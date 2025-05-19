@@ -2,9 +2,10 @@
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Browser;
-using Client;
 
 [assembly: SupportedOSPlatform("browser")]
+
+namespace Client.Browser;
 
 internal sealed partial class Program
 {
