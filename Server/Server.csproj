@@ -18,4 +18,17 @@
       </Content>
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\ECSDatabase\ECSDatabase.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="Environement\.env.exemple">
+        <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      </None>
+      <None Update="Environement\.env">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
 </Project>

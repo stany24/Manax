@@ -2,3 +2,4 @@
 bin
 obj
 Manax.sln.DotSettings.user
+.env

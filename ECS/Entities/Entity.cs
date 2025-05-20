@@ -4,6 +4,7 @@ namespace ECS.Entities;
 
 public class Entity
 {
+    public readonly long ID;
     private readonly List<Component> _components = [];
     
     public bool HasComponent(Type type)
@@ -24,5 +25,10 @@ public class Entity
     public T? GetComponent<T>() where T : Component
     {
         return (T?)_components.FirstOrDefault(x => x.GetType() == typeof(T));
+    }
+    
+    public List<Component> GetComponents()
+    {
+        return _components;
     }
 }
