@@ -1,0 +1,7 @@
+﻿services:
+  manaxapi:
+    image: manaxapi
+    build:
+      context: .
+      dockerfile: ManaxApi/Dockerfile
+

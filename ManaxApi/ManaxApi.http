@@ -1,0 +1,6 @@
+@ManaxApi_HostAddress = http://localhost:5246
+
+GET {{ManaxApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
