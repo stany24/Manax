@@ -16,11 +16,25 @@ public static class Program
         builder.Services.AddSwaggerGen();
         
         builder.Services.AddDbContext<LibraryContext>(opt =>
-            opt.UseSqlite("Data Source=database.db"));
+            opt.UseSqlite($"Data Source={Path.Combine(AppContext.BaseDirectory, "database.db")}"));
         builder.Services.AddDbContext<UserContext>(opt =>
-            opt.UseSqlite("Data Source=database.db"));
+            opt.UseSqlite($"Data Source={Path.Combine(AppContext.BaseDirectory, "database.db")}"));
 
         WebApplication app = builder.Build();
+
+        // Création/mise à jour automatique de la base de données
+        using (IServiceScope scope = app.Services.CreateScope())
+        {
+            DbContext[] dbContexts =
+            [
+                scope.ServiceProvider.GetRequiredService<LibraryContext>(),
+                scope.ServiceProvider.GetRequiredService<UserContext>()
+            ];
+            foreach (DbContext db in dbContexts)
+            {
+                db.Database.Migrate();
+            }
+        }
 
         // Middleware global de gestion des exceptions
         app.UseExceptionHandler(errorApp =>

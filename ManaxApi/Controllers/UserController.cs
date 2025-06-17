@@ -7,11 +7,11 @@ namespace ManaxApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UserController(UserContext context) : ControllerBase
+    public class UserController(UserContext context, IConfiguration config) : ControllerBase
     {
         // GET: api/Users
         [HttpGet("/api/Users")]
-        [AuthorizeRole(UserRole.User)]
+        [AuthorizeRole(UserRole.Admin)]
         public async Task<ActionResult<IEnumerable<User>>> GetUsers()
         {
             return await context.Users.ToListAsync();
@@ -51,7 +51,7 @@ namespace ManaxApi.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!UserExists(id))
+                if (!context.Users.Any(e => e.Id == id))
                 {
                     return NotFound();
                 }
@@ -64,22 +64,22 @@ namespace ManaxApi.Controllers
 
         // POST: api/User
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
+        [HttpPost("create")]
         public async Task<ActionResult<User>> PostUser(User user)
         {
-            // Vérifie si la base est vide
             if (!context.Users.Any())
             {
                 user.Role = UserRole.Owner;
+                user.PasswordHash = Services.HashService.ComputeSha3_512(user.PasswordHash);
                 context.Users.Add(user);
                 await context.SaveChangesAsync();
                 return CreatedAtAction("GetUser", new { id = user.Id }, user);
             }
-            // Si la base n'est pas vide, nécessite l'authentification et le rôle User
+
             if (!(HttpContext.User.Identity?.IsAuthenticated ?? false))
                 return Unauthorized();
             string? roleClaim = HttpContext.User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Role)?.Value;
-            if (roleClaim == null || !Enum.TryParse(roleClaim, out UserRole userRole) || userRole < UserRole.User)
+            if (roleClaim == null || !Enum.TryParse(roleClaim, out UserRole userRole) || userRole < UserRole.Admin)
                 return Forbid();
             context.Users.Add(user);
             await context.SaveChangesAsync();
@@ -88,7 +88,7 @@ namespace ManaxApi.Controllers
 
         // DELETE: api/User/5
         [HttpDelete("{id:long}")]
-        [AuthorizeRole(UserRole.User)]
+        [AuthorizeRole(UserRole.Admin)]
         public async Task<IActionResult> DeleteUser(long id)
         {
             User? user = await context.Users.FindAsync(id);
@@ -103,10 +103,25 @@ namespace ManaxApi.Controllers
             return NoContent();
         }
 
-        private bool UserExists(long id)
+        // POST: api/User/login
+        [HttpPost("/login")]
+        public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
-            return context.Users.Any(e => e.Id == id);
+            User? user = await context.Users.FirstOrDefaultAsync(u => u.Username == request.Username);
+            if (user == null)
+                return Unauthorized();
+            string hash = Services.HashService.ComputeSha3_512(request.Password);
+            if (user.PasswordHash != hash)
+                return Unauthorized();
+            string token = Services.JwtService.GenerateToken(user, config);
+            return Ok(new { token });
         }
+    }
+
+    public class LoginRequest
+    {
+        public string Username { get; set; } = string.Empty;
+        public string Password { get; set; } = string.Empty;
     }
 }
 

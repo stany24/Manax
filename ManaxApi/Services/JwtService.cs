@@ -1,18 +1,47 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
-using Microsoft.IdentityModel.Tokens;
 using ManaxApi.Models.User;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 
 namespace ManaxApi.Services;
 
 public static class JwtService
 {
-    private static string SecretKey = "votre_cle_secrete_a_remplacer"; // À stocker dans la config
-    public static string GenerateToken(User user)
+    private static string? _secretKey;
+    public static string GetSecretKey(IConfiguration config)
     {
+        if (!string.IsNullOrEmpty(_secretKey))
+            return _secretKey;
+        // Tente de lire la clé depuis la configuration
+        string? key = config["SecretKey"];
+        if (!string.IsNullOrEmpty(key))
+        {
+            _secretKey = key;
+            return _secretKey;
+        }
+        // Générer une clé aléatoire
+        RandomNumberGenerator rng = RandomNumberGenerator.Create();
+        byte[] bytes = new byte[48];
+        rng.GetBytes(bytes);
+        _secretKey = Convert.ToBase64String(bytes);
+        // Ajouter la clé au fichier appsettings.json
+        string configPath = Path.Combine(AppContext.BaseDirectory, "appsettings.json");
+        string json = File.ReadAllText(configPath);
+        Dictionary<string, object> dict = System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, object>>(json) ?? new();
+        dict["SecretKey"] = _secretKey;
+        string newJson = System.Text.Json.JsonSerializer.Serialize(dict, new System.Text.Json.JsonSerializerOptions { WriteIndented = true });
+        File.WriteAllText(configPath, newJson);
+        return _secretKey;
+    }
+
+    public static string GenerateToken(User user, IConfiguration config)
+    {
+        string secret = GetSecretKey(config);
         JwtSecurityTokenHandler tokenHandler = new();
-        byte[] key = Encoding.ASCII.GetBytes(SecretKey);
+        byte[] key = Convert.FromBase64String(secret);
         SecurityTokenDescriptor tokenDescriptor = new()
         {
             Subject = new ClaimsIdentity([
@@ -27,10 +56,11 @@ public static class JwtService
         return tokenHandler.WriteToken(token);
     }
 
-    public static ClaimsPrincipal? ValidateToken(string token)
+    public static ClaimsPrincipal? ValidateToken(string token, IConfiguration config)
     {
+        string secret = GetSecretKey(config);
         JwtSecurityTokenHandler tokenHandler = new();
-        byte[] key = Encoding.ASCII.GetBytes(SecretKey);
+        byte[] key = Convert.FromBase64String(secret);
         try
         {
             ClaimsPrincipal? principal = tokenHandler.ValidateToken(token, new TokenValidationParameters
@@ -49,4 +79,3 @@ public static class JwtService
         }
     }
 }
-

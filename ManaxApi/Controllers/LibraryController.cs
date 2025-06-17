@@ -65,7 +65,7 @@ namespace ManaxApi.Controllers
 
         // POST: api/Library
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
+        [HttpPost("create")]
         [AuthorizeRole(UserRole.User)]
         public async Task<ActionResult<Library>> PostLibrary(Library library)
         {
