@@ -1,9 +1,8 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
-using System.Text;
+using System.Text.Json;
 using ManaxApi.Models.User;
-using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
 namespace ManaxApi.Services;
@@ -11,7 +10,9 @@ namespace ManaxApi.Services;
 public static class JwtService
 {
     private static string? _secretKey;
-    public static string GetSecretKey(IConfiguration config)
+    private static readonly JsonSerializerOptions JsonSerializerOptions = new() { WriteIndented = true };
+
+    private static string GetSecretKey(IConfiguration config)
     {
         if (!string.IsNullOrEmpty(_secretKey))
             return _secretKey;
@@ -22,6 +23,7 @@ public static class JwtService
             _secretKey = key;
             return _secretKey;
         }
+
         // Générer une clé aléatoire
         RandomNumberGenerator rng = RandomNumberGenerator.Create();
         byte[] bytes = new byte[48];
@@ -30,9 +32,10 @@ public static class JwtService
         // Ajouter la clé au fichier appsettings.json
         string configPath = Path.Combine(AppContext.BaseDirectory, "appsettings.json");
         string json = File.ReadAllText(configPath);
-        Dictionary<string, object> dict = System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, object>>(json) ?? new();
+        Dictionary<string, object> dict = JsonSerializer.Deserialize<Dictionary<string, object>>(json) ??
+                                          new Dictionary<string, object>();
         dict["SecretKey"] = _secretKey;
-        string newJson = System.Text.Json.JsonSerializer.Serialize(dict, new System.Text.Json.JsonSerializerOptions { WriteIndented = true });
+        string newJson = JsonSerializer.Serialize(dict, JsonSerializerOptions );
         File.WriteAllText(configPath, newJson);
         return _secretKey;
     }
@@ -50,7 +53,8 @@ public static class JwtService
                 new Claim(ClaimTypes.Role, user.Role.ToString())
             ]),
             Expires = DateTime.UtcNow.AddHours(12),
-            SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            SigningCredentials =
+                new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
         };
         SecurityToken? token = tokenHandler.CreateToken(tokenDescriptor);
         return tokenHandler.WriteToken(token);

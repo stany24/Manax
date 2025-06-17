@@ -2,12 +2,10 @@
 // ReSharper disable PropertyCanBeMadeInitOnly.Global
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 
-namespace ManaxApi.Models.User;
+namespace ManaxApi.Auth;
 
-public class User
+public class LoginRequest
 {
-    public long Id { get; set; }
     public string Username { get; set; }
-    public string PasswordHash { get; set; }
-    public UserRole Role { get; set; }
+    public string Password { get; set; }
 }

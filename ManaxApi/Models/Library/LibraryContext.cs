@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 
-namespace ManaxApi.Models;
+namespace ManaxApi.Models.Library;
 
 public class LibraryContext(DbContextOptions<LibraryContext> options) : DbContext(options)
 {

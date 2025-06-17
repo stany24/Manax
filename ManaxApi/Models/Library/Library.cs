@@ -1,4 +1,8 @@
-namespace ManaxApi.Models;
+// ReSharper disable PropertyCanBeMadeInitOnly.Global
+// ReSharper disable PropertyCanBeMadeInitOnly.Global
+// ReSharper disable UnusedAutoPropertyAccessor.Global
+
+namespace ManaxApi.Models.Library;
 
 public class Library
 {

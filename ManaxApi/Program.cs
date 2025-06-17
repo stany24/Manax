@@ -1,4 +1,5 @@
 using ManaxApi.Models;
+using ManaxApi.Models.Library;
 using ManaxApi.Models.User;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,10 +12,10 @@ public static class Program
         WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
         builder.Services.AddControllers();
-        
+
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
-        
+
         builder.Services.AddDbContext<LibraryContext>(opt =>
             opt.UseSqlite($"Data Source={Path.Combine(AppContext.BaseDirectory, "database.db")}"));
         builder.Services.AddDbContext<UserContext>(opt =>
@@ -30,10 +31,7 @@ public static class Program
                 scope.ServiceProvider.GetRequiredService<LibraryContext>(),
                 scope.ServiceProvider.GetRequiredService<UserContext>()
             ];
-            foreach (DbContext db in dbContexts)
-            {
-                db.Database.Migrate();
-            }
+            foreach (DbContext db in dbContexts) db.Database.Migrate();
         }
 
         // Middleware global de gestion des exceptions

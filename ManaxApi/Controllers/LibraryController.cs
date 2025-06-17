@@ -1,100 +1,88 @@
+using ManaxApi.Auth;
+using ManaxApi.Models;
+using ManaxApi.Models.Library;
+using ManaxApi.Models.User;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using ManaxApi.Models;
-using ManaxApi.Auth;
-using ManaxApi.Models.User;
 
-namespace ManaxApi.Controllers
+namespace ManaxApi.Controllers;
+
+[Route("api/[controller]")]
+[ApiController]
+public class LibraryController(LibraryContext context) : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class LibraryController(LibraryContext context) : ControllerBase
+    // GET: api/Library
+    [HttpGet("/api/Libraries")]
+    [AuthorizeRole(UserRole.User)]
+    public async Task<ActionResult<IEnumerable<Library>>> GetLibraries()
     {
-        // GET: api/Library
-        [HttpGet("/api/Libraries")]
-        [AuthorizeRole(UserRole.User)]
-        public async Task<ActionResult<IEnumerable<Library>>> GetLibraries()
+        return await context.Libraries.ToListAsync();
+    }
+
+    // GET: api/Library/5
+    [HttpGet("{id:long}")]
+    [AuthorizeRole(UserRole.User)]
+    public async Task<ActionResult<Library>> GetLibrary(long id)
+    {
+        Library? library = await context.Libraries.FindAsync(id);
+
+        if (library == null) return NotFound();
+
+        return library;
+    }
+
+    // PUT: api/Library/5
+    // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+    [HttpPut("{id:long}")]
+    [AuthorizeRole(UserRole.User)]
+    public async Task<IActionResult> PutLibrary(long id, Library library)
+    {
+        if (id != library.Id) return BadRequest();
+
+        context.Entry(library).State = EntityState.Modified;
+
+        try
         {
-            return await context.Libraries.ToListAsync();
-        }
-
-        // GET: api/Library/5
-        [HttpGet("{id:long}")]
-        [AuthorizeRole(UserRole.User)]
-        public async Task<ActionResult<Library>> GetLibrary(long id)
-        {
-            Library? library = await context.Libraries.FindAsync(id);
-
-            if (library == null)
-            {
-                return NotFound();
-            }
-
-            return library;
-        }
-
-        // PUT: api/Library/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id:long}")]
-        [AuthorizeRole(UserRole.User)]
-        public async Task<IActionResult> PutLibrary(long id, Library library)
-        {
-            if (id != library.Id)
-            {
-                return BadRequest();
-            }
-
-            context.Entry(library).State = EntityState.Modified;
-
-            try
-            {
-                await context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!LibraryExists(id))
-                {
-                    return NotFound();
-                }
-
-                throw;
-            }
-
-            return NoContent();
-        }
-
-        // POST: api/Library
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost("create")]
-        [AuthorizeRole(UserRole.User)]
-        public async Task<ActionResult<Library>> PostLibrary(Library library)
-        {
-            context.Libraries.Add(library);
             await context.SaveChangesAsync();
-
-            return CreatedAtAction("GetLibrary", new { id = library.Id }, library);
         }
-
-        // DELETE: api/Library/5
-        [HttpDelete("{id:long}")]
-        [AuthorizeRole(UserRole.User)]
-        public async Task<IActionResult> DeleteLibrary(long id)
+        catch (DbUpdateConcurrencyException)
         {
-            Library? library = await context.Libraries.FindAsync(id);
-            if (library == null)
-            {
-                return NotFound();
-            }
+            if (!LibraryExists(id)) return NotFound();
 
-            context.Libraries.Remove(library);
-            await context.SaveChangesAsync();
-
-            return NoContent();
+            throw;
         }
 
-        private bool LibraryExists(long id)
-        {
-            return context.Libraries.Any(e => e.Id == id);
-        }
+        return NoContent();
+    }
+
+    // POST: api/Library
+    // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+    [HttpPost("create")]
+    [AuthorizeRole(UserRole.User)]
+    public async Task<ActionResult<Library>> PostLibrary(Library library)
+    {
+        context.Libraries.Add(library);
+        await context.SaveChangesAsync();
+
+        return CreatedAtAction("GetLibrary", new { id = library.Id }, library);
+    }
+
+    // DELETE: api/Library/5
+    [HttpDelete("{id:long}")]
+    [AuthorizeRole(UserRole.User)]
+    public async Task<IActionResult> DeleteLibrary(long id)
+    {
+        Library? library = await context.Libraries.FindAsync(id);
+        if (library == null) return NotFound();
+
+        context.Libraries.Remove(library);
+        await context.SaveChangesAsync();
+
+        return NoContent();
+    }
+
+    private bool LibraryExists(long id)
+    {
+        return context.Libraries.Any(e => e.Id == id);
     }
 }
