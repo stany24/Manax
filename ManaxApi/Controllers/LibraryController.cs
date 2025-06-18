@@ -1,5 +1,4 @@
 using ManaxApi.Auth;
-using ManaxApi.Models;
 using ManaxApi.Models.Library;
 using ManaxApi.Models.User;
 using Microsoft.AspNetCore.Mvc;

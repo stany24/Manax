@@ -2,12 +2,12 @@
 // ReSharper disable PropertyCanBeMadeInitOnly.Global
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 
-namespace ManaxApi.Models.Library;
+namespace ManaxApi.Models.Serie;
 
-public class Library
+public class Serie
 {
     public long Id { get; set; }
-    public string Name { get; set; } = string.Empty;
+    public string Title { get; set; }
     public string Description { get; set; } = string.Empty;
-    public List<Serie.Serie> Series { get; set; } = [];
+    public List<Chapter.Chapter> Chapters { get; set; }
 }

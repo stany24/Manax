@@ -1,5 +1,6 @@
-using ManaxApi.Models;
+using ManaxApi.Models.Chapter;
 using ManaxApi.Models.Library;
+using ManaxApi.Models.Serie;
 using ManaxApi.Models.User;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,9 +17,14 @@ public static class Program
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
 
+        builder.Services.AddDbContext<UserContext>(opt =>
+            opt.UseSqlite($"Data Source={Path.Combine(AppContext.BaseDirectory, "database.db")}"));
+        
         builder.Services.AddDbContext<LibraryContext>(opt =>
             opt.UseSqlite($"Data Source={Path.Combine(AppContext.BaseDirectory, "database.db")}"));
-        builder.Services.AddDbContext<UserContext>(opt =>
+        builder.Services.AddDbContext<SerieContext>(opt =>
+            opt.UseSqlite($"Data Source={Path.Combine(AppContext.BaseDirectory, "database.db")}"));
+        builder.Services.AddDbContext<ChapterContext>(opt =>
             opt.UseSqlite($"Data Source={Path.Combine(AppContext.BaseDirectory, "database.db")}"));
 
         WebApplication app = builder.Build();
