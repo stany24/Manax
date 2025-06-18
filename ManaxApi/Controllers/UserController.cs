@@ -14,6 +14,7 @@ public class UserController(UserContext context, IConfiguration config) : Contro
     // GET: api/Users
     [HttpGet("/api/Users")]
     [AuthorizeRole(UserRole.Admin)]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<long>))]
     public async Task<ActionResult<IEnumerable<long>>> GetUsers()
     {
         return await context.Users.Select(user => user.Id).ToListAsync();
@@ -22,6 +23,8 @@ public class UserController(UserContext context, IConfiguration config) : Contro
     // GET: api/User/5
     [HttpGet("{id:long}")]
     [AuthorizeRole(UserRole.Admin)]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(User))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<User>> GetUser(long id)
     {
         User? user = await context.Users.FindAsync(id);
@@ -35,6 +38,9 @@ public class UserController(UserContext context, IConfiguration config) : Contro
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPut("{id:long}")]
     [AuthorizeRole(UserRole.Admin)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> PutUser(long id, User user)
     {
         if (id != user.Id) return BadRequest();
@@ -59,6 +65,9 @@ public class UserController(UserContext context, IConfiguration config) : Contro
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPost("create")]
     [AuthorizeRole(UserRole.Admin)]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(User))]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult<User>> PostUser(User user)
     {
         if (!context.Users.Any())
@@ -83,6 +92,9 @@ public class UserController(UserContext context, IConfiguration config) : Contro
     // DELETE: api/User/5
     [HttpDelete("{id:long}")]
     [AuthorizeRole(UserRole.Admin)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> DeleteUser(long id)
     {
         User? user = await context.Users.FindAsync(id);
@@ -96,6 +108,8 @@ public class UserController(UserContext context, IConfiguration config) : Contro
 
     // POST: api/User/login
     [HttpPost("/login")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> Login(LoginRequest request)
     {
         User? user = await context.Users.FirstOrDefaultAsync(u => u.Username == request.Username);

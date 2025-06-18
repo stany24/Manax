@@ -13,6 +13,7 @@ namespace ManaxApi.Controllers
         // GET: api/Serie
         [HttpGet("/api/series")]
         [AuthorizeRole(UserRole.User)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<long>))]
         public async Task<ActionResult<IEnumerable<long>>> GetSeries()
         {
             return await context.Series.Select(serie => serie.Id).ToListAsync();
@@ -21,6 +22,8 @@ namespace ManaxApi.Controllers
         // GET: api/serie/{id}
         [HttpGet("{id:long}")]
         [AuthorizeRole(UserRole.User)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SerieInfo))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<SerieInfo>> GetSerie(long id)
         {
             Serie? serie = await context.Series
@@ -35,9 +38,11 @@ namespace ManaxApi.Controllers
         // GET: api/series/{id}/chapters
         [HttpGet("/api/series/{id:long}/chapters")]
         [AuthorizeRole(UserRole.User)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<long>))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<IEnumerable<long>>> GetSerieChapters(long id)
         {
-            var serie = await context.Series
+            Serie? serie = await context.Series
                 .Include(s => s.Chapters)
                 .FirstOrDefaultAsync(s => s.Id == id);
             if (serie == null)
@@ -51,6 +56,10 @@ namespace ManaxApi.Controllers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id:long}")]
         [AuthorizeRole(UserRole.Admin)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<IActionResult> PutSerie(long id, Serie serie)
         {
             if (id != serie.Id)
@@ -81,6 +90,7 @@ namespace ManaxApi.Controllers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         [AuthorizeRole(UserRole.Admin)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Serie))]
         public async Task<ActionResult<Serie>> PostSerie(Serie serie)
         {
             context.Series.Add(serie);
@@ -92,6 +102,9 @@ namespace ManaxApi.Controllers
         // DELETE: api/Serie/5
         [HttpDelete("{id:long}")]
         [AuthorizeRole(UserRole.Admin)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<IActionResult> DeleteSerie(long id)
         {
             Serie? serie = await context.Series.FindAsync(id);
@@ -112,3 +125,4 @@ namespace ManaxApi.Controllers
         }
     }
 }
+

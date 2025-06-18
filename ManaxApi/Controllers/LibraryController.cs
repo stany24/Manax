@@ -13,6 +13,7 @@ public class LibraryController(LibraryContext context) : ControllerBase
     // GET: api/Library
     [HttpGet("/api/Libraries")]
     [AuthorizeRole(UserRole.User)]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<long>))]
     public async Task<ActionResult<IEnumerable<long>>> GetLibraries()
     {
         return await context.Libraries.Select(t => t.Id).ToListAsync();
@@ -21,6 +22,8 @@ public class LibraryController(LibraryContext context) : ControllerBase
     // GET: api/library/{id}
     [HttpGet("{id:long}")]
     [AuthorizeRole(UserRole.User)]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(LibraryInfo))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<LibraryInfo>> GetLibrary(long id)
     {
         Library? library = await context.Libraries
@@ -35,6 +38,8 @@ public class LibraryController(LibraryContext context) : ControllerBase
     // GET: api/library/{id}/series
     [HttpGet("{id:long}/series")]
     [AuthorizeRole(UserRole.User)]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<long>))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<IEnumerable<long>>> GetLibrarySeries(long id)
     {
         Library? library = await context.Libraries
@@ -52,6 +57,10 @@ public class LibraryController(LibraryContext context) : ControllerBase
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPut("{id:long}")]
     [AuthorizeRole(UserRole.Admin)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> PutLibrary(long id, Library library)
     {
         if (id != library.Id) return BadRequest();
@@ -64,7 +73,7 @@ public class LibraryController(LibraryContext context) : ControllerBase
         }
         catch (DbUpdateConcurrencyException)
         {
-            if (!LibraryExists(id)) return NotFound();
+            if (!context.Libraries.Any(e => e.Id == id)) return NotFound();
 
             throw;
         }
@@ -76,6 +85,7 @@ public class LibraryController(LibraryContext context) : ControllerBase
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPost("create")]
     [AuthorizeRole(UserRole.Admin)]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Library))]
     public async Task<ActionResult<Library>> PostLibrary(Library library)
     {
         context.Libraries.Add(library);
@@ -87,6 +97,9 @@ public class LibraryController(LibraryContext context) : ControllerBase
     // DELETE: api/Library/5
     [HttpDelete("{id:long}")]
     [AuthorizeRole(UserRole.Admin)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> DeleteLibrary(long id)
     {
         Library? library = await context.Libraries.FindAsync(id);
@@ -96,10 +109,5 @@ public class LibraryController(LibraryContext context) : ControllerBase
         await context.SaveChangesAsync();
 
         return NoContent();
-    }
-
-    private bool LibraryExists(long id)
-    {
-        return context.Libraries.Any(e => e.Id == id);
     }
 }
