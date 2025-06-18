@@ -1,0 +1,47 @@
+using System.Net.Http.Json;
+using ManaxApi.Models.Library;
+
+namespace ManaxApiCaller;
+
+public static class ManaxApiLibraryCaller
+{
+    public static async Task<List<long>?> GetLibraryIdsAsync()
+    {
+        HttpResponseMessage response = await ManaxApiCaller.Client.GetAsync("api/libraries");
+        if (!response.IsSuccessStatusCode) return null;
+        return await response.Content.ReadFromJsonAsync<List<long>>();
+    }
+
+    public static async Task<LibraryInfo?> GetLibraryInfoAsync(long id)
+    {
+        HttpResponseMessage response = await ManaxApiCaller.Client.GetAsync($"api/library/{id}");
+        if (!response.IsSuccessStatusCode) return null;
+        return await response.Content.ReadFromJsonAsync<LibraryInfo>();
+    }
+
+    public static async Task<List<long>?> GetLibrarySeriesAsync(long id)
+    {
+        HttpResponseMessage response = await ManaxApiCaller.Client.GetAsync($"api/library/{id}/series");
+        if (!response.IsSuccessStatusCode) return null;
+        return await response.Content.ReadFromJsonAsync<List<long>>();
+    }
+
+    public static async Task<Library?> PostLibraryAsync(Library library)
+    {
+        HttpResponseMessage response = await ManaxApiCaller.Client.PostAsJsonAsync("api/library", library);
+        if (!response.IsSuccessStatusCode) return null;
+        return await response.Content.ReadFromJsonAsync<Library>();
+    }
+
+    public static async Task<bool> PutLibraryAsync(long id, Library library)
+    {
+        HttpResponseMessage response = await ManaxApiCaller.Client.PutAsJsonAsync($"api/library/{id}", library);
+        return response.IsSuccessStatusCode;
+    }
+
+    public static async Task<bool> DeleteLibraryAsync(long id)
+    {
+        HttpResponseMessage response = await ManaxApiCaller.Client.DeleteAsync($"api/library/{id}");
+        return response.IsSuccessStatusCode;
+    }
+}
