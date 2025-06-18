@@ -21,7 +21,7 @@ public class UserController(UserContext context, IConfiguration config) : Contro
 
     // GET: api/User/5
     [HttpGet("{id:long}")]
-    [AuthorizeRole(UserRole.User)]
+    [AuthorizeRole(UserRole.Admin)]
     public async Task<ActionResult<User>> GetUser(long id)
     {
         User? user = await context.Users.FindAsync(id);
@@ -34,7 +34,7 @@ public class UserController(UserContext context, IConfiguration config) : Contro
     // PUT: api/User/5
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPut("{id:long}")]
-    [AuthorizeRole(UserRole.User)]
+    [AuthorizeRole(UserRole.Admin)]
     public async Task<IActionResult> PutUser(long id, User user)
     {
         if (id != user.Id) return BadRequest();
@@ -58,6 +58,7 @@ public class UserController(UserContext context, IConfiguration config) : Contro
     // POST: api/User
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPost("create")]
+    [AuthorizeRole(UserRole.Admin)]
     public async Task<ActionResult<User>> PostUser(User user)
     {
         if (!context.Users.Any())

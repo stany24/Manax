@@ -33,7 +33,7 @@ public class LibraryController(LibraryContext context) : ControllerBase
     // PUT: api/Library/5
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPut("{id:long}")]
-    [AuthorizeRole(UserRole.User)]
+    [AuthorizeRole(UserRole.Admin)]
     public async Task<IActionResult> PutLibrary(long id, Library library)
     {
         if (id != library.Id) return BadRequest();
@@ -57,7 +57,7 @@ public class LibraryController(LibraryContext context) : ControllerBase
     // POST: api/Library
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPost("create")]
-    [AuthorizeRole(UserRole.User)]
+    [AuthorizeRole(UserRole.Admin)]
     public async Task<ActionResult<Library>> PostLibrary(Library library)
     {
         context.Libraries.Add(library);
@@ -68,7 +68,7 @@ public class LibraryController(LibraryContext context) : ControllerBase
 
     // DELETE: api/Library/5
     [HttpDelete("{id:long}")]
-    [AuthorizeRole(UserRole.User)]
+    [AuthorizeRole(UserRole.Admin)]
     public async Task<IActionResult> DeleteLibrary(long id)
     {
         Library? library = await context.Libraries.FindAsync(id);

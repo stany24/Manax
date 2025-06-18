@@ -1,6 +1,8 @@
+using ManaxApi.Auth;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ManaxApi.Models.Chapter;
+using ManaxApi.Models.User;
 
 namespace ManaxApi.Controllers
 {
@@ -9,7 +11,8 @@ namespace ManaxApi.Controllers
     public class ChapterController(ChapterContext context) : ControllerBase
     {
         // GET: api/Chapter
-        [HttpGet]
+        [HttpGet("/api/chapters")]
+        [AuthorizeRole(UserRole.User)]
         public async Task<ActionResult<IEnumerable<Chapter>>> GetChapters()
         {
             return await context.Chapters.ToListAsync();
@@ -17,6 +20,7 @@ namespace ManaxApi.Controllers
 
         // GET: api/Chapter/5
         [HttpGet("{id:long}")]
+        [AuthorizeRole(UserRole.User)]
         public async Task<ActionResult<Chapter>> GetChapter(long id)
         {
             Chapter? serie = await context.Chapters.FindAsync(id);
@@ -32,6 +36,7 @@ namespace ManaxApi.Controllers
         // PUT: api/Chapter/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id:long}")]
+        [AuthorizeRole(UserRole.Admin)]
         public async Task<IActionResult> PutChapter(long id, Chapter serie)
         {
             if (id != serie.Id)
@@ -61,6 +66,7 @@ namespace ManaxApi.Controllers
         // POST: api/Chapter
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
+        [AuthorizeRole(UserRole.Admin)]
         public async Task<ActionResult<Chapter>> PostChapter(Chapter serie)
         {
             context.Chapters.Add(serie);
@@ -71,6 +77,7 @@ namespace ManaxApi.Controllers
 
         // DELETE: api/Chapter/5
         [HttpDelete("{id:long}")]
+        [AuthorizeRole(UserRole.Admin)]
         public async Task<IActionResult> DeleteChapter(long id)
         {
             Chapter? serie = await context.Chapters.FindAsync(id);
