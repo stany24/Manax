@@ -13,21 +13,39 @@ public class LibraryController(LibraryContext context) : ControllerBase
     // GET: api/Library
     [HttpGet("/api/Libraries")]
     [AuthorizeRole(UserRole.User)]
-    public async Task<ActionResult<IEnumerable<Library>>> GetLibraries()
+    public async Task<ActionResult<IEnumerable<long>>> GetLibraries()
     {
-        return await context.Libraries.ToListAsync();
+        return await context.Libraries.Select(t => t.Id).ToListAsync();
     }
 
-    // GET: api/Library/5
+    // GET: api/library/{id}
     [HttpGet("{id:long}")]
     [AuthorizeRole(UserRole.User)]
-    public async Task<ActionResult<Library>> GetLibrary(long id)
+    public async Task<ActionResult<LibraryInfo>> GetLibrary(long id)
     {
-        Library? library = await context.Libraries.FindAsync(id);
+        Library? library = await context.Libraries
+            .AsNoTracking()
+            .Where(l => l.Id == id)
+            .Include(library => library.Infos)
+            .FirstOrDefaultAsync();
+        if (library == null) return NotFound();
+        return library.Infos;
+    }
+
+    // GET: api/library/{id}/series
+    [HttpGet("{id:long}/series")]
+    [AuthorizeRole(UserRole.User)]
+    public async Task<ActionResult<IEnumerable<long>>> GetLibrarySeries(long id)
+    {
+        Library? library = await context.Libraries
+            .AsNoTracking()
+            .Where(l => l.Id == id)
+            .Include(library => library.Series)
+            .FirstOrDefaultAsync(l => l.Id == id);
 
         if (library == null) return NotFound();
 
-        return library;
+        return library.Series.Select(s => s.Id).ToList();
     }
 
     // PUT: api/Library/5

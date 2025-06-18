@@ -2,6 +2,7 @@
 using ManaxApi.Models.Library;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -9,9 +10,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ManaxApi.Migrations
 {
     [DbContext(typeof(LibraryContext))]
-    partial class LibraryContextModelSnapshot : ModelSnapshot
+    [Migration("20250618155403_LibraryV0.1.1")]
+    partial class LibraryV011
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.6");
@@ -49,12 +52,12 @@ namespace ManaxApi.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<long>("InfosId")
+                    b.Property<long>("LibraryInfoId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("InfosId");
+                    b.HasIndex("LibraryInfoId");
 
                     b.ToTable("Libraries");
                 });
@@ -84,30 +87,12 @@ namespace ManaxApi.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<long>("InfosId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<long?>("LibraryId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("InfosId");
-
-                    b.HasIndex("LibraryId");
-
-                    b.ToTable("Serie");
-                });
-
-            modelBuilder.Entity("ManaxApi.Models.Serie.SerieInfo", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("TEXT");
+
+                    b.Property<long?>("LibraryId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -115,7 +100,9 @@ namespace ManaxApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("SerieInfo");
+                    b.HasIndex("LibraryId");
+
+                    b.ToTable("Serie");
                 });
 
             modelBuilder.Entity("ManaxApi.Models.Chapter.Chapter", b =>
@@ -127,28 +114,20 @@ namespace ManaxApi.Migrations
 
             modelBuilder.Entity("ManaxApi.Models.Library.Library", b =>
                 {
-                    b.HasOne("ManaxApi.Models.Library.LibraryInfo", "Infos")
+                    b.HasOne("ManaxApi.Models.Library.LibraryInfo", "LibraryInfo")
                         .WithMany()
-                        .HasForeignKey("InfosId")
+                        .HasForeignKey("LibraryInfoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Infos");
+                    b.Navigation("LibraryInfo");
                 });
 
             modelBuilder.Entity("ManaxApi.Models.Serie.Serie", b =>
                 {
-                    b.HasOne("ManaxApi.Models.Serie.SerieInfo", "Infos")
-                        .WithMany()
-                        .HasForeignKey("InfosId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("ManaxApi.Models.Library.Library", null)
                         .WithMany("Series")
                         .HasForeignKey("LibraryId");
-
-                    b.Navigation("Infos");
                 });
 
             modelBuilder.Entity("ManaxApi.Models.Library.Library", b =>

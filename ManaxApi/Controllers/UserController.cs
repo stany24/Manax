@@ -14,9 +14,9 @@ public class UserController(UserContext context, IConfiguration config) : Contro
     // GET: api/Users
     [HttpGet("/api/Users")]
     [AuthorizeRole(UserRole.Admin)]
-    public async Task<ActionResult<IEnumerable<User>>> GetUsers()
+    public async Task<ActionResult<IEnumerable<long>>> GetUsers()
     {
-        return await context.Users.ToListAsync();
+        return await context.Users.Select(user => user.Id).ToListAsync();
     }
 
     // GET: api/User/5

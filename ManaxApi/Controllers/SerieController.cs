@@ -13,24 +13,38 @@ namespace ManaxApi.Controllers
         // GET: api/Serie
         [HttpGet("/api/series")]
         [AuthorizeRole(UserRole.User)]
-        public async Task<ActionResult<IEnumerable<Serie>>> GetSeries()
+        public async Task<ActionResult<IEnumerable<long>>> GetSeries()
         {
-            return await context.Series.ToListAsync();
+            return await context.Series.Select(serie => serie.Id).ToListAsync();
         }
 
-        // GET: api/Serie/5
+        // GET: api/serie/{id}
         [HttpGet("{id:long}")]
         [AuthorizeRole(UserRole.User)]
-        public async Task<ActionResult<Serie>> GetSerie(long id)
+        public async Task<ActionResult<SerieInfo>> GetSerie(long id)
         {
-            Serie? serie = await context.Series.FindAsync(id);
+            Serie? serie = await context.Series
+                .AsNoTracking()
+                .Where(l => l.Id == id)
+                .Include(serie => serie.Infos)
+                .FirstOrDefaultAsync();
+            if (serie == null) return NotFound();
+            return serie.Infos;
+        }
 
+        // GET: api/series/{id}/chapters
+        [HttpGet("/api/series/{id:long}/chapters")]
+        [AuthorizeRole(UserRole.User)]
+        public async Task<ActionResult<IEnumerable<long>>> GetSerieChapters(long id)
+        {
+            var serie = await context.Series
+                .Include(s => s.Chapters)
+                .FirstOrDefaultAsync(s => s.Id == id);
             if (serie == null)
             {
                 return NotFound();
             }
-
-            return serie;
+            return serie.Chapters.Select(c => c.Id).ToList();
         }
 
         // PUT: api/Serie/5

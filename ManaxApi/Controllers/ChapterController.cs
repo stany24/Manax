@@ -13,9 +13,9 @@ namespace ManaxApi.Controllers
         // GET: api/Chapter
         [HttpGet("/api/chapters")]
         [AuthorizeRole(UserRole.User)]
-        public async Task<ActionResult<IEnumerable<Chapter>>> GetChapters()
+        public async Task<ActionResult<IEnumerable<long>>> GetChapters()
         {
-            return await context.Chapters.ToListAsync();
+            return await context.Chapters.Select(chapter => chapter.Id).ToListAsync();
         }
 
         // GET: api/Chapter/5
