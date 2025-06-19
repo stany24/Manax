@@ -1,0 +1,65 @@
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:login="clr-namespace:ManaxApp.ViewModels.Login"
+    mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+    x:Class="ManaxApp.Views.Login.LoginPageView"
+    x:DataType="login:LoginPageViewModel">
+    <Grid
+        HorizontalAlignment="Center"
+        VerticalAlignment="Center"
+        RowDefinitions="Auto,10,Auto,10,Auto,10,Auto,10,Auto,10,Auto"
+        ColumnDefinitions="Auto,10,*">
+        <Label
+            Grid.Column="0"
+            Grid.Row="0">Username:</Label>
+        
+        <TextBox
+            Grid.Column="2"
+            Grid.Row="0"
+            Text="{Binding Username}"></TextBox>
+        
+        <Label
+            Grid.Column="0"
+            Grid.Row="2">Password:</Label>
+        
+        <TextBox
+            Grid.Column="2"
+            Grid.Row="2"
+            PasswordChar="*"
+            Text="{Binding Password}"></TextBox>
+        
+        <Label
+            Grid.Column="0"
+            Grid.Row="4">Host:</Label>
+        
+        <TextBox
+            Grid.Column="2"
+            Grid.Row="4"
+            Text="{Binding Host}"></TextBox>
+        
+        <Label
+            Grid.Column="0"
+            Grid.Row="6">Port:</Label>
+        
+        <NumericUpDown
+            Grid.Column="2"
+            Grid.Row="6"
+            Value="{Binding Port}"></NumericUpDown>
+        
+        <Button
+            Grid.Column="0"
+            Grid.ColumnSpan="3"
+            Grid.Row="8"
+            HotKey="Enter"
+            Command="{Binding Login}">Login</Button>
+        
+        <Label
+            Grid.Column="0"
+            Grid.ColumnSpan="3"
+            Grid.Row="10"
+            Content="{Binding LoginError}"></Label>
+    </Grid>
+</UserControl>

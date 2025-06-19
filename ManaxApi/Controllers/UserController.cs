@@ -64,7 +64,6 @@ public class UserController(UserContext context, IConfiguration config) : Contro
     // POST: api/User
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPost("create")]
-    [AuthorizeRole(UserRole.Admin)]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(User))]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -107,7 +106,7 @@ public class UserController(UserContext context, IConfiguration config) : Contro
     }
 
     // POST: api/User/login
-    [HttpPost("/login")]
+    [HttpPost("/api/login")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> Login(LoginRequest request)

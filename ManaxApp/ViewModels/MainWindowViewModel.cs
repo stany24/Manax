@@ -1,8 +1,24 @@
-﻿namespace ManaxApp.ViewModels;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using ManaxApp.ViewModels.Login;
 
-public partial class MainWindowViewModel : ViewModelBase
+namespace ManaxApp.ViewModels;
+
+public partial class MainWindowViewModel : ObservableObject
 {
-#pragma warning disable CA1822 // Mark members as static
-    public string Greeting => "Welcome to Avalonia!";
-#pragma warning restore CA1822 // Mark members as static
+    [ObservableProperty] private PageViewModel _currentPageViewModel;
+
+    public MainWindowViewModel()
+    {
+        PropertyChanged += (_, args) =>
+        {
+            if (args.PropertyName == nameof(CurrentPageViewModel))
+            {
+                CurrentPageViewModel.PageChangedRequested += (_, e) =>
+                {
+                    CurrentPageViewModel = e;
+                };
+            }
+        };
+        CurrentPageViewModel = new LoginPageViewModel();
+    }
 }

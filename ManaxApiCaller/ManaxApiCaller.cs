@@ -6,11 +6,11 @@ namespace ManaxApiCaller;
 
 public static class ManaxApiCaller
 {
-    internal static readonly HttpClient Client = new() { BaseAddress = new Uri("http://localhost:5000/") };
+    internal static HttpClient Client = new() { BaseAddress = new Uri("http://127.0.0.1:5246/") };
 
     public static void SetHost(Uri host)
     {
-        Client.BaseAddress = host;
+        Client = new HttpClient { BaseAddress = host };
     }
 
     public static void SetToken(string? token)
@@ -20,7 +20,7 @@ public static class ManaxApiCaller
 
     public static async Task<string?> LoginAsync(string username, string password)
     {
-        HttpResponseMessage response = await Client.PostAsJsonAsync("api/user/login", new { username, password });
+        HttpResponseMessage response = await Client.PostAsJsonAsync("/api/login", new { username, password });
         if (!response.IsSuccessStatusCode) return null;
         string json = await response.Content.ReadAsStringAsync();
         using JsonDocument doc = JsonDocument.Parse(json);
