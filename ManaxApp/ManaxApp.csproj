@@ -32,9 +32,24 @@
         <DependentUpon>LoginPageView.axaml</DependentUpon>
         <SubType>Code</SubType>
       </Compile>
+      <Compile Update="Views\Issue\IssuesPageView.axaml.cs">
+        <DependentUpon>IssuePageView.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="Views\Issue\IssuePageView.axaml.cs">
+        <DependentUpon>HomePageView.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="Views\User\UsersPageView.axaml.cs">
+        <SubType>Code</SubType>
+      </Compile>
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\ManaxApiCaller\ManaxApiCaller.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <AdditionalFiles Include="Views\Issue\IssuePageView.axaml" />
     </ItemGroup>
 </Project>

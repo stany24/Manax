@@ -3,7 +3,8 @@ using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace ManaxApp.ViewModels;
 
-public abstract class PageViewModel:ObservableObject
+public abstract partial class PageViewModel:ObservableObject
 {
     public EventHandler<PageViewModel>? PageChangedRequested;
+    [ObservableProperty] private bool _controlBarVisible;
 }
