@@ -7,6 +7,16 @@ namespace ManaxApi.Models.Serie;
 public class Serie
 {
     public long Id { get; set; }
-    public SerieInfo Infos { get; set; } = new();
+    public string Title { get; set; }
+    public string Description { get; set; } = string.Empty;
     public List<Chapter.Chapter> Chapters { get; set; }
+    
+    public SerieInfo GetInfo()
+    {
+        return new SerieInfo
+        {
+            Title = Title,
+            Description = Description
+        };
+    }
 }

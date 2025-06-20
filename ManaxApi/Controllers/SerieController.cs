@@ -26,13 +26,13 @@ namespace ManaxApi.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<SerieInfo>> GetSerie(long id)
         {
-            Serie? serie = await context.Series
+            SerieInfo? infos = await context.Series
                 .AsNoTracking()
                 .Where(l => l.Id == id)
-                .Include(serie => serie.Infos)
+                .Select(s => s.GetInfo())
                 .FirstOrDefaultAsync();
-            if (serie == null) return NotFound();
-            return serie.Infos;
+            if (infos == null) return NotFound();
+            return infos;
         }
 
         // GET: api/series/{id}/chapters

@@ -26,13 +26,13 @@ public class LibraryController(LibraryContext context) : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<LibraryInfo>> GetLibrary(long id)
     {
-        Library? library = await context.Libraries
+        LibraryInfo? infos = await context.Libraries
             .AsNoTracking()
             .Where(l => l.Id == id)
-            .Include(library => library.Infos)
+            .Select(library => library.GetInfo() )
             .FirstOrDefaultAsync();
-        if (library == null) return NotFound();
-        return library.Infos;
+        if (infos == null) return NotFound();
+        return infos;
     }
 
     // GET: api/library/{id}/series

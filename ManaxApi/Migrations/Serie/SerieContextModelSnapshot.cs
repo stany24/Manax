@@ -49,22 +49,6 @@ namespace ManaxApi.Migrations.Serie
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<long>("InfosId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("InfosId");
-
-                    b.ToTable("Series");
-                });
-
-            modelBuilder.Entity("ManaxApi.Models.Serie.SerieInfo", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -75,7 +59,7 @@ namespace ManaxApi.Migrations.Serie
 
                     b.HasKey("Id");
 
-                    b.ToTable("SerieInfo");
+                    b.ToTable("Series");
                 });
 
             modelBuilder.Entity("ManaxApi.Models.Chapter.Chapter", b =>
@@ -83,17 +67,6 @@ namespace ManaxApi.Migrations.Serie
                     b.HasOne("ManaxApi.Models.Serie.Serie", null)
                         .WithMany("Chapters")
                         .HasForeignKey("SerieId");
-                });
-
-            modelBuilder.Entity("ManaxApi.Models.Serie.Serie", b =>
-                {
-                    b.HasOne("ManaxApi.Models.Serie.SerieInfo", "Infos")
-                        .WithMany()
-                        .HasForeignKey("InfosId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Infos");
                 });
 
             modelBuilder.Entity("ManaxApi.Models.Serie.Serie", b =>

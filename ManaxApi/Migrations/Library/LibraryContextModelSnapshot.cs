@@ -49,22 +49,6 @@ namespace ManaxApi.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<long>("InfosId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("InfosId");
-
-                    b.ToTable("Libraries");
-                });
-
-            modelBuilder.Entity("ManaxApi.Models.Library.LibraryInfo", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -75,31 +59,10 @@ namespace ManaxApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("LibraryInfo");
+                    b.ToTable("Libraries");
                 });
 
             modelBuilder.Entity("ManaxApi.Models.Serie.Serie", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<long>("InfosId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<long?>("LibraryId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("InfosId");
-
-                    b.HasIndex("LibraryId");
-
-                    b.ToTable("Serie");
-                });
-
-            modelBuilder.Entity("ManaxApi.Models.Serie.SerieInfo", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -109,13 +72,18 @@ namespace ManaxApi.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<long?>("LibraryId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.ToTable("SerieInfo");
+                    b.HasIndex("LibraryId");
+
+                    b.ToTable("Serie");
                 });
 
             modelBuilder.Entity("ManaxApi.Models.Chapter.Chapter", b =>
@@ -125,30 +93,11 @@ namespace ManaxApi.Migrations
                         .HasForeignKey("SerieId");
                 });
 
-            modelBuilder.Entity("ManaxApi.Models.Library.Library", b =>
-                {
-                    b.HasOne("ManaxApi.Models.Library.LibraryInfo", "Infos")
-                        .WithMany()
-                        .HasForeignKey("InfosId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Infos");
-                });
-
             modelBuilder.Entity("ManaxApi.Models.Serie.Serie", b =>
                 {
-                    b.HasOne("ManaxApi.Models.Serie.SerieInfo", "Infos")
-                        .WithMany()
-                        .HasForeignKey("InfosId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("ManaxApi.Models.Library.Library", null)
                         .WithMany("Series")
                         .HasForeignKey("LibraryId");
-
-                    b.Navigation("Infos");
                 });
 
             modelBuilder.Entity("ManaxApi.Models.Library.Library", b =>
