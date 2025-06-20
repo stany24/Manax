@@ -1,7 +1,9 @@
+// ReSharper disable PropertyCanBeMadeInitOnly.Global
+
 namespace ManaxApi.Models.Serie;
 
 public class SerieInfo
 {
-    public string Title { get; set; }
+    public string Title { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
 }

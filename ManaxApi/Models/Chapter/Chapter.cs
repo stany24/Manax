@@ -7,7 +7,7 @@ namespace ManaxApi.Models.Chapter;
 public class Chapter
 {
     public long Id { get; set; }
-    public string Name { get; set; }
+    public string Name { get; set; } = string.Empty;
     public int Number { get; set; }
     public string Path { get; set; } = string.Empty;
 }

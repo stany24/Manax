@@ -33,11 +33,7 @@
         <SubType>Code</SubType>
       </Compile>
       <Compile Update="Views\Issue\IssuesPageView.axaml.cs">
-        <DependentUpon>IssuePageView.axaml</DependentUpon>
-        <SubType>Code</SubType>
-      </Compile>
-      <Compile Update="Views\Issue\IssuePageView.axaml.cs">
-        <DependentUpon>HomePageView.axaml</DependentUpon>
+        <DependentUpon>IssuesPageView.axaml</DependentUpon>
         <SubType>Code</SubType>
       </Compile>
       <Compile Update="Views\User\UsersPageView.axaml.cs">
@@ -50,6 +46,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <AdditionalFiles Include="Views\Issue\IssuePageView.axaml" />
+      <AdditionalFiles Include="Views\Issue\IssuesPageView.axaml" />
     </ItemGroup>
 </Project>
