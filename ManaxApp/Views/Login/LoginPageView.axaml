@@ -49,14 +49,23 @@
             Grid.Row="6"
             Value="{Binding Port}"></NumericUpDown>
         
-        <Button
+        <Grid
             Grid.Column="0"
             Grid.ColumnSpan="3"
             Grid.Row="8"
-            HorizontalAlignment="Stretch"
-            HorizontalContentAlignment="Center"
-            HotKey="Enter"
-            Command="{Binding Login}">Login</Button>
+            ColumnDefinitions="*,10,*">
+            <Button
+                Grid.Column="0"
+                HorizontalAlignment="Stretch"
+                HorizontalContentAlignment="Center"
+                HotKey="Enter"
+                Command="{Binding Login}">Login</Button>
+            <Button
+                Grid.Column="2"
+                HorizontalAlignment="Stretch"
+                HorizontalContentAlignment="Center"
+                Command="{Binding Claim}">Claim</Button>
+        </Grid>
         
         <Label
             Grid.Column="0"

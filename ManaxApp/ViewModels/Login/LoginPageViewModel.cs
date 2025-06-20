@@ -20,14 +20,33 @@ public partial class LoginPageViewModel: PageViewModel
 
     public void Login()
     {
+        LoginError = string.Empty;
         Task.Run(async () =>
         {
-            Dispatcher.UIThread.Post(() => { LoginError = string.Empty; });
             ManaxApiConfig.SetHost(new Uri(Host + $":{Port}/"));
             string? token = await ManaxApiUserClient.LoginAsync(Username, Password);
+            CheckToken(token,"Invalid username or password");
+        });
+    }
+    
+    public void Claim()
+    {
+        LoginError = string.Empty;
+        Task.Run(async () =>
+        {
+            ManaxApiConfig.SetHost(new Uri(Host + $":{Port}/"));
+            string? token = await ManaxApiUserClient.ClaimAsync(Username, Password);
+            CheckToken(token,"Could not claim server");
+        });
+    }
+
+    private async void CheckToken(string? token,string errorMessage)
+    {
+        try
+        {
             if (token == null)
             {
-                Dispatcher.UIThread.Post(() => { LoginError = "Invalid username or password"; });
+                Dispatcher.UIThread.Post(() => { LoginError = errorMessage ; });
                 return;
             }
             ManaxApiConfig.SetToken(token);
@@ -44,7 +63,11 @@ public partial class LoginPageViewModel: PageViewModel
             _isAdmin = self.Role is UserRole.Admin or UserRole.Owner ;
 
             PageChangedRequested?.Invoke(this,new HomePageViewModel());
-        });
+        }
+        catch (Exception)
+        {
+            Dispatcher.UIThread.Post(() => { LoginError = "Unknown error"; });
+        }
     }
 
     public bool IsAdmin()

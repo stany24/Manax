@@ -64,25 +64,12 @@ public class UserController(UserContext context, IConfiguration config) : Contro
     // POST: api/User
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPost("create")]
+    [AuthorizeRole(UserRole.Admin)]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(long))]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult<long>> PostUser(User user)
     {
-        if (!context.Users.Any())
-        {
-            user.Role = UserRole.Owner;
-            user.PasswordHash = HashService.ComputeSha3_512(user.PasswordHash);
-            context.Users.Add(user);
-            await context.SaveChangesAsync();
-            return CreatedAtAction("GetUser", new { id = user.Id }, user);
-        }
-
-        if (!(HttpContext.User.Identity?.IsAuthenticated ?? false))
-            return Unauthorized();
-        string? roleClaim = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
-        if (roleClaim == null || !Enum.TryParse(roleClaim, out UserRole userRole) || userRole < UserRole.Admin)
-            return Forbid();
         user.PasswordHash = HashService.ComputeSha3_512(user.PasswordHash);
         context.Users.Add(user);
         await context.SaveChangesAsync();
@@ -141,5 +128,26 @@ public class UserController(UserContext context, IConfiguration config) : Contro
         if (user == null) return NotFound();
             
         return user.GetInfo();
+    }
+
+    [HttpPost("/api/claim")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(bool))]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    public async Task<ActionResult> Claim(LoginRequest request)
+    {
+        if (context.Users.Any()) { return Forbid(); }
+
+        User user = new()
+        {
+            Role = UserRole.Owner,
+            Username = request.Username,
+            PasswordHash = HashService.ComputeSha3_512(request.Password)
+        };
+        
+        context.Users.Add(user);
+        await context.SaveChangesAsync();
+            
+        string token = JwtService.GenerateToken(user, config);
+        return Ok(new { token });
     }
 }

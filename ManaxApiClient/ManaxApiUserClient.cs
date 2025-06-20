@@ -62,4 +62,13 @@ public static class ManaxApiUserClient
             Role = userInfo.Role
         };
     }
+    
+    public static async Task<string?> ClaimAsync(string username, string password)
+    {
+        HttpResponseMessage response = await ManaxApiClient.Client.PostAsJsonAsync("/api/claim", new { username, password });
+        if (!response.IsSuccessStatusCode) return null;
+        string json = await response.Content.ReadAsStringAsync();
+        using JsonDocument doc = JsonDocument.Parse(json);
+        return doc.RootElement.GetProperty("token").GetString();
+    }
 }
