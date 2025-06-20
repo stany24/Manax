@@ -3,4 +3,5 @@ dotnet ef migrations add UserV0.1 --project ManaxApi.csproj --context UserContex
 dotnet ef migrations add LibraryV0.1 --project ManaxApi.csproj --context LibraryContext
 dotnet ef migrations add SerieV0.1 --project ManaxApi.csproj --context SerieContext
 dotnet ef migrations add ChapterV0.1 --project ManaxApi.csproj --context ChapterContext
+dotnet ef migrations add IssueV0.1 --project ManaxApi.csproj --context IssueContext
 rm -r bin

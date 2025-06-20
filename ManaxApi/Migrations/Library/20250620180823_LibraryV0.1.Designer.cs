@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ManaxApi.Migrations.Library
 {
     [DbContext(typeof(LibraryContext))]
-    [Migration("20250620162852_LibraryV0.1")]
+    [Migration("20250620180823_LibraryV0.1")]
     partial class LibraryV01
     {
         /// <inheritdoc />
