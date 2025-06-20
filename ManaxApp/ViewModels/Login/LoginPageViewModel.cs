@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
+using ManaxApp.ViewModels.Home;
 
 namespace ManaxApp.ViewModels.Login;
 
@@ -26,7 +27,7 @@ public partial class LoginPageViewModel: PageViewModel
                 return;
             }
             ManaxApiCaller.ManaxApiCaller.SetToken(token);
-            PageChangedRequested?.Invoke(this,new LoginPageViewModel());
+            PageChangedRequested?.Invoke(this,new HomePageViewModel());
         });
     }
 }

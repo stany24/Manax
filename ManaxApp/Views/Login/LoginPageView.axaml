@@ -53,6 +53,8 @@
             Grid.Column="0"
             Grid.ColumnSpan="3"
             Grid.Row="8"
+            HorizontalAlignment="Stretch"
+            HorizontalContentAlignment="Center"
             HotKey="Enter"
             Command="{Binding Login}">Login</Button>
         

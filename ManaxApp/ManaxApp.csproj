@@ -28,6 +28,10 @@
       <Compile Update="Views\Login\LoginPageView.axaml.cs">
         <DependentUpon>LoginPageView.axaml</DependentUpon>
       </Compile>
+      <Compile Update="Views\Home\HomePageView.axaml.cs">
+        <DependentUpon>LoginPageView.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
     </ItemGroup>
 
     <ItemGroup>
