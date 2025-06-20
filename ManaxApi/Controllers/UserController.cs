@@ -23,15 +23,15 @@ public class UserController(UserContext context, IConfiguration config) : Contro
     // GET: api/User/5
     [HttpGet("{id:long}")]
     [AuthorizeRole(UserRole.Admin)]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(User))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserInfo))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<User>> GetUser(long id)
+    public async Task<ActionResult<UserInfo>> GetUser(long id)
     {
         User? user = await context.Users.FindAsync(id);
 
         if (user == null) return NotFound();
 
-        return user;
+        return user.GetInfo();
     }
 
     // PUT: api/User/5
@@ -64,10 +64,10 @@ public class UserController(UserContext context, IConfiguration config) : Contro
     // POST: api/User
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPost("create")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(User))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserInfo))]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<ActionResult<User>> PostUser(User user)
+    public async Task<ActionResult<UserInfo>> PostUser(User user)
     {
         if (!context.Users.Any())
         {
@@ -83,6 +83,7 @@ public class UserController(UserContext context, IConfiguration config) : Contro
         string? roleClaim = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
         if (roleClaim == null || !Enum.TryParse(roleClaim, out UserRole userRole) || userRole < UserRole.Admin)
             return Forbid();
+        user.PasswordHash = HashService.ComputeSha3_512(user.PasswordHash);
         context.Users.Add(user);
         await context.SaveChangesAsync();
         return CreatedAtAction("GetUser", new { id = user.Id }, user);

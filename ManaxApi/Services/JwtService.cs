@@ -12,7 +12,7 @@ public static class JwtService
     private static string? _secretKey;
     private static readonly JsonSerializerOptions JsonSerializerOptions = new() { WriteIndented = true };
 
-    private static string GetSecretKey(IConfiguration config)
+    public static string GetSecretKey(IConfiguration config)
     {
         if (!string.IsNullOrEmpty(_secretKey))
             return _secretKey;

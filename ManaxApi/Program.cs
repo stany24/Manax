@@ -2,7 +2,10 @@ using ManaxApi.Models.Chapter;
 using ManaxApi.Models.Library;
 using ManaxApi.Models.Serie;
 using ManaxApi.Models.User;
+using ManaxApi.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 
 namespace ManaxApi;
 
@@ -16,6 +19,22 @@ public static class Program
 
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
+
+        // Configuration de l'authentification JWT avec la clé obtenue de JwtService
+        // La méthode GetSecretKey va générer une clé si elle n'existe pas
+        string secretKey = JwtService.GetSecretKey(builder.Configuration);
+        builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Convert.FromBase64String(secretKey))
+                };
+            });
 
         builder.Services.AddDbContext<UserContext>(opt =>
             opt.UseSqlite($"Data Source={Path.Combine(AppContext.BaseDirectory, "database.db")}"));
@@ -59,6 +78,8 @@ public static class Program
 
         app.UseHttpsRedirection();
 
+        // Ajouter le middleware d'authentification avant celui d'autorisation
+        app.UseAuthentication();
         app.UseAuthorization();
 
         app.MapControllers();
