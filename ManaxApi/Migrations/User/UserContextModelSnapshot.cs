@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace ManaxApi.Migrations.User
+namespace ManaxApi.Migrations
 {
     [DbContext(typeof(UserContext))]
     partial class UserContextModelSnapshot : ModelSnapshot
@@ -24,6 +24,7 @@ namespace ManaxApi.Migrations.User
 
                     b.Property<string>("PasswordHash")
                         .IsRequired()
+                        .HasMaxLength(128)
                         .HasColumnType("TEXT");
 
                     b.Property<int>("Role")
@@ -31,9 +32,13 @@ namespace ManaxApi.Migrations.User
 
                     b.Property<string>("Username")
                         .IsRequired()
+                        .HasMaxLength(50)
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Username")
+                        .IsUnique();
 
                     b.ToTable("Users");
                 });

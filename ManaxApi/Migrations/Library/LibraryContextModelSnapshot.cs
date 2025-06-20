@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace ManaxApi.Migrations
+namespace ManaxApi.Migrations.Library
 {
     [DbContext(typeof(LibraryContext))]
     partial class LibraryContextModelSnapshot : ModelSnapshot

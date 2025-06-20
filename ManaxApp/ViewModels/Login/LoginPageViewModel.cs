@@ -2,6 +2,8 @@ using System;
 using System.Threading.Tasks;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
+using ManaxApi.Models.User;
+using ManaxApiClient;
 using ManaxApp.ViewModels.Home;
 
 namespace ManaxApp.ViewModels.Login;
@@ -14,20 +16,39 @@ public partial class LoginPageViewModel: PageViewModel
     [ObservableProperty] private int _port = 5246;
     [ObservableProperty] private string _loginError = string.Empty;
 
+    private bool _isAdmin;
+
     public void Login()
     {
         Task.Run(async () =>
         {
             Dispatcher.UIThread.Post(() => { LoginError = string.Empty; });
-            ManaxApiCaller.ManaxApiCaller.SetHost(new Uri(Host + $":{Port}/"));
-            string? token = await ManaxApiCaller.ManaxApiCaller.LoginAsync(Username, Password);
+            ManaxApiConfig.SetHost(new Uri(Host + $":{Port}/"));
+            string? token = await ManaxApiUserClient.LoginAsync(Username, Password);
             if (token == null)
             {
                 Dispatcher.UIThread.Post(() => { LoginError = "Invalid username or password"; });
                 return;
             }
-            ManaxApiCaller.ManaxApiCaller.SetToken(token);
+            ManaxApiConfig.SetToken(token);
+
+            ManaxApi.Models.User.User? self = await ManaxApiUserClient.GetSelf();
+            
+            if (self == null)
+            {
+                ManaxApiConfig.SetToken("");
+                Dispatcher.UIThread.Post(() => { LoginError = "Failed to retrieve user information"; });
+                return;
+            }
+            
+            _isAdmin = self.Role is UserRole.Admin or UserRole.Owner ;
+
             PageChangedRequested?.Invoke(this,new HomePageViewModel());
         });
+    }
+
+    public bool IsAdmin()
+    {
+        return _isAdmin;
     }
 }

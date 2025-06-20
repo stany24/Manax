@@ -42,7 +42,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\ManaxApiCaller\ManaxApiCaller.csproj" />
+      <ProjectReference Include="..\ManaxApiClient\ManaxApiClient.csproj" />
     </ItemGroup>
 
     <ItemGroup>

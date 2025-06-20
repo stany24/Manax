@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace ManaxApi.Migrations
+namespace ManaxApi.Migrations.Library
 {
     /// <inheritdoc />
     public partial class LibraryV01 : Migration

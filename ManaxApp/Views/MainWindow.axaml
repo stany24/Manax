@@ -22,10 +22,12 @@
             <Button
                 HorizontalAlignment="Stretch"
                 HorizontalContentAlignment="Center"
+                IsVisible="{Binding IsAdmin}"
                 Command="{Binding ChangePageIssues}">Issues</Button>
             <Button
                 HorizontalAlignment="Stretch"
                 HorizontalContentAlignment="Center"
+                IsVisible="{Binding IsAdmin}"
                 Command="{Binding ChangePageUsers}">Users</Button>
         </StackPanel>
 

@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace ManaxApi.Migrations.User
+namespace ManaxApi.Migrations
 {
     /// <inheritdoc />
     public partial class UserV01 : Migration
@@ -16,14 +16,20 @@ namespace ManaxApi.Migrations.User
                 {
                     Id = table.Column<long>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Username = table.Column<string>(type: "TEXT", nullable: false),
-                    PasswordHash = table.Column<string>(type: "TEXT", nullable: false),
+                    Username = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
+                    PasswordHash = table.Column<string>(type: "TEXT", maxLength: 128, nullable: false),
                     Role = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.Id);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_Username",
+                table: "Users",
+                column: "Username",
+                unique: true);
         }
 
         /// <inheritdoc />

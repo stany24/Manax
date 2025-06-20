@@ -9,19 +9,29 @@ namespace ManaxApp.ViewModels;
 public partial class MainWindowViewModel : ObservableObject
 {
     [ObservableProperty] private PageViewModel _currentPageViewModel;
+    [ObservableProperty] private bool _isAdmin;
 
     public MainWindowViewModel()
     {
         PropertyChanged += (_, args) =>
         {
-            if (args.PropertyName == nameof(CurrentPageViewModel))
+            if (args.PropertyName != nameof(CurrentPageViewModel)) {return;}
+            CurrentPageViewModel.Admin = IsAdmin;
+            CurrentPageViewModel.PageChangedRequested += (_, e) =>
             {
-                CurrentPageViewModel.PageChangedRequested += (_, e) =>
-                {
-                    CurrentPageViewModel = e;
-                };
+                CurrentPageViewModel = e;
+            };
+        };
+        
+        PropertyChanging += (_, args) =>
+        {
+            if (args.PropertyName != nameof(CurrentPageViewModel)) {return;}
+            if (CurrentPageViewModel is LoginPageViewModel login)
+            {
+                IsAdmin = login.IsAdmin();
             }
         };
+        
         CurrentPageViewModel = new LoginPageViewModel();
     }
     

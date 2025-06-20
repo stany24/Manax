@@ -4,34 +4,35 @@ using System.Threading.Tasks;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using ManaxApi.Models.User;
+using ManaxApiClient;
 
 namespace ManaxApp.ViewModels.User;
 
 public partial class UsersPageViewModel:PageViewModel
 {
-    [ObservableProperty] private ObservableCollection<ManaxApi.Models.User.User> _users = new();
+    [ObservableProperty] private ObservableCollection<UserInfo> _users = [];
     
     public UsersPageViewModel()
     {
         ControlBarVisible = true;
         Task.Run( async () =>
         {
-            List<long>? ids =  await ManaxApiCaller.ManaxApiUserCaller.GetUsersIdsAsync();
+            List<long>? ids =  await ManaxApiUserClient.GetUsersIdsAsync();
             if (ids == null) return;
             foreach (long id in ids)
             {
-                ManaxApi.Models.User.User? userAsync = await ManaxApiCaller.ManaxApiUserCaller.GetUserAsync(id);
+                UserInfo? userAsync = await ManaxApiUserClient.GetUserAsync(id);
                 if (userAsync == null) continue;
                 Dispatcher.UIThread.Post(() => Users.Add(userAsync));
             }
         });
     }
     
-    public void DeleteUser(ManaxApi.Models.User.User user)
+    public void DeleteUser(UserInfo user)
     {
         Task.Run(async () =>
         {
-            if (await ManaxApiCaller.ManaxApiUserCaller.DeleteUserAsync(user.Id))
+            if (await ManaxApiUserClient.DeleteUserAsync(user.Id))
             {
                 Dispatcher.UIThread.Post(() => Users.Remove(user));
             }
@@ -43,9 +44,11 @@ public partial class UsersPageViewModel:PageViewModel
         Task.Run(async () =>
         {
             ManaxApi.Models.User.User user = new(){Role = UserRole.User, Username = "test", PasswordHash = "test"};
-            UserInfo? userInfo = await ManaxApiCaller.ManaxApiUserCaller.PostUserAsync(user);
-            if (userInfo == null){return;}
-            Dispatcher.UIThread.Post(() => Users.Add(user));
+            long? id = await ManaxApiUserClient.PostUserAsync(user);
+            if (id == null){return;}
+            UserInfo? createdUser = await ManaxApiUserClient.GetUserAsync((long)id);
+            if (createdUser == null) return;
+            Dispatcher.UIThread.Post(() => Users.Add(createdUser));
         });
     }
 }

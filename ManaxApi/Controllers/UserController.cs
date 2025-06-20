@@ -64,10 +64,10 @@ public class UserController(UserContext context, IConfiguration config) : Contro
     // POST: api/User
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPost("create")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserInfo))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(long))]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<ActionResult<UserInfo>> PostUser(User user)
+    public async Task<ActionResult<long>> PostUser(User user)
     {
         if (!context.Users.Any())
         {
@@ -86,7 +86,7 @@ public class UserController(UserContext context, IConfiguration config) : Contro
         user.PasswordHash = HashService.ComputeSha3_512(user.PasswordHash);
         context.Users.Add(user);
         await context.SaveChangesAsync();
-        return CreatedAtAction("GetUser", new { id = user.Id }, user);
+        return user.Id;
     }
 
     // DELETE: api/User/5
@@ -120,5 +120,26 @@ public class UserController(UserContext context, IConfiguration config) : Contro
             return Unauthorized();
         string token = JwtService.GenerateToken(user, config);
         return Ok(new { token });
+    }
+
+    // GET: api/User/current
+    [HttpGet("current")]
+    [AuthorizeRole(UserRole.User)]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserInfo))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<ActionResult<UserInfo>> GetCurrentUser()
+    {
+        if (!(HttpContext.User.Identity?.IsAuthenticated ?? false))
+            return Unauthorized();
+            
+        string? userIdClaim = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+        if (userIdClaim == null || !long.TryParse(userIdClaim, out long userId))
+            return Unauthorized();
+            
+        User? user = await context.Users.FindAsync(userId);
+        if (user == null) return NotFound();
+            
+        return user.GetInfo();
     }
 }
