@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ManaxApi.Migrations.Read
 {
     [DbContext(typeof(ReadContext))]
-    [Migration("20250621074939_ReadV0.1")]
+    [Migration("20250621100621_ReadV0.1")]
     partial class ReadV01
     {
         /// <inheritdoc />
@@ -26,11 +26,14 @@ namespace ManaxApi.Migrations.Read
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("FileName")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int>("Number")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Pages")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Path")

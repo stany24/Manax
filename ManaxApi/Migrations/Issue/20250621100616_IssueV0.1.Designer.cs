@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ManaxApi.Migrations.Issue
 {
     [DbContext(typeof(IssueContext))]
-    [Migration("20250621074934_IssueV0.1")]
+    [Migration("20250621100616_IssueV0.1")]
     partial class IssueV01
     {
         /// <inheritdoc />
@@ -25,14 +25,17 @@ namespace ManaxApi.Migrations.Issue
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<long?>("IssueId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Name")
+                    b.Property<string>("FileName")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<long?>("IssueId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("Number")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Pages")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Path")

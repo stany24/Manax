@@ -22,11 +22,14 @@ namespace ManaxApi.Migrations.Serie
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("FileName")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int>("Number")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Pages")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Path")
@@ -50,6 +53,10 @@ namespace ManaxApi.Migrations.Serie
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("FolderName")
                         .IsRequired()
                         .HasColumnType("TEXT");
 

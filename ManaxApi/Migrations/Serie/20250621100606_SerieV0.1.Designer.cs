@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ManaxApi.Migrations.Serie
 {
     [DbContext(typeof(SerieContext))]
-    [Migration("20250621074924_SerieV0.1")]
+    [Migration("20250621100606_SerieV0.1")]
     partial class SerieV01
     {
         /// <inheritdoc />
@@ -25,11 +25,14 @@ namespace ManaxApi.Migrations.Serie
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("FileName")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int>("Number")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Pages")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Path")
@@ -53,6 +56,10 @@ namespace ManaxApi.Migrations.Serie
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("FolderName")
                         .IsRequired()
                         .HasColumnType("TEXT");
 

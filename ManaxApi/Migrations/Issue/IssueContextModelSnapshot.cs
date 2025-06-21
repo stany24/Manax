@@ -22,14 +22,17 @@ namespace ManaxApi.Migrations.Issue
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<long?>("IssueId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Name")
+                    b.Property<string>("FileName")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<long?>("IssueId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("Number")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Pages")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Path")

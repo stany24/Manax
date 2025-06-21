@@ -11,6 +11,7 @@ public class Library
     public long Id { get; set; }
     public string Name { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
+    public string Path { get; set; } = string.Empty;
     public List<Serie.Serie> Series { get; set; } = [];
     
     public LibraryInfo GetInfo()
@@ -18,7 +19,8 @@ public class Library
         return new LibraryInfo
         {
             Name = Name,
-            Description = Description
+            Description = Description,
+            Path = Path,
         };
     }
 }

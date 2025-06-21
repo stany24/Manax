@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ManaxApi.Migrations.Library
 {
     [DbContext(typeof(LibraryContext))]
-    [Migration("20250621074919_LibraryV0.1")]
+    [Migration("20250621100601_LibraryV0.1")]
     partial class LibraryV01
     {
         /// <inheritdoc />
@@ -25,11 +25,14 @@ namespace ManaxApi.Migrations.Library
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("FileName")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int>("Number")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Pages")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Path")
@@ -60,6 +63,10 @@ namespace ManaxApi.Migrations.Library
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Path")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
                     b.ToTable("Libraries");
@@ -72,6 +79,10 @@ namespace ManaxApi.Migrations.Library
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("FolderName")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
