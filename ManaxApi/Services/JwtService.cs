@@ -35,7 +35,7 @@ public static class JwtService
         Dictionary<string, object> dict = JsonSerializer.Deserialize<Dictionary<string, object>>(json) ??
                                           new Dictionary<string, object>();
         dict["SecretKey"] = _secretKey;
-        string newJson = JsonSerializer.Serialize(dict, JsonSerializerOptions );
+        string newJson = JsonSerializer.Serialize(dict, JsonSerializerOptions);
         File.WriteAllText(configPath, newJson);
         return _secretKey;
     }

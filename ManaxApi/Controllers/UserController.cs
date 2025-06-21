@@ -119,13 +119,13 @@ public class UserController(UserContext context, IConfiguration config) : Contro
     {
         if (!(HttpContext.User.Identity?.IsAuthenticated ?? false))
             return Unauthorized();
-            
+
         long? userId = GetCurrentUserId(HttpContext);
-        if (userId == null) {return Unauthorized();}
-            
+        if (userId == null) return Unauthorized();
+
         User? user = await context.Users.FindAsync(userId);
         if (user == null) return NotFound();
-            
+
         return user.GetInfo();
     }
 
@@ -134,7 +134,7 @@ public class UserController(UserContext context, IConfiguration config) : Contro
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<ActionResult> Claim(LoginRequest request)
     {
-        if (context.Users.Any()) { return Forbid(); }
+        if (context.Users.Any()) return Forbid();
 
         User user = new()
         {
@@ -142,10 +142,10 @@ public class UserController(UserContext context, IConfiguration config) : Contro
             Username = request.Username,
             PasswordHash = HashService.ComputeSha3_512(request.Password)
         };
-        
+
         context.Users.Add(user);
         await context.SaveChangesAsync();
-            
+
         string token = JwtService.GenerateToken(user, config);
         return Ok(new { token });
     }
@@ -153,10 +153,7 @@ public class UserController(UserContext context, IConfiguration config) : Contro
     internal static long? GetCurrentUserId(HttpContext httpContext)
     {
         string? userIdClaim = httpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-        if (userIdClaim == null || !long.TryParse(userIdClaim, out long userId))
-        {
-            return null;
-        }
+        if (userIdClaim == null || !long.TryParse(userIdClaim, out long userId)) return null;
         return userId;
     }
 }

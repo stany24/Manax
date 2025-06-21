@@ -11,19 +11,21 @@
         <Button
             DockPanel.Dock="Bottom"
             HorizontalAlignment="Right"
-            Command="{Binding CreateUser}">Add</Button>
-        
+            Command="{Binding CreateUser}">
+            Add
+        </Button>
+
         <ListBox
             ItemsSource="{Binding Users}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <Border BorderBrush="Blue" BorderThickness="1" 
+                    <Border BorderBrush="Blue" BorderThickness="1"
                             CornerRadius="4" Padding="4">
                         <StackPanel
                             Orientation="Horizontal">
-                            <Label Content="{Binding Id}"/>
-                            <Label Content="{Binding Username}"/>
-                            <Label Content="{Binding Role}"/>
+                            <Label Content="{Binding Id}" />
+                            <Label Content="{Binding Username}" />
+                            <Label Content="{Binding Role}" />
                             <Button
                                 Content="Delete"
                                 Command="{Binding $parent[UserControl].((login:UsersPageViewModel)DataContext).DeleteUser}"
@@ -34,5 +36,5 @@
             </ListBox.ItemTemplate>
         </ListBox>
     </DockPanel>
-    
+
 </UserControl>

@@ -1,5 +1,6 @@
 using System.Security.Claims;
 using ManaxApi.Models.User;
+using ManaxApi.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
@@ -10,25 +11,26 @@ public class AuthorizeRoleAttribute(UserRole minRole) : Attribute, IAuthorizatio
 {
     public void OnAuthorization(AuthorizationFilterContext context)
     {
-        IConfiguration? config = context.HttpContext.RequestServices.GetService(typeof(IConfiguration)) as IConfiguration;
+        IConfiguration? config =
+            context.HttpContext.RequestServices.GetService(typeof(IConfiguration)) as IConfiguration;
         string? authHeader = context.HttpContext.Request.Headers.Authorization.FirstOrDefault();
         if (authHeader == null || !authHeader.StartsWith("Bearer "))
         {
             context.Result = new UnauthorizedResult();
             return;
         }
+
         string token = authHeader["Bearer ".Length..].Trim();
-        ClaimsPrincipal? principal = Services.JwtService.ValidateToken(token, config!);
+        ClaimsPrincipal? principal = JwtService.ValidateToken(token, config!);
         if (principal == null)
         {
             context.Result = new UnauthorizedResult();
             return;
         }
+
         context.HttpContext.User = principal;
         string? roleClaim = principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
         if (roleClaim == null || !Enum.TryParse(roleClaim, out UserRole userRole) || userRole < minRole)
-        {
             context.Result = new ForbidResult();
-        }
     }
 }

@@ -8,16 +8,16 @@ using ManaxApiClient;
 
 namespace ManaxApp.ViewModels.User;
 
-public partial class UsersPageViewModel:PageViewModel
+public partial class UsersPageViewModel : PageViewModel
 {
     [ObservableProperty] private ObservableCollection<UserInfo> _users = [];
-    
+
     public UsersPageViewModel()
     {
         ControlBarVisible = true;
-        Task.Run( async () =>
+        Task.Run(async () =>
         {
-            List<long>? ids =  await ManaxApiUserClient.GetUsersIdsAsync();
+            List<long>? ids = await ManaxApiUserClient.GetUsersIdsAsync();
             if (ids == null) return;
             foreach (long id in ids)
             {
@@ -27,25 +27,22 @@ public partial class UsersPageViewModel:PageViewModel
             }
         });
     }
-    
+
     public void DeleteUser(UserInfo user)
     {
         Task.Run(async () =>
         {
-            if (await ManaxApiUserClient.DeleteUserAsync(user.Id))
-            {
-                Dispatcher.UIThread.Post(() => Users.Remove(user));
-            }
+            if (await ManaxApiUserClient.DeleteUserAsync(user.Id)) Dispatcher.UIThread.Post(() => Users.Remove(user));
         });
     }
-    
+
     public void CreateUser()
     {
         Task.Run(async () =>
         {
-            ManaxApi.Models.User.User user = new(){Role = UserRole.User, Username = "test", PasswordHash = "test"};
+            ManaxApi.Models.User.User user = new() { Role = UserRole.User, Username = "test", PasswordHash = "test" };
             long? id = await ManaxApiUserClient.PostUserAsync(user);
-            if (id == null){return;}
+            if (id == null) return;
             UserInfo? createdUser = await ManaxApiUserClient.GetUserAsync((long)id);
             if (createdUser == null) return;
             Dispatcher.UIThread.Post(() => Users.Add(createdUser));

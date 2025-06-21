@@ -1,8 +1,8 @@
+using ManaxApi.Auth;
 using ManaxApi.Models.Issue;
+using ManaxApi.Models.User;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using ManaxApi.Auth;
-using ManaxApi.Models.User;
 
 namespace ManaxApi.Controllers;
 
@@ -23,26 +23,23 @@ public class IssueController(IssueContext issueContext) : ControllerBase
     public async Task<ActionResult<Issue>> CreateIssue(Issue issue)
     {
         long? userId = UserController.GetCurrentUserId(HttpContext);
-        if (userId == null) { return Unauthorized(); }
+        if (userId == null) return Unauthorized();
 
         issue.User = new User { Id = (long)userId };
-        
+
         issueContext.Issues.Add(issue);
         await issueContext.SaveChangesAsync();
 
         return CreatedAtAction(nameof(GetAllIssues), new { id = issue.Id }, issue);
     }
 
-    [HttpPut("{id}/close")]
+    [HttpPut("{id:long}/close")]
     [AuthorizeRole(UserRole.Admin)]
     public async Task<IActionResult> CloseIssue(long id)
     {
         Issue? issue = await issueContext.Issues.FindAsync(id);
-        
-        if (issue == null)
-        {
-            return NotFound();
-        }
+
+        if (issue == null) return NotFound();
 
         issueContext.Issues.Remove(issue);
         await issueContext.SaveChangesAsync();

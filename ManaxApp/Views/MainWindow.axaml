@@ -9,7 +9,7 @@
     x:DataType="vm:MainWindowViewModel"
     Icon="/Assets/avalonia-logo.ico"
     Title="ManaxApp">
-    
+
     <DockPanel>
         <StackPanel
             IsVisible="{Binding CurrentPageViewModel.ControlBarVisible}"
@@ -18,17 +18,23 @@
             <Button
                 HorizontalAlignment="Stretch"
                 HorizontalContentAlignment="Center"
-                Command="{Binding ChangePageHome}">Home</Button>
+                Command="{Binding ChangePageHome}">
+                Home
+            </Button>
             <Button
                 HorizontalAlignment="Stretch"
                 HorizontalContentAlignment="Center"
                 IsVisible="{Binding IsAdmin}"
-                Command="{Binding ChangePageIssues}">Issues</Button>
+                Command="{Binding ChangePageIssues}">
+                Issues
+            </Button>
             <Button
                 HorizontalAlignment="Stretch"
                 HorizontalContentAlignment="Center"
                 IsVisible="{Binding IsAdmin}"
-                Command="{Binding ChangePageUsers}">Users</Button>
+                Command="{Binding ChangePageUsers}">
+                Users
+            </Button>
         </StackPanel>
 
         <ContentControl

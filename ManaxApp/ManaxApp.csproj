@@ -11,41 +11,41 @@
     <ItemGroup>
         <Folder Include="Models\"/>
         <AvaloniaResource Include="Assets\**"/>
-        <Folder Include="Views\Login\" />
+        <Folder Include="Views\Login\"/>
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Avalonia" Version="11.3.1" />
-        <PackageReference Include="Avalonia.Desktop" Version="11.3.1" />
-        <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.1" />
-        <PackageReference Include="Avalonia.Fonts.Inter" Version="11.3.1" />
+        <PackageReference Include="Avalonia" Version="11.3.1"/>
+        <PackageReference Include="Avalonia.Desktop" Version="11.3.1"/>
+        <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.1"/>
+        <PackageReference Include="Avalonia.Fonts.Inter" Version="11.3.1"/>
         <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
-        <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.3.1" />
-        <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+        <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.3.1"/>
+        <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0"/>
     </ItemGroup>
 
     <ItemGroup>
-      <Compile Update="Views\Login\LoginPageView.axaml.cs">
-        <DependentUpon>LoginPageView.axaml</DependentUpon>
-      </Compile>
-      <Compile Update="Views\Home\HomePageView.axaml.cs">
-        <DependentUpon>LoginPageView.axaml</DependentUpon>
-        <SubType>Code</SubType>
-      </Compile>
-      <Compile Update="Views\Issue\IssuesPageView.axaml.cs">
-        <DependentUpon>IssuesPageView.axaml</DependentUpon>
-        <SubType>Code</SubType>
-      </Compile>
-      <Compile Update="Views\User\UsersPageView.axaml.cs">
-        <SubType>Code</SubType>
-      </Compile>
+        <Compile Update="Views\Login\LoginPageView.axaml.cs">
+            <DependentUpon>LoginPageView.axaml</DependentUpon>
+        </Compile>
+        <Compile Update="Views\Home\HomePageView.axaml.cs">
+            <DependentUpon>LoginPageView.axaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\Issue\IssuesPageView.axaml.cs">
+            <DependentUpon>IssuesPageView.axaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\User\UsersPageView.axaml.cs">
+            <SubType>Code</SubType>
+        </Compile>
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\ManaxApiClient\ManaxApiClient.csproj" />
+        <ProjectReference Include="..\ManaxApiClient\ManaxApiClient.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-      <AdditionalFiles Include="Views\Issue\IssuesPageView.axaml" />
+        <AdditionalFiles Include="Views\Issue\IssuesPageView.axaml"/>
     </ItemGroup>
 </Project>

@@ -1,42 +1,38 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿#nullable disable
 
-#nullable disable
+using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace ManaxApi.Migrations
+namespace ManaxApi.Migrations;
+
+/// <inheritdoc />
+public partial class UserV01 : Migration
 {
     /// <inheritdoc />
-    public partial class UserV01 : Migration
+    protected override void Up(MigrationBuilder migrationBuilder)
     {
-        /// <inheritdoc />
-        protected override void Up(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.CreateTable(
-                name: "Users",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Username = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
-                    PasswordHash = table.Column<string>(type: "TEXT", maxLength: 128, nullable: false),
-                    Role = table.Column<int>(type: "INTEGER", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Users", x => x.Id);
-                });
+        migrationBuilder.CreateTable(
+            "Users",
+            table => new
+            {
+                Id = table.Column<long>("INTEGER", nullable: false)
+                    .Annotation("Sqlite:Autoincrement", true),
+                Username = table.Column<string>("TEXT", maxLength: 50, nullable: false),
+                PasswordHash = table.Column<string>("TEXT", maxLength: 128, nullable: false),
+                Role = table.Column<int>("INTEGER", nullable: false)
+            },
+            constraints: table => { table.PrimaryKey("PK_Users", x => x.Id); });
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Users_Username",
-                table: "Users",
-                column: "Username",
-                unique: true);
-        }
+        migrationBuilder.CreateIndex(
+            "IX_Users_Username",
+            "Users",
+            "Username",
+            unique: true);
+    }
 
-        /// <inheritdoc />
-        protected override void Down(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.DropTable(
-                name: "Users");
-        }
+    /// <inheritdoc />
+    protected override void Down(MigrationBuilder migrationBuilder)
+    {
+        migrationBuilder.DropTable(
+            "Users");
     }
 }

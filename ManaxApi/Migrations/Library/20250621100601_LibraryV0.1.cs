@@ -1,95 +1,91 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿#nullable disable
 
-#nullable disable
+using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace ManaxApi.Migrations.Library
+namespace ManaxApi.Migrations.Library;
+
+/// <inheritdoc />
+public partial class LibraryV01 : Migration
 {
     /// <inheritdoc />
-    public partial class LibraryV01 : Migration
+    protected override void Up(MigrationBuilder migrationBuilder)
     {
-        /// <inheritdoc />
-        protected override void Up(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.CreateTable(
-                name: "Libraries",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", nullable: false),
-                    Description = table.Column<string>(type: "TEXT", nullable: false),
-                    Path = table.Column<string>(type: "TEXT", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Libraries", x => x.Id);
-                });
+        migrationBuilder.CreateTable(
+            "Libraries",
+            table => new
+            {
+                Id = table.Column<long>("INTEGER", nullable: false)
+                    .Annotation("Sqlite:Autoincrement", true),
+                Name = table.Column<string>("TEXT", nullable: false),
+                Description = table.Column<string>("TEXT", nullable: false),
+                Path = table.Column<string>("TEXT", nullable: false)
+            },
+            constraints: table => { table.PrimaryKey("PK_Libraries", x => x.Id); });
 
-            migrationBuilder.CreateTable(
-                name: "Serie",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    FolderName = table.Column<string>(type: "TEXT", nullable: false),
-                    Title = table.Column<string>(type: "TEXT", nullable: false),
-                    Description = table.Column<string>(type: "TEXT", nullable: false),
-                    LibraryId = table.Column<long>(type: "INTEGER", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Serie", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Serie_Libraries_LibraryId",
-                        column: x => x.LibraryId,
-                        principalTable: "Libraries",
-                        principalColumn: "Id");
-                });
+        migrationBuilder.CreateTable(
+            "Serie",
+            table => new
+            {
+                Id = table.Column<long>("INTEGER", nullable: false)
+                    .Annotation("Sqlite:Autoincrement", true),
+                FolderName = table.Column<string>("TEXT", nullable: false),
+                Title = table.Column<string>("TEXT", nullable: false),
+                Description = table.Column<string>("TEXT", nullable: false),
+                LibraryId = table.Column<long>("INTEGER", nullable: true)
+            },
+            constraints: table =>
+            {
+                table.PrimaryKey("PK_Serie", x => x.Id);
+                table.ForeignKey(
+                    "FK_Serie_Libraries_LibraryId",
+                    x => x.LibraryId,
+                    "Libraries",
+                    "Id");
+            });
 
-            migrationBuilder.CreateTable(
-                name: "Chapter",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    FileName = table.Column<string>(type: "TEXT", nullable: false),
-                    Number = table.Column<int>(type: "INTEGER", nullable: false),
-                    Pages = table.Column<int>(type: "INTEGER", nullable: false),
-                    Path = table.Column<string>(type: "TEXT", nullable: false),
-                    SerieId = table.Column<long>(type: "INTEGER", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Chapter", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Chapter_Serie_SerieId",
-                        column: x => x.SerieId,
-                        principalTable: "Serie",
-                        principalColumn: "Id");
-                });
+        migrationBuilder.CreateTable(
+            "Chapter",
+            table => new
+            {
+                Id = table.Column<long>("INTEGER", nullable: false)
+                    .Annotation("Sqlite:Autoincrement", true),
+                FileName = table.Column<string>("TEXT", nullable: false),
+                Number = table.Column<int>("INTEGER", nullable: false),
+                Pages = table.Column<int>("INTEGER", nullable: false),
+                Path = table.Column<string>("TEXT", nullable: false),
+                SerieId = table.Column<long>("INTEGER", nullable: true)
+            },
+            constraints: table =>
+            {
+                table.PrimaryKey("PK_Chapter", x => x.Id);
+                table.ForeignKey(
+                    "FK_Chapter_Serie_SerieId",
+                    x => x.SerieId,
+                    "Serie",
+                    "Id");
+            });
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Chapter_SerieId",
-                table: "Chapter",
-                column: "SerieId");
+        migrationBuilder.CreateIndex(
+            "IX_Chapter_SerieId",
+            "Chapter",
+            "SerieId");
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Serie_LibraryId",
-                table: "Serie",
-                column: "LibraryId");
-        }
+        migrationBuilder.CreateIndex(
+            "IX_Serie_LibraryId",
+            "Serie",
+            "LibraryId");
+    }
 
-        /// <inheritdoc />
-        protected override void Down(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.DropTable(
-                name: "Chapter");
+    /// <inheritdoc />
+    protected override void Down(MigrationBuilder migrationBuilder)
+    {
+        migrationBuilder.DropTable(
+            "Chapter");
 
-            migrationBuilder.DropTable(
-                name: "Serie");
+        migrationBuilder.DropTable(
+            "Serie");
 
-            migrationBuilder.DropTable(
-                name: "Libraries");
-        }
+        migrationBuilder.DropTable(
+            "Libraries");
     }
 }

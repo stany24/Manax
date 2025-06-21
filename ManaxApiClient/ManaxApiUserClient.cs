@@ -14,7 +14,7 @@ public static class ManaxApiUserClient
         using JsonDocument doc = JsonDocument.Parse(json);
         return doc.RootElement.GetProperty("token").GetString();
     }
-    
+
     public static async Task<List<long>?> GetUsersIdsAsync()
     {
         HttpResponseMessage response = await ManaxApiClient.Client.GetAsync("api/users");
@@ -50,7 +50,7 @@ public static class ManaxApiUserClient
 
     public static async Task<User?> GetSelf()
     {
-        HttpResponseMessage response = await ManaxApiClient.Client.GetAsync($"api/user/current");
+        HttpResponseMessage response = await ManaxApiClient.Client.GetAsync("api/user/current");
         if (!response.IsSuccessStatusCode) return null;
         UserInfo? userInfo = await response.Content.ReadFromJsonAsync<UserInfo>();
         if (userInfo == null) return null;
@@ -62,7 +62,7 @@ public static class ManaxApiUserClient
             Role = userInfo.Role
         };
     }
-    
+
     public static async Task<string?> ClaimAsync(string username, string password)
     {
         HttpResponseMessage response = await ManaxApiClient.Client.PostAsJsonAsync("/api/claim", new { username, password });

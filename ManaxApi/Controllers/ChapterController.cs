@@ -1,9 +1,9 @@
 using System.IO.Compression;
 using ManaxApi.Auth;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using ManaxApi.Models.Chapter;
 using ManaxApi.Models.User;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace ManaxApi.Controllers;
 
@@ -28,10 +28,7 @@ public class ChapterController(ChapterContext context) : ControllerBase
     {
         Chapter? serie = await context.Chapters.FindAsync(id);
 
-        if (serie == null)
-        {
-            return NotFound();
-        }
+        if (serie == null) return NotFound();
 
         return serie;
     }
@@ -46,10 +43,7 @@ public class ChapterController(ChapterContext context) : ControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> PutChapter(long id, Chapter serie)
     {
-        if (id != serie.Id)
-        {
-            return BadRequest();
-        }
+        if (id != serie.Id) return BadRequest();
 
         context.Entry(serie).State = EntityState.Modified;
 
@@ -59,10 +53,7 @@ public class ChapterController(ChapterContext context) : ControllerBase
         }
         catch (DbUpdateConcurrencyException)
         {
-            if (!ChapterExists(id))
-            {
-                return NotFound();
-            }
+            if (!ChapterExists(id)) return NotFound();
 
             throw;
         }
@@ -92,10 +83,7 @@ public class ChapterController(ChapterContext context) : ControllerBase
     public async Task<IActionResult> DeleteChapter(long id)
     {
         Chapter? serie = await context.Chapters.FindAsync(id);
-        if (serie == null)
-        {
-            return NotFound();
-        }
+        if (serie == null) return NotFound();
 
         context.Chapters.Remove(serie);
         await context.SaveChangesAsync();

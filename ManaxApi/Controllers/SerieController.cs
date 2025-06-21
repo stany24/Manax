@@ -1,8 +1,8 @@
 using ManaxApi.Auth;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using ManaxApi.Models.Serie;
 using ManaxApi.Models.User;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace ManaxApi.Controllers;
 
@@ -45,10 +45,7 @@ public class SerieController(SerieContext context) : ControllerBase
         Serie? serie = await context.Series
             .Include(s => s.Chapters)
             .FirstOrDefaultAsync(s => s.Id == id);
-        if (serie == null)
-        {
-            return NotFound();
-        }
+        if (serie == null) return NotFound();
         return serie.Chapters.Select(c => c.Id).ToList();
     }
 
@@ -62,10 +59,7 @@ public class SerieController(SerieContext context) : ControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> PutSerie(long id, Serie serie)
     {
-        if (id != serie.Id)
-        {
-            return BadRequest();
-        }
+        if (id != serie.Id) return BadRequest();
 
         context.Entry(serie).State = EntityState.Modified;
 
@@ -75,10 +69,7 @@ public class SerieController(SerieContext context) : ControllerBase
         }
         catch (DbUpdateConcurrencyException)
         {
-            if (!SerieExists(id))
-            {
-                return NotFound();
-            }
+            if (!SerieExists(id)) return NotFound();
 
             throw;
         }
@@ -108,10 +99,7 @@ public class SerieController(SerieContext context) : ControllerBase
     public async Task<IActionResult> DeleteSerie(long id)
     {
         Serie? serie = await context.Series.FindAsync(id);
-        if (serie == null)
-        {
-            return NotFound();
-        }
+        if (serie == null) return NotFound();
 
         context.Series.Remove(serie);
         await context.SaveChangesAsync();

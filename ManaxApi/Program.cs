@@ -5,8 +5,8 @@ using ManaxApi.Models.Read;
 using ManaxApi.Models.Serie;
 using ManaxApi.Models.User;
 using ManaxApi.Services;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
 namespace ManaxApi;
@@ -40,14 +40,14 @@ public static class Program
 
         builder.Services.AddDbContext<UserContext>(opt =>
             opt.UseSqlite($"Data Source={Path.Combine(AppContext.BaseDirectory, "database.db")}"));
-        
+
         builder.Services.AddDbContext<LibraryContext>(opt =>
             opt.UseSqlite($"Data Source={Path.Combine(AppContext.BaseDirectory, "database.db")}"));
         builder.Services.AddDbContext<SerieContext>(opt =>
             opt.UseSqlite($"Data Source={Path.Combine(AppContext.BaseDirectory, "database.db")}"));
         builder.Services.AddDbContext<ChapterContext>(opt =>
             opt.UseSqlite($"Data Source={Path.Combine(AppContext.BaseDirectory, "database.db")}"));
-        
+
         builder.Services.AddDbContext<IssueContext>(opt =>
             opt.UseSqlite($"Data Source={Path.Combine(AppContext.BaseDirectory, "database.db")}"));
         builder.Services.AddDbContext<ReadContext>(opt =>

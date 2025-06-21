@@ -29,7 +29,7 @@ public class LibraryController(LibraryContext context) : ControllerBase
         LibraryInfo? infos = await context.Libraries
             .AsNoTracking()
             .Where(l => l.Id == id)
-            .Select(library => library.GetInfo() )
+            .Select(library => library.GetInfo())
             .FirstOrDefaultAsync();
         if (infos == null) return NotFound();
         return infos;

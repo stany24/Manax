@@ -20,7 +20,7 @@ public class Serie
         {
             Title = Title,
             Description = Description,
-            FolderName = FolderName,
+            FolderName = FolderName
         };
     }
 }

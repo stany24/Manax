@@ -12,7 +12,7 @@ public static class TaskManagerService
     {
         System.Threading.Tasks.Task.Run(TaskLoop);
     }
-    
+
     public static void AddTask(ITask task)
     {
         WaitingTasks.Add(task);
@@ -28,17 +28,14 @@ public static class TaskManagerService
                 WaitingTasks.RemoveAt(0);
                 System.Threading.Tasks.Task runningTask = System.Threading.Tasks.Task.Run(() => task.Execute());
                 RunningTasks.Add(runningTask);
-                runningTask.ContinueWith(t =>
-                {
-                    RunningTasks.Remove(runningTask);
-                });
+                runningTask.ContinueWith(_ => { RunningTasks.Remove(runningTask); });
             }
 
             Console.WriteLine("loop");
             Thread.Sleep(100);
         }
     }
-    
+
     public static Dictionary<string, int> GetTasks()
     {
         return WaitingTasks.GroupBy(e => e.GetName())
