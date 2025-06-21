@@ -1,6 +1,7 @@
 using ManaxApi.Models.Chapter;
 using ManaxApi.Models.Issue;
 using ManaxApi.Models.Library;
+using ManaxApi.Models.Read;
 using ManaxApi.Models.Serie;
 using ManaxApi.Models.User;
 using ManaxApi.Services;
@@ -48,6 +49,8 @@ public static class Program
             opt.UseSqlite($"Data Source={Path.Combine(AppContext.BaseDirectory, "database.db")}"));
         
         builder.Services.AddDbContext<IssueContext>(opt =>
+            opt.UseSqlite($"Data Source={Path.Combine(AppContext.BaseDirectory, "database.db")}"));
+        builder.Services.AddDbContext<ReadContext>(opt =>
             opt.UseSqlite($"Data Source={Path.Combine(AppContext.BaseDirectory, "database.db")}"));
 
         WebApplication app = builder.Build();

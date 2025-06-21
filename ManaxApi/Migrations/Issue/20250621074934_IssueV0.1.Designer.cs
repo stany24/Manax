@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ManaxApi.Migrations.Issue
 {
     [DbContext(typeof(IssueContext))]
-    [Migration("20250620180839_IssueV0.1")]
+    [Migration("20250621074934_IssueV0.1")]
     partial class IssueV01
     {
         /// <inheritdoc />
@@ -52,12 +52,46 @@ namespace ManaxApi.Migrations.Issue
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("Role")
+                    b.Property<string>("Problem")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("TEXT");
+
+                    b.Property<long>("UserId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("UserId");
+
                     b.ToTable("Issues");
+                });
+
+            modelBuilder.Entity("ManaxApi.Models.User.User", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Role")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Username")
+                        .IsUnique();
+
+                    b.ToTable("User");
                 });
 
             modelBuilder.Entity("ManaxApi.Models.Chapter.Chapter", b =>
@@ -65,6 +99,17 @@ namespace ManaxApi.Migrations.Issue
                     b.HasOne("ManaxApi.Models.Issue.Issue", null)
                         .WithMany("Chapters")
                         .HasForeignKey("IssueId");
+                });
+
+            modelBuilder.Entity("ManaxApi.Models.Issue.Issue", b =>
+                {
+                    b.HasOne("ManaxApi.Models.User.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ManaxApi.Models.Issue.Issue", b =>

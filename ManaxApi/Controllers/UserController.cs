@@ -120,9 +120,8 @@ public class UserController(UserContext context, IConfiguration config) : Contro
         if (!(HttpContext.User.Identity?.IsAuthenticated ?? false))
             return Unauthorized();
             
-        string? userIdClaim = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-        if (userIdClaim == null || !long.TryParse(userIdClaim, out long userId))
-            return Unauthorized();
+        long? userId = GetCurrentUserId(HttpContext);
+        if (userId == null) {return Unauthorized();}
             
         User? user = await context.Users.FindAsync(userId);
         if (user == null) return NotFound();
@@ -149,5 +148,15 @@ public class UserController(UserContext context, IConfiguration config) : Contro
             
         string token = JwtService.GenerateToken(user, config);
         return Ok(new { token });
+    }
+
+    internal static long? GetCurrentUserId(HttpContext httpContext)
+    {
+        string? userIdClaim = httpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+        if (userIdClaim == null || !long.TryParse(userIdClaim, out long userId))
+        {
+            return null;
+        }
+        return userId;
     }
 }

@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ManaxApi.Migrations.Chapter
 {
     [DbContext(typeof(ChapterContext))]
-    [Migration("20250620180833_ChapterV0.1")]
+    [Migration("20250621074929_ChapterV0.1")]
     partial class ChapterV01
     {
         /// <inheritdoc />
