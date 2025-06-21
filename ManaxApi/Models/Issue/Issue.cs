@@ -10,7 +10,7 @@ namespace ManaxApi.Models.Issue;
 public class Issue
 {
     public long Id { get; set; }
-    public List<Chapter.Chapter> Chapters { get; set; } = [];
+    public Chapter.Chapter Chapter { get; set; }
     public User.User User { get; set; }
     [MaxLength(128)] public string Problem { get; set; }
 }

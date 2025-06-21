@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ManaxApi.Migrations
 {
     [DbContext(typeof(ManaxContext))]
-    [Migration("20250621204812_ManaxV0.1")]
+    [Migration("20250621221216_ManaxV0.1")]
     partial class ManaxV01
     {
         /// <inheritdoc />
@@ -30,9 +30,6 @@ namespace ManaxApi.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<long?>("IssueId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<int>("Number")
                         .HasColumnType("INTEGER");
 
@@ -48,8 +45,6 @@ namespace ManaxApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("IssueId");
-
                     b.HasIndex("SerieId");
 
                     b.ToTable("Chapters");
@@ -61,6 +56,9 @@ namespace ManaxApi.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<long>("ChaptersId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Problem")
                         .IsRequired()
                         .HasMaxLength(128)
@@ -70,6 +68,8 @@ namespace ManaxApi.Migrations
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ChaptersId");
 
                     b.HasIndex("UserId");
 
@@ -178,10 +178,6 @@ namespace ManaxApi.Migrations
 
             modelBuilder.Entity("ManaxApi.Models.Chapter.Chapter", b =>
                 {
-                    b.HasOne("ManaxApi.Models.Issue.Issue", null)
-                        .WithMany("Chapters")
-                        .HasForeignKey("IssueId");
-
                     b.HasOne("ManaxApi.Models.Serie.Serie", null)
                         .WithMany("Chapters")
                         .HasForeignKey("SerieId");
@@ -189,11 +185,19 @@ namespace ManaxApi.Migrations
 
             modelBuilder.Entity("ManaxApi.Models.Issue.Issue", b =>
                 {
+                    b.HasOne("ManaxApi.Models.Chapter.Chapter", "Chapters")
+                        .WithMany()
+                        .HasForeignKey("ChaptersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("ManaxApi.Models.User.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Chapters");
 
                     b.Navigation("User");
                 });
@@ -222,11 +226,6 @@ namespace ManaxApi.Migrations
                     b.HasOne("ManaxApi.Models.Library.Library", null)
                         .WithMany("Series")
                         .HasForeignKey("LibraryId");
-                });
-
-            modelBuilder.Entity("ManaxApi.Models.Issue.Issue", b =>
-                {
-                    b.Navigation("Chapters");
                 });
 
             modelBuilder.Entity("ManaxApi.Models.Library.Library", b =>

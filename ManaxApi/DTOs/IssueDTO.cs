@@ -10,14 +10,14 @@ namespace ManaxApi.DTOs;
 public class IssueDTO
 {
     public long Id { get; set; }
-    public List<ChapterDTO> Chapters { get; set; } = [];
+    public ChapterDTO Chapter { get; set; }
     public User User { get; set; }
     [MaxLength(128)] public string Problem { get; set; }
 }
 
 public class IssueCreateDTO
 {
-    [Required] public List<ChapterDTO> Chapters { get; set; }
+    [Required] public ChapterDTO Chapter { get; set; }
         
     [Required] [MaxLength(128)] public string Problem { get; set; }
 }
