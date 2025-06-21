@@ -60,6 +60,10 @@ namespace ManaxApi.Migrations.Serie
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Path")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("TEXT");

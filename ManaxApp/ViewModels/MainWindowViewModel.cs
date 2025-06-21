@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using ManaxApp.ViewModels.Home;
 using ManaxApp.ViewModels.Issue;
+using ManaxApp.ViewModels.Library;
 using ManaxApp.ViewModels.Login;
 using ManaxApp.ViewModels.User;
 
@@ -32,6 +33,11 @@ public partial class MainWindowViewModel : ObservableObject
     public void ChangePageHome()
     {
         CurrentPageViewModel = new HomePageViewModel();
+    }
+    
+    public void ChangePageLibraries()
+    {
+        CurrentPageViewModel = new LibrariesPageViewModel();
     }
 
     public void ChangePageIssues()

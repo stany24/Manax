@@ -86,6 +86,10 @@ namespace ManaxApi.Migrations.Library
                     b.Property<long?>("LibraryId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("Path")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("TEXT");

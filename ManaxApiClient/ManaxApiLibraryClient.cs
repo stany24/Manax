@@ -26,11 +26,11 @@ public static class ManaxApiLibraryClient
         return await response.Content.ReadFromJsonAsync<List<long>>();
     }
 
-    public static async Task<Library?> PostLibraryAsync(Library library)
+    public static async Task<long?> PostLibraryAsync(Library library)
     {
-        HttpResponseMessage response = await ManaxApiClient.Client.PostAsJsonAsync("api/library", library);
+        HttpResponseMessage response = await ManaxApiClient.Client.PostAsJsonAsync("api/library/create", library);
         if (!response.IsSuccessStatusCode) return null;
-        return await response.Content.ReadFromJsonAsync<Library>();
+        return await response.Content.ReadFromJsonAsync<long>();
     }
 
     public static async Task<bool> PutLibraryAsync(long id, Library library)

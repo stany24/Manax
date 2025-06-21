@@ -18,6 +18,7 @@ public class Library
     {
         return new LibraryInfo
         {
+            Id = Id,
             Name = Name,
             Description = Description,
             Path = Path

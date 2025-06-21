@@ -1,0 +1,44 @@
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:login="clr-namespace:ManaxApp.ViewModels.Library"
+    mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+    x:Class="ManaxApp.Views.Library.LibrariesPageView"
+    x:DataType="login:LibrariesPageViewModel">
+    <DockPanel>
+        <Button
+            DockPanel.Dock="Bottom"
+            HorizontalAlignment="Right"
+            Command="{Binding CreateLibrary}">
+            Add
+        </Button>
+
+        <ListBox
+            ItemsSource="{Binding Libraries}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Border BorderBrush="Blue" BorderThickness="1"
+                            CornerRadius="4" Padding="4">
+                        <StackPanel
+                            Orientation="Horizontal">
+                            <Label Content="{Binding Id}" />
+                            <Label Content="{Binding Name}" />
+                            <Label Content="{Binding Description}" />
+                            <Button
+                                Content="Scan"
+                                Command="{Binding $parent[UserControl].((login:LibrariesPageViewModel)DataContext).ScanLibrary}"
+                                CommandParameter="{Binding .}" />
+                            <Button
+                                Content="Delete"
+                                Command="{Binding $parent[UserControl].((login:LibrariesPageViewModel)DataContext).DeleteLibrary}"
+                                CommandParameter="{Binding .}" />
+                        </StackPanel>
+                    </Border>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </DockPanel>
+
+</UserControl>

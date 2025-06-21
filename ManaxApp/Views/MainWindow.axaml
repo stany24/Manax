@@ -24,6 +24,12 @@
             <Button
                 HorizontalAlignment="Stretch"
                 HorizontalContentAlignment="Center"
+                Command="{Binding ChangePageLibraries}">
+                Libraries
+            </Button>
+            <Button
+                HorizontalAlignment="Stretch"
+                HorizontalContentAlignment="Center"
                 IsVisible="{Binding IsAdmin}"
                 Command="{Binding ChangePageIssues}">
                 Issues

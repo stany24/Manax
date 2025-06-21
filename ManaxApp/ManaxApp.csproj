@@ -39,6 +39,14 @@
         <Compile Update="Views\User\UsersPageView.axaml.cs">
             <SubType>Code</SubType>
         </Compile>
+        <Compile Update="Views\Library\LibrarysPageView.axaml.cs">
+          <SubType>Code</SubType>
+          <DependentUpon>UsersPageView.axaml</DependentUpon>
+        </Compile>
+        <Compile Update="Views\Library\LibrarysPageView.axaml.cs">
+          <SubType>Code</SubType>
+          <DependentUpon>LibrarysPageView.axaml</DependentUpon>
+        </Compile>
     </ItemGroup>
 
     <ItemGroup>
@@ -47,5 +55,6 @@
 
     <ItemGroup>
         <AdditionalFiles Include="Views\Issue\IssuesPageView.axaml"/>
+        <AdditionalFiles Include="Views\Library\LibrarysPageView.axaml" />
     </ItemGroup>
 </Project>
