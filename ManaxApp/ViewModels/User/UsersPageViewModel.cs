@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
+using ManaxApi.DTOs;
 using ManaxApi.Models.User;
 using ManaxApiClient;
 
@@ -10,7 +11,7 @@ namespace ManaxApp.ViewModels.User;
 
 public partial class UsersPageViewModel : PageViewModel
 {
-    [ObservableProperty] private ObservableCollection<UserInfo> _users = [];
+    [ObservableProperty] private ObservableCollection<UserDTO> _users = [];
 
     public UsersPageViewModel()
     {
@@ -21,14 +22,14 @@ public partial class UsersPageViewModel : PageViewModel
             if (ids == null) return;
             foreach (long id in ids)
             {
-                UserInfo? userAsync = await ManaxApiUserClient.GetUserAsync(id);
+                UserDTO? userAsync = await ManaxApiUserClient.GetUserAsync(id);
                 if (userAsync == null) continue;
                 Dispatcher.UIThread.Post(() => Users.Add(userAsync));
             }
         });
     }
 
-    public void DeleteUser(UserInfo user)
+    public void DeleteUser(UserDTO user)
     {
         Task.Run(async () =>
         {
@@ -43,7 +44,7 @@ public partial class UsersPageViewModel : PageViewModel
             ManaxApi.Models.User.User user = new() { Role = UserRole.User, Username = "test", PasswordHash = "test" };
             long? id = await ManaxApiUserClient.PostUserAsync(user);
             if (id == null) return;
-            UserInfo? createdUser = await ManaxApiUserClient.GetUserAsync((long)id);
+            UserDTO? createdUser = await ManaxApiUserClient.GetUserAsync((long)id);
             if (createdUser == null) return;
             Dispatcher.UIThread.Post(() => Users.Add(createdUser));
         });

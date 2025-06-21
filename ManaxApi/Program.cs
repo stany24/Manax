@@ -1,14 +1,10 @@
 using ManaxApi.Models.Chapter;
-using ManaxApi.Models.Issue;
-using ManaxApi.Models.Library;
-using ManaxApi.Models.Read;
-using ManaxApi.Models.Serie;
-using ManaxApi.Models.User;
 using ManaxApi.Services;
 using ManaxApi.Task;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using ManaxApi.DTOs;
 
 namespace ManaxApi;
 
@@ -41,8 +37,10 @@ public static class Program
 
         builder.Services.AddDbContext<ManaxContext>(opt =>
             opt.UseSqlite($"Data Source={Path.Combine(AppContext.BaseDirectory, "database.db")}"));
-
-        builder.Services.AddTransient<ITask>();
+        
+        
+        // Configuration AutoMapper
+        builder.Services.AddAutoMapper(typeof(MappingProfile));
         
         WebApplication app = builder.Build();
 

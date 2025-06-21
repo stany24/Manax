@@ -1,4 +1,5 @@
 using System.Net.Http.Json;
+using ManaxApi.DTOs;
 using ManaxApi.Models.Library;
 
 namespace ManaxApiClient;
@@ -12,11 +13,11 @@ public static class ManaxApiLibraryClient
         return await response.Content.ReadFromJsonAsync<List<long>>();
     }
 
-    public static async Task<LibraryInfo?> GetLibraryInfoAsync(long id)
+    public static async Task<LibraryDTO?> GetLibraryAsync(long id)
     {
         HttpResponseMessage response = await ManaxApiClient.Client.GetAsync($"api/library/{id}");
         if (!response.IsSuccessStatusCode) return null;
-        return await response.Content.ReadFromJsonAsync<LibraryInfo>();
+        return await response.Content.ReadFromJsonAsync<LibraryDTO>();
     }
 
     public static async Task<List<long>?> GetLibrarySeriesAsync(long id)

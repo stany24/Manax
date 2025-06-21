@@ -1,4 +1,6 @@
+using AutoMapper;
 using ManaxApi.Auth;
+using ManaxApi.DTOs;
 using ManaxApi.Models.Chapter;
 using ManaxApi.Models.Library;
 using ManaxApi.Models.User;
@@ -9,7 +11,7 @@ namespace ManaxApi.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class LibraryController(ManaxContext context) : ControllerBase
+public class LibraryController(ManaxContext context, IMapper mapper) : ControllerBase
 {
     // GET: api/Library
     [HttpGet("/api/Libraries")]
@@ -23,17 +25,17 @@ public class LibraryController(ManaxContext context) : ControllerBase
     // GET: api/library/{id}
     [HttpGet("{id:long}")]
     [AuthorizeRole(UserRole.User)]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(LibraryInfo))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(LibraryDTO))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<LibraryInfo>> GetLibrary(long id)
+    public async Task<ActionResult<LibraryDTO>> GetLibrary(long id)
     {
-        LibraryInfo? infos = await context.Libraries
+        Library? library = await context.Libraries
             .AsNoTracking()
-            .Where(l => l.Id == id)
-            .Select(library => library.GetInfo())
-            .FirstOrDefaultAsync();
-        if (infos == null) return NotFound();
-        return infos;
+            .FirstOrDefaultAsync(l => l.Id == id);
+            
+        if (library == null) return NotFound();
+        
+        return mapper.Map<LibraryDTO>(library);
     }
 
     // GET: api/library/{id}/series
@@ -55,18 +57,18 @@ public class LibraryController(ManaxContext context) : ControllerBase
     }
 
     // PUT: api/Library/5
-    // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPut("{id:long}")]
     [AuthorizeRole(UserRole.Admin)]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    public async Task<IActionResult> PutLibrary(long id, Library library)
+    public async Task<IActionResult> PutLibrary(long id, LibraryUpdateDTO libraryDTO)
     {
-        if (id != library.Id) return BadRequest();
-
-        context.Entry(library).State = EntityState.Modified;
+        Library? library = await context.Libraries.FindAsync(id);
+        
+        if (library == null) return NotFound();
+        
+        mapper.Map(libraryDTO, library);
 
         try
         {
@@ -75,7 +77,6 @@ public class LibraryController(ManaxContext context) : ControllerBase
         catch (DbUpdateConcurrencyException)
         {
             if (!context.Libraries.Any(e => e.Id == id)) return NotFound();
-
             throw;
         }
 
@@ -83,16 +84,17 @@ public class LibraryController(ManaxContext context) : ControllerBase
     }
 
     // POST: api/Library
-    // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPost("create")]
     [AuthorizeRole(UserRole.Admin)]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Library))]
-    public async Task<ActionResult<Library>> PostLibrary(Library library)
+    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(long))]
+    public async Task<ActionResult<long>> PostLibrary(LibraryCreateDTO libraryCreateDTO)
     {
+        Library? library = mapper.Map<Library>(libraryCreateDTO);
+        
         context.Libraries.Add(library);
         await context.SaveChangesAsync();
 
-        return CreatedAtAction("GetLibrary", new { id = library.Id }, library);
+        return library.Id;
     }
 
     // DELETE: api/Library/5

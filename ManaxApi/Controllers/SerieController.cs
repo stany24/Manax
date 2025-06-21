@@ -1,4 +1,6 @@
+using AutoMapper;
 using ManaxApi.Auth;
+using ManaxApi.DTOs;
 using ManaxApi.Models.Chapter;
 using ManaxApi.Models.Serie;
 using ManaxApi.Models.User;
@@ -9,7 +11,7 @@ namespace ManaxApi.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class SerieController(ManaxContext context) : ControllerBase
+public class SerieController(ManaxContext context, IMapper mapper) : ControllerBase
 {
     // GET: api/Serie
     [HttpGet("/api/series")]
@@ -23,17 +25,17 @@ public class SerieController(ManaxContext context) : ControllerBase
     // GET: api/serie/{id}
     [HttpGet("{id:long}")]
     [AuthorizeRole(UserRole.User)]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SerieInfo))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SerieDTO))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<SerieInfo>> GetSerie(long id)
+    public async Task<ActionResult<SerieDTO>> GetSerie(long id)
     {
-        SerieInfo? infos = await context.Series
+        Serie? serie = await context.Series
             .AsNoTracking()
-            .Where(l => l.Id == id)
-            .Select(s => s.GetInfo())
-            .FirstOrDefaultAsync();
-        if (infos == null) return NotFound();
-        return infos;
+            .FirstOrDefaultAsync(l => l.Id == id);
+            
+        if (serie == null) return NotFound();
+        
+        return mapper.Map<SerieDTO>(serie);
     }
 
     // GET: api/series/{id}/chapters
@@ -46,23 +48,25 @@ public class SerieController(ManaxContext context) : ControllerBase
         Serie? serie = await context.Series
             .Include(s => s.Chapters)
             .FirstOrDefaultAsync(s => s.Id == id);
+            
         if (serie == null) return NotFound();
+        
         return serie.Chapters.Select(c => c.Id).ToList();
     }
 
     // PUT: api/Serie/5
-    // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPut("{id:long}")]
     [AuthorizeRole(UserRole.Admin)]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    public async Task<IActionResult> PutSerie(long id, Serie serie)
+    public async Task<IActionResult> PutSerie(long id, SerieUpdateDTO serieDTO)
     {
-        if (id != serie.Id) return BadRequest();
-
-        context.Entry(serie).State = EntityState.Modified;
+        Serie? serie = await context.Series.FindAsync(id);
+        
+        if (serie == null) return NotFound();
+        
+        mapper.Map(serieDTO, serie);
 
         try
         {
@@ -71,7 +75,6 @@ public class SerieController(ManaxContext context) : ControllerBase
         catch (DbUpdateConcurrencyException)
         {
             if (!SerieExists(id)) return NotFound();
-
             throw;
         }
 
@@ -79,24 +82,26 @@ public class SerieController(ManaxContext context) : ControllerBase
     }
 
     // POST: api/Serie
-    // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPost]
     [AuthorizeRole(UserRole.Admin)]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Serie))]
-    public async Task<ActionResult<Serie>> PostSerie(Serie serie)
+    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(SerieDTO))]
+    public async Task<ActionResult<SerieDTO>> PostSerie(SerieCreateDTO serieCreateDTO)
     {
+        Serie? serie = mapper.Map<Serie>(serieCreateDTO);
+        
         context.Series.Add(serie);
         await context.SaveChangesAsync();
+        
+        SerieDTO? serieDTO = mapper.Map<SerieDTO>(serie);
 
-        return CreatedAtAction("GetSerie", new { id = serie.Id }, serie);
+        return CreatedAtAction(nameof(GetSerie), new { id = serie.Id }, serieDTO);
     }
 
     // DELETE: api/Serie/5
     [HttpDelete("{id:long}")]
     [AuthorizeRole(UserRole.Admin)]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteSerie(long id)
     {
         Serie? serie = await context.Series.FindAsync(id);

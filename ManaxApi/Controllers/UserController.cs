@@ -1,5 +1,7 @@
 using System.Security.Claims;
+using AutoMapper;
 using ManaxApi.Auth;
+using ManaxApi.DTOs;
 using ManaxApi.Models.Chapter;
 using ManaxApi.Models.User;
 using ManaxApi.Services;
@@ -10,7 +12,7 @@ namespace ManaxApi.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class UserController(ManaxContext context, IConfiguration config) : ControllerBase
+public class UserController(ManaxContext context, IMapper mapper, IConfiguration config) : ControllerBase
 {
     // GET: api/Users
     [HttpGet("/api/Users")]
@@ -24,29 +26,36 @@ public class UserController(ManaxContext context, IConfiguration config) : Contr
     // GET: api/User/5
     [HttpGet("{id:long}")]
     [AuthorizeRole(UserRole.Admin)]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserInfo))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserDTO))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<UserInfo>> GetUser(long id)
+    public async Task<ActionResult<UserDTO>> GetUser(long id)
     {
         User? user = await context.Users.FindAsync(id);
 
         if (user == null) return NotFound();
 
-        return user.GetInfo();
+        return mapper.Map<UserDTO>(user);
     }
 
     // PUT: api/User/5
-    // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPut("{id:long}")]
     [AuthorizeRole(UserRole.Admin)]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
-    public async Task<IActionResult> PutUser(long id, User user)
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> PutUser(long id, UserUpdateDTO userDTO)
     {
-        if (id != user.Id) return BadRequest();
-
-        context.Entry(user).State = EntityState.Modified;
+        User? user = await context.Users.FindAsync(id);
+        
+        if (user == null) return NotFound();
+        
+        mapper.Map(userDTO, user);
+        
+        // Si un nouveau mot de passe est fourni, le hasher
+        if (!string.IsNullOrEmpty(userDTO.Password))
+        {
+            user.PasswordHash = HashService.ComputeSha3_512(userDTO.Password);
+        }
 
         try
         {
@@ -55,7 +64,6 @@ public class UserController(ManaxContext context, IConfiguration config) : Contr
         catch (DbUpdateConcurrencyException)
         {
             if (!context.Users.Any(e => e.Id == id)) return NotFound();
-
             throw;
         }
 
@@ -63,26 +71,29 @@ public class UserController(ManaxContext context, IConfiguration config) : Contr
     }
 
     // POST: api/User
-    // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPost("create")]
     [AuthorizeRole(UserRole.Admin)]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(long))]
-    [ProducesResponseType(StatusCodes.Status403Forbidden)]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<ActionResult<long>> PostUser(User user)
+    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(UserDTO))]
+    public async Task<ActionResult<UserDTO>> PostUser(UserCreateDTO userCreateDTO)
     {
-        user.PasswordHash = HashService.ComputeSha3_512(user.PasswordHash);
+        User? user = mapper.Map<User>(userCreateDTO);
+        
+        // Hasher le mot de passe
+        user.PasswordHash = HashService.ComputeSha3_512(userCreateDTO.Password);
+        
         context.Users.Add(user);
         await context.SaveChangesAsync();
-        return user.Id;
+        
+        UserDTO? userDTO = mapper.Map<UserDTO>(user);
+
+        return CreatedAtAction(nameof(GetUser), new { id = user.Id }, userDTO);
     }
 
     // DELETE: api/User/5
     [HttpDelete("{id:long}")]
     [AuthorizeRole(UserRole.Admin)]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteUser(long id)
     {
         User? user = await context.Users.FindAsync(id);
@@ -98,12 +109,12 @@ public class UserController(ManaxContext context, IConfiguration config) : Contr
     [HttpPost("/api/login")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<IActionResult> Login(LoginRequest request)
+    public async Task<IActionResult> Login(UserLoginDTO loginDTO)
     {
-        User? user = await context.Users.FirstOrDefaultAsync(u => u.Username == request.Username);
+        User? user = await context.Users.FirstOrDefaultAsync(u => u.Username == loginDTO.Username);
         if (user == null)
             return Unauthorized();
-        string hash = HashService.ComputeSha3_512(request.Password);
+        string hash = HashService.ComputeSha3_512(loginDTO.Password);
         if (user.PasswordHash != hash)
             return Unauthorized();
         string token = JwtService.GenerateToken(user, config);
@@ -113,10 +124,10 @@ public class UserController(ManaxContext context, IConfiguration config) : Contr
     // GET: api/User/current
     [HttpGet("current")]
     [AuthorizeRole(UserRole.User)]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserInfo))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserDTO))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<ActionResult<UserInfo>> GetCurrentUser()
+    public async Task<ActionResult<UserDTO>> GetCurrentUser()
     {
         if (!(HttpContext.User.Identity?.IsAuthenticated ?? false))
             return Unauthorized();
@@ -127,7 +138,7 @@ public class UserController(ManaxContext context, IConfiguration config) : Contr
         User? user = await context.Users.FindAsync(userId);
         if (user == null) return NotFound();
 
-        return user.GetInfo();
+        return mapper.Map<UserDTO>(user);
     }
 
     [HttpPost("/api/claim")]

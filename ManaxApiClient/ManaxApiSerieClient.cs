@@ -1,4 +1,5 @@
 using System.Net.Http.Json;
+using ManaxApi.DTOs;
 using ManaxApi.Models.Serie;
 
 namespace ManaxApiClient;
@@ -12,11 +13,11 @@ public static class ManaxApiSerieClient
         return await response.Content.ReadFromJsonAsync<List<long>>();
     }
 
-    public static async Task<SerieInfo?> GetSerieInfoAsync(long id)
+    public static async Task<SerieDTO?> GetSerieInfoAsync(long id)
     {
         HttpResponseMessage response = await ManaxApiClient.Client.GetAsync($"api/serie/{id}");
         if (!response.IsSuccessStatusCode) return null;
-        return await response.Content.ReadFromJsonAsync<SerieInfo>();
+        return await response.Content.ReadFromJsonAsync<SerieDTO>();
     }
 
     public static async Task<List<long>?> GetSerieChaptersAsync(long id)

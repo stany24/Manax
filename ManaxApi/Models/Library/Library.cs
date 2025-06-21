@@ -13,15 +13,4 @@ public class Library
     public string Description { get; set; } = string.Empty;
     public string Path { get; set; } = string.Empty;
     public List<Serie.Serie> Series { get; set; } = [];
-
-    public LibraryInfo GetInfo()
-    {
-        return new LibraryInfo
-        {
-            Id = Id,
-            Name = Name,
-            Description = Description,
-            Path = Path
-        };
-    }
 }

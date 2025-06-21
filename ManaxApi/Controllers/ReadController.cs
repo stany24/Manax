@@ -1,4 +1,6 @@
+using AutoMapper;
 using ManaxApi.Auth;
+using ManaxApi.DTOs;
 using ManaxApi.Models.Chapter;
 using ManaxApi.Models.Read;
 using ManaxApi.Models.User;
@@ -9,45 +11,41 @@ namespace ManaxApi.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class ReadController(ManaxContext manaxContext) : ControllerBase
+public class ReadController(ManaxContext context, IMapper mapper) : ControllerBase
 {
     [HttpPut("read")]
     [AuthorizeRole(UserRole.User)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> Read(long chapterId, DateTime? dateTime)
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<IActionResult> Read(ReadCreateDTO readDTO)
     {
         long? userId = UserController.GetCurrentUserId(HttpContext);
         if (userId == null) return Unauthorized();
 
-        User? user = await manaxContext.Users.FindAsync(userId);
-        Chapter? chapter = await manaxContext.Reads
-            .Include(r => r.Chapter)
-            .Where(r => r.Chapter.Id == chapterId)
-            .Select(r => r.Chapter)
-            .FirstOrDefaultAsync();
+        User? user = await context.Users.FindAsync(userId);
+        Chapter? chapter = await context.Chapters.FindAsync(readDTO.ChapterId);
 
         if (user == null || chapter == null) return NotFound();
 
-        Read? existingRead = await manaxContext.Reads
-            .FirstOrDefaultAsync(r => r.User.Id == userId && r.Chapter.Id == chapterId);
+        Read? existingRead = await context.Reads
+            .FirstOrDefaultAsync(r => r.User.Id == userId && r.Chapter.Id == readDTO.ChapterId);
 
         if (existingRead != null)
         {
-            existingRead.Date = dateTime ?? DateTime.UtcNow;
+            existingRead.Date = DateTime.UtcNow;
         }
         else
         {
-            Read read = new()
-            {
-                User = user,
-                Chapter = chapter,
-                Date = dateTime ?? DateTime.UtcNow
-            };
-            await manaxContext.Reads.AddAsync(read);
+            Read? read = mapper.Map<Read>(readDTO);
+            read.User = user;
+            read.Chapter = chapter;
+            read.Date = DateTime.UtcNow;
+            
+            await context.Reads.AddAsync(read);
         }
 
-        await manaxContext.SaveChangesAsync();
+        await context.SaveChangesAsync();
         return Ok();
     }
 
@@ -55,18 +53,28 @@ public class ReadController(ManaxContext manaxContext) : ControllerBase
     [AuthorizeRole(UserRole.User)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> Unread(long chapterId)
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<IActionResult> Unread(int chapterId, int? userId = null)
     {
-        long? userId = UserController.GetCurrentUserId(HttpContext);
-        if (userId == null) return Unauthorized();
+        long? currentUserId = UserController.GetCurrentUserId(HttpContext);
+        if (currentUserId == null) return Unauthorized();
 
-        Read? existingRead = await manaxContext.Reads
-            .FirstOrDefaultAsync(r => r.User.Id == userId && r.Chapter.Id == chapterId);
+        // Si aucun userId n'est fourni, utilisez l'ID de l'utilisateur actuel
+        long targetUserId = userId ?? (long)currentUserId;
+        
+        // Vérifiez si l'utilisateur actuel est autorisé à modifier les lectures d'un autre utilisateur
+        if (targetUserId != currentUserId && !User.IsInRole(nameof(UserRole.Admin)))
+        {
+            return Unauthorized();
+        }
+
+        Read? existingRead = await context.Reads
+            .FirstOrDefaultAsync(r => r.User.Id == targetUserId && r.Chapter.Id == chapterId);
 
         if (existingRead == null) return Ok();
 
-        manaxContext.Reads.Remove(existingRead);
-        await manaxContext.SaveChangesAsync();
+        context.Reads.Remove(existingRead);
+        await context.SaveChangesAsync();
 
         return Ok();
     }

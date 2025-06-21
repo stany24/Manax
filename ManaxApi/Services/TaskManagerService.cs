@@ -30,8 +30,6 @@ public static class TaskManagerService
                 RunningTasks.Add(runningTask);
                 runningTask.ContinueWith(_ => { RunningTasks.Remove(runningTask); });
             }
-
-            Console.WriteLine("loop");
             Thread.Sleep(100);
         }
     }

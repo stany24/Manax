@@ -1,5 +1,6 @@
 using System.Net.Http.Json;
 using System.Text.Json;
+using ManaxApi.DTOs;
 using ManaxApi.Models.User;
 
 namespace ManaxApiClient;
@@ -22,11 +23,11 @@ public static class ManaxApiUserClient
         return await response.Content.ReadFromJsonAsync<List<long>>();
     }
 
-    public static async Task<UserInfo?> GetUserAsync(long id)
+    public static async Task<UserDTO?> GetUserAsync(long id)
     {
         HttpResponseMessage response = await ManaxApiClient.Client.GetAsync($"api/user/{id}");
         if (!response.IsSuccessStatusCode) return null;
-        return await response.Content.ReadFromJsonAsync<UserInfo>();
+        return await response.Content.ReadFromJsonAsync<UserDTO>();
     }
 
     public static async Task<long?> PostUserAsync(User user)
@@ -52,7 +53,7 @@ public static class ManaxApiUserClient
     {
         HttpResponseMessage response = await ManaxApiClient.Client.GetAsync("api/user/current");
         if (!response.IsSuccessStatusCode) return null;
-        UserInfo? userInfo = await response.Content.ReadFromJsonAsync<UserInfo>();
+        UserDTO? userInfo = await response.Content.ReadFromJsonAsync<UserDTO>();
         if (userInfo == null) return null;
         return new User
         {

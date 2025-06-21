@@ -14,14 +14,4 @@ public class Serie
     public string Description { get; set; } = string.Empty;
     public string Path { get; set; } = string.Empty;
     public List<Chapter.Chapter> Chapters { get; set; } = [];
-
-    public SerieInfo GetInfo()
-    {
-        return new SerieInfo
-        {
-            Title = Title,
-            Description = Description,
-            FolderName = FolderName
-        };
-    }
 }
