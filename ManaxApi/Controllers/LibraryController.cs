@@ -1,4 +1,5 @@
 using ManaxApi.Auth;
+using ManaxApi.Models.Chapter;
 using ManaxApi.Models.Library;
 using ManaxApi.Models.User;
 using Microsoft.AspNetCore.Mvc;
@@ -8,7 +9,7 @@ namespace ManaxApi.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class LibraryController(LibraryContext context) : ControllerBase
+public class LibraryController(ManaxContext context) : ControllerBase
 {
     // GET: api/Library
     [HttpGet("/api/Libraries")]

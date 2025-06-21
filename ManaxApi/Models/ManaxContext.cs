@@ -1,0 +1,13 @@
+using Microsoft.EntityFrameworkCore;
+
+namespace ManaxApi.Models.Chapter;
+
+public class ManaxContext(DbContextOptions<ManaxContext> options) : DbContext(options)
+{
+    public DbSet<Chapter> Chapters { get; set; } = null!;
+    public DbSet<Issue.Issue> Issues { get; set; } = null!;
+    public DbSet<Library.Library> Libraries { get; set; } = null!;
+    public DbSet<Read.Read> Reads { get; set; } = null!;
+    public DbSet<Serie.Serie> Series { get; set; } = null!;
+    public DbSet<User.User> Users { get; set; } = null!;
+}

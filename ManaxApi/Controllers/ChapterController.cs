@@ -9,7 +9,7 @@ namespace ManaxApi.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class ChapterController(ChapterContext context) : ControllerBase
+public class ChapterController(ManaxContext context) : ControllerBase
 {
     // GET: api/Chapter
     [HttpGet("/api/chapters")]

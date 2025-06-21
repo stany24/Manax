@@ -1,5 +1,6 @@
 using System.Security.Claims;
 using ManaxApi.Auth;
+using ManaxApi.Models.Chapter;
 using ManaxApi.Models.User;
 using ManaxApi.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -9,7 +10,7 @@ namespace ManaxApi.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class UserController(UserContext context, IConfiguration config) : ControllerBase
+public class UserController(ManaxContext context, IConfiguration config) : ControllerBase
 {
     // GET: api/Users
     [HttpGet("/api/Users")]

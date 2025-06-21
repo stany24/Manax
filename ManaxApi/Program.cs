@@ -38,19 +38,7 @@ public static class Program
                 };
             });
 
-        builder.Services.AddDbContext<UserContext>(opt =>
-            opt.UseSqlite($"Data Source={Path.Combine(AppContext.BaseDirectory, "database.db")}"));
-
-        builder.Services.AddDbContext<LibraryContext>(opt =>
-            opt.UseSqlite($"Data Source={Path.Combine(AppContext.BaseDirectory, "database.db")}"));
-        builder.Services.AddDbContext<SerieContext>(opt =>
-            opt.UseSqlite($"Data Source={Path.Combine(AppContext.BaseDirectory, "database.db")}"));
-        builder.Services.AddDbContext<ChapterContext>(opt =>
-            opt.UseSqlite($"Data Source={Path.Combine(AppContext.BaseDirectory, "database.db")}"));
-
-        builder.Services.AddDbContext<IssueContext>(opt =>
-            opt.UseSqlite($"Data Source={Path.Combine(AppContext.BaseDirectory, "database.db")}"));
-        builder.Services.AddDbContext<ReadContext>(opt =>
+        builder.Services.AddDbContext<ManaxContext>(opt =>
             opt.UseSqlite($"Data Source={Path.Combine(AppContext.BaseDirectory, "database.db")}"));
 
         WebApplication app = builder.Build();
@@ -58,12 +46,8 @@ public static class Program
         // Création/mise à jour automatique de la base de données
         using (IServiceScope scope = app.Services.CreateScope())
         {
-            DbContext[] dbContexts =
-            [
-                scope.ServiceProvider.GetRequiredService<LibraryContext>(),
-                scope.ServiceProvider.GetRequiredService<UserContext>()
-            ];
-            foreach (DbContext db in dbContexts) db.Database.Migrate();
+            ManaxContext manaxContext = scope.ServiceProvider.GetRequiredService<ManaxContext>();
+            manaxContext.Database.Migrate();
         }
 
         // Middleware global de gestion des exceptions

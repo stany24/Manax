@@ -12,56 +12,56 @@ namespace ManaxApi.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class ScanController(LibraryContext libraryContext, SerieContext serieContext, ChapterContext chapterContext)
+public class ScanController(ManaxContext ManaxContext)
     : ControllerBase
 {
-    [HttpGet("{id:long}")]
+    [HttpGet("library/{id:long}")]
     [AuthorizeRole(UserRole.Admin)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> ScanLibrary(long id)
     {
-        Library? library = await libraryContext.Libraries
+        Library? library = await ManaxContext.Libraries
             .Include(l => l.Series)
             .ThenInclude(s => s.Chapters)
             .FirstOrDefaultAsync(l => l.Id == id);
 
         if (library == null) return NotFound();
 
-        TaskManagerService.AddTask(new LibraryScanTask(library, libraryContext, serieContext, chapterContext));
+        TaskManagerService.AddTask(new LibraryScanTask(library, ManaxContext));
 
         return Ok();
     }
 
-    [HttpGet("{id:long}")]
+    [HttpGet("serie/{id:long}")]
     [AuthorizeRole(UserRole.Admin)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> ScanSerie(long id)
     {
-        Serie? serie = await serieContext.Series
+        Serie? serie = await ManaxContext.Series
             .Include(s => s.Chapters)
             .FirstOrDefaultAsync(s => s.Id == id);
 
         if (serie == null) return NotFound();
 
-        TaskManagerService.AddTask(new SerieScanTask(serie, libraryContext, serieContext, chapterContext));
+        TaskManagerService.AddTask(new SerieScanTask(serie, ManaxContext));
 
         return Ok();
     }
 
-    [HttpGet("{id:long}")]
+    [HttpGet("chapter/{id:long}")]
     [AuthorizeRole(UserRole.Admin)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> ScanChapter(long id)
     {
-        Chapter? chapter = await chapterContext.Chapters
+        Chapter? chapter = await ManaxContext.Chapters
             .FirstOrDefaultAsync(l => l.Id == id);
 
         if (chapter == null) return NotFound();
 
-        TaskManagerService.AddTask(new ChapterScanTask(chapter, libraryContext, serieContext, chapterContext));
+        TaskManagerService.AddTask(new ChapterScanTask(chapter, ManaxContext));
 
         return Ok();
     }

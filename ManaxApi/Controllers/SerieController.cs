@@ -1,4 +1,5 @@
 using ManaxApi.Auth;
+using ManaxApi.Models.Chapter;
 using ManaxApi.Models.Serie;
 using ManaxApi.Models.User;
 using Microsoft.AspNetCore.Mvc;
@@ -8,7 +9,7 @@ namespace ManaxApi.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class SerieController(SerieContext context) : ControllerBase
+public class SerieController(ManaxContext context) : ControllerBase
 {
     // GET: api/Serie
     [HttpGet("/api/series")]

@@ -5,11 +5,11 @@ using ManaxApi.Services;
 
 namespace ManaxApi.Task;
 
-public class LibraryScanTask(Library library,LibraryContext libraryContext, SerieContext serieContext, ChapterContext chapterContext) : ITask
+public class LibraryScanTask(Library library,ManaxContext ManaxContext) : ITask
 {
     public void Execute()
     {
-        ScanService.ScanLibrary(library, libraryContext, serieContext, chapterContext);
+        ScanService.ScanLibrary(library, ManaxContext);
     }
 
     public string GetName()
