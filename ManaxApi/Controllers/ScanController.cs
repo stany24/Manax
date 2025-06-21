@@ -12,7 +12,7 @@ namespace ManaxApi.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class ScanController(ManaxContext ManaxContext)
+public class ScanController(ManaxContext manaxContext)
     : ControllerBase
 {
     [HttpGet("library/{id:long}")]
@@ -21,14 +21,14 @@ public class ScanController(ManaxContext ManaxContext)
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> ScanLibrary(long id)
     {
-        Library? library = await ManaxContext.Libraries
+        Library? library = await manaxContext.Libraries
             .Include(l => l.Series)
             .ThenInclude(s => s.Chapters)
             .FirstOrDefaultAsync(l => l.Id == id);
 
         if (library == null) return NotFound();
 
-        TaskManagerService.AddTask(new LibraryScanTask(library, ManaxContext));
+        TaskManagerService.AddTask(new LibraryScanTask(library, manaxContext));
 
         return Ok();
     }
@@ -39,13 +39,13 @@ public class ScanController(ManaxContext ManaxContext)
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> ScanSerie(long id)
     {
-        Serie? serie = await ManaxContext.Series
+        Serie? serie = await manaxContext.Series
             .Include(s => s.Chapters)
             .FirstOrDefaultAsync(s => s.Id == id);
 
         if (serie == null) return NotFound();
 
-        TaskManagerService.AddTask(new SerieScanTask(serie, ManaxContext));
+        TaskManagerService.AddTask(new SerieScanTask(serie, manaxContext));
 
         return Ok();
     }
@@ -56,12 +56,12 @@ public class ScanController(ManaxContext ManaxContext)
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> ScanChapter(long id)
     {
-        Chapter? chapter = await ManaxContext.Chapters
+        Chapter? chapter = await manaxContext.Chapters
             .FirstOrDefaultAsync(l => l.Id == id);
 
         if (chapter == null) return NotFound();
 
-        TaskManagerService.AddTask(new ChapterScanTask(chapter, ManaxContext));
+        TaskManagerService.AddTask(new ChapterScanTask(chapter, manaxContext));
 
         return Ok();
     }

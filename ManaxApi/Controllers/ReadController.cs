@@ -9,7 +9,7 @@ namespace ManaxApi.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class ReadController(ManaxContext ManaxContext) : ControllerBase
+public class ReadController(ManaxContext manaxContext) : ControllerBase
 {
     [HttpPut("read")]
     [AuthorizeRole(UserRole.User)]
@@ -20,8 +20,8 @@ public class ReadController(ManaxContext ManaxContext) : ControllerBase
         long? userId = UserController.GetCurrentUserId(HttpContext);
         if (userId == null) return Unauthorized();
 
-        User? user = await ManaxContext.Users.FindAsync(userId);
-        Chapter? chapter = await ManaxContext.Reads
+        User? user = await manaxContext.Users.FindAsync(userId);
+        Chapter? chapter = await manaxContext.Reads
             .Include(r => r.Chapter)
             .Where(r => r.Chapter.Id == chapterId)
             .Select(r => r.Chapter)
@@ -29,7 +29,7 @@ public class ReadController(ManaxContext ManaxContext) : ControllerBase
 
         if (user == null || chapter == null) return NotFound();
 
-        Read? existingRead = await ManaxContext.Reads
+        Read? existingRead = await manaxContext.Reads
             .FirstOrDefaultAsync(r => r.User.Id == userId && r.Chapter.Id == chapterId);
 
         if (existingRead != null)
@@ -44,10 +44,10 @@ public class ReadController(ManaxContext ManaxContext) : ControllerBase
                 Chapter = chapter,
                 Date = dateTime ?? DateTime.UtcNow
             };
-            await ManaxContext.Reads.AddAsync(read);
+            await manaxContext.Reads.AddAsync(read);
         }
 
-        await ManaxContext.SaveChangesAsync();
+        await manaxContext.SaveChangesAsync();
         return Ok();
     }
 
@@ -60,13 +60,13 @@ public class ReadController(ManaxContext ManaxContext) : ControllerBase
         long? userId = UserController.GetCurrentUserId(HttpContext);
         if (userId == null) return Unauthorized();
 
-        Read? existingRead = await ManaxContext.Reads
+        Read? existingRead = await manaxContext.Reads
             .FirstOrDefaultAsync(r => r.User.Id == userId && r.Chapter.Id == chapterId);
 
         if (existingRead == null) return Ok();
 
-        ManaxContext.Reads.Remove(existingRead);
-        await ManaxContext.SaveChangesAsync();
+        manaxContext.Reads.Remove(existingRead);
+        await manaxContext.SaveChangesAsync();
 
         return Ok();
     }

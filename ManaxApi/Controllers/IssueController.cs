@@ -9,13 +9,13 @@ namespace ManaxApi.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class IssueController(ManaxContext ManaxContext) : ControllerBase
+public class IssueController(ManaxContext manaxContext) : ControllerBase
 {
     [HttpGet]
     [AuthorizeRole(UserRole.Admin)]
     public async Task<ActionResult<IEnumerable<Issue>>> GetAllIssues()
     {
-        return await ManaxContext.Issues
+        return await manaxContext.Issues
             .ToListAsync();
     }
 
@@ -28,8 +28,8 @@ public class IssueController(ManaxContext ManaxContext) : ControllerBase
 
         issue.User = new User { Id = (long)userId };
 
-        ManaxContext.Issues.Add(issue);
-        await ManaxContext.SaveChangesAsync();
+        manaxContext.Issues.Add(issue);
+        await manaxContext.SaveChangesAsync();
 
         return CreatedAtAction(nameof(GetAllIssues), new { id = issue.Id }, issue);
     }
@@ -38,12 +38,12 @@ public class IssueController(ManaxContext ManaxContext) : ControllerBase
     [AuthorizeRole(UserRole.Admin)]
     public async Task<IActionResult> CloseIssue(long id)
     {
-        Issue? issue = await ManaxContext.Issues.FindAsync(id);
+        Issue? issue = await manaxContext.Issues.FindAsync(id);
 
         if (issue == null) return NotFound();
 
-        ManaxContext.Issues.Remove(issue);
-        await ManaxContext.SaveChangesAsync();
+        manaxContext.Issues.Remove(issue);
+        await manaxContext.SaveChangesAsync();
 
         return NoContent();
     }

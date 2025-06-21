@@ -5,6 +5,7 @@ using ManaxApi.Models.Read;
 using ManaxApi.Models.Serie;
 using ManaxApi.Models.User;
 using ManaxApi.Services;
+using ManaxApi.Task;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -41,6 +42,8 @@ public static class Program
         builder.Services.AddDbContext<ManaxContext>(opt =>
             opt.UseSqlite($"Data Source={Path.Combine(AppContext.BaseDirectory, "database.db")}"));
 
+        builder.Services.AddTransient<ITask>();
+        
         WebApplication app = builder.Build();
 
         // Création/mise à jour automatique de la base de données

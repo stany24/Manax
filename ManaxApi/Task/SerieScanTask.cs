@@ -5,11 +5,11 @@ using ManaxApi.Services;
 
 namespace ManaxApi.Task;
 
-public class SerieScanTask(Serie serie,ManaxContext ManaxContext) : ITask
+public class SerieScanTask(Serie serie,ManaxContext manaxContext) : ITask
 {
     public void Execute()
     {
-        ScanService.ScanSerie(serie, ManaxContext);
+        ScanService.ScanSerie(serie, manaxContext);
     }
 
     public string GetName()
