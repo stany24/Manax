@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using ManaxApi.DTOs;
-using ManaxApi.Models.Library;
 using ManaxApiClient;
 using Path = System.IO.Path;
 

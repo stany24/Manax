@@ -1,14 +1,24 @@
-using ManaxApi.Models.Chapter;
 using ManaxApi.Models.Library;
 using ManaxApi.Services;
 
 namespace ManaxApi.Task;
 
-public class LibraryScanTask(Library library,ManaxContext manaxContext) : ITask
+public class LibraryScanTask : ITask
 {
+    private readonly IServiceScopeFactory _scopeFactory;
+    private readonly Library _library;
+
+    public LibraryScanTask(IServiceScopeFactory scopeFactory, Library library)
+    {
+        _scopeFactory = scopeFactory;
+        _library = library;
+    }
+
     public void Execute()
     {
-        ScanService.ScanLibrary(library, manaxContext);
+        using IServiceScope scope = _scopeFactory.CreateScope();
+        ScanService scanService = scope.ServiceProvider.GetRequiredService<ScanService>();
+        scanService.ScanLibrary(_library);
     }
 
     public string GetName()

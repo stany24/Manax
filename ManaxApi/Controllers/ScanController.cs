@@ -1,4 +1,3 @@
-using AutoMapper;
 using ManaxApi.Auth;
 using ManaxApi.Models.Chapter;
 using ManaxApi.Models.Library;
@@ -13,8 +12,9 @@ namespace ManaxApi.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class ScanController(ManaxContext context) : ControllerBase
+public class ScanController(ManaxContext context, IServiceScopeFactory scopeFactory) : ControllerBase
 {
+
     [HttpGet("library/{id:long}")]
     [AuthorizeRole(UserRole.Admin)]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -28,7 +28,7 @@ public class ScanController(ManaxContext context) : ControllerBase
 
         if (library == null) return NotFound();
 
-        TaskManagerService.AddTask(new LibraryScanTask(library, context));
+        TaskManagerService.AddTask(new LibraryScanTask(scopeFactory, library));
 
         return Ok();
     }
@@ -45,7 +45,7 @@ public class ScanController(ManaxContext context) : ControllerBase
 
         if (serie == null) return NotFound();
 
-        TaskManagerService.AddTask(new SerieScanTask(serie, context));
+        TaskManagerService.AddTask(new SerieScanTask(scopeFactory, serie.Id));
 
         return Ok();
     }
@@ -61,7 +61,7 @@ public class ScanController(ManaxContext context) : ControllerBase
 
         if (chapter == null) return NotFound();
 
-        TaskManagerService.AddTask(new ChapterScanTask(chapter, context));
+        TaskManagerService.AddTask(new ChapterScanTask(scopeFactory, chapter.Id));
 
         return Ok();
     }

@@ -1,14 +1,23 @@
-using ManaxApi.Models.Chapter;
-using ManaxApi.Models.Serie;
 using ManaxApi.Services;
 
 namespace ManaxApi.Task;
 
-public class SerieScanTask(Serie serie,ManaxContext manaxContext) : ITask
+public class SerieScanTask : ITask
 {
+    private readonly IServiceScopeFactory _scopeFactory;
+    private readonly long _serieId;
+
+    public SerieScanTask(IServiceScopeFactory scopeFactory, long serieId)
+    {
+        _scopeFactory = scopeFactory;
+        _serieId = serieId;
+    }
+
     public void Execute()
     {
-        ScanService.ScanSerie(serie, manaxContext);
+        using IServiceScope scope = _scopeFactory.CreateScope();
+        ScanService scanService = scope.ServiceProvider.GetRequiredService<ScanService>();
+        scanService.ScanSerie(_serieId);
     }
 
     public string GetName()

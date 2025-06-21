@@ -1,6 +1,5 @@
 using ManaxApi.Models.Chapter;
 using ManaxApi.Services;
-using ManaxApi.Task;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -38,9 +37,11 @@ public static class Program
         builder.Services.AddDbContext<ManaxContext>(opt =>
             opt.UseSqlite($"Data Source={Path.Combine(AppContext.BaseDirectory, "database.db")}"));
         
-        
         // Configuration AutoMapper
         builder.Services.AddAutoMapper(typeof(MappingProfile));
+        
+        // Enregistrement du ScanService pour l'injection de dépendances
+        builder.Services.AddScoped<ScanService>();
         
         WebApplication app = builder.Build();
 
