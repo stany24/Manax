@@ -24,8 +24,12 @@ public static class ManaxApiScanClient
     
     public static async Task<Dictionary<string, int>?> GetTasksAsync()
     {
-        HttpResponseMessage response = await ManaxApiClient.Client.GetAsync("api/scan/tasks");
-        if (!response.IsSuccessStatusCode) return null;
-        return await response.Content.ReadFromJsonAsync<Dictionary<string, int>>();
+        try
+        {
+            HttpResponseMessage response = await ManaxApiClient.Client.GetAsync("api/scan/tasks");
+            if (!response.IsSuccessStatusCode) return null;
+            return await response.Content.ReadFromJsonAsync<Dictionary<string, int>>();
+        }
+        catch (Exception) { return null; }
     }
 }

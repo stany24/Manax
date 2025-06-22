@@ -2,22 +2,13 @@ using ManaxApi.Services;
 
 namespace ManaxApi.Task;
 
-public class ChapterScanTask : ITask
+public class ChapterScanTask(IServiceScopeFactory scopeFactory, long chapterId) : ITask
 {
-    private readonly IServiceScopeFactory _scopeFactory;
-    private readonly long _chapterId;
-
-    public ChapterScanTask(IServiceScopeFactory scopeFactory, long chapterId)
-    {
-        _scopeFactory = scopeFactory;
-        _chapterId = chapterId;
-    }
-
     public void Execute()
     {
-        using IServiceScope scope = _scopeFactory.CreateScope();
+        using IServiceScope scope = scopeFactory.CreateScope();
         ScanService scanService = scope.ServiceProvider.GetRequiredService<ScanService>();
-        scanService.ScanChapter(_chapterId);
+        scanService.ScanChapter(chapterId);
     }
 
     public string GetName()

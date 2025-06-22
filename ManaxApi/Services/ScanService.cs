@@ -6,20 +6,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ManaxApi.Services;
 
-public class ScanService
+public class ScanService(IServiceScopeFactory scopeFactory)
 {
-    private readonly IServiceScopeFactory _scopeFactory;
-
-    public ScanService(IServiceScopeFactory scopeFactory)
-    {
-        _scopeFactory = scopeFactory;
-    }
-
     public void ScanLibrary(Library library)
     {
         Console.WriteLine("Scanning library: " + library.Name);
         
-        using IServiceScope scope = _scopeFactory.CreateScope();
+        using IServiceScope scope = scopeFactory.CreateScope();
         ManaxContext manaxContext = scope.ServiceProvider.GetRequiredService<ManaxContext>();
         
         string[] directories = Directory.GetDirectories(library.Path);
@@ -42,13 +35,13 @@ public class ScanService
                 manaxContext.SaveChanges();
             }
             
-            TaskManagerService.AddTask(new SerieScanTask(_scopeFactory, serie.Id));
+            _ = TaskManagerService.AddTaskAsync(new SerieScanTask(scopeFactory, serie.Id));
         }
     }
 
     public void ScanSerie(long serieId)
     {
-        using IServiceScope scope = _scopeFactory.CreateScope();
+        using IServiceScope scope = scopeFactory.CreateScope();
         ManaxContext manaxContext = scope.ServiceProvider.GetRequiredService<ManaxContext>();
         
         Serie? serie = manaxContext.Series.Find(serieId);
@@ -79,13 +72,13 @@ public class ScanService
                 manaxContext.SaveChanges();
             }
             
-            TaskManagerService.AddTask(new ChapterScanTask(_scopeFactory, chapter.Id));
+            _ = TaskManagerService.AddTaskAsync(new ChapterScanTask(scopeFactory, chapter.Id));
         }
     }
 
     public void ScanChapter(long chapterId)
     {
-        using IServiceScope scope = _scopeFactory.CreateScope();
+        using IServiceScope scope = scopeFactory.CreateScope();
         ManaxContext manaxContext = scope.ServiceProvider.GetRequiredService<ManaxContext>();
         
         Chapter? chapter = manaxContext.Chapters.Find(chapterId);

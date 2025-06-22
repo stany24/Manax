@@ -28,7 +28,7 @@ public class ScanController(ManaxContext context, IServiceScopeFactory scopeFact
 
         if (library == null) return NotFound();
 
-        TaskManagerService.AddTask(new LibraryScanTask(scopeFactory, library));
+        _ =TaskManagerService.AddTaskAsync(new LibraryScanTask(scopeFactory, library));
 
         return Ok();
     }
@@ -45,7 +45,7 @@ public class ScanController(ManaxContext context, IServiceScopeFactory scopeFact
 
         if (serie == null) return NotFound();
 
-        TaskManagerService.AddTask(new SerieScanTask(scopeFactory, serie.Id));
+        _ = TaskManagerService.AddTaskAsync(new SerieScanTask(scopeFactory, serie.Id));
 
         return Ok();
     }
@@ -61,7 +61,7 @@ public class ScanController(ManaxContext context, IServiceScopeFactory scopeFact
 
         if (chapter == null) return NotFound();
 
-        TaskManagerService.AddTask(new ChapterScanTask(scopeFactory, chapter.Id));
+        _ = TaskManagerService.AddTaskAsync(new ChapterScanTask(scopeFactory, chapter.Id));
 
         return Ok();
     }

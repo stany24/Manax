@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ManaxApi.Migrations
 {
     [DbContext(typeof(ManaxContext))]
-    [Migration("20250621221216_ManaxV0.1")]
+    [Migration("20250622132331_ManaxV0.1")]
     partial class ManaxV01
     {
         /// <inheritdoc />
@@ -56,7 +56,7 @@ namespace ManaxApi.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<long>("ChaptersId")
+                    b.Property<long>("ChapterId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Problem")
@@ -69,7 +69,7 @@ namespace ManaxApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ChaptersId");
+                    b.HasIndex("ChapterId");
 
                     b.HasIndex("UserId");
 
@@ -95,6 +95,12 @@ namespace ManaxApi.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.HasIndex("Path")
+                        .IsUnique();
 
                     b.ToTable("Libraries");
                 });
@@ -185,9 +191,9 @@ namespace ManaxApi.Migrations
 
             modelBuilder.Entity("ManaxApi.Models.Issue.Issue", b =>
                 {
-                    b.HasOne("ManaxApi.Models.Chapter.Chapter", "Chapters")
+                    b.HasOne("ManaxApi.Models.Chapter.Chapter", "Chapter")
                         .WithMany()
-                        .HasForeignKey("ChaptersId")
+                        .HasForeignKey("ChapterId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -197,7 +203,7 @@ namespace ManaxApi.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Chapters");
+                    b.Navigation("Chapter");
 
                     b.Navigation("User");
                 });

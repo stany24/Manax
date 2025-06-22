@@ -91,7 +91,7 @@ namespace ManaxApi.Migrations
                 {
                     Id = table.Column<long>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    ChaptersId = table.Column<long>(type: "INTEGER", nullable: false),
+                    ChapterId = table.Column<long>(type: "INTEGER", nullable: false),
                     UserId = table.Column<long>(type: "INTEGER", nullable: false),
                     Problem = table.Column<string>(type: "TEXT", maxLength: 128, nullable: false)
                 },
@@ -99,8 +99,8 @@ namespace ManaxApi.Migrations
                 {
                     table.PrimaryKey("PK_Issues", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Issues_Chapters_ChaptersId",
-                        column: x => x.ChaptersId,
+                        name: "FK_Issues_Chapters_ChapterId",
+                        column: x => x.ChapterId,
                         principalTable: "Chapters",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -141,14 +141,26 @@ namespace ManaxApi.Migrations
                 column: "SerieId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Issues_ChaptersId",
+                name: "IX_Issues_ChapterId",
                 table: "Issues",
-                column: "ChaptersId");
+                column: "ChapterId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Issues_UserId",
                 table: "Issues",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Libraries_Name",
+                table: "Libraries",
+                column: "Name",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Libraries_Path",
+                table: "Libraries",
+                column: "Path",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Reads_UserId",

@@ -1,4 +1,10 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Threading;
+using System.Threading.Tasks;
+using Avalonia.Threading;
+using CommunityToolkit.Mvvm.ComponentModel;
+using ManaxApiClient;
 using ManaxApp.ViewModels.Home;
 using ManaxApp.ViewModels.Issue;
 using ManaxApp.ViewModels.Library;
@@ -7,11 +13,43 @@ using ManaxApp.ViewModels.User;
 
 namespace ManaxApp.ViewModels;
 
+public class TaskItem : ObservableObject
+{
+    public string TaskName { get; set; } = string.Empty;
+    public int Number { get; set; }
+}
+
 public partial class MainWindowViewModel : ObservableObject
 {
     [ObservableProperty] private PageViewModel _currentPageViewModel;
     [ObservableProperty] private bool _isAdmin;
+    [ObservableProperty] private ObservableCollection<TaskItem> _runningTasks = [];
 
+    private void UpdateRunningTasks()
+    {
+        if(!IsAdmin){return;}
+        Task.Run(() =>
+        {
+            while (true)
+            {
+                Thread.Sleep(1000);
+                
+                Dictionary<string, int>? tasks = ManaxApiScanClient.GetTasksAsync().Result;
+                if (tasks == null) { continue; }
+
+                Dispatcher.UIThread.Invoke(() =>
+                {
+                    RunningTasks.Clear();
+
+                    foreach (KeyValuePair<string, int> task in tasks)
+                    {
+                        RunningTasks.Add(new TaskItem { TaskName = task.Key, Number = task.Value });
+                    }
+                });
+            }
+        });
+    }
+    
     public MainWindowViewModel()
     {
         PropertyChanged += (_, args) =>
@@ -25,6 +63,7 @@ public partial class MainWindowViewModel : ObservableObject
         {
             if (args.PropertyName != nameof(CurrentPageViewModel)) return;
             if (CurrentPageViewModel is LoginPageViewModel login) IsAdmin = login.IsAdmin();
+            UpdateRunningTasks();
         };
 
         CurrentPageViewModel = new LoginPageViewModel();

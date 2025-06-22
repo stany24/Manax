@@ -1,8 +1,6 @@
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
-using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -45,22 +43,6 @@ public partial class LibrariesPageViewModel : PageViewModel
         Task.Run(async () =>
         {
             await ManaxApiScanClient.ScanLibraryAsync(library.Id);
-        });
-        Task.Run(() =>
-        {
-            while (true)
-            {
-                Thread.Sleep(1000);
-                Dictionary<string, int>? tasks = ManaxApiScanClient.GetTasksAsync().Result;
-                if (tasks == null)
-                {
-                    Console.WriteLine("null");
-                }
-                else
-                {
-                    Console.WriteLine(tasks.Count);
-                }
-            }
         });
     }
 
