@@ -12,7 +12,7 @@ namespace ManaxApi.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class ScanController(ManaxContext context, IServiceScopeFactory scopeFactory) : ControllerBase
+public class ScanController(ManaxContext context) : ControllerBase
 {
 
     [HttpGet("library/{id:long}")]
