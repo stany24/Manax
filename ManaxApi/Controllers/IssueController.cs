@@ -24,21 +24,20 @@ public class IssueController(ManaxContext context, IMapper mapper) : ControllerB
 
     [HttpPost]
     [AuthorizeRole(UserRole.User)]
-    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(IssueDTO))]
+    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(long))]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<ActionResult<IssueDTO>> CreateIssue(IssueCreateDTO issueCreateDTO)
+    public async Task<ActionResult<long>> CreateIssue(IssueCreateDTO issueCreate)
     {
         long? userId = UserController.GetCurrentUserId(HttpContext);
         if (userId == null) return Unauthorized();
 
-        Issue? issue = mapper.Map<Issue>(issueCreateDTO);
+        Issue? issue = mapper.Map<Issue>(issueCreate);
         issue.User = new User { Id = (long)userId };
 
         context.Issues.Add(issue);
         await context.SaveChangesAsync();
-
-        IssueDTO? issueDTO = mapper.Map<IssueDTO>(issue);
-        return CreatedAtAction(nameof(GetAllIssues), new { id = issue.Id }, issueDTO);
+        
+        return issue.Id;
     }
 
     [HttpPut("{id:long}/close")]

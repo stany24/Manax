@@ -19,18 +19,18 @@ public class ReadController(ManaxContext context, IMapper mapper) : ControllerBa
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<IActionResult> Read(ReadCreateDTO readDTO)
+    public async Task<IActionResult> Read(ReadCreateDTO readCreate)
     {
         long? userId = UserController.GetCurrentUserId(HttpContext);
         if (userId == null) return Unauthorized();
 
         User? user = await context.Users.FindAsync(userId);
-        Chapter? chapter = await context.Chapters.FindAsync(readDTO.ChapterId);
+        Chapter? chapter = await context.Chapters.FindAsync(readCreate.ChapterId);
 
         if (user == null || chapter == null) return NotFound();
 
         Read? existingRead = await context.Reads
-            .FirstOrDefaultAsync(r => r.User.Id == userId && r.Chapter.Id == readDTO.ChapterId);
+            .FirstOrDefaultAsync(r => r.User.Id == userId && r.Chapter.Id == readCreate.ChapterId);
 
         if (existingRead != null)
         {
@@ -38,7 +38,7 @@ public class ReadController(ManaxContext context, IMapper mapper) : ControllerBa
         }
         else
         {
-            Read? read = mapper.Map<Read>(readDTO);
+            Read? read = mapper.Map<Read>(readCreate);
             read.User = user;
             read.Chapter = chapter;
             read.Date = DateTime.UtcNow;

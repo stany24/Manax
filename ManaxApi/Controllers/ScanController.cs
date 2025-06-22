@@ -3,9 +3,9 @@ using ManaxApi.Models;
 using ManaxApi.Models.Chapter;
 using ManaxApi.Models.Library;
 using ManaxApi.Models.Serie;
-using ManaxApi.Models.User;
 using ManaxApi.Services;
 using ManaxApi.Task;
+using ManaxLibrary.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 

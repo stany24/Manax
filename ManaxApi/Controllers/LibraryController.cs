@@ -2,7 +2,6 @@ using AutoMapper;
 using ManaxApi.Auth;
 using ManaxApi.Models;
 using ManaxApi.Models.Library;
-using ManaxApi.Models.User;
 using ManaxLibrary.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -63,25 +62,25 @@ public class LibraryController(ManaxContext context, IMapper mapper) : Controlle
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
-    public async Task<IActionResult> PutLibrary(long id, LibraryUpdateDTO libraryDTO)
+    public async Task<IActionResult> PutLibrary(long id, LibraryUpdateDTO libraryUpdate)
     {
         Library? library = await context.Libraries.FindAsync(id);
         
         if (library == null) return NotFound();
         
         // Check if name is unique (except for the current library)
-        if (await context.Libraries.AnyAsync(l => l.Name == libraryDTO.Name && l.Id != id))
+        if (await context.Libraries.AnyAsync(l => l.Name == libraryUpdate.Name && l.Id != id))
         {
-            return Conflict($"A library with name '{libraryDTO.Name}' already exists.");
+            return Conflict($"A library with name '{libraryUpdate.Name}' already exists.");
         }
         
         // Check if path is unique (except for the current library)
-        if (await context.Libraries.AnyAsync(l => l.Path == libraryDTO.Path && l.Id != id))
+        if (await context.Libraries.AnyAsync(l => l.Path == libraryUpdate.Path && l.Id != id))
         {
-            return Conflict($"A library with path '{libraryDTO.Path}' already exists.");
+            return Conflict($"A library with path '{libraryUpdate.Path}' already exists.");
         }
         
-        mapper.Map(libraryDTO, library);
+        mapper.Map(libraryUpdate, library);
 
         try
         {
@@ -105,21 +104,21 @@ public class LibraryController(ManaxContext context, IMapper mapper) : Controlle
     [AuthorizeRole(UserRole.Admin)]
     [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(long))]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
-    public async Task<ActionResult<long>> PostLibrary(LibraryCreateDTO libraryCreateDTO)
+    public async Task<ActionResult<long>> PostLibrary(LibraryCreateDTO libraryCreate)
     {
-        // Check if name is unique
-        if (await context.Libraries.AnyAsync(l => l.Name == libraryCreateDTO.Name))
+        // Check if name is unique dsgsgs
+        if (await context.Libraries.AnyAsync(l => l.Name == libraryCreate.Name))
         {
-            return Conflict($"A library with name '{libraryCreateDTO.Name}' already exists.");
+            return Conflict($"A library with name '{libraryCreate.Name}' already exists.");
         }
         
         // Check if path is unique
-        if (await context.Libraries.AnyAsync(l => l.Path == libraryCreateDTO.Path))
+        if (await context.Libraries.AnyAsync(l => l.Path == libraryCreate.Path))
         {
-            return Conflict($"A library with path '{libraryCreateDTO.Path}' already exists.");
+            return Conflict($"A library with path '{libraryCreate.Path}' already exists.");
         }
         
-        Library? library = mapper.Map<Library>(libraryCreateDTO);
+        Library? library = mapper.Map<Library>(libraryCreate);
         
         context.Libraries.Add(library);
         

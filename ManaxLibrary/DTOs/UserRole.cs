@@ -1,4 +1,4 @@
-namespace ManaxApi.Models.User;
+namespace ManaxLibrary.DTOs;
 
 public enum UserRole
 {

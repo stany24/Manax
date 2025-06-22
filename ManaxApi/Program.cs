@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using ManaxApi.Models;
-using ManaxLibrary.DTOs;
 
 namespace ManaxApi;
 

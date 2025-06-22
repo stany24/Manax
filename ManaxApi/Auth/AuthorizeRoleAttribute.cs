@@ -1,6 +1,6 @@
 using System.Security.Claims;
-using ManaxApi.Models.User;
 using ManaxApi.Services;
+using ManaxLibrary.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 

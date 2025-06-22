@@ -43,18 +43,18 @@ public class UserController(ManaxContext context, IMapper mapper, IConfiguration
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> PutUser(long id, UserUpdateDTO userDTO)
+    public async Task<IActionResult> PutUser(long id, UserUpdateDTO userUpdate)
     {
         User? user = await context.Users.FindAsync(id);
         
         if (user == null) return NotFound();
         
-        mapper.Map(userDTO, user);
+        mapper.Map(userUpdate, user);
         
         // Si un nouveau mot de passe est fourni, le hasher
-        if (!string.IsNullOrEmpty(userDTO.Password))
+        if (!string.IsNullOrEmpty(userUpdate.Password))
         {
-            user.PasswordHash = HashService.ComputeSha3_512(userDTO.Password);
+            user.PasswordHash = HashService.ComputeSha3_512(userUpdate.Password);
         }
 
         try
@@ -73,20 +73,18 @@ public class UserController(ManaxContext context, IMapper mapper, IConfiguration
     // POST: api/User
     [HttpPost("create")]
     [AuthorizeRole(UserRole.Admin)]
-    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(UserDTO))]
-    public async Task<ActionResult<UserDTO>> PostUser(UserCreateDTO userCreateDTO)
+    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(long))]
+    public async Task<ActionResult<long>> PostUser(UserCreateDTO userCreate)
     {
-        User? user = mapper.Map<User>(userCreateDTO);
+        User? user = mapper.Map<User>(userCreate);
         
         // Hasher le mot de passe
-        user.PasswordHash = HashService.ComputeSha3_512(userCreateDTO.Password);
+        user.PasswordHash = HashService.ComputeSha3_512(userCreate.Password);
         
         context.Users.Add(user);
         await context.SaveChangesAsync();
-        
-        UserDTO? userDTO = mapper.Map<UserDTO>(user);
 
-        return CreatedAtAction(nameof(GetUser), new { id = user.Id }, userDTO);
+        return user.Id;
     }
 
     // DELETE: api/User/5
@@ -109,12 +107,12 @@ public class UserController(ManaxContext context, IMapper mapper, IConfiguration
     [HttpPost("/api/login")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<IActionResult> Login(UserLoginDTO loginDTO)
+    public async Task<IActionResult> Login(UserLoginDTO loginDto)
     {
-        User? user = await context.Users.FirstOrDefaultAsync(u => u.Username == loginDTO.Username);
+        User? user = await context.Users.FirstOrDefaultAsync(u => u.Username == loginDto.Username);
         if (user == null)
             return Unauthorized();
-        string hash = HashService.ComputeSha3_512(loginDTO.Password);
+        string hash = HashService.ComputeSha3_512(loginDto.Password);
         if (user.PasswordHash != hash)
             return Unauthorized();
         string token = JwtService.GenerateToken(user, config);

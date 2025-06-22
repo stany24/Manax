@@ -3,6 +3,7 @@
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 
 using System.ComponentModel.DataAnnotations;
+using ManaxLibrary.DTOs;
 using Microsoft.EntityFrameworkCore;
 
 namespace ManaxApi.Models.User;

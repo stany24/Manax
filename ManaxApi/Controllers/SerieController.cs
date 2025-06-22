@@ -2,7 +2,6 @@ using AutoMapper;
 using ManaxApi.Auth;
 using ManaxApi.Models;
 using ManaxApi.Models.Serie;
-using ManaxApi.Models.User;
 using ManaxLibrary.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -60,13 +59,13 @@ public class SerieController(ManaxContext context, IMapper mapper) : ControllerB
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> PutSerie(long id, SerieUpdateDTO serieDTO)
+    public async Task<IActionResult> PutSerie(long id, SerieUpdateDTO serieUpdate)
     {
         Serie? serie = await context.Series.FindAsync(id);
         
         if (serie == null) return NotFound();
         
-        mapper.Map(serieDTO, serie);
+        mapper.Map(serieUpdate, serie);
 
         try
         {
@@ -84,17 +83,15 @@ public class SerieController(ManaxContext context, IMapper mapper) : ControllerB
     // POST: api/Serie
     [HttpPost]
     [AuthorizeRole(UserRole.Admin)]
-    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(SerieDTO))]
-    public async Task<ActionResult<SerieDTO>> PostSerie(SerieCreateDTO serieCreateDTO)
+    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(long))]
+    public async Task<ActionResult<long>> PostSerie(SerieCreateDTO serieCreate)
     {
-        Serie? serie = mapper.Map<Serie>(serieCreateDTO);
+        Serie? serie = mapper.Map<Serie>(serieCreate);
         
         context.Series.Add(serie);
         await context.SaveChangesAsync();
-        
-        SerieDTO? serieDTO = mapper.Map<SerieDTO>(serie);
 
-        return CreatedAtAction(nameof(GetSerie), new { id = serie.Id }, serieDTO);
+        return serie.Id;
     }
 
     // DELETE: api/Serie/5

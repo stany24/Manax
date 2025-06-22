@@ -3,7 +3,6 @@ using AutoMapper;
 using ManaxApi.Auth;
 using ManaxApi.Models;
 using ManaxApi.Models.Chapter;
-using ManaxApi.Models.User;
 using ManaxLibrary.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -93,10 +92,5 @@ public class ChapterController(ManaxContext context, IMapper mapper) : Controlle
             return NotFound();
         byte[] bytes = await System.IO.File.ReadAllBytesAsync(filePath);
         return File(bytes, "application/x-cbz");
-    }
-
-    private bool ChapterExists(long id)
-    {
-        return context.Chapters.Any(e => e.Id == id);
     }
 }
