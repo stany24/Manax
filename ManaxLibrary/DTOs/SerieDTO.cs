@@ -4,7 +4,7 @@
 
 using System.ComponentModel.DataAnnotations;
 
-namespace ManaxApi.DTOs;
+namespace ManaxLibrary.DTOs;
 
 public class SerieDTO
 {

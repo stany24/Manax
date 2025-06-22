@@ -1,6 +1,6 @@
 using System.Net.Http.Headers;
 
-namespace ManaxApiClient;
+namespace ManaxLibrary.ApiCaller;
 
 internal static class ManaxApiClient
 {

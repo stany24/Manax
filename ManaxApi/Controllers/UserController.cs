@@ -1,10 +1,10 @@
 using System.Security.Claims;
 using AutoMapper;
 using ManaxApi.Auth;
-using ManaxApi.DTOs;
-using ManaxApi.Models.Chapter;
+using ManaxApi.Models;
 using ManaxApi.Models.User;
 using ManaxApi.Services;
+using ManaxLibrary.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 

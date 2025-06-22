@@ -4,8 +4,8 @@ using System.IO;
 using System.Threading.Tasks;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
-using ManaxApi.DTOs;
-using ManaxApiClient;
+using ManaxLibrary.ApiCaller;
+using ManaxLibrary.DTOs;
 using Path = System.IO.Path;
 
 namespace ManaxApp.ViewModels.Library;
@@ -51,7 +51,7 @@ public partial class LibrariesPageViewModel : PageViewModel
     {
         Task.Run(async () =>
         {
-            ManaxApi.Models.Library.Library library = new() { Name = "New Library", Description = "Description", Path = Path.Combine(Directory.GetCurrentDirectory(),"Library") };
+            LibraryCreateDTO library = new() { Name = "New Library", Description = "Description", Path = Path.Combine(Directory.GetCurrentDirectory(),"Library") };
             long? id = await ManaxApiLibraryClient.PostLibraryAsync(library);
             if (id == null) return;
             LibraryDTO? createdLibrary = await ManaxApiLibraryClient.GetLibraryAsync((long)id);

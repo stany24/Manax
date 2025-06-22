@@ -1,4 +1,4 @@
-namespace ManaxApiClient;
+namespace ManaxLibrary.ApiCaller;
 
 public static class ManaxApiConfig
 {

@@ -3,8 +3,9 @@ using System.Threading.Tasks;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using ManaxApi.Models.User;
-using ManaxApiClient;
 using ManaxApp.ViewModels.Home;
+using ManaxLibrary.ApiCaller;
+using ManaxLibrary.DTOs;
 
 namespace ManaxApp.ViewModels.Login;
 
@@ -51,7 +52,7 @@ public partial class LoginPageViewModel : PageViewModel
 
             ManaxApiConfig.SetToken(token);
 
-            ManaxApi.Models.User.User? self = await ManaxApiUserClient.GetSelf();
+            UserDTO? self = await ManaxApiUserClient.GetSelf();
 
             if (self == null)
             {

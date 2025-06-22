@@ -1,4 +1,5 @@
 using ManaxApi.Auth;
+using ManaxApi.Models;
 using ManaxApi.Models.Chapter;
 using ManaxApi.Models.Library;
 using ManaxApi.Models.Serie;

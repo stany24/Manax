@@ -1,8 +1,7 @@
 using System.Net.Http.Json;
-using ManaxApi.DTOs;
-using ManaxApi.Models.Serie;
+using ManaxLibrary.DTOs;
 
-namespace ManaxApiClient;
+namespace ManaxLibrary.ApiCaller;
 
 public static class ManaxApiSerieClient
 {
@@ -27,14 +26,14 @@ public static class ManaxApiSerieClient
         return await response.Content.ReadFromJsonAsync<List<long>>();
     }
 
-    public static async Task<Serie?> PostSerieAsync(Serie serie)
+    public static async Task<SerieDTO?> PostSerieAsync(SerieDTO serie)
     {
         HttpResponseMessage response = await ManaxApiClient.Client.PostAsJsonAsync("api/serie", serie);
         if (!response.IsSuccessStatusCode) return null;
-        return await response.Content.ReadFromJsonAsync<Serie>();
+        return await response.Content.ReadFromJsonAsync<SerieDTO>();
     }
 
-    public static async Task<bool> PutSerieAsync(long id, Serie serie)
+    public static async Task<bool> PutSerieAsync(long id, SerieDTO serie)
     {
         HttpResponseMessage response = await ManaxApiClient.Client.PutAsJsonAsync($"api/serie/{id}", serie);
         return response.IsSuccessStatusCode;

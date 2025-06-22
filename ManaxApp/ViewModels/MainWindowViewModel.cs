@@ -4,12 +4,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
-using ManaxApiClient;
 using ManaxApp.ViewModels.Home;
 using ManaxApp.ViewModels.Issue;
 using ManaxApp.ViewModels.Library;
 using ManaxApp.ViewModels.Login;
 using ManaxApp.ViewModels.User;
+using ManaxLibrary.ApiCaller;
 
 namespace ManaxApp.ViewModels;
 

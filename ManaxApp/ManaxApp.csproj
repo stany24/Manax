@@ -90,7 +90,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\ManaxApiClient\ManaxApiClient.csproj"/>
+        <ProjectReference Include="..\ManaxLibrary\ManaxLibrary.csproj" />
     </ItemGroup>
 
     <ItemGroup>

@@ -9,7 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ManaxApp", "ManaxApp\ManaxApp.csproj", "{365CC5F8-6CD9-4EFD-9501-5C274D8049D3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ManaxApiClient", "ManaxApiClient\ManaxApiClient.csproj", "{DE7E770A-C1AF-42F0-82BE-AB8401AA3360}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ManaxLibrary", "ManaxLibrary\ManaxLibrary.csproj", "{DE7E770A-C1AF-42F0-82BE-AB8401AA3360}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

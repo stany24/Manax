@@ -74,5 +74,9 @@
         </Content>
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\ManaxLibrary\ManaxLibrary.csproj" />
+    </ItemGroup>
+
 </Project>
 

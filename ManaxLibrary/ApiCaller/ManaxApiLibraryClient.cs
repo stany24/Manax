@@ -1,8 +1,7 @@
 using System.Net.Http.Json;
-using ManaxApi.DTOs;
-using ManaxApi.Models.Library;
+using ManaxLibrary.DTOs;
 
-namespace ManaxApiClient;
+namespace ManaxLibrary.ApiCaller;
 
 public static class ManaxApiLibraryClient
 {
@@ -27,14 +26,14 @@ public static class ManaxApiLibraryClient
         return await response.Content.ReadFromJsonAsync<List<long>>();
     }
 
-    public static async Task<long?> PostLibraryAsync(Library library)
+    public static async Task<long?> PostLibraryAsync(LibraryCreateDTO library)
     {
         HttpResponseMessage response = await ManaxApiClient.Client.PostAsJsonAsync("api/library/create", library);
         if (!response.IsSuccessStatusCode) return null;
         return await response.Content.ReadFromJsonAsync<long>();
     }
 
-    public static async Task<bool> PutLibraryAsync(long id, Library library)
+    public static async Task<bool> PutLibraryAsync(long id, LibraryCreateDTO library)
     {
         HttpResponseMessage response = await ManaxApiClient.Client.PutAsJsonAsync($"api/library/{id}", library);
         return response.IsSuccessStatusCode;

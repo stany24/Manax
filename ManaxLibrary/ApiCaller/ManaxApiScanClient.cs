@@ -1,6 +1,6 @@
 using System.Net.Http.Json;
 
-namespace ManaxApiClient;
+namespace ManaxLibrary.ApiCaller;
 
 public static class ManaxApiScanClient
 {

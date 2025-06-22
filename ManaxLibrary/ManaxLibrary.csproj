@@ -43,12 +43,8 @@
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <RootNamespace>ManaxApiClient</RootNamespace>
+        <RootNamespace>ManaxLibrary</RootNamespace>
     </PropertyGroup>
-
-    <ItemGroup>
-        <ProjectReference Include="..\ManaxApi\ManaxApi.csproj"/>
-    </ItemGroup>
 
     <ItemGroup>
       <PackageReference Include="nulastudio.NetBeauty" Version="2.1.5" />

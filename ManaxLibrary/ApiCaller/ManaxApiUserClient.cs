@@ -1,9 +1,8 @@
 using System.Net.Http.Json;
 using System.Text.Json;
-using ManaxApi.DTOs;
-using ManaxApi.Models.User;
+using ManaxLibrary.DTOs;
 
-namespace ManaxApiClient;
+namespace ManaxLibrary.ApiCaller;
 
 public static class ManaxApiUserClient
 {
@@ -30,14 +29,14 @@ public static class ManaxApiUserClient
         return await response.Content.ReadFromJsonAsync<UserDTO>();
     }
 
-    public static async Task<long?> PostUserAsync(User user)
+    public static async Task<long?> PostUserAsync(UserCreateDTO user)
     {
         HttpResponseMessage response = await ManaxApiClient.Client.PostAsJsonAsync("api/user/create", user);
         if (!response.IsSuccessStatusCode) return null;
         return await response.Content.ReadFromJsonAsync<long>();
     }
 
-    public static async Task<bool> PutUserAsync(long id, User user)
+    public static async Task<bool> PutUserAsync(long id, UserDTO user)
     {
         HttpResponseMessage response = await ManaxApiClient.Client.PutAsJsonAsync($"api/user/{id}", user);
         return response.IsSuccessStatusCode;
@@ -49,17 +48,16 @@ public static class ManaxApiUserClient
         return response.IsSuccessStatusCode;
     }
 
-    public static async Task<User?> GetSelf()
+    public static async Task<UserDTO?> GetSelf()
     {
         HttpResponseMessage response = await ManaxApiClient.Client.GetAsync("api/user/current");
         if (!response.IsSuccessStatusCode) return null;
         UserDTO? userInfo = await response.Content.ReadFromJsonAsync<UserDTO>();
         if (userInfo == null) return null;
-        return new User
+        return new UserDTO
         {
             Id = userInfo.Id,
             Username = userInfo.Username,
-            PasswordHash = string.Empty,
             Role = userInfo.Role
         };
     }

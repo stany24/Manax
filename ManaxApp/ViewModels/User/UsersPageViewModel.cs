@@ -3,9 +3,8 @@ using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
-using ManaxApi.DTOs;
-using ManaxApi.Models.User;
-using ManaxApiClient;
+using ManaxLibrary.ApiCaller;
+using ManaxLibrary.DTOs;
 
 namespace ManaxApp.ViewModels.User;
 
@@ -41,7 +40,7 @@ public partial class UsersPageViewModel : PageViewModel
     {
         Task.Run(async () =>
         {
-            ManaxApi.Models.User.User user = new() { Role = UserRole.User, Username = "test", PasswordHash = "test" };
+            UserCreateDTO user = new() { Username = "test", Password ="test"};
             long? id = await ManaxApiUserClient.PostUserAsync(user);
             if (id == null) return;
             UserDTO? createdUser = await ManaxApiUserClient.GetUserAsync((long)id);

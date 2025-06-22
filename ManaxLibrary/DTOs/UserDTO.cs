@@ -5,7 +5,7 @@
 using System.ComponentModel.DataAnnotations;
 using ManaxApi.Models.User;
 
-namespace ManaxApi.DTOs;
+namespace ManaxLibrary.DTOs;
 
 public class UserDTO
 {
