@@ -6,13 +6,20 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ManaxApi.Services;
 
-public class ScanService(IServiceScopeFactory scopeFactory)
+public static class ScanService
 {
-    public void ScanLibrary(Library library)
+    private static IServiceScopeFactory _scopeFactory;
+    
+    public static void Initialize(IServiceScopeFactory scopeFactory)
+    {
+        _scopeFactory = scopeFactory;
+    }
+    
+    public static void ScanLibrary(Library library)
     {
         Console.WriteLine("Scanning library: " + library.Name);
         
-        using IServiceScope scope = scopeFactory.CreateScope();
+        using IServiceScope scope = _scopeFactory.CreateScope();
         ManaxContext manaxContext = scope.ServiceProvider.GetRequiredService<ManaxContext>();
         
         string[] directories = Directory.GetDirectories(library.Path);
@@ -35,13 +42,13 @@ public class ScanService(IServiceScopeFactory scopeFactory)
                 manaxContext.SaveChanges();
             }
             
-            _ = TaskManagerService.AddTaskAsync(new SerieScanTask(scopeFactory, serie.Id));
+            _ = TaskManagerService.AddTaskAsync(new SerieScanTask(serie.Id));
         }
     }
 
-    public void ScanSerie(long serieId)
+    public static void ScanSerie(long serieId)
     {
-        using IServiceScope scope = scopeFactory.CreateScope();
+        using IServiceScope scope = _scopeFactory.CreateScope();
         ManaxContext manaxContext = scope.ServiceProvider.GetRequiredService<ManaxContext>();
         
         Serie? serie = manaxContext.Series.Find(serieId);
@@ -72,19 +79,18 @@ public class ScanService(IServiceScopeFactory scopeFactory)
                 manaxContext.SaveChanges();
             }
             
-            _ = TaskManagerService.AddTaskAsync(new ChapterScanTask(scopeFactory, chapter.Id));
+            _ = TaskManagerService.AddTaskAsync(new ChapterScanTask(chapter.Id));
         }
     }
 
-    public void ScanChapter(long chapterId)
+    public static void ScanChapter(long chapterId)
     {
-        using IServiceScope scope = scopeFactory.CreateScope();
+        using IServiceScope scope = _scopeFactory.CreateScope();
         ManaxContext manaxContext = scope.ServiceProvider.GetRequiredService<ManaxContext>();
         
         Chapter? chapter = manaxContext.Chapters.Find(chapterId);
         if (chapter == null) return;
         
         Console.WriteLine("Scanning chapter: " + chapter.FileName);
-        // Logique de scan de chapitre ici
     }
 }

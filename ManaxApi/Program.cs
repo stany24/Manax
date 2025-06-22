@@ -40,9 +40,6 @@ public static class Program
         // Configuration AutoMapper
         builder.Services.AddAutoMapper(typeof(MappingProfile));
         
-        // Enregistrement du ScanService pour l'injection de dépendances
-        builder.Services.AddScoped<ScanService>();
-        
         WebApplication app = builder.Build();
 
         // Création/mise à jour automatique de la base de données
@@ -51,6 +48,9 @@ public static class Program
             ManaxContext manaxContext = scope.ServiceProvider.GetRequiredService<ManaxContext>();
             manaxContext.Database.Migrate();
         }
+        
+        // Initialisation du singleton ScanService
+        ScanService.Initialize(app.Services.GetRequiredService<IServiceScopeFactory>());
 
         // Middleware global de gestion des exceptions
         app.UseExceptionHandler(errorApp =>

@@ -3,13 +3,11 @@ using ManaxApi.Services;
 
 namespace ManaxApi.Task;
 
-public class LibraryScanTask(IServiceScopeFactory scopeFactory, Library library) : ITask
+public class LibraryScanTask(Library library) : ITask
 {
     public void Execute()
     {
-        using IServiceScope scope = scopeFactory.CreateScope();
-        ScanService scanService = scope.ServiceProvider.GetRequiredService<ScanService>();
-        scanService.ScanLibrary(library);
+        ScanService.ScanLibrary(library);
     }
 
     public string GetName()
