@@ -61,7 +61,6 @@
         <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
         <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.3.1"/>
         <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0"/>
-        <PackageReference Include="nulastudio.NetBeauty" Version="2.1.5" />
     </ItemGroup>
 
     <ItemGroup>
@@ -86,6 +85,10 @@
         <Compile Update="Views\Library\LibrarysPageView.axaml.cs">
           <SubType>Code</SubType>
           <DependentUpon>LibrarysPageView.axaml</DependentUpon>
+        </Compile>
+        <Compile Update="Views\Library\LibraryPageView.axaml.cs">
+          <SubType>Code</SubType>
+          <DependentUpon>LibraryPageView.axaml</DependentUpon>
         </Compile>
     </ItemGroup>
 

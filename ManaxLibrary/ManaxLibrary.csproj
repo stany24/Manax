@@ -46,8 +46,4 @@
         <RootNamespace>ManaxLibrary</RootNamespace>
     </PropertyGroup>
 
-    <ItemGroup>
-      <PackageReference Include="nulastudio.NetBeauty" Version="2.1.5" />
-    </ItemGroup>
-
 </Project>

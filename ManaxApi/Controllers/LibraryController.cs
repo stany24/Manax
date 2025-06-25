@@ -42,17 +42,13 @@ public class LibraryController(ManaxContext context, IMapper mapper) : Controlle
     [AuthorizeRole(UserRole.User)]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<long>))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<IEnumerable<long>>> GetLibrarySeries(long id)
+    public async Task<IEnumerable<long>> GetLibrarySeries(long id)
     {
-        Library? library = await context.Libraries
-            .AsNoTracking()
-            .Where(l => l.Id == id)
-            .Include(library => library.Series)
-            .FirstOrDefaultAsync(l => l.Id == id);
+        IEnumerable<long> seriesIds = context.Series
+            .Where(s => s.LibraryId == id)
+            .Select(s => s.Id);
 
-        if (library == null) return NotFound();
-
-        return library.Series.Select(s => s.Id).ToList();
+        return seriesIds;
     }
 
     // PUT: api/Library/5

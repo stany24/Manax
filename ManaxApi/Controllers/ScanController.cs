@@ -22,10 +22,7 @@ public class ScanController(ManaxContext context) : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> ScanLibrary(long id)
     {
-        Library? library = await context.Libraries
-            .Include(l => l.Series)
-            .ThenInclude(s => s.Chapters)
-            .FirstOrDefaultAsync(l => l.Id == id);
+        Library? library = await context.Libraries.FirstOrDefaultAsync(l => l.Id == id);
 
         if (library == null) return NotFound();
 
@@ -40,9 +37,7 @@ public class ScanController(ManaxContext context) : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> ScanSerie(long id)
     {
-        Serie? serie = await context.Series
-            .Include(s => s.Chapters)
-            .FirstOrDefaultAsync(s => s.Id == id);
+        Serie? serie = await context.Series.FirstOrDefaultAsync(s => s.Id == id);
 
         if (serie == null) return NotFound();
 

@@ -38,6 +38,11 @@ public partial class LibrariesPageViewModel : PageViewModel
         });
     }
     
+    public void ShowLibrary(long libraryId)
+    {
+        PageChangedRequested?.Invoke(this,new LibraryPageViewModel(libraryId));
+    }
+    
     public void ScanLibrary(LibraryDTO library)
     {
         Task.Run(async () =>

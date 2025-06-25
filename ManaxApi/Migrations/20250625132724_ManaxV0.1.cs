@@ -47,11 +47,11 @@ namespace ManaxApi.Migrations
                 {
                     Id = table.Column<long>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
+                    LibraryId = table.Column<long>(type: "INTEGER", nullable: false),
                     FolderName = table.Column<string>(type: "TEXT", nullable: false),
                     Title = table.Column<string>(type: "TEXT", nullable: false),
                     Description = table.Column<string>(type: "TEXT", nullable: false),
-                    Path = table.Column<string>(type: "TEXT", nullable: false),
-                    LibraryId = table.Column<long>(type: "INTEGER", nullable: true)
+                    Path = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -60,7 +60,8 @@ namespace ManaxApi.Migrations
                         name: "FK_Series_Libraries_LibraryId",
                         column: x => x.LibraryId,
                         principalTable: "Libraries",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -69,11 +70,11 @@ namespace ManaxApi.Migrations
                 {
                     Id = table.Column<long>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
+                    SerieId = table.Column<long>(type: "INTEGER", nullable: false),
                     FileName = table.Column<string>(type: "TEXT", nullable: false),
                     Number = table.Column<int>(type: "INTEGER", nullable: false),
                     Pages = table.Column<int>(type: "INTEGER", nullable: false),
-                    Path = table.Column<string>(type: "TEXT", nullable: false),
-                    SerieId = table.Column<long>(type: "INTEGER", nullable: true)
+                    Path = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -82,7 +83,8 @@ namespace ManaxApi.Migrations
                         name: "FK_Chapters_Series_SerieId",
                         column: x => x.SerieId,
                         principalTable: "Series",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(

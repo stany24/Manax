@@ -56,7 +56,10 @@ public partial class MainWindowViewModel : ObservableObject
         {
             if (args.PropertyName != nameof(CurrentPageViewModel)) return;
             CurrentPageViewModel.Admin = IsAdmin;
-            CurrentPageViewModel.PageChangedRequested += (_, e) => { CurrentPageViewModel = e; };
+            CurrentPageViewModel.PageChangedRequested += (_, e) =>
+            {
+                CurrentPageViewModel = e;
+            };
         };
 
         PropertyChanging += (_, args) =>

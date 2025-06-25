@@ -16,5 +16,4 @@ public class Library
     public string Name { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
     public string Path { get; set; } = string.Empty;
-    public List<Serie.Serie> Series { get; set; } = [];
 }

@@ -21,20 +21,24 @@
                 <DataTemplate>
                     <Border BorderBrush="Blue" BorderThickness="1"
                             CornerRadius="4" Padding="4">
-                        <StackPanel
-                            Orientation="Horizontal">
-                            <Label Content="{Binding Id}" />
-                            <Label Content="{Binding Name}" />
-                            <Label Content="{Binding Description}" />
-                            <Button
-                                Content="Scan"
-                                Command="{Binding $parent[UserControl].((login:LibrariesPageViewModel)DataContext).ScanLibrary}"
-                                CommandParameter="{Binding .}" />
-                            <Button
-                                Content="Delete"
-                                Command="{Binding $parent[UserControl].((login:LibrariesPageViewModel)DataContext).DeleteLibrary}"
-                                CommandParameter="{Binding .}" />
-                        </StackPanel>
+                        <Button
+                            Command="{Binding $parent[UserControl].((login:LibrariesPageViewModel)DataContext).ShowLibrary}"
+                            CommandParameter="{Binding Id}">
+                            <StackPanel
+                                Orientation="Horizontal">
+                                <Label Content="{Binding Id}" />
+                                <Label Content="{Binding Name}" />
+                                <Label Content="{Binding Description}" />
+                                <Button
+                                    Content="Scan"
+                                    Command="{Binding $parent[UserControl].((login:LibrariesPageViewModel)DataContext).ScanLibrary}"
+                                    CommandParameter="{Binding .}" />
+                                <Button
+                                    Content="Delete"
+                                    Command="{Binding $parent[UserControl].((login:LibrariesPageViewModel)DataContext).DeleteLibrary}"
+                                    CommandParameter="{Binding .}" />
+                            </StackPanel>
+                        </Button>
                     </Border>
                 </DataTemplate>
             </ListBox.ItemTemplate>

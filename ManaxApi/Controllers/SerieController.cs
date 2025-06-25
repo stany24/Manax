@@ -42,15 +42,13 @@ public class SerieController(ManaxContext context, IMapper mapper) : ControllerB
     [AuthorizeRole(UserRole.User)]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<long>))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<IEnumerable<long>>> GetSerieChapters(long id)
+    public async Task<IEnumerable<long>> GetSerieChapters(long id)
     {
-        Serie? serie = await context.Series
-            .Include(s => s.Chapters)
-            .FirstOrDefaultAsync(s => s.Id == id);
-            
-        if (serie == null) return NotFound();
-        
-        return serie.Chapters.Select(c => c.Id).ToList();
+        IEnumerable<long> chaptersIds = context.Chapters
+            .Where(c => c.SerieId == id)
+            .Select(c => c.Id);
+
+        return chaptersIds;
     }
 
     // PUT: api/Serie/5

@@ -3,13 +3,12 @@ using ManaxApi.Models.Chapter;
 using ManaxApi.Models.Library;
 using ManaxApi.Models.Serie;
 using ManaxApi.Task;
-using Microsoft.EntityFrameworkCore;
 
 namespace ManaxApi.Services;
 
 public static class ScanService
 {
-    private static IServiceScopeFactory _scopeFactory;
+    private static IServiceScopeFactory _scopeFactory = null!;
     
     public static void Initialize(IServiceScopeFactory scopeFactory)
     {
@@ -34,6 +33,7 @@ public static class ScanService
             {
                 serie = new Serie
                 {
+                    LibraryId = library.Id,
                     FolderName = folderName,
                     Title = folderName,
                     Description = string.Empty,
@@ -61,22 +61,19 @@ public static class ScanService
         foreach (string file in files)
         {
             string fileName = Path.GetFileName(file);
-            Chapter? chapter = manaxContext.Series
-                .Include(s => s.Chapters)
-                .FirstOrDefault(s => s.FolderName == serie.FolderName)?
-                .Chapters.FirstOrDefault(s => s.FileName == fileName);
+            Chapter? chapter = manaxContext.Chapters.FirstOrDefault(s => s.FileName == fileName);
 
             if (chapter == null)
             {
                 chapter = new Chapter
                 {
+                    SerieId = serie.Id,
                     FileName = Path.GetFileName(file),
                     Path = file,
                     Pages = 0,
                     Number = 0
                 };
                 manaxContext.Chapters.Add(chapter);
-                serie.Chapters.Add(chapter);
                 manaxContext.SaveChanges();
             }
             
