@@ -4,6 +4,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:login="clr-namespace:ManaxApp.ViewModels.Library"
+    xmlns:controls="clr-namespace:ManaxApp.Controls"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxApp.Views.Library.LibraryPageView"
     x:DataType="login:LibraryPageViewModel">
@@ -17,15 +18,14 @@
             ItemsSource="{Binding Series}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <StackPanel Orientation="Vertical">
-                        <TextBlock Text="{Binding Title}" />
-                        <TextBlock Text="{Binding Description}" />
-                    </StackPanel>
+                    <controls:SeriePreview
+                        Serie="{Binding .}">
+                    </controls:SeriePreview>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <WrapPanel />
+                    <WrapPanel ItemSpacing="5"/>
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
         </ItemsControl>

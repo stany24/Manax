@@ -50,6 +50,22 @@ public class SerieController(ManaxContext context, IMapper mapper) : ControllerB
 
         return chaptersIds;
     }
+    
+    // GET: api/serie/{id}/poster
+    [HttpGet("{id:long}/poster")]
+    [AuthorizeRole(UserRole.User)]
+    [Produces("image/webp")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetChapterPage(long id)
+    {
+        Serie? serie = await context.Series.FindAsync(id);
+        if (serie == null) return NotFound();
+        string posterPath = Path.Combine(serie.Path,"poster.webp");
+        if (!System.IO.File.Exists(posterPath)) return NotFound();
+        byte[] readAllBytes = await System.IO.File.ReadAllBytesAsync(posterPath);
+        return File(readAllBytes, "image/webp", "poster.webp");
+    }
 
     // PUT: api/Serie/5
     [HttpPut("{id:long}")]

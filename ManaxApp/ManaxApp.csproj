@@ -48,8 +48,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Folder Include="Models\"/>
         <AvaloniaResource Include="Assets\**"/>
+        <Folder Include="Models\" />
         <Folder Include="Views\Login\"/>
     </ItemGroup>
 

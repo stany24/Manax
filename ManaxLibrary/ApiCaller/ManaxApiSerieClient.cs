@@ -44,4 +44,11 @@ public static class ManaxApiSerieClient
         HttpResponseMessage response = await ManaxApiClient.Client.DeleteAsync($"api/serie/{id}");
         return response.IsSuccessStatusCode;
     }
+
+    public static async Task<byte[]?> GetSeriePosterAsync(long id)
+    {
+        HttpResponseMessage response = await ManaxApiClient.Client.GetAsync($"api/serie/{id}/poster");
+        if (!response.IsSuccessStatusCode) return null;
+        return await response.Content.ReadAsByteArrayAsync();
+    }
 }
