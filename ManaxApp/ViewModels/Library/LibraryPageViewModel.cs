@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Avalonia.Media.Imaging;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
+using ManaxApp.Models;
+using ManaxApp.ViewModels.Serie;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTOs;
 
@@ -44,5 +46,11 @@ public partial class LibraryPageViewModel : PageViewModel
                 Dispatcher.UIThread.Post(() => Series.Add(serie));
             }
         });
+    }
+    
+    public void MoveToSeriePage(ClientSerie serie)
+    {
+        SeriePageViewModel seriePageViewModel = new(serie.Info.Id);
+        PageChangedRequested?.Invoke(this, seriePageViewModel);
     }
 }

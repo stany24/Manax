@@ -1,0 +1,46 @@
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:login="clr-namespace:ManaxApp.ViewModels.Serie"
+    xmlns:controls="clr-namespace:ManaxApp.Controls"
+    mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+    x:Class="ManaxApp.Views.Serie.SeriePageView"
+    x:DataType="login:SeriePageViewModel">
+    <DockPanel>
+        <StackPanel
+            DockPanel.Dock="Top"
+            Orientation="Vertical">
+            <Image 
+                Source="{Binding Poster}"
+                Width="120"
+                Height="194"></Image>
+            <Label Content="{Binding Serie.Title}"></Label>
+            <Label Content="{Binding Serie.Description}"></Label>
+            <Label Content="{Binding Serie.Path}"></Label>
+            <Label Content="{Binding Serie.FolderName}"></Label>
+        </StackPanel>
+        <ScrollViewer
+            VerticalScrollBarVisibility="Auto"
+            HorizontalScrollBarVisibility="Disabled">
+            <ItemsControl
+                ItemsSource="{Binding Chapters}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <controls:ChapterPreview
+                            Chapter="{Binding .}">
+                        </controls:ChapterPreview>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel 
+                            Orientation="Vertical"
+                            Spacing="2"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+        </ScrollViewer>
+    </DockPanel>
+</UserControl>

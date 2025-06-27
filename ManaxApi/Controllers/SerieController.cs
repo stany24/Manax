@@ -46,6 +46,7 @@ public class SerieController(ManaxContext context, IMapper mapper) : ControllerB
     {
         IEnumerable<long> chaptersIds = context.Chapters
             .Where(c => c.SerieId == id)
+            .OrderBy(c => c.FileName)
             .Select(c => c.Id);
 
         return chaptersIds;

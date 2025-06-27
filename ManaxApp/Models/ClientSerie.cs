@@ -1,6 +1,7 @@
 using Avalonia.Media.Imaging;
+using ManaxLibrary.DTOs;
 
-namespace ManaxLibrary.DTOs;
+namespace ManaxApp.Models;
 
 public class ClientSerie
 {

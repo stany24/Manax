@@ -57,11 +57,13 @@ public static class ScanService
         
         Console.WriteLine("Scanning serie: " + serie.Title);
         string[] files = Directory.GetFiles(serie.Path);
+        
+        files = files.Where(f => f.ToLower().EndsWith(".cbz")).ToArray();
 
         foreach (string file in files)
         {
             string fileName = Path.GetFileName(file);
-            Chapter? chapter = manaxContext.Chapters.FirstOrDefault(s => s.FileName == fileName);
+            Chapter? chapter = manaxContext.Chapters.FirstOrDefault(s => s.FileName == fileName && s.SerieId == serie.Id);
 
             if (chapter == null)
             {

@@ -2,11 +2,11 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Media;
-using ManaxLibrary.DTOs;
+using ManaxApp.Models;
 
 namespace ManaxApp.Controls;
 
-public class SeriePreview : Grid
+public class SeriePreview : Button
 {
     public static readonly AttachedProperty<ClientSerie> SerieProperty = AvaloniaProperty.RegisterAttached<SeriePreview, Grid, ClientSerie>(
         "Serie", new ClientSerie(), false, BindingMode.OneTime);
@@ -31,7 +31,6 @@ public class SeriePreview : Grid
     {
         Width = 120;
         Height = Width*1.61;
-        RowDefinitions = new RowDefinitions("*, auto");
         
         Image image = new()
         {
@@ -42,8 +41,8 @@ public class SeriePreview : Grid
             Source = this,
             Mode = BindingMode.OneWay
         });
-        image.SetValue(RowProperty, 0);
-        Children.Add(image);
+        image.SetValue(Grid.RowProperty, 0);
+        
         
         TextBlock textBlock = new()
         {
@@ -55,7 +54,16 @@ public class SeriePreview : Grid
             Source = this,
             Mode = BindingMode.OneWay
         });
-        textBlock.SetValue(RowProperty, 1);
-        Children.Add(textBlock);
+        textBlock.SetValue(Grid.RowProperty, 1);
+        
+        
+        Grid grid = new()
+        {
+            RowDefinitions = new RowDefinitions("*, auto")
+        };
+        grid.Children.Add(image);
+        grid.Children.Add(textBlock);
+        
+        Content = grid;
     }
 }

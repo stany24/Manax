@@ -10,6 +10,7 @@
     x:DataType="login:LibraryPageViewModel">
     <DockPanel>
         <StackPanel
+            DockPanel.Dock="Top"
             Orientation="Vertical">
             <Label
                 Content="{Binding Library.Name}"></Label>
@@ -19,7 +20,9 @@
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <controls:SeriePreview
-                        Serie="{Binding .}">
+                        Serie="{Binding .}"
+                        Command="{Binding $parent[UserControl].((login:LibraryPageViewModel)DataContext).MoveToSeriePage}"
+                        CommandParameter="{Binding .}">
                     </controls:SeriePreview>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
