@@ -64,7 +64,7 @@ public class RankController(ManaxContext context, IMapper mapper) : ControllerBa
     
     [HttpPost("set")]
     [AuthorizeRole(UserRole.User)]
-    public async Task<IActionResult> SetUserRank(long serieId, long rankId)
+    public async Task<IActionResult> SetUserRank(UserRankCreateDTO rank)
     {
         long? userId = UserController.GetCurrentUserId(HttpContext);
         if (userId == null) return Unauthorized();
@@ -72,8 +72,8 @@ public class RankController(ManaxContext context, IMapper mapper) : ControllerBa
         UserRank userRank = new()
         {
             UserId = userId.Value,
-            SerieId = serieId,
-            RankId = rankId
+            SerieId = rank.SerieId,
+            RankId = rank.RankId
         };
         
         context.UserRanks.Add(userRank);

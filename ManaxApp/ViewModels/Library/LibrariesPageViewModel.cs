@@ -6,6 +6,7 @@ using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTOs;
+using ManaxLibrary.DTOs.Library;
 using Path = System.IO.Path;
 
 namespace ManaxApp.ViewModels.Library;

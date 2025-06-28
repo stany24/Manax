@@ -4,18 +4,11 @@
 
 using System.ComponentModel.DataAnnotations;
 
-namespace ManaxLibrary.DTOs;
+namespace ManaxLibrary.DTOs.Serie;
 
-public class ReadDTO
+public class SerieUpdateDTO
 {
-    public long ChapterId { get; set; }
-    public DateTime Date { get; set; }
-    public ChapterDTO Chapter { get; set; }
-    public UserDTO User { get; set; }
-}
-
-public class ReadCreateDTO
-{
-    [Required]
-    public int ChapterId { get; set; }
+    [Required] public string Title { get; set; }
+    [Required] public string Description { get; set; }
+    [Required] public string Path { get; set; }
 }

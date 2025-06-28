@@ -1,5 +1,6 @@
 using System.Net.Http.Json;
 using ManaxLibrary.DTOs;
+using ManaxLibrary.DTOs.Rank;
 
 namespace ManaxLibrary.ApiCaller;
 
@@ -30,7 +31,7 @@ public static class ManaxApiRankClient
         return response.IsSuccessStatusCode;
     }
 
-    public static async Task<bool> SetUserRankAsync(UserRankDTO rank)
+    public static async Task<bool> SetUserRankAsync(UserRankCreateDTO rank)
     {
         HttpResponseMessage response = await ManaxApiClient.Client.PostAsJsonAsync("/api/rank/set",rank);
         return response.IsSuccessStatusCode;

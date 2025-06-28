@@ -1,6 +1,11 @@
 using AutoMapper;
 using ManaxLibrary.DTOs;
+using ManaxLibrary.DTOs.Issue;
+using ManaxLibrary.DTOs.Library;
 using ManaxLibrary.DTOs.Rank;
+using ManaxLibrary.DTOs.Read;
+using ManaxLibrary.DTOs.Serie;
+using ManaxLibrary.DTOs.User;
 
 namespace ManaxApi.Models;
 

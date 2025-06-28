@@ -5,6 +5,7 @@ using ManaxApi.Models.Chapter;
 using ManaxApi.Models.Read;
 using ManaxApi.Models.User;
 using ManaxLibrary.DTOs;
+using ManaxLibrary.DTOs.Read;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 

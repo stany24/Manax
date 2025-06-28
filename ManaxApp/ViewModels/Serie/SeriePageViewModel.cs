@@ -7,6 +7,7 @@ using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTOs;
+using ManaxLibrary.DTOs.Serie;
 
 namespace ManaxApp.ViewModels.Serie;
 

@@ -1,5 +1,6 @@
 using Avalonia.Media.Imaging;
 using ManaxLibrary.DTOs;
+using ManaxLibrary.DTOs.Serie;
 
 namespace ManaxApp.Models;
 
