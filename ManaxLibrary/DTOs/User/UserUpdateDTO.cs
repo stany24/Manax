@@ -10,6 +10,7 @@ namespace ManaxLibrary.DTOs.User;
 
 public class UserUpdateDTO
 {
+    [Required] public UserRole Role { get; set; } = UserRole.User;
     [Required] public string Username { get; set; }
     [Required] public string Password { get; set; }
 }

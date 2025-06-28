@@ -93,12 +93,26 @@ public class UserController(ManaxContext context, IMapper mapper, IConfiguration
     [AuthorizeRole(UserRole.Admin)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> DeleteUser(long id)
     {
-        User? user = await context.Users.FindAsync(id);
-        if (user == null) return NotFound();
+        User? userToDelete = await context.Users.FindAsync(id);
+        if (userToDelete == null) return NotFound();
 
-        context.Users.Remove(user);
+        long? selfId = GetCurrentUserId(HttpContext);
+        if (selfId == null)
+            return Unauthorized();
+        if (selfId == id)
+            return Forbid();
+
+        User? self = context.Users.FirstOrDefault(u => u.Id == selfId);
+        if (self == null)
+            return Unauthorized();
+
+        if(self.Role == UserRole.Admin && userToDelete.Role is UserRole.Admin or UserRole.Owner)
+            return Forbid();
+        
+        context.Users.Remove(userToDelete);
         await context.SaveChangesAsync();
 
         return NoContent();
