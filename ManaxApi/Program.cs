@@ -40,27 +40,11 @@ public static class Program
         builder.Services.AddAutoMapper(typeof(MappingProfile));
         
         WebApplication app = builder.Build();
-
-        // Création/mise à jour automatique de la base de données
-        using (IServiceScope scope = app.Services.CreateScope())
-        {
-            ManaxContext manaxContext = scope.ServiceProvider.GetRequiredService<ManaxContext>();
-            manaxContext.Database.Migrate();
-        }
+        
+        Migrate(app);
         
         // Initialisation du singleton ScanService
         ScanService.Initialize(app.Services.GetRequiredService<IServiceScopeFactory>());
-
-        // Middleware global de gestion des exceptions
-        app.UseExceptionHandler(errorApp =>
-        {
-            errorApp.Run(async context =>
-            {
-                context.Response.StatusCode = 500;
-                context.Response.ContentType = "application/json";
-                await context.Response.WriteAsync("{\"error\":\"Internal server error\"}");
-            });
-        });
 
         if (app.Environment.IsDevelopment())
         {
@@ -77,5 +61,27 @@ public static class Program
         app.MapControllers();
 
         app.Run();
+    }
+
+    private static void Migrate(WebApplication app)
+    {
+        using IServiceScope scope = app.Services.CreateScope();
+        ManaxContext manaxContext = scope.ServiceProvider.GetRequiredService<ManaxContext>();
+        manaxContext.Database.Migrate();
+        
+        if (!manaxContext.Ranks.Any())
+        {
+            manaxContext.Ranks.AddRange(
+                new Models.Rank.Rank { Name = "SSS", Value = 16 },
+                new Models.Rank.Rank { Name = "SS", Value = 14 },
+                new Models.Rank.Rank { Name = "S", Value = 12 },
+                new Models.Rank.Rank { Name = "A", Value = 10 },
+                new Models.Rank.Rank { Name = "B", Value = 8 },
+                new Models.Rank.Rank { Name = "C", Value = 6 },
+                new Models.Rank.Rank { Name = "D", Value = 4 },
+                new Models.Rank.Rank { Name = "E", Value = 2 }
+            );
+            manaxContext.SaveChanges();
+        }
     }
 }

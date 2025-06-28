@@ -15,6 +15,7 @@ public class RankController(ManaxContext context, IMapper mapper) : ControllerBa
 {
     // GET: api/rank
     [HttpGet("/api/ranks")]
+    [AuthorizeRole(UserRole.User)]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<RankDTO>))]
     public async Task<ActionResult<IEnumerable<RankDTO>>> GetRanks()
         => await context.Ranks.Select(r => mapper.Map<RankDTO>(r)).ToListAsync();
@@ -79,5 +80,19 @@ public class RankController(ManaxContext context, IMapper mapper) : ControllerBa
         context.UserRanks.Add(userRank);
         await context.SaveChangesAsync();
         return NoContent();
+    }
+    
+    // GET: api/rank
+    [HttpGet("/api/ranking")]
+    [AuthorizeRole(UserRole.User)]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<UserRankDTO>))]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<ActionResult<IEnumerable<UserRankDTO>>> GetRanking()
+    {
+        long? currentUserId = UserController.GetCurrentUserId(HttpContext);
+        if (currentUserId == null) { return Unauthorized(); }
+        return await context.UserRanks
+            .Where(r => r.UserId == currentUserId)
+            .Select(r => mapper.Map<UserRankDTO>(r)).ToListAsync();
     }
 }
