@@ -10,14 +10,14 @@ namespace ManaxApi.Models.Read;
 [PrimaryKey(nameof(ChapterId), nameof(UserId))]
 public class Read
 {
-    public long ChapterId { get; set; }
-    public long UserId { get; set; }
     public DateTime Date { get; set; }
 
+    public long ChapterId { get; set; }
     [ForeignKey(nameof(ChapterId))]
     [DeleteBehavior(DeleteBehavior.NoAction)]
     public Chapter.Chapter Chapter { get; set; }
 
+    public long UserId { get; set; }
     [ForeignKey(nameof(UserId))]
     [DeleteBehavior(DeleteBehavior.NoAction)]
     public User.User User { get; set; }

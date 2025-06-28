@@ -1,5 +1,6 @@
 using AutoMapper;
 using ManaxLibrary.DTOs;
+using ManaxLibrary.DTOs.Rank;
 
 namespace ManaxApi.Models;
 
@@ -11,29 +12,33 @@ public class MappingProfile : Profile
         // Exemple : CreateMap<ModeleSource, DTODestination>();
             
         // Mappings des User
-        CreateMap<ManaxApi.Models.User.User, UserDTO>();
-        CreateMap<UserCreateDTO, ManaxApi.Models.User.User>();
-        CreateMap<UserUpdateDTO, ManaxApi.Models.User.User>();
+        CreateMap<User.User, UserDTO>();
+        CreateMap<UserCreateDTO, User.User>();
+        CreateMap<UserUpdateDTO, User.User>();
             
         // Mappings des Serie
-        CreateMap<ManaxApi.Models.Serie.Serie, SerieDTO>();
-        CreateMap<SerieCreateDTO, ManaxApi.Models.Serie.Serie>();
-        CreateMap<SerieUpdateDTO, ManaxApi.Models.Serie.Serie>();
+        CreateMap<Serie.Serie, SerieDTO>();
+        CreateMap<SerieCreateDTO, Serie.Serie>();
+        CreateMap<SerieUpdateDTO, Serie.Serie>();
             
         // Mappings des Library
-        CreateMap<ManaxApi.Models.Library.Library, LibraryDTO>();
-        CreateMap<LibraryCreateDTO, ManaxApi.Models.Library.Library>();
-        CreateMap<LibraryUpdateDTO, ManaxApi.Models.Library.Library>();
+        CreateMap<Library.Library, LibraryDTO>();
+        CreateMap<LibraryCreateDTO, Library.Library>();
+        CreateMap<LibraryUpdateDTO, Library.Library>();
             
         // Mappings des Issue
-        CreateMap<ManaxApi.Models.Issue.Issue, IssueDTO>();
-        CreateMap<IssueCreateDTO, ManaxApi.Models.Issue.Issue>();
+        CreateMap<Issue.Issue, IssueDTO>();
+        CreateMap<IssueCreateDTO, Issue.Issue>();
             
         // Mappings des Chapter
-        CreateMap<ManaxApi.Models.Chapter.Chapter, ChapterDTO>();
+        CreateMap<Chapter.Chapter, ChapterDTO>();
             
         // Mappings des Read
-        CreateMap<ManaxApi.Models.Read.Read, ReadDTO>();
-        CreateMap<ReadCreateDTO, ManaxApi.Models.Read.Read>();
+        CreateMap<Read.Read, ReadDTO>();
+        CreateMap<ReadCreateDTO, Read.Read>();
+        
+        // Mappings des Rank
+        CreateMap<Rank.Rank, RankDTO>();
+        CreateMap<Rank.Rank, RankCreateDTO>();
     }
 }

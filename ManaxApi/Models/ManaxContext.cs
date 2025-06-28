@@ -10,4 +10,6 @@ public class ManaxContext(DbContextOptions<ManaxContext> options) : DbContext(op
     public DbSet<Read.Read> Reads { get; set; } = null!;
     public DbSet<Serie.Serie> Series { get; set; } = null!;
     public DbSet<User.User> Users { get; set; } = null!;
+    public DbSet<Rank.Rank> Ranks { get; set; } = null!;
+    public DbSet<Rank.UserRank> UserRanks { get; set; } = null!;
 }

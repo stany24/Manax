@@ -102,6 +102,50 @@ namespace ManaxApi.Migrations
                     b.ToTable("Libraries");
                 });
 
+            modelBuilder.Entity("ManaxApi.Models.Rank.Rank", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Value")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.HasIndex("Value")
+                        .IsUnique();
+
+                    b.ToTable("Ranks");
+                });
+
+            modelBuilder.Entity("ManaxApi.Models.Rank.UserRank", b =>
+                {
+                    b.Property<long>("UserId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<long>("SerieId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<long>("RankId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("UserId", "SerieId");
+
+                    b.HasIndex("RankId");
+
+                    b.HasIndex("SerieId");
+
+                    b.ToTable("UserRanks");
+                });
+
             modelBuilder.Entity("ManaxApi.Models.Read.Read", b =>
                 {
                     b.Property<long>("ChapterId")
@@ -205,6 +249,33 @@ namespace ManaxApi.Migrations
                         .IsRequired();
 
                     b.Navigation("Chapter");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ManaxApi.Models.Rank.UserRank", b =>
+                {
+                    b.HasOne("ManaxApi.Models.Rank.Rank", "Rank")
+                        .WithMany()
+                        .HasForeignKey("RankId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ManaxApi.Models.Serie.Serie", "Serie")
+                        .WithMany()
+                        .HasForeignKey("SerieId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ManaxApi.Models.User.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Rank");
+
+                    b.Navigation("Serie");
 
                     b.Navigation("User");
                 });

@@ -27,6 +27,20 @@ namespace ManaxApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Ranks",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Value = table.Column<int>(type: "INTEGER", nullable: false),
+                    Name = table.Column<string>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Ranks", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
@@ -83,6 +97,37 @@ namespace ManaxApi.Migrations
                         name: "FK_Chapters_Series_SerieId",
                         column: x => x.SerieId,
                         principalTable: "Series",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserRanks",
+                columns: table => new
+                {
+                    UserId = table.Column<long>(type: "INTEGER", nullable: false),
+                    SerieId = table.Column<long>(type: "INTEGER", nullable: false),
+                    RankId = table.Column<long>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserRanks", x => new { x.UserId, x.SerieId });
+                    table.ForeignKey(
+                        name: "FK_UserRanks_Ranks_RankId",
+                        column: x => x.RankId,
+                        principalTable: "Ranks",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UserRanks_Series_SerieId",
+                        column: x => x.SerieId,
+                        principalTable: "Series",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UserRanks_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -165,6 +210,18 @@ namespace ManaxApi.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_Ranks_Name",
+                table: "Ranks",
+                column: "Name",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Ranks_Value",
+                table: "Ranks",
+                column: "Value",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Reads_UserId",
                 table: "Reads",
                 column: "UserId");
@@ -173,6 +230,16 @@ namespace ManaxApi.Migrations
                 name: "IX_Series_LibraryId",
                 table: "Series",
                 column: "LibraryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserRanks_RankId",
+                table: "UserRanks",
+                column: "RankId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserRanks_SerieId",
+                table: "UserRanks",
+                column: "SerieId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_Username",
@@ -191,7 +258,13 @@ namespace ManaxApi.Migrations
                 name: "Reads");
 
             migrationBuilder.DropTable(
+                name: "UserRanks");
+
+            migrationBuilder.DropTable(
                 name: "Chapters");
+
+            migrationBuilder.DropTable(
+                name: "Ranks");
 
             migrationBuilder.DropTable(
                 name: "Users");
