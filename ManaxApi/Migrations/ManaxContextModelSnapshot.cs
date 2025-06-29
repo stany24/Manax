@@ -47,30 +47,66 @@ namespace ManaxApi.Migrations
                     b.ToTable("Chapters");
                 });
 
-            modelBuilder.Entity("ManaxApi.Models.Issue.Issue", b =>
+            modelBuilder.Entity("ManaxApi.Models.Issue.ChapterIssue", b =>
+                {
+                    b.Property<long>("ChapterId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<long>("ProblemId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("ChapterId", "ProblemId");
+
+                    b.ToTable("ChapterIssues");
+                });
+
+            modelBuilder.Entity("ManaxApi.Models.Issue.ChapterIssueType", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<long>("ChapterId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Problem")
+                    b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(128)
                         .HasColumnType("TEXT");
-
-                    b.Property<long>("UserId")
-                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ChapterId");
+                    b.ToTable("ChapterIssueTypes");
+                });
 
-                    b.HasIndex("UserId");
+            modelBuilder.Entity("ManaxApi.Models.Issue.SerieIssue", b =>
+                {
+                    b.Property<long>("SerieId")
+                        .HasColumnType("INTEGER");
 
-                    b.ToTable("Issues");
+                    b.Property<long>("ProblemId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("SerieId", "ProblemId");
+
+                    b.ToTable("SerieIssues");
+                });
+
+            modelBuilder.Entity("ManaxApi.Models.Issue.SerieIssueType", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SerieIssueTypes");
                 });
 
             modelBuilder.Entity("ManaxApi.Models.Library.Library", b =>
@@ -110,6 +146,7 @@ namespace ManaxApi.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasMaxLength(128)
                         .HasColumnType("TEXT");
 
                     b.Property<int>("Value")
@@ -232,25 +269,6 @@ namespace ManaxApi.Migrations
                         .IsRequired();
 
                     b.Navigation("Serie");
-                });
-
-            modelBuilder.Entity("ManaxApi.Models.Issue.Issue", b =>
-                {
-                    b.HasOne("ManaxApi.Models.Chapter.Chapter", "Chapter")
-                        .WithMany()
-                        .HasForeignKey("ChapterId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ManaxApi.Models.User.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Chapter");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ManaxApi.Models.Rank.UserRank", b =>

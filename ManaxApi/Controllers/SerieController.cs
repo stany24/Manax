@@ -43,7 +43,7 @@ public class SerieController(ManaxContext context, IMapper mapper) : ControllerB
     [AuthorizeRole(UserRole.User)]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<long>))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IEnumerable<long>> GetSerieChapters(long id)
+    public IEnumerable<long> GetSerieChapters(long id)
     {
         IEnumerable<long> chaptersIds = context.Chapters
             .Where(c => c.SerieId == id)

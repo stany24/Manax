@@ -43,7 +43,7 @@ public class LibraryController(ManaxContext context, IMapper mapper) : Controlle
     [AuthorizeRole(UserRole.User)]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<long>))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IEnumerable<long>> GetLibrarySeries(long id)
+    public IEnumerable<long> GetLibrarySeries(long id)
     {
         IEnumerable<long> seriesIds = context.Series
             .Where(s => s.LibraryId == id)
@@ -103,7 +103,7 @@ public class LibraryController(ManaxContext context, IMapper mapper) : Controlle
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<ActionResult<long>> PostLibrary(LibraryCreateDTO libraryCreate)
     {
-        // Check if name is unique dsgsgs
+        // Check if name is unique
         if (await context.Libraries.AnyAsync(l => l.Name == libraryCreate.Name))
         {
             return Conflict($"A library with name '{libraryCreate.Name}' already exists.");

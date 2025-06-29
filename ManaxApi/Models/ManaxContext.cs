@@ -5,7 +5,10 @@ namespace ManaxApi.Models;
 public class ManaxContext(DbContextOptions<ManaxContext> options) : DbContext(options)
 {
     public DbSet<Chapter.Chapter> Chapters { get; set; } = null!;
-    public DbSet<Issue.Issue> Issues { get; set; } = null!;
+    public DbSet<Issue.ChapterIssue> ChapterIssues { get; set; } = null!;
+    public DbSet<Issue.ChapterIssueType> ChapterIssueTypes { get; set; } = null!;
+    public DbSet<Issue.SerieIssue> SerieIssues { get; set; } = null!;
+    public DbSet<Issue.SerieIssueType> SerieIssueTypes { get; set; } = null!;
     public DbSet<Library.Library> Libraries { get; set; } = null!;
     public DbSet<Read.Read> Reads { get; set; } = null!;
     public DbSet<Serie.Serie> Series { get; set; } = null!;

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using ManaxApi.Models;
+using ManaxApi.Models.Issue;
 
 namespace ManaxApi;
 
@@ -16,6 +17,7 @@ public static class Program
 
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
+        builder.Services.AddHttpContextAccessor();
 
         // Configuration de l'authentification JWT avec la clé obtenue de JwtService
         // La méthode GetSecretKey va générer une clé si elle n'existe pas
@@ -45,6 +47,7 @@ public static class Program
         
         // Initialisation du singleton ScanService
         ScanService.Initialize(app.Services.GetRequiredService<IServiceScopeFactory>());
+        IssueManagerService.Initialize(app.Services.GetRequiredService<IServiceScopeFactory>());
 
         if (app.Environment.IsDevelopment())
         {
@@ -81,6 +84,26 @@ public static class Program
                 new Models.Rank.Rank { Name = "D", Value = 4 },
                 new Models.Rank.Rank { Name = "E", Value = 2 }
             );
+            manaxContext.SaveChanges();
+        }
+
+        if (!manaxContext.SerieIssueTypes.Any())
+        {
+            IEnumerable<SerieIssueTypeEnum> values = Enum.GetValues(typeof(SerieIssueTypeEnum)).Cast<SerieIssueTypeEnum>();
+            foreach (SerieIssueTypeEnum serieIssueTypeEnum in values)
+            {
+                manaxContext.SerieIssueTypes.Add(new SerieIssueType {Name = serieIssueTypeEnum.ToString()});
+            }
+            manaxContext.SaveChanges();
+        }
+        
+        if (!manaxContext.ChapterIssueTypes.Any())
+        {
+            IEnumerable<ChapterIssueTypeEnum> values = Enum.GetValues(typeof(ChapterIssueTypeEnum)).Cast<ChapterIssueTypeEnum>();
+            foreach (ChapterIssueTypeEnum serieIssueTypeEnum in values)
+            {
+                manaxContext.ChapterIssueTypes.Add(new ChapterIssueType {Name = serieIssueTypeEnum.ToString()});
+            }
             manaxContext.SaveChanges();
         }
     }

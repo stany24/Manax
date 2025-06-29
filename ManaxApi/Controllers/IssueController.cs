@@ -19,26 +19,22 @@ public class IssueController(ManaxContext context, IMapper mapper) : ControllerB
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<IssueDTO>))]
     public async Task<ActionResult<IEnumerable<IssueDTO>>> GetAllIssues()
     {
-        List<Issue> issues = await context.Issues.ToListAsync();
+        List<ChapterIssue> issues = await context.ChapterIssues.ToListAsync();
         return mapper.Map<List<IssueDTO>>(issues);
     }
 
     [HttpPost]
     [AuthorizeRole(UserRole.User)]
-    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(long))]
+    [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<ActionResult<long>> CreateIssue(IssueCreateDTO issueCreate)
+    public async Task<ActionResult> CreateIssue(IssueCreateDTO issueCreate)
     {
-        long? userId = UserController.GetCurrentUserId(HttpContext);
-        if (userId == null) return Unauthorized();
+        ChapterIssue? issue = mapper.Map<ChapterIssue>(issueCreate);
 
-        Issue? issue = mapper.Map<Issue>(issueCreate);
-        issue.User = new User { Id = (long)userId };
-
-        context.Issues.Add(issue);
+        context.ChapterIssues.Add(issue);
         await context.SaveChangesAsync();
         
-        return issue.Id;
+        return NoContent();
     }
 
     [HttpPut("{id:long}/close")]
@@ -47,11 +43,11 @@ public class IssueController(ManaxContext context, IMapper mapper) : ControllerB
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> CloseIssue(long id)
     {
-        Issue? issue = await context.Issues.FindAsync(id);
+        ChapterIssue? issue = await context.ChapterIssues.FindAsync(id);
 
         if (issue == null) return NotFound();
 
-        context.Issues.Remove(issue);
+        context.ChapterIssues.Remove(issue);
         await context.SaveChangesAsync();
 
         return NoContent();

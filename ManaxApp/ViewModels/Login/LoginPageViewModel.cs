@@ -66,7 +66,7 @@ public partial class LoginPageViewModel : PageViewModel
             InfoEmitted?.Invoke(this, $"Logged in as {self.Username} ({self.Role})");
             PageChangedRequested?.Invoke(this, new HomePageViewModel());
         }
-        catch (Exception e)
+        catch (Exception)
         {
             Dispatcher.UIThread.Post(() => { LoginError = "Unknown error"; });
         }

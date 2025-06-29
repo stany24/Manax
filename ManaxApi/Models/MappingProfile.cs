@@ -33,8 +33,8 @@ public class MappingProfile : Profile
         CreateMap<LibraryUpdateDTO, Library.Library>();
             
         // Mappings des Issue
-        CreateMap<Issue.Issue, IssueDTO>();
-        CreateMap<IssueCreateDTO, Issue.Issue>();
+        CreateMap<Issue.ChapterIssue, IssueDTO>();
+        CreateMap<IssueCreateDTO, Issue.ChapterIssue>();
             
         // Mappings des Chapter
         CreateMap<Chapter.Chapter, ChapterDTO>();

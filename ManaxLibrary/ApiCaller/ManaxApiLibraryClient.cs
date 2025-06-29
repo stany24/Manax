@@ -1,5 +1,4 @@
 using System.Net.Http.Json;
-using ManaxLibrary.DTOs;
 using ManaxLibrary.DTOs.Library;
 
 namespace ManaxLibrary.ApiCaller;

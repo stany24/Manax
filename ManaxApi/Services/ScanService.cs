@@ -1,5 +1,6 @@
 using ManaxApi.Models;
 using ManaxApi.Models.Chapter;
+using ManaxApi.Models.Issue;
 using ManaxApi.Models.Library;
 using ManaxApi.Models.Serie;
 using ManaxApi.Task;
@@ -57,10 +58,10 @@ public static class ScanService
         
         Console.WriteLine("Scanning serie: " + serie.Title);
         string[] files = Directory.GetFiles(serie.Path);
-        
-        files = files.Where(f => f.ToLower().EndsWith(".cbz")).ToArray();
 
-        foreach (string file in files)
+        string[] chapters = files.Where(f => f.ToLower().EndsWith(".cbz")).ToArray();
+
+        foreach (string file in chapters)
         {
             string fileName = Path.GetFileName(file);
             Chapter? chapter = manaxContext.Chapters.FirstOrDefault(s => s.FileName == fileName && s.SerieId == serie.Id);
@@ -80,6 +81,24 @@ public static class ScanService
             }
             
             _ = TaskManagerService.AddTaskAsync(new ChapterScanTask(chapter.Id));
+        }
+        
+        List<string> posters = files.Where(f => Path.GetFileName(f).StartsWith("poster.", StringComparison.CurrentCultureIgnoreCase)).ToList();
+        switch (posters.Count)
+        {
+            case 0:
+                IssueManagerService.CreateSerieIssue(serie.Id, SerieIssueTypeEnum.PosterMissing);
+                break;
+            case 1:
+                string poster = posters.First();
+                if (!Path.GetExtension(poster).Equals("webp", StringComparison.CurrentCultureIgnoreCase))
+                {
+                    IssueManagerService.CreateSerieIssue(serie.Id, SerieIssueTypeEnum.PosterWrongFormat);
+                }
+                break;
+            case > 1:
+                IssueManagerService.CreateSerieIssue(serie.Id, SerieIssueTypeEnum.PosterDuplicate);
+                break;
         }
     }
 
