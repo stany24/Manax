@@ -2,6 +2,8 @@
 using System.Collections.ObjectModel;
 using System.Threading;
 using System.Threading.Tasks;
+using Avalonia.Controls;
+using Avalonia.Media;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using ManaxApp.ViewModels.Home;
@@ -22,6 +24,8 @@ public class TaskItem : ObservableObject
 public partial class MainWindowViewModel : ObservableObject
 {
     [ObservableProperty] private PageViewModel _currentPageViewModel;
+    [ObservableProperty] private ObservableCollection<string> _infos = [];
+    [ObservableProperty] private Control? _popup;
     [ObservableProperty] private bool _isAdmin;
     [ObservableProperty] private ObservableCollection<TaskItem> _runningTasks = [];
 
@@ -56,17 +60,25 @@ public partial class MainWindowViewModel : ObservableObject
         {
             if (args.PropertyName != nameof(CurrentPageViewModel)) return;
             CurrentPageViewModel.Admin = IsAdmin;
-            CurrentPageViewModel.PageChangedRequested += (_, e) =>
+            CurrentPageViewModel.PageChangedRequested += (_, e) => { CurrentPageViewModel = e; };
+            CurrentPageViewModel.PopupRequested += (_, e) => { Popup = e; };
+            CurrentPageViewModel.InfoEmitted += (_, e) =>
             {
-                CurrentPageViewModel = e;
+                Infos.Add(e);
             };
         };
 
         PropertyChanging += (_, args) =>
         {
             if (args.PropertyName != nameof(CurrentPageViewModel)) return;
-            if (CurrentPageViewModel is LoginPageViewModel login) IsAdmin = login.IsAdmin();
+            if (CurrentPageViewModel is not LoginPageViewModel login) return;
+            Dispatcher.UIThread.Post(() =>
+            {
+                IsAdmin = login.IsAdmin();
+                Popup = new Label {Content = "Test", Foreground = Brushes.White};
+            });
             UpdateRunningTasks();
+
         };
 
         CurrentPageViewModel = new LoginPageViewModel();

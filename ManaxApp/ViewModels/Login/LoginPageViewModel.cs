@@ -62,10 +62,11 @@ public partial class LoginPageViewModel : PageViewModel
             }
 
             _isAdmin = self.Role is UserRole.Admin or UserRole.Owner;
-
+            
+            InfoEmitted?.Invoke(this, $"Logged in as {self.Username} ({self.Role})");
             PageChangedRequested?.Invoke(this, new HomePageViewModel());
         }
-        catch (Exception)
+        catch (Exception e)
         {
             Dispatcher.UIThread.Post(() => { LoginError = "Unknown error"; });
         }

@@ -4,76 +4,113 @@
     xmlns:vm="using:ManaxApp.ViewModels"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:conv="clr-namespace:ManaxApp.Converters"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxApp.Views.MainWindow"
     x:DataType="vm:MainWindowViewModel"
     Icon="/Assets/avalonia-logo.ico"
     Title="ManaxApp">
 
-    <DockPanel>
-        <StackPanel
-            IsVisible="{Binding CurrentPageViewModel.ControlBarVisible}"
-            Orientation="Vertical"
-            DockPanel.Dock="Left">
-            <Button
-                HorizontalAlignment="Stretch"
-                HorizontalContentAlignment="Center"
-                Command="{Binding ChangePageHome}">
-                Home
-            </Button>
-            <Button
-                HorizontalAlignment="Stretch"
-                HorizontalContentAlignment="Center"
-                Command="{Binding ChangePageLibraries}">
-                Libraries
-            </Button>
-            <Button
-                HorizontalAlignment="Stretch"
-                HorizontalContentAlignment="Center"
-                IsVisible="{Binding IsAdmin}"
-                Command="{Binding ChangePageIssues}">
-                Issues
-            </Button>
-            <Button
-                HorizontalAlignment="Stretch"
-                HorizontalContentAlignment="Center"
-                IsVisible="{Binding IsAdmin}"
-                Command="{Binding ChangePageUsers}">
-                Users
-            </Button>
-            <TextBlock
-                Margin="5,5,5,5"
-                FontWeight="Bold"
-                TextAlignment="Center"
-                IsVisible="{Binding RunningTasks.Count}">
-                Running Tasks
-            </TextBlock>
-            <ItemsControl ItemsSource="{Binding RunningTasks}">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Border 
-                            BorderBrush="Gray" 
-                            BorderThickness="0,0,0,1" 
-                            Padding="5,2">
-                            <Grid ColumnDefinitions="*,Auto">
-                                <TextBlock 
-                                    Grid.Column="0" 
-                                    Text="{Binding TaskName}"
-                                    TextWrapping="Wrap" />
-                                <TextBlock 
-                                    Grid.Column="1" 
-                                    Text="{Binding Number, StringFormat='{}{0}'}"
-                                    HorizontalAlignment="Right" 
-                                    Margin="5,0,0,0" />
-                            </Grid>
-                        </Border>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </StackPanel>
+    <Window.Resources>
+        <conv:NullToBoolConverter x:Key="NullToBoolConverter" />
+    </Window.Resources>
+
+    <Panel>
+        <DockPanel>
+            <StackPanel
+                IsVisible="{Binding CurrentPageViewModel.ControlBarVisible}"
+                Orientation="Vertical"
+                DockPanel.Dock="Left">
+                <Button
+                    HorizontalAlignment="Stretch"
+                    HorizontalContentAlignment="Center"
+                    Command="{Binding ChangePageHome}">
+                    Home
+                </Button>
+                <Button
+                    HorizontalAlignment="Stretch"
+                    HorizontalContentAlignment="Center"
+                    Command="{Binding ChangePageLibraries}">
+                    Libraries
+                </Button>
+                <Button
+                    HorizontalAlignment="Stretch"
+                    HorizontalContentAlignment="Center"
+                    IsVisible="{Binding IsAdmin}"
+                    Command="{Binding ChangePageIssues}">
+                    Issues
+                </Button>
+                <Button
+                    HorizontalAlignment="Stretch"
+                    HorizontalContentAlignment="Center"
+                    IsVisible="{Binding IsAdmin}"
+                    Command="{Binding ChangePageUsers}">
+                    Users
+                </Button>
+                <TextBlock
+                    Margin="5,5,5,5"
+                    FontWeight="Bold"
+                    TextAlignment="Center"
+                    IsVisible="{Binding RunningTasks.Count}">
+                    Running Tasks
+                </TextBlock>
+                <ItemsControl ItemsSource="{Binding RunningTasks}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border
+                                BorderBrush="Gray"
+                                BorderThickness="0,0,0,1"
+                                Padding="5,2">
+                                <Grid ColumnDefinitions="*,Auto">
+                                    <TextBlock
+                                        Grid.Column="0"
+                                        Text="{Binding TaskName}"
+                                        TextWrapping="Wrap" />
+                                    <TextBlock
+                                        Grid.Column="1"
+                                        Text="{Binding Number, StringFormat='{}{0}'}"
+                                        HorizontalAlignment="Right"
+                                        Margin="5,0,0,0" />
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+
+            <ContentControl
+                Content="{Binding CurrentPageViewModel}" />
+
+        </DockPanel>
+
+        <ItemsControl
+            ItemsSource="{Binding Infos}"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Bottom">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Border
+                        BorderBrush="Gray"
+                        BorderThickness="0,0,0,1"
+                        Padding="5,2">
+                        <Label
+                            Content="{Binding .}"/>
+                    </Border>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+        
+        <Canvas
+            IsVisible="{Binding Popup, Converter={StaticResource NullToBoolConverter}}"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch">
+            <Rectangle Fill="Black" Opacity="0.7"
+                       Width="{Binding Width, RelativeSource={RelativeSource AncestorType=Window}}"
+                       Height="{Binding Height, RelativeSource={RelativeSource AncestorType=Window}}"
+                       Canvas.Left="0" Canvas.Top="0" />
+        </Canvas>
 
         <ContentControl
-            Content="{Binding CurrentPageViewModel}" />
-    </DockPanel>
-
+            Content="{Binding Popup}"></ContentControl>
+    </Panel>
 </Window>
