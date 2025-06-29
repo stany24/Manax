@@ -75,10 +75,8 @@ public partial class MainWindowViewModel : ObservableObject
             Dispatcher.UIThread.Post(() =>
             {
                 IsAdmin = login.IsAdmin();
-                Popup = new Label {Content = "Test", Foreground = Brushes.White};
+                UpdateRunningTasks();
             });
-            UpdateRunningTasks();
-
         };
 
         CurrentPageViewModel = new LoginPageViewModel();

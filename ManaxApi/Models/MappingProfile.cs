@@ -1,4 +1,5 @@
 using AutoMapper;
+using ManaxApi.Models.Rank;
 using ManaxLibrary.DTOs;
 using ManaxLibrary.DTOs.Issue;
 using ManaxLibrary.DTOs.Library;
@@ -45,5 +46,6 @@ public class MappingProfile : Profile
         // Mappings des Rank
         CreateMap<Rank.Rank, RankDTO>();
         CreateMap<Rank.Rank, RankCreateDTO>();
+        CreateMap<UserRank, UserRankDTO>();
     }
 }

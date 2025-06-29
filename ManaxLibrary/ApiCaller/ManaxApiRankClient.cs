@@ -36,4 +36,12 @@ public static class ManaxApiRankClient
         HttpResponseMessage response = await ManaxApiClient.Client.PostAsJsonAsync("/api/rank/set",rank);
         return response.IsSuccessStatusCode;
     }
+
+    public static async Task<List<UserRankDTO>?> GetRankingAsync()
+    {
+        HttpResponseMessage response = await ManaxApiClient.Client.GetAsync("/api/ranking");
+        if (!response.IsSuccessStatusCode) return null;
+        return await response.Content.ReadFromJsonAsync<List<UserRankDTO>>();
+    }
+    
 }

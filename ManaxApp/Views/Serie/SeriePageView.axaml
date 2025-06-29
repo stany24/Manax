@@ -20,6 +20,15 @@
             <Label Content="{Binding Serie.Description}"></Label>
             <Label Content="{Binding Serie.Path}"></Label>
             <Label Content="{Binding Serie.FolderName}"></Label>
+            <ComboBox
+                ItemsSource="{Binding Ranks}"
+                SelectedItem="{Binding SelectedRank}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Name}" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
         </StackPanel>
         <ScrollViewer
             VerticalScrollBarVisibility="Auto"

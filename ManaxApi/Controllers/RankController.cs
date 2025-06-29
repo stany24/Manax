@@ -70,14 +70,21 @@ public class RankController(ManaxContext context, IMapper mapper) : ControllerBa
         long? userId = UserController.GetCurrentUserId(HttpContext);
         if (userId == null) return Unauthorized();
 
-        UserRank userRank = new()
+        UserRank? existing = await context.UserRanks.FirstOrDefaultAsync(ur => ur.UserId == userId.Value && ur.SerieId == rank.SerieId);
+        if (existing != null)
         {
-            UserId = userId.Value,
-            SerieId = rank.SerieId,
-            RankId = rank.RankId
-        };
-        
-        context.UserRanks.Add(userRank);
+            existing.RankId = rank.RankId;
+        }
+        else
+        {
+            UserRank userRank = new()
+            {
+                UserId = userId.Value,
+                SerieId = rank.SerieId,
+                RankId = rank.RankId
+            };
+            context.UserRanks.Add(userRank);
+        }
         await context.SaveChangesAsync();
         return NoContent();
     }
