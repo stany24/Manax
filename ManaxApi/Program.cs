@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using ManaxApi.Models;
 using ManaxApi.Models.Issue;
+using ManaxApi.Middleware;
 
 namespace ManaxApi;
 
@@ -18,17 +19,15 @@ public static class Program
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
         builder.Services.AddHttpContextAccessor();
-
-        // Configuration de l'authentification JWT avec la clé obtenue de JwtService
-        // La méthode GetSecretKey va générer une clé si elle n'existe pas
-        string secretKey = JwtService.GetSecretKey(builder.Configuration);
+        
+        string secretKey = JwtService.GetSecretKey();
         builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
             {
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    ValidateIssuer = false,
-                    ValidateAudience = false,
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(Convert.FromBase64String(secretKey))
@@ -48,6 +47,8 @@ public static class Program
         // Initialisation du singleton ScanService
         ScanService.Initialize(app.Services.GetRequiredService<IServiceScopeFactory>());
         IssueManagerService.Initialize(app.Services.GetRequiredService<IServiceScopeFactory>());
+        
+        app.UseMiddleware<GlobalExceptionMiddleware>();
 
         if (app.Environment.IsDevelopment())
         {
@@ -56,8 +57,7 @@ public static class Program
         }
 
         app.UseHttpsRedirection();
-
-        // Ajouter le middleware d'authentification avant celui d'autorisation
+        
         app.UseAuthentication();
         app.UseAuthorization();
 

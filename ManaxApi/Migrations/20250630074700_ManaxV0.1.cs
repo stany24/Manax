@@ -53,6 +53,23 @@ namespace ManaxApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "LoginAttempts",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Type = table.Column<string>(type: "TEXT", maxLength: 15, nullable: false),
+                    Origin = table.Column<string>(type: "TEXT", maxLength: 45, nullable: false),
+                    Username = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
+                    Success = table.Column<bool>(type: "INTEGER", nullable: false),
+                    Timestamp = table.Column<DateTime>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_LoginAttempts", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Ranks",
                 columns: table => new
                 {
@@ -271,6 +288,9 @@ namespace ManaxApi.Migrations
 
             migrationBuilder.DropTable(
                 name: "ChapterIssueTypes");
+
+            migrationBuilder.DropTable(
+                name: "LoginAttempts");
 
             migrationBuilder.DropTable(
                 name: "Reads");

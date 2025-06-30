@@ -15,6 +15,8 @@ namespace ManaxApi.Controllers;
 [ApiController]
 public class UserController(ManaxContext context, IMapper mapper, IConfiguration config) : ControllerBase
 {
+    private readonly object _claimLock = new();
+
     // GET: api/Users
     [HttpGet("/api/Users")]
     [AuthorizeRole(UserRole.Admin)]
@@ -55,7 +57,7 @@ public class UserController(ManaxContext context, IMapper mapper, IConfiguration
         // Si un nouveau mot de passe est fourni, le hasher
         if (!string.IsNullOrEmpty(userUpdate.Password))
         {
-            user.PasswordHash = HashService.ComputeSha3_512(userUpdate.Password);
+            user.PasswordHash = HashService.HashPassword(userUpdate.Password);
         }
 
         try
@@ -80,7 +82,7 @@ public class UserController(ManaxContext context, IMapper mapper, IConfiguration
         User? user = mapper.Map<User>(userCreate);
         
         // Hasher le mot de passe
-        user.PasswordHash = HashService.ComputeSha3_512(userCreate.Password);
+        user.PasswordHash = HashService.HashPassword(userCreate.Password);
         
         context.Users.Add(user);
         await context.SaveChangesAsync();
@@ -124,13 +126,27 @@ public class UserController(ManaxContext context, IMapper mapper, IConfiguration
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> Login(UserLoginDTO loginDto)
     {
+        LoginAttempt loginAttempt = new()
+        {
+            Origin = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "Unknown",
+            Username = loginDto.Username,
+            Timestamp = DateTime.UtcNow,
+            Type = "Login",
+            Success = false
+        };
         User? user = await context.Users.FirstOrDefaultAsync(u => u.Username == loginDto.Username);
-        if (user == null)
+        if (user == null || !HashService.VerifyPassword(loginDto.Password, user.PasswordHash))
+        {
+            context.LoginAttempts.Add(loginAttempt);
+            await context.SaveChangesAsync();
             return Unauthorized();
-        string hash = HashService.ComputeSha3_512(loginDto.Password);
-        if (user.PasswordHash != hash)
-            return Unauthorized();
-        string token = JwtService.GenerateToken(user, config);
+        }
+        
+        loginAttempt.Success = true;
+        context.LoginAttempts.Add(loginAttempt);
+        await context.SaveChangesAsync();
+
+        string token = JwtService.GenerateToken(user);
         return Ok(new { token });
     }
 
@@ -142,9 +158,7 @@ public class UserController(ManaxContext context, IMapper mapper, IConfiguration
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult<UserDTO>> GetCurrentUser()
     {
-        if (!(HttpContext.User.Identity?.IsAuthenticated ?? false))
-            return Unauthorized();
-
+        Console.WriteLine("TEST");
         long? userId = GetCurrentUserId(HttpContext);
         if (userId == null) return Unauthorized();
 
@@ -157,22 +171,41 @@ public class UserController(ManaxContext context, IMapper mapper, IConfiguration
     [HttpPost("/api/claim")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(bool))]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
-    public async Task<ActionResult> Claim(LoginRequest request)
+    public ActionResult Claim(LoginRequest request)
     {
-        if (context.Users.Any()) return Forbid();
-
-        User user = new()
+        LoginAttempt loginAttempt = new()
         {
-            Role = UserRole.Owner,
+            Origin = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "Unknown",
             Username = request.Username,
-            PasswordHash = HashService.ComputeSha3_512(request.Password)
+            Timestamp = DateTime.UtcNow,
+            Type = "Claim",
+            Success = false
         };
+        
+        lock (_claimLock)
+        {
+            if (context.Users.Any())
+            {
+                context.LoginAttempts.Add(loginAttempt);
+                context.SaveChanges();
+                return Forbid();
+            }
 
-        context.Users.Add(user);
-        await context.SaveChangesAsync();
+            User user = new()
+            {
+                Role = UserRole.Owner,
+                Username = request.Username,
+                PasswordHash = HashService.HashPassword(request.Password)
+            };
 
-        string token = JwtService.GenerateToken(user, config);
-        return Ok(new { token });
+            loginAttempt.Success = true;
+            context.LoginAttempts.Add(loginAttempt);
+            context.Users.Add(user);
+            context.SaveChanges();
+
+            string token = JwtService.GenerateToken(user);
+            return Ok(new { token });
+        }
     }
 
     internal static long? GetCurrentUserId(HttpContext httpContext)

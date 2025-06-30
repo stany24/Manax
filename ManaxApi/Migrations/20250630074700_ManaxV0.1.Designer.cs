@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ManaxApi.Migrations
 {
     [DbContext(typeof(ManaxContext))]
-    [Migration("20250630063251_ManaxV0.1")]
+    [Migration("20250630074700_ManaxV0.1")]
     partial class ManaxV01
     {
         /// <inheritdoc />
@@ -234,6 +234,38 @@ namespace ManaxApi.Migrations
                     b.HasIndex("LibraryId");
 
                     b.ToTable("Series");
+                });
+
+            modelBuilder.Entity("ManaxApi.Models.User.LoginAttempt", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Origin")
+                        .IsRequired()
+                        .HasMaxLength(45)
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("Success")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("Timestamp")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasMaxLength(15)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("LoginAttempts");
                 });
 
             modelBuilder.Entity("ManaxApi.Models.User.User", b =>
