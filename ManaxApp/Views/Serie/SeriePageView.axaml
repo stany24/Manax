@@ -20,6 +20,7 @@
             <Label Content="{Binding Serie.Description}"></Label>
             <Label Content="{Binding Serie.Path}"></Label>
             <Label Content="{Binding Serie.FolderName}"></Label>
+            <Label Content="{Binding Serie.Status}"></Label>
             <ComboBox
                 ItemsSource="{Binding Ranks}"
                 SelectedItem="{Binding SelectedRank}">

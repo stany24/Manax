@@ -28,7 +28,6 @@
                                 Orientation="Horizontal">
                                 <Label Content="{Binding Id}" />
                                 <Label Content="{Binding Name}" />
-                                <Label Content="{Binding Description}" />
                                 <Button
                                     Content="Scan"
                                     Command="{Binding $parent[UserControl].((login:LibrariesPageViewModel)DataContext).ScanLibrary}"

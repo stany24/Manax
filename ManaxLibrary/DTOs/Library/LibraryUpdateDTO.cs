@@ -11,6 +11,5 @@ namespace ManaxLibrary.DTOs.Library;
 public class LibraryUpdateDTO
 {
     [Required] public string Name { get; set; }
-    [Required] public string Description { get; set; }
     [Required] public string Path { get; set; }
 }

@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ManaxApi.Migrations
 {
     [DbContext(typeof(ManaxContext))]
-    [Migration("20250630074700_ManaxV0.1")]
+    [Migration("20250630132542_ManaxV0.1")]
     partial class ManaxV01
     {
         /// <inheritdoc />
@@ -118,10 +118,6 @@ namespace ManaxApi.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -224,6 +220,9 @@ namespace ManaxApi.Migrations
                     b.Property<string>("Path")
                         .IsRequired()
                         .HasColumnType("TEXT");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Title")
                         .IsRequired()

@@ -56,7 +56,7 @@ public partial class LibrariesPageViewModel : PageViewModel
     {
         Task.Run(async () =>
         {
-            LibraryCreateDTO library = new() { Name = "New Library", Description = "Description", Path = Path.Combine(Directory.GetCurrentDirectory(),"Library") };
+            LibraryCreateDTO library = new() { Name = "New Library", Path = Path.Combine(Directory.GetCurrentDirectory(),"Library") };
             long? id = await ManaxApiLibraryClient.PostLibraryAsync(library);
             if (id == null) return;
             LibraryDTO? createdLibrary = await ManaxApiLibraryClient.GetLibraryAsync((long)id);
