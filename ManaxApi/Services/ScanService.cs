@@ -1,3 +1,5 @@
+using System.IO.Compression;
+using ImageMagick;
 using ManaxApi.Models;
 using ManaxApi.Models.Chapter;
 using ManaxApi.Models.Issue;
@@ -83,6 +85,18 @@ public static class ScanService
             _ = TaskManagerService.AddTaskAsync(new ChapterScanTask(chapter.Id));
         }
         
+        CheckSerie(serieId);
+    }
+
+    private static void CheckSerie(long serieId)
+    {
+        using IServiceScope scope = _scopeFactory.CreateScope();
+        ManaxContext manaxContext = scope.ServiceProvider.GetRequiredService<ManaxContext>();
+        Serie? serie = manaxContext.Series.Find(serieId);
+        if (serie == null) return;
+        manaxContext.SerieIssues.RemoveRange(manaxContext.SerieIssues.Where(i => i.SerieId == serieId));
+        
+        string[] files = Directory.GetFiles(serie.Path);
         List<string> posters = files.Where(f => Path.GetFileName(f).StartsWith("poster.", StringComparison.CurrentCultureIgnoreCase)).ToList();
         switch (posters.Count)
         {
@@ -91,7 +105,7 @@ public static class ScanService
                 break;
             case 1:
                 string poster = posters.First();
-                if (!Path.GetExtension(poster).Equals("webp", StringComparison.CurrentCultureIgnoreCase))
+                if (!Path.GetExtension(poster).Equals(".webp", StringComparison.CurrentCultureIgnoreCase))
                 {
                     IssueManagerService.CreateSerieIssue(serie.Id, SerieIssueTypeEnum.PosterWrongFormat);
                 }
@@ -100,6 +114,7 @@ public static class ScanService
                 IssueManagerService.CreateSerieIssue(serie.Id, SerieIssueTypeEnum.PosterDuplicate);
                 break;
         }
+        manaxContext.SaveChanges();
     }
 
     public static void ScanChapter(long chapterId)
@@ -111,5 +126,46 @@ public static class ScanService
         if (chapter == null) return;
         
         Console.WriteLine("Scanning chapter: " + chapter.FileName);
+        
+        CheckChapter(chapterId);
+    }
+    
+    private static void CheckChapter(long chapterId)
+    {
+        using IServiceScope scope = _scopeFactory.CreateScope();
+        ManaxContext manaxContext = scope.ServiceProvider.GetRequiredService<ManaxContext>();
+        Chapter? chapter = manaxContext.Chapters.Find(chapterId);
+        
+        manaxContext.ChapterIssues.RemoveRange(manaxContext.ChapterIssues.Where(i => i.ChapterId == chapterId));
+        
+        if (chapter == null) return;
+        ZipArchive archive = ZipFile.OpenRead(chapter.Path);
+        
+        bool notAllWebp = archive.Entries.Any(t => !t.FullName.EndsWith(".webp", StringComparison.CurrentCultureIgnoreCase));
+        if (notAllWebp)
+        {
+            IssueManagerService.CreateChapterIssue(chapter.Id, ChapterIssueTypeEnum.NotAllWebp);
+        }
+        
+        foreach (ZipArchiveEntry entry in archive.Entries)
+        {
+            string tempFileName = Path.GetTempFileName();
+            entry.ExtractToFile(tempFileName, true);
+            MagickImage image = new(tempFileName);
+            
+            switch (image.Width)
+            {
+                case < 720:
+                    IssueManagerService.CreateChapterIssue(chapter.Id, ChapterIssueTypeEnum.ImageTooSmall);
+                    break;
+                case > 800:
+                    IssueManagerService.CreateChapterIssue(chapter.Id, ChapterIssueTypeEnum.ImageTooBig);
+                    break;
+            }
+
+            image.Dispose();
+            File.Delete(tempFileName);
+        }
+        manaxContext.SaveChanges();
     }
 }

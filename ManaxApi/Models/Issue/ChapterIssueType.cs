@@ -8,5 +8,7 @@ public class ChapterIssueType
 
 public enum ChapterIssueTypeEnum
 {
-
+    NotAllWebp,
+    ImageTooBig,
+    ImageTooSmall,
 }

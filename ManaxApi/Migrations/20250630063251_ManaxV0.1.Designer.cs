@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ManaxApi.Migrations
 {
     [DbContext(typeof(ManaxContext))]
-    [Migration("20250629213435_ManaxV0.1")]
+    [Migration("20250630063251_ManaxV0.1")]
     partial class ManaxV01
     {
         /// <inheritdoc />
