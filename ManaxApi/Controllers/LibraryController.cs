@@ -65,6 +65,11 @@ public class LibraryController(ManaxContext context, IMapper mapper) : Controlle
         
         if (library == null) return NotFound();
         
+        if (!Directory.Exists(libraryUpdate.Path))
+        {
+            return BadRequest($"The specified path '{libraryUpdate.Path}' does not exist.");
+        }
+        
         // Check if name is unique (except for the current library)
         if (await context.Libraries.AnyAsync(l => l.Name == libraryUpdate.Name && l.Id != id))
         {
@@ -103,6 +108,11 @@ public class LibraryController(ManaxContext context, IMapper mapper) : Controlle
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<ActionResult<long>> PostLibrary(LibraryCreateDTO libraryCreate)
     {
+        if (!Directory.Exists(libraryCreate.Path))
+        {
+            return BadRequest($"The specified path '{libraryCreate.Path}' does not exist.");
+        }
+        
         // Check if name is unique
         if (await context.Libraries.AnyAsync(l => l.Name == libraryCreate.Name))
         {

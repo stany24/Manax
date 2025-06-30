@@ -13,7 +13,7 @@ namespace ManaxApi.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class UserController(ManaxContext context, IMapper mapper, IConfiguration config) : ControllerBase
+public class UserController(ManaxContext context, IMapper mapper) : ControllerBase
 {
     private readonly object _claimLock = new();
 

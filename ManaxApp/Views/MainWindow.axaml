@@ -111,6 +111,10 @@
         </Canvas>
 
         <ContentControl
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            VerticalContentAlignment="Center"
+            HorizontalContentAlignment="Center"
             Content="{Binding Popup}"></ContentControl>
     </Panel>
 </Window>

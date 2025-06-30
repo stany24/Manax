@@ -2,9 +2,9 @@
 using System.Collections.ObjectModel;
 using System.Threading;
 using System.Threading.Tasks;
-using Avalonia.Controls;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
+using ManaxApp.Controls;
 using ManaxApp.ViewModels.Home;
 using ManaxApp.ViewModels.Issue;
 using ManaxApp.ViewModels.Library;
@@ -24,7 +24,7 @@ public partial class MainWindowViewModel : ObservableObject
 {
     [ObservableProperty] private PageViewModel _currentPageViewModel;
     [ObservableProperty] private ObservableCollection<string> _infos = [];
-    [ObservableProperty] private Control? _popup;
+    [ObservableProperty] private Popup? _popup;
     [ObservableProperty] private bool _isAdmin;
     [ObservableProperty] private ObservableCollection<TaskItem> _runningTasks = [];
 
@@ -60,7 +60,14 @@ public partial class MainWindowViewModel : ObservableObject
             if (args.PropertyName != nameof(CurrentPageViewModel)) return;
             CurrentPageViewModel.Admin = IsAdmin;
             CurrentPageViewModel.PageChangedRequested += (_, e) => { CurrentPageViewModel = e; };
-            CurrentPageViewModel.PopupRequested += (_, e) => { Popup = e; };
+            CurrentPageViewModel.PopupRequested += (_, e) =>
+            {
+                Popup = e;
+                if (Popup is not null)
+                {
+                    Popup.Closed += (_, _) => Popup = null;
+                }
+            };
             CurrentPageViewModel.InfoEmitted += (_, e) =>
             {
                 Infos.Add(e);

@@ -1,12 +1,11 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.IO;
 using System.Threading.Tasks;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
+using ManaxApp.Controls;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTOs.Library;
-using Path = System.IO.Path;
 
 namespace ManaxApp.ViewModels.Library;
 
@@ -54,14 +53,22 @@ public partial class LibrariesPageViewModel : PageViewModel
 
     public void CreateLibrary()
     {
-        Task.Run(async () =>
+        LibraryCreatePopup popup = new();
+        popup.CloseRequested += async (_, _) =>
         {
-            LibraryCreateDTO library = new() { Name = "New Library", Path = Path.Combine(Directory.GetCurrentDirectory(),"Library") };
+            popup.Close();
+            LibraryCreateDTO? library = popup.GetResult();
+            if (library == null) return;
             long? id = await ManaxApiLibraryClient.PostLibraryAsync(library);
-            if (id == null) return;
+            if (id == null)
+            {
+                InfoEmitted?.Invoke(this, "Library creation failed");
+                return;
+            }
             LibraryDTO? createdLibrary = await ManaxApiLibraryClient.GetLibraryAsync((long)id);
             if (createdLibrary == null) return;
             Dispatcher.UIThread.Post(() => Libraries.Add(createdLibrary));
-        });
+        };
+        PopupRequested?.Invoke(this,popup);
     }
 }
