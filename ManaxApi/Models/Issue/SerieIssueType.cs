@@ -11,4 +11,7 @@ public enum SerieIssueTypeEnum
     PosterMissing,
     PosterDuplicate,
     PosterWrongFormat,
+    MissingChapter,
+    DescriptionTooShort,
+    DescriptionTooLong
 }

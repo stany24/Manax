@@ -1,5 +1,3 @@
-// Fichier : ManaxApi/Services/IssueManagerService.cs
-
 using ManaxApi.Models;
 using ManaxApi.Models.Issue;
 

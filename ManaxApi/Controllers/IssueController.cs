@@ -2,7 +2,6 @@ using AutoMapper;
 using ManaxApi.Auth;
 using ManaxApi.Models;
 using ManaxApi.Models.Issue;
-using ManaxApi.Models.User;
 using ManaxLibrary.DTOs;
 using ManaxLibrary.DTOs.Issue;
 using Microsoft.AspNetCore.Mvc;
