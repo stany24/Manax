@@ -1,10 +1,11 @@
 using Avalonia.Media.Imaging;
+using CommunityToolkit.Mvvm.ComponentModel;
 using ManaxLibrary.DTOs.Serie;
 
 namespace ManaxApp.Models;
 
-public class ClientSerie
+public partial class ClientSerie:ObservableObject
 {
-    public SerieDTO Info {get; set;} = null!;
-    public Bitmap? Poster { get; set; }
+    [ObservableProperty] private SerieDTO _info = null!;
+    [ObservableProperty] private Bitmap? _poster;
 }

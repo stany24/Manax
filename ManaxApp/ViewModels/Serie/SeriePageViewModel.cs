@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Avalonia.Media.Imaging;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
+using ManaxApp.ViewModels.Chapter;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTOs;
 using ManaxLibrary.DTOs.Rank;
@@ -97,5 +98,11 @@ public partial class SeriePageViewModel : PageViewModel
                 }
             };
         });
+    }
+    
+    public void MoveToChapterPage(ChapterDTO chapter)
+    {
+        ChapterPageViewModel chapterPageViewModel = new(chapter.Id);
+        PageChangedRequested?.Invoke(this, chapterPageViewModel);
     }
 }

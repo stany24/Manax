@@ -93,6 +93,10 @@
           <SubType>Code</SubType>
           <DependentUpon>LibraryPageView.axaml</DependentUpon>
         </Compile>
+        <Compile Update="Views\Chapter\ChapterPageView.axaml.cs">
+          <SubType>Code</SubType>
+          <DependentUpon>LibraryPageView.axaml</DependentUpon>
+        </Compile>
     </ItemGroup>
 
     <ItemGroup>

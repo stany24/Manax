@@ -172,6 +172,8 @@ public static partial class ScanService
         ManaxContext manaxContext = scope.ServiceProvider.GetRequiredService<ManaxContext>();
         Chapter? chapter = manaxContext.Chapters.Find(chapterId);
         if (chapter == null) return;
+
+        chapter.Pages = ZipFile.OpenRead(chapter.Path).Entries.Count;
         
         manaxContext.ChapterIssues.RemoveRange(manaxContext.ChapterIssues.Where(i => i.ChapterId == chapterId));
         manaxContext.SaveChanges();

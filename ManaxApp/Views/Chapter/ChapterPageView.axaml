@@ -1,0 +1,38 @@
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:login="clr-namespace:ManaxApp.ViewModels.Chapter"
+    mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+    x:Class="ManaxApp.Views.Chapter.ChapterPageView"
+    x:DataType="login:ChapterPageViewModel">
+    <DockPanel>
+        <StackPanel
+            DockPanel.Dock="Top"
+            Orientation="Vertical">
+            <Label
+                Content="{Binding Chapter.Info.FileName}"></Label>
+        </StackPanel>
+        <ScrollViewer
+            VerticalScrollBarVisibility="Auto"
+            HorizontalScrollBarVisibility="Disabled">
+            <ItemsControl
+                ItemsSource="{Binding Chapter.Pages}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Image
+                            Stretch="None"
+                            Source="{Binding .}"></Image>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel
+                            Orientation="Vertical"></StackPanel>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+        </ScrollViewer>
+    </DockPanel>
+</UserControl>

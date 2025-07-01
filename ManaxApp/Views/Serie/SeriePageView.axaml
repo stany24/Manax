@@ -39,6 +39,8 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <controls:ChapterPreview
+                            Command="{Binding $parent[UserControl].((login:SeriePageViewModel)DataContext).MoveToChapterPage}"
+                            CommandParameter="{Binding .}"
                             Chapter="{Binding .}">
                         </controls:ChapterPreview>
                     </DataTemplate>
