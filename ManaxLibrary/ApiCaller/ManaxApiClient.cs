@@ -8,7 +8,12 @@ internal static class ManaxApiClient
 
     public static void SetHost(Uri host)
     {
-        Client = new HttpClient { BaseAddress = host };
+        HttpClientHandler handler = new();
+        Client = new HttpClient(handler)
+        {
+            BaseAddress = host,
+            Timeout = TimeSpan.FromMinutes(30)
+        };
     }
 
     public static void SetToken(string? token)

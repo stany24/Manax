@@ -14,6 +14,8 @@
             Orientation="Vertical">
             <Label
                 Content="{Binding Library.Name}"></Label>
+            <Button
+                Command="{Binding UploadDefault}">Upload</Button>
         </StackPanel>
         <ItemsControl
             ItemsSource="{Binding Series}">

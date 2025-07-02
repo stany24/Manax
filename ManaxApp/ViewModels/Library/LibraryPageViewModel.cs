@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Avalonia.Media.Imaging;
 using Avalonia.Threading;
@@ -53,5 +54,15 @@ public partial class LibraryPageViewModel : PageViewModel
     {
         SeriePageViewModel seriePageViewModel = new(serie.Info.Id);
         PageChangedRequested?.Invoke(this, seriePageViewModel);
+    }
+
+    public async void UploadDefault()
+    {
+        if(Library == null)return;
+        _ = UploadApiUploadClient.UploadSerieAsync(
+            new ByteArrayContent(await File.ReadAllBytesAsync("/home/stan/Téléchargements/666 Satan.zip")),
+            "/home/stan/Téléchargements/666 Satan.zip",
+            Library.Id
+        );
     }
 }
