@@ -5,6 +5,8 @@ using Microsoft.IdentityModel.Tokens;
 using ManaxApi.Models;
 using ManaxApi.Models.Issue;
 using ManaxApi.Middleware;
+using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 
 namespace ManaxApi;
 
@@ -39,6 +41,20 @@ public static class Program
         
         // Configuration AutoMapper
         builder.Services.AddAutoMapper(typeof(MappingProfile));
+        
+        builder.Services.Configure<KestrelServerOptions>(options =>
+        {
+            options.Limits.MaxRequestBodySize = int.MaxValue;
+            options.Limits.KeepAliveTimeout = TimeSpan.FromMinutes(3);
+            options.Limits.RequestHeadersTimeout = TimeSpan.FromSeconds(20);
+        });
+
+        builder.Services.Configure<FormOptions>(options =>
+        {
+            options.ValueLengthLimit = int.MaxValue;
+            options.MultipartBodyLengthLimit = int.MaxValue;
+            options.MemoryBufferThreshold = int.MaxValue;
+        });
         
         WebApplication app = builder.Build();
         

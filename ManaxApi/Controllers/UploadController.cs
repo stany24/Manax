@@ -1,8 +1,9 @@
 using System.IO.Compression;
-using Microsoft.AspNetCore.Mvc;
 using ManaxApi.Auth;
 using ManaxApi.Models;
+using ManaxApi.Models.Library;
 using ManaxLibrary.DTOs.User;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ManaxApi.Controllers;
 
@@ -16,21 +17,23 @@ public class UploadController(ManaxContext context) : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> UploadSerie(IFormFile file, [FromForm] long libraryId)
     {
-        if (context.Libraries.FirstOrDefault(l => l.Id == libraryId) == null)
+        Library? library = context.Libraries.FirstOrDefault(l => l.Id == libraryId);
+        if (library == null)
             return BadRequest("The library does not exist");
         
-        if (!file.FileName.EndsWith(".zip"))
-            return BadRequest("The file must be a zip");
         try
         {
             using ZipArchive zipArchive = new(file.OpenReadStream());
-            foreach (ZipArchiveEntry entry in zipArchive.Entries)
+            string folderPath = Path.Combine(library.Path, file.FileName);
+            if(Directory.Exists(folderPath) || System.IO.File.Exists(folderPath))
             {
-                Console.WriteLine(entry.FullName);
+                return BadRequest("The serie already exists");
             }
+            Directory.CreateDirectory(folderPath);
+            zipArchive.ExtractToDirectory(folderPath);
             return Ok();
         }
-        catch (Exception e)
+        catch (Exception)
         {
             return BadRequest("Invalid zip file");
         }

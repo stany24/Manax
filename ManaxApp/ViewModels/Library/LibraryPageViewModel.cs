@@ -1,9 +1,12 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Avalonia.Controls;
 using Avalonia.Media.Imaging;
+using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using ManaxApp.Models;
@@ -58,11 +61,37 @@ public partial class LibraryPageViewModel : PageViewModel
 
     public async void UploadDefault()
     {
-        if(Library == null)return;
-        _ = UploadApiUploadClient.UploadSerieAsync(
-            new ByteArrayContent(await File.ReadAllBytesAsync("/home/stan/Téléchargements/666 Satan.zip")),
-            "/home/stan/Téléchargements/666 Satan.zip",
-            Library.Id
-        );
+        if (Library == null) return;
+
+        Window? window = Avalonia.Application.Current?.ApplicationLifetime is Avalonia.Controls.ApplicationLifetimes.IClassicDesktopStyleApplicationLifetime desktop ? desktop.MainWindow : null;
+        if (window?.StorageProvider == null) return;
+        IReadOnlyList<IStorageFolder> folders = await window.StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions
+        {
+            Title = "Sélectionnez un dossier à uploader",
+            AllowMultiple = false
+        });
+        
+        IStorageFolder? folder = folders.FirstOrDefault();
+        if (folder == null) return;
+        string folderPath = folder.Path.LocalPath;
+        if (string.IsNullOrEmpty(folderPath)) return;
+
+        string tempZip = Path.Combine(Path.GetTempPath(), $"{Path.GetDirectoryName(folderPath)}.zip");
+        if (File.Exists(tempZip)) File.Delete(tempZip);
+        System.IO.Compression.ZipFile.CreateFromDirectory(folderPath, tempZip);
+
+        try
+        {
+            using ByteArrayContent content = new(await File.ReadAllBytesAsync(tempZip));
+            await UploadApiUploadClient.UploadSerieAsync(
+                content,
+                Path.GetFileNameWithoutExtension(tempZip),
+                Library.Id
+            );
+        }
+        finally
+        {
+            if (File.Exists(tempZip)) File.Delete(tempZip);
+        }
     }
 }
