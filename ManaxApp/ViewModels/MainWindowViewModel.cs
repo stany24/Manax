@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using ManaxApp.Controls;
+using ManaxApp.Models;
 using ManaxApp.ViewModels.Home;
 using ManaxApp.ViewModels.Issue;
 using ManaxApp.ViewModels.Library;
@@ -14,19 +15,36 @@ using ManaxLibrary.ApiCaller;
 
 namespace ManaxApp.ViewModels;
 
-public class TaskItem : ObservableObject
-{
-    public string TaskName { get; set; } = string.Empty;
-    public int Number { get; set; }
-}
-
 public partial class MainWindowViewModel : ObservableObject
 {
-    [ObservableProperty] private PageViewModel _currentPageViewModel;
     [ObservableProperty] private ObservableCollection<string> _infos = [];
     [ObservableProperty] private Popup? _popup;
     [ObservableProperty] private bool _isAdmin;
     [ObservableProperty] private ObservableCollection<TaskItem> _runningTasks = [];
+
+    private readonly PageHistoryManager _history = new();
+
+    public bool CanGoBack => _history.CanGoBack;
+    public bool CanGoForward => _history.CanGoForward;
+    public PageViewModel? CurrentPageViewModel => _history.CurrentPage;
+
+    public void GoBack()
+    {
+        _history.GoBack();
+        OnPropertyChanged(nameof(CurrentPageViewModel));
+    }
+
+    public void GoForward()
+    {
+        _history.GoForward();
+        OnPropertyChanged(nameof(CurrentPageViewModel));
+    }
+
+    private void SetPage(PageViewModel page)
+    {
+        _history.SetPage(page);
+        OnPropertyChanged(nameof(CurrentPageViewModel));
+    }
 
     private void UpdateRunningTasks()
     {
@@ -55,11 +73,11 @@ public partial class MainWindowViewModel : ObservableObject
     
     public MainWindowViewModel()
     {
-        PropertyChanged += (_, args) =>
+        _history.PageChanged += _ =>
         {
-            if (args.PropertyName != nameof(CurrentPageViewModel)) return;
+            if (CurrentPageViewModel == null) return;
             CurrentPageViewModel.Admin = IsAdmin;
-            CurrentPageViewModel.PageChangedRequested += (_, e) => { CurrentPageViewModel = e; };
+            CurrentPageViewModel.PageChangedRequested += (_, e) => { SetPage(e); };
             CurrentPageViewModel.PopupRequested += (_, e) =>
             {
                 Popup = e;
@@ -72,11 +90,12 @@ public partial class MainWindowViewModel : ObservableObject
             {
                 Infos.Add(e);
             };
+            CurrentPageViewModel.PreviousRequested += (_, _) => GoBack();
+            CurrentPageViewModel.NextRequested += (_, _) => GoForward();
         };
 
-        PropertyChanging += (_, args) =>
+        _history.PageChanging += _ =>
         {
-            if (args.PropertyName != nameof(CurrentPageViewModel)) return;
             if (CurrentPageViewModel is not LoginPageViewModel login) return;
             Dispatcher.UIThread.Post(() =>
             {
@@ -84,27 +103,12 @@ public partial class MainWindowViewModel : ObservableObject
                 UpdateRunningTasks();
             });
         };
-
-        CurrentPageViewModel = new LoginPageViewModel();
+        
+        SetPage(new LoginPageViewModel());
     }
 
-    public void ChangePageHome()
-    {
-        CurrentPageViewModel = new HomePageViewModel();
-    }
-    
-    public void ChangePageLibraries()
-    {
-        CurrentPageViewModel = new LibrariesPageViewModel();
-    }
-
-    public void ChangePageIssues()
-    {
-        CurrentPageViewModel = new IssuesPageViewModel();
-    }
-
-    public void ChangePageUsers()
-    {
-        CurrentPageViewModel = new UsersPageViewModel();
-    }
+    public void ChangePageHome() => SetPage(new HomePageViewModel());
+    public void ChangePageLibraries() => SetPage(new LibrariesPageViewModel());
+    public void ChangePageIssues() => SetPage(new IssuesPageViewModel());
+    public void ChangePageUsers() => SetPage(new UsersPageViewModel());
 }

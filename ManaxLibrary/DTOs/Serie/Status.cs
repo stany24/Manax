@@ -1,4 +1,4 @@
-namespace ManaxApi.Models.Serie;
+namespace ManaxLibrary.DTOs.Serie;
 
 public enum Status
 {

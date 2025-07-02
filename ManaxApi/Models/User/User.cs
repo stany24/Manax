@@ -4,6 +4,7 @@
 
 using System.ComponentModel.DataAnnotations;
 using ManaxLibrary.DTOs;
+using ManaxLibrary.DTOs.User;
 using Microsoft.EntityFrameworkCore;
 
 namespace ManaxApi.Models.User;

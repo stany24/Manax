@@ -1,4 +1,4 @@
-namespace ManaxLibrary.DTOs;
+namespace ManaxLibrary.DTOs.User;
 
 public enum UserRole
 {

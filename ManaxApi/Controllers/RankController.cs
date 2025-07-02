@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using ManaxApi.Auth;
 using ManaxLibrary.DTOs;
 using ManaxLibrary.DTOs.Rank;
+using ManaxLibrary.DTOs.User;
 
 namespace ManaxApi.Controllers;
 
