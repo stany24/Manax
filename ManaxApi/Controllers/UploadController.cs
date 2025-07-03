@@ -1,5 +1,6 @@
 using System.IO.Compression;
 using System.Text.RegularExpressions;
+using ImageMagick;
 using ManaxApi.Auth;
 using ManaxApi.Models;
 using ManaxApi.Models.Chapter;
@@ -35,6 +36,26 @@ public partial class UploadController(ManaxContext context) : ControllerBase
     {
         return await UpdateOrReplaceChapter(file,serieId, true);
     }
+    
+    // POST: api/upload/poster
+    [HttpPost("poster")]
+    [AuthorizeRole(UserRole.Admin)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> UploadPoster(IFormFile file, [FromForm] long serieId)
+    {
+        return await UpdateOrReplacePoster(file,serieId, false);
+    }
+
+    // POST: api/upload/poster/replace
+    [HttpPost("poster/replace")]
+    [AuthorizeRole(UserRole.Admin)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> ReplacePoster(IFormFile file, [FromForm] long serieId)
+    {
+        return await UpdateOrReplacePoster(file,serieId, true);
+    }
 
     private async Task<IActionResult> UpdateOrReplaceChapter(IFormFile file, [FromForm] long serieId, bool replace)
     {
@@ -42,7 +63,7 @@ public partial class UploadController(ManaxContext context) : ControllerBase
         if (serie == null)
             return BadRequest("The serie does not exist");
         
-        int pagesCount = 0;
+        int pagesCount;
         try
         {
             using ZipArchive zipArchive = new(file.OpenReadStream());
@@ -79,6 +100,26 @@ public partial class UploadController(ManaxContext context) : ControllerBase
         });
         
         await context.SaveChangesAsync();
+        return Ok();
+    }
+    
+    private async Task<IActionResult> UpdateOrReplacePoster(IFormFile file, [FromForm] long serieId, bool replace)
+    {
+        Serie? serie = context.Series.FirstOrDefault(s => s.Id == serieId);
+        if (serie == null)
+            return BadRequest("The serie does not exist");
+
+        try
+        {
+            MagickImage image = new(file.OpenReadStream());
+            image.Quality = 94;
+            await image.WriteAsync(Path.Combine(serie.Path, "poster.webp"), MagickFormat.WebP);
+        }
+        catch (Exception e)
+        {
+            return BadRequest($"Invalid image file: {e.Message}");
+        }
+        
         return Ok();
     }
 }

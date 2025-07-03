@@ -15,7 +15,6 @@ namespace ManaxApi.Controllers;
 [ApiController]
 public class ScanController(ManaxContext context) : ControllerBase
 {
-
     [HttpGet("library/{id:long}")]
     [AuthorizeRole(UserRole.Admin)]
     [ProducesResponseType(StatusCodes.Status200OK)]
