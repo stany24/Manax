@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ManaxApi.Controllers;
 
-[Route("api/[controller]")]
+[Route("api/chapter")]
 [ApiController]
 public class ChapterController(ManaxContext context, IMapper mapper) : ControllerBase
 {

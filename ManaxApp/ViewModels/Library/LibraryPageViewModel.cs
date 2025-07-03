@@ -76,22 +76,17 @@ public partial class LibraryPageViewModel : PageViewModel
         string folderPath = folder.Path.LocalPath;
         if (string.IsNullOrEmpty(folderPath)) return;
 
-        string tempZip = Path.Combine(Path.GetTempPath(), $"{Path.GetDirectoryName(folderPath)}.zip");
-        if (File.Exists(tempZip)) File.Delete(tempZip);
-        System.IO.Compression.ZipFile.CreateFromDirectory(folderPath, tempZip);
-
         try
         {
-            using ByteArrayContent content = new(await File.ReadAllBytesAsync(tempZip));
-            await UploadApiUploadClient.UploadSerieAsync(
-                content,
-                Path.GetFileNameWithoutExtension(tempZip),
-                Library.Id
-            );
+            bool success = await UploadApiUploadClient.UploadSerieAsync(folderPath, Library.Id);
+            if (!success)
+            {
+                InfoEmitted?.Invoke(this, "Serie upload failed");
+            }
         }
-        finally
+        catch (HttpRequestException e)
         {
-            if (File.Exists(tempZip)) File.Delete(tempZip);
+            System.Diagnostics.Debug.WriteLine($"Error uploading series: {e.Message}");
         }
     }
 }

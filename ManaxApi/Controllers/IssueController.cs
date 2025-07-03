@@ -2,7 +2,6 @@ using AutoMapper;
 using ManaxApi.Auth;
 using ManaxApi.Models;
 using ManaxApi.Models.Issue;
-using ManaxLibrary.DTOs;
 using ManaxLibrary.DTOs.Issue;
 using ManaxLibrary.DTOs.User;
 using Microsoft.AspNetCore.Mvc;
@@ -10,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ManaxApi.Controllers;
 
-[Route("api/[controller]")]
+[Route("api/issue")]
 [ApiController]
 public class IssueController(ManaxContext context, IMapper mapper) : ControllerBase
 {

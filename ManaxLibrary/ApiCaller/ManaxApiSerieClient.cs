@@ -26,11 +26,11 @@ public static class ManaxApiSerieClient
         return await response.Content.ReadFromJsonAsync<List<long>>();
     }
 
-    public static async Task<SerieDTO?> PostSerieAsync(SerieDTO serie)
+    public static async Task<long?> PostSerieAsync(SerieCreateDTO serieCreate)
     {
-        HttpResponseMessage response = await ManaxApiClient.Client.PostAsJsonAsync("api/serie", serie);
+        HttpResponseMessage response = await ManaxApiClient.Client.PostAsJsonAsync("/api/serie", serieCreate);
         if (!response.IsSuccessStatusCode) return null;
-        return await response.Content.ReadFromJsonAsync<SerieDTO>();
+        return await response.Content.ReadFromJsonAsync<long>();
     }
 
     public static async Task<bool> PutSerieAsync(long id, SerieDTO serie)

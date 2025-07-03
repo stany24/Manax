@@ -144,6 +144,11 @@ public static partial class ScanService
     private static void CheckMissingChapters(Serie serie)
     {
         string[] chapters = Directory.GetFiles(serie.Path);
+        if(chapters.Length == 0)
+        {
+            IssueManagerService.CreateSerieIssue(serie.Id, SerieIssueTypeEnum.MissingChapter);
+            return;
+        }
         Array.Sort(chapters);
         Regex regex = RegexNumber();
         string last = Path.GetFileName(chapters[^1]);

@@ -5,14 +5,13 @@ using ManaxApi.Models.Library;
 using ManaxApi.Models.Serie;
 using ManaxApi.Services;
 using ManaxApi.Task;
-using ManaxLibrary.DTOs;
 using ManaxLibrary.DTOs.User;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace ManaxApi.Controllers;
 
-[Route("api/[controller]")]
+[Route("api/scan")]
 [ApiController]
 public class ScanController(ManaxContext context) : ControllerBase
 {

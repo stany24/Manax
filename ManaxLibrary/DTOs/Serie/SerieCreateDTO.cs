@@ -9,7 +9,5 @@ namespace ManaxLibrary.DTOs.Serie;
 public class SerieCreateDTO
 {
     [Required] public string Title { get; set; }
-    [Required] public string Description { get; set; }
-    [Required] public string Path { get; set; }
-    public Status Status { get; set; } = Status.Ongoing;
+    [Required] public long LibraryId { get; set; }
 }

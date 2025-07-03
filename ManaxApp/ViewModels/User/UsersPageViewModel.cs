@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using ManaxLibrary.ApiCaller;
-using ManaxLibrary.DTOs;
 using ManaxLibrary.DTOs.User;
 
 namespace ManaxApp.ViewModels.User;

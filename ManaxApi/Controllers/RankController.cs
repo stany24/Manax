@@ -4,13 +4,12 @@ using Microsoft.AspNetCore.Mvc;
 using ManaxApi.Models.Rank;
 using Microsoft.EntityFrameworkCore;
 using ManaxApi.Auth;
-using ManaxLibrary.DTOs;
 using ManaxLibrary.DTOs.Rank;
 using ManaxLibrary.DTOs.User;
 
 namespace ManaxApi.Controllers;
 
-[Route("api/[controller]")]
+[Route("api/rank")]
 [ApiController]
 public class RankController(ManaxContext context, IMapper mapper) : ControllerBase
 {

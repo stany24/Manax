@@ -2,7 +2,6 @@ using AutoMapper;
 using ManaxApi.Auth;
 using ManaxApi.Models;
 using ManaxApi.Models.Library;
-using ManaxLibrary.DTOs;
 using ManaxLibrary.DTOs.Library;
 using ManaxLibrary.DTOs.User;
 using Microsoft.AspNetCore.Mvc;
@@ -10,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ManaxApi.Controllers;
 
-[Route("api/[controller]")]
+[Route("api/library")]
 [ApiController]
 public class LibraryController(ManaxContext context, IMapper mapper) : ControllerBase
 {
@@ -109,6 +108,10 @@ public class LibraryController(ManaxContext context, IMapper mapper) : Controlle
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<ActionResult<long>> PostLibrary(LibraryCreateDTO libraryCreate)
     {
+        if(!libraryCreate.Path.EndsWith(Path.DirectorySeparatorChar.ToString()))
+        {
+            libraryCreate.Path += Path.DirectorySeparatorChar;
+        }
         if (!Directory.Exists(libraryCreate.Path))
         {
             return BadRequest($"The specified path '{libraryCreate.Path}' does not exist.");

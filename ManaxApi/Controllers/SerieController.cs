@@ -1,8 +1,8 @@
 using AutoMapper;
 using ManaxApi.Auth;
 using ManaxApi.Models;
+using ManaxApi.Models.Library;
 using ManaxApi.Models.Serie;
-using ManaxLibrary.DTOs;
 using ManaxLibrary.DTOs.Serie;
 using ManaxLibrary.DTOs.User;
 using Microsoft.AspNetCore.Mvc;
@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ManaxApi.Controllers;
 
-[Route("api/[controller]")]
+[Route("api/serie")]
 [ApiController]
 public class SerieController(ManaxContext context, IMapper mapper) : ControllerBase
 {
@@ -101,14 +101,38 @@ public class SerieController(ManaxContext context, IMapper mapper) : ControllerB
     [HttpPost]
     [AuthorizeRole(UserRole.Admin)]
     [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(long))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<long>> PostSerie(SerieCreateDTO serieCreate)
     {
-        Serie? serie = mapper.Map<Serie>(serieCreate);
+        Library? library = context.Libraries.FirstOrDefault(l => l.Id == serieCreate.LibraryId);
+        if (library == null)
+            return BadRequest("The library does not exist");
         
-        context.Series.Add(serie);
-        await context.SaveChangesAsync();
-
-        return serie.Id;
+        try
+        {
+            string folderPath = library.Path + serieCreate.Title;
+            if(System.IO.File.Exists(folderPath))
+            {
+                return BadRequest("The serie already exists");
+            }
+            Directory.CreateDirectory(folderPath);
+            Serie serie = new()
+            {
+                Title = serieCreate.Title,
+                FolderName = serieCreate.Title,
+                LibraryId = serieCreate.LibraryId,
+                Path = folderPath,
+                Description = "",
+                Status = Status.Ongoing
+            };
+            context.Series.Add(serie);
+            await context.SaveChangesAsync();
+            return serie.Id;
+        }
+        catch (Exception)
+        {
+            return BadRequest("Invalid zip file");
+        }
     }
 
     // DELETE: api/Serie/5
