@@ -1,4 +1,5 @@
-using ManaxApi.Models.Issue;
+using ManaxApi.Models.Issue.Internal;
+using ManaxApi.Models.Issue.User;
 using ManaxApi.Models.Rank;
 using ManaxApi.Models.User;
 using Microsoft.EntityFrameworkCore;
@@ -8,10 +9,12 @@ namespace ManaxApi.Models;
 public class ManaxContext(DbContextOptions<ManaxContext> options) : DbContext(options)
 {
     public DbSet<Chapter.Chapter> Chapters { get; set; } = null!;
-    public DbSet<ChapterIssue> ChapterIssues { get; set; } = null!;
-    public DbSet<ChapterIssueType> ChapterIssueTypes { get; set; } = null!;
-    public DbSet<SerieIssue> SerieIssues { get; set; } = null!;
-    public DbSet<SerieIssueType> SerieIssueTypes { get; set; } = null!;
+    public DbSet<InternalChapterIssue> InternalChapterIssues { get; set; } = null!;
+    public DbSet<UserChapterIssue> UserChapterIssues { get; set; } = null!;
+    public DbSet<UserChapterIssueType> ChapterIssueTypes { get; set; } = null!;
+    public DbSet<InternalSerieIssue> InternalSerieIssues { get; set; } = null!;
+    public DbSet<UserSerieIssue> UserSerieIssues { get; set; } = null!;
+    public DbSet<UserSerieIssueType> SerieIssueTypes { get; set; } = null!;
     public DbSet<Library.Library> Libraries { get; set; } = null!;
     public DbSet<Read.Read> Reads { get; set; } = null!;
     public DbSet<Serie.Serie> Series { get; set; } = null!;

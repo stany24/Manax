@@ -1,6 +1,7 @@
 using ManaxApi.Middleware;
 using ManaxApi.Models;
-using ManaxApi.Models.Issue;
+using ManaxApi.Models.Issue.Internal;
+using ManaxApi.Models.Issue.User;
 using ManaxApi.Models.Rank;
 using ManaxApi.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -106,19 +107,19 @@ public static class Program
 
         if (!manaxContext.SerieIssueTypes.Any())
         {
-            IEnumerable<SerieIssueTypeEnum> values =
-                Enum.GetValues(typeof(SerieIssueTypeEnum)).Cast<SerieIssueTypeEnum>();
-            foreach (SerieIssueTypeEnum serieIssueTypeEnum in values)
-                manaxContext.SerieIssueTypes.Add(new SerieIssueType { Name = serieIssueTypeEnum.ToString() });
+            IEnumerable<InternalSerieIssueTypeEnum> values =
+                Enum.GetValues(typeof(InternalSerieIssueTypeEnum)).Cast<InternalSerieIssueTypeEnum>();
+            foreach (InternalSerieIssueTypeEnum serieIssueTypeEnum in values)
+                manaxContext.SerieIssueTypes.Add(new UserSerieIssueType { Name = serieIssueTypeEnum.ToString() });
             manaxContext.SaveChanges();
         }
 
         if (!manaxContext.ChapterIssueTypes.Any())
         {
-            IEnumerable<ChapterIssueTypeEnum> values =
-                Enum.GetValues(typeof(ChapterIssueTypeEnum)).Cast<ChapterIssueTypeEnum>();
-            foreach (ChapterIssueTypeEnum serieIssueTypeEnum in values)
-                manaxContext.ChapterIssueTypes.Add(new ChapterIssueType { Name = serieIssueTypeEnum.ToString() });
+            IEnumerable<InternalChapterIssueTypeEnum> values =
+                Enum.GetValues(typeof(InternalChapterIssueTypeEnum)).Cast<InternalChapterIssueTypeEnum>();
+            foreach (InternalChapterIssueTypeEnum serieIssueTypeEnum in values)
+                manaxContext.ChapterIssueTypes.Add(new UserChapterIssueType { Name = serieIssueTypeEnum.ToString() });
             manaxContext.SaveChanges();
         }
     }

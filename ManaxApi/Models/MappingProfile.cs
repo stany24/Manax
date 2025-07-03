@@ -1,5 +1,4 @@
 using AutoMapper;
-using ManaxApi.Models.Issue;
 using ManaxApi.Models.Rank;
 using ManaxLibrary.DTOs;
 using ManaxLibrary.DTOs.Issue;
@@ -34,8 +33,8 @@ public class MappingProfile : Profile
         CreateMap<LibraryUpdateDTO, Library.Library>();
 
         // Mappings des Issue
-        CreateMap<ChapterIssue, IssueDTO>();
-        CreateMap<IssueCreateDTO, ChapterIssue>();
+        CreateMap<UserChapterIssue, IssueDTO>();
+        CreateMap<IssueCreateDTO, UserChapterIssue>();
 
         // Mappings des Chapter
         CreateMap<Chapter.Chapter, ChapterDTO>();

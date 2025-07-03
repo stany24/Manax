@@ -1,5 +1,6 @@
 using ManaxApi.Models;
-using ManaxApi.Models.Issue;
+using ManaxApi.Models.Issue.Internal;
+using ManaxApi.Models.Issue.User;
 
 namespace ManaxApi.Services;
 
@@ -12,47 +13,47 @@ internal static class IssueManagerService
         _scopeFactory = scopeFactory;
     }
 
-    internal static bool CreateSerieIssue(long serieId, SerieIssueTypeEnum problem)
+    internal static bool CreateSerieIssue(long serieId, InternalSerieIssueTypeEnum problem)
     {
         using IServiceScope scope = _scopeFactory.CreateScope();
         ManaxContext context = scope.ServiceProvider.GetRequiredService<ManaxContext>();
 
-        SerieIssueType? issueType = context.SerieIssueTypes.FirstOrDefault(i => i.Name == problem.ToString());
+        UserSerieIssueType? issueType = context.SerieIssueTypes.FirstOrDefault(i => i.Name == problem.ToString());
         if (issueType == null) return false;
 
-        if (context.SerieIssues.Any(i => i.ProblemId == issueType.Id && i.SerieId == serieId)) return false;
+        if (context.InternalSerieIssues.Any(i => i.Problem == problem && i.SerieId == serieId)) return false;
 
-        SerieIssue issue = new()
+        InternalSerieIssue issue = new()
         {
             SerieId = serieId,
-            ProblemId = issueType.Id,
+            Problem = problem,
             CreatedAt = DateTime.UtcNow
         };
 
-        context.SerieIssues.Add(issue);
+        context.InternalSerieIssues.Add(issue);
         context.SaveChanges();
 
         return true;
     }
 
-    internal static bool CreateChapterIssue(long chapterId, ChapterIssueTypeEnum problem)
+    internal static bool CreateChapterIssue(long chapterId, InternalChapterIssueTypeEnum problem)
     {
         using IServiceScope scope = _scopeFactory.CreateScope();
         ManaxContext context = scope.ServiceProvider.GetRequiredService<ManaxContext>();
 
-        ChapterIssueType? issueType = context.ChapterIssueTypes.FirstOrDefault(i => i.Name == problem.ToString());
+        UserChapterIssueType? issueType = context.ChapterIssueTypes.FirstOrDefault(i => i.Name == problem.ToString());
         if (issueType == null) return false;
 
-        if (context.ChapterIssues.Any(i => i.ProblemId == issueType.Id && i.ChapterId == chapterId)) return false;
+        if (context.InternalChapterIssues.Any(i => i.Problem== problem && i.ChapterId == chapterId)) return false;
 
-        ChapterIssue issue = new()
+        InternalChapterIssue issue = new()
         {
             ChapterId = chapterId,
-            ProblemId = issueType.Id,
+            Problem = problem,
             CreatedAt = DateTime.UtcNow
         };
 
-        context.ChapterIssues.Add(issue);
+        context.InternalChapterIssues.Add(issue);
         context.SaveChanges();
 
         return true;

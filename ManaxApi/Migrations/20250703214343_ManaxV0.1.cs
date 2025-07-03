@@ -12,19 +12,6 @@ namespace ManaxApi.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "ChapterIssues",
-                columns: table => new
-                {
-                    ChapterId = table.Column<long>(type: "INTEGER", nullable: false),
-                    ProblemId = table.Column<long>(type: "INTEGER", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ChapterIssues", x => new { x.ChapterId, x.ProblemId });
-                });
-
-            migrationBuilder.CreateTable(
                 name: "ChapterIssueTypes",
                 columns: table => new
                 {
@@ -80,19 +67,6 @@ namespace ManaxApi.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Ranks", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "SerieIssues",
-                columns: table => new
-                {
-                    SerieId = table.Column<long>(type: "INTEGER", nullable: false),
-                    ProblemId = table.Column<long>(type: "INTEGER", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_SerieIssues", x => new { x.SerieId, x.ProblemId });
                 });
 
             migrationBuilder.CreateTable(
@@ -171,6 +145,25 @@ namespace ManaxApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "InternalSerieIssues",
+                columns: table => new
+                {
+                    SerieId = table.Column<long>(type: "INTEGER", nullable: false),
+                    Problem = table.Column<int>(type: "INTEGER", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_InternalSerieIssues", x => new { x.SerieId, x.Problem });
+                    table.ForeignKey(
+                        name: "FK_InternalSerieIssues_Series_SerieId",
+                        column: x => x.SerieId,
+                        principalTable: "Series",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "UserRanks",
                 columns: table => new
                 {
@@ -202,6 +195,59 @@ namespace ManaxApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "UserSerieIssues",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    UserId = table.Column<long>(type: "INTEGER", nullable: false),
+                    SerieId = table.Column<long>(type: "INTEGER", nullable: false),
+                    ProblemId = table.Column<long>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserSerieIssues", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UserSerieIssues_SerieIssueTypes_ProblemId",
+                        column: x => x.ProblemId,
+                        principalTable: "SerieIssueTypes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UserSerieIssues_Series_SerieId",
+                        column: x => x.SerieId,
+                        principalTable: "Series",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UserSerieIssues_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "InternalChapterIssues",
+                columns: table => new
+                {
+                    ChapterId = table.Column<long>(type: "INTEGER", nullable: false),
+                    Problem = table.Column<int>(type: "INTEGER", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_InternalChapterIssues", x => new { x.ChapterId, x.Problem });
+                    table.ForeignKey(
+                        name: "FK_InternalChapterIssues_Chapters_ChapterId",
+                        column: x => x.ChapterId,
+                        principalTable: "Chapters",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Reads",
                 columns: table => new
                 {
@@ -222,6 +268,40 @@ namespace ManaxApi.Migrations
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserChapterIssues",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    UserId = table.Column<long>(type: "INTEGER", nullable: false),
+                    ChapterId = table.Column<long>(type: "INTEGER", nullable: false),
+                    ProblemId = table.Column<long>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserChapterIssues", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UserChapterIssues_ChapterIssueTypes_ProblemId",
+                        column: x => x.ProblemId,
+                        principalTable: "ChapterIssueTypes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UserChapterIssues_Chapters_ChapterId",
+                        column: x => x.ChapterId,
+                        principalTable: "Chapters",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UserChapterIssues_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -264,6 +344,21 @@ namespace ManaxApi.Migrations
                 column: "LibraryId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_UserChapterIssues_ChapterId",
+                table: "UserChapterIssues",
+                column: "ChapterId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserChapterIssues_ProblemId",
+                table: "UserChapterIssues",
+                column: "ProblemId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserChapterIssues_UserId",
+                table: "UserChapterIssues",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_UserRanks_RankId",
                 table: "UserRanks",
                 column: "RankId");
@@ -278,16 +373,31 @@ namespace ManaxApi.Migrations
                 table: "Users",
                 column: "Username",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserSerieIssues_ProblemId",
+                table: "UserSerieIssues",
+                column: "ProblemId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserSerieIssues_SerieId",
+                table: "UserSerieIssues",
+                column: "SerieId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserSerieIssues_UserId",
+                table: "UserSerieIssues",
+                column: "UserId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "ChapterIssues");
+                name: "InternalChapterIssues");
 
             migrationBuilder.DropTable(
-                name: "ChapterIssueTypes");
+                name: "InternalSerieIssues");
 
             migrationBuilder.DropTable(
                 name: "LoginAttempts");
@@ -296,19 +406,25 @@ namespace ManaxApi.Migrations
                 name: "Reads");
 
             migrationBuilder.DropTable(
-                name: "SerieIssues");
-
-            migrationBuilder.DropTable(
-                name: "SerieIssueTypes");
+                name: "UserChapterIssues");
 
             migrationBuilder.DropTable(
                 name: "UserRanks");
+
+            migrationBuilder.DropTable(
+                name: "UserSerieIssues");
+
+            migrationBuilder.DropTable(
+                name: "ChapterIssueTypes");
 
             migrationBuilder.DropTable(
                 name: "Chapters");
 
             migrationBuilder.DropTable(
                 name: "Ranks");
+
+            migrationBuilder.DropTable(
+                name: "SerieIssueTypes");
 
             migrationBuilder.DropTable(
                 name: "Users");

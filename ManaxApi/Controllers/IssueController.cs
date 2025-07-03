@@ -1,7 +1,6 @@
 using AutoMapper;
 using ManaxApi.Auth;
 using ManaxApi.Models;
-using ManaxApi.Models.Issue;
 using ManaxLibrary.DTOs.Issue;
 using ManaxLibrary.DTOs.User;
 using Microsoft.AspNetCore.Mvc;
@@ -18,7 +17,7 @@ public class IssueController(ManaxContext context, IMapper mapper) : ControllerB
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<IssueDTO>))]
     public async Task<ActionResult<IEnumerable<IssueDTO>>> GetAllIssues()
     {
-        List<ChapterIssue> issues = await context.ChapterIssues.ToListAsync();
+        List<UserChapterIssue> issues = await context.UserChapterIssues.ToListAsync();
         return mapper.Map<List<IssueDTO>>(issues);
     }
 
@@ -28,9 +27,9 @@ public class IssueController(ManaxContext context, IMapper mapper) : ControllerB
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult> CreateIssue(IssueCreateDTO issueCreate)
     {
-        ChapterIssue? issue = mapper.Map<ChapterIssue>(issueCreate);
+        UserChapterIssue? issue = mapper.Map<UserChapterIssue>(issueCreate);
 
-        context.ChapterIssues.Add(issue);
+        context.UserChapterIssues.Add(issue);
         await context.SaveChangesAsync();
 
         return NoContent();
@@ -42,11 +41,11 @@ public class IssueController(ManaxContext context, IMapper mapper) : ControllerB
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> CloseIssue(long id)
     {
-        ChapterIssue? issue = await context.ChapterIssues.FindAsync(id);
+        UserChapterIssue? issue = await context.UserChapterIssues.FindAsync(id);
 
         if (issue == null) return NotFound();
 
-        context.ChapterIssues.Remove(issue);
+        context.UserChapterIssues.Remove(issue);
         await context.SaveChangesAsync();
 
         return NoContent();
