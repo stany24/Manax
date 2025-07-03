@@ -13,9 +13,11 @@
             DockPanel.Dock="Top"
             Orientation="Vertical">
             <Label
-                Content="{Binding Library.Name}"></Label>
+                Content="{Binding Library.Name}" />
             <Button
-                Command="{Binding UploadDefault}">Upload</Button>
+                Command="{Binding UploadDefault}">
+                Upload
+            </Button>
         </StackPanel>
         <ItemsControl
             ItemsSource="{Binding Series}">
@@ -24,13 +26,12 @@
                     <controls:SeriePreview
                         Serie="{Binding .}"
                         Command="{Binding $parent[UserControl].((login:LibraryPageViewModel)DataContext).MoveToSeriePage}"
-                        CommandParameter="{Binding .}">
-                    </controls:SeriePreview>
+                        CommandParameter="{Binding .}" />
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <WrapPanel ItemSpacing="5"/>
+                    <WrapPanel ItemSpacing="5" />
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
         </ItemsControl>

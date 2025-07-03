@@ -1,12 +1,13 @@
-using ManaxApi.Services;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
+using ManaxApi.Middleware;
 using ManaxApi.Models;
 using ManaxApi.Models.Issue;
-using ManaxApi.Middleware;
+using ManaxApi.Models.Rank;
+using ManaxApi.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace ManaxApi;
 
@@ -21,7 +22,7 @@ public static class Program
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
         builder.Services.AddHttpContextAccessor();
-        
+
         string secretKey = JwtService.GetSecretKey();
         builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
@@ -38,10 +39,10 @@ public static class Program
 
         builder.Services.AddDbContext<ManaxContext>(opt =>
             opt.UseSqlite($"Data Source={Path.Combine(AppContext.BaseDirectory, "database.db")}"));
-        
+
         // Configuration AutoMapper
         builder.Services.AddAutoMapper(typeof(MappingProfile));
-        
+
         builder.Services.Configure<KestrelServerOptions>(options =>
         {
             options.Limits.MaxRequestBodySize = int.MaxValue;
@@ -55,15 +56,15 @@ public static class Program
             options.MultipartBodyLengthLimit = int.MaxValue;
             options.MemoryBufferThreshold = int.MaxValue;
         });
-        
+
         WebApplication app = builder.Build();
-        
+
         Migrate(app);
-        
+
         // Initialisation du singleton ScanService
         ScanService.Initialize(app.Services.GetRequiredService<IServiceScopeFactory>());
         IssueManagerService.Initialize(app.Services.GetRequiredService<IServiceScopeFactory>());
-        
+
         app.UseMiddleware<GlobalExceptionMiddleware>();
 
         if (app.Environment.IsDevelopment())
@@ -73,7 +74,7 @@ public static class Program
         }
 
         app.UseHttpsRedirection();
-        
+
         app.UseAuthentication();
         app.UseAuthorization();
 
@@ -87,39 +88,37 @@ public static class Program
         using IServiceScope scope = app.Services.CreateScope();
         ManaxContext manaxContext = scope.ServiceProvider.GetRequiredService<ManaxContext>();
         manaxContext.Database.Migrate();
-        
+
         if (!manaxContext.Ranks.Any())
         {
             manaxContext.Ranks.AddRange(
-                new Models.Rank.Rank { Name = "SSS", Value = 16 },
-                new Models.Rank.Rank { Name = "SS", Value = 14 },
-                new Models.Rank.Rank { Name = "S", Value = 12 },
-                new Models.Rank.Rank { Name = "A", Value = 10 },
-                new Models.Rank.Rank { Name = "B", Value = 8 },
-                new Models.Rank.Rank { Name = "C", Value = 6 },
-                new Models.Rank.Rank { Name = "D", Value = 4 },
-                new Models.Rank.Rank { Name = "E", Value = 2 }
+                new Rank { Name = "SSS", Value = 16 },
+                new Rank { Name = "SS", Value = 14 },
+                new Rank { Name = "S", Value = 12 },
+                new Rank { Name = "A", Value = 10 },
+                new Rank { Name = "B", Value = 8 },
+                new Rank { Name = "C", Value = 6 },
+                new Rank { Name = "D", Value = 4 },
+                new Rank { Name = "E", Value = 2 }
             );
             manaxContext.SaveChanges();
         }
 
         if (!manaxContext.SerieIssueTypes.Any())
         {
-            IEnumerable<SerieIssueTypeEnum> values = Enum.GetValues(typeof(SerieIssueTypeEnum)).Cast<SerieIssueTypeEnum>();
+            IEnumerable<SerieIssueTypeEnum> values =
+                Enum.GetValues(typeof(SerieIssueTypeEnum)).Cast<SerieIssueTypeEnum>();
             foreach (SerieIssueTypeEnum serieIssueTypeEnum in values)
-            {
-                manaxContext.SerieIssueTypes.Add(new SerieIssueType {Name = serieIssueTypeEnum.ToString()});
-            }
+                manaxContext.SerieIssueTypes.Add(new SerieIssueType { Name = serieIssueTypeEnum.ToString() });
             manaxContext.SaveChanges();
         }
-        
+
         if (!manaxContext.ChapterIssueTypes.Any())
         {
-            IEnumerable<ChapterIssueTypeEnum> values = Enum.GetValues(typeof(ChapterIssueTypeEnum)).Cast<ChapterIssueTypeEnum>();
+            IEnumerable<ChapterIssueTypeEnum> values =
+                Enum.GetValues(typeof(ChapterIssueTypeEnum)).Cast<ChapterIssueTypeEnum>();
             foreach (ChapterIssueTypeEnum serieIssueTypeEnum in values)
-            {
-                manaxContext.ChapterIssueTypes.Add(new ChapterIssueType {Name = serieIssueTypeEnum.ToString()});
-            }
+                manaxContext.ChapterIssueTypes.Add(new ChapterIssueType { Name = serieIssueTypeEnum.ToString() });
             manaxContext.SaveChanges();
         }
     }

@@ -1,19 +1,19 @@
 using System;
-using Avalonia.Controls;
-using Avalonia.Layout;
-using Avalonia.Interactivity;
-using ManaxLibrary.DTOs.Library;
 using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Input;
+using Avalonia.Interactivity;
+using Avalonia.Layout;
+using ManaxLibrary.DTOs.Library;
 
 namespace ManaxApp.Controls;
 
 public class LibraryCreatePopup : Popup
 {
-    private readonly TextBox _nameBox;
-    private readonly TextBox _pathBox;
-    private readonly Button _okButton;
     private readonly Button _cancelButton;
+    private readonly TextBox _nameBox;
+    private readonly Button _okButton;
+    private readonly TextBox _pathBox;
     private LibraryCreateDTO? _result;
 
     public LibraryCreatePopup()
@@ -22,7 +22,7 @@ public class LibraryCreatePopup : Popup
         MaxWidth = 500;
         HorizontalAlignment = HorizontalAlignment.Center;
         VerticalAlignment = VerticalAlignment.Center;
-        
+
         Grid grid = new()
         {
             Margin = new Thickness(10),
@@ -30,7 +30,7 @@ public class LibraryCreatePopup : Popup
             RowDefinitions = new RowDefinitions("Auto,Auto,Auto"),
             ColumnDefinitions = new ColumnDefinitions("Auto,10,*")
         };
-        
+
         TextBlock nameLabel = new()
         {
             Text = "Name:",
@@ -39,12 +39,12 @@ public class LibraryCreatePopup : Popup
         Grid.SetRow(nameLabel, 0);
         Grid.SetColumn(nameLabel, 0);
         grid.Children.Add(nameLabel);
-        
+
         _nameBox = new TextBox();
         Grid.SetRow(_nameBox, 0);
         Grid.SetColumn(_nameBox, 2);
         grid.Children.Add(_nameBox);
-        
+
         TextBlock pathLabel = new()
         {
             Text = "Path:",
@@ -53,15 +53,15 @@ public class LibraryCreatePopup : Popup
         Grid.SetRow(pathLabel, 1);
         Grid.SetColumn(pathLabel, 0);
         grid.Children.Add(pathLabel);
-        
+
         _pathBox = new TextBox();
         Grid.SetRow(_pathBox, 1);
         Grid.SetColumn(_pathBox, 2);
         grid.Children.Add(_pathBox);
-        
+
         Grid buttonGrid = new()
         {
-            ColumnDefinitions = new ColumnDefinitions("*,10,*"),
+            ColumnDefinitions = new ColumnDefinitions("*,10,*")
         };
         _okButton = new Button
         {
@@ -72,7 +72,7 @@ public class LibraryCreatePopup : Popup
         };
         Grid.SetColumn(_okButton, 2);
         _okButton.Click += OkButton_Click;
-        
+
         _cancelButton = new Button
         {
             Content = "Cancel",
@@ -81,14 +81,14 @@ public class LibraryCreatePopup : Popup
         };
         Grid.SetColumn(_cancelButton, 0);
         _cancelButton.Click += CancelButton_Click;
-        
+
         buttonGrid.Children.Add(_okButton);
         buttonGrid.Children.Add(_cancelButton);
         Grid.SetRow(buttonGrid, 3);
         Grid.SetColumn(buttonGrid, 0);
         Grid.SetColumnSpan(buttonGrid, 3);
         grid.Children.Add(buttonGrid);
-        
+
         Content = grid;
     }
 
@@ -107,5 +107,8 @@ public class LibraryCreatePopup : Popup
         CloseRequested?.Invoke(this, EventArgs.Empty);
     }
 
-    public LibraryCreateDTO? GetResult() => _result;
+    public LibraryCreateDTO? GetResult()
+    {
+        return _result;
+    }
 }

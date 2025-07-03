@@ -1,11 +1,11 @@
 using AutoMapper;
-using ManaxApi.Models;
-using Microsoft.AspNetCore.Mvc;
-using ManaxApi.Models.Rank;
-using Microsoft.EntityFrameworkCore;
 using ManaxApi.Auth;
+using ManaxApi.Models;
+using ManaxApi.Models.Rank;
 using ManaxLibrary.DTOs.Rank;
 using ManaxLibrary.DTOs.User;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace ManaxApi.Controllers;
 
@@ -18,7 +18,9 @@ public class RankController(ManaxContext context, IMapper mapper) : ControllerBa
     [AuthorizeRole(UserRole.User)]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<RankDTO>))]
     public async Task<ActionResult<IEnumerable<RankDTO>>> GetRanks()
-        => await context.Ranks.Select(r => mapper.Map<RankDTO>(r)).ToListAsync();
+    {
+        return await context.Ranks.Select(r => mapper.Map<RankDTO>(r)).ToListAsync();
+    }
 
     // POST: api/rank
     [HttpPost]
@@ -42,7 +44,7 @@ public class RankController(ManaxContext context, IMapper mapper) : ControllerBa
     {
         if (id != rank.Id) return BadRequest("Rank ID mismatch");
         Rank? found = context.Ranks.FirstOrDefault(r => r.Id == rank.Id);
-        if (found == null) { return NotFound();}
+        if (found == null) return NotFound();
         found.Name = rank.Name;
         found.Value = rank.Value;
         await context.SaveChangesAsync();
@@ -62,7 +64,7 @@ public class RankController(ManaxContext context, IMapper mapper) : ControllerBa
         await context.SaveChangesAsync();
         return NoContent();
     }
-    
+
     [HttpPost("set")]
     [AuthorizeRole(UserRole.User)]
     public async Task<IActionResult> SetUserRank(UserRankCreateDTO rank)
@@ -70,7 +72,8 @@ public class RankController(ManaxContext context, IMapper mapper) : ControllerBa
         long? userId = UserController.GetCurrentUserId(HttpContext);
         if (userId == null) return Unauthorized();
 
-        UserRank? existing = await context.UserRanks.FirstOrDefaultAsync(ur => ur.UserId == userId.Value && ur.SerieId == rank.SerieId);
+        UserRank? existing =
+            await context.UserRanks.FirstOrDefaultAsync(ur => ur.UserId == userId.Value && ur.SerieId == rank.SerieId);
         if (existing != null)
         {
             existing.RankId = rank.RankId;
@@ -85,10 +88,11 @@ public class RankController(ManaxContext context, IMapper mapper) : ControllerBa
             };
             context.UserRanks.Add(userRank);
         }
+
         await context.SaveChangesAsync();
         return NoContent();
     }
-    
+
     // GET: api/rank
     [HttpGet("/api/ranking")]
     [AuthorizeRole(UserRole.User)]
@@ -97,7 +101,7 @@ public class RankController(ManaxContext context, IMapper mapper) : ControllerBa
     public async Task<ActionResult<IEnumerable<UserRankDTO>>> GetRanking()
     {
         long? currentUserId = UserController.GetCurrentUserId(HttpContext);
-        if (currentUserId == null) { return Unauthorized(); }
+        if (currentUserId == null) return Unauthorized();
         return await context.UserRanks
             .Where(r => r.UserId == currentUserId)
             .Select(r => mapper.Map<UserRankDTO>(r)).ToListAsync();

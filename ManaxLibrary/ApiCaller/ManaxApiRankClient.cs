@@ -32,7 +32,7 @@ public static class ManaxApiRankClient
 
     public static async Task<bool> SetUserRankAsync(UserRankCreateDTO rank)
     {
-        HttpResponseMessage response = await ManaxApiClient.Client.PostAsJsonAsync("/api/rank/set",rank);
+        HttpResponseMessage response = await ManaxApiClient.Client.PostAsJsonAsync("/api/rank/set", rank);
         return response.IsSuccessStatusCode;
     }
 
@@ -42,5 +42,4 @@ public static class ManaxApiRankClient
         if (!response.IsSuccessStatusCode) return null;
         return await response.Content.ReadFromJsonAsync<List<UserRankDTO>>();
     }
-    
 }

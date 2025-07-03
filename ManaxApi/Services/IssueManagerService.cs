@@ -19,11 +19,8 @@ internal static class IssueManagerService
 
         SerieIssueType? issueType = context.SerieIssueTypes.FirstOrDefault(i => i.Name == problem.ToString());
         if (issueType == null) return false;
-        
-        if (context.SerieIssues.Any(i => i.ProblemId == issueType.Id && i.SerieId == serieId))
-        {
-            return false;
-        }
+
+        if (context.SerieIssues.Any(i => i.ProblemId == issueType.Id && i.SerieId == serieId)) return false;
 
         SerieIssue issue = new()
         {
@@ -45,11 +42,8 @@ internal static class IssueManagerService
 
         ChapterIssueType? issueType = context.ChapterIssueTypes.FirstOrDefault(i => i.Name == problem.ToString());
         if (issueType == null) return false;
-        
-        if (context.ChapterIssues.Any(i => i.ProblemId == issueType.Id && i.ChapterId == chapterId))
-        {
-            return false;
-        }
+
+        if (context.ChapterIssues.Any(i => i.ProblemId == issueType.Id && i.ChapterId == chapterId)) return false;
 
         ChapterIssue issue = new()
         {

@@ -9,19 +9,19 @@ public static class ManaxApiScanClient
         HttpResponseMessage response = await ManaxApiClient.Client.GetAsync($"api/scan/library/{id}");
         return response.IsSuccessStatusCode;
     }
-    
+
     public static async Task<bool> ScanSerieAsync(long id)
     {
         HttpResponseMessage response = await ManaxApiClient.Client.GetAsync($"api/scan/serie/{id}");
         return response.IsSuccessStatusCode;
     }
-    
+
     public static async Task<bool> ScanChapterAsync(long id)
     {
         HttpResponseMessage response = await ManaxApiClient.Client.GetAsync($"api/scan/chapter/{id}");
         return response.IsSuccessStatusCode;
     }
-    
+
     public static async Task<Dictionary<string, int>?> GetTasksAsync()
     {
         try
@@ -30,6 +30,9 @@ public static class ManaxApiScanClient
             if (!response.IsSuccessStatusCode) return null;
             return await response.Content.ReadFromJsonAsync<Dictionary<string, int>>();
         }
-        catch (Exception) { return null; }
+        catch (Exception)
+        {
+            return null;
+        }
     }
 }

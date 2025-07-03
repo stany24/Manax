@@ -13,8 +13,9 @@ public class Serie
 {
     public long Id { get; set; }
     public long LibraryId { get; set; }
-    [ForeignKey(nameof(LibraryId))]
-    public Library.Library Library { get; set; } = null!;
+
+    [ForeignKey(nameof(LibraryId))] public Library.Library Library { get; set; } = null!;
+
     public string FolderName { get; set; } = string.Empty;
     public string Title { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;

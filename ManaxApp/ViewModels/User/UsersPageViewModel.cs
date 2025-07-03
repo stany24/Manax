@@ -40,7 +40,7 @@ public partial class UsersPageViewModel : PageViewModel
     {
         Task.Run(async () =>
         {
-            UserCreateDTO user = new() { Username = "user", Password ="user"};
+            UserCreateDTO user = new() { Username = "user", Password = "user" };
             long? id = await ManaxApiUserClient.PostUserAsync(user);
             if (id == null) return;
             UserDTO? createdUser = await ManaxApiUserClient.GetUserAsync((long)id);
@@ -49,7 +49,7 @@ public partial class UsersPageViewModel : PageViewModel
         });
         Task.Run(async () =>
         {
-            UserCreateDTO user = new() { Username = "admin", Password ="admin", Role = UserRole.Admin };
+            UserCreateDTO user = new() { Username = "admin", Password = "admin", Role = UserRole.Admin };
             long? id = await ManaxApiUserClient.PostUserAsync(user);
             if (id == null) return;
             UserDTO? createdUser = await ManaxApiUserClient.GetUserAsync((long)id);

@@ -48,16 +48,14 @@ public class UserController(ManaxContext context, IMapper mapper) : ControllerBa
     public async Task<IActionResult> PutUser(long id, UserUpdateDTO userUpdate)
     {
         User? user = await context.Users.FindAsync(id);
-        
+
         if (user == null) return NotFound();
-        
+
         mapper.Map(userUpdate, user);
-        
+
         // Si un nouveau mot de passe est fourni, le hasher
         if (!string.IsNullOrEmpty(userUpdate.Password))
-        {
             user.PasswordHash = HashService.HashPassword(userUpdate.Password);
-        }
 
         try
         {
@@ -79,10 +77,10 @@ public class UserController(ManaxContext context, IMapper mapper) : ControllerBa
     public async Task<ActionResult<long>> PostUser(UserCreateDTO userCreate)
     {
         User? user = mapper.Map<User>(userCreate);
-        
+
         // Hasher le mot de passe
         user.PasswordHash = HashService.HashPassword(userCreate.Password);
-        
+
         context.Users.Add(user);
         await context.SaveChangesAsync();
 
@@ -110,9 +108,9 @@ public class UserController(ManaxContext context, IMapper mapper) : ControllerBa
         if (self == null)
             return Unauthorized();
 
-        if(self.Role == UserRole.Admin && userToDelete.Role is UserRole.Admin or UserRole.Owner)
+        if (self.Role == UserRole.Admin && userToDelete.Role is UserRole.Admin or UserRole.Owner)
             return Forbid();
-        
+
         context.Users.Remove(userToDelete);
         await context.SaveChangesAsync();
 
@@ -140,7 +138,7 @@ public class UserController(ManaxContext context, IMapper mapper) : ControllerBa
             await context.SaveChangesAsync();
             return Unauthorized();
         }
-        
+
         loginAttempt.Success = true;
         context.LoginAttempts.Add(loginAttempt);
         await context.SaveChangesAsync();
@@ -180,7 +178,7 @@ public class UserController(ManaxContext context, IMapper mapper) : ControllerBa
             Type = "Claim",
             Success = false
         };
-        
+
         lock (_claimLock)
         {
             if (context.Users.Any())

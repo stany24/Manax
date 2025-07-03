@@ -17,12 +17,41 @@ namespace ManaxApp.ViewModels;
 
 public partial class MainWindowViewModel : ObservableObject
 {
+    private readonly PageHistoryManager _history = new();
     [ObservableProperty] private ObservableCollection<string> _infos = [];
-    [ObservableProperty] private Popup? _popup;
     [ObservableProperty] private bool _isAdmin;
+    [ObservableProperty] private Popup? _popup;
     [ObservableProperty] private ObservableCollection<TaskItem> _runningTasks = [];
 
-    private readonly PageHistoryManager _history = new();
+    public MainWindowViewModel()
+    {
+        _history.PageChanged += _ =>
+        {
+            if (CurrentPageViewModel == null) return;
+            CurrentPageViewModel.Admin = IsAdmin;
+            CurrentPageViewModel.PageChangedRequested += (_, e) => { SetPage(e); };
+            CurrentPageViewModel.PopupRequested += (_, e) =>
+            {
+                Popup = e;
+                if (Popup is not null) Popup.Closed += (_, _) => Popup = null;
+            };
+            CurrentPageViewModel.InfoEmitted += (_, e) => { Infos.Add(e); };
+            CurrentPageViewModel.PreviousRequested += (_, _) => GoBack();
+            CurrentPageViewModel.NextRequested += (_, _) => GoForward();
+        };
+
+        _history.PageChanging += _ =>
+        {
+            if (CurrentPageViewModel is not LoginPageViewModel login) return;
+            Dispatcher.UIThread.Post(() =>
+            {
+                IsAdmin = login.IsAdmin();
+                UpdateRunningTasks();
+            });
+        };
+
+        SetPage(new LoginPageViewModel());
+    }
 
     public bool CanGoBack => _history.CanGoBack;
     public bool CanGoForward => _history.CanGoForward;
@@ -48,67 +77,44 @@ public partial class MainWindowViewModel : ObservableObject
 
     private void UpdateRunningTasks()
     {
-        if(!IsAdmin){return;}
+        if (!IsAdmin) return;
         Task.Run(() =>
         {
             while (true)
             {
                 Thread.Sleep(1000);
-                
+
                 Dictionary<string, int>? tasks = ManaxApiScanClient.GetTasksAsync().Result;
-                if (tasks == null) { continue; }
+                if (tasks == null) continue;
 
                 Dispatcher.UIThread.Invoke(() =>
                 {
                     RunningTasks.Clear();
 
                     foreach (KeyValuePair<string, int> task in tasks)
-                    {
                         RunningTasks.Add(new TaskItem { TaskName = task.Key, Number = task.Value });
-                    }
                 });
             }
         });
     }
-    
-    public MainWindowViewModel()
-    {
-        _history.PageChanged += _ =>
-        {
-            if (CurrentPageViewModel == null) return;
-            CurrentPageViewModel.Admin = IsAdmin;
-            CurrentPageViewModel.PageChangedRequested += (_, e) => { SetPage(e); };
-            CurrentPageViewModel.PopupRequested += (_, e) =>
-            {
-                Popup = e;
-                if (Popup is not null)
-                {
-                    Popup.Closed += (_, _) => Popup = null;
-                }
-            };
-            CurrentPageViewModel.InfoEmitted += (_, e) =>
-            {
-                Infos.Add(e);
-            };
-            CurrentPageViewModel.PreviousRequested += (_, _) => GoBack();
-            CurrentPageViewModel.NextRequested += (_, _) => GoForward();
-        };
 
-        _history.PageChanging += _ =>
-        {
-            if (CurrentPageViewModel is not LoginPageViewModel login) return;
-            Dispatcher.UIThread.Post(() =>
-            {
-                IsAdmin = login.IsAdmin();
-                UpdateRunningTasks();
-            });
-        };
-        
-        SetPage(new LoginPageViewModel());
+    public void ChangePageHome()
+    {
+        SetPage(new HomePageViewModel());
     }
 
-    public void ChangePageHome() => SetPage(new HomePageViewModel());
-    public void ChangePageLibraries() => SetPage(new LibrariesPageViewModel());
-    public void ChangePageIssues() => SetPage(new IssuesPageViewModel());
-    public void ChangePageUsers() => SetPage(new UsersPageViewModel());
+    public void ChangePageLibraries()
+    {
+        SetPage(new LibrariesPageViewModel());
+    }
+
+    public void ChangePageIssues()
+    {
+        SetPage(new IssuesPageViewModel());
+    }
+
+    public void ChangePageUsers()
+    {
+        SetPage(new UsersPageViewModel());
+    }
 }

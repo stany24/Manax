@@ -1,3 +1,6 @@
+// ReSharper disable UnusedAutoPropertyAccessor.Global
+// ReSharper disable UnusedMember.Global
+
 namespace ManaxApi.Models;
 
 public class ApiError

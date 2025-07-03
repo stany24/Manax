@@ -33,9 +33,9 @@ public class SerieController(ManaxContext context, IMapper mapper) : ControllerB
         Serie? serie = await context.Series
             .AsNoTracking()
             .FirstOrDefaultAsync(l => l.Id == id);
-            
+
         if (serie == null) return NotFound();
-        
+
         return mapper.Map<SerieDTO>(serie);
     }
 
@@ -53,7 +53,7 @@ public class SerieController(ManaxContext context, IMapper mapper) : ControllerB
 
         return chaptersIds;
     }
-    
+
     // GET: api/serie/{id}/poster
     [HttpGet("{id:long}/poster")]
     [AuthorizeRole(UserRole.User)]
@@ -64,7 +64,7 @@ public class SerieController(ManaxContext context, IMapper mapper) : ControllerB
     {
         Serie? serie = await context.Series.FindAsync(id);
         if (serie == null) return NotFound();
-        string posterPath = Path.Combine(serie.Path,"poster.webp");
+        string posterPath = Path.Combine(serie.Path, "poster.webp");
         if (!System.IO.File.Exists(posterPath)) return NotFound();
         byte[] readAllBytes = await System.IO.File.ReadAllBytesAsync(posterPath);
         return File(readAllBytes, "image/webp", "poster.webp");
@@ -79,9 +79,9 @@ public class SerieController(ManaxContext context, IMapper mapper) : ControllerB
     public async Task<IActionResult> PutSerie(long id, SerieUpdateDTO serieUpdate)
     {
         Serie? serie = await context.Series.FindAsync(id);
-        
+
         if (serie == null) return NotFound();
-        
+
         mapper.Map(serieUpdate, serie);
 
         try
@@ -107,14 +107,11 @@ public class SerieController(ManaxContext context, IMapper mapper) : ControllerB
         Library? library = context.Libraries.FirstOrDefault(l => l.Id == serieCreate.LibraryId);
         if (library == null)
             return BadRequest("The library does not exist");
-        
+
         try
         {
             string folderPath = library.Path + serieCreate.Title;
-            if(System.IO.File.Exists(folderPath))
-            {
-                return BadRequest("The serie already exists");
-            }
+            if (System.IO.File.Exists(folderPath)) return BadRequest("The serie already exists");
             Directory.CreateDirectory(folderPath);
             Serie serie = new()
             {

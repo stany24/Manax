@@ -32,7 +32,7 @@ public class IssueController(ManaxContext context, IMapper mapper) : ControllerB
 
         context.ChapterIssues.Add(issue);
         await context.SaveChangesAsync();
-        
+
         return NoContent();
     }
 

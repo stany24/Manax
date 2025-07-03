@@ -13,22 +13,22 @@ namespace ManaxApi.Services;
 public static partial class ScanService
 {
     private static IServiceScopeFactory _scopeFactory = null!;
-    
+
     [GeneratedRegex("\\d{1,4}")]
     private static partial Regex RegexNumber();
-    
+
     public static void Initialize(IServiceScopeFactory scopeFactory)
     {
         _scopeFactory = scopeFactory;
     }
-    
+
     public static void ScanLibrary(Library library)
     {
         Console.WriteLine("Scanning library: " + library.Name);
-        
+
         using IServiceScope scope = _scopeFactory.CreateScope();
         ManaxContext manaxContext = scope.ServiceProvider.GetRequiredService<ManaxContext>();
-        
+
         string[] directories = Directory.GetDirectories(library.Path);
 
         foreach (string directory in directories)
@@ -49,7 +49,7 @@ public static partial class ScanService
                 manaxContext.Series.Add(serie);
                 manaxContext.SaveChanges();
             }
-            
+
             _ = TaskManagerService.AddTaskAsync(new SerieScanTask(serie.Id));
         }
     }
@@ -58,10 +58,10 @@ public static partial class ScanService
     {
         using IServiceScope scope = _scopeFactory.CreateScope();
         ManaxContext manaxContext = scope.ServiceProvider.GetRequiredService<ManaxContext>();
-        
+
         Serie? serie = manaxContext.Series.Find(serieId);
         if (serie == null) return;
-        
+
         Console.WriteLine("Scanning serie: " + serie.Title);
         string[] files = Directory.GetFiles(serie.Path);
 
@@ -70,7 +70,8 @@ public static partial class ScanService
         foreach (string file in chapters)
         {
             string fileName = Path.GetFileName(file);
-            Chapter? chapter = manaxContext.Chapters.FirstOrDefault(s => s.FileName == fileName && s.SerieId == serie.Id);
+            Chapter? chapter =
+                manaxContext.Chapters.FirstOrDefault(s => s.FileName == fileName && s.SerieId == serie.Id);
 
             if (chapter == null)
             {
@@ -85,10 +86,10 @@ public static partial class ScanService
                 manaxContext.Chapters.Add(chapter);
                 manaxContext.SaveChanges();
             }
-            
+
             _ = TaskManagerService.AddTaskAsync(new ChapterScanTask(chapter.Id));
         }
-        
+
         CheckSerie(serieId);
     }
 
@@ -100,7 +101,7 @@ public static partial class ScanService
         if (serie == null) return;
         manaxContext.SerieIssues.RemoveRange(manaxContext.SerieIssues.Where(i => i.SerieId == serieId));
         manaxContext.SaveChanges();
-        
+
         CheckPoster(serie);
         CheckMissingChapters(serie);
         CheckDescription(serie);
@@ -122,7 +123,8 @@ public static partial class ScanService
     private static void CheckPoster(Serie serie)
     {
         string[] files = Directory.GetFiles(serie.Path);
-        List<string> posters = files.Where(f => Path.GetFileName(f).StartsWith("poster.", StringComparison.CurrentCultureIgnoreCase)).ToList();
+        List<string> posters = files
+            .Where(f => Path.GetFileName(f).StartsWith("poster.", StringComparison.CurrentCultureIgnoreCase)).ToList();
         switch (posters.Count)
         {
             case 0:
@@ -131,24 +133,23 @@ public static partial class ScanService
             case 1:
                 string poster = posters.First();
                 if (!Path.GetExtension(poster).Equals(".webp", StringComparison.CurrentCultureIgnoreCase))
-                {
                     IssueManagerService.CreateSerieIssue(serie.Id, SerieIssueTypeEnum.PosterWrongFormat);
-                }
                 break;
             case > 1:
                 IssueManagerService.CreateSerieIssue(serie.Id, SerieIssueTypeEnum.PosterDuplicate);
                 break;
         }
     }
-    
+
     private static void CheckMissingChapters(Serie serie)
     {
         string[] chapters = Directory.GetFiles(serie.Path);
-        if(chapters.Length == 0)
+        if (chapters.Length == 0)
         {
             IssueManagerService.CreateSerieIssue(serie.Id, SerieIssueTypeEnum.MissingChapter);
             return;
         }
+
         Array.Sort(chapters);
         Regex regex = RegexNumber();
         string last = Path.GetFileName(chapters[^1]);
@@ -162,15 +163,15 @@ public static partial class ScanService
     {
         using IServiceScope scope = _scopeFactory.CreateScope();
         ManaxContext manaxContext = scope.ServiceProvider.GetRequiredService<ManaxContext>();
-        
+
         Chapter? chapter = manaxContext.Chapters.Find(chapterId);
         if (chapter == null) return;
-        
+
         Console.WriteLine("Scanning chapter: " + chapter.FileName);
-        
+
         CheckChapter(chapterId);
     }
-    
+
     private static void CheckChapter(long chapterId)
     {
         using IServiceScope scope = _scopeFactory.CreateScope();
@@ -179,13 +180,13 @@ public static partial class ScanService
         if (chapter == null) return;
 
         chapter.Pages = ZipFile.OpenRead(chapter.Path).Entries.Count;
-        
+
         manaxContext.ChapterIssues.RemoveRange(manaxContext.ChapterIssues.Where(i => i.ChapterId == chapterId));
         manaxContext.SaveChanges();
-        
+
         CheckChapterDeep(chapter);
     }
-    
+
     private static void CheckChapterDeep(Chapter chapter)
     {
         string copyName = Path.Combine(Directory.GetCurrentDirectory(), Path.GetRandomFileName());
@@ -207,13 +208,11 @@ public static partial class ScanService
         CheckMissingPages(chapter.Id, files);
         Directory.Delete(copyName, true);
     }
-    
+
     private static void CheckNames(long id, string[] chapterFiles)
     {
         if (chapterFiles.Any(file => !Path.GetFileName(file).StartsWith('P')))
-        {
             IssueManagerService.CreateChapterIssue(id, ChapterIssueTypeEnum.BadPageNaming);
-        }
     }
 
     private static void CheckMissingPages(long id, string[] chapterFiles)
@@ -229,13 +228,10 @@ public static partial class ScanService
 
     private static void CheckWidthOfChapter(long id, string[] images)
     {
-        foreach (string image in images)
-        {
-            CheckSizeOfImage(id,image);
-        }
+        foreach (string image in images) CheckSizeOfImage(id, image);
     }
 
-    private static void CheckSizeOfImage(long id,string file)
+    private static void CheckSizeOfImage(long id, string file)
     {
         try
         {
@@ -260,8 +256,6 @@ public static partial class ScanService
     private static void CheckChapterFilesAreWebp(long id, string[] chapterFiles)
     {
         if (chapterFiles.Any(file => !Path.GetFileName(file).EndsWith(".webp")))
-        {
             IssueManagerService.CreateChapterIssue(id, ChapterIssueTypeEnum.CouldNotOpen);
-        }
     }
 }

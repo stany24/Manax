@@ -94,12 +94,12 @@
                         BorderThickness="0,0,0,1"
                         Padding="5,2">
                         <Label
-                            Content="{Binding .}"/>
+                            Content="{Binding .}" />
                     </Border>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
-        
+
         <Canvas
             IsVisible="{Binding Popup, Converter={StaticResource NullToBoolConverter}}"
             HorizontalAlignment="Stretch"
@@ -115,6 +115,6 @@
             VerticalAlignment="Stretch"
             VerticalContentAlignment="Center"
             HorizontalContentAlignment="Center"
-            Content="{Binding Popup}"></ContentControl>
+            Content="{Binding Popup}" />
     </Panel>
 </Window>

@@ -4,7 +4,10 @@ using ManaxApi.Models;
 
 namespace ManaxApi.Middleware;
 
-public class GlobalExceptionMiddleware(RequestDelegate next, ILogger<GlobalExceptionMiddleware> logger, IWebHostEnvironment env)
+public class GlobalExceptionMiddleware(
+    RequestDelegate next,
+    ILogger<GlobalExceptionMiddleware> logger,
+    IWebHostEnvironment env)
 {
     public async System.Threading.Tasks.Task InvokeAsync(HttpContext context)
     {
@@ -21,18 +24,18 @@ public class GlobalExceptionMiddleware(RequestDelegate next, ILogger<GlobalExcep
     private async System.Threading.Tasks.Task HandleExceptionAsync(HttpContext context, Exception exception)
     {
         logger.LogError(exception, "An unhandled error occurred: {Message}", exception.Message);
-        
+
         string traceId = Guid.NewGuid().ToString();
-        
-        logger.LogError(exception, 
-            "Detailed exception for TraceId: {TraceId}, Message: {Message}, Stack: {StackTrace}", 
+
+        logger.LogError(exception,
+            "Detailed exception for TraceId: {TraceId}, Message: {Message}, Stack: {StackTrace}",
             traceId, exception.Message, exception.StackTrace);
 
         ApiError error = new()
         {
             Status = (int)HttpStatusCode.InternalServerError,
             TraceId = traceId,
-            Message = env.IsDevelopment() 
+            Message = env.IsDevelopment()
                 ? exception.Message
                 : "An internal server error occurred. Please contact the administrator with the provided trace ID."
         };
@@ -48,7 +51,7 @@ public class GlobalExceptionMiddleware(RequestDelegate next, ILogger<GlobalExcep
                 error.Message = "The requested resource was not found.";
                 break;
         }
-        
+
         context.Response.ContentType = "application/json";
         context.Response.StatusCode = error.Status;
 

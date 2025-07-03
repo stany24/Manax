@@ -43,7 +43,7 @@ public class ReadController(ManaxContext context, IMapper mapper) : ControllerBa
             read.User = user;
             read.Chapter = chapter;
             read.Date = DateTime.UtcNow;
-            
+
             await context.Reads.AddAsync(read);
         }
 
@@ -63,12 +63,9 @@ public class ReadController(ManaxContext context, IMapper mapper) : ControllerBa
 
         // Si aucun userId n'est fourni, utilisez l'ID de l'utilisateur actuel
         long targetUserId = userId ?? (long)currentUserId;
-        
+
         // Vérifiez si l'utilisateur actuel est autorisé à modifier les lectures d'un autre utilisateur
-        if (targetUserId != currentUserId && !User.IsInRole(nameof(UserRole.Admin)))
-        {
-            return Unauthorized();
-        }
+        if (targetUserId != currentUserId && !User.IsInRole(nameof(UserRole.Admin))) return Unauthorized();
 
         Read? existingRead = await context.Reads
             .FirstOrDefaultAsync(r => r.User.Id == targetUserId && r.Chapter.Id == chapterId);

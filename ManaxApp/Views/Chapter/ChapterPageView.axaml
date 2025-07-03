@@ -12,7 +12,7 @@
             DockPanel.Dock="Top"
             Orientation="Vertical">
             <Label
-                Content="{Binding Chapter.Info.FileName}"></Label>
+                Content="{Binding Chapter.Info.FileName}" />
         </StackPanel>
         <ScrollViewer
             VerticalScrollBarVisibility="Auto"
@@ -23,13 +23,13 @@
                     <DataTemplate>
                         <Image
                             Stretch="None"
-                            Source="{Binding .}"></Image>
+                            Source="{Binding .}" />
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <StackPanel
-                            Orientation="Vertical"></StackPanel>
+                            Orientation="Vertical" />
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
             </ItemsControl>

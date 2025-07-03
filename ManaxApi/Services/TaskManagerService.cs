@@ -6,7 +6,7 @@ public static class TaskManagerService
 {
     private const int MaxTasks = 12;
     private static readonly List<ITask> WaitingTasks = [];
-    private static readonly Dictionary<string,int> TasksInfo = [];
+    private static readonly Dictionary<string, int> TasksInfo = [];
     private static readonly List<System.Threading.Tasks.Task> RunningTasks = [];
     private static readonly SemaphoreSlim TaskSemaphore = new(1, 1);
     private static readonly CancellationTokenSource CancellationTokenSource = new();
@@ -22,14 +22,10 @@ public static class TaskManagerService
         try
         {
             WaitingTasks.Add(task);
-            if (!TasksInfo.ContainsKey(task.GetName())) 
-            { 
-                TasksInfo[task.GetName()] = 1; 
-            }
-            else 
-            { 
-                TasksInfo[task.GetName()]++; 
-            }
+            if (!TasksInfo.ContainsKey(task.GetName()))
+                TasksInfo[task.GetName()] = 1;
+            else
+                TasksInfo[task.GetName()]++;
         }
         finally
         {
@@ -48,8 +44,8 @@ public static class TaskManagerService
                 {
                     ITask task = WaitingTasks[0];
                     WaitingTasks.RemoveAt(0);
-                    
-                    System.Threading.Tasks.Task runningTask = System.Threading.Tasks.Task.Run(async () => 
+
+                    System.Threading.Tasks.Task runningTask = System.Threading.Tasks.Task.Run(async () =>
                     {
                         try
                         {
@@ -61,7 +57,7 @@ public static class TaskManagerService
                             Console.WriteLine($"Task error: {ex.Message}");
                         }
                     }, cancellationToken);
-                    
+
                     RunningTasks.Add(runningTask);
                     _ = runningTask.ContinueWith(async _ =>
                     {
@@ -71,10 +67,7 @@ public static class TaskManagerService
                             RunningTasks.Remove(runningTask);
                             if (!TasksInfo.ContainsKey(task.GetName())) return;
                             TasksInfo[task.GetName()]--;
-                            if (TasksInfo[task.GetName()] <= 0)
-                            {
-                                TasksInfo.Remove(task.GetName());
-                            }
+                            if (TasksInfo[task.GetName()] <= 0) TasksInfo.Remove(task.GetName());
                         }
                         finally
                         {
@@ -87,6 +80,7 @@ public static class TaskManagerService
             {
                 TaskSemaphore.Release();
             }
+
             await System.Threading.Tasks.Task.Delay(100, cancellationToken);
         }
     }
@@ -94,23 +88,20 @@ public static class TaskManagerService
     public static Dictionary<string, int> GetTasks()
     {
         Dictionary<string, int> tasksCopy = new();
-        
+
         TaskSemaphore.Wait();
         try
         {
-            foreach (KeyValuePair<string, int> kvp in TasksInfo)
-            {
-                tasksCopy[kvp.Key] = kvp.Value;
-            }
+            foreach (KeyValuePair<string, int> kvp in TasksInfo) tasksCopy[kvp.Key] = kvp.Value;
         }
         finally
         {
             TaskSemaphore.Release();
         }
-        
+
         return tasksCopy;
     }
-    
+
     public static void Shutdown()
     {
         CancellationTokenSource.Cancel();

@@ -8,15 +8,15 @@ namespace ManaxApi.Services;
 
 public static class JwtService
 {
-    private static string? _secretKey;
     private const string Issuer = "ManaxApi";
     private const string Audience = "ManaxApp";
+    private static string? _secretKey;
 
     public static string GetSecretKey()
     {
         if (!string.IsNullOrEmpty(_secretKey))
             return _secretKey;
-        
+
         RandomNumberGenerator rng = RandomNumberGenerator.Create();
         byte[] bytes = new byte[48];
         rng.GetBytes(bytes);

@@ -18,6 +18,7 @@ internal static class ManaxApiClient
 
     public static void SetToken(string? token)
     {
-        Client.DefaultRequestHeaders.Authorization = string.IsNullOrEmpty(token) ? null : new AuthenticationHeaderValue("Bearer", token);
+        Client.DefaultRequestHeaders.Authorization =
+            string.IsNullOrEmpty(token) ? null : new AuthenticationHeaderValue("Bearer", token);
     }
 }

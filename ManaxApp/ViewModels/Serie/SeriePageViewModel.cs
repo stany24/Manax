@@ -16,11 +16,11 @@ namespace ManaxApp.ViewModels.Serie;
 
 public partial class SeriePageViewModel : PageViewModel
 {
-    [ObservableProperty] private Bitmap? _poster;
-    [ObservableProperty] private SerieDTO? _serie;
     [ObservableProperty] private ObservableCollection<ChapterDTO> _chapters = [];
+    [ObservableProperty] private Bitmap? _poster;
     [ObservableProperty] private ObservableCollection<RankDTO> _ranks = [];
     [ObservableProperty] private RankDTO? _selectedRank;
+    [ObservableProperty] private SerieDTO? _serie;
 
     public SeriePageViewModel(long serieId)
     {
@@ -29,24 +29,29 @@ public partial class SeriePageViewModel : PageViewModel
         {
             SerieDTO? libraryAsync = await ManaxApiSerieClient.GetSerieInfoAsync(serieId);
             if (libraryAsync == null) return;
-            Dispatcher.UIThread.Post(() => Serie= libraryAsync);
+            Dispatcher.UIThread.Post(() => Serie = libraryAsync);
         });
-        
+
         Task.Run(async () =>
         {
             byte[]? posterBytes = await ManaxApiSerieClient.GetSeriePosterAsync(serieId);
             if (posterBytes != null)
-            {
-                try { Poster = new Bitmap(new MemoryStream(posterBytes)); }
-                catch { Poster = null; }
-            }
-            else { Poster = null; }
+                try
+                {
+                    Poster = new Bitmap(new MemoryStream(posterBytes));
+                }
+                catch
+                {
+                    Poster = null;
+                }
+            else
+                Poster = null;
         });
-        
+
         Task.Run(async () =>
         {
             List<long>? chaptersIds = await ManaxApiSerieClient.GetSerieChaptersAsync(serieId);
-            
+
             if (chaptersIds == null) return;
             foreach (long chapterId in chaptersIds)
             {
@@ -62,44 +67,36 @@ public partial class SeriePageViewModel : PageViewModel
             if (ranks == null) return;
             Dispatcher.UIThread.Post(() =>
             {
-                foreach (RankDTO rank in ranks)
-                {
-                    Ranks.Add(rank);
-                }
+                foreach (RankDTO rank in ranks) Ranks.Add(rank);
             });
 
             List<UserRankDTO>? userRanks = await ManaxApiRankClient.GetRankingAsync();
             UserRankDTO? rank = userRanks?.FirstOrDefault(rank => rank.SerieId == serieId);
             if (rank == null) return;
             RankDTO? userRank = ranks.FirstOrDefault(r => r.Id == rank.RankId);
-            Dispatcher.UIThread.Post(() =>
-            {
-                SelectedRank = userRank;
-            });
+            Dispatcher.UIThread.Post(() => { SelectedRank = userRank; });
         });
         task.ContinueWith(_ =>
         {
             PropertyChanged += (_, args) =>
             {
-                if (args.PropertyName == nameof(SelectedRank))
+                if (args.PropertyName != nameof(SelectedRank)) return;
+                if (SelectedRank == null) return;
+                UserRankCreateDTO userRankCreateDto = new()
                 {
-                    if (SelectedRank == null) return;
-                    UserRankCreateDTO userRankCreateDto = new()
-                    {
-                        SerieId = serieId,
-                        RankId = SelectedRank.Id
-                    };
-                    Task.Run(async () =>
-                    {
-                        bool success = await ManaxApiRankClient.SetUserRankAsync(userRankCreateDto);
-                        if (success) return;
-                        InfoEmitted?.Invoke(this, "Failed to set rank");
-                    });
-                }
+                    SerieId = serieId,
+                    RankId = SelectedRank.Id
+                };
+                Task.Run(async () =>
+                {
+                    bool success = await ManaxApiRankClient.SetUserRankAsync(userRankCreateDto);
+                    if (success) return;
+                    InfoEmitted?.Invoke(this, "Failed to set rank");
+                });
             };
         });
     }
-    
+
     public void MoveToChapterPage(ChapterDTO chapter)
     {
         ChapterPageViewModel chapterPageViewModel = new(chapter.Id);

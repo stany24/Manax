@@ -16,7 +16,7 @@ public partial class UploadController(ManaxContext context) : ControllerBase
 {
     [GeneratedRegex("\\d{1,4}")]
     private static partial Regex RegexNumber();
-    
+
     // POST: api/upload/chapter
     [HttpPost("chapter")]
     [AuthorizeRole(UserRole.Admin)]
@@ -24,7 +24,7 @@ public partial class UploadController(ManaxContext context) : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> UploadChapter(IFormFile file, [FromForm] long serieId)
     {
-        return await UpdateOrReplaceChapter(file,serieId, false);
+        return await UpdateOrReplaceChapter(file, serieId, false);
     }
 
     // POST: api/upload/chapter/replace
@@ -34,9 +34,9 @@ public partial class UploadController(ManaxContext context) : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> ReplaceChapter(IFormFile file, [FromForm] long serieId)
     {
-        return await UpdateOrReplaceChapter(file,serieId, true);
+        return await UpdateOrReplaceChapter(file, serieId, true);
     }
-    
+
     // POST: api/upload/poster
     [HttpPost("poster")]
     [AuthorizeRole(UserRole.Admin)]
@@ -44,7 +44,7 @@ public partial class UploadController(ManaxContext context) : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> UploadPoster(IFormFile file, [FromForm] long serieId)
     {
-        return await UpdateOrReplacePoster(file,serieId, false);
+        return await UpdateOrReplacePoster(file, serieId, false);
     }
 
     // POST: api/upload/poster/replace
@@ -54,7 +54,7 @@ public partial class UploadController(ManaxContext context) : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> ReplacePoster(IFormFile file, [FromForm] long serieId)
     {
-        return await UpdateOrReplacePoster(file,serieId, true);
+        return await UpdateOrReplacePoster(file, serieId, true);
     }
 
     private async Task<IActionResult> UpdateOrReplaceChapter(IFormFile file, [FromForm] long serieId, bool replace)
@@ -62,22 +62,27 @@ public partial class UploadController(ManaxContext context) : ControllerBase
         Serie? serie = context.Series.FirstOrDefault(s => s.Id == serieId);
         if (serie == null)
             return BadRequest("The serie does not exist");
-        
+
         int pagesCount;
         try
         {
             using ZipArchive zipArchive = new(file.OpenReadStream());
             pagesCount = zipArchive.Entries.Count;
         }
-        catch (Exception) { return BadRequest("Invalid zip file"); }
-        
+        catch (Exception)
+        {
+            return BadRequest("Invalid zip file");
+        }
+
         string filePath = Path.Combine(serie.Path, file.FileName);
         if (Directory.Exists(filePath) || System.IO.File.Exists(filePath))
         {
-            if (replace) { System.IO.File.Delete(filePath); }
-            else { return BadRequest("The chapter already exists"); }
+            if (replace)
+                System.IO.File.Delete(filePath);
+            else
+                return BadRequest("The chapter already exists");
         }
-            
+
         byte[] buffer = new byte[file.Length];
         _ = await file.OpenReadStream().ReadAsync(buffer.AsMemory(0, (int)file.Length));
         await System.IO.File.WriteAllBytesAsync(filePath, buffer);
@@ -85,42 +90,41 @@ public partial class UploadController(ManaxContext context) : ControllerBase
         int number = 0;
         Regex regex = RegexNumber();
         Match match = regex.Match(file.FileName);
-        if (match.Success)
-        {
-            number = Convert.ToInt32(match.Value);
-        }
-        
+        if (match.Success) number = Convert.ToInt32(match.Value);
+
         context.Chapters.Add(new Chapter
         {
             SerieId = serieId,
             Path = filePath,
             FileName = file.FileName,
             Number = number,
-            Pages = pagesCount 
+            Pages = pagesCount
         });
-        
+
         await context.SaveChangesAsync();
         return Ok();
     }
-    
+
     private async Task<IActionResult> UpdateOrReplacePoster(IFormFile file, [FromForm] long serieId, bool replace)
     {
         Serie? serie = context.Series.FirstOrDefault(s => s.Id == serieId);
         if (serie == null)
             return BadRequest("The serie does not exist");
 
+        string path = Path.Combine(serie.Path, "poster.webp");
+        if (System.IO.File.Exists(path) && !replace) return BadRequest("The poster already exists");
+
         try
         {
             MagickImage image = new(file.OpenReadStream());
             image.Quality = 94;
-            await image.WriteAsync(Path.Combine(serie.Path, "poster.webp"), MagickFormat.WebP);
+            await image.WriteAsync(path, MagickFormat.WebP);
         }
         catch (Exception e)
         {
             return BadRequest($"Invalid image file: {e.Message}");
         }
-        
+
         return Ok();
     }
 }
-

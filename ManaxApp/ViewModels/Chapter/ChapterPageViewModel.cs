@@ -36,11 +36,8 @@ public partial class ChapterPageViewModel : PageViewModel
                 try
                 {
                     Bitmap page = new(new MemoryStream(pageBites));
-                    
-                    Dispatcher.UIThread.Post(() =>
-                    {
-                        Chapter.Pages[index] = page;
-                    });
+
+                    Dispatcher.UIThread.Post(() => { Chapter.Pages[index] = page; });
                 }
                 catch (Exception)
                 {

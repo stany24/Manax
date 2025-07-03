@@ -10,8 +10,8 @@ namespace ManaxApp.ViewModels.Login;
 
 public partial class LoginPageViewModel : PageViewModel
 {
-    private bool _isAdmin;
     [ObservableProperty] private string _host = "http://127.0.0.1";
+    private bool _isAdmin;
     [ObservableProperty] private string _loginError = string.Empty;
     [ObservableProperty] private string _password = string.Empty;
     [ObservableProperty] private int _port = 5246;
@@ -61,7 +61,7 @@ public partial class LoginPageViewModel : PageViewModel
             }
 
             _isAdmin = self.Role is UserRole.Admin or UserRole.Owner;
-            
+
             InfoEmitted?.Invoke(this, $"Logged in as {self.Username} ({self.Role})");
             PageChangedRequested?.Invoke(this, new HomePageViewModel());
         }

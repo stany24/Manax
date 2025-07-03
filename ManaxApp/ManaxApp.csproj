@@ -37,7 +37,7 @@
         <!-- <BeautyGitCDN>https://gitee.com/liesauer/HostFXRPatcher</BeautyGitCDN> -->
         <!-- <BeautyGitTree>master</BeautyGitTree> -->
     </PropertyGroup>
-    
+
     <PropertyGroup>
         <OutputType>WinExe</OutputType>
         <TargetFramework>net8.0</TargetFramework>
@@ -78,33 +78,33 @@
             <SubType>Code</SubType>
         </Compile>
         <Compile Update="Views\Library\LibrarysPageView.axaml.cs">
-          <SubType>Code</SubType>
-          <DependentUpon>UsersPageView.axaml</DependentUpon>
+            <SubType>Code</SubType>
+            <DependentUpon>UsersPageView.axaml</DependentUpon>
         </Compile>
         <Compile Update="Views\Library\LibrarysPageView.axaml.cs">
-          <SubType>Code</SubType>
-          <DependentUpon>LibrarysPageView.axaml</DependentUpon>
+            <SubType>Code</SubType>
+            <DependentUpon>LibrarysPageView.axaml</DependentUpon>
         </Compile>
         <Compile Update="Views\Library\LibraryPageView.axaml.cs">
-          <SubType>Code</SubType>
-          <DependentUpon>LibraryPageView.axaml</DependentUpon>
+            <SubType>Code</SubType>
+            <DependentUpon>LibraryPageView.axaml</DependentUpon>
         </Compile>
         <Compile Update="Views\Serie\SeriePageView.axaml.cs">
-          <SubType>Code</SubType>
-          <DependentUpon>LibraryPageView.axaml</DependentUpon>
+            <SubType>Code</SubType>
+            <DependentUpon>LibraryPageView.axaml</DependentUpon>
         </Compile>
         <Compile Update="Views\Chapter\ChapterPageView.axaml.cs">
-          <SubType>Code</SubType>
-          <DependentUpon>LibraryPageView.axaml</DependentUpon>
+            <SubType>Code</SubType>
+            <DependentUpon>LibraryPageView.axaml</DependentUpon>
         </Compile>
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\ManaxLibrary\ManaxLibrary.csproj" />
+        <ProjectReference Include="..\ManaxLibrary\ManaxLibrary.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
         <AdditionalFiles Include="Views\Issue\IssuesPageView.axaml"/>
-        <AdditionalFiles Include="Views\Library\LibrarysPageView.axaml" />
+        <AdditionalFiles Include="Views\Library\LibrarysPageView.axaml"/>
     </ItemGroup>
 </Project>

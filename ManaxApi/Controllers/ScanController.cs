@@ -25,7 +25,7 @@ public class ScanController(ManaxContext context) : ControllerBase
 
         if (library == null) return NotFound();
 
-        _ =TaskManagerService.AddTaskAsync(new LibraryScanTask(library));
+        _ = TaskManagerService.AddTaskAsync(new LibraryScanTask(library));
 
         return Ok();
     }

@@ -35,6 +35,7 @@ public class PageHistoryManager
                 _backStack.Push(CurrentPage);
             _forwardStack.Clear();
         }
+
         if (ReferenceEquals(CurrentPage, page)) return;
         SetCurrent(page);
     }

@@ -11,8 +11,9 @@ public class Chapter
 {
     public long Id { get; set; }
     public long SerieId { get; set; }
-    [ForeignKey(nameof(SerieId))]
-    public Serie.Serie Serie { get; set; } = null!;
+
+    [ForeignKey(nameof(SerieId))] public Serie.Serie Serie { get; set; } = null!;
+
     public string FileName { get; set; } = string.Empty;
     public int Number { get; set; }
     public int Pages { get; set; }

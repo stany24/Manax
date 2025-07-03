@@ -11,8 +11,6 @@ public class AuthorizeRoleAttribute(UserRole minRole) : Attribute, IAuthorizatio
 {
     public void OnAuthorization(AuthorizationFilterContext context)
     {
-        IConfiguration? config =
-            context.HttpContext.RequestServices.GetService(typeof(IConfiguration)) as IConfiguration;
         string? authHeader = context.HttpContext.Request.Headers.Authorization.FirstOrDefault();
         if (authHeader == null || !authHeader.StartsWith("Bearer "))
         {

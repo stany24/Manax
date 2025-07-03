@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
@@ -33,42 +34,48 @@ public partial class LibrariesPageViewModel : PageViewModel
     {
         Task.Run(async () =>
         {
-            if (await ManaxApiLibraryClient.DeleteLibraryAsync(library.Id)) Dispatcher.UIThread.Post(() => Libraries.Remove(library));
+            if (await ManaxApiLibraryClient.DeleteLibraryAsync(library.Id))
+                Dispatcher.UIThread.Post(() => Libraries.Remove(library));
         });
     }
-    
+
     public void ShowLibrary(long libraryId)
     {
-        PageChangedRequested?.Invoke(this,new LibraryPageViewModel(libraryId));
+        PageChangedRequested?.Invoke(this, new LibraryPageViewModel(libraryId));
     }
-    
-    public void ScanLibrary(LibraryDTO library)
+
+    public static void ScanLibrary(LibraryDTO library)
     {
-        Task.Run(async () =>
-        {
-            await ManaxApiScanClient.ScanLibraryAsync(library.Id);
-        });
+        Task.Run(async () => { await ManaxApiScanClient.ScanLibraryAsync(library.Id); });
     }
 
 
     public void CreateLibrary()
     {
         LibraryCreatePopup popup = new();
-        popup.CloseRequested += async (_, _) =>
+        popup.CloseRequested += async void (_, _) =>
         {
-            popup.Close();
-            LibraryCreateDTO? library = popup.GetResult();
-            if (library == null) return;
-            long? id = await ManaxApiLibraryClient.PostLibraryAsync(library);
-            if (id == null)
+            try
             {
-                InfoEmitted?.Invoke(this, "Library creation failed");
-                return;
+                popup.Close();
+                LibraryCreateDTO? library = popup.GetResult();
+                if (library == null) return;
+                long? id = await ManaxApiLibraryClient.PostLibraryAsync(library);
+                if (id == null)
+                {
+                    InfoEmitted?.Invoke(this, "Library creation failed");
+                    return;
+                }
+
+                LibraryDTO? createdLibrary = await ManaxApiLibraryClient.GetLibraryAsync((long)id);
+                if (createdLibrary == null) return;
+                Dispatcher.UIThread.Post(() => Libraries.Add(createdLibrary));
             }
-            LibraryDTO? createdLibrary = await ManaxApiLibraryClient.GetLibraryAsync((long)id);
-            if (createdLibrary == null) return;
-            Dispatcher.UIThread.Post(() => Libraries.Add(createdLibrary));
+            catch (Exception)
+            {
+                InfoEmitted?.Invoke(this, "Error creating library");
+            }
         };
-        PopupRequested?.Invoke(this,popup);
+        PopupRequested?.Invoke(this, popup);
     }
 }

@@ -1,3 +1,5 @@
+// ReSharper disable PropertyCanBeMadeInitOnly.Global
+
 namespace ManaxApi.Models.Issue;
 
 public class SerieIssueType

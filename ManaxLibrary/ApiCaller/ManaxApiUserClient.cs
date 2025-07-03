@@ -8,7 +8,8 @@ public static class ManaxApiUserClient
 {
     public static async Task<string?> LoginAsync(string username, string password)
     {
-        HttpResponseMessage response = await ManaxApiClient.Client.PostAsJsonAsync("/api/login", new { username, password });
+        HttpResponseMessage response =
+            await ManaxApiClient.Client.PostAsJsonAsync("/api/login", new { username, password });
         if (!response.IsSuccessStatusCode) return null;
         string json = await response.Content.ReadAsStringAsync();
         using JsonDocument doc = JsonDocument.Parse(json);
@@ -64,7 +65,8 @@ public static class ManaxApiUserClient
 
     public static async Task<string?> ClaimAsync(string username, string password)
     {
-        HttpResponseMessage response = await ManaxApiClient.Client.PostAsJsonAsync("/api/claim", new { username, password });
+        HttpResponseMessage response =
+            await ManaxApiClient.Client.PostAsJsonAsync("/api/claim", new { username, password });
         if (!response.IsSuccessStatusCode) return null;
         string json = await response.Content.ReadAsStringAsync();
         using JsonDocument doc = JsonDocument.Parse(json);

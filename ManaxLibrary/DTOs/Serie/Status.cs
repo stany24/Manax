@@ -5,5 +5,5 @@ public enum Status
     Ongoing,
     Completed,
     Hiatus,
-    Cancelled,
+    Cancelled
 }

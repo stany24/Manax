@@ -32,9 +32,9 @@ public class LibraryController(ManaxContext context, IMapper mapper) : Controlle
         Library? library = await context.Libraries
             .AsNoTracking()
             .FirstOrDefaultAsync(l => l.Id == id);
-            
+
         if (library == null) return NotFound();
-        
+
         return mapper.Map<LibraryDTO>(library);
     }
 
@@ -62,26 +62,20 @@ public class LibraryController(ManaxContext context, IMapper mapper) : Controlle
     public async Task<IActionResult> PutLibrary(long id, LibraryUpdateDTO libraryUpdate)
     {
         Library? library = await context.Libraries.FindAsync(id);
-        
+
         if (library == null) return NotFound();
-        
+
         if (!Directory.Exists(libraryUpdate.Path))
-        {
             return BadRequest($"The specified path '{libraryUpdate.Path}' does not exist.");
-        }
-        
+
         // Check if name is unique (except for the current library)
         if (await context.Libraries.AnyAsync(l => l.Name == libraryUpdate.Name && l.Id != id))
-        {
             return Conflict($"A library with name '{libraryUpdate.Name}' already exists.");
-        }
-        
+
         // Check if path is unique (except for the current library)
         if (await context.Libraries.AnyAsync(l => l.Path == libraryUpdate.Path && l.Id != id))
-        {
             return Conflict($"A library with path '{libraryUpdate.Path}' already exists.");
-        }
-        
+
         mapper.Map(libraryUpdate, library);
 
         try
@@ -95,7 +89,8 @@ public class LibraryController(ManaxContext context, IMapper mapper) : Controlle
         }
         catch (DbUpdateException ex) when (ex.InnerException?.Message.Contains("constraint") ?? false)
         {
-            return Conflict("A uniqueness constraint violation occurred. Please check that the name and path are unique.");
+            return Conflict(
+                "A uniqueness constraint violation occurred. Please check that the name and path are unique.");
         }
 
         return NoContent();
@@ -108,38 +103,31 @@ public class LibraryController(ManaxContext context, IMapper mapper) : Controlle
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<ActionResult<long>> PostLibrary(LibraryCreateDTO libraryCreate)
     {
-        if(!libraryCreate.Path.EndsWith(Path.DirectorySeparatorChar.ToString()))
-        {
+        if (!libraryCreate.Path.EndsWith(Path.DirectorySeparatorChar.ToString()))
             libraryCreate.Path += Path.DirectorySeparatorChar;
-        }
         if (!Directory.Exists(libraryCreate.Path))
-        {
             return BadRequest($"The specified path '{libraryCreate.Path}' does not exist.");
-        }
-        
+
         // Check if name is unique
         if (await context.Libraries.AnyAsync(l => l.Name == libraryCreate.Name))
-        {
             return Conflict($"A library with name '{libraryCreate.Name}' already exists.");
-        }
-        
+
         // Check if path is unique
         if (await context.Libraries.AnyAsync(l => l.Path == libraryCreate.Path))
-        {
             return Conflict($"A library with path '{libraryCreate.Path}' already exists.");
-        }
-        
+
         Library? library = mapper.Map<Library>(libraryCreate);
-        
+
         context.Libraries.Add(library);
-        
+
         try
         {
             await context.SaveChangesAsync();
         }
         catch (DbUpdateException ex) when (ex.InnerException?.Message.Contains("constraint") ?? false)
         {
-            return Conflict("A uniqueness constraint violation occurred. Please check that the name and path are unique.");
+            return Conflict(
+                "A uniqueness constraint violation occurred. Please check that the name and path are unique.");
         }
 
         return library.Id;
