@@ -44,12 +44,6 @@ public partial class LibrariesPageViewModel : PageViewModel
         PageChangedRequested?.Invoke(this, new LibraryPageViewModel(libraryId));
     }
 
-    public static void ScanLibrary(LibraryDTO library)
-    {
-        Task.Run(async () => { await ManaxApiScanClient.ScanLibraryAsync(library.Id); });
-    }
-
-
     public void CreateLibrary()
     {
         LibraryCreatePopup popup = new();

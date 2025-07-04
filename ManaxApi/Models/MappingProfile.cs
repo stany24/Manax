@@ -1,4 +1,5 @@
 using AutoMapper;
+using ManaxApi.Models.Issue.User;
 using ManaxApi.Models.Rank;
 using ManaxLibrary.DTOs;
 using ManaxLibrary.DTOs.Issue;

@@ -9,7 +9,7 @@ public class GlobalExceptionMiddleware(
     ILogger<GlobalExceptionMiddleware> logger,
     IWebHostEnvironment env)
 {
-    public async System.Threading.Tasks.Task InvokeAsync(HttpContext context)
+    public async Task InvokeAsync(HttpContext context)
     {
         try
         {
@@ -21,7 +21,7 @@ public class GlobalExceptionMiddleware(
         }
     }
 
-    private async System.Threading.Tasks.Task HandleExceptionAsync(HttpContext context, Exception exception)
+    private async Task HandleExceptionAsync(HttpContext context, Exception exception)
     {
         logger.LogError(exception, "An unhandled error occurred: {Message}", exception.Message);
 

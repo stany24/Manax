@@ -2,11 +2,14 @@ using System.IO.Compression;
 using System.Text.RegularExpressions;
 using ImageMagick;
 using ManaxApi.Auth;
+using ManaxApi.BackgroundTask;
 using ManaxApi.Models;
 using ManaxApi.Models.Chapter;
 using ManaxApi.Models.Serie;
+using ManaxApi.Services;
 using ManaxLibrary.DTOs.User;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages;
 
 namespace ManaxApi.Controllers;
 
@@ -92,16 +95,22 @@ public partial class UploadController(ManaxContext context) : ControllerBase
         Match match = regex.Match(file.FileName);
         if (match.Success) number = Convert.ToInt32(match.Value);
 
-        context.Chapters.Add(new Chapter
+        Chapter chapter = new()
         {
             SerieId = serieId,
             Path = filePath,
             FileName = file.FileName,
             Number = number,
             Pages = pagesCount
-        });
+        };
+
+        context.Chapters.Add(chapter);
 
         await context.SaveChangesAsync();
+
+        _ = TaskManagerService.AddTaskAsync(new ChapterCheckTask(chapter.Id));
+        _ = TaskManagerService.AddTaskAsync(new SerieCheckTask(chapter.SerieId));
+        
         return Ok();
     }
 

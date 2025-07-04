@@ -63,7 +63,7 @@ public static class Program
         Migrate(app);
 
         // Initialisation du singleton ScanService
-        ScanService.Initialize(app.Services.GetRequiredService<IServiceScopeFactory>());
+        CheckService.Initialize(app.Services.GetRequiredService<IServiceScopeFactory>());
         IssueManagerService.Initialize(app.Services.GetRequiredService<IServiceScopeFactory>());
 
         app.UseMiddleware<GlobalExceptionMiddleware>();

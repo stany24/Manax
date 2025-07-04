@@ -4,13 +4,11 @@ using ImageMagick;
 using ManaxApi.Models;
 using ManaxApi.Models.Chapter;
 using ManaxApi.Models.Issue.Internal;
-using ManaxApi.Models.Library;
 using ManaxApi.Models.Serie;
-using ManaxApi.Task;
 
 namespace ManaxApi.Services;
 
-public static partial class ScanService
+public static partial class CheckService
 {
     private static IServiceScopeFactory _scopeFactory = null!;
 
@@ -22,78 +20,7 @@ public static partial class ScanService
         _scopeFactory = scopeFactory;
     }
 
-    public static void ScanLibrary(Library library)
-    {
-        Console.WriteLine("Scanning library: " + library.Name);
-
-        using IServiceScope scope = _scopeFactory.CreateScope();
-        ManaxContext manaxContext = scope.ServiceProvider.GetRequiredService<ManaxContext>();
-
-        string[] directories = Directory.GetDirectories(library.Path);
-
-        foreach (string directory in directories)
-        {
-            string folderName = Path.GetFileName(directory);
-            Serie? serie = manaxContext.Series.FirstOrDefault(s => s.FolderName == folderName);
-
-            if (serie == null)
-            {
-                serie = new Serie
-                {
-                    LibraryId = library.Id,
-                    FolderName = folderName,
-                    Title = folderName,
-                    Description = string.Empty,
-                    Path = directory
-                };
-                manaxContext.Series.Add(serie);
-                manaxContext.SaveChanges();
-            }
-
-            _ = TaskManagerService.AddTaskAsync(new SerieScanTask(serie.Id));
-        }
-    }
-
-    public static void ScanSerie(long serieId)
-    {
-        using IServiceScope scope = _scopeFactory.CreateScope();
-        ManaxContext manaxContext = scope.ServiceProvider.GetRequiredService<ManaxContext>();
-
-        Serie? serie = manaxContext.Series.Find(serieId);
-        if (serie == null) return;
-
-        Console.WriteLine("Scanning serie: " + serie.Title);
-        string[] files = Directory.GetFiles(serie.Path);
-
-        string[] chapters = files.Where(f => f.ToLower().EndsWith(".cbz")).ToArray();
-
-        foreach (string file in chapters)
-        {
-            string fileName = Path.GetFileName(file);
-            Chapter? chapter =
-                manaxContext.Chapters.FirstOrDefault(s => s.FileName == fileName && s.SerieId == serie.Id);
-
-            if (chapter == null)
-            {
-                chapter = new Chapter
-                {
-                    SerieId = serie.Id,
-                    FileName = Path.GetFileName(file),
-                    Path = file,
-                    Pages = 0,
-                    Number = 0
-                };
-                manaxContext.Chapters.Add(chapter);
-                manaxContext.SaveChanges();
-            }
-
-            _ = TaskManagerService.AddTaskAsync(new ChapterScanTask(chapter.Id));
-        }
-
-        CheckSerie(serieId);
-    }
-
-    private static void CheckSerie(long serieId)
+    public static void CheckSerie(long serieId)
     {
         using IServiceScope scope = _scopeFactory.CreateScope();
         ManaxContext manaxContext = scope.ServiceProvider.GetRequiredService<ManaxContext>();
@@ -159,20 +86,7 @@ public static partial class ScanService
         IssueManagerService.CreateSerieIssue(serie.Id, InternalSerieIssueTypeEnum.MissingChapter);
     }
 
-    public static void ScanChapter(long chapterId)
-    {
-        using IServiceScope scope = _scopeFactory.CreateScope();
-        ManaxContext manaxContext = scope.ServiceProvider.GetRequiredService<ManaxContext>();
-
-        Chapter? chapter = manaxContext.Chapters.Find(chapterId);
-        if (chapter == null) return;
-
-        Console.WriteLine("Scanning chapter: " + chapter.FileName);
-
-        CheckChapter(chapterId);
-    }
-
-    private static void CheckChapter(long chapterId)
+    public static void CheckChapter(long chapterId)
     {
         using IServiceScope scope = _scopeFactory.CreateScope();
         ManaxContext manaxContext = scope.ServiceProvider.GetRequiredService<ManaxContext>();
@@ -189,7 +103,7 @@ public static partial class ScanService
 
     private static void CheckChapterDeep(Chapter chapter)
     {
-        string copyName = Path.Combine(Directory.GetCurrentDirectory(), Path.GetRandomFileName());
+        string copyName = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
         try
         {
             ZipFile.ExtractToDirectory(chapter.Path, copyName);

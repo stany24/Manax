@@ -29,10 +29,6 @@
                                 <Label Content="{Binding Id}" />
                                 <Label Content="{Binding Name}" />
                                 <Button
-                                    Content="Scan"
-                                    Command="{Binding $parent[UserControl].((login:LibrariesPageViewModel)DataContext).ScanLibrary}"
-                                    CommandParameter="{Binding .}" />
-                                <Button
                                     Content="Delete"
                                     Command="{Binding $parent[UserControl].((login:LibrariesPageViewModel)DataContext).DeleteLibrary}"
                                     CommandParameter="{Binding .}" />
