@@ -53,12 +53,20 @@ public partial class SeriePageViewModel : PageViewModel
             List<long>? chaptersIds = await ManaxApiSerieClient.GetSerieChaptersAsync(serieId);
 
             if (chaptersIds == null) return;
+            List<ChapterDTO> chapters = [];
             foreach (long chapterId in chaptersIds)
             {
                 ChapterDTO? chapter = await ManaxApiChapterClient.GetChapterAsync(chapterId);
                 if (chapter == null) continue;
-                Dispatcher.UIThread.Post(() => Chapters.Add(chapter));
+                chapters.Add(chapter);
             }
+            Dispatcher.UIThread.Post(() =>
+            {
+                foreach (ChapterDTO chapter in chapters)
+                {
+                    Chapters.Add(chapter);
+                }
+            });
         });
 
         Task task = Task.Run(async () =>
