@@ -1,13 +1,16 @@
 using AutoMapper;
+using ManaxApi.Models.Issue.Internal;
 using ManaxApi.Models.Issue.User;
 using ManaxApi.Models.Rank;
 using ManaxLibrary.DTOs;
-using ManaxLibrary.DTOs.Issue;
+using ManaxLibrary.DTOs.Issue.Internal;
+using ManaxLibrary.DTOs.Issue.User;
 using ManaxLibrary.DTOs.Library;
 using ManaxLibrary.DTOs.Rank;
 using ManaxLibrary.DTOs.Read;
 using ManaxLibrary.DTOs.Serie;
 using ManaxLibrary.DTOs.User;
+using InternalSerieIssue = ManaxApi.Models.Issue.Internal.InternalSerieIssue;
 
 namespace ManaxApi.Models;
 
@@ -34,8 +37,12 @@ public class MappingProfile : Profile
         CreateMap<LibraryUpdateDTO, Library.Library>();
 
         // Mappings des Issue
-        CreateMap<UserChapterIssue, IssueDTO>();
-        CreateMap<IssueCreateDTO, UserChapterIssue>();
+        CreateMap<UserChapterIssue, UserChapterIssueDTO>();
+        CreateMap<ChapterIssueCreateDTO, UserChapterIssue>();
+        CreateMap<UserSerieIssue, UserSerieIssueDTO>();
+        CreateMap<SerieIssueCreateDTO, UserSerieIssue>();
+        CreateMap<InternalSerieIssue, InternalSerieIssueDTO>();
+        CreateMap<InternalChapterIssue, InternalChapterIssueDTO>();
 
         // Mappings des Chapter
         CreateMap<Chapter.Chapter, ChapterDTO>();

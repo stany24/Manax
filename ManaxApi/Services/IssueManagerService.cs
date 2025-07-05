@@ -1,6 +1,7 @@
 using ManaxApi.Models;
 using ManaxApi.Models.Issue.Internal;
 using ManaxApi.Models.Issue.User;
+using ManaxLibrary.DTOs.Issue.Internal;
 
 namespace ManaxApi.Services;
 

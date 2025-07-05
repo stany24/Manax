@@ -5,6 +5,7 @@ using ManaxApi.Models;
 using ManaxApi.Models.Chapter;
 using ManaxApi.Models.Issue.Internal;
 using ManaxApi.Models.Serie;
+using ManaxLibrary.DTOs.Issue.Internal;
 
 namespace ManaxApi.Services;
 

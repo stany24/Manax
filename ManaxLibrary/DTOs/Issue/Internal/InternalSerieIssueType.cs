@@ -1,4 +1,4 @@
-namespace ManaxApi.Models.Issue.Internal;
+namespace ManaxLibrary.DTOs.Issue.Internal;
 
 public enum InternalSerieIssueType
 {

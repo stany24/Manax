@@ -9,7 +9,6 @@ using ManaxApi.Models.Serie;
 using ManaxApi.Services;
 using ManaxLibrary.DTOs.User;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages;
 
 namespace ManaxApi.Controllers;
 

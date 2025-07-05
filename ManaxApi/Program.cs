@@ -4,6 +4,7 @@ using ManaxApi.Models.Issue.Internal;
 using ManaxApi.Models.Issue.User;
 using ManaxApi.Models.Rank;
 using ManaxApi.Services;
+using ManaxLibrary.DTOs.Issue.Internal;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
