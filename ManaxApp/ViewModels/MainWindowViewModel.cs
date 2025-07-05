@@ -124,9 +124,14 @@ public partial class MainWindowViewModel : ObservableObject
         SetPage(new LibrariesPageViewModel());
     }
 
-    public void ChangePageIssues()
+    public void ChangePageUserIssues()
     {
-        SetPage(new IssuesPageViewModel());
+        SetPage(new UserIssuesPageViewModel());
+    }
+    
+    public void ChangePageAutomaticIssues()
+    {
+        SetPage(new AutomaticIssuesPageViewModel());
     }
 
     public void ChangePageUsers()

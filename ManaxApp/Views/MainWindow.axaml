@@ -37,8 +37,15 @@
                     HorizontalAlignment="Stretch"
                     HorizontalContentAlignment="Center"
                     IsVisible="{Binding IsAdmin}"
-                    Command="{Binding ChangePageIssues}">
-                    Issues
+                    Command="{Binding ChangePageAutomaticIssues}">
+                    Automatic issues
+                </Button>
+                <Button
+                    HorizontalAlignment="Stretch"
+                    HorizontalContentAlignment="Center"
+                    IsVisible="{Binding IsAdmin}"
+                    Command="{Binding ChangePageUserIssues}">
+                    User issues
                 </Button>
                 <Button
                     HorizontalAlignment="Stretch"

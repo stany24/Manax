@@ -70,8 +70,8 @@
             <DependentUpon>LoginPageView.axaml</DependentUpon>
             <SubType>Code</SubType>
         </Compile>
-        <Compile Update="Views\Issue\IssuesPageView.axaml.cs">
-            <DependentUpon>IssuesPageView.axaml</DependentUpon>
+        <Compile Update="Views\Issue\AutomaticIssuesPageView.axaml.cs">
+            <DependentUpon>AutomaticIssuesPageView.axaml</DependentUpon>
             <SubType>Code</SubType>
         </Compile>
         <Compile Update="Views\User\UsersPageView.axaml.cs">
@@ -97,14 +97,13 @@
             <SubType>Code</SubType>
             <DependentUpon>LibraryPageView.axaml</DependentUpon>
         </Compile>
+        <Compile Update="Views\Issue\UserIssuesPageView.axaml.cs">
+          <DependentUpon>UserIssuesPageView.axaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
     </ItemGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\ManaxLibrary\ManaxLibrary.csproj"/>
-    </ItemGroup>
-
-    <ItemGroup>
-        <AdditionalFiles Include="Views\Issue\IssuesPageView.axaml"/>
-        <AdditionalFiles Include="Views\Library\LibrarysPageView.axaml"/>
     </ItemGroup>
 </Project>
