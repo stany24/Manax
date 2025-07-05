@@ -24,6 +24,7 @@ public partial class LibraryPageViewModel : PageViewModel
 {
     [ObservableProperty] private LibraryDTO? _library;
     [ObservableProperty] private ObservableCollection<ClientSerie> _series = [];
+    [ObservableProperty] private bool _isFolderPickerOpen;
 
     public LibraryPageViewModel(long libraryId)
     {
@@ -68,10 +69,12 @@ public partial class LibraryPageViewModel : PageViewModel
         PageChangedRequested?.Invoke(this, seriePageViewModel);
     }
 
-    public async void UploadDefault()
+    public async void UploadSerie()
     {
         try
         {
+            if (IsFolderPickerOpen) return;
+            IsFolderPickerOpen = true;
             if (Library == null) return;
 
             Window? window = Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop
@@ -91,11 +94,15 @@ public partial class LibraryPageViewModel : PageViewModel
             if (string.IsNullOrEmpty(folderPath)) return;
 
             bool success = await UploadApiUploadClient.UploadSerieAsync(folderPath, Library.Id);
-            if (!success) InfoEmitted?.Invoke(this, "Serie upload failed");
+            InfoEmitted?.Invoke(this, !success ? "Serie upload failed" : "Serie upload successful");
         }
         catch (Exception e)
         {
             Debug.WriteLine($"Error uploading series: {e.Message}");
+        }
+        finally
+        {
+            IsFolderPickerOpen = false;
         }
     }
 }

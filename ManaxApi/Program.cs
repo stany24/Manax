@@ -107,18 +107,18 @@ public static class Program
 
         if (!manaxContext.SerieIssueTypes.Any())
         {
-            IEnumerable<InternalSerieIssueTypeEnum> values =
-                Enum.GetValues(typeof(InternalSerieIssueTypeEnum)).Cast<InternalSerieIssueTypeEnum>();
-            foreach (InternalSerieIssueTypeEnum serieIssueTypeEnum in values)
+            IEnumerable<InternalSerieIssueType> values =
+                Enum.GetValues(typeof(InternalSerieIssueType)).Cast<InternalSerieIssueType>();
+            foreach (InternalSerieIssueType serieIssueTypeEnum in values)
                 manaxContext.SerieIssueTypes.Add(new UserSerieIssueType { Name = serieIssueTypeEnum.ToString() });
             manaxContext.SaveChanges();
         }
 
         if (!manaxContext.ChapterIssueTypes.Any())
         {
-            IEnumerable<InternalChapterIssueTypeEnum> values =
-                Enum.GetValues(typeof(InternalChapterIssueTypeEnum)).Cast<InternalChapterIssueTypeEnum>();
-            foreach (InternalChapterIssueTypeEnum serieIssueTypeEnum in values)
+            IEnumerable<InternalChapterIssueType> values =
+                Enum.GetValues(typeof(InternalChapterIssueType)).Cast<InternalChapterIssueType>();
+            foreach (InternalChapterIssueType serieIssueTypeEnum in values)
                 manaxContext.ChapterIssueTypes.Add(new UserChapterIssueType { Name = serieIssueTypeEnum.ToString() });
             manaxContext.SaveChanges();
         }

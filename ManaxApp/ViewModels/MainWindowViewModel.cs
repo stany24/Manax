@@ -35,7 +35,7 @@ public partial class MainWindowViewModel : ObservableObject
                 Popup = e;
                 if (Popup is not null) Popup.Closed += (_, _) => Popup = null;
             };
-            CurrentPageViewModel.InfoEmitted += (_, e) => { Infos.Add(e); };
+            CurrentPageViewModel.InfoEmitted += (_, e) => { ShowInfo(e); };
             CurrentPageViewModel.PreviousRequested += (_, _) => GoBack();
             CurrentPageViewModel.NextRequested += (_, _) => GoForward();
         };
@@ -51,6 +51,22 @@ public partial class MainWindowViewModel : ObservableObject
         };
 
         SetPage(new LoginPageViewModel());
+    }
+
+    private void ShowInfo(string info)
+    {
+        Dispatcher.UIThread.Invoke(() =>
+        {
+            Infos.Add(info);
+        });
+        Task.Run(() =>
+        {
+            Thread.Sleep(10000);
+            Dispatcher.UIThread.Invoke(() =>
+            {
+                Infos.Remove(info);
+            });
+        });
     }
 
     public bool CanGoBack => _history.CanGoBack;

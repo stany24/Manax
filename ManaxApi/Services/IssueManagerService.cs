@@ -13,7 +13,7 @@ internal static class IssueManagerService
         _scopeFactory = scopeFactory;
     }
 
-    internal static bool CreateSerieIssue(long serieId, InternalSerieIssueTypeEnum problem)
+    internal static bool CreateSerieIssue(long serieId, InternalSerieIssueType problem)
     {
         using IServiceScope scope = _scopeFactory.CreateScope();
         ManaxContext context = scope.ServiceProvider.GetRequiredService<ManaxContext>();
@@ -36,7 +36,7 @@ internal static class IssueManagerService
         return true;
     }
 
-    internal static bool CreateChapterIssue(long chapterId, InternalChapterIssueTypeEnum problem)
+    internal static bool CreateChapterIssue(long chapterId, InternalChapterIssueType problem)
     {
         using IServiceScope scope = _scopeFactory.CreateScope();
         ManaxContext context = scope.ServiceProvider.GetRequiredService<ManaxContext>();

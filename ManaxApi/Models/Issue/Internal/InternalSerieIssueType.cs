@@ -1,6 +1,6 @@
 namespace ManaxApi.Models.Issue.Internal;
 
-public enum InternalSerieIssueTypeEnum
+public enum InternalSerieIssueType
 {
     PosterMissing,
     PosterDuplicate,

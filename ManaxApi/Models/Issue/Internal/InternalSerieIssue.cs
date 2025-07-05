@@ -15,5 +15,5 @@ public class InternalSerieIssue
     public long SerieId { get; set; }
 
     [ForeignKey(nameof(SerieId))] public Serie.Serie Serie { get; set; } = null!;
-    public InternalSerieIssueTypeEnum Problem { get; set; }
+    public InternalSerieIssueType Problem { get; set; }
 }

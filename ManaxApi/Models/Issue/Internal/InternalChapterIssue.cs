@@ -16,5 +16,5 @@ public class InternalChapterIssue
     public long ChapterId { get; set; }
 
     [ForeignKey(nameof(ChapterId))] public Chapter.Chapter Chapter { get; set; } = null!;
-    public InternalChapterIssueTypeEnum Problem { get; set; }
+    public InternalChapterIssueType Problem { get; set; }
 }

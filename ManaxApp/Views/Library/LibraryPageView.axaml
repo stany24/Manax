@@ -15,7 +15,7 @@
             <Label
                 Content="{Binding Library.Name}" />
             <Button
-                Command="{Binding UploadDefault}">
+                Command="{Binding UploadSerie}">
                 Upload
             </Button>
         </StackPanel>

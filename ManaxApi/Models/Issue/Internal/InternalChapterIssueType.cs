@@ -1,6 +1,6 @@
 namespace ManaxApi.Models.Issue.Internal;
 
-public enum InternalChapterIssueTypeEnum
+public enum InternalChapterIssueType
 {
     NotAllWebp,
     ImageTooBig,
