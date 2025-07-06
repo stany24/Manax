@@ -46,10 +46,4 @@
         <RootNamespace>ManaxLibrary</RootNamespace>
     </PropertyGroup>
 
-    <ItemGroup>
-        <Reference Include="Avalonia.Base">
-            <HintPath>..\..\..\..\..\home\stan\.nuget\packages\avalonia\11.3.1\ref\net8.0\Avalonia.Base.dll</HintPath>
-        </Reference>
-    </ItemGroup>
-
 </Project>

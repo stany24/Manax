@@ -1,8 +1,5 @@
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
 using System.Threading.Tasks;
-using Avalonia.Threading;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTOs.Issue.User;
 
