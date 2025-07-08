@@ -33,9 +33,9 @@ public static class ManaxApiSerieClient
         return await response.Content.ReadFromJsonAsync<long>();
     }
 
-    public static async Task<bool> PutSerieAsync(long id, SerieDTO serie)
+    public static async Task<bool> PutSerieAsync(long id, SerieUpdateDTO serieUpdate)
     {
-        HttpResponseMessage response = await ManaxApiClient.Client.PutAsJsonAsync($"api/serie/{id}", serie);
+        HttpResponseMessage response = await ManaxApiClient.Client.PutAsJsonAsync($"api/serie/{id}", serieUpdate);
         return response.IsSuccessStatusCode;
     }
 

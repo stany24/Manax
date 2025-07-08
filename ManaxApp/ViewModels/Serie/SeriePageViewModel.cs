@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -6,6 +7,7 @@ using System.Threading.Tasks;
 using Avalonia.Media.Imaging;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
+using ManaxApp.Controls;
 using ManaxApp.ViewModels.Chapter;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTOs;
@@ -25,49 +27,9 @@ public partial class SeriePageViewModel : PageViewModel
     public SeriePageViewModel(long serieId)
     {
         ControlBarVisible = true;
-        Task.Run(async () =>
-        {
-            SerieDTO? libraryAsync = await ManaxApiSerieClient.GetSerieInfoAsync(serieId);
-            if (libraryAsync == null) return;
-            Dispatcher.UIThread.Post(() => Serie = libraryAsync);
-        });
-
-        Task.Run(async () =>
-        {
-            byte[]? posterBytes = await ManaxApiSerieClient.GetSeriePosterAsync(serieId);
-            if (posterBytes != null)
-                try
-                {
-                    Poster = new Bitmap(new MemoryStream(posterBytes));
-                }
-                catch
-                {
-                    Poster = null;
-                }
-            else
-                Poster = null;
-        });
-
-        Task.Run(async () =>
-        {
-            List<long>? chaptersIds = await ManaxApiSerieClient.GetSerieChaptersAsync(serieId);
-
-            if (chaptersIds == null) return;
-            List<ChapterDTO> chapters = [];
-            foreach (long chapterId in chaptersIds)
-            {
-                ChapterDTO? chapter = await ManaxApiChapterClient.GetChapterAsync(chapterId);
-                if (chapter == null) continue;
-                chapters.Add(chapter);
-            }
-            Dispatcher.UIThread.Post(() =>
-            {
-                foreach (ChapterDTO chapter in chapters)
-                {
-                    Chapters.Add(chapter);
-                }
-            });
-        });
+        Task.Run(() => { LoadSerieInfo(serieId); });
+        Task.Run(() => { LoadPoster(serieId); });
+        Task.Run(() => { LoadChapters(serieId); });
 
         Task task = Task.Run(async () =>
         {
@@ -105,9 +67,103 @@ public partial class SeriePageViewModel : PageViewModel
         });
     }
 
+    private async void LoadSerieInfo(long serieId)
+    {
+        try
+        {
+            SerieDTO? libraryAsync = await ManaxApiSerieClient.GetSerieInfoAsync(serieId);
+            if (libraryAsync == null) return;
+            Dispatcher.UIThread.Post(() => Serie = libraryAsync);
+        }
+        catch (Exception)
+        {
+            InfoEmitted?.Invoke(this, "Error loading serie info");
+        }
+    }
+
+    private async void LoadPoster(long serieId)
+    {
+        try
+        {
+            byte[]? posterBytes = await ManaxApiSerieClient.GetSeriePosterAsync(serieId);
+            if (posterBytes != null)
+                try
+                {
+                    Poster = new Bitmap(new MemoryStream(posterBytes));
+                }
+                catch
+                {
+                    Poster = null;
+                }
+            else
+                Poster = null;
+        }
+        catch (Exception)
+        {
+            InfoEmitted?.Invoke(this, "Error loading poster");
+        }
+    }
+
+    private async void LoadChapters(long serieId)
+    {
+        try
+        {
+            List<long>? chaptersIds = await ManaxApiSerieClient.GetSerieChaptersAsync(serieId);
+
+            if (chaptersIds == null) return;
+            List<ChapterDTO> chapters = [];
+            foreach (long chapterId in chaptersIds)
+            {
+                ChapterDTO? chapter = await ManaxApiChapterClient.GetChapterAsync(chapterId);
+                if (chapter == null) continue;
+                chapters.Add(chapter);
+            }
+            Dispatcher.UIThread.Post(() =>
+            {
+                foreach (ChapterDTO chapter in chapters)
+                {
+                    Chapters.Add(chapter);
+                }
+            });
+        }
+        catch (Exception)
+        {
+            InfoEmitted?.Invoke(this, "Error loading chapters");
+        }
+    }
+
     public void MoveToChapterPage(ChapterDTO chapter)
     {
         ChapterPageViewModel chapterPageViewModel = new(chapter.Id);
         PageChangedRequested?.Invoke(this, chapterPageViewModel);
+    }
+    
+    public void UpdateSerie()
+    {
+        if (Serie == null) return;
+        SerieUpdatePopup popup = new(Serie);
+        popup.CloseRequested += async void (_, _) =>
+        {
+            try
+            {
+                popup.Close();
+                SerieUpdateDTO? serie = popup.GetResult();
+                if (serie == null) return;
+                bool success = await ManaxApiSerieClient.PutSerieAsync(Serie.Id, serie);
+                InfoEmitted?.Invoke(this, success ? "Serie update successful" : "Serie update failed");
+                if (success)
+                {
+                    _ = Task.Run(() =>
+                    {
+                        LoadSerieInfo(Serie.Id);
+                    });
+                }
+            }
+            catch (Exception)
+            {
+                InfoEmitted?.Invoke(this, "Error updating serie");
+            }
+        };
+        PopupRequested?.Invoke(this, popup);
     }
 }

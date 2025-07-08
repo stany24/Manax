@@ -30,6 +30,8 @@
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
             </ComboBox>
+            <Button
+                Command="{Binding UpdateSerie}">Update serie infos</Button>
         </StackPanel>
         <ScrollViewer
             VerticalScrollBarVisibility="Auto"

@@ -12,6 +12,5 @@ public class SerieUpdateDTO
 {
     [Required] public string Title { get; set; }
     [Required] public string Description { get; set; }
-    [Required] public string Path { get; set; }
     public Status Status { get; set; }
 }
