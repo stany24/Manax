@@ -29,19 +29,35 @@ public partial class LibraryPageViewModel : PageViewModel
     public LibraryPageViewModel(long libraryId)
     {
         ControlBarVisible = true;
-        Task.Run(async () =>
+        Task.Run(() => { LoadLibrary(libraryId); });
+        Task.Run(() => { LoadSeries(libraryId); });
+    }
+    
+    private async void LoadLibrary(long libraryId)
+    {
+        try
         {
             LibraryDTO? libraryAsync = await ManaxApiLibraryClient.GetLibraryAsync(libraryId);
             if (libraryAsync == null) return;
             Dispatcher.UIThread.Post(() => Library = libraryAsync);
-        });
-        Task.Run(async () =>
+        }
+        catch (Exception)
+        {
+            InfoEmitted?.Invoke(this, "Failed to load library informations");
+        }
+    }
+
+    private async void LoadSeries(long libraryId)
+    {
+        try
         {
             List<long>? seriesIds = await ManaxApiLibraryClient.GetLibrarySeriesAsync(libraryId);
 
             if (seriesIds == null) return;
             foreach (long serieId in seriesIds)
             {
+                if(Series.FirstOrDefault(s => s.Info.Id == serieId) != null)
+                    continue;
                 SerieDTO? info = await ManaxApiSerieClient.GetSerieInfoAsync(serieId);
                 if (info == null) continue;
                 byte[]? posterBytes = await ManaxApiSerieClient.GetSeriePosterAsync(serieId);
@@ -60,7 +76,11 @@ public partial class LibraryPageViewModel : PageViewModel
 
                 Dispatcher.UIThread.Post(() => Series.Add(serie));
             }
-        });
+        }
+        catch (Exception)
+        {
+            InfoEmitted?.Invoke(this,"Failed to load series");
+        }
     }
 
     public void MoveToSeriePage(ClientSerie serie)
@@ -95,6 +115,7 @@ public partial class LibraryPageViewModel : PageViewModel
 
             bool success = await UploadApiUploadClient.UploadSerieAsync(folderPath, Library.Id);
             InfoEmitted?.Invoke(this, !success ? "Serie upload failed" : "Serie upload successful");
+            LoadSeries(Library.Id);
         }
         catch (Exception e)
         {
