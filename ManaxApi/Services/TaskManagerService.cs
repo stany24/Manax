@@ -81,11 +81,19 @@ public static class TaskManagerService
         }
     }
     
-    public static Dictionary<string, int> GetTasks()
+    public static async Task<Dictionary<string, int>> GetTasks()
     {
-        return WaitingTasks.GroupBy(t => t.GetName())
-            .Select(g => new KeyValuePair<string, int>(g.Key, g.Count()))
-            .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+        await TaskSemaphore.WaitAsync();
+        try
+        {
+            return WaitingTasks.GroupBy(t => t.GetName())
+                .Select(g => new KeyValuePair<string, int>(g.Key, g.Count()))
+                .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+        }
+        finally
+        {
+            TaskSemaphore.Release();
+        }
     }
 
     public static void Shutdown()

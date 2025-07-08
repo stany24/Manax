@@ -51,6 +51,6 @@ public class CheckController(ManaxContext context) : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public ActionResult<Dictionary<string, int>> GetTasks()
     {
-        return TaskManagerService.GetTasks();
+        return TaskManagerService.GetTasks().Result;
     }
 }
