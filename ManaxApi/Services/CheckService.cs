@@ -4,7 +4,7 @@ using ImageMagick;
 using ManaxApi.Models;
 using ManaxApi.Models.Chapter;
 using ManaxApi.Models.Serie;
-using ManaxLibrary.DTOs.Issue.Internal;
+using ManaxLibrary.DTOs.Issue.Automatic;
 
 namespace ManaxApi.Services;
 
@@ -26,7 +26,7 @@ public static partial class CheckService
         ManaxContext manaxContext = scope.ServiceProvider.GetRequiredService<ManaxContext>();
         Serie? serie = manaxContext.Series.Find(serieId);
         if (serie == null) return;
-        manaxContext.InternalSerieIssues.RemoveRange(manaxContext.InternalSerieIssues.Where(i => i.SerieId == serieId));
+        manaxContext.AutomaticIssuesSerie.RemoveRange(manaxContext.AutomaticIssuesSerie.Where(i => i.SerieId == serieId));
         manaxContext.SaveChanges();
 
         CheckPoster(serie);
@@ -39,10 +39,10 @@ public static partial class CheckService
         switch (serie.Description.Length)
         {
             case < 100:
-                IssueManagerService.CreateSerieIssue(serie.Id, InternalSerieIssueType.DescriptionTooShort);
+                IssueManagerService.CreateSerieIssue(serie.Id, AutomaticIssueSerieType.DescriptionTooShort);
                 break;
             case > 1000:
-                IssueManagerService.CreateSerieIssue(serie.Id, InternalSerieIssueType.DescriptionTooLong);
+                IssueManagerService.CreateSerieIssue(serie.Id, AutomaticIssueSerieType.DescriptionTooLong);
                 break;
         }
     }
@@ -55,15 +55,15 @@ public static partial class CheckService
         switch (posters.Count)
         {
             case 0:
-                IssueManagerService.CreateSerieIssue(serie.Id, InternalSerieIssueType.PosterMissing);
+                IssueManagerService.CreateSerieIssue(serie.Id, AutomaticIssueSerieType.PosterMissing);
                 break;
             case 1:
                 string poster = posters.First();
                 if (!Path.GetExtension(poster).Equals(".webp", StringComparison.CurrentCultureIgnoreCase))
-                    IssueManagerService.CreateSerieIssue(serie.Id, InternalSerieIssueType.PosterWrongFormat);
+                    IssueManagerService.CreateSerieIssue(serie.Id, AutomaticIssueSerieType.PosterWrongFormat);
                 break;
             case > 1:
-                IssueManagerService.CreateSerieIssue(serie.Id, InternalSerieIssueType.PosterDuplicate);
+                IssueManagerService.CreateSerieIssue(serie.Id, AutomaticIssueSerieType.PosterDuplicate);
                 break;
         }
     }
@@ -73,7 +73,7 @@ public static partial class CheckService
         string[] chapters = Directory.GetFiles(serie.Path);
         if (chapters.Length == 0)
         {
-            IssueManagerService.CreateSerieIssue(serie.Id, InternalSerieIssueType.MissingChapter);
+            IssueManagerService.CreateSerieIssue(serie.Id, AutomaticIssueSerieType.MissingChapter);
             return;
         }
 
@@ -83,7 +83,7 @@ public static partial class CheckService
         Match match = regex.Match(last);
         if (!match.Success) return;
         if (Convert.ToInt32(match.Value) == chapters.Length) return;
-        IssueManagerService.CreateSerieIssue(serie.Id, InternalSerieIssueType.MissingChapter);
+        IssueManagerService.CreateSerieIssue(serie.Id, AutomaticIssueSerieType.MissingChapter);
     }
 
     public static void CheckChapter(long chapterId)
@@ -95,7 +95,7 @@ public static partial class CheckService
 
         chapter.Pages = ZipFile.OpenRead(chapter.Path).Entries.Count;
 
-        manaxContext.InternalChapterIssues.RemoveRange(manaxContext.InternalChapterIssues.Where(i => i.ChapterId == chapterId));
+        manaxContext.AutomaticIssuesChapter.RemoveRange(manaxContext.AutomaticIssuesChapter.Where(i => i.ChapterId == chapterId));
         manaxContext.SaveChanges();
 
         CheckChapterDeep(chapter);
@@ -111,7 +111,7 @@ public static partial class CheckService
         catch
         {
             if (Directory.Exists(copyName)) Directory.Delete(copyName, true);
-            IssueManagerService.CreateChapterIssue(chapter.Id, InternalChapterIssueType.CouldNotOpen);
+            IssueManagerService.CreateChapterIssue(chapter.Id, AutomaticIssueChapterType.CouldNotOpen);
             return;
         }
 
@@ -126,7 +126,7 @@ public static partial class CheckService
     private static void CheckNames(long id, string[] chapterFiles)
     {
         if (chapterFiles.Any(file => !Path.GetFileName(file).StartsWith('P')))
-            IssueManagerService.CreateChapterIssue(id, InternalChapterIssueType.BadPageNaming);
+            IssueManagerService.CreateChapterIssue(id, AutomaticIssueChapterType.BadPageNaming);
     }
 
     private static void CheckMissingPages(long id, string[] chapterFiles)
@@ -137,7 +137,7 @@ public static partial class CheckService
         Match match = regex.Match(last);
         if (!match.Success) return;
         if (Convert.ToInt32(match.Value) == chapterFiles.Length) return;
-        IssueManagerService.CreateChapterIssue(id, InternalChapterIssueType.MissingPage);
+        IssueManagerService.CreateChapterIssue(id, AutomaticIssueChapterType.MissingPage);
     }
 
     private static void CheckWidthOfChapter(long id, string[] images)
@@ -154,22 +154,22 @@ public static partial class CheckService
             switch (width)
             {
                 case > 800:
-                    IssueManagerService.CreateChapterIssue(id, InternalChapterIssueType.ImageTooBig);
+                    IssueManagerService.CreateChapterIssue(id, AutomaticIssueChapterType.ImageTooBig);
                     break;
                 case < 720:
-                    IssueManagerService.CreateChapterIssue(id, InternalChapterIssueType.ImageTooSmall);
+                    IssueManagerService.CreateChapterIssue(id, AutomaticIssueChapterType.ImageTooSmall);
                     break;
             }
         }
         catch
         {
-            IssueManagerService.CreateChapterIssue(id, InternalChapterIssueType.CouldNotOpen);
+            IssueManagerService.CreateChapterIssue(id, AutomaticIssueChapterType.CouldNotOpen);
         }
     }
 
     private static void CheckChapterFilesAreWebp(long id, string[] chapterFiles)
     {
         if (chapterFiles.Any(file => !Path.GetFileName(file).EndsWith(".webp")))
-            IssueManagerService.CreateChapterIssue(id, InternalChapterIssueType.NotAllWebp);
+            IssueManagerService.CreateChapterIssue(id, AutomaticIssueChapterType.NotAllWebp);
     }
 }

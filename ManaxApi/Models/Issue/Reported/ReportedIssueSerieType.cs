@@ -1,8 +1,8 @@
 // ReSharper disable PropertyCanBeMadeInitOnly.Global
 
-namespace ManaxApi.Models.Issue.User;
+namespace ManaxApi.Models.Issue.Reported;
 
-public class UserSerieIssueType
+public class ReportedIssueSerieType
 {
     public long Id { get; set; }
     public string Name { get; set; } = null!;

@@ -1,48 +1,48 @@
 using System.Net.Http.Json;
-using ManaxLibrary.DTOs.Issue.Internal;
-using ManaxLibrary.DTOs.Issue.User;
+using ManaxLibrary.DTOs.Issue.Automatic;
+using ManaxLibrary.DTOs.Issue.Reported;
 
 namespace ManaxLibrary.ApiCaller;
 
 public static class ManaxApiIssueClient
 {
-    public static async Task<List<InternalChapterIssueDTO>?> GetAllInternalChapterIssuesAsync()
+    public static async Task<List<AutomaticIssueChapterDTO>?> GetAllAutomaticChapterIssuesAsync()
     {
         HttpResponseMessage response = await ManaxApiClient.Client.GetAsync("/api/issue/chapter/internal");
         if (!response.IsSuccessStatusCode) return null;
-        return await response.Content.ReadFromJsonAsync<List<InternalChapterIssueDTO>>();
+        return await response.Content.ReadFromJsonAsync<List<AutomaticIssueChapterDTO>>();
     }
     
-    public static async Task<List<InternalSerieIssueDTO>?> GetAllInternalSerieIssuesAsync()
+    public static async Task<List<AutomaticIssueSerieDTO>?> GetAllAutomaticSerieIssuesAsync()
     {
         HttpResponseMessage response = await ManaxApiClient.Client.GetAsync("/api/issue/serie/internal");
         if (!response.IsSuccessStatusCode) return null;
-        return await response.Content.ReadFromJsonAsync<List<InternalSerieIssueDTO>>();
+        return await response.Content.ReadFromJsonAsync<List<AutomaticIssueSerieDTO>>();
     }
     
-    public static async Task<List<UserChapterIssueDTO>?> GetAllUserChapterIssuesAsync()
+    public static async Task<List<ReportedIssueChapterDTO>?> GetAllReportedChapterIssuesAsync()
     {
         HttpResponseMessage response = await ManaxApiClient.Client.GetAsync("/api/issue/chapter/user");
         if (!response.IsSuccessStatusCode) return null;
-        return await response.Content.ReadFromJsonAsync<List<UserChapterIssueDTO>>();
+        return await response.Content.ReadFromJsonAsync<List<ReportedIssueChapterDTO>>();
     }
     
-    public static async Task<List<UserSerieIssueDTO>?> GetAllUserSerieIssuesAsync()
+    public static async Task<List<ReportedIssueSerieDTO>?> GetAllReportedSerieIssuesAsync()
     {
         HttpResponseMessage response = await ManaxApiClient.Client.GetAsync("/api/issue/serie/user");
         if (!response.IsSuccessStatusCode) return null;
-        return await response.Content.ReadFromJsonAsync<List<UserSerieIssueDTO>>();
+        return await response.Content.ReadFromJsonAsync<List<ReportedIssueSerieDTO>>();
     }
     
-    public static async Task<bool> CreateChapterIssueAsync(ChapterIssueCreateDTO chapterIssue)
+    public static async Task<bool> CreateChapterIssueAsync(ReportedIssueChapterCreateDTO reportedIssueChapter)
     {
-        HttpResponseMessage response = await ManaxApiClient.Client.PostAsJsonAsync("/api/issue/chapter", chapterIssue);
+        HttpResponseMessage response = await ManaxApiClient.Client.PostAsJsonAsync("/api/issue/chapter", reportedIssueChapter);
         return response.IsSuccessStatusCode;
     }
     
-    public static async Task<bool> CreateSerieIssueAsync(SerieIssueCreateDTO serieIssue)
+    public static async Task<bool> CreateSerieIssueAsync(ReportedIssueSerieCreateDTO reportedIssueSerie)
     {
-        HttpResponseMessage response = await ManaxApiClient.Client.PostAsJsonAsync("/api/issue/serie", serieIssue);
+        HttpResponseMessage response = await ManaxApiClient.Client.PostAsJsonAsync("/api/issue/serie", reportedIssueSerie);
         return response.IsSuccessStatusCode;
     }
     

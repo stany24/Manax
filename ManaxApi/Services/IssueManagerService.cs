@@ -1,7 +1,7 @@
 using ManaxApi.Models;
-using ManaxApi.Models.Issue.Internal;
-using ManaxApi.Models.Issue.User;
-using ManaxLibrary.DTOs.Issue.Internal;
+using ManaxApi.Models.Issue.Automatic;
+using ManaxApi.Models.Issue.Reported;
+using ManaxLibrary.DTOs.Issue.Automatic;
 
 namespace ManaxApi.Services;
 
@@ -14,47 +14,47 @@ internal static class IssueManagerService
         _scopeFactory = scopeFactory;
     }
 
-    internal static bool CreateSerieIssue(long serieId, InternalSerieIssueType problem)
+    internal static bool CreateSerieIssue(long serieId, AutomaticIssueSerieType problem)
     {
         using IServiceScope scope = _scopeFactory.CreateScope();
         ManaxContext context = scope.ServiceProvider.GetRequiredService<ManaxContext>();
 
-        UserSerieIssueType? issueType = context.SerieIssueTypes.FirstOrDefault(i => i.Name == problem.ToString());
+        ReportedIssueSerieType? issueType = context.ReportedIssueSerieTypes.FirstOrDefault(i => i.Name == problem.ToString());
         if (issueType == null) return false;
 
-        if (context.InternalSerieIssues.Any(i => i.Problem == problem && i.SerieId == serieId)) return false;
+        if (context.AutomaticIssuesSerie.Any(i => i.Problem == problem && i.SerieId == serieId)) return false;
 
-        InternalSerieIssue issue = new()
+        AutomaticIssueSerie issue = new()
         {
             SerieId = serieId,
             Problem = problem,
             CreatedAt = DateTime.UtcNow
         };
 
-        context.InternalSerieIssues.Add(issue);
+        context.AutomaticIssuesSerie.Add(issue);
         context.SaveChanges();
 
         return true;
     }
 
-    internal static bool CreateChapterIssue(long chapterId, InternalChapterIssueType problem)
+    internal static bool CreateChapterIssue(long chapterId, AutomaticIssueChapterType problem)
     {
         using IServiceScope scope = _scopeFactory.CreateScope();
         ManaxContext context = scope.ServiceProvider.GetRequiredService<ManaxContext>();
 
-        UserChapterIssueType? issueType = context.ChapterIssueTypes.FirstOrDefault(i => i.Name == problem.ToString());
+        ReportedIssueChapterType? issueType = context.ReportedIssueChapterTypes.FirstOrDefault(i => i.Name == problem.ToString());
         if (issueType == null) return false;
 
-        if (context.InternalChapterIssues.Any(i => i.Problem== problem && i.ChapterId == chapterId)) return false;
+        if (context.AutomaticIssuesChapter.Any(i => i.Problem== problem && i.ChapterId == chapterId)) return false;
 
-        InternalChapterIssue issue = new()
+        AutomaticIssueChapter issue = new()
         {
             ChapterId = chapterId,
             Problem = problem,
             CreatedAt = DateTime.UtcNow
         };
 
-        context.InternalChapterIssues.Add(issue);
+        context.AutomaticIssuesChapter.Add(issue);
         context.SaveChanges();
 
         return true;

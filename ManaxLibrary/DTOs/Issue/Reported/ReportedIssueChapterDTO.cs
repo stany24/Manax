@@ -3,9 +3,9 @@
 
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
 
-namespace ManaxLibrary.DTOs.Issue.User;
+namespace ManaxLibrary.DTOs.Issue.Reported;
 
-public class UserChapterIssueDTO
+public class ReportedIssueChapterDTO
 {
     public long Id { get; set; }
     public DateTime CreatedAt { get; set; }

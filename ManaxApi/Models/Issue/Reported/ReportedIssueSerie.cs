@@ -5,9 +5,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
 
-namespace ManaxApi.Models.Issue.User;
+namespace ManaxApi.Models.Issue.Reported;
 
-public class UserSerieIssue
+public class ReportedIssueSerie
 {
     public long Id { get; set; }
     public DateTime CreatedAt { get; set; }
@@ -18,5 +18,5 @@ public class UserSerieIssue
 
     [ForeignKey(nameof(SerieId))] public Serie.Serie Serie { get; set; } = null!;
     public long ProblemId { get; set; }
-    [ForeignKey(nameof(ProblemId))] public UserSerieIssueType Problem { get; set; } = null!;
+    [ForeignKey(nameof(ProblemId))] public ReportedIssueSerieType Problem { get; set; } = null!;
 }

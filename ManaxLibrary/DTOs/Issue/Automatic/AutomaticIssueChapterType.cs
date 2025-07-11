@@ -1,6 +1,6 @@
-namespace ManaxLibrary.DTOs.Issue.Internal;
+namespace ManaxLibrary.DTOs.Issue.Automatic;
 
-public enum InternalChapterIssueType
+public enum AutomaticIssueChapterType
 {
     NotAllWebp,
     ImageTooBig,

@@ -7,11 +7,11 @@
 
 using System.ComponentModel.DataAnnotations;
 
-namespace ManaxLibrary.DTOs.Issue.User;
+namespace ManaxLibrary.DTOs.Issue.Reported;
 
-public class SerieIssueCreateDTO
+public class ReportedIssueChapterCreateDTO
 {
-    [Required] public long SerieId { get; set; }
+    [Required] public long ChapterId { get; set; }
 
     [Required] public long ProblemId { get; set; }
 }

@@ -1,16 +1,15 @@
 using AutoMapper;
-using ManaxApi.Models.Issue.Internal;
-using ManaxApi.Models.Issue.User;
+using ManaxApi.Models.Issue.Automatic;
+using ManaxApi.Models.Issue.Reported;
 using ManaxApi.Models.Rank;
 using ManaxLibrary.DTOs;
-using ManaxLibrary.DTOs.Issue.Internal;
-using ManaxLibrary.DTOs.Issue.User;
+using ManaxLibrary.DTOs.Issue.Automatic;
+using ManaxLibrary.DTOs.Issue.Reported;
 using ManaxLibrary.DTOs.Library;
 using ManaxLibrary.DTOs.Rank;
 using ManaxLibrary.DTOs.Read;
 using ManaxLibrary.DTOs.Serie;
 using ManaxLibrary.DTOs.User;
-using InternalSerieIssue = ManaxApi.Models.Issue.Internal.InternalSerieIssue;
 
 namespace ManaxApi.Models;
 
@@ -37,12 +36,12 @@ public class MappingProfile : Profile
         CreateMap<LibraryUpdateDTO, Library.Library>();
 
         // Mappings des Issue
-        CreateMap<UserChapterIssue, UserChapterIssueDTO>();
-        CreateMap<ChapterIssueCreateDTO, UserChapterIssue>();
-        CreateMap<UserSerieIssue, UserSerieIssueDTO>();
-        CreateMap<SerieIssueCreateDTO, UserSerieIssue>();
-        CreateMap<InternalSerieIssue, InternalSerieIssueDTO>();
-        CreateMap<InternalChapterIssue, InternalChapterIssueDTO>();
+        CreateMap<ReportedIssueChapter, ReportedIssueChapterDTO>();
+        CreateMap<ReportedIssueChapterCreateDTO, ReportedIssueChapter>();
+        CreateMap<ReportedIssueSerie, ReportedIssueSerieDTO>();
+        CreateMap<ReportedIssueSerieCreateDTO, ReportedIssueSerie>();
+        CreateMap<AutomaticIssueSerie, AutomaticIssueSerieDTO>();
+        CreateMap<AutomaticIssueChapter, AutomaticIssueChapterDTO>();
 
         // Mappings des Chapter
         CreateMap<Chapter.Chapter, ChapterDTO>();

@@ -1,9 +1,9 @@
 using ManaxApi.Middleware;
 using ManaxApi.Models;
-using ManaxApi.Models.Issue.User;
+using ManaxApi.Models.Issue.Reported;
 using ManaxApi.Models.Rank;
 using ManaxApi.Services;
-using ManaxLibrary.DTOs.Issue.Internal;
+using ManaxLibrary.DTOs.Issue.Automatic;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
@@ -105,21 +105,21 @@ public static class Program
             manaxContext.SaveChanges();
         }
 
-        if (!manaxContext.SerieIssueTypes.Any())
+        if (!manaxContext.ReportedIssueSerieTypes.Any())
         {
-            IEnumerable<InternalSerieIssueType> values =
-                Enum.GetValues(typeof(InternalSerieIssueType)).Cast<InternalSerieIssueType>();
-            foreach (InternalSerieIssueType serieIssueTypeEnum in values)
-                manaxContext.SerieIssueTypes.Add(new UserSerieIssueType { Name = serieIssueTypeEnum.ToString() });
+            IEnumerable<AutomaticIssueSerieType> values =
+                Enum.GetValues(typeof(AutomaticIssueSerieType)).Cast<AutomaticIssueSerieType>();
+            foreach (AutomaticIssueSerieType serieIssueTypeEnum in values)
+                manaxContext.ReportedIssueSerieTypes.Add(new ReportedIssueSerieType { Name = serieIssueTypeEnum.ToString() });
             manaxContext.SaveChanges();
         }
 
-        if (!manaxContext.ChapterIssueTypes.Any())
+        if (!manaxContext.ReportedIssueChapterTypes.Any())
         {
-            IEnumerable<InternalChapterIssueType> values =
-                Enum.GetValues(typeof(InternalChapterIssueType)).Cast<InternalChapterIssueType>();
-            foreach (InternalChapterIssueType serieIssueTypeEnum in values)
-                manaxContext.ChapterIssueTypes.Add(new UserChapterIssueType { Name = serieIssueTypeEnum.ToString() });
+            IEnumerable<AutomaticIssueChapterType> values =
+                Enum.GetValues(typeof(AutomaticIssueChapterType)).Cast<AutomaticIssueChapterType>();
+            foreach (AutomaticIssueChapterType serieIssueTypeEnum in values)
+                manaxContext.ReportedIssueChapterTypes.Add(new ReportedIssueChapterType { Name = serieIssueTypeEnum.ToString() });
             manaxContext.SaveChanges();
         }
     }

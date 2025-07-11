@@ -1,10 +1,10 @@
 using AutoMapper;
 using ManaxApi.Auth;
 using ManaxApi.Models;
-using ManaxApi.Models.Issue.Internal;
-using ManaxApi.Models.Issue.User;
-using ManaxLibrary.DTOs.Issue.Internal;
-using ManaxLibrary.DTOs.Issue.User;
+using ManaxApi.Models.Issue.Automatic;
+using ManaxApi.Models.Issue.Reported;
+using ManaxLibrary.DTOs.Issue.Automatic;
+using ManaxLibrary.DTOs.Issue.Reported;
 using ManaxLibrary.DTOs.User;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -15,51 +15,51 @@ namespace ManaxApi.Controllers;
 [ApiController]
 public class IssueController(ManaxContext context, IMapper mapper) : ControllerBase
 {
-    [HttpGet("chapter/internal")]
+    [HttpGet("chapter/automatic")]
     [AuthorizeRole(UserRole.Admin)]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<InternalChapterIssueDTO>))]
-    public async Task<ActionResult<IEnumerable<InternalChapterIssueDTO>>> GetAllInternalChapterIssues()
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<AutomaticIssueChapterDTO>))]
+    public async Task<ActionResult<IEnumerable<AutomaticIssueChapterDTO>>> GetAllAutomaticChapterIssues()
     {
-        List<InternalChapterIssue> issues = await context.InternalChapterIssues.ToListAsync();
-        return mapper.Map<List<InternalChapterIssueDTO>>(issues);
+        List<AutomaticIssueChapter> issues = await context.AutomaticIssuesChapter.ToListAsync();
+        return mapper.Map<List<AutomaticIssueChapterDTO>>(issues);
     }
     
-    [HttpGet("serie/internal")]
+    [HttpGet("serie/automatic")]
     [AuthorizeRole(UserRole.Admin)]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<InternalSerieIssueDTO>))]
-    public async Task<ActionResult<IEnumerable<InternalSerieIssueDTO>>> GetAllInternalSerieIssues()
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<AutomaticIssueSerieDTO>))]
+    public async Task<ActionResult<IEnumerable<AutomaticIssueSerieDTO>>> GetAllAutomaticSerieIssues()
     {
-        List<InternalSerieIssue> issues = await context.InternalSerieIssues.ToListAsync();
-        return mapper.Map<List<InternalSerieIssueDTO>>(issues);
+        List<AutomaticIssueSerie> issues = await context.AutomaticIssuesSerie.ToListAsync();
+        return mapper.Map<List<AutomaticIssueSerieDTO>>(issues);
     }
     
-    [HttpGet("chapter/user")]
+    [HttpGet("chapter/reported")]
     [AuthorizeRole(UserRole.Admin)]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<UserChapterIssueDTO>))]
-    public async Task<ActionResult<IEnumerable<UserChapterIssueDTO>>> GetAllUserChapterIssues()
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<ReportedIssueChapterDTO>))]
+    public async Task<ActionResult<IEnumerable<ReportedIssueChapterDTO>>> GetAllReportedChapterIssues()
     {
-        List<UserChapterIssue> issues = await context.UserChapterIssues.ToListAsync();
-        return mapper.Map<List<UserChapterIssueDTO>>(issues);
+        List<ReportedIssueChapter> issues = await context.ReportedIssuesChapter.ToListAsync();
+        return mapper.Map<List<ReportedIssueChapterDTO>>(issues);
     }
     
-    [HttpGet("serie/user")]
+    [HttpGet("serie/reported")]
     [AuthorizeRole(UserRole.Admin)]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<UserSerieIssueDTO>))]
-    public async Task<ActionResult<IEnumerable<UserSerieIssueDTO>>> GetAllUserSerieIssues()
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<ReportedIssueSerieDTO>))]
+    public async Task<ActionResult<IEnumerable<ReportedIssueSerieDTO>>> GetAllReportedSerieIssues()
     {
-        List<UserSerieIssue> issues = await context.UserSerieIssues.ToListAsync();
-        return mapper.Map<List<UserSerieIssueDTO>>(issues);
+        List<ReportedIssueSerie> issues = await context.ReportedIssuesSerie.ToListAsync();
+        return mapper.Map<List<ReportedIssueSerieDTO>>(issues);
     }
 
     [HttpPost("chapter")]
     [AuthorizeRole(UserRole.User)]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<ActionResult> CreateChapterIssue(ChapterIssueCreateDTO chapterIssueCreate)
+    public async Task<ActionResult> CreateChapterIssue(ReportedIssueChapterCreateDTO reportedIssueChapterCreate)
     {
-        UserChapterIssue? issue = mapper.Map<UserChapterIssue>(chapterIssueCreate);
+        ReportedIssueChapter? issue = mapper.Map<ReportedIssueChapter>(reportedIssueChapterCreate);
 
-        context.UserChapterIssues.Add(issue);
+        context.ReportedIssuesChapter.Add(issue);
         await context.SaveChangesAsync();
 
         return NoContent();
@@ -69,11 +69,11 @@ public class IssueController(ManaxContext context, IMapper mapper) : ControllerB
     [AuthorizeRole(UserRole.User)]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<ActionResult> CreateSerieIssue(SerieIssueCreateDTO serieIssueCreate)
+    public async Task<ActionResult> CreateSerieIssue(ReportedIssueSerieCreateDTO reportedIssueSerieCreate)
     {
-        UserSerieIssue? issue = mapper.Map<UserSerieIssue>(serieIssueCreate);
+        ReportedIssueSerie? issue = mapper.Map<ReportedIssueSerie>(reportedIssueSerieCreate);
 
-        context.UserSerieIssues.Add(issue);
+        context.ReportedIssuesSerie.Add(issue);
         await context.SaveChangesAsync();
 
         return NoContent();
@@ -85,11 +85,11 @@ public class IssueController(ManaxContext context, IMapper mapper) : ControllerB
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> CloseChapterIssue(long id)
     {
-        UserChapterIssue? issue = await context.UserChapterIssues.FindAsync(id);
+        ReportedIssueChapter? issue = await context.ReportedIssuesChapter.FindAsync(id);
 
         if (issue == null) return NotFound();
 
-        context.UserChapterIssues.Remove(issue);
+        context.ReportedIssuesChapter.Remove(issue);
         await context.SaveChangesAsync();
 
         return NoContent();
@@ -101,11 +101,11 @@ public class IssueController(ManaxContext context, IMapper mapper) : ControllerB
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> CloseSerieIssue(long id)
     {
-        UserSerieIssue? issue = await context.UserSerieIssues.FindAsync(id);
+        ReportedIssueSerie? issue = await context.ReportedIssuesSerie.FindAsync(id);
 
         if (issue == null) return NotFound();
 
-        context.UserSerieIssues.Remove(issue);
+        context.ReportedIssuesSerie.Remove(issue);
         await context.SaveChangesAsync();
 
         return NoContent();

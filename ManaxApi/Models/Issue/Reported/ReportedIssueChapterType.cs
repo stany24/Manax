@@ -1,8 +1,8 @@
 // ReSharper disable PropertyCanBeMadeInitOnly.Global
 
-namespace ManaxApi.Models.Issue.User;
+namespace ManaxApi.Models.Issue.Reported;
 
-public class UserChapterIssueType
+public class ReportedIssueChapterType
 {
     public long Id { get; set; }
     public string Name { get; set; } = null!;

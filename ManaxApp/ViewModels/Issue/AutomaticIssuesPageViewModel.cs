@@ -1,15 +1,15 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ManaxLibrary.ApiCaller;
-using ManaxLibrary.DTOs.Issue.Internal;
+using ManaxLibrary.DTOs.Issue.Automatic;
 
 namespace ManaxApp.ViewModels.Issue;
 
 public partial class AutomaticIssuesPageViewModel : PageViewModel
 {
     // Collections
-    private List<InternalChapterIssueDTO> _allInternalChapterIssues = [];
-    private List<InternalSerieIssueDTO> _allInternalSerieIssues = [];
+    private List<AutomaticIssueChapterDTO> _allInternalChapterIssues = [];
+    private List<AutomaticIssueSerieDTO> _allInternalSerieIssues = [];
     public AutomaticIssuesPageViewModel()
     {
         ControlBarVisible = true;
@@ -20,13 +20,13 @@ public partial class AutomaticIssuesPageViewModel : PageViewModel
     {
         Task.Run(async () =>
         {
-            List<InternalSerieIssueDTO>? allInternalSerieIssuesAsync = await ManaxApiIssueClient.GetAllInternalSerieIssuesAsync();
+            List<AutomaticIssueSerieDTO>? allInternalSerieIssuesAsync = await ManaxApiIssueClient.GetAllAutomaticSerieIssuesAsync();
             if (allInternalSerieIssuesAsync is not null)
             {
                 _allInternalSerieIssues = allInternalSerieIssuesAsync;
             }
             
-            List<InternalChapterIssueDTO>? allInternalChapterIssuesAsync = await ManaxApiIssueClient.GetAllInternalChapterIssuesAsync();
+            List<AutomaticIssueChapterDTO>? allInternalChapterIssuesAsync = await ManaxApiIssueClient.GetAllAutomaticChapterIssuesAsync();
             if (allInternalChapterIssuesAsync is not null)
             {
                 _allInternalChapterIssues = allInternalChapterIssuesAsync;
