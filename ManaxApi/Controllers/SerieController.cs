@@ -60,14 +60,15 @@ public class SerieController(ManaxContext context, IMapper mapper) : ControllerB
     [Produces("image/webp")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetChapterPage(long id)
+    public async Task<IActionResult> GetPoster(long id)
     {
         Serie? serie = await context.Series.FindAsync(id);
         if (serie == null) return NotFound();
-        string posterPath = Path.Combine(serie.Path, "poster.webp");
+        string posterName = "poster." + Settings.Settings.Data.ImageFormat.ToString().ToLower();
+        string posterPath = Path.Combine(serie.Path, posterName);
         if (!System.IO.File.Exists(posterPath)) return NotFound();
         byte[] readAllBytes = await System.IO.File.ReadAllBytesAsync(posterPath);
-        return File(readAllBytes, "image/webp", "poster.webp");
+        return File(readAllBytes, "image/webp", posterName);
     }
 
     // PUT: api/Serie/5

@@ -4,6 +4,7 @@ using ImageMagick;
 using ManaxApi.Models;
 using ManaxApi.Models.Chapter;
 using ManaxApi.Models.Serie;
+using ManaxApi.Settings;
 using ManaxLibrary.DTOs.Issue.Automatic;
 
 namespace ManaxApi.Services;
@@ -36,15 +37,10 @@ public static partial class CheckService
 
     private static void CheckDescription(Serie serie)
     {
-        switch (serie.Description.Length)
-        {
-            case < 100:
-                IssueManagerService.CreateSerieIssue(serie.Id, AutomaticIssueSerieType.DescriptionTooShort);
-                break;
-            case > 1000:
-                IssueManagerService.CreateSerieIssue(serie.Id, AutomaticIssueSerieType.DescriptionTooLong);
-                break;
-        }
+        uint max = Settings.Settings.Data.MaxDescriptionLength;
+        uint min = Settings.Settings.Data.MinDescriptionLength;
+        if (serie.Description.Length > max) { IssueManagerService.CreateSerieIssue(serie.Id, AutomaticIssueSerieType.DescriptionTooLong); }
+        if (serie.Description.Length < min) { IssueManagerService.CreateSerieIssue(serie.Id, AutomaticIssueSerieType.DescriptionTooShort); }
     }
 
     private static void CheckPoster(Serie serie)
@@ -59,12 +55,30 @@ public static partial class CheckService
                 break;
             case 1:
                 string poster = posters.First();
-                if (!Path.GetExtension(poster).Equals(".webp", StringComparison.CurrentCultureIgnoreCase))
-                    IssueManagerService.CreateSerieIssue(serie.Id, AutomaticIssueSerieType.PosterWrongFormat);
+                CheckPoster(poster,serie.Id);
                 break;
             case > 1:
                 IssueManagerService.CreateSerieIssue(serie.Id, AutomaticIssueSerieType.PosterDuplicate);
                 break;
+        }
+    }
+
+    private static void CheckPoster(string posterPath,long serieId)
+    {
+        string format = "."+Settings.Settings.Data.ImageFormat.ToString().ToLower();
+        uint min = Settings.Settings.Data.MinPosterWidth;
+        uint max = Settings.Settings.Data.MaxPosterWidth;
+        if (!Path.GetExtension(posterPath).Equals(format, StringComparison.CurrentCultureIgnoreCase))
+            IssueManagerService.CreateSerieIssue(serieId, AutomaticIssueSerieType.PosterWrongFormat);
+        try
+        {
+            MagickImage poster = new(posterPath);
+            if (poster.Width < min) { IssueManagerService.CreateSerieIssue(serieId, AutomaticIssueSerieType.PosterWrongFormat); }
+            if (poster.Width > max) { IssueManagerService.CreateSerieIssue(serieId, AutomaticIssueSerieType.PosterWrongFormat); }
+        }
+        catch (Exception)
+        {
+            IssueManagerService.CreateSerieIssue(serieId, AutomaticIssueSerieType.PosterCouldNotOpen);
         }
     }
 
@@ -118,7 +132,7 @@ public static partial class CheckService
         string[] files = Directory.GetFiles(copyName);
         CheckWidthOfChapter(chapter.Id, files);
         CheckNames(chapter.Id, files);
-        CheckChapterFilesAreWebp(chapter.Id, files);
+        CheckChapterFilesAreRightFormat(chapter.Id, files);
         CheckMissingPages(chapter.Id, files);
         Directory.Delete(copyName, true);
     }
@@ -150,16 +164,10 @@ public static partial class CheckService
         try
         {
             using MagickImage image = new(file);
-            int width = (int)image.Width;
-            switch (width)
-            {
-                case > 800:
-                    IssueManagerService.CreateChapterIssue(id, AutomaticIssueChapterType.ImageTooBig);
-                    break;
-                case < 720:
-                    IssueManagerService.CreateChapterIssue(id, AutomaticIssueChapterType.ImageTooSmall);
-                    break;
-            }
+            uint min = Settings.Settings.Data.MinChapterWidth;
+            uint max = Settings.Settings.Data.MaxChapterWidth;
+            if (image.Width < min) {IssueManagerService.CreateChapterIssue(id, AutomaticIssueChapterType.ImageTooSmall); }
+            if (image.Width > max) {IssueManagerService.CreateChapterIssue(id, AutomaticIssueChapterType.ImageTooBig); }
         }
         catch
         {
@@ -167,9 +175,10 @@ public static partial class CheckService
         }
     }
 
-    private static void CheckChapterFilesAreWebp(long id, string[] chapterFiles)
+    private static void CheckChapterFilesAreRightFormat(long id, string[] chapterFiles)
     {
-        if (chapterFiles.Any(file => !Path.GetFileName(file).EndsWith(".webp")))
+        ImageFormat format = Settings.Settings.Data.ImageFormat;
+        if (chapterFiles.Any(file => !Path.GetFileName(file).EndsWith("."+format.ToString().ToLower())))
             IssueManagerService.CreateChapterIssue(id, AutomaticIssueChapterType.NotAllWebp);
     }
 }

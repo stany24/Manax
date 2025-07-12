@@ -7,6 +7,7 @@ using ManaxApi.Models;
 using ManaxApi.Models.Chapter;
 using ManaxApi.Models.Serie;
 using ManaxApi.Services;
+using ManaxApi.Settings;
 using ManaxLibrary.DTOs.User;
 using Microsoft.AspNetCore.Mvc;
 
@@ -119,14 +120,15 @@ public partial class UploadController(ManaxContext context) : ControllerBase
         if (serie == null)
             return BadRequest("The serie does not exist");
 
-        string path = Path.Combine(serie.Path, "poster.webp");
+        ImageFormat format = Settings.Settings.Data.PosterFormat;
+        string path = Path.Combine(serie.Path, "poster."+format.ToString().ToLower());
         if (System.IO.File.Exists(path) && !replace) return BadRequest("The poster already exists");
-
         try
         {
             MagickImage image = new(file.OpenReadStream());
-            image.Quality = 94;
-            await image.WriteAsync(path, MagickFormat.WebP);
+            image.Quality = Settings.Settings.Data.PosterQuality;
+            await image.WriteAsync(path, format.GetMagickFormat());
+            _ = TaskManagerService.AddTaskAsync(new SerieCheckTask(serieId));
         }
         catch (Exception e)
         {

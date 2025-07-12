@@ -6,8 +6,8 @@ namespace ManaxApi.Settings;
 public static class Settings
 { 
     public static SettingsData Data { get; set; } = new();
-    private static string SavePath => Path.Combine(Directory.GetCurrentDirectory(), "settings.json");
-    private static string BackupPath => Path.Combine(Directory.GetCurrentDirectory(), "settings_backup.json");
+    private static string SavePath => Path.Combine(AppContext.BaseDirectory, "settings.json");
+    private static string BackupPath => Path.Combine(AppContext.BaseDirectory, "settings_backup.json");
     
     static Settings()
     {

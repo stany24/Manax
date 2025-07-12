@@ -64,7 +64,7 @@ public static class TaskManagerService
                         {
                             task.Execute();
                         }
-                        catch
+                        catch(Exception e)
                         {
                             Console.WriteLine("Error executing task: " + task.GetName());
                         }
