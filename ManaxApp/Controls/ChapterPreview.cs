@@ -1,8 +1,10 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
+using Avalonia.Data.Converters;
 using Avalonia.Media;
 using ManaxLibrary.DTOs;
+using System.IO;
 
 namespace ManaxApp.Controls;
 
@@ -14,8 +16,11 @@ public class ChapterPreview : Button
 
     public ChapterPreview()
     {
+        Background = Brushes.Transparent;
         Border border = new()
         {
+            Margin = new Thickness(0,1,6,1),
+            Padding = new Thickness(2),
             BorderThickness = new Thickness(1),
             BorderBrush = Brushes.Black,
             CornerRadius = new CornerRadius(3)
@@ -29,7 +34,8 @@ public class ChapterPreview : Button
         textBlock.Bind(TextBlock.TextProperty, new Binding("Chapter.FileName")
         {
             Source = this,
-            Mode = BindingMode.OneWay
+            Mode = BindingMode.OneWay,
+            Converter = new FuncValueConverter<string, string>(fileName => Path.GetFileNameWithoutExtension(fileName) ?? fileName ?? string.Empty)
         });
         border.Child = textBlock;
         Content = border;

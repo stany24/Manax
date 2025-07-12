@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ManaxApi.Migrations
 {
     [DbContext(typeof(ManaxContext))]
-    [Migration("20250705113650_ManaxV0.1")]
+    [Migration("20250711134402_ManaxV0.1")]
     partial class ManaxV01
     {
         /// <inheritdoc />
@@ -50,7 +50,7 @@ namespace ManaxApi.Migrations
                     b.ToTable("Chapters");
                 });
 
-            modelBuilder.Entity("ManaxApi.Models.Issue.Internal.InternalChapterIssue", b =>
+            modelBuilder.Entity("ManaxApi.Models.Issue.Automatic.AutomaticIssueChapter", b =>
                 {
                     b.Property<long>("ChapterId")
                         .HasColumnType("INTEGER");
@@ -63,10 +63,10 @@ namespace ManaxApi.Migrations
 
                     b.HasKey("ChapterId", "Problem");
 
-                    b.ToTable("InternalChapterIssues");
+                    b.ToTable("AutomaticIssuesChapter");
                 });
 
-            modelBuilder.Entity("ManaxApi.Models.Issue.Internal.InternalSerieIssue", b =>
+            modelBuilder.Entity("ManaxApi.Models.Issue.Automatic.AutomaticIssueSerie", b =>
                 {
                     b.Property<long>("SerieId")
                         .HasColumnType("INTEGER");
@@ -79,10 +79,10 @@ namespace ManaxApi.Migrations
 
                     b.HasKey("SerieId", "Problem");
 
-                    b.ToTable("InternalSerieIssues");
+                    b.ToTable("AutomaticIssuesSerie");
                 });
 
-            modelBuilder.Entity("ManaxApi.Models.Issue.User.UserChapterIssue", b =>
+            modelBuilder.Entity("ManaxApi.Models.Issue.Reported.ReportedIssueChapter", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -108,10 +108,10 @@ namespace ManaxApi.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserChapterIssues");
+                    b.ToTable("ReportedIssuesChapter");
                 });
 
-            modelBuilder.Entity("ManaxApi.Models.Issue.User.UserChapterIssueType", b =>
+            modelBuilder.Entity("ManaxApi.Models.Issue.Reported.ReportedIssueChapterType", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -123,10 +123,10 @@ namespace ManaxApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ChapterIssueTypes");
+                    b.ToTable("ReportedIssueChapterTypes");
                 });
 
-            modelBuilder.Entity("ManaxApi.Models.Issue.User.UserSerieIssue", b =>
+            modelBuilder.Entity("ManaxApi.Models.Issue.Reported.ReportedIssueSerie", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -152,10 +152,10 @@ namespace ManaxApi.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserSerieIssues");
+                    b.ToTable("ReportedIssuesSerie");
                 });
 
-            modelBuilder.Entity("ManaxApi.Models.Issue.User.UserSerieIssueType", b =>
+            modelBuilder.Entity("ManaxApi.Models.Issue.Reported.ReportedIssueSerieType", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -167,7 +167,7 @@ namespace ManaxApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("SerieIssueTypes");
+                    b.ToTable("ReportedIssueSerieTypes");
                 });
 
             modelBuilder.Entity("ManaxApi.Models.Library.Library", b =>
@@ -363,7 +363,7 @@ namespace ManaxApi.Migrations
                     b.Navigation("Serie");
                 });
 
-            modelBuilder.Entity("ManaxApi.Models.Issue.Internal.InternalChapterIssue", b =>
+            modelBuilder.Entity("ManaxApi.Models.Issue.Automatic.AutomaticIssueChapter", b =>
                 {
                     b.HasOne("ManaxApi.Models.Chapter.Chapter", "Chapter")
                         .WithMany()
@@ -374,7 +374,7 @@ namespace ManaxApi.Migrations
                     b.Navigation("Chapter");
                 });
 
-            modelBuilder.Entity("ManaxApi.Models.Issue.Internal.InternalSerieIssue", b =>
+            modelBuilder.Entity("ManaxApi.Models.Issue.Automatic.AutomaticIssueSerie", b =>
                 {
                     b.HasOne("ManaxApi.Models.Serie.Serie", "Serie")
                         .WithMany()
@@ -385,7 +385,7 @@ namespace ManaxApi.Migrations
                     b.Navigation("Serie");
                 });
 
-            modelBuilder.Entity("ManaxApi.Models.Issue.User.UserChapterIssue", b =>
+            modelBuilder.Entity("ManaxApi.Models.Issue.Reported.ReportedIssueChapter", b =>
                 {
                     b.HasOne("ManaxApi.Models.Chapter.Chapter", "Chapter")
                         .WithMany()
@@ -393,7 +393,7 @@ namespace ManaxApi.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ManaxApi.Models.Issue.User.UserChapterIssueType", "Problem")
+                    b.HasOne("ManaxApi.Models.Issue.Reported.ReportedIssueChapterType", "Problem")
                         .WithMany()
                         .HasForeignKey("ProblemId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -412,9 +412,9 @@ namespace ManaxApi.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("ManaxApi.Models.Issue.User.UserSerieIssue", b =>
+            modelBuilder.Entity("ManaxApi.Models.Issue.Reported.ReportedIssueSerie", b =>
                 {
-                    b.HasOne("ManaxApi.Models.Issue.User.UserSerieIssueType", "Problem")
+                    b.HasOne("ManaxApi.Models.Issue.Reported.ReportedIssueSerieType", "Problem")
                         .WithMany()
                         .HasForeignKey("ProblemId")
                         .OnDelete(DeleteBehavior.Cascade)

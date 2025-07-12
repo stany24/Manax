@@ -18,7 +18,6 @@
                 Height="194" />
             <Label Content="{Binding Serie.Title}" />
             <Label Content="{Binding Serie.Description}" />
-            <Label Content="{Binding Serie.Path}" />
             <Label Content="{Binding Serie.FolderName}" />
             <Label Content="{Binding Serie.Status}" />
             <ComboBox
@@ -49,8 +48,7 @@
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <StackPanel
-                            Orientation="Vertical"
-                            Spacing="2" />
+                            Orientation="Vertical" />
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
             </ItemsControl>
