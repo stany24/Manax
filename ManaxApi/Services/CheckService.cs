@@ -4,8 +4,8 @@ using ImageMagick;
 using ManaxApi.Models;
 using ManaxApi.Models.Chapter;
 using ManaxApi.Models.Serie;
-using ManaxApi.Settings;
 using ManaxLibrary.DTOs.Issue.Automatic;
+using ManaxLibrary.DTOs.Setting;
 
 namespace ManaxApi.Services;
 

@@ -1,4 +1,4 @@
-namespace ManaxApi.Settings;
+namespace ManaxLibrary.DTOs.Setting;
 
 public enum ArchiveFormat
 {

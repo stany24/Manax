@@ -7,7 +7,7 @@ using ManaxApi.Models;
 using ManaxApi.Models.Chapter;
 using ManaxApi.Models.Serie;
 using ManaxApi.Services;
-using ManaxApi.Settings;
+using ManaxLibrary.DTOs.Setting;
 using ManaxLibrary.DTOs.User;
 using Microsoft.AspNetCore.Mvc;
 
@@ -127,7 +127,7 @@ public partial class UploadController(ManaxContext context) : ControllerBase
         {
             MagickImage image = new(file.OpenReadStream());
             image.Quality = Settings.Settings.Data.PosterQuality;
-            await image.WriteAsync(path, format.GetMagickFormat());
+            await image.WriteAsync(path, GetMagickFormat(format));
             _ = TaskManagerService.AddTaskAsync(new SerieCheckTask(serieId));
         }
         catch (Exception e)
@@ -136,5 +136,16 @@ public partial class UploadController(ManaxContext context) : ControllerBase
         }
 
         return Ok();
+    }
+
+    private static MagickFormat GetMagickFormat(ImageFormat format)
+    {
+        return format switch
+        {
+            ImageFormat.Webp => MagickFormat.WebP,
+            ImageFormat.Png => MagickFormat.Png,
+            ImageFormat.Jpeg => MagickFormat.Jpeg,
+            _ => MagickFormat.WebP
+        };
     }
 }

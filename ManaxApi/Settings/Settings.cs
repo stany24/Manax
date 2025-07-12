@@ -1,5 +1,6 @@
 using System.Reflection;
 using System.Text.Json;
+using ManaxLibrary.DTOs.Setting;
 
 namespace ManaxApi.Settings;
 
@@ -11,10 +12,10 @@ public static class Settings
     
     static Settings()
     {
-        Load();   
+        Load();
     }
-    
-    public static void Load()
+
+    private static void Load()
     {
         if (!File.Exists(SavePath)) { File.WriteAllText(SavePath, "{}"); }
 
@@ -27,8 +28,8 @@ public static class Settings
         }
         Data = settingsData;
     }
-    
-    public static void Save()
+
+    private static void Save()
     {
         string json = JsonSerializer.Serialize(Data, new JsonSerializerOptions { WriteIndented = true });
         File.WriteAllText(SavePath, json);
@@ -42,6 +43,7 @@ public static class Settings
         try
         {
             property.SetValue(Data, value);
+            Data.ForceFixIssues();
             Save();
             return true;
         }
