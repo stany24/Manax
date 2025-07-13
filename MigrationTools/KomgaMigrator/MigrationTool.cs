@@ -1,12 +1,13 @@
 using System.Data.SQLite;
 using System.Text.RegularExpressions;
-using ManaxApi.Models;
-using ManaxApi.Models.Chapter;
-using ManaxApi.Models.Read;
-using ManaxApi.Models.Serie;
-using ManaxApi.Models.User;
 using ManaxLibrary.DTOs.Serie;
 using ManaxLibrary.DTOs.User;
+using ManaxServer.Models;
+using ManaxServer.Models.Chapter;
+using ManaxServer.Models.Library;
+using ManaxServer.Models.Read;
+using ManaxServer.Models.Serie;
+using ManaxServer.Models.User;
 using Microsoft.Extensions.Logging;
 
 namespace KomgaMigrationTool
@@ -128,7 +129,7 @@ namespace KomgaMigrationTool
             using SQLiteCommand command = new("SELECT * FROM LIBRARY", connection);
             using SQLiteDataReader? reader = command.ExecuteReader();
             
-            List<ManaxApi.Models.Library.Library> libraryList = [];
+            List<Library> libraryList = [];
             
             while (reader.Read())
             {
@@ -136,7 +137,7 @@ namespace KomgaMigrationTool
                 GetIntOrDefault(reader, "TYPE");
                 string folderPath = GetStringOrDefault(reader, "ROOT");
                 
-                ManaxApi.Models.Library.Library library = new()
+                Library library = new()
                 {
                     Name = name,
                     Path = folderPath
