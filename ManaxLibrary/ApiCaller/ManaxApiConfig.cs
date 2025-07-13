@@ -7,7 +7,7 @@ public static class ManaxApiConfig
         ManaxApiClient.SetHost(host);
     }
 
-    public static void SetToken(string? token)
+    public static void SetToken(string token)
     {
         ManaxApiClient.SetToken(token);
     }

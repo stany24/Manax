@@ -8,6 +8,7 @@ namespace ManaxLibrary.DTOs;
 public class ChapterDTO
 {
     public long Id { get; set; }
+    public long SerieId { get; set; }
     public string FileName { get; set; } = string.Empty;
     public int Number { get; set; }
     public int Pages { get; set; }

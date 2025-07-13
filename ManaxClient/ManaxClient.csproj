@@ -48,8 +48,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <AvaloniaResource Include="Assets\**"/>
-        <Folder Include="Views\Login\"/>
+        <AvaloniaResource Include="Assets\**" />
+        <Folder Include="Views\Login\" />
     </ItemGroup>
 
     <ItemGroup>
@@ -58,8 +58,8 @@
         <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.2" />
         <PackageReference Include="Avalonia.Fonts.Inter" Version="11.3.2" />
         <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
-        <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.3.1"/>
-        <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0"/>
+        <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.3.1" />
+        <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
     </ItemGroup>
 
     <ItemGroup>
@@ -100,6 +100,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\ManaxLibrary\ManaxLibrary.csproj"/>
+        <ProjectReference Include="..\ManaxLibrary\ManaxLibrary.csproj" />
     </ItemGroup>
 </Project>

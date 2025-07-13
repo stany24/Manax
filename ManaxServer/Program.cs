@@ -7,7 +7,9 @@ using ManaxServer.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Primitives;
 using Microsoft.IdentityModel.Tokens;
 
 namespace ManaxServer;
@@ -24,6 +26,10 @@ public static class Program
         builder.Services.AddSwaggerGen();
         builder.Services.AddHttpContextAccessor();
 
+        // Configuration SignalR
+        builder.Services.AddSignalR();
+        builder.Services.AddSingleton<NotificationService>();
+
         string secretKey = JwtService.GetSecretKey();
         builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
@@ -35,6 +41,22 @@ public static class Program
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(Convert.FromBase64String(secretKey))
+                };
+
+                // Configuration de SignalR avec l'authentification JWT
+                options.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context =>
+                    {
+                        // Permet l'authentification JWT pour SignalR
+                        StringValues accessToken = context.Request.Query["access_token"];
+                        PathString path = context.HttpContext.Request.Path;
+                        if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/notificationHub"))
+                        {
+                            context.Token = accessToken;
+                        }
+                        return Task.CompletedTask;
+                    }
                 };
             });
 
@@ -80,6 +102,9 @@ public static class Program
         app.UseAuthorization();
 
         app.MapControllers();
+        
+        // Configuration du endpoint pour le hub SignalR
+        app.MapHub<Hub>("/notificationHub");
 
         app.Run();
     }

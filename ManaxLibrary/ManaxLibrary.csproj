@@ -46,4 +46,8 @@
         <RootNamespace>ManaxLibrary</RootNamespace>
     </PropertyGroup>
 
+    <ItemGroup>
+      <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="9.0.7" />
+    </ItemGroup>
+
 </Project>
