@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading;
 using System.Threading.Tasks;
@@ -12,6 +13,7 @@ using ManaxClient.ViewModels.Library;
 using ManaxClient.ViewModels.Login;
 using ManaxClient.ViewModels.User;
 using ManaxLibrary.ApiCaller;
+using ManaxLibrary.DTOs.Library;
 
 namespace ManaxClient.ViewModels;
 
@@ -22,6 +24,7 @@ public partial class MainWindowViewModel : ObservableObject
     [ObservableProperty] private bool _isAdmin;
     [ObservableProperty] private Popup? _popup;
     [ObservableProperty] private ObservableCollection<TaskItem> _runningTasks = [];
+    [ObservableProperty] private ObservableCollection<LibraryDTO> _libraries = [];
 
     public MainWindowViewModel()
     {
@@ -30,11 +33,7 @@ public partial class MainWindowViewModel : ObservableObject
             if (CurrentPageViewModel == null) return;
             CurrentPageViewModel.Admin = IsAdmin;
             CurrentPageViewModel.PageChangedRequested += (_, e) => { SetPage(e); };
-            CurrentPageViewModel.PopupRequested += (_, e) =>
-            {
-                Popup = e;
-                if (Popup is not null) Popup.Closed += (_, _) => Popup = null;
-            };
+            CurrentPageViewModel.PopupRequested += (_, e) => { SetPopup(e); };
             CurrentPageViewModel.InfoEmitted += (_, e) => { ShowInfo(e); };
             CurrentPageViewModel.PreviousRequested += (_, _) => GoBack();
             CurrentPageViewModel.NextRequested += (_, _) => GoForward();
@@ -47,12 +46,35 @@ public partial class MainWindowViewModel : ObservableObject
             {
                 IsAdmin = login.IsAdmin();
                 UpdateRunningTasks();
+                LoadLibraries();
             });
         };
 
         SetPage(new LoginPageViewModel());
     }
 
+    private void LoadLibraries()
+    {
+        Task.Run(async () =>
+        {
+            List<long>? ids = await ManaxApiLibraryClient.GetLibraryIdsAsync();
+            if (ids == null) return;
+            Dispatcher.UIThread.Invoke(() => { Libraries.Clear(); });
+            foreach (long id in ids)
+            {
+                LibraryDTO? libraryAsync = await ManaxApiLibraryClient.GetLibraryAsync(id);
+                if (libraryAsync == null) continue;
+                Dispatcher.UIThread.Post(() => Libraries.Add(libraryAsync));
+            }
+        });
+    }
+    
+    private void SetPopup(Popup? popup)
+    {
+        Popup = popup;
+        if (Popup is not null) Popup.Closed += (_, _) => Popup = null;
+    }
+    
     private void ShowInfo(string info)
     {
         Dispatcher.UIThread.Invoke(() =>
@@ -114,14 +136,44 @@ public partial class MainWindowViewModel : ObservableObject
         });
     }
 
+    public void CreateLibrary()
+    {
+        LibraryCreatePopup popup = new();
+        popup.CloseRequested += async void (_, _) =>
+        {
+            try
+            {
+                popup.Close();
+                LibraryCreateDTO? library = popup.GetResult();
+                if (library == null) return;
+                long? id = await ManaxApiLibraryClient.PostLibraryAsync(library);
+                if (id == null)
+                {
+                    Infos.Add("Library creation failed");
+                    return;
+                }
+
+                LibraryDTO? createdLibrary = await ManaxApiLibraryClient.GetLibraryAsync((long)id);
+                if (createdLibrary == null) return;
+                Dispatcher.UIThread.Post(() => Libraries.Add(createdLibrary));
+                ShowLibrary(createdLibrary.Id);
+            }
+            catch (Exception)
+            {
+                Infos.Add("Error creating library");
+            }
+        };
+        SetPopup(popup);
+    }
+    
+    public void ShowLibrary(long libraryId)
+    {
+        SetPage(new LibraryPageViewModel(libraryId));
+    }
+
     public void ChangePageHome()
     {
         SetPage(new HomePageViewModel());
-    }
-
-    public void ChangePageLibraries()
-    {
-        SetPage(new LibrariesPageViewModel());
     }
 
     public void ChangePageUserIssues()

@@ -79,10 +79,6 @@
         </Compile>
         <Compile Update="Views\Library\LibrarysPageView.axaml.cs">
             <SubType>Code</SubType>
-            <DependentUpon>UsersPageView.axaml</DependentUpon>
-        </Compile>
-        <Compile Update="Views\Library\LibrarysPageView.axaml.cs">
-            <SubType>Code</SubType>
             <DependentUpon>LibrarysPageView.axaml</DependentUpon>
         </Compile>
         <Compile Update="Views\Library\LibraryPageView.axaml.cs">

@@ -27,12 +27,41 @@
                     Command="{Binding ChangePageHome}">
                     Home
                 </Button>
-                <Button
+                <Grid
                     HorizontalAlignment="Stretch"
-                    HorizontalContentAlignment="Center"
-                    Command="{Binding ChangePageLibraries}">
-                    Libraries
-                </Button>
+                    ColumnDefinitions="*,Auto">
+                    <Label
+                        Grid.Column="0">Libraries</Label>
+                    <Button
+                        Grid.Column="1"
+                        BorderBrush="Black"
+                        BorderThickness="1"
+                        CornerRadius="3"
+                        HorizontalContentAlignment="Center"
+                        VerticalContentAlignment="Center"
+                        HorizontalAlignment="Right"
+                        Command="{Binding CreateLibrary}">
+                        +
+                    </Button>
+                </Grid>
+                <ItemsControl
+                    ItemsSource="{Binding Libraries}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Button
+                                HorizontalAlignment="Stretch"
+                                Command="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).ShowLibrary}"
+                                CommandParameter="{Binding Id}"
+                                Content="{Binding Name}">
+                            </Button>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
                 <Button
                     HorizontalAlignment="Stretch"
                     HorizontalContentAlignment="Center"
@@ -93,13 +122,15 @@
         <ItemsControl
             Margin="5,5,5,5"
             ItemsSource="{Binding Infos}"
-            HorizontalAlignment="Right"
+            HorizontalAlignment="Left"
             VerticalAlignment="Bottom">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <Border
+                        Background="White"
                         BorderBrush="Gray"
-                        BorderThickness="0,0,0,1"
+                        BorderThickness="2"
+                        CornerRadius="3"
                         Padding="5,2">
                             <Label
                                 Content="{Binding .}" />

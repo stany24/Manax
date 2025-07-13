@@ -138,7 +138,6 @@ public class LibraryController(ManaxContext context, IMapper mapper) : Controlle
     [AuthorizeRole(UserRole.Admin)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> DeleteLibrary(long id)
     {
         Library? library = await context.Libraries.FindAsync(id);
@@ -147,6 +146,6 @@ public class LibraryController(ManaxContext context, IMapper mapper) : Controlle
         context.Libraries.Remove(library);
         await context.SaveChangesAsync();
 
-        return NoContent();
+        return Ok();
     }
 }

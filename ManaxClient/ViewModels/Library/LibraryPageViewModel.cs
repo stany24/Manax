@@ -13,6 +13,7 @@ using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using ManaxClient.Models;
+using ManaxClient.ViewModels.Home;
 using ManaxClient.ViewModels.Serie;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTOs.Library;
@@ -45,6 +46,22 @@ public partial class LibraryPageViewModel : PageViewModel
         {
             InfoEmitted?.Invoke(this, "Failed to load library informations");
         }
+    }
+    
+    public void DeleteLibrary()
+    {
+        if(Library == null){return;}
+        Task.Run(async () =>
+        {
+            if (await ManaxApiLibraryClient.DeleteLibraryAsync(Library.Id))
+            {
+                PageChangedRequested?.Invoke(this, new HomePageViewModel());
+            }
+            else
+            {
+                InfoEmitted?.Invoke(this, "Failed to delete library");
+            }
+        });
     }
 
     private async void LoadSeries(long libraryId)

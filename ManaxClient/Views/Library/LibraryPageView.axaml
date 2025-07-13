@@ -18,6 +18,10 @@
                 Command="{Binding UploadSerie}">
                 Upload
             </Button>
+            <Button
+                Command="{Binding DeleteLibrary}">
+                Delete
+            </Button>
         </StackPanel>
         <ItemsControl
             ItemsSource="{Binding Series}">
