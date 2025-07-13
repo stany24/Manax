@@ -93,7 +93,7 @@ public static class TaskManagerService
                 Dictionary<string, int> tasks = WaitingTasks.GroupBy(t => t.GetName())
                     .Select(g => new KeyValuePair<string, int>(g.Key, g.Count()))
                     .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
-                _ = NotificationService.NotifyRunningTasksAsync(tasks);
+               NotificationService.NotifyRunningTasksAsync(tasks);
             }
             finally
             {

@@ -5,6 +5,7 @@ using ManaxLibrary.DTOs.User;
 using ManaxServer.Auth;
 using ManaxServer.Models;
 using ManaxServer.Models.Chapter;
+using ManaxServer.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -49,6 +50,7 @@ public class ChapterController(ManaxContext context, IMapper mapper) : Controlle
 
         context.Chapters.Remove(chapter);
         await context.SaveChangesAsync();
+        NotificationService.NotifyChapterRemovedAsync(chapter.Id);
 
         return NoContent();
     }

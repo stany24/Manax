@@ -19,11 +19,11 @@ public static class NotificationService
         _logger?.LogInformation("NotificationService initialisé");
     }
     
-    private static async Task TrySendToAllClientsAsync(string methodName, object? arg)
+    private static void TrySendToAllClientsAsync(string methodName, object? arg)
     {
         try
         {
-            await _hubContext.Clients.All.SendAsync(methodName, arg);
+            _hubContext.Clients.All.SendAsync(methodName, arg);
             _logger?.LogDebug("Message envoyé à tous les clients: {Method}", methodName);
         }
         catch (Exception ex)
@@ -32,58 +32,63 @@ public static class NotificationService
         }
     }
     
-    public static async Task NotifyLibraryCreatedAsync(LibraryDTO library)
+    public static void NotifyLibraryCreatedAsync(LibraryDTO library)
     {
-        await TrySendToAllClientsAsync("LibraryCreated", library);
+        TrySendToAllClientsAsync("LibraryCreated", library);
     }
 
-    public static async Task NotifyLibraryDeletedAsync(long id)
+    public static void NotifyLibraryDeletedAsync(long id)
     {
-        await TrySendToAllClientsAsync("LibraryDeleted", id.ToString());
+        TrySendToAllClientsAsync("LibraryDeleted", id.ToString());
     }
 
-    public static async Task NotifyLibraryUpdatedAsync(LibraryDTO library)
+    public static void NotifyLibraryUpdatedAsync(LibraryDTO library)
     {
-        await TrySendToAllClientsAsync("LibraryUpdated", library);
+        TrySendToAllClientsAsync("LibraryUpdated", library);
     }
 
-    public static async Task NotifySerieCreatedAsync(SerieDTO serie)
+    public static void NotifySerieCreatedAsync(SerieDTO serie)
     {
-        await TrySendToAllClientsAsync("SerieCreated", serie);
+        TrySendToAllClientsAsync("SerieCreated", serie);
     }
 
-    public static async Task NotifySerieUpdatedAsync(SerieDTO serie)
+    public static void NotifySerieUpdatedAsync(SerieDTO serie)
     {
-        await TrySendToAllClientsAsync("SerieUpdated", serie);
+        TrySendToAllClientsAsync("SerieUpdated", serie);
     }
     
-    public static async Task NotifySerieDeletedAsync(long serieId)
+    public static void NotifySerieDeletedAsync(long serieId)
     {
-        await TrySendToAllClientsAsync("SerieDeleted", serieId.ToString());
+        TrySendToAllClientsAsync("SerieDeleted", serieId.ToString());
     }
 
-    public static async Task NotifyChapterAddedAsync(ChapterDTO chapter)
+    public static void NotifyChapterAddedAsync(ChapterDTO chapter)
     {
-        await TrySendToAllClientsAsync("ChapterAdded", chapter);
+        TrySendToAllClientsAsync("ChapterAdded", chapter);
     }
 
-    public static async Task NotifyChapterRemovedAsync(long chapterId)
+    public static void NotifyChapterRemovedAsync(long chapterId)
     {
-        await TrySendToAllClientsAsync("ChapterRemoved", chapterId.ToString());
+        TrySendToAllClientsAsync("ChapterRemoved", chapterId.ToString());
     }
     
-    public static async Task NotifyUserCreatedAsync(UserDTO user)
+    public static void NotifyUserCreatedAsync(UserDTO user)
     {
-        await TrySendToAllClientsAsync("UserCreated", user);
+        TrySendToAllClientsAsync("UserCreated", user);
     }
     
-    public static async Task NotifyUserDeletedAsync(long userId)
+    public static void NotifyUserDeletedAsync(long userId)
     {
-        await TrySendToAllClientsAsync("UserDeleted", userId.ToString());
+        TrySendToAllClientsAsync("UserDeleted", userId.ToString());
     }
 
-    public static async Task NotifyRunningTasksAsync(Dictionary<string, int> tasks)
+    public static void NotifyRunningTasksAsync(Dictionary<string, int> tasks)
     {
-        await TrySendToAllClientsAsync("RunningTasks", tasks);
+        TrySendToAllClientsAsync("RunningTasks", tasks);
+    }
+
+    public static void NotifyPosterModifiedAsync(long serieId)
+    {
+        TrySendToAllClientsAsync("PosterModified", serieId.ToString());
     }
 }

@@ -4,6 +4,7 @@ using ManaxLibrary.DTOs.User;
 using ManaxServer.Auth;
 using ManaxServer.Models;
 using ManaxServer.Models.Library;
+using ManaxServer.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -93,6 +94,7 @@ public class LibraryController(ManaxContext context, IMapper mapper) : Controlle
                 "A uniqueness constraint violation occurred. Please check that the name and path are unique.");
         }
 
+        NotificationService.NotifyLibraryCreatedAsync(mapper.Map<LibraryDTO>(library));
         return NoContent();
     }
 
@@ -130,6 +132,7 @@ public class LibraryController(ManaxContext context, IMapper mapper) : Controlle
                 "A uniqueness constraint violation occurred. Please check that the name and path are unique.");
         }
 
+        NotificationService.NotifyLibraryCreatedAsync(mapper.Map<LibraryDTO>(library));
         return library.Id;
     }
 
@@ -145,6 +148,7 @@ public class LibraryController(ManaxContext context, IMapper mapper) : Controlle
 
         context.Libraries.Remove(library);
         await context.SaveChangesAsync();
+        NotificationService.NotifyLibraryDeletedAsync(library.Id);
 
         return Ok();
     }

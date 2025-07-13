@@ -77,12 +77,11 @@ public class UserController(ManaxContext context, IMapper mapper) : ControllerBa
     public async Task<ActionResult<long>> PostUser(UserCreateDTO userCreate)
     {
         User? user = mapper.Map<User>(userCreate);
-
-        // Hasher le mot de passe
         user.PasswordHash = HashService.HashPassword(userCreate.Password);
 
         context.Users.Add(user);
         await context.SaveChangesAsync();
+        NotificationService.NotifyUserCreatedAsync(mapper.Map<UserDTO>(user));
 
         return user.Id;
     }
@@ -113,6 +112,7 @@ public class UserController(ManaxContext context, IMapper mapper) : ControllerBa
 
         context.Users.Remove(userToDelete);
         await context.SaveChangesAsync();
+        NotificationService.NotifyUserDeletedAsync(userToDelete.Id);
 
         return NoContent();
     }

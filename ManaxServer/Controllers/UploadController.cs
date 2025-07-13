@@ -1,6 +1,8 @@
 using System.IO.Compression;
 using System.Text.RegularExpressions;
+using AutoMapper;
 using ImageMagick;
+using ManaxLibrary.DTOs;
 using ManaxLibrary.DTOs.Setting;
 using ManaxLibrary.DTOs.User;
 using ManaxServer.Auth;
@@ -15,7 +17,7 @@ namespace ManaxServer.Controllers;
 
 [Route("api/upload")]
 [ApiController]
-public partial class UploadController(ManaxContext context) : ControllerBase
+public partial class UploadController(ManaxContext context, IMapper mapper) : ControllerBase
 {
     [GeneratedRegex("\\d{1,4}")]
     private static partial Regex RegexNumber();
@@ -105,8 +107,8 @@ public partial class UploadController(ManaxContext context) : ControllerBase
         };
 
         context.Chapters.Add(chapter);
-
         await context.SaveChangesAsync();
+        if (!replace) { NotificationService.NotifyChapterAddedAsync(mapper.Map<ChapterDTO>(chapter)); }
 
         _ = TaskManagerService.AddTaskAsync(new ChapterCheckTask(chapter.Id));
         _ = TaskManagerService.AddTaskAsync(new SerieCheckTask(chapter.SerieId));
@@ -128,7 +130,8 @@ public partial class UploadController(ManaxContext context) : ControllerBase
             MagickImage image = new(file.OpenReadStream());
             image.Quality = Settings.Settings.Data.PosterQuality;
             await image.WriteAsync(path, GetMagickFormat(format));
-            _ = TaskManagerService.AddTaskAsync(new SerieCheckTask(serieId));
+            _ = TaskManagerService.AddTaskAsync(new SerieCheckTask(serie.Id));
+            NotificationService.NotifyPosterModifiedAsync(serie.Id);
         }
         catch (Exception e)
         {

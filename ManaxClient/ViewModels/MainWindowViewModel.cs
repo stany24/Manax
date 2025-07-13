@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Threading;
@@ -46,11 +47,23 @@ public partial class MainWindowViewModel : ObservableObject
             {
                 IsAdmin = login.IsAdmin();
                 ServerNotification.OnRunningTasks += OnRunningTasksHandler;
+                ServerNotification.OnLibraryCreated += OnLibraryCreatedHandler;
+                ServerNotification.OnLibraryUpdated += OnLibraryUpdatedHandler;
+                ServerNotification.OnLibraryDeleted += OnLibraryDeletedHandler;
                 LoadLibraries();
             });
         };
         
         SetPage(new LoginPageViewModel());
+    }
+
+    ~MainWindowViewModel()
+    {
+        ServerNotification.OnRunningTasks -= OnRunningTasksHandler;
+        ServerNotification.OnLibraryCreated -= OnLibraryCreatedHandler;
+        ServerNotification.OnLibraryUpdated -= OnLibraryUpdatedHandler;
+        ServerNotification.OnLibraryDeleted -= OnLibraryDeletedHandler;
+        
     }
 
     private void OnRunningTasksHandler(Dictionary<string, int> tasks)
@@ -63,6 +76,41 @@ public partial class MainWindowViewModel : ObservableObject
 
             foreach (KeyValuePair<string, int> task in tasks)
                 RunningTasks.Add(new TaskItem { TaskName = task.Key, Number = task.Value });
+        });
+    }
+    
+    private void OnLibraryCreatedHandler(LibraryDTO library)
+    {
+        if (library == null) return;
+
+        Dispatcher.UIThread.Invoke(() =>
+        {
+            Libraries.Add(library);
+            ShowInfo($"Library '{library.Name}' was created");
+        });
+    }
+    
+    private void OnLibraryUpdatedHandler(LibraryDTO library)
+    {
+        Dispatcher.UIThread.Invoke(() =>
+        {
+            LibraryDTO? old = Libraries.FirstOrDefault(l => l.Id == library.Id);
+            if(old != null){Libraries.Remove(old);}
+            Libraries.Add(library);
+            ShowInfo($"Library '{old?.Name ?? "null"}' was updated to '{library.Name}'");
+        });
+    }
+    
+    private void OnLibraryDeletedHandler(long libraryId)
+    {
+        Dispatcher.UIThread.Invoke(() =>
+        {
+            LibraryDTO? library = Libraries.FirstOrDefault(l => l.Id == libraryId);
+            if (library != null)
+            {
+                Libraries.Remove(library);
+                ShowInfo($"Library '{library.Name}' was deleted");
+            }
         });
     }
 
@@ -137,16 +185,7 @@ public partial class MainWindowViewModel : ObservableObject
                 LibraryCreateDTO? library = popup.GetResult();
                 if (library == null) return;
                 long? id = await ManaxApiLibraryClient.PostLibraryAsync(library);
-                if (id == null)
-                {
-                    Infos.Add("Library creation failed");
-                    return;
-                }
-
-                LibraryDTO? createdLibrary = await ManaxApiLibraryClient.GetLibraryAsync((long)id);
-                if (createdLibrary == null) return;
-                Dispatcher.UIThread.Post(() => Libraries.Add(createdLibrary));
-                ShowLibrary(createdLibrary.Id);
+                if (id == null) { Infos.Add("Library creation failed"); }
             }
             catch (Exception)
             {

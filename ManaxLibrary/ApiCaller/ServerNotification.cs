@@ -16,20 +16,21 @@ public static class ServerNotification
     private static string _token = null!;
     
     public static event Action<Dictionary<string, int>>? OnRunningTasks;
+    public static event Action<long>? OnPosterModified;
     
     public static event Action<LibraryDTO>? OnLibraryCreated;
-    public static event Action<string>? OnLibraryDeleted;
+    public static event Action<long>? OnLibraryDeleted;
     public static event Action<LibraryDTO>? OnLibraryUpdated;
     
     public static event Action<SerieDTO>? OnSerieCreated;
     public static event Action<SerieDTO>? OnSerieUpdated;
-    public static event Action<string>? OnSerieDeleted;
+    public static event Action<long>? OnSerieDeleted;
     
     public static event Action<ChapterDTO>? OnChapterAdded;
-    public static event Action<string>? OnChapterDeleted;
+    public static event Action<long>? OnChapterDeleted;
     
     public static event Action<UserDTO>? OnUserCreated;
-    public static event Action<string>? OnUserDeleted;
+    public static event Action<long>? OnUserDeleted;
     
     public static async Task InitializeAsync(Uri host, string token)
     {
@@ -49,7 +50,7 @@ public static class ServerNotification
             OnLibraryCreated?.Invoke(libraryData);
         });
         
-        _hubConnection.On<string>("LibraryDeleted", libraryId =>
+        _hubConnection.On<long>("LibraryDeleted", libraryId =>
         {
             OnLibraryDeleted?.Invoke(libraryId);
         });
@@ -69,7 +70,7 @@ public static class ServerNotification
             OnSerieUpdated?.Invoke(serieData);
         });
         
-        _hubConnection.On<string>("SerieDeleted", serieId =>
+        _hubConnection.On<long>("SerieDeleted", serieId =>
         {
             OnSerieDeleted?.Invoke(serieId);
         });
@@ -79,7 +80,7 @@ public static class ServerNotification
             OnChapterAdded?.Invoke(chapterData);
         });
         
-        _hubConnection.On<string>("ChapterRemoved", chapterId =>
+        _hubConnection.On<long>("ChapterRemoved", chapterId =>
         {
             OnChapterDeleted?.Invoke(chapterId);
         });
@@ -89,7 +90,7 @@ public static class ServerNotification
             OnUserCreated?.Invoke(userData);
         });
         
-        _hubConnection.On<string>("UserDeleted", userId =>
+        _hubConnection.On<long>("UserDeleted", userId =>
         {
             OnUserDeleted?.Invoke(userId);
         });
@@ -99,6 +100,11 @@ public static class ServerNotification
             OnRunningTasks?.Invoke(tasks);
         });
 
+        _hubConnection.On<long>("PosterModified", serieId =>
+        {
+            OnPosterModified?.Invoke(serieId);
+        });
+        
         _hubConnection.On<string>("Connected", message =>
         {
             Console.WriteLine($"SignalR: {message}");

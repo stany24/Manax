@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -26,13 +27,36 @@ public partial class UsersPageViewModel : PageViewModel
                 Dispatcher.UIThread.Post(() => Users.Add(userAsync));
             }
         });
+        ServerNotification.OnUserCreated += OnUserCreated;
+        ServerNotification.OnUserDeleted += OnUserDeleted;
+    }
+
+    ~UsersPageViewModel()
+    {
+        ServerNotification.OnUserCreated -= OnUserCreated;
+        ServerNotification.OnUserDeleted -= OnUserDeleted;
+    }
+
+    private void OnUserDeleted(long userId)
+    {
+        UserDTO? user = Users.FirstOrDefault(u => u.Id == userId);
+        if (user == null) return;
+        Dispatcher.UIThread.Post(() => Users.Remove(user));
+    }
+
+    private void OnUserCreated(UserDTO user)
+    {
+        Dispatcher.UIThread.Post(() => Users.Add(user));
     }
 
     public void DeleteUser(UserDTO user)
     {
         Task.Run(async () =>
         {
-            if (await ManaxApiUserClient.DeleteUserAsync(user.Id)) Dispatcher.UIThread.Post(() => Users.Remove(user));
+            if (!await ManaxApiUserClient.DeleteUserAsync(user.Id))
+            {
+                InfoEmitted?.Invoke("Failed to delete user", "Error");
+            }
         });
     }
 
@@ -42,19 +66,13 @@ public partial class UsersPageViewModel : PageViewModel
         {
             UserCreateDTO user = new() { Username = "user", Password = "user" };
             long? id = await ManaxApiUserClient.PostUserAsync(user);
-            if (id == null) return;
-            UserDTO? createdUser = await ManaxApiUserClient.GetUserAsync((long)id);
-            if (createdUser == null) return;
-            Dispatcher.UIThread.Post(() => Users.Add(createdUser));
+            if (id == null) {InfoEmitted?.Invoke(this,"Failed to create user"); }
         });
         Task.Run(async () =>
         {
             UserCreateDTO user = new() { Username = "admin", Password = "admin", Role = UserRole.Admin };
             long? id = await ManaxApiUserClient.PostUserAsync(user);
-            if (id == null) return;
-            UserDTO? createdUser = await ManaxApiUserClient.GetUserAsync((long)id);
-            if (createdUser == null) return;
-            Dispatcher.UIThread.Post(() => Users.Add(createdUser));
+            if (id == null) {InfoEmitted?.Invoke(this,"Failed to create user"); }
         });
     }
 }

@@ -32,18 +32,40 @@ public partial class LibraryPageViewModel : PageViewModel
         ControlBarVisible = true;
         Task.Run(() => { LoadLibrary(libraryId); });
         Task.Run(() => { LoadSeries(libraryId); });
-        ServerNotification.OnSerieCreated += serieInfo =>
-        {
-            if (serieInfo.LibraryId != libraryId) return;
-            Dispatcher.UIThread.Post(() =>
-            {
-                if (serieInfo == null) return;
-                ClientSerie? existingSerie = Series.FirstOrDefault(s => s.Info.Id == serieInfo.Id);
-                if (existingSerie != null) return;
-                Series.Add(new ClientSerie { Info = serieInfo, Poster = null });
-            });
-        };
+        ServerNotification.OnSerieCreated += OnSerieCreated;
+        ServerNotification.OnSerieDeleted += OnSerieDeleted;
     }
+
+    ~LibraryPageViewModel()
+    {
+        ServerNotification.OnSerieCreated -= OnSerieCreated;
+    }
+    
+    private void OnSerieCreated(SerieDTO serie)
+    {
+        Console.WriteLine("Created");
+        if (serie.LibraryId != Library?.Id) return;
+        Dispatcher.UIThread.Post(() =>
+        {
+            if (serie == null) return;
+            ClientSerie? existingSerie = Series.FirstOrDefault(s => s.Info.Id == serie.Id);
+            if (existingSerie != null) return;
+            Series.Add(new ClientSerie { Info = serie, Poster = null });
+        });
+    }
+    
+    private void OnSerieDeleted(long serieId)
+    {
+        Dispatcher.UIThread.Post(() =>
+        {
+            ClientSerie? existingSerie = Series.FirstOrDefault(s => s.Info.Id == serieId);
+            if (existingSerie != null)
+            {
+                Series.Remove(existingSerie);
+            }
+        });
+    }
+
     
     private async void LoadLibrary(long libraryId)
     {

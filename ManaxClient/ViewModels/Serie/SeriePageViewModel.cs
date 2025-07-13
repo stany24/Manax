@@ -30,6 +30,10 @@ public partial class SeriePageViewModel : PageViewModel
         Task.Run(() => { LoadSerieInfo(serieId); });
         Task.Run(() => { LoadPoster(serieId); });
         Task.Run(() => { LoadChapters(serieId); });
+        ServerNotification.OnSerieUpdated += UpdateSerieInfo;
+        ServerNotification.OnPosterModified += LoadPoster;
+        ServerNotification.OnChapterAdded += OnChapterAdded;
+        ServerNotification.OnChapterDeleted += OnChapterDeleted;
 
         Task task = Task.Run(async () =>
         {
@@ -65,6 +69,35 @@ public partial class SeriePageViewModel : PageViewModel
                 });
             };
         });
+    }
+
+    ~SeriePageViewModel()
+    {
+        ServerNotification.OnSerieUpdated -= UpdateSerieInfo;
+        ServerNotification.OnPosterModified -= LoadPoster;
+        ServerNotification.OnChapterAdded -= OnChapterAdded;
+        ServerNotification.OnChapterDeleted -= OnChapterDeleted;
+    }
+
+    private void UpdateSerieInfo(SerieDTO serie)
+    {
+        if(serie.Id != Serie?.Id) return;
+        Dispatcher.UIThread.Post(() =>
+        {
+            Serie = serie;
+        });
+    }
+    
+    private void OnChapterAdded(ChapterDTO chapter)
+    {
+        Dispatcher.UIThread.Post(() => Chapters.Add(chapter));
+    }
+    
+    private void OnChapterDeleted(long chapterId)
+    {
+        ChapterDTO? chapter = Chapters.FirstOrDefault(c => c.Id == chapterId);
+        if (chapter == null) return;
+        Dispatcher.UIThread.Post(() => Chapters.Remove(chapter));
     }
 
     private async void LoadSerieInfo(long serieId)
@@ -150,14 +183,7 @@ public partial class SeriePageViewModel : PageViewModel
                 SerieUpdateDTO? serie = popup.GetResult();
                 if (serie == null) return;
                 bool success = await ManaxApiSerieClient.PutSerieAsync(Serie.Id, serie);
-                InfoEmitted?.Invoke(this, success ? "Serie update successful" : "Serie update failed");
-                if (success)
-                {
-                    _ = Task.Run(() =>
-                    {
-                        LoadSerieInfo(Serie.Id);
-                    });
-                }
+                if(!success){InfoEmitted?.Invoke(this,"Serie update failed");}
             }
             catch (Exception)
             {

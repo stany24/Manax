@@ -75,7 +75,7 @@ public class SerieController(ManaxContext context, IMapper mapper) : ControllerB
     // PUT: api/Serie/5
     [HttpPut("{id:long}")]
     [AuthorizeRole(UserRole.Admin)]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> PutSerie(long id, SerieUpdateDTO serieUpdate)
@@ -89,6 +89,7 @@ public class SerieController(ManaxContext context, IMapper mapper) : ControllerB
         try
         {
             await context.SaveChangesAsync();
+            NotificationService.NotifySerieUpdatedAsync(mapper.Map<SerieDTO>(serie));
         }
         catch (DbUpdateConcurrencyException)
         {
@@ -96,7 +97,7 @@ public class SerieController(ManaxContext context, IMapper mapper) : ControllerB
             throw;
         }
 
-        return NoContent();
+        return Ok();
     }
 
     // POST: api/Serie
@@ -126,7 +127,7 @@ public class SerieController(ManaxContext context, IMapper mapper) : ControllerB
             };
             context.Series.Add(serie);
             await context.SaveChangesAsync();
-            _ = NotificationService.NotifySerieCreatedAsync(mapper.Map<SerieDTO>(serie));
+            NotificationService.NotifySerieCreatedAsync(mapper.Map<SerieDTO>(serie));
             return serie.Id;
         }
         catch (Exception)
@@ -147,6 +148,7 @@ public class SerieController(ManaxContext context, IMapper mapper) : ControllerB
 
         context.Series.Remove(serie);
         await context.SaveChangesAsync();
+        NotificationService.NotifySerieDeletedAsync(serie.Id);
 
         return NoContent();
     }
