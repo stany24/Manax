@@ -13,6 +13,7 @@ public static class TaskManagerService
     static TaskManagerService()
     {
         Task.Run(() => TaskLoopAsync(CancellationTokenSource.Token));
+        Task.Run(() => PublishTasks(CancellationTokenSource.Token));
     }
 
     public static async Task AddTaskAsync(ITask task)
@@ -81,18 +82,23 @@ public static class TaskManagerService
         }
     }
     
-    public static async Task<Dictionary<string, int>> GetTasks()
+    private static async void PublishTasks(CancellationToken cancellationToken)
     {
-        await TaskSemaphore.WaitAsync();
-        try
+        while (!cancellationToken.IsCancellationRequested)
         {
-            return WaitingTasks.GroupBy(t => t.GetName())
-                .Select(g => new KeyValuePair<string, int>(g.Key, g.Count()))
-                .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
-        }
-        finally
-        {
-            TaskSemaphore.Release();
+            Thread.Sleep(1000);
+            await TaskSemaphore.WaitAsync(cancellationToken);
+            try
+            {
+                Dictionary<string, int> tasks = WaitingTasks.GroupBy(t => t.GetName())
+                    .Select(g => new KeyValuePair<string, int>(g.Key, g.Count()))
+                    .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+                _ = NotificationService.NotifyRunningTasksAsync(tasks);
+            }
+            finally
+            {
+                TaskSemaphore.Release();
+            }
         }
     }
 

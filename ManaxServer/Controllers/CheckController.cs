@@ -44,13 +44,4 @@ public class CheckController(ManaxContext context) : ControllerBase
 
         return Ok();
     }
-
-    [HttpGet("tasks")]
-    [AuthorizeRole(UserRole.User)]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public ActionResult<Dictionary<string, int>> GetTasks()
-    {
-        return TaskManagerService.GetTasks().Result;
-    }
 }

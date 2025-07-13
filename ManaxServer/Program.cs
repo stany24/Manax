@@ -4,6 +4,7 @@ using ManaxServer.Models;
 using ManaxServer.Models.Issue.Reported;
 using ManaxServer.Models.Rank;
 using ManaxServer.Services;
+using ManaxServer.Hubs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
@@ -14,7 +15,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace ManaxServer;
 
-public static class Program
+public class Program
 {
     public static void Main(string[] args)
     {
@@ -28,7 +29,6 @@ public static class Program
 
         // Configuration SignalR
         builder.Services.AddSignalR();
-        builder.Services.AddSingleton<NotificationService>();
 
         string secretKey = JwtService.GetSecretKey();
         builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -43,18 +43,36 @@ public static class Program
                     IssuerSigningKey = new SymmetricSecurityKey(Convert.FromBase64String(secretKey))
                 };
 
-                // Configuration de SignalR avec l'authentification JWT
+                // Configuration spéciale pour SignalR
                 options.Events = new JwtBearerEvents
                 {
                     OnMessageReceived = context =>
                     {
-                        // Permet l'authentification JWT pour SignalR
                         StringValues accessToken = context.Request.Query["access_token"];
                         PathString path = context.HttpContext.Request.Path;
-                        if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/notificationHub"))
+
+                        if (string.IsNullOrEmpty(accessToken) || !path.StartsWithSegments("/notificationHub"))
+                            return Task.CompletedTask;
+                        context.Token = accessToken;
+                            
+                        context.Options.TokenValidationParameters = new TokenValidationParameters
                         {
-                            context.Token = accessToken;
-                        }
+                            ValidateIssuer = false,
+                            ValidateAudience = false,
+                            ValidateLifetime = true,
+                            ValidateIssuerSigningKey = true,
+                            IssuerSigningKey = new SymmetricSecurityKey(Convert.FromBase64String(secretKey))
+                        };
+                            
+                        ILogger<Program> logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Program>>();
+                        logger.LogDebug("Token extrait de la requête SignalR: {Path} - Validation adaptée", path);
+
+                        return Task.CompletedTask;
+                    },
+                    OnAuthenticationFailed = context =>
+                    {
+                        ILogger<Program> logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Program>>();
+                        logger.LogWarning(context.Exception, "Échec d'authentification SignalR");
                         return Task.CompletedTask;
                     }
                 };
@@ -87,6 +105,9 @@ public static class Program
         // Initialisation du singleton ScanService
         CheckService.Initialize(app.Services.GetRequiredService<IServiceScopeFactory>());
         IssueManagerService.Initialize(app.Services.GetRequiredService<IServiceScopeFactory>());
+        NotificationService.Initialize(
+            app.Services.GetRequiredService<IHubContext<NotificationHub>>(),
+            app.Services.GetRequiredService<ILogger<NotificationHub>>());
 
         app.UseMiddleware<GlobalExceptionMiddleware>();
 
@@ -104,7 +125,7 @@ public static class Program
         app.MapControllers();
         
         // Configuration du endpoint pour le hub SignalR
-        app.MapHub<Hub>("/notificationHub");
+        app.MapHub<NotificationHub>("/notificationHub");
 
         app.Run();
     }

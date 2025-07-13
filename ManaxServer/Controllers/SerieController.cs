@@ -5,6 +5,7 @@ using ManaxServer.Auth;
 using ManaxServer.Models;
 using ManaxServer.Models.Library;
 using ManaxServer.Models.Serie;
+using ManaxServer.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -125,6 +126,7 @@ public class SerieController(ManaxContext context, IMapper mapper) : ControllerB
             };
             context.Series.Add(serie);
             await context.SaveChangesAsync();
+            _ = NotificationService.NotifySerieCreatedAsync(mapper.Map<SerieDTO>(serie));
             return serie.Id;
         }
         catch (Exception)

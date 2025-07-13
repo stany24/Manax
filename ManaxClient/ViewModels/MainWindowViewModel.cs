@@ -45,12 +45,25 @@ public partial class MainWindowViewModel : ObservableObject
             Dispatcher.UIThread.Post(() =>
             {
                 IsAdmin = login.IsAdmin();
-                UpdateRunningTasks();
+                ServerNotification.OnRunningTasks += OnRunningTasksHandler;
                 LoadLibraries();
             });
         };
-
+        
         SetPage(new LoginPageViewModel());
+    }
+
+    private void OnRunningTasksHandler(Dictionary<string, int> tasks)
+    {
+        if (tasks == null) return;
+
+        Dispatcher.UIThread.Invoke(() =>
+        {
+            RunningTasks.Clear();
+
+            foreach (KeyValuePair<string, int> task in tasks)
+                RunningTasks.Add(new TaskItem { TaskName = task.Key, Number = task.Value });
+        });
     }
 
     private void LoadLibraries()
@@ -111,29 +124,6 @@ public partial class MainWindowViewModel : ObservableObject
     {
         _history.SetPage(page);
         OnPropertyChanged(nameof(CurrentPageViewModel));
-    }
-
-    private void UpdateRunningTasks()
-    {
-        if (!IsAdmin) return;
-        Task.Run(() =>
-        {
-            while (true)
-            {
-                Thread.Sleep(1000);
-
-                Dictionary<string, int>? tasks = ManaxApiScanClient.GetTasksAsync().Result;
-                if (tasks == null) continue;
-
-                Dispatcher.UIThread.Invoke(() =>
-                {
-                    RunningTasks.Clear();
-
-                    foreach (KeyValuePair<string, int> task in tasks)
-                        RunningTasks.Add(new TaskItem { TaskName = task.Key, Number = task.Value });
-                });
-            }
-        });
     }
 
     public void CreateLibrary()

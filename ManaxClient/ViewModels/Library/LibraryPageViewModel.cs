@@ -32,6 +32,17 @@ public partial class LibraryPageViewModel : PageViewModel
         ControlBarVisible = true;
         Task.Run(() => { LoadLibrary(libraryId); });
         Task.Run(() => { LoadSeries(libraryId); });
+        ServerNotification.OnSerieCreated += serieInfo =>
+        {
+            if (serieInfo.LibraryId != libraryId) return;
+            Dispatcher.UIThread.Post(() =>
+            {
+                if (serieInfo == null) return;
+                ClientSerie? existingSerie = Series.FirstOrDefault(s => s.Info.Id == serieInfo.Id);
+                if (existingSerie != null) return;
+                Series.Add(new ClientSerie { Info = serieInfo, Poster = null });
+            });
+        };
     }
     
     private async void LoadLibrary(long libraryId)
@@ -132,7 +143,6 @@ public partial class LibraryPageViewModel : PageViewModel
 
             bool success = await UploadApiUploadClient.UploadSerieAsync(folderPath, Library.Id);
             InfoEmitted?.Invoke(this, !success ? "Serie upload failed" : "Serie upload successful");
-            LoadSeries(Library.Id);
         }
         catch (Exception e)
         {

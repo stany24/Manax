@@ -155,7 +155,6 @@ public class UserController(ManaxContext context, IMapper mapper) : ControllerBa
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult<UserDTO>> GetCurrentUser()
     {
-        Console.WriteLine("TEST");
         long? userId = GetCurrentUserId(HttpContext);
         if (userId == null) return Unauthorized();
 
