@@ -5,6 +5,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using ManaxClient.ViewModels.Home;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTOs.User;
+using Logger = ManaxLibrary.Logging.Logger;
 
 namespace ManaxClient.ViewModels.Login;
 
@@ -61,8 +62,8 @@ public partial class LoginPageViewModel : PageViewModel
             }
 
             _isAdmin = self.Role is UserRole.Admin or UserRole.Owner;
-
             InfoEmitted?.Invoke(this, $"Logged in as {self.Username} ({self.Role})");
+            Logger.LogInfo($"Logged in as {self.Username} ({self.Role})");
             PageChangedRequested?.Invoke(this, new HomePageViewModel());
         }
         catch (Exception)

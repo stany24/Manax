@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -18,6 +17,7 @@ using ManaxClient.ViewModels.Serie;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTOs.Library;
 using ManaxLibrary.DTOs.Serie;
+using ManaxLibrary.Logging;
 
 namespace ManaxClient.ViewModels.Library;
 
@@ -26,6 +26,7 @@ public partial class LibraryPageViewModel : PageViewModel
     [ObservableProperty] private LibraryDTO? _library;
     [ObservableProperty] private ObservableCollection<ClientSerie> _series = [];
     [ObservableProperty] private bool _isFolderPickerOpen;
+    private readonly object _serieLock = new();
 
     public LibraryPageViewModel(long libraryId)
     {
@@ -46,13 +47,16 @@ public partial class LibraryPageViewModel : PageViewModel
     
     private void OnSerieCreated(SerieDTO serie)
     {
-        Console.WriteLine("Created");
+        Logger.LogInfo("A new Serie has been created in "+Library?.Name);
         if (serie.LibraryId != Library?.Id) return;
         Dispatcher.UIThread.Post(() =>
         {
-            ClientSerie? existingSerie = Series.FirstOrDefault(s => s.Info.Id == serie.Id);
-            if (existingSerie != null) return;
-            Series.Add(new ClientSerie { Info = serie, Poster = null });
+            lock (_serieLock)
+            {
+                ClientSerie? existingSerie = Series.FirstOrDefault(s => s.Info.Id == serie.Id);
+                if (existingSerie != null) return;
+                Series.Add(new ClientSerie { Info = serie, Poster = null });
+            }
         });
     }
     
@@ -60,10 +64,13 @@ public partial class LibraryPageViewModel : PageViewModel
     {
         Dispatcher.UIThread.Post(() =>
         {
-            ClientSerie? existingSerie = Series.FirstOrDefault(s => s.Info.Id == serieId);
-            if (existingSerie != null)
+            lock (_serieLock)
             {
-                Series.Remove(existingSerie);
+                ClientSerie? existingSerie = Series.FirstOrDefault(s => s.Info.Id == serieId);
+                if (existingSerie != null)
+                {
+                    Series.Remove(existingSerie);
+                }
             }
         });
     }
@@ -72,7 +79,11 @@ public partial class LibraryPageViewModel : PageViewModel
     {
         try
         {
-            ClientSerie? serie = Series.FirstOrDefault(s => s.Info.Id == serieId);
+            ClientSerie? serie;
+            lock (_serieLock)
+            {
+                serie = Series.FirstOrDefault(s => s.Info.Id == serieId);
+            }
             if (serie == null) return;
             byte[]? posterBytes = await ManaxApiSerieClient.GetSeriePosterAsync(serieId);
             if (posterBytes == null){return;}
@@ -81,14 +92,14 @@ public partial class LibraryPageViewModel : PageViewModel
                 Bitmap poster = new(new MemoryStream(posterBytes));
                 Dispatcher.UIThread.Post(() => serie.Poster = poster);
             }
-            catch
+            catch (Exception e)
             {
-                Console.WriteLine("Failed to load poster for serie with ID: " + serieId);
+                Logger.LogError("Failed to load the new poster for serie with ID: " + serieId,e, Environment.StackTrace);
             }
         }
-        catch (Exception)
+        catch (Exception e)
         {
-            InfoEmitted?.Invoke(this,"Failed to update poster");
+            Logger.LogError("Failed to receive the new poster for serie with ID: " + serieId,e, Environment.StackTrace);
         }
     }
     
@@ -100,9 +111,9 @@ public partial class LibraryPageViewModel : PageViewModel
             if (libraryAsync == null) return;
             Dispatcher.UIThread.Post(() => Library = libraryAsync);
         }
-        catch (Exception)
+        catch (Exception e)
         {
-            InfoEmitted?.Invoke(this, "Failed to load library informations");
+            Logger.LogError("Failed to load the library with ID: " + libraryId,e, Environment.StackTrace);
         }
     }
     
@@ -117,7 +128,7 @@ public partial class LibraryPageViewModel : PageViewModel
             }
             else
             {
-                InfoEmitted?.Invoke(this, "Failed to delete library");
+                Logger.LogFailure("Failed to delete library with ID: " + Library.Id, Environment.StackTrace);
             }
         });
     }
@@ -131,8 +142,11 @@ public partial class LibraryPageViewModel : PageViewModel
             if (seriesIds == null) return;
             foreach (long serieId in seriesIds)
             {
-                if(Series.FirstOrDefault(s => s.Info.Id == serieId) != null)
-                    continue;
+                lock (_serieLock)
+                {
+                    if(Series.FirstOrDefault(s => s.Info.Id == serieId) != null) {continue;}
+                }
+                
                 SerieDTO? info = await ManaxApiSerieClient.GetSerieInfoAsync(serieId);
                 if (info == null) continue;
                 byte[]? posterBytes = await ManaxApiSerieClient.GetSeriePosterAsync(serieId);
@@ -149,12 +163,18 @@ public partial class LibraryPageViewModel : PageViewModel
                 else
                     serie.Poster = null;
 
-                Dispatcher.UIThread.Post(() => Series.Add(serie));
+                Dispatcher.UIThread.Post(() =>
+                {
+                    lock (_serieLock)
+                    {
+                        Series.Add(serie);
+                    }
+                });
             }
         }
-        catch (Exception)
+        catch (Exception e)
         {
-            InfoEmitted?.Invoke(this,"Failed to load series");
+            Logger.LogError("Failed to load series for library with ID: " + libraryId, e, Environment.StackTrace);
         }
     }
 
@@ -190,10 +210,11 @@ public partial class LibraryPageViewModel : PageViewModel
 
             bool success = await UploadApiUploadClient.UploadSerieAsync(folderPath, Library.Id);
             InfoEmitted?.Invoke(this, !success ? "Serie upload failed" : "Serie upload successful");
+            Logger.LogInfo(!success ? "Serie upload failed" : "Serie upload successful");
         }
         catch (Exception e)
         {
-            Debug.WriteLine($"Error uploading series: {e.Message}");
+            Logger.LogError("Error uploading series", e, Environment.StackTrace);
         }
         finally
         {

@@ -8,6 +8,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using ManaxClient.Models;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTOs;
+using ManaxLibrary.Logging;
 
 namespace ManaxClient.ViewModels.Chapter;
 
@@ -27,7 +28,6 @@ public partial class ChapterPageViewModel : PageViewModel
                 Chapter.Info = chapterAsync;
                 Chapter.Pages = new ObservableCollection<Bitmap>(new Bitmap[chapterAsync.Pages]);
             });
-            Console.WriteLine(chapterAsync.Pages);
             for (int i = 0; i < chapterAsync.Pages; i++)
             {
                 int index = i;
@@ -39,9 +39,10 @@ public partial class ChapterPageViewModel : PageViewModel
 
                     Dispatcher.UIThread.Post(() => { Chapter.Pages[index] = page; });
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
                     InfoEmitted?.Invoke(this, "Error loading page " + index);
+                    Logger.LogError("Failed to load page " + index + " for chapter " + chapterId,e,Environment.StackTrace);
                 }
             }
         });

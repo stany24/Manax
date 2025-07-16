@@ -13,6 +13,7 @@ using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTOs;
 using ManaxLibrary.DTOs.Rank;
 using ManaxLibrary.DTOs.Serie;
+using Logger = ManaxLibrary.Logging.Logger;
 
 namespace ManaxClient.ViewModels.Serie;
 
@@ -67,6 +68,7 @@ public partial class SeriePageViewModel : PageViewModel
                     bool success = await ManaxApiRankClient.SetUserRankAsync(userRankCreateDto);
                     if (success) return;
                     InfoEmitted?.Invoke(this, "Failed to set rank");
+                    Logger.LogFailure("Failed to set rank for serie " + serieId,Environment.StackTrace);
                 });
             };
         });
@@ -91,6 +93,7 @@ public partial class SeriePageViewModel : PageViewModel
     
     private void OnChapterAdded(ChapterDTO chapter)
     {
+        if (chapter.SerieId != Serie?.Id) return;
         Dispatcher.UIThread.Post(() => Chapters.Add(chapter));
     }
     
@@ -109,9 +112,10 @@ public partial class SeriePageViewModel : PageViewModel
             if (libraryAsync == null) return;
             Dispatcher.UIThread.Post(() => Serie = libraryAsync);
         }
-        catch (Exception)
+        catch (Exception e)
         {
             InfoEmitted?.Invoke(this, "Error loading serie info");
+            Logger.LogError("Failed to load serie with ID: " + serieId,e, Environment.StackTrace);
         }
     }
 
@@ -133,9 +137,10 @@ public partial class SeriePageViewModel : PageViewModel
             else
                 Poster = null;
         }
-        catch (Exception)
+        catch (Exception e)
         {
             InfoEmitted?.Invoke(this, "Error loading poster");
+            Logger.LogError("Failed to load poster for serie with ID: " + serieId, e, Environment.StackTrace);
         }
     }
 
@@ -161,9 +166,10 @@ public partial class SeriePageViewModel : PageViewModel
                 }
             });
         }
-        catch (Exception)
+        catch (Exception e)
         {
             InfoEmitted?.Invoke(this, "Error loading chapters");
+            Logger.LogError("Failed to load chapters for serie with ID: " + serieId, e, Environment.StackTrace);
         }
     }
 
@@ -185,11 +191,16 @@ public partial class SeriePageViewModel : PageViewModel
                 SerieUpdateDTO? serie = popup.GetResult();
                 if (serie == null) return;
                 bool success = await ManaxApiSerieClient.PutSerieAsync(Serie.Id, serie);
-                if(!success){InfoEmitted?.Invoke(this,"Serie update failed");}
+                if (!success)
+                {
+                    InfoEmitted?.Invoke(this,"Serie update failed");
+                    Logger.LogFailure("Failed to update serie with ID: " + Serie.Id, Environment.StackTrace);
+                }
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 InfoEmitted?.Invoke(this, "Error updating serie");
+                Logger.LogError("Failed to update serie with ID: " + Serie.Id,e, Environment.StackTrace);
             }
         };
         PopupRequested?.Invoke(this, popup);

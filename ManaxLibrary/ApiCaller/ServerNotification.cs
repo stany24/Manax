@@ -2,6 +2,7 @@ using ManaxLibrary.DTOs;
 using ManaxLibrary.DTOs.Library;
 using ManaxLibrary.DTOs.Serie;
 using ManaxLibrary.DTOs.User;
+using ManaxLibrary.Logging;
 using Microsoft.AspNetCore.SignalR.Client;
 
 namespace ManaxLibrary.ApiCaller;
@@ -104,25 +105,27 @@ public static class ServerNotification
         
         _hubConnection.On<string>("Connected", message =>
         {
-            Console.WriteLine($"SignalR: {message}");
+            Logger.LogInfo("SignalR Server: " + message);
         });
 
         _hubConnection.Closed += async exception =>
         {
-            Console.WriteLine($"SignalR: Connexion fermée{(exception != null ? $" avec erreur: {exception.Message}" : "")}");
+            if (exception != null) { Logger.LogError("SignalR: Connexion fermée", exception, Environment.StackTrace); }
+            else { Logger.LogInfo("SignalR: Connexion fermée"); }
             await Task.Delay(5000);
             await ConnectAsync();
         };
         
         _hubConnection.Reconnecting += exception =>
         {
-            Console.WriteLine($"SignalR: Tentative de reconnexion... {(exception != null ? exception.Message : "")}");
+            if (exception != null) { Logger.LogError("SignalR: Tentative de reconnexion", exception, Environment.StackTrace); }
+            else { Logger.LogInfo("SignalR: Tentative de reconnexion"); }
             return Task.CompletedTask;
         };
         
         _hubConnection.Reconnected += connectionId =>
         {
-            Console.WriteLine($"SignalR: Reconnecté avec ID: {connectionId}");
+            Logger.LogInfo("SignalR: Reconnecté avec ID: " + connectionId);
             return Task.CompletedTask;
         };
 
@@ -135,14 +138,13 @@ public static class ServerNotification
         {
             if (_hubConnection == null) return;
             
-            Console.WriteLine("SignalR: Tentative de connexion...");
+            Logger.LogInfo("SignalR: Tentative de connexion...");
             await _hubConnection.StartAsync();
-            Console.WriteLine("SignalR: Connexion établie avec succès!");
+            Logger.LogInfo("SignalR: Connexion établie avec succès");
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"SignalR: Erreur de connexion: {ex.Message}");
-            // Attendre avant de réessayer
+            Logger.LogError("SignalR: Erreur de connexion", ex, Environment.StackTrace);
             await Task.Delay(5000);
             await ConnectAsync();
         }
@@ -160,7 +162,7 @@ public static class ServerNotification
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"SignalR: Erreur lors de la déconnexion: {ex.Message}");
+                Logger.LogError("SignalR: Erreur lors de l'arrêt de la connexion", ex, Environment.StackTrace);
             }
         }
     }

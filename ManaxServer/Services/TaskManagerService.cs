@@ -1,3 +1,4 @@
+using ManaxLibrary.Logging;
 using ManaxServer.BackgroundTask;
 
 namespace ManaxServer.Services;
@@ -67,7 +68,7 @@ public static class TaskManagerService
                         }
                         catch(Exception e)
                         {
-                            Console.WriteLine("Error executing task: " + task.GetName());
+                            Logger.LogError("Error executing task: " + task.GetName(), e, Environment.StackTrace);
                         }
                     }, cancellationToken);
                     RunningTasks.Add((task, runningTask));

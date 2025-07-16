@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -6,6 +7,7 @@ using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTOs.User;
+using ManaxLibrary.Logging;
 
 namespace ManaxClient.ViewModels.User;
 
@@ -56,6 +58,7 @@ public partial class UsersPageViewModel : PageViewModel
             if (!await ManaxApiUserClient.DeleteUserAsync(user.Id))
             {
                 InfoEmitted?.Invoke("Failed to delete user", "Error");
+                Logger.LogFailure("Failed to delete user"+ user.Id,Environment.StackTrace);
             }
         });
     }
@@ -66,13 +69,21 @@ public partial class UsersPageViewModel : PageViewModel
         {
             UserCreateDTO user = new() { Username = "user", Password = "user" };
             long? id = await ManaxApiUserClient.PostUserAsync(user);
-            if (id == null) {InfoEmitted?.Invoke(this,"Failed to create user"); }
+            if (id == null)
+            {
+                InfoEmitted?.Invoke(this,"Failed to create user");
+                Logger.LogFailure("Failed to create user", Environment.StackTrace);
+            }
         });
         Task.Run(async () =>
         {
             UserCreateDTO user = new() { Username = "admin", Password = "admin", Role = UserRole.Admin };
             long? id = await ManaxApiUserClient.PostUserAsync(user);
-            if (id == null) {InfoEmitted?.Invoke(this,"Failed to create user"); }
+            if (id == null)
+            {
+                InfoEmitted?.Invoke(this,"Failed to create admin user");
+                Logger.LogFailure("Failed to create admin user", Environment.StackTrace);
+            }
         });
     }
 }
