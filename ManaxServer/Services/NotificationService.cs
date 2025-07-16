@@ -39,7 +39,7 @@ public static class NotificationService
 
     public static void NotifyLibraryDeletedAsync(long id)
     {
-        TrySendToAllClientsAsync("LibraryDeleted", id.ToString());
+        TrySendToAllClientsAsync("LibraryDeleted", id);
     }
 
     public static void NotifyLibraryUpdatedAsync(LibraryDTO library)
@@ -59,7 +59,7 @@ public static class NotificationService
     
     public static void NotifySerieDeletedAsync(long serieId)
     {
-        TrySendToAllClientsAsync("SerieDeleted", serieId.ToString());
+        TrySendToAllClientsAsync("SerieDeleted", serieId);
     }
 
     public static void NotifyChapterAddedAsync(ChapterDTO chapter)
@@ -69,7 +69,7 @@ public static class NotificationService
 
     public static void NotifyChapterRemovedAsync(long chapterId)
     {
-        TrySendToAllClientsAsync("ChapterRemoved", chapterId.ToString());
+        TrySendToAllClientsAsync("ChapterRemoved", chapterId);
     }
     
     public static void NotifyUserCreatedAsync(UserDTO user)
@@ -79,7 +79,7 @@ public static class NotificationService
     
     public static void NotifyUserDeletedAsync(long userId)
     {
-        TrySendToAllClientsAsync("UserDeleted", userId.ToString());
+        TrySendToAllClientsAsync("UserDeleted", userId);
     }
 
     public static void NotifyRunningTasksAsync(Dictionary<string, int> tasks)
@@ -89,6 +89,6 @@ public static class NotificationService
 
     public static void NotifyPosterModifiedAsync(long serieId)
     {
-        TrySendToAllClientsAsync("PosterModified", serieId.ToString());
+        TrySendToAllClientsAsync("PosterModified", serieId);
     }
 }

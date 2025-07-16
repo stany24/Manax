@@ -4,13 +4,13 @@ using ManaxLibrary.DTOs.Setting;
 
 namespace ManaxServer.Settings;
 
-public static class Settings
+public static class SettingsManager
 { 
     public static SettingsData Data { get; set; } = new();
     private static string SavePath => Path.Combine(AppContext.BaseDirectory, "settings.json");
     private static string BackupPath => Path.Combine(AppContext.BaseDirectory, "settings_backup.json");
     
-    static Settings()
+    static SettingsManager()
     {
         Load();
     }

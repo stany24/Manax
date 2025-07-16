@@ -15,6 +15,10 @@ public static class UploadApiUploadClient
         long? serieId = await ManaxApiSerieClient.PostSerieAsync(serieCreate);
         if (serieId == null)
             return false;
+        
+        string? poster = Directory.GetFiles(directory, "*poster.*").FirstOrDefault();
+        if (poster == null) return true;
+        await UploadPosterAsync(poster, Path.GetFileName(poster), (long)serieId);
 
         foreach (string filePath in Directory.GetFiles(directory, "*.cbz"))
         {
@@ -25,11 +29,8 @@ public static class UploadApiUploadClient
             if (!chapterResponse.IsSuccessStatusCode)
                 return false;
         }
-
-        string? poster = Directory.GetFiles(directory, "*poster.*").FirstOrDefault();
-        if (poster == null) return true;
-        HttpResponseMessage posterResponse = await UploadPosterAsync(poster, Path.GetFileName(poster), (long)serieId);
-        return posterResponse.IsSuccessStatusCode;
+        
+        return true;
     }
 
     private static async Task<HttpResponseMessage> UploadChapterAsync(ByteArrayContent file, string fileName,

@@ -11,6 +11,7 @@ using ManaxServer.Models;
 using ManaxServer.Models.Chapter;
 using ManaxServer.Models.Serie;
 using ManaxServer.Services;
+using ManaxServer.Settings;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ManaxServer.Controllers;
@@ -122,13 +123,13 @@ public partial class UploadController(ManaxContext context, IMapper mapper) : Co
         if (serie == null)
             return BadRequest("The serie does not exist");
 
-        ImageFormat format = Settings.Settings.Data.PosterFormat;
+        ImageFormat format = SettingsManager.Data.PosterFormat;
         string path = Path.Combine(serie.Path, "poster."+format.ToString().ToLower());
         if (System.IO.File.Exists(path) && !replace) return BadRequest("The poster already exists");
         try
         {
             MagickImage image = new(file.OpenReadStream());
-            image.Quality = Settings.Settings.Data.PosterQuality;
+            image.Quality = SettingsManager.Data.PosterQuality;
             await image.WriteAsync(path, GetMagickFormat(format));
             _ = TaskManagerService.AddTaskAsync(new SerieCheckTask(serie.Id));
             NotificationService.NotifyPosterModifiedAsync(serie.Id);

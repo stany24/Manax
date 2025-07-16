@@ -6,6 +6,7 @@ using ManaxServer.Models;
 using ManaxServer.Models.Library;
 using ManaxServer.Models.Serie;
 using ManaxServer.Services;
+using ManaxServer.Settings;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -65,7 +66,7 @@ public class SerieController(ManaxContext context, IMapper mapper) : ControllerB
     {
         Serie? serie = await context.Series.FindAsync(id);
         if (serie == null) return NotFound();
-        string posterName = "poster." + Settings.Settings.Data.ImageFormat.ToString().ToLower();
+        string posterName = "poster." + SettingsManager.Data.ImageFormat.ToString().ToLower();
         string posterPath = Path.Combine(serie.Path, posterName);
         if (!System.IO.File.Exists(posterPath)) return NotFound();
         byte[] readAllBytes = await System.IO.File.ReadAllBytesAsync(posterPath);

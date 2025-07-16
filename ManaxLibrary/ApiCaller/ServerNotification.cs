@@ -3,9 +3,6 @@ using ManaxLibrary.DTOs.Library;
 using ManaxLibrary.DTOs.Serie;
 using ManaxLibrary.DTOs.User;
 using Microsoft.AspNetCore.SignalR.Client;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace ManaxLibrary.ApiCaller;
 

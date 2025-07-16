@@ -33,12 +33,15 @@ public partial class LibraryPageViewModel : PageViewModel
         Task.Run(() => { LoadLibrary(libraryId); });
         Task.Run(() => { LoadSeries(libraryId); });
         ServerNotification.OnSerieCreated += OnSerieCreated;
+        ServerNotification.OnPosterModified += OnPosterModified;
         ServerNotification.OnSerieDeleted += OnSerieDeleted;
     }
 
     ~LibraryPageViewModel()
     {
         ServerNotification.OnSerieCreated -= OnSerieCreated;
+        ServerNotification.OnPosterModified -= OnPosterModified;
+        ServerNotification.OnSerieDeleted -= OnSerieDeleted;
     }
     
     private void OnSerieCreated(SerieDTO serie)
@@ -47,7 +50,6 @@ public partial class LibraryPageViewModel : PageViewModel
         if (serie.LibraryId != Library?.Id) return;
         Dispatcher.UIThread.Post(() =>
         {
-            if (serie == null) return;
             ClientSerie? existingSerie = Series.FirstOrDefault(s => s.Info.Id == serie.Id);
             if (existingSerie != null) return;
             Series.Add(new ClientSerie { Info = serie, Poster = null });
@@ -65,7 +67,30 @@ public partial class LibraryPageViewModel : PageViewModel
             }
         });
     }
-
+    
+    private async void OnPosterModified(long serieId)
+    {
+        try
+        {
+            ClientSerie? serie = Series.FirstOrDefault(s => s.Info.Id == serieId);
+            if (serie == null) return;
+            byte[]? posterBytes = await ManaxApiSerieClient.GetSeriePosterAsync(serieId);
+            if (posterBytes == null){return;}
+            try
+            {
+                Bitmap poster = new(new MemoryStream(posterBytes));
+                Dispatcher.UIThread.Post(() => serie.Poster = poster);
+            }
+            catch
+            {
+                Console.WriteLine("Failed to load poster for serie with ID: " + serieId);
+            }
+        }
+        catch (Exception)
+        {
+            InfoEmitted?.Invoke(this,"Failed to update poster");
+        }
+    }
     
     private async void LoadLibrary(long libraryId)
     {
