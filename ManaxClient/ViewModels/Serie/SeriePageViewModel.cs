@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Avalonia.Media.Imaging;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
-using ManaxClient.Controls;
+using ManaxClient.Controls.Popups;
 using ManaxClient.ViewModels.Chapter;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTOs;

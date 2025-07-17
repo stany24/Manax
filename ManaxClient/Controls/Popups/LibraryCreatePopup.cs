@@ -4,20 +4,19 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
-using ManaxLibrary.DTOs.Serie;
+using ManaxLibrary.DTOs.Library;
 
-namespace ManaxClient.Controls;
+namespace ManaxClient.Controls.Popups;
 
-public class SerieUpdatePopup : Popup
+public class LibraryCreatePopup : Popup
 {
     private readonly Button _cancelButton;
-    private readonly TextBox _titleBox;
+    private readonly TextBox _nameBox;
     private readonly Button _okButton;
-    private readonly TextBox _descriptionBox;
-    private readonly ComboBox _statusComboBox;
-    private SerieUpdateDTO? _result;
+    private readonly TextBox _pathBox;
+    private LibraryCreateDTO? _result;
 
-    public SerieUpdatePopup(SerieDTO serie)
+    public LibraryCreatePopup()
     {
         MinWidth = 200;
         MaxWidth = 500;
@@ -28,7 +27,7 @@ public class SerieUpdatePopup : Popup
         {
             Margin = new Thickness(10),
             RowSpacing = 5,
-            RowDefinitions = new RowDefinitions("Auto,Auto,Auto,Auto"),
+            RowDefinitions = new RowDefinitions("Auto,Auto,Auto"),
             ColumnDefinitions = new ColumnDefinitions("Auto,10,*")
         };
 
@@ -41,42 +40,24 @@ public class SerieUpdatePopup : Popup
         Grid.SetColumn(nameLabel, 0);
         grid.Children.Add(nameLabel);
 
-        _titleBox = new TextBox();
-        Grid.SetRow(_titleBox, 0);
-        Grid.SetColumn(_titleBox, 2);
-        grid.Children.Add(_titleBox);
-        _titleBox.Text = serie.Title;
+        _nameBox = new TextBox();
+        Grid.SetRow(_nameBox, 0);
+        Grid.SetColumn(_nameBox, 2);
+        grid.Children.Add(_nameBox);
 
-        TextBlock descriptionLabel = new()
+        TextBlock pathLabel = new()
         {
-            Text = "Description:",
+            Text = "Path:",
             VerticalAlignment = VerticalAlignment.Center
         };
-        Grid.SetRow(descriptionLabel, 1);
-        Grid.SetColumn(descriptionLabel, 0);
-        grid.Children.Add(descriptionLabel);
+        Grid.SetRow(pathLabel, 1);
+        Grid.SetColumn(pathLabel, 0);
+        grid.Children.Add(pathLabel);
 
-        _descriptionBox = new TextBox();
-        Grid.SetRow(_descriptionBox, 1);
-        Grid.SetColumn(_descriptionBox, 2);
-        grid.Children.Add(_descriptionBox);
-        _descriptionBox.Text = serie.Description;
-        
-        TextBlock statusLabel = new()
-        {
-            Text = "Status:",
-            VerticalAlignment = VerticalAlignment.Center
-        };
-        Grid.SetRow(statusLabel, 2);
-        Grid.SetColumn(statusLabel, 0);
-        grid.Children.Add(statusLabel);
-
-        _statusComboBox = new ComboBox();
-        Grid.SetRow(_statusComboBox, 2);
-        Grid.SetColumn(_statusComboBox, 2);
-        grid.Children.Add(_statusComboBox);
-        foreach (object value in Enum.GetValues(typeof(Status))) { _statusComboBox.Items.Add(value); }
-        _statusComboBox.SelectedItem = serie.Status;
+        _pathBox = new TextBox();
+        Grid.SetRow(_pathBox, 1);
+        Grid.SetColumn(_pathBox, 2);
+        grid.Children.Add(_pathBox);
 
         Grid buttonGrid = new()
         {
@@ -103,7 +84,7 @@ public class SerieUpdatePopup : Popup
 
         buttonGrid.Children.Add(_okButton);
         buttonGrid.Children.Add(_cancelButton);
-        Grid.SetRow(buttonGrid, 4);
+        Grid.SetRow(buttonGrid, 3);
         Grid.SetColumn(buttonGrid, 0);
         Grid.SetColumnSpan(buttonGrid, 3);
         grid.Children.Add(buttonGrid);
@@ -113,11 +94,10 @@ public class SerieUpdatePopup : Popup
 
     private void OkButton_Click(object? sender, RoutedEventArgs e)
     {
-        string? title = _titleBox.Text?.Trim();
-        string? description = _descriptionBox.Text?.Trim();
-        Status? status = _statusComboBox.SelectedItem as Status?;
-        if (string.IsNullOrEmpty(title) || string.IsNullOrEmpty(description) || status == null) return;
-        _result = new SerieUpdateDTO { Title = title, Description = description, Status = (Status)status};
+        string? name = _nameBox.Text?.Trim();
+        string? path = _pathBox.Text?.Trim();
+        if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(path)) return;
+        _result = new LibraryCreateDTO { Name = name, Path = path };
         CloseRequested?.Invoke(this, EventArgs.Empty);
     }
 
@@ -127,7 +107,7 @@ public class SerieUpdatePopup : Popup
         CloseRequested?.Invoke(this, EventArgs.Empty);
     }
 
-    public SerieUpdateDTO? GetResult()
+    public LibraryCreateDTO? GetResult()
     {
         return _result;
     }

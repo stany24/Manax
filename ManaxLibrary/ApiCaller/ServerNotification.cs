@@ -1,5 +1,6 @@
 using ManaxLibrary.DTOs;
 using ManaxLibrary.DTOs.Library;
+using ManaxLibrary.DTOs.Rank;
 using ManaxLibrary.DTOs.Serie;
 using ManaxLibrary.DTOs.User;
 using ManaxLibrary.Logging;
@@ -23,6 +24,10 @@ public static class ServerNotification
     public static event Action<SerieDTO>? OnSerieCreated;
     public static event Action<SerieDTO>? OnSerieUpdated;
     public static event Action<long>? OnSerieDeleted;
+    
+    public static event Action<RankDTO>? OnRankCreated;
+    public static event Action<RankDTO>? OnRankUpdated;
+    public static event Action<long>? OnRankDeleted;
     
     public static event Action<ChapterDTO>? OnChapterAdded;
     public static event Action<long>? OnChapterDeleted;
@@ -71,6 +76,21 @@ public static class ServerNotification
         _hubConnection.On<long>("SerieDeleted", serieId =>
         {
             OnSerieDeleted?.Invoke(serieId);
+        });
+        
+        _hubConnection.On<RankDTO>("RankCreated", rankData =>
+        {
+            OnRankCreated?.Invoke(rankData);
+        });
+        
+        _hubConnection.On<RankDTO>("RankUpdated", rankData =>
+        {
+            OnRankUpdated?.Invoke(rankData);
+        });
+        
+        _hubConnection.On<long>("RankDeleted", rankId =>
+        {
+            OnRankDeleted?.Invoke(rankId);
         });
         
         _hubConnection.On<ChapterDTO>("ChapterAdded", chapterData =>

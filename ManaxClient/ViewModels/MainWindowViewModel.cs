@@ -7,11 +7,13 @@ using System.Threading.Tasks;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using ManaxClient.Controls;
+using ManaxClient.Controls.Popups;
 using ManaxClient.Models;
 using ManaxClient.ViewModels.Home;
 using ManaxClient.ViewModels.Issue;
 using ManaxClient.ViewModels.Library;
 using ManaxClient.ViewModels.Login;
+using ManaxClient.ViewModels.Rank;
 using ManaxClient.ViewModels.User;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTOs.Library;
@@ -218,5 +220,10 @@ public partial class MainWindowViewModel : ObservableObject
     public void ChangePageUsers()
     {
         SetPage(new UsersPageViewModel());
+    }
+    
+    public void ChangePageRanks()
+    {
+        SetPage(new RankPageViewModel());
     }
 }

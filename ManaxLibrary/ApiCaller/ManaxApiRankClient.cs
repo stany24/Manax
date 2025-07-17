@@ -18,9 +18,9 @@ public static class ManaxApiRankClient
         return response.IsSuccessStatusCode;
     }
 
-    public static async Task<bool> UpdateRankAsync(long id, RankDTO rank)
+    public static async Task<bool> UpdateRankAsync(RankDTO rank)
     {
-        HttpResponseMessage response = await ManaxApiClient.Client.PutAsJsonAsync($"/api/rank/{id}", rank);
+        HttpResponseMessage response = await ManaxApiClient.Client.PutAsJsonAsync($"/api/rank/{rank.Id}", rank);
         return response.IsSuccessStatusCode;
     }
 

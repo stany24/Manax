@@ -1,0 +1,35 @@
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:login="clr-namespace:ManaxClient.ViewModels.Rank"
+    mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+    x:Class="ManaxClient.Views.Rank.RankPageView"
+    x:DataType="login:RankPageViewModel">
+    <ItemsControl
+        ItemsSource="{Binding Ranks}">
+        <ItemsControl.ItemTemplate>
+            <DataTemplate>
+                <StackPanel
+                    Orientation="Horizontal">
+                    <TextBlock
+                        Text="{Binding Name}"/>
+                    <TextBlock
+                        Text="{Binding Value}"/>
+                    <Button
+                        Command="{Binding $parent[UserControl].((login:RankPageViewModel)DataContext).UpdateRank}"
+                        CommandParameter="{Binding .}"
+                        Content="Modify"/>
+                </StackPanel>
+            </DataTemplate>
+        </ItemsControl.ItemTemplate>
+        <ItemsControl.ItemsPanel>
+            <ItemsPanelTemplate>
+                <StackPanel 
+                    Orientation="Vertical"
+                    Spacing="5"></StackPanel>
+            </ItemsPanelTemplate>
+        </ItemsControl.ItemsPanel>
+    </ItemsControl>
+</UserControl>

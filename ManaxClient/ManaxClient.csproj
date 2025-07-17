@@ -97,6 +97,10 @@
           <DependentUpon>UserIssuesPageView.axaml</DependentUpon>
           <SubType>Code</SubType>
         </Compile>
+        <Compile Update="Views\Rank\RankPageView.axaml.cs">
+          <DependentUpon>LoginPageView.axaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
     </ItemGroup>
 
     <ItemGroup>

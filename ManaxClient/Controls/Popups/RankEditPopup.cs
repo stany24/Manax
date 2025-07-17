@@ -4,20 +4,21 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
-using ManaxLibrary.DTOs.Library;
+using ManaxLibrary.DTOs.Rank;
 
-namespace ManaxClient.Controls;
+namespace ManaxClient.Controls.Popups;
 
-public class LibraryCreatePopup : Popup
+public class RankEditPopup : Popup
 {
     private readonly Button _cancelButton;
     private readonly TextBox _nameBox;
     private readonly Button _okButton;
-    private readonly TextBox _pathBox;
-    private LibraryCreateDTO? _result;
+    private readonly NumericUpDown _valueBox;
+    private readonly RankDTO _result;
 
-    public LibraryCreatePopup()
+    public RankEditPopup(RankDTO rank)
     {
+        _result = rank;
         MinWidth = 200;
         MaxWidth = 500;
         HorizontalAlignment = HorizontalAlignment.Center;
@@ -40,24 +41,33 @@ public class LibraryCreatePopup : Popup
         Grid.SetColumn(nameLabel, 0);
         grid.Children.Add(nameLabel);
 
-        _nameBox = new TextBox();
+        _nameBox = new TextBox()
+        {
+            Text = rank.Name,
+        };
         Grid.SetRow(_nameBox, 0);
         Grid.SetColumn(_nameBox, 2);
         grid.Children.Add(_nameBox);
 
-        TextBlock pathLabel = new()
+        TextBlock valueLabel = new()
         {
-            Text = "Path:",
+            Text = "Value:",
             VerticalAlignment = VerticalAlignment.Center
         };
-        Grid.SetRow(pathLabel, 1);
-        Grid.SetColumn(pathLabel, 0);
-        grid.Children.Add(pathLabel);
+        Grid.SetRow(valueLabel, 1);
+        Grid.SetColumn(valueLabel, 0);
+        grid.Children.Add(valueLabel);
 
-        _pathBox = new TextBox();
-        Grid.SetRow(_pathBox, 1);
-        Grid.SetColumn(_pathBox, 2);
-        grid.Children.Add(_pathBox);
+        _valueBox = new NumericUpDown
+        {
+            Minimum = 0,
+            Value = rank.Value,
+            Increment = 1,
+            FormatString = "0"
+        };
+        Grid.SetRow(_valueBox, 1);
+        Grid.SetColumn(_valueBox, 2);
+        grid.Children.Add(_valueBox);
 
         Grid buttonGrid = new()
         {
@@ -80,7 +90,7 @@ public class LibraryCreatePopup : Popup
             HorizontalContentAlignment = HorizontalAlignment.Center
         };
         Grid.SetColumn(_cancelButton, 0);
-        _cancelButton.Click += CancelButton_Click;
+        _cancelButton.Click += (_,_) => Close();
 
         buttonGrid.Children.Add(_okButton);
         buttonGrid.Children.Add(_cancelButton);
@@ -95,19 +105,14 @@ public class LibraryCreatePopup : Popup
     private void OkButton_Click(object? sender, RoutedEventArgs e)
     {
         string? name = _nameBox.Text?.Trim();
-        string? path = _pathBox.Text?.Trim();
-        if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(path)) return;
-        _result = new LibraryCreateDTO { Name = name, Path = path };
+        int value = Convert.ToInt32(_valueBox.Value);
+        if (string.IsNullOrEmpty(name)) return;
+        _result.Value = value;
+        _result.Name = name;
         CloseRequested?.Invoke(this, EventArgs.Empty);
     }
 
-    private void CancelButton_Click(object? sender, RoutedEventArgs e)
-    {
-        _result = null;
-        CloseRequested?.Invoke(this, EventArgs.Empty);
-    }
-
-    public LibraryCreateDTO? GetResult()
+    public RankDTO GetResult()
     {
         return _result;
     }

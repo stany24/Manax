@@ -4,6 +4,7 @@ using ManaxLibrary.DTOs.User;
 using ManaxServer.Auth;
 using ManaxServer.Models;
 using ManaxServer.Models.Rank;
+using ManaxServer.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -26,12 +27,13 @@ public class RankController(ManaxContext context, IMapper mapper) : ControllerBa
     [HttpPost]
     [AuthorizeRole(UserRole.Admin)]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(long))]
-    public async Task<ActionResult<long>> CreateRank(RankCreateDTO rank)
+    public async Task<ActionResult<long>> CreateRank(RankCreateDTO rankCreate)
     {
-        Rank map = mapper.Map<Rank>(rank);
-        context.Ranks.Add(map);
+        Rank rank = mapper.Map<Rank>(rankCreate);
+        context.Ranks.Add(rank);
         await context.SaveChangesAsync();
-        return map.Id;
+        NotificationService.NotifyRankCreatedAsync(mapper.Map<RankDTO>(rank));
+        return rank.Id;
     }
 
     // PUT: api/rank/5
@@ -47,7 +49,16 @@ public class RankController(ManaxContext context, IMapper mapper) : ControllerBa
         if (found == null) return NotFound();
         found.Name = rank.Name;
         found.Value = rank.Value;
-        await context.SaveChangesAsync();
+        try
+        {
+
+            await context.SaveChangesAsync();
+        }
+        catch (DbUpdateException e)
+        {
+            return BadRequest(e.Message);
+        }
+        NotificationService.NotifyRankUpdatedAsync(mapper.Map<RankDTO>(found));
         return NoContent();
     }
 
@@ -62,6 +73,7 @@ public class RankController(ManaxContext context, IMapper mapper) : ControllerBa
         if (rank == null) return NotFound();
         context.Ranks.Remove(rank);
         await context.SaveChangesAsync();
+        NotificationService.NotifyRankDeletedAsync(id);
         return NoContent();
     }
 

@@ -83,6 +83,14 @@
                     Command="{Binding ChangePageUsers}">
                     Users
                 </Button>
+                
+                <Button
+                    HorizontalAlignment="Stretch"
+                    HorizontalContentAlignment="Center"
+                    IsVisible="{Binding IsAdmin}"
+                    Command="{Binding ChangePageRanks}">
+                    Ranks
+                </Button>
                 <TextBlock
                     Margin="5,5,5,5"
                     FontWeight="Bold"

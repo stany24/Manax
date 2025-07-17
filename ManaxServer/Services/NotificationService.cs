@@ -1,5 +1,6 @@
 using ManaxLibrary.DTOs;
 using ManaxLibrary.DTOs.Library;
+using ManaxLibrary.DTOs.Rank;
 using ManaxLibrary.DTOs.Serie;
 using ManaxLibrary.DTOs.User;
 using Microsoft.AspNetCore.SignalR;
@@ -60,6 +61,21 @@ public static class NotificationService
     public static void NotifySerieDeletedAsync(long serieId)
     {
         TrySendToAllClientsAsync("SerieDeleted", serieId);
+    }
+    
+    public static void NotifyRankCreatedAsync(RankDTO rank)
+    {
+        TrySendToAllClientsAsync("RankCreated", rank);
+    }
+
+    public static void NotifyRankUpdatedAsync(RankDTO rank)
+    {
+        TrySendToAllClientsAsync("RankUpdated", rank);
+    }
+    
+    public static void NotifyRankDeletedAsync(long rankId)
+    {
+        TrySendToAllClientsAsync("RankDeleted", rankId);
     }
 
     public static void NotifyChapterAddedAsync(ChapterDTO chapter)
