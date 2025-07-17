@@ -52,7 +52,7 @@ public class MappingProfile : Profile
 
         // Mappings des Rank
         CreateMap<Rank.Rank, RankDTO>();
-        CreateMap<Rank.Rank, RankCreateDTO>();
+        CreateMap<RankCreateDTO,Rank.Rank>();
         CreateMap<UserRank, UserRankDTO>();
     }
 }

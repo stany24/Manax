@@ -12,7 +12,7 @@ public static class ManaxApiRankClient
         return await response.Content.ReadFromJsonAsync<List<RankDTO>>();
     }
 
-    public static async Task<bool> CreateRankAsync(RankDTO rank)
+    public static async Task<bool> CreateRankAsync(RankCreateDTO rank)
     {
         HttpResponseMessage response = await ManaxApiClient.Client.PostAsJsonAsync("/api/rank", rank);
         return response.IsSuccessStatusCode;

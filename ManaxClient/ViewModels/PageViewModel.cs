@@ -1,13 +1,13 @@
 using System;
 using CommunityToolkit.Mvvm.ComponentModel;
-using ManaxClient.Controls;
+using ManaxClient.Controls.Popups;
 
 namespace ManaxClient.ViewModels;
 
 public abstract partial class PageViewModel : ObservableObject
 {
     [ObservableProperty] private bool _admin;
-    [ObservableProperty] private bool _controlBarVisible;
+    [ObservableProperty] private bool _controlBarVisible = true;
     public EventHandler<string>? InfoEmitted;
     public EventHandler? NextRequested;
     public EventHandler<PageViewModel>? PageChangedRequested;

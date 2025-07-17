@@ -30,7 +30,6 @@ public partial class LibraryPageViewModel : PageViewModel
 
     public LibraryPageViewModel(long libraryId)
     {
-        ControlBarVisible = true;
         Task.Run(() => { LoadLibrary(libraryId); });
         Task.Run(() => { LoadSeries(libraryId); });
         ServerNotification.OnSerieCreated += OnSerieCreated;

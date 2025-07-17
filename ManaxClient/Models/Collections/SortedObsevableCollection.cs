@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
 
-namespace ManaxClient;
+namespace ManaxClient.Models.Collections;
 
 public class SortedObservableCollection<T>(IEnumerable<T> collection) : ObservableCollection<T>(collection)
 {

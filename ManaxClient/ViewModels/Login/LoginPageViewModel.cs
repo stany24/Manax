@@ -18,6 +18,11 @@ public partial class LoginPageViewModel : PageViewModel
     [ObservableProperty] private int _port = 5246;
     [ObservableProperty] private string _username = string.Empty;
 
+    public LoginPageViewModel()
+    {
+        ControlBarVisible = false;
+    }
+    
     public void Login()
     {
         LoginError = string.Empty;

@@ -17,7 +17,6 @@ public partial class UsersPageViewModel : PageViewModel
 
     public UsersPageViewModel()
     {
-        ControlBarVisible = true;
         Task.Run(async () =>
         {
             List<long>? ids = await ManaxApiUserClient.GetUsersIdsAsync();

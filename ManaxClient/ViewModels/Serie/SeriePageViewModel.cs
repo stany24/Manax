@@ -28,7 +28,6 @@ public partial class SeriePageViewModel : PageViewModel
     public SeriePageViewModel(long serieId)
     {
         Serie = new SerieDTO { Id = serieId };
-        ControlBarVisible = true;
         Task.Run(() => { LoadSerieInfo(serieId); });
         Task.Run(() => { LoadPoster(serieId); });
         Task.Run(() => { LoadChapters(serieId); });

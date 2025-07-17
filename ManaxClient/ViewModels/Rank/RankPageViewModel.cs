@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using ManaxClient.Controls.Popups;
+using ManaxClient.Models.Collections;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTOs.Rank;
 using ManaxLibrary.Logging;
@@ -105,5 +106,51 @@ public partial class RankPageViewModel : PageViewModel
             }
         };
         PopupRequested?.Invoke(this, rankEditPopup);
+    }
+
+    public void DeleteRank(RankDTO rank)
+    {
+        Task.Run(async () =>
+        {
+            try
+            {
+                bool success = await ManaxApiRankClient.DeleteRankAsync(rank.Id);
+                if (!success)
+                {
+                    InfoEmitted?.Invoke(this, "Failed to delete rank on server");
+                    Logger.LogFailure("Failed to delete rank on server", Environment.StackTrace);
+                }
+            }
+            catch (Exception e)
+            {
+                InfoEmitted?.Invoke(this, "Failed to delete rank on server");
+                Logger.LogError("Failed to delete rank on server", e, Environment.StackTrace);
+            }
+        });
+    }
+    
+    public void CreateRank()
+    {
+        RankEditPopup rankCreatePopup = new(new RankDTO {Name = "New Rank", Value = 10});
+        rankCreatePopup.CloseRequested += async (_, _) =>
+        {
+            try
+            {
+                RankDTO result = rankCreatePopup.GetResult();
+                bool success = await ManaxApiRankClient.CreateRankAsync(new RankCreateDTO {Name = result.Name, Value = result.Value});
+                if (success) { rankCreatePopup.Close(); }
+                else
+                {
+                    InfoEmitted?.Invoke(this, "Failed to create rank on server");
+                    Logger.LogFailure("Failed to create rank on server", Environment.StackTrace);
+                }
+            }
+            catch (Exception e)
+            {
+                InfoEmitted?.Invoke(this, "Failed to create rank on server");
+                Logger.LogError("Failed to create rank on server", e, Environment.StackTrace);
+            }
+        };
+        PopupRequested?.Invoke(this, rankCreatePopup);
     }
 }

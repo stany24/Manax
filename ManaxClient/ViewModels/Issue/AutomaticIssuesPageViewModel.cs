@@ -12,7 +12,6 @@ public partial class AutomaticIssuesPageViewModel : PageViewModel
     private List<AutomaticIssueSerieDTO> _allInternalSerieIssues = [];
     public AutomaticIssuesPageViewModel()
     {
-        ControlBarVisible = true;
         LoadData();
     }
     

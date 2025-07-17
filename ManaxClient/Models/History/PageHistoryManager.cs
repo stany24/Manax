@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using ManaxClient.ViewModels;
 using ManaxClient.ViewModels.Login;
 
-namespace ManaxClient.Models;
+namespace ManaxClient.Models.History;
 
 public class PageHistoryManager
 {

@@ -12,7 +12,6 @@ public partial class UserIssuesPageViewModel : PageViewModel
     
     public UserIssuesPageViewModel()
     {
-        ControlBarVisible = true;
         LoadData();
     }
     

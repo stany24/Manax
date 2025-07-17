@@ -18,7 +18,7 @@ public partial class ChapterPageViewModel : PageViewModel
 
     public ChapterPageViewModel(long chapterId)
     {
-        ControlBarVisible = true;
+        ControlBarVisible = false;
         Task.Run(async () =>
         {
             ChapterDTO? chapterAsync = await ManaxApiChapterClient.GetChapterAsync(chapterId);

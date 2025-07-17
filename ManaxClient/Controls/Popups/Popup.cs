@@ -3,7 +3,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
 
-namespace ManaxClient.Controls;
+namespace ManaxClient.Controls.Popups;
 
 public abstract class Popup : UserControl
 {
