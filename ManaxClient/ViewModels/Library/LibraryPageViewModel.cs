@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,10 +11,12 @@ using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using ManaxClient.Models;
+using ManaxClient.Models.Collections;
 using ManaxClient.ViewModels.Home;
 using ManaxClient.ViewModels.Serie;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTOs.Library;
+using ManaxLibrary.DTOs.Search;
 using ManaxLibrary.DTOs.Serie;
 using ManaxLibrary.Logging;
 
@@ -24,12 +25,13 @@ namespace ManaxClient.ViewModels.Library;
 public partial class LibraryPageViewModel : PageViewModel
 {
     [ObservableProperty] private LibraryDTO? _library;
-    [ObservableProperty] private ObservableCollection<ClientSerie> _series = [];
+    [ObservableProperty] private SortedObservableCollection<ClientSerie> _series;
     [ObservableProperty] private bool _isFolderPickerOpen;
     private readonly object _serieLock = new();
 
     public LibraryPageViewModel(long libraryId)
     {
+        Series = new SortedObservableCollection<ClientSerie>([]) {SortingSelector = serie => serie.Info.Title ,Descending = false };
         Task.Run(() => { LoadLibrary(libraryId); });
         Task.Run(() => { LoadSeries(libraryId); });
         ServerNotification.OnSerieCreated += OnSerieCreated;
@@ -136,8 +138,7 @@ public partial class LibraryPageViewModel : PageViewModel
     {
         try
         {
-            List<long>? seriesIds = await ManaxApiLibraryClient.GetLibrarySeriesAsync(libraryId);
-
+            List<long>? seriesIds = await ManaxApiSerieClient.GetSearchResult(new Search { IncludedLibraries = [libraryId] });
             if (seriesIds == null) return;
             foreach (long serieId in seriesIds)
             {

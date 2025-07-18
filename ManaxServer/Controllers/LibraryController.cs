@@ -39,20 +39,6 @@ public class LibraryController(ManaxContext context, IMapper mapper) : Controlle
         return mapper.Map<LibraryDTO>(library);
     }
 
-    // GET: api/library/{id}/series
-    [HttpGet("{id:long}/series")]
-    [AuthorizeRole(UserRole.User)]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<long>))]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public IEnumerable<long> GetLibrarySeries(long id)
-    {
-        IEnumerable<long> seriesIds = context.Series
-            .Where(s => s.LibraryId == id)
-            .Select(s => s.Id);
-
-        return seriesIds;
-    }
-
     // PUT: api/Library/5
     [HttpPut("{id:long}")]
     [AuthorizeRole(UserRole.Admin)]

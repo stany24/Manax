@@ -1,4 +1,6 @@
+using System.Text.RegularExpressions;
 using AutoMapper;
+using ManaxLibrary.DTOs.Search;
 using ManaxLibrary.DTOs.Serie;
 using ManaxLibrary.DTOs.User;
 using ManaxServer.Auth;
@@ -152,6 +154,34 @@ public class SerieController(ManaxContext context, IMapper mapper) : ControllerB
         NotificationService.NotifySerieDeletedAsync(serie.Id);
 
         return NoContent();
+    }
+    
+    [HttpPost("search")]
+    [AuthorizeRole(UserRole.User)]
+    public List<long> Search(Search search)
+    {
+        Regex regex = new(search.RegexSearch, RegexOptions.IgnoreCase | RegexOptions.Compiled);
+        
+        Dictionary<long, int> seriesWithChapterCount = context.Chapters
+            .GroupBy(c => c.SerieId)
+            .Select(g => new { SerieId = g.Key, ChapterCount = g.Count() })
+            .ToDictionary(x => x.SerieId, x => x.ChapterCount);
+        
+        List<Serie> series = context.Series
+            .Where(s => search.IncludedLibraries.Contains(s.LibraryId))
+            .Where(s => !search.ExcludedLibraries.Contains(s.LibraryId))
+            .Where(s => search.IncludedStatuses.Contains(s.Status))
+            .Where(s => !search.ExcludedStatuses.Contains(s.Status))
+            .ToList();
+        
+        return series
+            .Where(s => regex.Match(s.Title).Success || regex.Match(s.Description).Success)
+            .Where(s => {
+                int chapterCount = seriesWithChapterCount.TryGetValue(s.Id, out int value) ? value : 0;
+                return chapterCount >= search.MinChapters && chapterCount <= search.MaxChapters;
+            })
+            .Select(s => s.Id)
+            .ToList();
     }
 
     private bool SerieExists(long id)

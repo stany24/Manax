@@ -19,13 +19,6 @@ public static class ManaxApiLibraryClient
         return await response.Content.ReadFromJsonAsync<LibraryDTO>();
     }
 
-    public static async Task<List<long>?> GetLibrarySeriesAsync(long id)
-    {
-        HttpResponseMessage response = await ManaxApiClient.Client.GetAsync($"api/library/{id}/series");
-        if (!response.IsSuccessStatusCode) return null;
-        return await response.Content.ReadFromJsonAsync<List<long>>();
-    }
-
     public static async Task<long?> PostLibraryAsync(LibraryCreateDTO library)
     {
         HttpResponseMessage response = await ManaxApiClient.Client.PostAsJsonAsync("api/library/create", library);

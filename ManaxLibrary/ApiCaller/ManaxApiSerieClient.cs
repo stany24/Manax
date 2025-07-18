@@ -1,4 +1,5 @@
 using System.Net.Http.Json;
+using ManaxLibrary.DTOs.Search;
 using ManaxLibrary.DTOs.Serie;
 
 namespace ManaxLibrary.ApiCaller;
@@ -50,5 +51,12 @@ public static class ManaxApiSerieClient
         HttpResponseMessage response = await ManaxApiClient.Client.GetAsync($"api/serie/{id}/poster");
         if (!response.IsSuccessStatusCode) return null;
         return await response.Content.ReadAsByteArrayAsync();
+    }
+
+    public static async Task<List<long>> GetSearchResult(Search search)
+    {
+        HttpResponseMessage response = await ManaxApiClient.Client.PostAsJsonAsync("api/serie/search", search);
+        if (!response.IsSuccessStatusCode) return [];
+        return await response.Content.ReadFromJsonAsync<List<long>>() ?? [];
     }
 }
