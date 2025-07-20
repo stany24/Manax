@@ -6,7 +6,7 @@ using ManaxLibrary.DTOs.User;
 using ManaxLibrary.Logging;
 using Microsoft.AspNetCore.SignalR.Client;
 
-namespace ManaxLibrary.ApiCaller;
+namespace ManaxLibrary.Notifications;
 
 public static class ServerNotification
 {
@@ -48,82 +48,82 @@ public static class ServerNotification
             .WithAutomaticReconnect()
             .Build();
         
-        _hubConnection.On<LibraryDTO>("LibraryCreated", libraryData =>
+        _hubConnection.On<LibraryDTO>(nameof(NotificationType.LibraryCreated), libraryData =>
         {
             OnLibraryCreated?.Invoke(libraryData);
         });
         
-        _hubConnection.On<long>("LibraryDeleted", libraryId =>
+        _hubConnection.On<long>(nameof(NotificationType.LibraryDeleted), libraryId =>
         {
             OnLibraryDeleted?.Invoke(libraryId);
         });
         
-        _hubConnection.On<LibraryDTO>("LibraryUpdated", libraryData =>
+        _hubConnection.On<LibraryDTO>(nameof(NotificationType.LibraryUpdated), libraryData =>
         {
             OnLibraryUpdated?.Invoke(libraryData);
         });
         
-        _hubConnection.On<SerieDTO>("SerieCreated", serieData =>
+        _hubConnection.On<SerieDTO>(nameof(NotificationType.SerieCreated), serieData =>
         {
             OnSerieCreated?.Invoke(serieData);
         });
         
-        _hubConnection.On<SerieDTO>("SerieUpdated", serieData =>
+        _hubConnection.On<SerieDTO>(nameof(NotificationType.SerieUpdated), serieData =>
         {
             OnSerieUpdated?.Invoke(serieData);
         });
         
-        _hubConnection.On<long>("SerieDeleted", serieId =>
+        _hubConnection.On<long>(nameof(NotificationType.SerieDeleted), serieId =>
         {
             OnSerieDeleted?.Invoke(serieId);
         });
         
-        _hubConnection.On<RankDTO>("RankCreated", rankData =>
+        _hubConnection.On<RankDTO>(nameof(NotificationType.RankCreated), rankData =>
         {
             OnRankCreated?.Invoke(rankData);
         });
         
-        _hubConnection.On<RankDTO>("RankUpdated", rankData =>
+        _hubConnection.On<RankDTO>(nameof(NotificationType.RankUpdated), rankData =>
         {
             OnRankUpdated?.Invoke(rankData);
         });
         
-        _hubConnection.On<long>("RankDeleted", rankId =>
+        _hubConnection.On<long>(nameof(NotificationType.RankDeleted), rankId =>
         {
             OnRankDeleted?.Invoke(rankId);
         });
         
-        _hubConnection.On<ChapterDTO>("ChapterAdded", chapterData =>
+        _hubConnection.On<ChapterDTO>(nameof(NotificationType.ChapterAdded), chapterData =>
         {
             OnChapterAdded?.Invoke(chapterData);
         });
         
-        _hubConnection.On<long>("ChapterRemoved", chapterId =>
+        _hubConnection.On<long>(nameof(NotificationType.ChapterRemoved), chapterId =>
         {
             OnChapterDeleted?.Invoke(chapterId);
         });
         
-        _hubConnection.On<UserDTO>("UserCreated", userData =>
+        _hubConnection.On<UserDTO>(nameof(NotificationType.UserCreated), userData =>
         {
             OnUserCreated?.Invoke(userData);
         });
         
-        _hubConnection.On<long>("UserDeleted", userId =>
+        _hubConnection.On<long>(nameof(NotificationType.UserDeleted), userId =>
         {
             OnUserDeleted?.Invoke(userId);
         });
         
-        _hubConnection.On<Dictionary<string, int>>("RunningTasks", tasks =>
+        _hubConnection.On<Dictionary<string, int>>(nameof(NotificationType.RunningTasks), tasks =>
         {
             OnRunningTasks?.Invoke(tasks);
         });
 
-        _hubConnection.On<long>("PosterModified", serieId =>
+        _hubConnection.On<long>(nameof(NotificationType.PosterModified), serieId =>
         {
             OnPosterModified?.Invoke(serieId);
         });
         
-        _hubConnection.On<string>("Connected", message =>
+        _hubConnection.On<string>(nameof(NotificationType.Connected), message =>
         {
             Logger.LogInfo("SignalR Server: " + message);
         });

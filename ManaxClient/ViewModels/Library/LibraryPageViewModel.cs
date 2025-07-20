@@ -19,6 +19,7 @@ using ManaxLibrary.DTOs.Library;
 using ManaxLibrary.DTOs.Search;
 using ManaxLibrary.DTOs.Serie;
 using ManaxLibrary.Logging;
+using ManaxLibrary.Notifications;
 
 namespace ManaxClient.ViewModels.Library;
 

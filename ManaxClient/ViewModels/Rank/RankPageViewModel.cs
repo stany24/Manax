@@ -9,6 +9,7 @@ using ManaxClient.Models.Collections;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTOs.Rank;
 using ManaxLibrary.Logging;
+using ManaxLibrary.Notifications;
 
 namespace ManaxClient.ViewModels.Rank;
 

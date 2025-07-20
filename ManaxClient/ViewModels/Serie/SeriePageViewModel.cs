@@ -14,6 +14,7 @@ using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTOs;
 using ManaxLibrary.DTOs.Rank;
 using ManaxLibrary.DTOs.Serie;
+using ManaxLibrary.Notifications;
 using Logger = ManaxLibrary.Logging.Logger;
 
 namespace ManaxClient.ViewModels.Serie;

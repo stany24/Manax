@@ -17,6 +17,7 @@ using ManaxClient.ViewModels.Rank;
 using ManaxClient.ViewModels.User;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTOs.Library;
+using ManaxLibrary.Notifications;
 
 namespace ManaxClient.ViewModels;
 

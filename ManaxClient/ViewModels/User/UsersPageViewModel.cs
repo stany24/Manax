@@ -8,6 +8,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTOs.User;
 using ManaxLibrary.Logging;
+using ManaxLibrary.Notifications;
 
 namespace ManaxClient.ViewModels.User;
 
