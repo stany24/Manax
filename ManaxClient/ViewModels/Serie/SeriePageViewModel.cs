@@ -126,9 +126,9 @@ public partial class SeriePageViewModel : PageViewModel
 
     private async void LoadPoster(long serieId)
     {
-        if(serieId != Serie?.Id) return;
         try
         {
+            if(serieId != Serie?.Id) return;
             byte[]? posterBytes = await ManaxApiSerieClient.GetSeriePosterAsync(serieId);
             if (posterBytes != null)
                 try
@@ -196,11 +196,9 @@ public partial class SeriePageViewModel : PageViewModel
                 SerieUpdateDTO? serie = popup.GetResult();
                 if (serie == null) return;
                 bool success = await ManaxApiSerieClient.PutSerieAsync(Serie.Id, serie);
-                if (!success)
-                {
-                    InfoEmitted?.Invoke(this,"Serie update failed");
-                    Logger.LogFailure("Failed to update serie with ID: " + Serie.Id, Environment.StackTrace);
-                }
+                if (success) return;
+                InfoEmitted?.Invoke(this,"Serie update failed");
+                Logger.LogFailure("Failed to update serie with ID: " + Serie.Id, Environment.StackTrace);
             }
             catch (Exception e)
             {

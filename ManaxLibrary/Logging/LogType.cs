@@ -5,5 +5,5 @@ public enum LogType
     Info,
     Warning,
     Failure,
-    Error,
+    Error
 }

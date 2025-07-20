@@ -20,6 +20,7 @@ internal static class ManaxApiClient
     public static void SetToken(string token)
     {
         Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        if(Client.BaseAddress == null){return;}
         _ = ServerNotification.InitializeAsync(Client.BaseAddress,token);
     }
 }

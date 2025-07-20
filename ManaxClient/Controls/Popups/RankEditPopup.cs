@@ -43,7 +43,7 @@ public class RankEditPopup : Popup
 
         _nameBox = new TextBox
         {
-            Text = rank.Name,
+            Text = rank.Name
         };
         Grid.SetRow(_nameBox, 0);
         Grid.SetColumn(_nameBox, 2);

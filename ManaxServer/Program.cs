@@ -102,7 +102,7 @@ public class Program
 
         Migrate(app);
 
-        // Initialisation du singleton ScanService
+        // Initialisation of services
         CheckService.Initialize(app.Services.GetRequiredService<IServiceScopeFactory>());
         IssueManagerService.Initialize(app.Services.GetRequiredService<IServiceScopeFactory>());
         NotificationService.Initialize(

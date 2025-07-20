@@ -139,8 +139,7 @@ public partial class LibraryPageViewModel : PageViewModel
     {
         try
         {
-            List<long>? seriesIds = await ManaxApiSerieClient.GetSearchResult(new Search { IncludedLibraries = [libraryId] });
-            if (seriesIds == null) return;
+            List<long> seriesIds = await ManaxApiSerieClient.GetSearchResult(new Search { IncludedLibraries = [libraryId] });
             foreach (long serieId in seriesIds)
             {
                 lock (_serieLock)
@@ -204,9 +203,8 @@ public partial class LibraryPageViewModel : PageViewModel
                     AllowMultiple = false
                 });
 
-            IStorageFolder? folder = folders.FirstOrDefault();
-            if (folder == null) return;
-            string folderPath = folder.Path.LocalPath;
+            if (folders.Count == 0) return;
+            string folderPath = folders[0].Path.LocalPath;
             if (string.IsNullOrEmpty(folderPath)) return;
 
             bool success = await UploadApiUploadClient.UploadSerieAsync(folderPath, Library.Id);

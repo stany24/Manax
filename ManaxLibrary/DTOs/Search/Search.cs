@@ -1,9 +1,13 @@
+// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
+// ReSharper disable PropertyCanBeMadeInitOnly.Global
+
 using ManaxLibrary.DTOs.Serie;
 
 namespace ManaxLibrary.DTOs.Search;
 
 public class Search
 {
+    
     public List<long> IncludedLibraries { get; set; } = [];
     public List<long> ExcludedLibraries { get; set; } = [];
     public List<Status> IncludedStatuses { get; set; } = [Status.Cancelled, Status.Ongoing, Status.Completed, Status.Hiatus];

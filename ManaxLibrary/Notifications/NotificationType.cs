@@ -23,5 +23,5 @@ public enum NotificationType
     
     RunningTasks,
     
-    Connected,
+    Connected
 }

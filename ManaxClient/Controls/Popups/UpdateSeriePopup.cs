@@ -115,9 +115,8 @@ public class SerieUpdatePopup : Popup
     {
         string? title = _titleBox.Text?.Trim();
         string? description = _descriptionBox.Text?.Trim();
-        Status? status = _statusComboBox.SelectedItem as Status?;
-        if (string.IsNullOrEmpty(title) || string.IsNullOrEmpty(description) || status == null) return;
-        _result = new SerieUpdateDTO { Title = title, Description = description, Status = (Status)status};
+        if (string.IsNullOrEmpty(title) || string.IsNullOrEmpty(description) || _statusComboBox.SelectedItem is not Status status) return;
+        _result = new SerieUpdateDTO { Title = title, Description = description, Status = status};
         CloseRequested?.Invoke(this, EventArgs.Empty);
     }
 

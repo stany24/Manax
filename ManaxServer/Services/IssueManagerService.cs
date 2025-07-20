@@ -1,4 +1,5 @@
 using ManaxLibrary.DTOs.Issue.Automatic;
+using ManaxLibrary.Logging;
 using ManaxServer.Models;
 using ManaxServer.Models.Issue.Automatic;
 using ManaxServer.Models.Issue.Reported;
@@ -14,15 +15,12 @@ internal static class IssueManagerService
         _scopeFactory = scopeFactory;
     }
 
-    internal static bool CreateSerieIssue(long serieId, AutomaticIssueSerieType problem)
+    internal static void CreateSerieIssue(long serieId, AutomaticIssueSerieType problem)
     {
         using IServiceScope scope = _scopeFactory.CreateScope();
         ManaxContext context = scope.ServiceProvider.GetRequiredService<ManaxContext>();
 
-        ReportedIssueSerieType? issueType = context.ReportedIssueSerieTypes.FirstOrDefault(i => i.Name == problem.ToString());
-        if (issueType == null) return false;
-
-        if (context.AutomaticIssuesSerie.Any(i => i.Problem == problem && i.SerieId == serieId)) return false;
+        if (context.AutomaticIssuesSerie.Any(i => i.Problem == problem && i.SerieId == serieId)) {return;}
 
         AutomaticIssueSerie issue = new()
         {
@@ -33,19 +31,14 @@ internal static class IssueManagerService
 
         context.AutomaticIssuesSerie.Add(issue);
         context.SaveChanges();
-
-        return true;
     }
 
-    internal static bool CreateChapterIssue(long chapterId, AutomaticIssueChapterType problem)
+    internal static void CreateChapterIssue(long chapterId, AutomaticIssueChapterType problem)
     {
         using IServiceScope scope = _scopeFactory.CreateScope();
         ManaxContext context = scope.ServiceProvider.GetRequiredService<ManaxContext>();
 
-        ReportedIssueChapterType? issueType = context.ReportedIssueChapterTypes.FirstOrDefault(i => i.Name == problem.ToString());
-        if (issueType == null) return false;
-
-        if (context.AutomaticIssuesChapter.Any(i => i.Problem== problem && i.ChapterId == chapterId)) return false;
+        if (context.AutomaticIssuesChapter.Any(i => i.Problem== problem && i.ChapterId == chapterId)) return;
 
         AutomaticIssueChapter issue = new()
         {
@@ -56,7 +49,5 @@ internal static class IssueManagerService
 
         context.AutomaticIssuesChapter.Add(issue);
         context.SaveChanges();
-
-        return true;
     }
 }

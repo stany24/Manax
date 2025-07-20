@@ -73,8 +73,6 @@ public partial class MainWindowViewModel : ObservableObject
 
     private void OnRunningTasksHandler(Dictionary<string, int> tasks)
     {
-        if (tasks == null) return;
-
         Dispatcher.UIThread.Invoke(() =>
         {
             RunningTasks.Clear();
@@ -86,8 +84,6 @@ public partial class MainWindowViewModel : ObservableObject
     
     private void OnLibraryCreatedHandler(LibraryDTO library)
     {
-        if (library == null) return;
-
         Dispatcher.UIThread.Invoke(() =>
         {
             Libraries.Add(library);
@@ -111,11 +107,9 @@ public partial class MainWindowViewModel : ObservableObject
         Dispatcher.UIThread.Invoke(() =>
         {
             LibraryDTO? library = Libraries.FirstOrDefault(l => l.Id == libraryId);
-            if (library != null)
-            {
-                Libraries.Remove(library);
-                ShowInfo($"Library '{library.Name}' was deleted");
-            }
+            if (library == null) return;
+            Libraries.Remove(library);
+            ShowInfo($"Library '{library.Name}' was deleted");
         });
     }
 

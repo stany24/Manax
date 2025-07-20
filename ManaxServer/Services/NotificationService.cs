@@ -23,7 +23,7 @@ public static class NotificationService
     
     private static void TrySendToAllClientsAsync(NotificationType type, object? arg)
     {
-        const string methodName = nameof(type);
+        string methodName = type.ToString();
         try
         {
             _hubContext.Clients.All.SendAsync(methodName, arg);

@@ -15,7 +15,8 @@ namespace ManaxClient.ViewModels.Rank;
 
 public partial class RankPageViewModel : PageViewModel
 {
-    [ObservableProperty] private SortedObservableCollection<RankDTO> _ranks;
+    [ObservableProperty]
+    private SortedObservableCollection<RankDTO> _ranks = new([]);
     
     public RankPageViewModel()
     {

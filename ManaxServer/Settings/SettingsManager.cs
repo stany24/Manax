@@ -9,6 +9,7 @@ public static class SettingsManager
     public static SettingsData Data { get; set; } = new();
     private static string SavePath => Path.Combine(AppContext.BaseDirectory, "settings.json");
     private static string BackupPath => Path.Combine(AppContext.BaseDirectory, "settings_backup.json");
+    private static readonly JsonSerializerOptions JsonOptions = new() { WriteIndented = true };
     
     static SettingsManager()
     {
@@ -31,7 +32,7 @@ public static class SettingsManager
 
     private static void Save()
     {
-        string json = JsonSerializer.Serialize(Data, new JsonSerializerOptions { WriteIndented = true });
+        string json = JsonSerializer.Serialize(Data, JsonOptions);
         File.WriteAllText(SavePath, json);
     }
     
