@@ -6,11 +6,12 @@ namespace ManaxServer.Services;
 
 public static class HashService
 {
-    private const int MemorySize = 65536; // 64 MB
-    private const int Iterations = 4; // Facteur de travail (nombre d'itérations)
-    private const int DegreeOfParallelism = 4; // Nombre de threads à utiliser
-    private const int SaltSize = 16; // Taille du sel en octets (128 bits)
-    private const int HashSize = 32; // Taille du hash en octets (256 bits)
+    // Format: Base64(Salt):Base64(Hash)
+    private const int MemorySize = 64; // kB
+    private const int Iterations = 4;
+    private const int DegreeOfParallelism = 4; // threads
+    private const int SaltSize = 16; // 128 bits
+    private const int HashSize = 32; // 256 bits
 
     private static byte[] GenerateSalt()
     {
@@ -25,16 +26,14 @@ public static class HashService
         byte[] salt = GenerateSalt();
         byte[] hash = HashPasswordWithSalt(password, salt);
 
-        // Format: Base64(Salt):Base64(Hash)
+        
         return $"{Convert.ToBase64String(salt)}:{Convert.ToBase64String(hash)}";
     }
 
     public static bool VerifyPassword(string password, string storedHash)
     {
-        // Format Argon2id: Base64(Salt):Base64(Hash)
         string[] parts = storedHash.Split(':');
-        if (parts.Length != 2)
-            return false;
+        if (parts.Length != 2) {return false;}
 
         try
         {
@@ -43,10 +42,7 @@ public static class HashService
             byte[] actualHash = HashPasswordWithSalt(password, salt);
             return CryptographicOperations.FixedTimeEquals(expectedHash, actualHash);
         }
-        catch
-        {
-            return false;
-        }
+        catch { return false; }
     }
 
     private static byte[] HashPasswordWithSalt(string password, byte[] salt)

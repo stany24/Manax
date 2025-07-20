@@ -29,6 +29,7 @@
                         Grid.Column="0">Libraries</Label>
                     <Button
                         Grid.Column="1"
+                        IsVisible="{Binding IsAdmin}"
                         BorderBrush="Black"
                         BorderThickness="1"
                         CornerRadius="3"

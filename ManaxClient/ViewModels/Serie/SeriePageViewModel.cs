@@ -8,6 +8,7 @@ using Avalonia.Media.Imaging;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using ManaxClient.Controls.Popups;
+using ManaxClient.Models.Collections;
 using ManaxClient.ViewModels.Chapter;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTOs;
@@ -19,7 +20,7 @@ namespace ManaxClient.ViewModels.Serie;
 
 public partial class SeriePageViewModel : PageViewModel
 {
-    [ObservableProperty] private ObservableCollection<ChapterDTO> _chapters = [];
+    [ObservableProperty] private SortedObservableCollection<ChapterDTO> _chapters;
     [ObservableProperty] private Bitmap? _poster;
     [ObservableProperty] private ObservableCollection<RankDTO> _ranks = [];
     [ObservableProperty] private RankDTO? _selectedRank;
@@ -27,6 +28,10 @@ public partial class SeriePageViewModel : PageViewModel
 
     public SeriePageViewModel(long serieId)
     {
+        Chapters = new SortedObservableCollection<ChapterDTO>([])
+        {
+            SortingSelector = dto => dto.Number
+        };
         Serie = new SerieDTO { Id = serieId };
         Task.Run(() => { LoadSerieInfo(serieId); });
         Task.Run(() => { LoadPoster(serieId); });
