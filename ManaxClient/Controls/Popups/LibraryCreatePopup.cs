@@ -88,8 +88,10 @@ public class LibraryCreatePopup : Popup
         Grid.SetColumn(buttonGrid, 0);
         Grid.SetColumnSpan(buttonGrid, 3);
         grid.Children.Add(buttonGrid);
-
-        Content = grid;
+        
+        Form.Content = grid;
+        Console.WriteLine(Width);
+        Console.WriteLine(Height);
     }
 
     private void OkButton_Click(object? sender, RoutedEventArgs e)

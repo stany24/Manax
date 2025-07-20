@@ -41,7 +41,7 @@ public class RankEditPopup : Popup
         Grid.SetColumn(nameLabel, 0);
         grid.Children.Add(nameLabel);
 
-        _nameBox = new TextBox()
+        _nameBox = new TextBox
         {
             Text = rank.Name,
         };
@@ -99,7 +99,7 @@ public class RankEditPopup : Popup
         Grid.SetColumnSpan(buttonGrid, 3);
         grid.Children.Add(buttonGrid);
 
-        Content = grid;
+        Form.Content = grid;
     }
 
     private void OkButton_Click(object? sender, RoutedEventArgs e)

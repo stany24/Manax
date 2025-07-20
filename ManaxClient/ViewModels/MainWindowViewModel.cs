@@ -28,6 +28,8 @@ public partial class MainWindowViewModel : ObservableObject
     [ObservableProperty] private Popup? _popup;
     [ObservableProperty] private ObservableCollection<TaskItem> _runningTasks = [];
     [ObservableProperty] private ObservableCollection<LibraryDTO> _libraries = [];
+    [ObservableProperty] private double _width;
+    [ObservableProperty] private double _height;
 
     public MainWindowViewModel()
     {

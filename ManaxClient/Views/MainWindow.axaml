@@ -4,16 +4,11 @@
     xmlns:vm="using:ManaxClient.ViewModels"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:conv="clr-namespace:ManaxClient.Converters"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.MainWindow"
     x:DataType="vm:MainWindowViewModel"
     Icon="/Assets/avalonia-logo.ico"
     Title="ManaxClient">
-
-    <Window.Resources>
-        <conv:NullToBoolConverter x:Key="NullToBoolConverter" />
-    </Window.Resources>
 
     <Panel>
         <DockPanel>
@@ -126,7 +121,14 @@
                 Content="{Binding CurrentPageViewModel}" />
 
         </DockPanel>
-
+        
+        <ContentControl
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            VerticalContentAlignment="Center"
+            HorizontalContentAlignment="Center"
+            Content="{Binding Popup}" />
+        
         <ItemsControl
             Margin="5,5,5,5"
             ItemsSource="{Binding Infos}"
@@ -140,28 +142,11 @@
                         BorderThickness="2"
                         CornerRadius="3"
                         Padding="5,2">
-                            <Label
-                                Content="{Binding .}" />
+                        <Label
+                            Content="{Binding .}" />
                     </Border>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
-
-        <Canvas
-            IsVisible="{Binding Popup, Converter={StaticResource NullToBoolConverter}}"
-            HorizontalAlignment="Stretch"
-            VerticalAlignment="Stretch">
-            <Rectangle Fill="Black" Opacity="0.7"
-                       Width="{Binding Width, RelativeSource={RelativeSource AncestorType=Window}}"
-                       Height="{Binding Height, RelativeSource={RelativeSource AncestorType=Window}}"
-                       Canvas.Left="0" Canvas.Top="0" />
-        </Canvas>
-
-        <ContentControl
-            HorizontalAlignment="Stretch"
-            VerticalAlignment="Stretch"
-            VerticalContentAlignment="Center"
-            HorizontalContentAlignment="Center"
-            Content="{Binding Popup}" />
     </Panel>
 </Window>

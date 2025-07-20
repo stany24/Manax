@@ -108,7 +108,7 @@ public class SerieUpdatePopup : Popup
         Grid.SetColumnSpan(buttonGrid, 3);
         grid.Children.Add(buttonGrid);
 
-        Content = grid;
+        Form.Content = grid;
     }
 
     private void OkButton_Click(object? sender, RoutedEventArgs e)
