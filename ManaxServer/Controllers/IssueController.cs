@@ -3,6 +3,7 @@ using ManaxLibrary.DTOs.Issue.Automatic;
 using ManaxLibrary.DTOs.Issue.Reported;
 using ManaxLibrary.DTOs.User;
 using ManaxServer.Auth;
+using ManaxServer.Localization;
 using ManaxServer.Models;
 using ManaxServer.Models.Issue.Automatic;
 using ManaxServer.Models.Issue.Reported;
@@ -87,7 +88,7 @@ public class IssueController(ManaxContext context, IMapper mapper) : ControllerB
     {
         ReportedIssueChapter? issue = await context.ReportedIssuesChapter.FindAsync(id);
 
-        if (issue == null) return NotFound("Issue with ID " + id + " does not exist.");
+        if (issue == null) return NotFound(Localizer.Format("IssueNotFound", id));
 
         context.ReportedIssuesChapter.Remove(issue);
         await context.SaveChangesAsync();
@@ -103,7 +104,7 @@ public class IssueController(ManaxContext context, IMapper mapper) : ControllerB
     {
         ReportedIssueSerie? issue = await context.ReportedIssuesSerie.FindAsync(id);
 
-        if (issue == null) return NotFound("Issue with ID " + id + " does not exist.");
+        if (issue == null) return NotFound(Localizer.Format("IssueNotFound", id));
 
         context.ReportedIssuesSerie.Remove(issue);
         await context.SaveChangesAsync();

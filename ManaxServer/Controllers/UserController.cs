@@ -3,6 +3,7 @@ using AutoMapper;
 using ManaxLibrary.DTOs.User;
 using ManaxLibrary.Logging;
 using ManaxServer.Auth;
+using ManaxServer.Localization;
 using ManaxServer.Models;
 using ManaxServer.Models.User;
 using ManaxServer.Services;
@@ -35,7 +36,7 @@ public class UserController(ManaxContext context, IMapper mapper) : ControllerBa
     {
         User? user = await context.Users.FindAsync(id);
 
-        if (user == null) return NotFound("User with ID " + id + " does not exist.");
+        if (user == null) return NotFound(Localizer.Format("UserNotFound", id));
 
         return mapper.Map<UserDTO>(user);
     }
@@ -50,7 +51,7 @@ public class UserController(ManaxContext context, IMapper mapper) : ControllerBa
     {
         User? user = await context.Users.FindAsync(id);
 
-        if (user == null) return NotFound("User with ID " + id + " does not exist.");
+        if (user == null) return NotFound(Localizer.Format("UserNotFound", id));
 
         mapper.Map(userUpdate, user);
 
@@ -95,20 +96,20 @@ public class UserController(ManaxContext context, IMapper mapper) : ControllerBa
     public async Task<IActionResult> DeleteUser(long id)
     {
         User? userToDelete = await context.Users.FindAsync(id);
-        if (userToDelete == null) return NotFound("User with ID " + id + " does not exist.");
+        if (userToDelete == null) return NotFound(Localizer.Format("UserNotFound", id));
 
         long? selfId = GetCurrentUserId(HttpContext);
         if (selfId == null)
-            return Unauthorized("You must be logged in to delete a user.");
+            return Unauthorized(Localizer.Format("UserMustBeLoggedInDelete"));
         if (selfId == id)
-            return Forbid("You cannot delete your own account.");
+            return Forbid(Localizer.Format("UserCannotDeleteSelf"));
 
         User? self = context.Users.FirstOrDefault(u => u.Id == selfId);
         if (self == null)
-            return Unauthorized("You must be logged in to delete a user.");
+            return Unauthorized(Localizer.Format("UserMustBeLoggedInDelete"));
 
         if (self.Role == UserRole.Admin && userToDelete.Role is UserRole.Admin or UserRole.Owner)
-            return Forbid("You cannot delete an admin or owner user.");
+            return Forbid(Localizer.Format("UserCannotDeleteAdminOrOwner"));
 
         context.Users.Remove(userToDelete);
         await context.SaveChangesAsync();
@@ -137,7 +138,7 @@ public class UserController(ManaxContext context, IMapper mapper) : ControllerBa
             Logger.LogWarning("Failed login attempt for user "+loginDto.Username+" from "+loginAttempt.Origin,Environment.StackTrace);
             context.LoginAttempts.Add(loginAttempt);
             await context.SaveChangesAsync();
-            return Unauthorized("Invalid username or password.");
+            return Unauthorized(Localizer.Format("UserInvalidLogin"));
         }
         
         loginAttempt.Success = true;
@@ -158,10 +159,10 @@ public class UserController(ManaxContext context, IMapper mapper) : ControllerBa
     public async Task<ActionResult<UserDTO>> GetCurrentUser()
     {
         long? userId = GetCurrentUserId(HttpContext);
-        if (userId == null) return Unauthorized("You must be logged in to get your user information.");
+        if (userId == null) return Unauthorized(Localizer.Format("UserMustBeLoggedInInfo"));
 
         User? user = await context.Users.FindAsync(userId);
-        if (user == null) return NotFound("User with ID " + userId + " does not exist.");
+        if (user == null) return NotFound(Localizer.Format("UserNotFound", userId));
 
         return mapper.Map<UserDTO>(user);
     }
@@ -186,7 +187,7 @@ public class UserController(ManaxContext context, IMapper mapper) : ControllerBa
             {
                 context.LoginAttempts.Add(loginAttempt);
                 context.SaveChanges();
-                return Unauthorized("User claiming is only allowed when there are no users in the database.");
+                return Unauthorized(Localizer.Format("UserClaimNotAllowed"));
             }
 
             User user = new()

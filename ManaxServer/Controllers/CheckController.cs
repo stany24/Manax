@@ -1,6 +1,7 @@
 using ManaxLibrary.DTOs.User;
 using ManaxServer.Auth;
 using ManaxServer.BackgroundTask;
+using ManaxServer.Localization;
 using ManaxServer.Models;
 using ManaxServer.Models.Chapter;
 using ManaxServer.Models.Serie;
@@ -22,7 +23,7 @@ public class CheckController(ManaxContext context) : ControllerBase
     {
         Serie? serie = await context.Series.FirstOrDefaultAsync(s => s.Id == id);
 
-        if (serie == null) return NotFound("Serie with ID " + id + " does not exist.");
+        if (serie == null) return NotFound(Localizer.Format("SerieNotFound", id));
 
         _ = TaskManagerService.AddTaskAsync(new SerieCheckTask(serie.Id));
 
@@ -38,7 +39,7 @@ public class CheckController(ManaxContext context) : ControllerBase
         Chapter? chapter = await context.Chapters
             .FirstOrDefaultAsync(l => l.Id == id);
 
-        if (chapter == null) return NotFound("Chapter with ID " + id + " does not exist.");
+        if (chapter == null) return NotFound(Localizer.Format("ChapterNotFound", id));
 
         _ = TaskManagerService.AddTaskAsync(new ChapterCheckTask(chapter.Id));
 

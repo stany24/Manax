@@ -82,5 +82,16 @@
         <ProjectReference Include="..\ManaxLibrary\ManaxLibrary.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <EmbeddedResource Update="Localization\Languages\manax.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>manax.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Localization\Languages\manax.fr.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>manax.fr.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+    </ItemGroup>
+
 </Project>
 

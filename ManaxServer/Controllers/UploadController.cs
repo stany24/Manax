@@ -7,6 +7,7 @@ using ManaxLibrary.DTOs.Setting;
 using ManaxLibrary.DTOs.User;
 using ManaxServer.Auth;
 using ManaxServer.BackgroundTask;
+using ManaxServer.Localization;
 using ManaxServer.Models;
 using ManaxServer.Models.Chapter;
 using ManaxServer.Models.Serie;
@@ -67,7 +68,7 @@ public partial class UploadController(ManaxContext context, IMapper mapper) : Co
     {
         Serie? serie = context.Series.FirstOrDefault(s => s.Id == serieId);
         if (serie == null)
-            return BadRequest("The serie does not exist");
+            return BadRequest(Localizer.GetString("SerieNotFound"));
 
         int pagesCount;
         try
@@ -77,7 +78,7 @@ public partial class UploadController(ManaxContext context, IMapper mapper) : Co
         }
         catch (Exception)
         {
-            return BadRequest("Invalid zip file");
+            return BadRequest(Localizer.GetString("InvalidZipFile"));
         }
 
         string filePath = Path.Combine(serie.Path, file.FileName);
@@ -86,7 +87,7 @@ public partial class UploadController(ManaxContext context, IMapper mapper) : Co
             if (replace)
                 System.IO.File.Delete(filePath);
             else
-                return BadRequest("The chapter already exists");
+                return BadRequest(Localizer.GetString("ChapterAlreadyExists"));
         }
 
         byte[] buffer = new byte[file.Length];
@@ -121,11 +122,11 @@ public partial class UploadController(ManaxContext context, IMapper mapper) : Co
     {
         Serie? serie = context.Series.FirstOrDefault(s => s.Id == serieId);
         if (serie == null)
-            return BadRequest("The serie does not exist");
+            return BadRequest(Localizer.GetString("SerieNotFound"));
 
         ImageFormat format = SettingsManager.Data.PosterFormat;
         string path = Path.Combine(serie.Path, "poster."+format.ToString().ToLower());
-        if (System.IO.File.Exists(path) && !replace) return BadRequest("The poster already exists");
+        if (System.IO.File.Exists(path) && !replace) return BadRequest(Localizer.GetString("PosterAlreadyExists"));
         try
         {
             MagickImage image = new(file.OpenReadStream());
@@ -136,7 +137,7 @@ public partial class UploadController(ManaxContext context, IMapper mapper) : Co
         }
         catch (Exception e)
         {
-            return BadRequest($"Invalid image file: {e.Message}");
+            return BadRequest(Localizer.Format("InvalidImageFile", e.Message));
         }
 
         return Ok();

@@ -4,6 +4,7 @@ using ManaxLibrary.DTOs.Search;
 using ManaxLibrary.DTOs.Serie;
 using ManaxLibrary.DTOs.User;
 using ManaxServer.Auth;
+using ManaxServer.Localization;
 using ManaxServer.Models;
 using ManaxServer.Models.Library;
 using ManaxServer.Models.Serie;
@@ -38,7 +39,7 @@ public class SerieController(ManaxContext context, IMapper mapper) : ControllerB
             .AsNoTracking()
             .FirstOrDefaultAsync(l => l.Id == id);
 
-        if (serie == null) return NotFound("Serie with ID " + id + " does not exist.");
+        if (serie == null) return NotFound(Localizer.Format("SerieNotFound", id));
 
         return mapper.Map<SerieDTO>(serie);
     }
@@ -70,7 +71,7 @@ public class SerieController(ManaxContext context, IMapper mapper) : ControllerB
         if (serie == null) return NotFound();
         string posterName = "poster." + SettingsManager.Data.ImageFormat.ToString().ToLower();
         string posterPath = Path.Combine(serie.Path, posterName);
-        if (!System.IO.File.Exists(posterPath)) return NotFound("Poster not found for serie with ID " + id);
+        if (!System.IO.File.Exists(posterPath)) return NotFound(Localizer.Format("PosterNotFound", id));
         byte[] readAllBytes = await System.IO.File.ReadAllBytesAsync(posterPath);
         return File(readAllBytes, "image/webp", posterName);
     }
@@ -85,7 +86,7 @@ public class SerieController(ManaxContext context, IMapper mapper) : ControllerB
     {
         Serie? serie = await context.Series.FindAsync(id);
 
-        if (serie == null) return NotFound("Serie with ID " + id + " does not exist.");
+        if (serie == null) return NotFound(Localizer.Format("SerieNotFound", id));
 
         mapper.Map(serieUpdate, serie);
 
@@ -111,12 +112,12 @@ public class SerieController(ManaxContext context, IMapper mapper) : ControllerB
     {
         Library? library = context.Libraries.FirstOrDefault(l => l.Id == serieCreate.LibraryId);
         if (library == null)
-            return BadRequest("The library does not exist");
+            return BadRequest(Localizer.Format("LibraryNotFound", serieCreate.LibraryId));
 
         try
         {
             string folderPath = library.Path + serieCreate.Title;
-            if (System.IO.File.Exists(folderPath)) return BadRequest("The serie already exists");
+            if (System.IO.File.Exists(folderPath)) return BadRequest(Localizer.Format("SerieAlreadyExists"));
             Directory.CreateDirectory(folderPath);
             Serie serie = new()
             {
@@ -134,7 +135,7 @@ public class SerieController(ManaxContext context, IMapper mapper) : ControllerB
         }
         catch (Exception)
         {
-            return BadRequest("Invalid zip file");
+            return BadRequest(Localizer.Format("InvalidZipFile"));
         }
     }
 
@@ -146,7 +147,7 @@ public class SerieController(ManaxContext context, IMapper mapper) : ControllerB
     public async Task<IActionResult> DeleteSerie(long id)
     {
         Serie? serie = await context.Series.FindAsync(id);
-        if (serie == null) return NotFound("Serie with ID " + id + " does not exist.");
+        if (serie == null) return NotFound(Localizer.Format("SerieNotFound", id));
 
         context.Series.Remove(serie);
         await context.SaveChangesAsync();

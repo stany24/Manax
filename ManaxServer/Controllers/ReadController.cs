@@ -2,6 +2,7 @@ using AutoMapper;
 using ManaxLibrary.DTOs.Read;
 using ManaxLibrary.DTOs.User;
 using ManaxServer.Auth;
+using ManaxServer.Localization;
 using ManaxServer.Models;
 using ManaxServer.Models.Chapter;
 using ManaxServer.Models.Read;
@@ -23,12 +24,12 @@ public class ReadController(ManaxContext context, IMapper mapper) : ControllerBa
     public async Task<IActionResult> Read(ReadCreateDTO readCreate)
     {
         long? userId = UserController.GetCurrentUserId(HttpContext);
-        if (userId == null) return Unauthorized("You must be logged in to mark a chapter as read.");
+        if (userId == null) return Unauthorized(Localizer.Format("UserMustBeLoggedInRead"));
 
         User? user = await context.Users.FindAsync(userId);
         Chapter? chapter = await context.Chapters.FindAsync(readCreate.ChapterId);
 
-        if (user == null || chapter == null) return NotFound("User or chapter not found.");
+        if (user == null || chapter == null) return NotFound(Localizer.Format("UserOrChapterNotFound"));
 
         Read? existingRead = await context.Reads
             .FirstOrDefaultAsync(r => r.User.Id == userId && r.Chapter.Id == readCreate.ChapterId);
@@ -59,7 +60,7 @@ public class ReadController(ManaxContext context, IMapper mapper) : ControllerBa
     public async Task<IActionResult> Unread(int chapterId)
     {
         long? currentUserId = UserController.GetCurrentUserId(HttpContext);
-        if (currentUserId == null) return Unauthorized();
+        if (currentUserId == null) return Unauthorized(Localizer.Format("UserMustBeLoggedInRead"));
         
         Read? existingRead = await context.Reads
             .FirstOrDefaultAsync(r => r.User.Id == currentUserId && r.Chapter.Id == chapterId);
