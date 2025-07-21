@@ -22,7 +22,7 @@ public class CheckController(ManaxContext context) : ControllerBase
     {
         Serie? serie = await context.Series.FirstOrDefaultAsync(s => s.Id == id);
 
-        if (serie == null) return NotFound();
+        if (serie == null) return NotFound("Serie with ID " + id + " does not exist.");
 
         _ = TaskManagerService.AddTaskAsync(new SerieCheckTask(serie.Id));
 
@@ -38,7 +38,7 @@ public class CheckController(ManaxContext context) : ControllerBase
         Chapter? chapter = await context.Chapters
             .FirstOrDefaultAsync(l => l.Id == id);
 
-        if (chapter == null) return NotFound();
+        if (chapter == null) return NotFound("Chapter with ID " + id + " does not exist.");
 
         _ = TaskManagerService.AddTaskAsync(new ChapterCheckTask(chapter.Id));
 

@@ -23,12 +23,12 @@ public class ReadController(ManaxContext context, IMapper mapper) : ControllerBa
     public async Task<IActionResult> Read(ReadCreateDTO readCreate)
     {
         long? userId = UserController.GetCurrentUserId(HttpContext);
-        if (userId == null) return Unauthorized();
+        if (userId == null) return Unauthorized("You must be logged in to mark a chapter as read.");
 
         User? user = await context.Users.FindAsync(userId);
         Chapter? chapter = await context.Chapters.FindAsync(readCreate.ChapterId);
 
-        if (user == null || chapter == null) return NotFound();
+        if (user == null || chapter == null) return NotFound("User or chapter not found.");
 
         Read? existingRead = await context.Reads
             .FirstOrDefaultAsync(r => r.User.Id == userId && r.Chapter.Id == readCreate.ChapterId);
@@ -56,19 +56,13 @@ public class ReadController(ManaxContext context, IMapper mapper) : ControllerBa
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<IActionResult> Unread(int chapterId, int? userId = null)
+    public async Task<IActionResult> Unread(int chapterId)
     {
         long? currentUserId = UserController.GetCurrentUserId(HttpContext);
         if (currentUserId == null) return Unauthorized();
-
-        // Si aucun userId n'est fourni, utilisez l'ID de l'utilisateur actuel
-        long targetUserId = userId ?? (long)currentUserId;
-
-        // Vérifiez si l'utilisateur actuel est autorisé à modifier les lectures d'un autre utilisateur
-        if (targetUserId != currentUserId && !User.IsInRole(nameof(UserRole.Admin))) return Unauthorized();
-
+        
         Read? existingRead = await context.Reads
-            .FirstOrDefaultAsync(r => r.User.Id == targetUserId && r.Chapter.Id == chapterId);
+            .FirstOrDefaultAsync(r => r.User.Id == currentUserId && r.Chapter.Id == chapterId);
 
         if (existingRead == null) return Ok();
 

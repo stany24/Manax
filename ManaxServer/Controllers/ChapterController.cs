@@ -33,7 +33,7 @@ public class ChapterController(ManaxContext context, IMapper mapper) : Controlle
     {
         Chapter? chapter = await context.Chapters.FindAsync(id);
 
-        if (chapter == null) return NotFound();
+        if (chapter == null) return NotFound("Chapter with ID " + id + " does not exist.");
 
         return mapper.Map<ChapterDTO>(chapter);
     }
@@ -46,7 +46,7 @@ public class ChapterController(ManaxContext context, IMapper mapper) : Controlle
     public async Task<IActionResult> DeleteChapter(long id)
     {
         Chapter? chapter = await context.Chapters.FindAsync(id);
-        if (chapter == null) return NotFound();
+        if (chapter == null) return NotFound("Chapter with ID " + id + " does not exist.");
 
         context.Chapters.Remove(chapter);
         await context.SaveChangesAsync();
@@ -64,14 +64,14 @@ public class ChapterController(ManaxContext context, IMapper mapper) : Controlle
     public async Task<IActionResult> GetChapterPage(long id, int number)
     {
         Chapter? chapter = await context.Chapters.FindAsync(id);
-        if (chapter == null) return NotFound();
+        if (chapter == null) return NotFound("Chapter with ID " + id + " does not exist.");
 
         string filePath = chapter.Path;
         if (string.IsNullOrEmpty(filePath) || !System.IO.File.Exists(filePath) || !filePath.EndsWith(".cbz"))
-            return NotFound();
+            return NotFound("Chapter file does not exist or is not a valid CBZ file.");
         using ZipArchive archive = ZipFile.OpenRead(filePath);
         if (number < 0 || number >= archive.Entries.Count)
-            return NotFound();
+            return NotFound("Page number " + number + " too big for chapter with " + archive.Entries.Count + " pages.");
         ZipArchiveEntry entry = archive.Entries[number];
         await using Stream stream = entry.Open();
         using MemoryStream memoryStream = new();
@@ -89,10 +89,10 @@ public class ChapterController(ManaxContext context, IMapper mapper) : Controlle
     public async Task<IActionResult> GetChapterPages(long id)
     {
         Chapter? chapter = await context.Chapters.FindAsync(id);
-        if (chapter == null) return NotFound();
+        if (chapter == null) return NotFound("Chapter with ID " + id + " does not exist.");
         string filePath = chapter.Path;
         if (string.IsNullOrEmpty(filePath) || !System.IO.File.Exists(filePath))
-            return NotFound();
+            return NotFound("Chapter file does not exist or is not a valid CBZ file.");
         byte[] bytes = await System.IO.File.ReadAllBytesAsync(filePath);
         return File(bytes, "application/x-cbz");
     }

@@ -35,7 +35,7 @@ public class UserController(ManaxContext context, IMapper mapper) : ControllerBa
     {
         User? user = await context.Users.FindAsync(id);
 
-        if (user == null) return NotFound();
+        if (user == null) return NotFound("User with ID " + id + " does not exist.");
 
         return mapper.Map<UserDTO>(user);
     }
@@ -50,11 +50,10 @@ public class UserController(ManaxContext context, IMapper mapper) : ControllerBa
     {
         User? user = await context.Users.FindAsync(id);
 
-        if (user == null) return NotFound();
+        if (user == null) return NotFound("User with ID " + id + " does not exist.");
 
         mapper.Map(userUpdate, user);
 
-        // Si un nouveau mot de passe est fourni, le hasher
         if (!string.IsNullOrEmpty(userUpdate.Password))
             user.PasswordHash = HashService.HashPassword(userUpdate.Password);
 
@@ -96,20 +95,20 @@ public class UserController(ManaxContext context, IMapper mapper) : ControllerBa
     public async Task<IActionResult> DeleteUser(long id)
     {
         User? userToDelete = await context.Users.FindAsync(id);
-        if (userToDelete == null) return NotFound();
+        if (userToDelete == null) return NotFound("User with ID " + id + " does not exist.");
 
         long? selfId = GetCurrentUserId(HttpContext);
         if (selfId == null)
-            return Unauthorized();
+            return Unauthorized("You must be logged in to delete a user.");
         if (selfId == id)
-            return Forbid();
+            return Forbid("You cannot delete your own account.");
 
         User? self = context.Users.FirstOrDefault(u => u.Id == selfId);
         if (self == null)
-            return Unauthorized();
+            return Unauthorized("You must be logged in to delete a user.");
 
         if (self.Role == UserRole.Admin && userToDelete.Role is UserRole.Admin or UserRole.Owner)
-            return Forbid();
+            return Forbid("You cannot delete an admin or owner user.");
 
         context.Users.Remove(userToDelete);
         await context.SaveChangesAsync();
@@ -138,7 +137,7 @@ public class UserController(ManaxContext context, IMapper mapper) : ControllerBa
             Logger.LogWarning("Failed login attempt for user "+loginDto.Username+" from "+loginAttempt.Origin,Environment.StackTrace);
             context.LoginAttempts.Add(loginAttempt);
             await context.SaveChangesAsync();
-            return Unauthorized();
+            return Unauthorized("Invalid username or password.");
         }
         
         loginAttempt.Success = true;
@@ -159,10 +158,10 @@ public class UserController(ManaxContext context, IMapper mapper) : ControllerBa
     public async Task<ActionResult<UserDTO>> GetCurrentUser()
     {
         long? userId = GetCurrentUserId(HttpContext);
-        if (userId == null) return Unauthorized();
+        if (userId == null) return Unauthorized("You must be logged in to get your user information.");
 
         User? user = await context.Users.FindAsync(userId);
-        if (user == null) return NotFound();
+        if (user == null) return NotFound("User with ID " + userId + " does not exist.");
 
         return mapper.Map<UserDTO>(user);
     }
@@ -187,7 +186,7 @@ public class UserController(ManaxContext context, IMapper mapper) : ControllerBa
             {
                 context.LoginAttempts.Add(loginAttempt);
                 context.SaveChanges();
-                return Forbid();
+                return Unauthorized("User claiming is only allowed when there are no users in the database.");
             }
 
             User user = new()

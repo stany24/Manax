@@ -87,7 +87,7 @@ public class IssueController(ManaxContext context, IMapper mapper) : ControllerB
     {
         ReportedIssueChapter? issue = await context.ReportedIssuesChapter.FindAsync(id);
 
-        if (issue == null) return NotFound();
+        if (issue == null) return NotFound("Issue with ID " + id + " does not exist.");
 
         context.ReportedIssuesChapter.Remove(issue);
         await context.SaveChangesAsync();
@@ -103,7 +103,7 @@ public class IssueController(ManaxContext context, IMapper mapper) : ControllerB
     {
         ReportedIssueSerie? issue = await context.ReportedIssuesSerie.FindAsync(id);
 
-        if (issue == null) return NotFound();
+        if (issue == null) return NotFound("Issue with ID " + id + " does not exist.");
 
         context.ReportedIssuesSerie.Remove(issue);
         await context.SaveChangesAsync();

@@ -35,11 +35,9 @@ public class Optional<T>
         }
     }
 
-
-
     public Optional(HttpResponseMessage response)
     {
-        string error = response.StatusCode + ": " + response.ReasonPhrase;
+        string error = response.StatusCode + ": " + response.Content.ReadAsStringAsync().Result;
         Error = error;
         Logger.LogFailure(error, Environment.StackTrace);
     }

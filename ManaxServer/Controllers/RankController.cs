@@ -46,7 +46,7 @@ public class RankController(ManaxContext context, IMapper mapper) : ControllerBa
     {
         if (id != rank.Id) return BadRequest("Rank ID mismatch");
         Rank? found = context.Ranks.FirstOrDefault(r => r.Id == rank.Id);
-        if (found == null) return NotFound();
+        if (found == null) return NotFound("Rank with ID " + id + " does not exist.");
         found.Name = rank.Name;
         found.Value = rank.Value;
         try
@@ -70,7 +70,7 @@ public class RankController(ManaxContext context, IMapper mapper) : ControllerBa
     public async Task<IActionResult> DeleteRank(long id)
     {
         Rank? rank = await context.Ranks.FindAsync(id);
-        if (rank == null) return NotFound();
+        if (rank == null) return NotFound("Rank with ID " + id + " does not exist.");
         context.Ranks.Remove(rank);
         await context.SaveChangesAsync();
         NotificationService.NotifyRankDeletedAsync(id);
@@ -82,7 +82,7 @@ public class RankController(ManaxContext context, IMapper mapper) : ControllerBa
     public async Task<IActionResult> SetUserRank(UserRankCreateDTO rank)
     {
         long? userId = UserController.GetCurrentUserId(HttpContext);
-        if (userId == null) return Unauthorized();
+        if (userId == null) return Unauthorized("You must be logged in to set a rank.");
 
         UserRank? existing =
             await context.UserRanks.FirstOrDefaultAsync(ur => ur.UserId == userId.Value && ur.SerieId == rank.SerieId);
@@ -113,7 +113,7 @@ public class RankController(ManaxContext context, IMapper mapper) : ControllerBa
     public async Task<ActionResult<IEnumerable<UserRankDTO>>> GetRanking()
     {
         long? currentUserId = UserController.GetCurrentUserId(HttpContext);
-        if (currentUserId == null) return Unauthorized();
+        if (currentUserId == null) return Unauthorized("You must be logged in to get your ranking.");
         return await context.UserRanks
             .Where(r => r.UserId == currentUserId)
             .Select(r => mapper.Map<UserRankDTO>(r)).ToListAsync();

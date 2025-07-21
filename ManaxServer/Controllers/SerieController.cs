@@ -38,7 +38,7 @@ public class SerieController(ManaxContext context, IMapper mapper) : ControllerB
             .AsNoTracking()
             .FirstOrDefaultAsync(l => l.Id == id);
 
-        if (serie == null) return NotFound();
+        if (serie == null) return NotFound("Serie with ID " + id + " does not exist.");
 
         return mapper.Map<SerieDTO>(serie);
     }
@@ -70,7 +70,7 @@ public class SerieController(ManaxContext context, IMapper mapper) : ControllerB
         if (serie == null) return NotFound();
         string posterName = "poster." + SettingsManager.Data.ImageFormat.ToString().ToLower();
         string posterPath = Path.Combine(serie.Path, posterName);
-        if (!System.IO.File.Exists(posterPath)) return NotFound();
+        if (!System.IO.File.Exists(posterPath)) return NotFound("Poster not found for serie with ID " + id);
         byte[] readAllBytes = await System.IO.File.ReadAllBytesAsync(posterPath);
         return File(readAllBytes, "image/webp", posterName);
     }
@@ -85,7 +85,7 @@ public class SerieController(ManaxContext context, IMapper mapper) : ControllerB
     {
         Serie? serie = await context.Series.FindAsync(id);
 
-        if (serie == null) return NotFound();
+        if (serie == null) return NotFound("Serie with ID " + id + " does not exist.");
 
         mapper.Map(serieUpdate, serie);
 
@@ -96,8 +96,7 @@ public class SerieController(ManaxContext context, IMapper mapper) : ControllerB
         }
         catch (DbUpdateConcurrencyException)
         {
-            if (!SerieExists(id)) return NotFound();
-            throw;
+            BadRequest("Failed to update serie with ID " + id);
         }
 
         return Ok();
@@ -147,7 +146,7 @@ public class SerieController(ManaxContext context, IMapper mapper) : ControllerB
     public async Task<IActionResult> DeleteSerie(long id)
     {
         Serie? serie = await context.Series.FindAsync(id);
-        if (serie == null) return NotFound();
+        if (serie == null) return NotFound("Serie with ID " + id + " does not exist.");
 
         context.Series.Remove(serie);
         await context.SaveChangesAsync();

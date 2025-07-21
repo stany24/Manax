@@ -34,7 +34,7 @@ public class LibraryController(ManaxContext context, IMapper mapper) : Controlle
             .AsNoTracking()
             .FirstOrDefaultAsync(l => l.Id == id);
 
-        if (library == null) return NotFound();
+        if (library == null) return NotFound("Library with ID " + id + " does not exist.");
 
         return mapper.Map<LibraryDTO>(library);
     }
@@ -50,7 +50,7 @@ public class LibraryController(ManaxContext context, IMapper mapper) : Controlle
     {
         Library? library = await context.Libraries.FindAsync(id);
 
-        if (library == null) return NotFound();
+        if (library == null) return NotFound("Library with ID " + id + " does not exist.");
 
         if (!Directory.Exists(libraryUpdate.Path))
             return BadRequest($"The specified path '{libraryUpdate.Path}' does not exist.");
@@ -71,13 +71,13 @@ public class LibraryController(ManaxContext context, IMapper mapper) : Controlle
         }
         catch (DbUpdateConcurrencyException)
         {
-            if (!context.Libraries.Any(e => e.Id == id)) return NotFound();
+            if (!context.Libraries.Any(e => e.Id == id)) return NotFound("Library already created");
             throw;
         }
         catch (DbUpdateException ex) when (ex.InnerException?.Message.Contains("constraint") ?? false)
         {
             return Conflict(
-                "A uniqueness constraint violation occurred. Please check that the name and path are unique.");
+                "Name or path is not unique");
         }
 
         NotificationService.NotifyLibraryCreatedAsync(mapper.Map<LibraryDTO>(library));
@@ -115,7 +115,7 @@ public class LibraryController(ManaxContext context, IMapper mapper) : Controlle
         catch (DbUpdateException ex) when (ex.InnerException?.Message.Contains("constraint") ?? false)
         {
             return Conflict(
-                "A uniqueness constraint violation occurred. Please check that the name and path are unique.");
+                "Name or path is not unique");
         }
 
         NotificationService.NotifyLibraryCreatedAsync(mapper.Map<LibraryDTO>(library));
@@ -130,7 +130,7 @@ public class LibraryController(ManaxContext context, IMapper mapper) : Controlle
     public async Task<IActionResult> DeleteLibrary(long id)
     {
         Library? library = await context.Libraries.FindAsync(id);
-        if (library == null) return NotFound();
+        if (library == null) return NotFound("Library with ID " + id + " does not exist.");
 
         context.Libraries.Remove(library);
         await context.SaveChangesAsync();
