@@ -5,71 +5,83 @@ namespace ManaxLibrary.ApiCaller;
 
 public static class UploadApiUploadClient
 {
-    public static async Task<bool> UploadSerieAsync(string directory, long libraryId)
+    public static async Task<Optional<bool>> UploadSerieAsync(string directory, long libraryId)
     {
         SerieCreateDTO serieCreate = new()
         {
             Title = Path.GetFileName(directory[..directory.LastIndexOf(Path.DirectorySeparatorChar)]),
             LibraryId = libraryId
         };
-        long? serieId = await ManaxApiSerieClient.PostSerieAsync(serieCreate);
-        if (serieId == null)
-            return false;
+        
+        Optional<long> serieCreateResponse = await ManaxApiSerieClient.PostSerieAsync(serieCreate);
+        if (serieCreateResponse.Failed)
+            return new Optional<bool>(serieCreateResponse.Error);
+        
+        long serieId = serieCreateResponse.GetValue();
         
         string? poster = Directory.GetFiles(directory, "*poster.*").FirstOrDefault();
-        if (poster == null) return true;
-        await UploadPosterAsync(poster, Path.GetFileName(poster), (long)serieId);
+        string? posterError = null;
+        if (poster != null) 
+        {
+            Optional<bool> posterResult = await UploadPosterAsync(poster, Path.GetFileName(poster), serieId);
+            if (posterResult.Failed)
+                posterError = posterResult.Error;
+        }
 
         foreach (string filePath in Directory.GetFiles(directory, "*.cbz"))
         {
             await using FileStream fileStream = File.OpenRead(filePath);
             ByteArrayContent fileContent = new(await File.ReadAllBytesAsync(filePath));
             string fileName = Path.GetFileName(filePath);
-            HttpResponseMessage chapterResponse = await UploadChapterAsync(fileContent, fileName, (long)serieId);
-            if (!chapterResponse.IsSuccessStatusCode)
-                return false;
+            Optional<bool> uploadChapterResponse = await UploadChapterAsync(fileContent, fileName, serieId);
+            if (uploadChapterResponse.Failed)
+                return new Optional<bool>(uploadChapterResponse.Error);
         }
-        
-        return true;
+
+        return new Optional<bool>(true);
     }
 
-    private static async Task<HttpResponseMessage> UploadChapterAsync(ByteArrayContent file, string fileName,
+    public static async Task<Optional<bool>> UploadChapterAsync(ByteArrayContent file, string fileName,
         long serieId)
     {
         using MultipartFormDataContent content = new();
         file.Headers.ContentType = MediaTypeHeaderValue.Parse("application/zip");
         content.Add(file, "file", fileName);
         content.Add(new StringContent(serieId.ToString()), "serieId");
-        return await ManaxApiClient.Client.PostAsync("api/upload/chapter", content);
+        HttpResponseMessage response = await ManaxApiClient.Client.PostAsync("api/upload/chapter", content);
+        return new Optional<bool>(true);
     }
 
-    private static async Task<HttpResponseMessage> ReplaceChapterAsync(ByteArrayContent file, string fileName,
+    public static async Task<Optional<bool>> ReplaceChapterAsync(ByteArrayContent file, string fileName,
         long serieId)
     {
         using MultipartFormDataContent content = new();
         file.Headers.ContentType = MediaTypeHeaderValue.Parse("application/zip");
         content.Add(file, "file", fileName);
         content.Add(new StringContent(serieId.ToString()), "serieId");
-        return await ManaxApiClient.Client.PostAsync("api/upload/chapter/replace", content);
+        HttpResponseMessage response = await ManaxApiClient.Client.PostAsync("api/upload/chapter/replace", content);
+        return new Optional<bool>(true);
     }
 
-    private static async Task<HttpResponseMessage> UploadPosterAsync(string file, string fileName, long serieId)
+    public static async Task<Optional<bool>> UploadPosterAsync(string file, string fileName, long serieId)
     {
         using MultipartFormDataContent content = new();
         ByteArrayContent img = new(await File.ReadAllBytesAsync(file));
         img.Headers.ContentType = MediaTypeHeaderValue.Parse("application/zip");
         content.Add(img, "file", fileName);
         content.Add(new StringContent(serieId.ToString()), "serieId");
-        return await ManaxApiClient.Client.PostAsync("api/upload/poster", content);
+        HttpResponseMessage response = await ManaxApiClient.Client.PostAsync("api/upload/poster", content);
+        return new Optional<bool>(true);
     }
 
-    private static async Task<HttpResponseMessage> ReplacePosterAsync(string file, string fileName, long serieId)
+    public static async Task<Optional<bool>> ReplacePosterAsync(string file, string fileName, long serieId)
     {
         using MultipartFormDataContent content = new();
         ByteArrayContent img = new(await File.ReadAllBytesAsync(file));
         img.Headers.ContentType = MediaTypeHeaderValue.Parse("application/zip");
         content.Add(img, "file", fileName);
         content.Add(new StringContent(serieId.ToString()), "serieId");
-        return await ManaxApiClient.Client.PostAsync("api/upload/poster/replace", content);
+        HttpResponseMessage response = await ManaxApiClient.Client.PostAsync("api/upload/poster/replace", content);
+        return new Optional<bool>(true);
     }
 }

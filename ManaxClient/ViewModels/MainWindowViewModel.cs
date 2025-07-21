@@ -15,8 +15,10 @@ using ManaxClient.ViewModels.Library;
 using ManaxClient.ViewModels.Login;
 using ManaxClient.ViewModels.Rank;
 using ManaxClient.ViewModels.User;
+using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTOs.Library;
+using ManaxLibrary.Logging;
 using ManaxLibrary.Notifications;
 
 namespace ManaxClient.ViewModels;
@@ -117,14 +119,23 @@ public partial class MainWindowViewModel : ObservableObject
     {
         Task.Run(async () =>
         {
-            List<long>? ids = await ManaxApiLibraryClient.GetLibraryIdsAsync();
-            if (ids == null) return;
+            Optional<List<long>> libraryIdsResponse = await ManaxApiLibraryClient.GetLibraryIdsAsync();
+            if (libraryIdsResponse.Failed)
+            {
+                ShowInfo(libraryIdsResponse.Error);
+                return;
+            }
             Dispatcher.UIThread.Invoke(() => { Libraries.Clear(); });
+            List<long> ids = libraryIdsResponse.GetValue();
             foreach (long id in ids)
             {
-                LibraryDTO? libraryAsync = await ManaxApiLibraryClient.GetLibraryAsync(id);
-                if (libraryAsync == null) continue;
-                Dispatcher.UIThread.Post(() => Libraries.Add(libraryAsync));
+                Optional<LibraryDTO> libraryResponse = await ManaxApiLibraryClient.GetLibraryAsync(id);
+                if (libraryResponse.Failed)
+                {
+                    ShowInfo(libraryResponse.Error);
+                    continue;
+                }
+                Dispatcher.UIThread.Post(() => Libraries.Add(libraryResponse.GetValue()));
             }
         });
     }
@@ -183,11 +194,15 @@ public partial class MainWindowViewModel : ObservableObject
                 popup.Close();
                 LibraryCreateDTO? library = popup.GetResult();
                 if (library == null) return;
-                long? id = await ManaxApiLibraryClient.PostLibraryAsync(library);
-                if (id == null) { Infos.Add("Library creation failed"); }
+                Optional<long> postLibraryResponse = await ManaxApiLibraryClient.PostLibraryAsync(library);
+                if (postLibraryResponse.Failed)
+                {
+                    ShowInfo(postLibraryResponse.Error);
+                }
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                Logger.LogError("Error creating library",e,Environment.StackTrace);
                 Infos.Add("Error creating library");
             }
         };

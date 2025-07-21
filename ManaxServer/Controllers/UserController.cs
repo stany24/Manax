@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using AutoMapper;
 using ManaxLibrary.DTOs.User;
+using ManaxLibrary.Logging;
 using ManaxServer.Auth;
 using ManaxServer.Models;
 using ManaxServer.Models.User;
@@ -134,12 +135,14 @@ public class UserController(ManaxContext context, IMapper mapper) : ControllerBa
         User? user = await context.Users.FirstOrDefaultAsync(u => u.Username == loginDto.Username);
         if (user == null || !HashService.VerifyPassword(loginDto.Password, user.PasswordHash))
         {
+            Logger.LogWarning("Failed login attempt for user "+loginDto.Username+" from "+loginAttempt.Origin,Environment.StackTrace);
             context.LoginAttempts.Add(loginAttempt);
             await context.SaveChangesAsync();
             return Unauthorized();
         }
-
+        
         loginAttempt.Success = true;
+        Logger.LogInfo("User "+loginDto.Username+" logged in successfully from "+loginAttempt.Origin);
         context.LoginAttempts.Add(loginAttempt);
         await context.SaveChangesAsync();
 

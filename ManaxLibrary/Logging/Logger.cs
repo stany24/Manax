@@ -7,7 +7,7 @@ public static class Logger
     private static readonly object ConsoleLock = new();
     static Logger()
     {
-        Path = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "logs.txt");
+        Path = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "logs.txt");
     }
     
     public static void LogInfo(string message)

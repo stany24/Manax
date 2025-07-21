@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using ManaxClient.ViewModels.Home;
+using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTOs.User;
 using Logger = ManaxLibrary.Logging.Logger;
@@ -29,8 +30,13 @@ public partial class LoginPageViewModel : PageViewModel
         Task.Run(async () =>
         {
             ManaxApiConfig.SetHost(new Uri(Host + $":{Port}/"));
-            string? token = await ManaxApiUserClient.LoginAsync(Username, Password);
-            CheckToken(token, "Invalid username or password");
+            Optional<string> loginResponse = await ManaxApiUserClient.LoginAsync(Username, Password);
+            if (loginResponse.Failed)
+            {
+                InfoEmitted?.Invoke(this, loginResponse.Error);
+                return;
+            }
+            CheckToken(loginResponse.GetValue(), "Invalid username or password");
         });
     }
 
@@ -40,8 +46,13 @@ public partial class LoginPageViewModel : PageViewModel
         Task.Run(async () =>
         {
             ManaxApiConfig.SetHost(new Uri(Host + $":{Port}/"));
-            string? token = await ManaxApiUserClient.ClaimAsync(Username, Password);
-            CheckToken(token, "Could not claim server");
+            Optional<string> claimResponse = await ManaxApiUserClient.ClaimAsync(Username, Password);
+            if (claimResponse.Failed)
+            {
+                InfoEmitted?.Invoke(this, claimResponse.Error);
+                return;
+            }
+            CheckToken(claimResponse.GetValue(), "Could not claim server");
         });
     }
 
@@ -57,15 +68,16 @@ public partial class LoginPageViewModel : PageViewModel
 
             ManaxApiConfig.SetToken(token);
 
-            UserDTO? self = await ManaxApiUserClient.GetSelf();
+            Optional<UserDTO> selfResponse = await ManaxApiUserClient.GetSelf();
 
-            if (self == null)
+            if (selfResponse.Failed)
             {
                 ManaxApiConfig.SetToken("");
                 Dispatcher.UIThread.Post(() => { LoginError = "Failed to retrieve user information"; });
                 return;
             }
-
+            
+            UserDTO self = selfResponse.GetValue();
             _isAdmin = self.Role is UserRole.Admin or UserRole.Owner;
             InfoEmitted?.Invoke(this, $"Logged in as {self.Username} ({self.Role})");
             Logger.LogInfo($"Logged in as {self.Username} ({self.Role})");

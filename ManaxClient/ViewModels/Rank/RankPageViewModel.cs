@@ -6,6 +6,7 @@ using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using ManaxClient.Controls.Popups;
 using ManaxClient.Models.Collections;
+using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTOs.Rank;
 using ManaxLibrary.Logging;
@@ -61,16 +62,15 @@ public partial class RankPageViewModel : PageViewModel
     {
         try
         {
-            IEnumerable<RankDTO>? ranks = await ManaxApiRankClient.GetRanksAsync();
-            if (ranks == null)
+            Optional<List<RankDTO>> ranksResponse = await ManaxApiRankClient.GetRanksAsync();
+            if (ranksResponse.Failed)
             {
-                InfoEmitted?.Invoke(this,"Failed to load ranks from server");
-                Logger.LogFailure("Failed to load ranks from server",Environment.StackTrace);
+                InfoEmitted?.Invoke(this, ranksResponse.Error);
                 return;
             }
             Dispatcher.UIThread.Post(() =>
             {
-                Ranks = new SortedObservableCollection<RankDTO>(ranks)
+                Ranks = new SortedObservableCollection<RankDTO>(ranksResponse.GetValue())
                 {
                     SortingSelector = r => r.Value,
                     Descending = true
@@ -92,14 +92,9 @@ public partial class RankPageViewModel : PageViewModel
             try
             {
                 RankDTO result = rankEditPopup.GetResult();
-                bool success = await ManaxApiRankClient.UpdateRankAsync(result);
-                if (success){rankEditPopup.Close();}
-                else
-                {
-                    InfoEmitted?.Invoke(this,"Failed to update rank on server");
-                    Logger.LogFailure("Failed to update rank on server",Environment.StackTrace);
-                }
-                
+                Optional<bool> updateRankAsync = await ManaxApiRankClient.UpdateRankAsync(result);
+                if (updateRankAsync.Failed) { InfoEmitted?.Invoke(this,updateRankAsync.Error); }
+                else { rankEditPopup.Close(); }
             }
             catch (Exception e)
             {
@@ -116,11 +111,10 @@ public partial class RankPageViewModel : PageViewModel
         {
             try
             {
-                bool success = await ManaxApiRankClient.DeleteRankAsync(rank.Id);
-                if (!success)
+                Optional<bool> deleteRankResponse = await ManaxApiRankClient.DeleteRankAsync(rank.Id);
+                if (deleteRankResponse.Failed)
                 {
-                    InfoEmitted?.Invoke(this, "Failed to delete rank on server");
-                    Logger.LogFailure("Failed to delete rank on server", Environment.StackTrace);
+                    InfoEmitted?.Invoke(this, deleteRankResponse.Error);
                 }
             }
             catch (Exception e)
@@ -139,12 +133,15 @@ public partial class RankPageViewModel : PageViewModel
             try
             {
                 RankDTO result = rankCreatePopup.GetResult();
-                bool success = await ManaxApiRankClient.CreateRankAsync(new RankCreateDTO {Name = result.Name, Value = result.Value});
-                if (success) { rankCreatePopup.Close(); }
+                Optional<bool> rankResponse = await ManaxApiRankClient.CreateRankAsync(new RankCreateDTO {Name = result.Name, Value = result.Value});
+
+                if (rankResponse.Failed)
+                {
+                    InfoEmitted?.Invoke(this, rankResponse.Error);
+                }
                 else
                 {
-                    InfoEmitted?.Invoke(this, "Failed to create rank on server");
-                    Logger.LogFailure("Failed to create rank on server", Environment.StackTrace);
+                    rankCreatePopup.Close();
                 }
             }
             catch (Exception e)

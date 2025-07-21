@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTOs.Issue.Reported;
 
@@ -19,17 +20,24 @@ public partial class UserIssuesPageViewModel : PageViewModel
     {
         Task.Run(async () =>
         {
-            List<ReportedIssueSerieDTO>? allUserSerieIssuesAsync = await ManaxApiIssueClient.GetAllReportedSerieIssuesAsync();
-            if (allUserSerieIssuesAsync is not null)
+            Optional<List<ReportedIssueSerieDTO>> allReportedSerieIssuesAsync = await ManaxApiIssueClient.GetAllReportedSerieIssuesAsync();
+            if (allReportedSerieIssuesAsync.Failed)
             {
-                _allUserSerieIssues = allUserSerieIssuesAsync;
+                InfoEmitted?.Invoke(this,allReportedSerieIssuesAsync.Error);
+            }
+            else
+            {
+                _allUserSerieIssues = allReportedSerieIssuesAsync.GetValue();
             }
             
-            // Récupérer les données des problèmes de chapitres
-            List<ReportedIssueChapterDTO>? allUserChapterIssuesAsync = await ManaxApiIssueClient.GetAllReportedChapterIssuesAsync();
-            if (allUserChapterIssuesAsync is not null)
+            Optional<List<ReportedIssueChapterDTO>> allReportedChapterIssuesAsync = await ManaxApiIssueClient.GetAllReportedChapterIssuesAsync();
+            if (allReportedChapterIssuesAsync.Failed)
             {
-                _allUserChapterIssues = allUserChapterIssuesAsync;
+                InfoEmitted?.Invoke(this,allReportedChapterIssuesAsync.Error);
+            }
+            else
+            {
+                _allUserChapterIssues = allReportedChapterIssuesAsync.GetValue();
             }
         });
     }

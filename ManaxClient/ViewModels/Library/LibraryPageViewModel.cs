@@ -14,6 +14,7 @@ using ManaxClient.Models;
 using ManaxClient.Models.Collections;
 using ManaxClient.ViewModels.Home;
 using ManaxClient.ViewModels.Serie;
+using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTOs.Library;
 using ManaxLibrary.DTOs.Search;
@@ -87,11 +88,15 @@ public partial class LibraryPageViewModel : PageViewModel
                 serie = Series.FirstOrDefault(s => s.Info.Id == serieId);
             }
             if (serie == null) return;
-            byte[]? posterBytes = await ManaxApiSerieClient.GetSeriePosterAsync(serieId);
-            if (posterBytes == null){return;}
+            Optional<byte[]> seriePosterResponse = await ManaxApiSerieClient.GetSeriePosterAsync(serieId);
+            if (seriePosterResponse.Failed)
+            {
+                InfoEmitted?.Invoke(this, seriePosterResponse.Error);
+                return;
+            }
             try
             {
-                Bitmap poster = new(new MemoryStream(posterBytes));
+                Bitmap poster = new(new MemoryStream(seriePosterResponse.GetValue()));
                 Dispatcher.UIThread.Post(() => serie.Poster = poster);
             }
             catch (Exception e)
@@ -109,9 +114,13 @@ public partial class LibraryPageViewModel : PageViewModel
     {
         try
         {
-            LibraryDTO? libraryAsync = await ManaxApiLibraryClient.GetLibraryAsync(libraryId);
-            if (libraryAsync == null) return;
-            Dispatcher.UIThread.Post(() => Library = libraryAsync);
+            Optional<LibraryDTO> libraryResponse = await ManaxApiLibraryClient.GetLibraryAsync(libraryId);
+            if (libraryResponse.Failed)
+            {
+                InfoEmitted?.Invoke(this, libraryResponse.Error);
+                return;
+            }
+            Dispatcher.UIThread.Post(() => Library = libraryResponse.GetValue());
         }
         catch (Exception e)
         {
@@ -124,14 +133,9 @@ public partial class LibraryPageViewModel : PageViewModel
         if(Library == null){return;}
         Task.Run(async () =>
         {
-            if (await ManaxApiLibraryClient.DeleteLibraryAsync(Library.Id))
-            {
-                PageChangedRequested?.Invoke(this, new HomePageViewModel());
-            }
-            else
-            {
-                Logger.LogFailure("Failed to delete library with ID: " + Library.Id, Environment.StackTrace);
-            }
+            Optional<bool> deleteLibraryResponse = await ManaxApiLibraryClient.DeleteLibraryAsync(Library.Id);
+            if (deleteLibraryResponse.Failed ) { PageChangedRequested?.Invoke(this, new HomePageViewModel()); }
+            else { InfoEmitted?.Invoke(this, "Library '" + Library.Name + "' was correctly deleted"); }
         });
     }
 
@@ -139,29 +143,45 @@ public partial class LibraryPageViewModel : PageViewModel
     {
         try
         {
-            List<long> seriesIds = await ManaxApiSerieClient.GetSearchResult(new Search { IncludedLibraries = [libraryId] });
-            foreach (long serieId in seriesIds)
+            Optional<List<long>> searchResultResponse = await ManaxApiSerieClient.GetSearchResult(new Search { IncludedLibraries = [libraryId] });
+            if (searchResultResponse.Failed)
+            {
+                InfoEmitted?.Invoke(this, searchResultResponse.Error);
+                return;
+            }
+            foreach (long serieId in searchResultResponse.GetValue())
             {
                 lock (_serieLock)
                 {
                     if(Series.FirstOrDefault(s => s.Info.Id == serieId) != null) {continue;}
                 }
-                
-                SerieDTO? info = await ManaxApiSerieClient.GetSerieInfoAsync(serieId);
-                if (info == null) continue;
-                byte[]? posterBytes = await ManaxApiSerieClient.GetSeriePosterAsync(serieId);
-                ClientSerie serie = new() { Info = info };
-                if (posterBytes != null)
+
+                Optional<SerieDTO> serieInfoAsync = await ManaxApiSerieClient.GetSerieInfoAsync(serieId);
+                if (serieInfoAsync.Failed)
+                {
+                    InfoEmitted?.Invoke(this, serieInfoAsync.Error);
+                    continue;
+                }
+                ClientSerie serie = new() { Info = serieInfoAsync.GetValue() };
+
+                Optional<byte[]> seriePosterAsync = await ManaxApiSerieClient.GetSeriePosterAsync(serieId);
+                if (seriePosterAsync.Failed)
+                {
+                    InfoEmitted?.Invoke(this, seriePosterAsync.Error);
+                }
+                else
+                {
                     try
                     {
-                        serie.Poster = new Bitmap(new MemoryStream(posterBytes));
+                        serie.Poster = new Bitmap(new MemoryStream(seriePosterAsync.GetValue()));
                     }
-                    catch
+                    catch (Exception e)
                     {
+                        Logger.LogError("Failed to convert byte[] to image",e,Environment.StackTrace);
+                        InfoEmitted?.Invoke(this, "Invalid image received for serie " + serieId);
                         serie.Poster = null;
                     }
-                else
-                    serie.Poster = null;
+                }
 
                 Dispatcher.UIThread.Post(() =>
                 {
@@ -207,9 +227,16 @@ public partial class LibraryPageViewModel : PageViewModel
             string folderPath = folders[0].Path.LocalPath;
             if (string.IsNullOrEmpty(folderPath)) return;
 
-            bool success = await UploadApiUploadClient.UploadSerieAsync(folderPath, Library.Id);
-            InfoEmitted?.Invoke(this, !success ? "Serie upload failed" : "Serie upload successful");
-            Logger.LogInfo(!success ? "Serie upload failed" : "Serie upload successful");
+            Optional<bool> uploadSerieResponse = await UploadApiUploadClient.UploadSerieAsync(folderPath, Library.Id);
+            if (uploadSerieResponse.Failed)
+            {
+                InfoEmitted?.Invoke(this, uploadSerieResponse.Error);
+            }
+            else
+            {
+                InfoEmitted?.Invoke(this, "Serie upload successful");
+                Logger.LogInfo("Serie upload successful");
+            }
         }
         catch (Exception e)
         {

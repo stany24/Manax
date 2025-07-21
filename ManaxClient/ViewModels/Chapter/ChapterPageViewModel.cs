@@ -6,6 +6,7 @@ using Avalonia.Media.Imaging;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using ManaxClient.Models;
+using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTOs;
 using ManaxLibrary.Logging;
@@ -21,21 +22,30 @@ public partial class ChapterPageViewModel : PageViewModel
         ControlBarVisible = false;
         Task.Run(async () =>
         {
-            ChapterDTO? chapterAsync = await ManaxApiChapterClient.GetChapterAsync(chapterId);
-            if (chapterAsync == null) return;
+            Optional<ChapterDTO> chapterResponse = await ManaxApiChapterClient.GetChapterAsync(chapterId);
+            if (chapterResponse.Failed)
+            {
+                InfoEmitted?.Invoke(this, chapterResponse.Error);
+                return;
+            }
+            ChapterDTO chapter = chapterResponse.GetValue();
             Dispatcher.UIThread.Post(() =>
             {
-                Chapter.Info = chapterAsync;
-                Chapter.Pages = new ObservableCollection<Bitmap>(new Bitmap[chapterAsync.Pages]);
+                Chapter.Info = chapter;
+                Chapter.Pages = new ObservableCollection<Bitmap>(new Bitmap[chapter.Pages]);
             });
-            for (int i = 0; i < chapterAsync.Pages; i++)
+            for (int i = 0; i < chapter.Pages; i++)
             {
                 int index = i;
-                byte[]? pageBites = await ManaxApiChapterClient.GetChapterPageAsync(chapterId, i);
-                if (pageBites == null) continue;
+                Optional<byte[]> chapterPageResponse = await ManaxApiChapterClient.GetChapterPageAsync(chapterId, i);
+                if (chapterPageResponse.Failed)
+                {
+                    InfoEmitted?.Invoke(this, chapterPageResponse.Error);
+                    continue;
+                }
                 try
                 {
-                    Bitmap page = new(new MemoryStream(pageBites));
+                    Bitmap page = new(new MemoryStream(chapterPageResponse.GetValue()));
 
                     Dispatcher.UIThread.Post(() => { Chapter.Pages[index] = page; });
                 }

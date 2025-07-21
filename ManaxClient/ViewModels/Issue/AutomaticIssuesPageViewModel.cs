@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTOs.Issue.Automatic;
 
@@ -19,16 +20,24 @@ public partial class AutomaticIssuesPageViewModel : PageViewModel
     {
         Task.Run(async () =>
         {
-            List<AutomaticIssueSerieDTO>? allInternalSerieIssuesAsync = await ManaxApiIssueClient.GetAllAutomaticSerieIssuesAsync();
-            if (allInternalSerieIssuesAsync is not null)
+            Optional<List<AutomaticIssueSerieDTO>> allAutomaticSerieIssuesResponse = await ManaxApiIssueClient.GetAllAutomaticSerieIssuesAsync();
+            if (allAutomaticSerieIssuesResponse.Failed)
             {
-                _allInternalSerieIssues = allInternalSerieIssuesAsync;
+                InfoEmitted?.Invoke(this, allAutomaticSerieIssuesResponse.Error);
+            }
+            else
+            {
+                _allInternalSerieIssues = allAutomaticSerieIssuesResponse.GetValue();
             }
             
-            List<AutomaticIssueChapterDTO>? allInternalChapterIssuesAsync = await ManaxApiIssueClient.GetAllAutomaticChapterIssuesAsync();
-            if (allInternalChapterIssuesAsync is not null)
+            Optional<List<AutomaticIssueChapterDTO>> allAutomaticChapterIssuesResponse = await ManaxApiIssueClient.GetAllAutomaticChapterIssuesAsync();
+            if (allAutomaticChapterIssuesResponse.Failed)
             {
-                _allInternalChapterIssues = allInternalChapterIssuesAsync;
+                InfoEmitted?.Invoke(this, allAutomaticChapterIssuesResponse.Error);
+            }
+            else
+            {
+                _allInternalChapterIssues = allAutomaticChapterIssuesResponse.GetValue();
             }
         });
     }
