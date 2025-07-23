@@ -183,9 +183,4 @@ public class SerieController(ManaxContext context, IMapper mapper) : ControllerB
             .Select(s => s.Id)
             .ToList();
     }
-
-    private bool SerieExists(long id)
-    {
-        return context.Series.Any(e => e.Id == id);
-    }
 }

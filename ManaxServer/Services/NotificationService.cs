@@ -3,22 +3,22 @@ using ManaxLibrary.DTOs.Library;
 using ManaxLibrary.DTOs.Rank;
 using ManaxLibrary.DTOs.Serie;
 using ManaxLibrary.DTOs.User;
+using ManaxLibrary.Logging;
 using ManaxLibrary.Notifications;
 using Microsoft.AspNetCore.SignalR;
 using ManaxServer.Hubs;
+using ManaxServer.Localization;
 
 namespace ManaxServer.Services;
 
 public static class NotificationService
 {
     private static IHubContext<NotificationHub> _hubContext = null!;
-    private static ILogger<NotificationHub>? _logger;
     
-    public static void Initialize(IHubContext<NotificationHub> hubContext, ILogger<NotificationHub>? logger = null)
+    public static void Initialize(IHubContext<NotificationHub> hubContext)
     {
         _hubContext = hubContext;
-        _logger = logger;
-        _logger?.LogInformation("NotificationService initialisé");
+        Logger.LogInfo("NotificationService initialisé");
     }
     
     private static void TrySendToAllClientsAsync(NotificationType type, object? arg)
@@ -27,11 +27,11 @@ public static class NotificationService
         try
         {
             _hubContext.Clients.All.SendAsync(methodName, arg);
-            _logger?.LogDebug("Message envoyé à tous les clients: {Method}", methodName);
+            Logger.LogInfo(Localizer.Format("HubMessageSent",methodName));
         }
         catch (Exception ex)
         {
-            _logger?.LogError(ex, "Erreur lors de l'envoi de la notification {Method}", methodName);
+            Logger.LogError(Localizer.Format("HubMessageError",methodName),ex, Environment.StackTrace );
         }
     }
     

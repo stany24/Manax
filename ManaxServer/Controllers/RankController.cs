@@ -71,7 +71,7 @@ public class RankController(ManaxContext context, IMapper mapper) : ControllerBa
     public async Task<IActionResult> DeleteRank(long id)
     {
         Rank? rank = await context.Ranks.FindAsync(id);
-        if (rank == null) return NotFound("Rank with ID " + id + " does not exist.");
+        if (rank == null) return NotFound(Localizer.Format("RankNotFound", id));
         context.Ranks.Remove(rank);
         await context.SaveChangesAsync();
         NotificationService.NotifyRankDeletedAsync(id);

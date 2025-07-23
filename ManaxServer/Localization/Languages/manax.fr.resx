@@ -21,4 +21,28 @@
     <data name="ChapterNotFound" xml:space="preserve">
         <value>Le chapitre avec l'ID {0} n'existe pas</value>
     </data>
+    <data name="HubConnected" xml:space="preserve">
+        <value>Client connecté: {0} - Utilisateur: {1}</value>
+    </data>
+    <data name="HubConnectionError" xml:space="preserve">
+        <value>Erreur lors de la connexion du client {0}</value>
+    </data>
+    <data name="HubConnectionSuccess" xml:space="preserve">
+        <value>Connexion établie avec succès</value>
+    </data>
+    <data name="HubDisconnectedError" xml:space="preserve">
+        <value>Client déconnecté avec erreur: {0}</value>
+    </data>
+    <data name="HubDisconnected" xml:space="preserve">
+        <value>Client déconnecté: {0}</value>
+    </data>
+    <data name="HubMessageSent" xml:space="preserve">
+        <value>Message envoyé à tous les clients:  {0}</value>
+    </data>
+    <data name="HubMessageError" xml:space="preserve">
+        <value>Erreur lors de l'envoi de la notification pendant l'envoi de {0}</value>
+    </data>
+    <data name="TaskError" xml:space="preserve">
+        <value>Erreur pendant l'execution de la tache: {0}</value>
+    </data>
 </root>

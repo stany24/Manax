@@ -1,4 +1,5 @@
 using ManaxLibrary.DTOs.Issue.Automatic;
+using ManaxLibrary.Logging;
 using ManaxServer.Middleware;
 using ManaxServer.Models;
 using ManaxServer.Models.Issue.Reported;
@@ -27,7 +28,7 @@ public class Program
         builder.Services.AddSwaggerGen();
         builder.Services.AddHttpContextAccessor();
 
-        // Configuration SignalR
+        // SignalR configuration 
         builder.Services.AddSignalR();
 
         string secretKey = JwtService.GetSecretKey();
@@ -43,7 +44,7 @@ public class Program
                     IssuerSigningKey = new SymmetricSecurityKey(Convert.FromBase64String(secretKey))
                 };
 
-                // Configuration spéciale pour SignalR
+                // Special configuration for SignalR
                 options.Events = new JwtBearerEvents
                 {
                     OnMessageReceived = context =>
@@ -64,15 +65,13 @@ public class Program
                             IssuerSigningKey = new SymmetricSecurityKey(Convert.FromBase64String(secretKey))
                         };
                             
-                        ILogger<Program> logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Program>>();
-                        logger.LogDebug("Token extrait de la requête SignalR: {Path} - Validation adaptée", path);
+                        Logger.LogInfo("Token extrait de la requête SignalR: "+path+" - Validation adaptée");
 
                         return Task.CompletedTask;
                     },
                     OnAuthenticationFailed = context =>
                     {
-                        ILogger<Program> logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Program>>();
-                        logger.LogWarning(context.Exception, "Échec d'authentification SignalR");
+                        Logger.LogError("Échec d'authentification SignalR",context.Exception,Environment.StackTrace);
                         return Task.CompletedTask;
                     }
                 };
@@ -81,7 +80,7 @@ public class Program
         builder.Services.AddDbContext<ManaxContext>(opt =>
             opt.UseSqlite($"Data Source={Path.Combine(AppContext.BaseDirectory, "database.db")}"));
 
-        // Configuration AutoMapper
+        // AutoMapper configuration 
         builder.Services.AddAutoMapper(typeof(MappingProfile));
 
         builder.Services.Configure<KestrelServerOptions>(options =>
@@ -105,9 +104,7 @@ public class Program
         // Initialisation of services
         CheckService.Initialize(app.Services.GetRequiredService<IServiceScopeFactory>());
         IssueManagerService.Initialize(app.Services.GetRequiredService<IServiceScopeFactory>());
-        NotificationService.Initialize(
-            app.Services.GetRequiredService<IHubContext<NotificationHub>>(),
-            app.Services.GetRequiredService<ILogger<NotificationHub>>());
+        NotificationService.Initialize(app.Services.GetRequiredService<IHubContext<NotificationHub>>());
 
         app.UseMiddleware<GlobalExceptionMiddleware>();
 
@@ -124,7 +121,6 @@ public class Program
 
         app.MapControllers();
         
-        // Configuration du endpoint pour le hub SignalR
         app.MapHub<NotificationHub>("/notificationHub");
 
         app.Run();

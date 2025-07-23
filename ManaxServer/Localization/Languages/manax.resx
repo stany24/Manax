@@ -111,4 +111,28 @@
     <data name="UserMustBeLoggedInRead" xml:space="preserve">
         <value>You must be logged in to read chapters.</value>
     </data>
+    <data name="HubConnected" xml:space="preserve">
+        <value>Client connected: {0} - User: {1}</value>
+    </data>
+    <data name="HubConnectionError" xml:space="preserve">
+        <value>Erreur when connecting client {0}</value>
+    </data>
+    <data name="HubConnectionSuccess" xml:space="preserve">
+        <value>Connexion sucessfully established</value>
+    </data>
+    <data name="HubDisconnectedError" xml:space="preserve">
+        <value>Client disconected with error: {0}</value>
+    </data>
+    <data name="HubDisconnected" xml:space="preserve">
+        <value>Client disconnected: {0}</value>
+    </data>
+    <data name="HubMessageSent" xml:space="preserve">
+        <value>Message sent to all clients: {0}</value>
+    </data>
+    <data name="HubMessageError" xml:space="preserve">
+        <value>Erreur while sending notification {0}</value>
+    </data>
+    <data name="TaskError" xml:space="preserve">
+        <value>Error executing task: {0}</value>
+    </data>
 </root>

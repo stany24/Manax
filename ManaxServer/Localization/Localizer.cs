@@ -19,7 +19,12 @@ public static class Localizer
     {
         _current.TryGetValue(key, out string? value);
         if (value != null) return value;
+        Logger.LogWarning("The key '{Key}' was not found in the current language '{Language}'. Using fallback.",Environment.StackTrace);
         Fallback.TryGetValue(key, out value);
+        if (value == null)
+        {
+            Logger.LogError("The key '{Key}' was not found in the fallback language. Returning the key itself.",new NotImplementedException(),Environment.StackTrace);
+        }
         return value ?? key;
     }
     

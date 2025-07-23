@@ -1,8 +1,6 @@
 using ManaxLibrary.DTOs.Issue.Automatic;
-using ManaxLibrary.Logging;
 using ManaxServer.Models;
 using ManaxServer.Models.Issue.Automatic;
-using ManaxServer.Models.Issue.Reported;
 
 namespace ManaxServer.Services;
 

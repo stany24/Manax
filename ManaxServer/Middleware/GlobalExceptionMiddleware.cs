@@ -1,12 +1,12 @@
 using System.Net;
 using System.Text.Json;
+using ManaxLibrary.Logging;
 using ManaxServer.Models;
 
 namespace ManaxServer.Middleware;
 
 public class GlobalExceptionMiddleware(
     RequestDelegate next,
-    ILogger<GlobalExceptionMiddleware> logger,
     IWebHostEnvironment env)
 {
     public async Task InvokeAsync(HttpContext context)
@@ -23,13 +23,9 @@ public class GlobalExceptionMiddleware(
 
     private async Task HandleExceptionAsync(HttpContext context, Exception exception)
     {
-        logger.LogError(exception, "An unhandled error occurred: {Message}", exception.Message);
+        Logger.LogError("An unhandled error occurred: ",exception, Environment.StackTrace);
 
         string traceId = Guid.NewGuid().ToString();
-
-        logger.LogError(exception,
-            "Detailed exception for TraceId: {TraceId}, Message: {Message}, Stack: {StackTrace}",
-            traceId, exception.Message, exception.StackTrace);
 
         ApiError error = new()
         {

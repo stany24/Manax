@@ -1,5 +1,6 @@
 using ManaxLibrary.Logging;
 using ManaxServer.BackgroundTask;
+using ManaxServer.Localization;
 
 namespace ManaxServer.Services;
 
@@ -68,7 +69,7 @@ public static class TaskManagerService
                         }
                         catch(Exception e)
                         {
-                            Logger.LogError("Error executing task: " + task.GetName(), e, Environment.StackTrace);
+                            Logger.LogError(Localizer.Format("TaskError",task.GetName()), e, Environment.StackTrace);
                         }
                     }, cancellationToken);
                     RunningTasks.Add((task, runningTask));

@@ -1,25 +1,26 @@
+using ManaxLibrary.Logging;
+using ManaxServer.Localization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 
 namespace ManaxServer.Hubs;
 
 [Authorize]
-public class NotificationHub(ILogger<NotificationHub> logger) : Hub
+public class NotificationHub : Hub
 {
     public override async Task OnConnectedAsync()
     {
         try
         {
-            logger.LogInformation("Client connecté: {ConnectionId} - User: {UserId}", 
-                Context.ConnectionId, Context.User?.Identity?.Name ?? "Unknown");
+            Logger.LogInfo(Localizer.Format("HubConnected", Context.ConnectionId, Context.User?.Identity?.Name ?? "Unknown"));
             await base.OnConnectedAsync();
             
-            // Envoyer une confirmation de connexion uniquement au client appelant
-            await Clients.Caller.SendAsync("Connected", "Connexion établie avec succès");
+            await Clients.Caller.SendAsync("Connected", Localizer.Format("HubConnectionSuccess"));
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Erreur lors de la connexion du client {ConnectionId}", Context.ConnectionId);
+            
+            Logger.LogError(Localizer.Format("HubConnectionError", Context.ConnectionId),ex,Environment.StackTrace);
         }
     }
 
@@ -29,18 +30,18 @@ public class NotificationHub(ILogger<NotificationHub> logger) : Hub
         {
             if (exception != null)
             {
-                logger.LogWarning(exception, "Client déconnecté avec erreur: {ConnectionId}", Context.ConnectionId);
+                Logger.LogError(Localizer.Format("HubDisconnectedError",Context.ConnectionId),exception, Environment.StackTrace);
             }
             else
             {
-                logger.LogInformation("Client déconnecté: {ConnectionId}", Context.ConnectionId);
+                Logger.LogInfo(Localizer.Format("HubDisconnected",Context.ConnectionId));
             }
             
             await base.OnDisconnectedAsync(exception);
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Erreur lors de la déconnexion du client {ConnectionId}", Context.ConnectionId);
+            Logger.LogError(Localizer.Format("HubDisconnectedError",Context.ConnectionId),ex, Environment.StackTrace);
         }
     }
 }
