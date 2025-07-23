@@ -54,25 +54,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="AutoMapper" Version="14.0.0" />
-        <PackageReference Include="BouncyCastle.Cryptography" Version="2.6.1" />
-        <PackageReference Include="Konscious.Security.Cryptography.Argon2" Version="1.3.1" />
-        <PackageReference Include="Magick.NET-Q8-AnyCPU" Version="14.6.0" />
-        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.18" />
-        <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.2.0" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.7" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.7" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.7" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.7">
-            <PrivateAssets>all</PrivateAssets>
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageReference>
-        <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="9.0.0" />
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.3" />
-        <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.12.1" />
-    </ItemGroup>
-
-    <ItemGroup>
         <Content Include="..\.dockerignore">
             <Link>.dockerignore</Link>
         </Content>
@@ -91,6 +72,17 @@
         <Generator>ResXFileCodeGenerator</Generator>
         <LastGenOutput>manax.fr.Designer.cs</LastGenOutput>
       </EmbeddedResource>
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="AutoMapper" Version="14.0.0" />
+      <PackageReference Include="Konscious.Security.Cryptography.Argon2" Version="1.3.1" />
+      <PackageReference Include="Magick.NET-Q8-AnyCPU" Version="14.7.0" />
+      <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.18" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.7" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.7" />
+      <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.3" />
+      <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.13.0" />
     </ItemGroup>
 
 </Project>
