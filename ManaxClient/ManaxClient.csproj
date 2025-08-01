@@ -101,9 +101,21 @@
           <DependentUpon>LoginPageView.axaml</DependentUpon>
           <SubType>Code</SubType>
         </Compile>
+        <Compile Update="Views\Settings\SettingsPageView.axaml.cs">
+          <DependentUpon>SettingsPageView.axaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\Settings\SettingsPageView.axaml.cs">
+          <DependentUpon>HomePageView.axaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
     </ItemGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\ManaxLibrary\ManaxLibrary.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <AdditionalFiles Include="Views\Settings\SettingsPageView.axaml" />
     </ItemGroup>
 </Project>

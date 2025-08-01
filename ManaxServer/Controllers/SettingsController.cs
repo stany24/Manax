@@ -15,7 +15,7 @@ namespace ManaxServer.Controllers;
 [ApiController]
 public class SettingsController(ManaxContext context) : ControllerBase
 {
-    private object _lock = new();
+    private readonly object _lock = new();
     
     [HttpGet]
     [AuthorizeRole(UserRole.Owner)]

@@ -14,6 +14,7 @@ public partial class LoginPageViewModel : PageViewModel
 {
     [ObservableProperty] private string _host = "http://127.0.0.1";
     private bool _isAdmin;
+    private bool _isOwner;
     [ObservableProperty] private string _loginError = string.Empty;
     [ObservableProperty] private string _password = string.Empty;
     [ObservableProperty] private int _port = 5246;
@@ -79,6 +80,7 @@ public partial class LoginPageViewModel : PageViewModel
             
             UserDTO self = selfResponse.GetValue();
             _isAdmin = self.Role is UserRole.Admin or UserRole.Owner;
+            _isOwner = self.Role is UserRole.Owner;
             InfoEmitted?.Invoke(this, $"Logged in as {self.Username} ({self.Role})");
             Logger.LogInfo($"Logged in as {self.Username} ({self.Role})");
             PageChangedRequested?.Invoke(this, new HomePageViewModel());
@@ -92,5 +94,10 @@ public partial class LoginPageViewModel : PageViewModel
     public bool IsAdmin()
     {
         return _isAdmin;
+    }
+
+    public bool IsOwner()
+    {
+        return _isOwner;
     }
 }

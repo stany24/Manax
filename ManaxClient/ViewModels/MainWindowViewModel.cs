@@ -14,6 +14,7 @@ using ManaxClient.ViewModels.Issue;
 using ManaxClient.ViewModels.Library;
 using ManaxClient.ViewModels.Login;
 using ManaxClient.ViewModels.Rank;
+using ManaxClient.ViewModels.Settings;
 using ManaxClient.ViewModels.User;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
@@ -28,6 +29,7 @@ public partial class MainWindowViewModel : ObservableObject
     private readonly PageHistoryManager _history = new();
     [ObservableProperty] private ObservableCollection<string> _infos = [];
     [ObservableProperty] private bool _isAdmin;
+    [ObservableProperty] private bool _isOwner;
     [ObservableProperty] private Popup? _popup;
     [ObservableProperty] private ObservableCollection<TaskItem> _runningTasks = [];
     [ObservableProperty] private ObservableCollection<LibraryDTO> _libraries = [];
@@ -53,6 +55,7 @@ public partial class MainWindowViewModel : ObservableObject
             Dispatcher.UIThread.Post(() =>
             {
                 IsAdmin = login.IsAdmin();
+                IsOwner= login.IsOwner();
                 ServerNotification.OnRunningTasks += OnRunningTasksHandler;
                 ServerNotification.OnLibraryCreated += OnLibraryCreatedHandler;
                 ServerNotification.OnLibraryUpdated += OnLibraryUpdatedHandler;
@@ -237,5 +240,10 @@ public partial class MainWindowViewModel : ObservableObject
     public void ChangePageRanks()
     {
         SetPage(new RankPageViewModel());
+    }
+    
+    public void ChangePageSettings()
+    {
+        SetPage(new SettingsPageViewModel());
     }
 }
