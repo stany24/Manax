@@ -9,19 +9,14 @@ public class SettingsData
     public uint MaxDescriptionLength { get; private set; } = 1000;
     public uint MinDescriptionLength { get; private set; } = 100;
     public uint ImageQuality { get; private set; } = 94;
+    
+    public string PosterName { get; private set; } = "poster";
     public uint PosterQuality { get; private set; } = 94;
     public ImageFormat PosterFormat { get; private set; } = ImageFormat.Webp;
     public ImageFormat ImageFormat { get; private set; } = ImageFormat.Webp;
     public ArchiveFormat ArchiveFormat { get; private set; } = ArchiveFormat.Cbz;
-
-    public void ForceFixIssues()
-    {
-        if (MaxPosterWidth < MinPosterWidth) { MinPosterWidth = MaxPosterWidth; }
-        if (MaxChapterWidth < MinChapterWidth) { MinChapterWidth = MaxChapterWidth; }
-        if (MaxDescriptionLength < MinDescriptionLength) { MinDescriptionLength = MaxDescriptionLength; }
-        ImageQuality = Math.Clamp(ImageQuality, 1, 100);
-        PosterQuality = Math.Clamp(PosterQuality, 1, 100);
-    }
+    
+    public bool IsValid => GetIssues() == null;
 
     public string? GetIssues()
     {

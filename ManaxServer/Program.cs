@@ -103,6 +103,7 @@ public class Program
 
         // Initialisation of services
         CheckService.Initialize(app.Services.GetRequiredService<IServiceScopeFactory>());
+        RenamingService.Initialize(app.Services.GetRequiredService<IServiceScopeFactory>());
         IssueManagerService.Initialize(app.Services.GetRequiredService<IServiceScopeFactory>());
         NotificationService.Initialize(app.Services.GetRequiredService<IHubContext<NotificationHub>>());
 

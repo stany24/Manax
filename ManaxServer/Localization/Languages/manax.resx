@@ -135,4 +135,7 @@
     <data name="TaskError" xml:space="preserve">
         <value>Error executing task: {0}</value>
     </data>
+    <data name="SettingsUpdateNotForced" xml:space="preserve">
+        <value>The settings given have an issue, fix it or force the change.</value>
+    </data>
 </root>

@@ -69,7 +69,7 @@ public class SerieController(ManaxContext context, IMapper mapper) : ControllerB
     {
         Serie? serie = await context.Series.FindAsync(id);
         if (serie == null) return NotFound();
-        string posterName = "poster." + SettingsManager.Data.ImageFormat.ToString().ToLower();
+        string posterName = SettingsManager.Data.PosterName + "." + SettingsManager.Data.ImageFormat.ToString().ToLower();
         string posterPath = Path.Combine(serie.Path, posterName);
         if (!System.IO.File.Exists(posterPath)) return NotFound(Localizer.Format("PosterNotFound", id));
         byte[] readAllBytes = await System.IO.File.ReadAllBytesAsync(posterPath);

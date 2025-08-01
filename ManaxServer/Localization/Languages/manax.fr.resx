@@ -45,4 +45,7 @@
     <data name="TaskError" xml:space="preserve">
         <value>Erreur pendant l'execution de la tache: {0}</value>
     </data>
+    <data name="SettingsUpdateNotForced" xml:space="preserve">
+        <value>Les paramètres donnée on un problème, corriger le ou forcez le changement.</value>
+    </data>
 </root>

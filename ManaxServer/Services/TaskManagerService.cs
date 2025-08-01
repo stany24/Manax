@@ -92,6 +92,7 @@ public static class TaskManagerService
             await TaskSemaphore.WaitAsync(cancellationToken);
             try
             {
+                if(WaitingTasks.Count == 0){continue;}
                 Dictionary<string, int> tasks = WaitingTasks.GroupBy(t => t.GetName())
                     .Select(g => new KeyValuePair<string, int>(g.Key, g.Count()))
                     .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
@@ -118,7 +119,7 @@ public class TaskPriorityComparer : IComparer<ITask>
         if (ReferenceEquals(x, y)) return 0;
         if (x is null) return -1;
         if (y is null) return 1;
-        int cmp = y.GetPriority().CompareTo(x.GetPriority());
+        int cmp = x.GetPriority().CompareTo(y.GetPriority());
         if (cmp != 0) return cmp;
         return x.GetHashCode().CompareTo(y.GetHashCode());
     }

@@ -2,27 +2,27 @@ using ManaxServer.Services;
 
 namespace ManaxServer.BackgroundTask;
 
-public class SerieCheckTask(long serieId) : ITask
+public class PosterCheckTask(long serieId) : ITask
 {
     private readonly long _serieId = serieId;
     public void Execute()
     {
-        CheckService.CheckSerie(_serieId);
+        CheckService.CheckPoster(_serieId);
     }
 
     public string GetName()
     {
-        return "Serie check";
+        return "Poster check";
     }
 
     public int GetPriority()
     {
-        return (int)TaskPriority.SerieCheck;
+        return (int)TaskPriority.PosterCheck;
     }
     
     public override bool Equals(object? obj)
     {
-        if (obj is not  SerieCheckTask serieCheckTask) { return false; }
+        if (obj is not PosterCheckTask serieCheckTask) { return false; }
         return serieCheckTask._serieId == _serieId;
     }
 

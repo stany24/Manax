@@ -125,7 +125,7 @@ public partial class UploadController(ManaxContext context, IMapper mapper) : Co
             return BadRequest(Localizer.GetString("SerieNotFound"));
 
         ImageFormat format = SettingsManager.Data.PosterFormat;
-        string path = Path.Combine(serie.Path, "poster."+format.ToString().ToLower());
+        string path = Path.Combine(serie.Path,SettingsManager.Data.PosterName +"."+format.ToString().ToLower());
         if (System.IO.File.Exists(path) && !replace) return BadRequest(Localizer.GetString("PosterAlreadyExists"));
         try
         {

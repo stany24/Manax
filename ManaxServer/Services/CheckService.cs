@@ -31,7 +31,6 @@ public static partial class CheckService
         manaxContext.AutomaticIssuesSerie.RemoveRange(manaxContext.AutomaticIssuesSerie.Where(i => i.SerieId == serieId));
         manaxContext.SaveChanges();
 
-        CheckPoster(serie);
         CheckMissingChapters(serie);
         CheckDescription(serie);
     }
@@ -44,24 +43,22 @@ public static partial class CheckService
         if (serie.Description.Length < min) { IssueManagerService.CreateSerieIssue(serie.Id, AutomaticIssueSerieType.DescriptionTooShort); }
     }
 
-    private static void CheckPoster(Serie serie)
+    public static void CheckPoster(long serieId)
     {
-        string[] files = Directory.GetFiles(serie.Path);
-        List<string> posters = files
-            .Where(f => Path.GetFileName(f).StartsWith("poster.", StringComparison.CurrentCultureIgnoreCase)).ToList();
-        switch (posters.Count)
+        using IServiceScope scope = _scopeFactory.CreateScope();
+        ManaxContext manaxContext = scope.ServiceProvider.GetRequiredService<ManaxContext>();
+        Serie? serie = manaxContext.Series.Find(serieId);
+        if (serie == null) { return; }
+
+        string directory = serie.Path;
+        string fileName = SettingsManager.Data.PosterName +"."+ SettingsManager.Data.ImageFormat.ToString().ToLower();
+        string poster = Path.Combine(directory, fileName);
+        if (!File.Exists(poster))
         {
-            case 0:
-                IssueManagerService.CreateSerieIssue(serie.Id, AutomaticIssueSerieType.PosterMissing);
-                break;
-            case 1:
-                string poster = posters.First();
-                CheckPoster(poster,serie.Id);
-                break;
-            case > 1:
-                IssueManagerService.CreateSerieIssue(serie.Id, AutomaticIssueSerieType.PosterDuplicate);
-                break;
+            IssueManagerService.CreateSerieIssue(serie.Id, AutomaticIssueSerieType.PosterMissing);
+            return;
         }
+        CheckPoster(poster,serie.Id);
     }
 
     private static void CheckPoster(string posterPath,long serieId)

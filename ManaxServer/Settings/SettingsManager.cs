@@ -1,4 +1,3 @@
-using System.Reflection;
 using System.Text.Json;
 using ManaxLibrary.DTOs.Setting;
 
@@ -6,7 +5,7 @@ namespace ManaxServer.Settings;
 
 public static class SettingsManager
 { 
-    public static SettingsData Data { get; set; } = new();
+    public static SettingsData Data { get; private set; } = new();
     private static string SavePath => Path.Combine(AppContext.BaseDirectory, "settings.json");
     private static string BackupPath => Path.Combine(AppContext.BaseDirectory, "settings_backup.json");
     private static readonly JsonSerializerOptions JsonOptions = new() { WriteIndented = true };
@@ -29,28 +28,20 @@ public static class SettingsManager
         }
         Data = settingsData;
     }
-
+    
     private static void Save()
     {
         string json = JsonSerializer.Serialize(Data, JsonOptions);
         File.WriteAllText(SavePath, json);
     }
     
-    public static bool SetProperty(string propertyName, object value)
+    public static void OverwriteSettings(SettingsData newData)
     {
-        PropertyInfo? property = Data.GetType().GetProperty(propertyName);
-        if (property == null || !property.CanWrite) return false;
-
-        try
+        if(!newData.IsValid)
         {
-            property.SetValue(Data, value);
-            Data.ForceFixIssues();
-            Save();
-            return true;
+            throw new InvalidOperationException("New settings data contains issues that need to be resolved before saving.");
         }
-        catch
-        {
-            return false;
-        }
+        Data = newData;
+        Save();
     }
 }

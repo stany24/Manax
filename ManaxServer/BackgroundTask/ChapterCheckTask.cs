@@ -12,12 +12,12 @@ public class ChapterCheckTask(long chapterId) : ITask
 
     public string GetName()
     {
-        return "Chapter Scan";
+        return "Chapter check";
     }
 
     public int GetPriority()
     {
-        return 10;
+        return (int)TaskPriority.ChapterCheck;
     }
 
     public override bool Equals(object? obj)

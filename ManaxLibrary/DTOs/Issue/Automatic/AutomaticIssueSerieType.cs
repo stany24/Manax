@@ -4,7 +4,6 @@ public enum AutomaticIssueSerieType
 {
     PosterCouldNotOpen,
     PosterMissing,
-    PosterDuplicate,
     PosterWrongFormat,
     MissingChapter,
     DescriptionTooShort,
