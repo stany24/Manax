@@ -52,27 +52,25 @@ public static partial class CheckService
 
         string directory = serie.Path;
         string fileName = SettingsManager.Data.PosterName +"."+ SettingsManager.Data.ImageFormat.ToString().ToLower();
-        string poster = Path.Combine(directory, fileName);
-        if (!File.Exists(poster))
+        string posterPath = Path.Combine(directory, fileName);
+        if (!File.Exists(posterPath))
         {
             IssueManagerService.CreateSerieIssue(serie.Id, AutomaticIssueSerieType.PosterMissing);
             return;
         }
-        CheckPoster(poster,serie.Id);
-    }
-
-    private static void CheckPoster(string posterPath,long serieId)
-    {
-        string format = "."+SettingsManager.Data.ImageFormat.ToString().ToLower();
+        
         uint min = SettingsManager.Data.MinPosterWidth;
         uint max = SettingsManager.Data.MaxPosterWidth;
-        if (!Path.GetExtension(posterPath).Equals(format, StringComparison.CurrentCultureIgnoreCase))
-            IssueManagerService.CreateSerieIssue(serieId, AutomaticIssueSerieType.PosterWrongFormat);
         try
         {
-            MagickImage poster = new(posterPath);
-            if (poster.Width < min) { IssueManagerService.CreateSerieIssue(serieId, AutomaticIssueSerieType.PosterWrongFormat); }
-            if (poster.Width > max) { IssueManagerService.CreateSerieIssue(serieId, AutomaticIssueSerieType.PosterWrongFormat); }
+            using MagickImage poster = new(posterPath);
+            if (poster.Width < min) { IssueManagerService.CreateSerieIssue(serieId, AutomaticIssueSerieType.PosterTooSmall); }
+
+            if (poster.Width > max)
+            {
+                poster.Resize(max,poster.Height * max / poster.Width);
+                poster.Write(posterPath);
+            }
         }
         catch (Exception)
         {

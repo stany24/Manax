@@ -132,7 +132,7 @@ public partial class UploadController(ManaxContext context, IMapper mapper) : Co
             MagickImage image = new(file.OpenReadStream());
             image.Quality = SettingsManager.Data.PosterQuality;
             await image.WriteAsync(path, GetMagickFormat(format));
-            _ = TaskManagerService.AddTaskAsync(new SerieCheckTask(serie.Id));
+            _ = TaskManagerService.AddTaskAsync(new PosterCheckTask(serie.Id));
             NotificationService.NotifyPosterModifiedAsync(serie.Id);
         }
         catch (Exception e)

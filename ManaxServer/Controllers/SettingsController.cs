@@ -13,10 +13,10 @@ namespace ManaxServer.Controllers;
 
 [Route("api/settings")]
 [ApiController]
-public class SettingsController(ManaxContext context) : ControllerBase
+public class SettingsController(IServiceProvider serviceProvider) : ControllerBase
 {
     private readonly object _lock = new();
-    
+
     [HttpGet]
     [AuthorizeRole(UserRole.Owner)]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SettingsData))]
@@ -39,20 +39,22 @@ public class SettingsController(ManaxContext context) : ControllerBase
                 return BadRequest(Localizer.GetString("SettingsUpdateNotForced"));
             }
             SettingsManager.OverwriteSettings(data);
-            Task.Run(() => CheckModifications(data,oldData));
+            Task.Run(() => CheckModifications(data, oldData));
             return Ok();
         }   
     }
     
-    private void CheckModifications(SettingsData newData,SettingsData oldData)
+    private void CheckModifications(SettingsData newData, SettingsData oldData)
     {
         lock (_lock)
         {
-            HandlePosterModifications(newData, oldData);
+            using IServiceScope scope = serviceProvider.CreateScope();
+            ManaxContext scopedContext = scope.ServiceProvider.GetRequiredService<ManaxContext>();
+            HandlePosterModifications(newData, oldData, scopedContext);
         }
     }
 
-    private void HandlePosterModifications(SettingsData newData, SettingsData oldData)
+    private static void HandlePosterModifications(SettingsData newData, SettingsData oldData, ManaxContext context)
     {
         if(newData.PosterName != oldData.PosterName || newData.PosterFormat != oldData.PosterFormat )
         {
