@@ -5,6 +5,7 @@ using Avalonia.Data.Converters;
 using Avalonia.Media;
 using ManaxLibrary.DTOs;
 using System.IO;
+using ManaxLibrary.DTOs.Chapter;
 
 namespace ManaxClient.Controls;
 

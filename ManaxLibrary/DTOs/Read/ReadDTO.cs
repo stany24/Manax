@@ -3,6 +3,7 @@
 
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
 
+using ManaxLibrary.DTOs.Chapter;
 using ManaxLibrary.DTOs.User;
 
 namespace ManaxLibrary.DTOs.Read;

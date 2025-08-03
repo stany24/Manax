@@ -1,4 +1,5 @@
 using ManaxLibrary.DTOs;
+using ManaxLibrary.DTOs.Chapter;
 using ManaxLibrary.DTOs.Setting;
 using ManaxLibrary.DTOs.User;
 using ManaxServer.Auth;

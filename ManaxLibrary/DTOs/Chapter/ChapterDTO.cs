@@ -3,7 +3,7 @@
 
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
 
-namespace ManaxLibrary.DTOs;
+namespace ManaxLibrary.DTOs.Chapter;
 
 public class ChapterDTO
 {
@@ -12,4 +12,7 @@ public class ChapterDTO
     public string FileName { get; set; } = string.Empty;
     public int Number { get; set; }
     public int Pages { get; set; }
+    
+    public DateTime Creation { get; set; }
+    public DateTime LastModification { get; set; }
 }

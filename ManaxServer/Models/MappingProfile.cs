@@ -1,5 +1,6 @@
 using AutoMapper;
 using ManaxLibrary.DTOs;
+using ManaxLibrary.DTOs.Chapter;
 using ManaxLibrary.DTOs.Issue.Automatic;
 using ManaxLibrary.DTOs.Issue.Reported;
 using ManaxLibrary.DTOs.Library;

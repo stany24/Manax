@@ -18,4 +18,6 @@ public class Chapter
     public int Number { get; set; }
     public int Pages { get; set; }
     public string Path { get; set; } = string.Empty;
+    public DateTime Creation { get; set; }
+    public DateTime LastModification { get; set; }
 }

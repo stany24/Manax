@@ -3,6 +3,7 @@ using System.Text.RegularExpressions;
 using AutoMapper;
 using ImageMagick;
 using ManaxLibrary.DTOs;
+using ManaxLibrary.DTOs.Chapter;
 using ManaxLibrary.DTOs.Setting;
 using ManaxLibrary.DTOs.User;
 using ManaxServer.Auth;
@@ -31,7 +32,7 @@ public partial class UploadController(ManaxContext context, IMapper mapper) : Co
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> UploadChapter(IFormFile file, [FromForm] long serieId)
     {
-        return await UpdateOrReplaceChapter(file, serieId, false);
+        return await CreateOrReplaceChapter(file, serieId, false);
     }
 
     // POST: api/upload/chapter/replace
@@ -41,7 +42,7 @@ public partial class UploadController(ManaxContext context, IMapper mapper) : Co
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> ReplaceChapter(IFormFile file, [FromForm] long serieId)
     {
-        return await UpdateOrReplaceChapter(file, serieId, true);
+        return await CreateOrReplaceChapter(file, serieId, true);
     }
 
     // POST: api/upload/poster
@@ -51,7 +52,7 @@ public partial class UploadController(ManaxContext context, IMapper mapper) : Co
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> UploadPoster(IFormFile file, [FromForm] long serieId)
     {
-        return await UpdateOrReplacePoster(file, serieId, false);
+        return await CreateOrReplacePoster(file, serieId, false);
     }
 
     // POST: api/upload/poster/replace
@@ -61,43 +62,35 @@ public partial class UploadController(ManaxContext context, IMapper mapper) : Co
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> ReplacePoster(IFormFile file, [FromForm] long serieId)
     {
-        return await UpdateOrReplacePoster(file, serieId, true);
+        return await CreateOrReplacePoster(file, serieId, true);
     }
 
-    private async Task<IActionResult> UpdateOrReplaceChapter(IFormFile file, [FromForm] long serieId, bool replace)
+    private async Task<IActionResult> CreateOrReplaceChapter(IFormFile file, [FromForm] long serieId, bool removeOld)
     {
         Serie? serie = context.Series.FirstOrDefault(s => s.Id == serieId);
         if (serie == null)
             return BadRequest(Localizer.GetString("SerieNotFound"));
 
-        int pagesCount;
-        try
-        {
-            using ZipArchive zipArchive = new(file.OpenReadStream());
-            pagesCount = zipArchive.Entries.Count;
-        }
-        catch (Exception)
-        {
+        if (!TryGetPagesCountFromCbz(file, out int pagesCount))
             return BadRequest(Localizer.GetString("InvalidZipFile"));
-        }
 
         string filePath = Path.Combine(serie.Path, file.FileName);
+        bool replacing = false;
         if (Directory.Exists(filePath) || System.IO.File.Exists(filePath))
         {
-            if (replace)
+            if (removeOld)
+            {
+                replacing = true;
                 System.IO.File.Delete(filePath);
+            }
             else
                 return BadRequest(Localizer.GetString("ChapterAlreadyExists"));
         }
 
-        byte[] buffer = new byte[file.Length];
-        _ = await file.OpenReadStream().ReadAsync(buffer.AsMemory(0, (int)file.Length));
-        await System.IO.File.WriteAllBytesAsync(filePath, buffer);
+        await SaveFileAsync(file, filePath);
 
-        int number = 0;
-        Regex regex = RegexNumber();
-        Match match = regex.Match(file.FileName);
-        if (match.Success) number = Convert.ToInt32(match.Value);
+        int number = ExtractChapterNumber(file.FileName);
+        DateTime creation = GetChapterCreationDate(replacing, filePath);
 
         Chapter chapter = new()
         {
@@ -105,12 +98,13 @@ public partial class UploadController(ManaxContext context, IMapper mapper) : Co
             Path = filePath,
             FileName = file.FileName,
             Number = number,
-            Pages = pagesCount
+            Pages = pagesCount,
+            Creation = creation
         };
 
         context.Chapters.Add(chapter);
         await context.SaveChangesAsync();
-        if (!replace) { NotificationService.NotifyChapterAddedAsync(mapper.Map<ChapterDTO>(chapter)); }
+        if (!replacing) { NotificationService.NotifyChapterAddedAsync(mapper.Map<ChapterDTO>(chapter)); }
 
         _ = TaskManagerService.AddTaskAsync(new ChapterCheckTask(chapter.Id));
         _ = TaskManagerService.AddTaskAsync(new SerieCheckTask(chapter.SerieId));
@@ -118,7 +112,43 @@ public partial class UploadController(ManaxContext context, IMapper mapper) : Co
         return Ok();
     }
 
-    private async Task<IActionResult> UpdateOrReplacePoster(IFormFile file, [FromForm] long serieId, bool replace)
+    private static bool TryGetPagesCountFromCbz(IFormFile file, out int pagesCount)
+    {
+        try
+        {
+            using ZipArchive zipArchive = new(file.OpenReadStream());
+            pagesCount = zipArchive.Entries.Count;
+            return true;
+        }
+        catch
+        {
+            pagesCount = 0;
+            return false;
+        }
+    }
+
+    private static async Task SaveFileAsync(IFormFile file, string filePath)
+    {
+        byte[] buffer = new byte[file.Length];
+        _ = await file.OpenReadStream().ReadAsync(buffer.AsMemory(0, (int)file.Length));
+        await System.IO.File.WriteAllBytesAsync(filePath, buffer);
+    }
+
+    private static int ExtractChapterNumber(string fileName)
+    {
+        Regex regex = RegexNumber();
+        Match match = regex.Match(fileName);
+        return match.Success ? Convert.ToInt32(match.Value) : 0;
+    }
+
+    private DateTime GetChapterCreationDate(bool replacing, string filePath)
+    {
+        if (!replacing) return DateTime.Now;
+        Chapter? replacedChapter = context.Chapters.FirstOrDefault(c => c.FileName == filePath);
+        return replacedChapter?.Creation ?? DateTime.Now;
+    }
+
+    private async Task<IActionResult> CreateOrReplacePoster(IFormFile file, [FromForm] long serieId, bool replace)
     {
         Serie? serie = context.Series.FirstOrDefault(s => s.Id == serieId);
         if (serie == null)

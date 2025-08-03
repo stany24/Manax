@@ -9,6 +9,7 @@ using ManaxClient.Models;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTOs;
+using ManaxLibrary.DTOs.Chapter;
 using ManaxLibrary.Logging;
 
 namespace ManaxClient.ViewModels.Chapter;
