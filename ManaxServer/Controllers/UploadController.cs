@@ -143,9 +143,9 @@ public partial class UploadController(ManaxContext context, IMapper mapper) : Co
 
     private DateTime GetChapterCreationDate(bool replacing, string filePath)
     {
-        if (!replacing) return DateTime.Now;
+        if (!replacing) return DateTime.UtcNow;
         Chapter? replacedChapter = context.Chapters.FirstOrDefault(c => c.FileName == filePath);
-        return replacedChapter?.Creation ?? DateTime.Now;
+        return replacedChapter?.Creation ?? DateTime.UtcNow;
     }
 
     private async Task<IActionResult> CreateOrReplacePoster(IFormFile file, [FromForm] long serieId, bool replace)

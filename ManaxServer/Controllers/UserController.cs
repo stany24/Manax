@@ -78,6 +78,7 @@ public class UserController(ManaxContext context, IMapper mapper) : ControllerBa
     public async Task<ActionResult<long>> PostUser(UserCreateDTO userCreate)
     {
         User? user = mapper.Map<User>(userCreate);
+        user.Creation = DateTime.UtcNow;
         user.PasswordHash = HashService.HashPassword(userCreate.Password);
 
         context.Users.Add(user);

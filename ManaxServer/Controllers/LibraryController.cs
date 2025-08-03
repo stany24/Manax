@@ -105,7 +105,7 @@ public class LibraryController(ManaxContext context, IMapper mapper) : Controlle
             return Conflict(Localizer.Format("LibraryPathExists", libraryCreate.Path));
 
         Library? library = mapper.Map<Library>(libraryCreate);
-        library.Creation = DateTime.Now;
+        library.Creation = DateTime.UtcNow;
 
         context.Libraries.Add(library);
 

@@ -89,7 +89,7 @@ public class SerieController(ManaxContext context, IMapper mapper) : ControllerB
         if (serie == null) return NotFound(Localizer.Format("SerieNotFound", id));
 
         mapper.Map(serieUpdate, serie);
-        serie.LastModification = DateTime.Now;
+        serie.LastModification = DateTime.UtcNow;
 
         try
         {
@@ -128,8 +128,8 @@ public class SerieController(ManaxContext context, IMapper mapper) : ControllerB
                 Path = folderPath,
                 Description = "",
                 Status = Status.Ongoing,
-                Creation = DateTime.Now,
-                LastModification = DateTime.Now
+                Creation = DateTime.UtcNow,
+                LastModification = DateTime.UtcNow
             };
             context.Series.Add(serie);
             await context.SaveChangesAsync();
