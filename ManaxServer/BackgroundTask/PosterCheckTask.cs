@@ -7,7 +7,7 @@ public class PosterCheckTask(long serieId) : ITask
     private readonly long _serieId = serieId;
     public void Execute()
     {
-        CheckService.CheckPoster(_serieId);
+        FixService.FixPoster(_serieId);
     }
 
     public string GetName()

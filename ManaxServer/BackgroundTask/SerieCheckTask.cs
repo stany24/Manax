@@ -7,7 +7,7 @@ public class SerieCheckTask(long serieId) : ITask
     private readonly long _serieId = serieId;
     public void Execute()
     {
-        CheckService.CheckSerie(_serieId);
+        FixService.FixSerie(_serieId);
     }
 
     public string GetName()

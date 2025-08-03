@@ -30,6 +30,29 @@ internal static class IssueManagerService
         context.AutomaticIssuesSerie.Add(issue);
         context.SaveChanges();
     }
+    
+    internal static void ManageSerieIssue(long serieId, AutomaticIssueSerieType problem, bool create)
+    {
+        if (create)
+        {
+            CreateSerieIssue(serieId, problem);
+        }
+        else
+        {
+            RemoveSerieIssue(serieId, problem);
+        }
+    }
+
+    internal static void RemoveSerieIssue(long serieId, AutomaticIssueSerieType problem)
+    {
+        using IServiceScope scope = _scopeFactory.CreateScope();
+        ManaxContext context = scope.ServiceProvider.GetRequiredService<ManaxContext>();
+        AutomaticIssueSerie? issue = context.AutomaticIssuesSerie
+            .FirstOrDefault(i => i.Problem == problem && i.SerieId == serieId);
+        if (issue == null) return;
+        context.AutomaticIssuesSerie.Remove(issue);
+        context.SaveChanges();
+    }
 
     internal static void CreateChapterIssue(long chapterId, AutomaticIssueChapterType problem)
     {
@@ -46,6 +69,29 @@ internal static class IssueManagerService
         };
 
         context.AutomaticIssuesChapter.Add(issue);
+        context.SaveChanges();
+    }
+    
+    internal static void ManageChapterIssue(long serieId, AutomaticIssueChapterType problem, bool create)
+    {
+        if (create)
+        {
+            CreateChapterIssue(serieId, problem);
+        }
+        else
+        {
+            RemoveChapterIssue(serieId, problem);
+        }
+    }
+
+    internal static void RemoveChapterIssue(long serieId, AutomaticIssueChapterType problem)
+    {
+        using IServiceScope scope = _scopeFactory.CreateScope();
+        ManaxContext context = scope.ServiceProvider.GetRequiredService<ManaxContext>();
+        AutomaticIssueChapter? issue = context.AutomaticIssuesChapter
+            .FirstOrDefault(i => i.Problem == problem && i.ChapterId == serieId);
+        if (issue == null) return;
+        context.AutomaticIssuesChapter.Remove(issue);
         context.SaveChanges();
     }
 }
