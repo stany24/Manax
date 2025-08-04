@@ -1,12 +1,15 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
+using ManaxClient.Controls.Popups;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTOs.User;
+using ManaxLibrary.Logging;
 using ManaxLibrary.Notifications;
 
 namespace ManaxClient.ViewModels.User;
@@ -72,21 +75,26 @@ public partial class UsersPageViewModel : PageViewModel
 
     public void CreateUser()
     {
-        Task.Run(async () =>
+        UserCreatePopup popup = new(Owner);
+        PopupRequested?.Invoke(this, popup);
+        popup.CloseRequested += async void (_, _) =>
         {
-            UserCreateDTO user = new() { Username = "user", Password = "user" };
-            Optional<long> postUserResponse = await ManaxApiUserClient.PostUserAsync(user);
-            InfoEmitted?.Invoke(this, postUserResponse.Failed 
-                ? postUserResponse.Error 
-                : $"User '{user.Username}' was successfully created");
-        });
-        Task.Run(async () =>
-        {
-            UserCreateDTO user = new() { Username = "admin", Password = "admin", Role = UserRole.Admin};
-            Optional<long> postUserResponse = await ManaxApiUserClient.PostUserAsync(user);
-            InfoEmitted?.Invoke(this, postUserResponse.Failed 
-                ? postUserResponse.Error 
-                : $"User '{user.Username}' was successfully created");
-        });
+            try
+            {
+                popup.Close();
+                UserCreateDTO? user = popup.GetResult();
+                if (user == null) return;
+                Optional<long> postUserResponse = await ManaxApiUserClient.PostUserAsync(user);
+                if (postUserResponse.Failed)
+                {
+                    InfoEmitted?.Invoke(this, postUserResponse.Error);
+                }
+            }
+            catch (Exception e)
+            {
+                Logger.LogError("Error creating user", e, Environment.StackTrace);
+                InfoEmitted?.Invoke(this, "Error creating user");
+            }
+        };
     }
 }

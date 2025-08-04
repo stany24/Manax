@@ -4,19 +4,20 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
-using ManaxLibrary.DTOs.Library;
+using ManaxLibrary.DTOs.User;
 
 namespace ManaxClient.Controls.Popups;
 
-public class LibraryCreatePopup : Popup
+public class UserCreatePopup : Popup
 {
+    private readonly TextBox _usernameBox;
+    private readonly TextBox _passwordBox;
+    private readonly ComboBox _roleComboBox;
     private readonly Button _cancelButton;
-    private readonly TextBox _nameBox;
     private readonly Button _okButton;
-    private readonly TextBox _pathBox;
-    private LibraryCreateDTO? _result;
+    private UserCreateDTO? _result;
 
-    public LibraryCreatePopup()
+    public UserCreatePopup(bool owner)
     {
         MinWidth = 200;
         MaxWidth = 500;
@@ -27,37 +28,57 @@ public class LibraryCreatePopup : Popup
         {
             Margin = new Thickness(10),
             RowSpacing = 5,
-            RowDefinitions = new RowDefinitions("Auto,Auto,Auto"),
+            RowDefinitions = new RowDefinitions("Auto,Auto,Auto,Auto"),
             ColumnDefinitions = new ColumnDefinitions("Auto,10,*")
         };
 
-        TextBlock nameLabel = new()
+        TextBlock usernameLabel = new()
         {
-            Text = "Name:",
+            Text = "Username:",
             VerticalAlignment = VerticalAlignment.Center
         };
-        Grid.SetRow(nameLabel, 0);
-        Grid.SetColumn(nameLabel, 0);
-        grid.Children.Add(nameLabel);
+        Grid.SetRow(usernameLabel, 0);
+        Grid.SetColumn(usernameLabel, 0);
+        grid.Children.Add(usernameLabel);
 
-        _nameBox = new TextBox();
-        Grid.SetRow(_nameBox, 0);
-        Grid.SetColumn(_nameBox, 2);
-        grid.Children.Add(_nameBox);
+        _usernameBox = new TextBox();
+        Grid.SetRow(_usernameBox, 0);
+        Grid.SetColumn(_usernameBox, 2);
+        grid.Children.Add(_usernameBox);
 
-        TextBlock pathLabel = new()
+        TextBlock passwordLabel = new()
         {
-            Text = "Path:",
+            Text = "Password:",
             VerticalAlignment = VerticalAlignment.Center
         };
-        Grid.SetRow(pathLabel, 1);
-        Grid.SetColumn(pathLabel, 0);
-        grid.Children.Add(pathLabel);
+        Grid.SetRow(passwordLabel, 1);
+        Grid.SetColumn(passwordLabel, 0);
+        grid.Children.Add(passwordLabel);
 
-        _pathBox = new TextBox();
-        Grid.SetRow(_pathBox, 1);
-        Grid.SetColumn(_pathBox, 2);
-        grid.Children.Add(_pathBox);
+        _passwordBox = new TextBox();
+        Grid.SetRow(_passwordBox, 1);
+        Grid.SetColumn(_passwordBox, 2);
+        grid.Children.Add(_passwordBox);
+        
+        TextBlock roleLabel = new()
+        {
+            Text = "Role:",
+            VerticalAlignment = VerticalAlignment.Center
+        };
+        Grid.SetRow(roleLabel, 2);
+        Grid.SetColumn(roleLabel, 0);
+        grid.Children.Add(roleLabel);
+
+        _roleComboBox = new ComboBox();
+        Grid.SetRow(_roleComboBox, 2);
+        Grid.SetColumn(_roleComboBox, 2);
+        grid.Children.Add(_roleComboBox);
+        _roleComboBox.Items.Add(UserRole.User);
+        _roleComboBox.SelectedItem = UserRole.User;
+        if (owner)
+        {
+            _roleComboBox.Items.Add(UserRole.Admin);
+        }
 
         Grid buttonGrid = new()
         {
@@ -94,10 +115,10 @@ public class LibraryCreatePopup : Popup
 
     private void OkButton_Click(object? sender, RoutedEventArgs e)
     {
-        string? name = _nameBox.Text?.Trim();
-        string? path = _pathBox.Text?.Trim();
-        if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(path)) return;
-        _result = new LibraryCreateDTO { Name = name, Path = path };
+        string? username = _usernameBox.Text?.Trim();
+        string? password = _passwordBox.Text?.Trim();
+        if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password) || _roleComboBox.SelectedItem is not UserRole role) return;
+        _result = new UserCreateDTO { Username = username, Password = password, Role = role};
         CloseRequested?.Invoke(this, EventArgs.Empty);
     }
 
@@ -107,7 +128,7 @@ public class LibraryCreatePopup : Popup
         CloseRequested?.Invoke(this, EventArgs.Empty);
     }
 
-    public LibraryCreateDTO? GetResult()
+    public UserCreateDTO? GetResult()
     {
         return _result;
     }

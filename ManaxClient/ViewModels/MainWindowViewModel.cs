@@ -42,6 +42,7 @@ public partial class MainWindowViewModel : ObservableObject
         {
             if (CurrentPageViewModel == null) return;
             CurrentPageViewModel.Admin = IsAdmin;
+            CurrentPageViewModel.Owner = IsOwner;
             CurrentPageViewModel.PageChangedRequested += (_, e) => { SetPage(e); };
             CurrentPageViewModel.PopupRequested += (_, e) => { SetPopup(e); };
             CurrentPageViewModel.InfoEmitted += (_, e) => { ShowInfo(e); };
