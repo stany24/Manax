@@ -18,7 +18,8 @@ namespace ManaxServer.Migrations
                     Id = table.Column<long>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(type: "TEXT", nullable: false),
-                    Path = table.Column<string>(type: "TEXT", nullable: false)
+                    Path = table.Column<string>(type: "TEXT", nullable: false),
+                    Creation = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -90,7 +91,8 @@ namespace ManaxServer.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     Username = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
                     PasswordHash = table.Column<string>(type: "TEXT", maxLength: 128, nullable: false),
-                    Role = table.Column<int>(type: "INTEGER", nullable: false)
+                    Role = table.Column<int>(type: "INTEGER", nullable: false),
+                    Creation = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -108,7 +110,9 @@ namespace ManaxServer.Migrations
                     Title = table.Column<string>(type: "TEXT", nullable: false),
                     Description = table.Column<string>(type: "TEXT", nullable: false),
                     Path = table.Column<string>(type: "TEXT", nullable: false),
-                    Status = table.Column<int>(type: "INTEGER", nullable: false)
+                    Status = table.Column<int>(type: "INTEGER", nullable: false),
+                    Creation = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    LastModification = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -150,7 +154,9 @@ namespace ManaxServer.Migrations
                     FileName = table.Column<string>(type: "TEXT", nullable: false),
                     Number = table.Column<int>(type: "INTEGER", nullable: false),
                     Pages = table.Column<int>(type: "INTEGER", nullable: false),
-                    Path = table.Column<string>(type: "TEXT", nullable: false)
+                    Path = table.Column<string>(type: "TEXT", nullable: false),
+                    Creation = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    LastModification = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
