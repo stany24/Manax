@@ -4,7 +4,7 @@ using Avalonia.Data;
 using Avalonia.Media;
 using ManaxClient.Models;
 
-namespace ManaxClient.Controls;
+namespace ManaxClient.Controls.Previews;
 
 public class SeriePreview : Button
 {

@@ -2,7 +2,6 @@ using System.IO.Compression;
 using System.Text.RegularExpressions;
 using AutoMapper;
 using ImageMagick;
-using ManaxLibrary.DTOs;
 using ManaxLibrary.DTOs.Chapter;
 using ManaxLibrary.DTOs.Setting;
 using ManaxLibrary.DTOs.User;

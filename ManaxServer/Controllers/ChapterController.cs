@@ -1,6 +1,5 @@
 using System.IO.Compression;
 using AutoMapper;
-using ManaxLibrary.DTOs;
 using ManaxLibrary.DTOs.Chapter;
 using ManaxLibrary.DTOs.User;
 using ManaxServer.Auth;

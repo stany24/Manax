@@ -8,7 +8,6 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using ManaxClient.Models;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
-using ManaxLibrary.DTOs;
 using ManaxLibrary.DTOs.Chapter;
 using ManaxLibrary.Logging;
 

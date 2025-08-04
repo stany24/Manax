@@ -1,34 +1,32 @@
 using System;
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
 using ManaxLibrary.DTOs.Serie;
 
-namespace ManaxClient.Controls.Popups;
+namespace ManaxClient.Controls.Popups.Serie;
 
-public class SerieUpdatePopup : Popup
+public class SerieUpdatePopup : ConfirmCancelPopup
 {
-    private readonly Button _cancelButton;
-    private readonly TextBox _titleBox;
-    private readonly Button _okButton;
-    private readonly TextBox _descriptionBox;
-    private readonly ComboBox _statusComboBox;
+    private TextBox _titleBox;
+    private TextBox _descriptionBox;
+    private ComboBox _statusComboBox;
     private SerieUpdateDTO? _result;
+    private SerieDTO _serie;
 
-    public SerieUpdatePopup(SerieDTO serie)
+    public SerieUpdatePopup(SerieDTO serie) : base()
     {
-        MinWidth = 200;
-        MaxWidth = 500;
-        HorizontalAlignment = HorizontalAlignment.Center;
-        VerticalAlignment = VerticalAlignment.Center;
+        _serie = serie;
+    }
 
+    protected override Grid GetFormGrid()
+    {
         Grid grid = new()
         {
             Margin = new Thickness(10),
             RowSpacing = 5,
-            RowDefinitions = new RowDefinitions("Auto,Auto,Auto,Auto"),
+            RowDefinitions = new RowDefinitions("Auto,Auto,Auto"),
             ColumnDefinitions = new ColumnDefinitions("Auto,10,*")
         };
 
@@ -45,7 +43,7 @@ public class SerieUpdatePopup : Popup
         Grid.SetRow(_titleBox, 0);
         Grid.SetColumn(_titleBox, 2);
         grid.Children.Add(_titleBox);
-        _titleBox.Text = serie.Title;
+        _titleBox.Text = _serie.Title;
 
         TextBlock descriptionLabel = new()
         {
@@ -60,7 +58,7 @@ public class SerieUpdatePopup : Popup
         Grid.SetRow(_descriptionBox, 1);
         Grid.SetColumn(_descriptionBox, 2);
         grid.Children.Add(_descriptionBox);
-        _descriptionBox.Text = serie.Description;
+        _descriptionBox.Text = _serie.Description;
         
         TextBlock statusLabel = new()
         {
@@ -76,53 +74,17 @@ public class SerieUpdatePopup : Popup
         Grid.SetColumn(_statusComboBox, 2);
         grid.Children.Add(_statusComboBox);
         foreach (object value in Enum.GetValues(typeof(Status))) { _statusComboBox.Items.Add(value); }
-        _statusComboBox.SelectedItem = serie.Status;
+        _statusComboBox.SelectedItem = _serie.Status;
 
-        Grid buttonGrid = new()
-        {
-            ColumnDefinitions = new ColumnDefinitions("*,10,*")
-        };
-        _okButton = new Button
-        {
-            HotKey = new KeyGesture(Key.Enter),
-            Content = "Confirm",
-            HorizontalAlignment = HorizontalAlignment.Stretch,
-            HorizontalContentAlignment = HorizontalAlignment.Center
-        };
-        Grid.SetColumn(_okButton, 2);
-        _okButton.Click += OkButton_Click;
-
-        _cancelButton = new Button
-        {
-            Content = "Cancel",
-            HorizontalAlignment = HorizontalAlignment.Stretch,
-            HorizontalContentAlignment = HorizontalAlignment.Center
-        };
-        Grid.SetColumn(_cancelButton, 0);
-        _cancelButton.Click += CancelButton_Click;
-
-        buttonGrid.Children.Add(_okButton);
-        buttonGrid.Children.Add(_cancelButton);
-        Grid.SetRow(buttonGrid, 4);
-        Grid.SetColumn(buttonGrid, 0);
-        Grid.SetColumnSpan(buttonGrid, 3);
-        grid.Children.Add(buttonGrid);
-
-        Form.Content = grid;
+        return grid;
     }
 
-    private void OkButton_Click(object? sender, RoutedEventArgs e)
+    protected override void OkButton_Click(object? sender, RoutedEventArgs e)
     {
         string? title = _titleBox.Text?.Trim();
         string? description = _descriptionBox.Text?.Trim();
         if (string.IsNullOrEmpty(title) || string.IsNullOrEmpty(description) || _statusComboBox.SelectedItem is not Status status) return;
         _result = new SerieUpdateDTO { Title = title, Description = description, Status = status};
-        CloseRequested?.Invoke(this, EventArgs.Empty);
-    }
-
-    private void CancelButton_Click(object? sender, RoutedEventArgs e)
-    {
-        _result = null;
         CloseRequested?.Invoke(this, EventArgs.Empty);
     }
 

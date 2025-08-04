@@ -1,13 +1,12 @@
+using System.IO;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Data.Converters;
 using Avalonia.Media;
-using ManaxLibrary.DTOs;
-using System.IO;
 using ManaxLibrary.DTOs.Chapter;
 
-namespace ManaxClient.Controls;
+namespace ManaxClient.Controls.Previews;
 
 public class ChapterPreview : Button
 {

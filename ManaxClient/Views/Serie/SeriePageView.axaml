@@ -5,6 +5,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:login="clr-namespace:ManaxClient.ViewModels.Serie"
     xmlns:controls="clr-namespace:ManaxClient.Controls"
+    xmlns:previews="clr-namespace:ManaxClient.Controls.Previews"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Serie.SeriePageView"
     x:DataType="login:SeriePageViewModel">
@@ -38,7 +39,7 @@
                 ItemsSource="{Binding Chapters}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <controls:ChapterPreview
+                        <previews:ChapterPreview
                             Command="{Binding $parent[UserControl].((login:SeriePageViewModel)DataContext).MoveToChapterPage}"
                             CommandParameter="{Binding .}"
                             Chapter="{Binding .}" />

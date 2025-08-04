@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using ManaxClient.Controls.Popups;
+using ManaxClient.Controls.Popups.Library;
 using ManaxClient.Models;
 using ManaxClient.Models.History;
 using ManaxClient.ViewModels.Home;
