@@ -9,8 +9,8 @@ namespace ManaxClient.Controls.Popups.Library;
 
 public class LibraryCreatePopup : ConfirmCancelPopup
 {
-    private TextBox _nameBox;
-    private TextBox _pathBox;
+    private TextBox _nameBox = null!;
+    private TextBox _pathBox = null!;
     private LibraryCreateDTO? _result;
 
     protected override Grid GetFormGrid()

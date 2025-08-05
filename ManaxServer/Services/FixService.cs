@@ -164,7 +164,7 @@ public static partial class FixService
             if (images[i] == null) continue;
             string newPath = directory + Path.DirectorySeparatorChar + $"P{i + 1:000}" + Path.GetExtension(images[i]!.FileName);
             if (newPath == images[i]!.FileName) continue;
-            File.Move(images[i]!.FileName, newPath);
+            File.Move(images[i]!.FileName!, newPath);
             images[i] = new MagickImage(newPath);
             modified = true;
         }
@@ -187,7 +187,7 @@ public static partial class FixService
                 if (image.Width > max)
                 {
                     image.Resize(max,image.Height * max / image.Width);
-                    image.Write(image.FileName);
+                    image.Write(image.FileName!);
                     modified = true;
                 }
             }
@@ -209,7 +209,7 @@ public static partial class FixService
             if(image.Format == format) continue;
             image.Format = format;
             string newPath = Path.Combine(Path.GetDirectoryName(image.FileName) ?? string.Empty, $"{Path.GetFileNameWithoutExtension(image.FileName)}.{format.ToString().ToLower()}");
-            File.Delete(image.FileName);
+            File.Delete(image.FileName!);
             image.Write(newPath);
             modified = true;
         }

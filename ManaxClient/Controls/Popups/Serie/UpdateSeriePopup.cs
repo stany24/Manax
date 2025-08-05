@@ -7,18 +7,12 @@ using ManaxLibrary.DTOs.Serie;
 
 namespace ManaxClient.Controls.Popups.Serie;
 
-public class SerieUpdatePopup : ConfirmCancelPopup
+public class SerieUpdatePopup(SerieDTO serie) : ConfirmCancelPopup
 {
-    private TextBox _titleBox;
-    private TextBox _descriptionBox;
-    private ComboBox _statusComboBox;
+    private TextBox _titleBox = null!;
+    private TextBox _descriptionBox = null!;
+    private ComboBox _statusComboBox = null!;
     private SerieUpdateDTO? _result;
-    private SerieDTO _serie;
-
-    public SerieUpdatePopup(SerieDTO serie) : base()
-    {
-        _serie = serie;
-    }
 
     protected override Grid GetFormGrid()
     {
@@ -43,7 +37,7 @@ public class SerieUpdatePopup : ConfirmCancelPopup
         Grid.SetRow(_titleBox, 0);
         Grid.SetColumn(_titleBox, 2);
         grid.Children.Add(_titleBox);
-        _titleBox.Text = _serie.Title;
+        _titleBox.Text = serie.Title;
 
         TextBlock descriptionLabel = new()
         {
@@ -58,7 +52,7 @@ public class SerieUpdatePopup : ConfirmCancelPopup
         Grid.SetRow(_descriptionBox, 1);
         Grid.SetColumn(_descriptionBox, 2);
         grid.Children.Add(_descriptionBox);
-        _descriptionBox.Text = _serie.Description;
+        _descriptionBox.Text = serie.Description;
         
         TextBlock statusLabel = new()
         {
@@ -74,7 +68,7 @@ public class SerieUpdatePopup : ConfirmCancelPopup
         Grid.SetColumn(_statusComboBox, 2);
         grid.Children.Add(_statusComboBox);
         foreach (object value in Enum.GetValues(typeof(Status))) { _statusComboBox.Items.Add(value); }
-        _statusComboBox.SelectedItem = _serie.Status;
+        _statusComboBox.SelectedItem = serie.Status;
 
         return grid;
     }

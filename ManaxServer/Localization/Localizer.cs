@@ -71,8 +71,11 @@ public static class Localizer
     {
         List<string> languages = [];
         const string resourcePrefix = "manax.";
+
+        string? origin = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+        if (origin == null) return languages;
         
-        string basePath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Localization", "Languages");
+        string basePath = Path.Combine(origin, "Localization", "Languages");
         if (!Directory.Exists(basePath)) return languages;
         foreach (string file in Directory.GetFiles(basePath, "manax.*.resx"))
         {

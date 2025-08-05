@@ -29,7 +29,7 @@ public class SettingsController(IServiceProvider serviceProvider) : ControllerBa
     [AuthorizeRole(UserRole.Owner)]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ChapterDTO))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> ChangeSettings(SettingsData data)
+    public IActionResult ChangeSettings(SettingsData data)
     {
         lock (_lock)
         {

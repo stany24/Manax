@@ -7,18 +7,12 @@ using ManaxLibrary.DTOs.User;
 
 namespace ManaxClient.Controls.Popups.User;
 
-public class UserCreatePopup : ConfirmCancelPopup
+public class UserCreatePopup(bool owner) : ConfirmCancelPopup
 {
-    private TextBox _usernameBox;
-    private TextBox _passwordBox;
-    private ComboBox _roleComboBox;
+    private TextBox _usernameBox = null!;
+    private TextBox _passwordBox = null!;
+    private ComboBox _roleComboBox = null!;
     private UserCreateDTO? _result;
-    private readonly bool _owner;
-
-    public UserCreatePopup(bool owner)
-    {
-        _owner = owner;
-    }
 
     protected override Grid GetFormGrid()
     {
@@ -73,7 +67,7 @@ public class UserCreatePopup : ConfirmCancelPopup
         grid.Children.Add(_roleComboBox);
         _roleComboBox.Items.Add(UserRole.User);
         _roleComboBox.SelectedItem = UserRole.User;
-        if (_owner)
+        if (owner)
         {
             _roleComboBox.Items.Add(UserRole.Admin);
         }

@@ -7,16 +7,10 @@ using ManaxLibrary.DTOs.Rank;
 
 namespace ManaxClient.Controls.Popups.Rank;
 
-public class RankEditPopup : ConfirmCancelPopup
+public class RankEditPopup(RankDTO rank) : ConfirmCancelPopup
 {
-    private TextBox _nameBox;
-    private NumericUpDown _valueBox;
-    private readonly RankDTO _result;
-
-    public RankEditPopup(RankDTO rank)
-    {
-        _result = rank;
-    }
+    private TextBox _nameBox = null!;
+    private NumericUpDown _valueBox = null!;
 
     protected override Grid GetFormGrid()
     {
@@ -39,7 +33,7 @@ public class RankEditPopup : ConfirmCancelPopup
 
         _nameBox = new TextBox
         {
-            Text = _result.Name
+            Text = rank.Name
         };
         Grid.SetRow(_nameBox, 0);
         Grid.SetColumn(_nameBox, 2);
@@ -57,7 +51,7 @@ public class RankEditPopup : ConfirmCancelPopup
         _valueBox = new NumericUpDown
         {
             Minimum = 0,
-            Value = _result.Value,
+            Value = rank.Value,
             Increment = 1,
             FormatString = "0"
         };
@@ -73,13 +67,13 @@ public class RankEditPopup : ConfirmCancelPopup
         string? name = _nameBox.Text?.Trim();
         int value = Convert.ToInt32(_valueBox.Value);
         if (string.IsNullOrEmpty(name)) return;
-        _result.Value = value;
-        _result.Name = name;
+        rank.Value = value;
+        rank.Name = name;
         CloseRequested?.Invoke(this, EventArgs.Empty);
     }
 
     public RankDTO GetResult()
     {
-        return _result;
+        return rank;
     }
 }
