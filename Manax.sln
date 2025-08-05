@@ -11,10 +11,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ManaxClient", "ManaxClient\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ManaxLibrary", "ManaxLibrary\ManaxLibrary.csproj", "{DE7E770A-C1AF-42F0-82BE-AB8401AA3360}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MigrationTools", "MigrationTools", "{E7C55D6A-B543-4ABC-A645-0BF3C3D1DA09}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KomgaMigrator", "MigrationTools\KomgaMigrator\KomgaMigrator.csproj", "{37A2DC3F-7B78-4F86-9EF9-B1DDC6DF16EE}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,14 +37,9 @@ Global
 		{D5FF034E-0AC2-4EA7-8D3E-D0794B1F3DF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D5FF034E-0AC2-4EA7-8D3E-D0794B1F3DF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D5FF034E-0AC2-4EA7-8D3E-D0794B1F3DF6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{37A2DC3F-7B78-4F86-9EF9-B1DDC6DF16EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{37A2DC3F-7B78-4F86-9EF9-B1DDC6DF16EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{37A2DC3F-7B78-4F86-9EF9-B1DDC6DF16EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{37A2DC3F-7B78-4F86-9EF9-B1DDC6DF16EE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{DE916360-330D-45F2-8DE1-E0F282FBA822} = {72D4268A-F36B-4BF4-B495-9C2D8FC86059}
 		{D5FF034E-0AC2-4EA7-8D3E-D0794B1F3DF6} = {72D4268A-F36B-4BF4-B495-9C2D8FC86059}
-		{37A2DC3F-7B78-4F86-9EF9-B1DDC6DF16EE} = {E7C55D6A-B543-4ABC-A645-0BF3C3D1DA09}
 	EndGlobalSection
 EndGlobal
