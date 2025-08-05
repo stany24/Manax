@@ -8,20 +8,20 @@ namespace ManaxServer.Models;
 
 public class ManaxContext(DbContextOptions<ManaxContext> options) : DbContext(options)
 {
-    public DbSet<Library.Library> Libraries { get; set; } = null!;
-    public DbSet<Serie.Serie> Series { get; set; } = null!;
-    public DbSet<Chapter.Chapter> Chapters { get; set; } = null!;
+    public virtual DbSet<Library.Library> Libraries { get; set; } = null!;
+    public virtual DbSet<Serie.Serie> Series { get; set; } = null!;
+    public virtual DbSet<Chapter.Chapter> Chapters { get; set; } = null!;
     
-    public DbSet<AutomaticIssueChapter> AutomaticIssuesChapter { get; set; } = null!;
-    public DbSet<AutomaticIssueSerie> AutomaticIssuesSerie { get; set; } = null!;
-    public DbSet<ReportedIssueChapter> ReportedIssuesChapter { get; set; } = null!;
-    public DbSet<ReportedIssueChapterType> ReportedIssueChapterTypes { get; set; } = null!;
-    public DbSet<ReportedIssueSerie> ReportedIssuesSerie { get; set; } = null!;
-    public DbSet<ReportedIssueSerieType> ReportedIssueSerieTypes { get; set; } = null!;
+    public virtual DbSet<AutomaticIssueChapter> AutomaticIssuesChapter { get; set; } = null!;
+    public virtual DbSet<AutomaticIssueSerie> AutomaticIssuesSerie { get; set; } = null!;
+    public virtual DbSet<ReportedIssueChapter> ReportedIssuesChapter { get; set; } = null!;
+    public virtual DbSet<ReportedIssueChapterType> ReportedIssueChapterTypes { get; set; } = null!;
+    public virtual DbSet<ReportedIssueSerie> ReportedIssuesSerie { get; set; } = null!;
+    public virtual DbSet<ReportedIssueSerieType> ReportedIssueSerieTypes { get; set; } = null!;
     
-    public DbSet<User.User> Users { get; set; } = null!;
-    public DbSet<Read.Read> Reads { get; set; } = null!;
-    public DbSet<LoginAttempt> LoginAttempts { get; set; } = null!;
-    public DbSet<Rank.Rank> Ranks { get; set; } = null!;
-    public DbSet<UserRank> UserRanks { get; set; } = null!;
+    public virtual DbSet<User.User> Users { get; set; } = null!;
+    public virtual DbSet<Read.Read> Reads { get; set; } = null!;
+    public virtual DbSet<LoginAttempt> LoginAttempts { get; set; } = null!;
+    public virtual DbSet<Rank.Rank> Ranks { get; set; } = null!;
+    public virtual DbSet<UserRank> UserRanks { get; set; } = null!;
 }

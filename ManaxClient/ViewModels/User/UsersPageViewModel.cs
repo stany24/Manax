@@ -5,7 +5,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
-using ManaxClient.Controls.Popups;
 using ManaxClient.Controls.Popups.User;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;

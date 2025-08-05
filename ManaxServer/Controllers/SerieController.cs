@@ -36,7 +36,6 @@ public class SerieController(ManaxContext context, IMapper mapper) : ControllerB
     public async Task<ActionResult<SerieDTO>> GetSerie(long id)
     {
         Serie? serie = await context.Series
-            .AsNoTracking()
             .FirstOrDefaultAsync(l => l.Id == id);
 
         if (serie == null) return NotFound(Localizer.Format("SerieNotFound", id));

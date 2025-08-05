@@ -39,18 +39,18 @@ public class SettingsController(IServiceProvider serviceProvider) : ControllerBa
                 return BadRequest(Localizer.GetString("SettingsUpdateNotForced"));
             }
             SettingsManager.OverwriteSettings(data);
-            Task.Run(() => CheckModifications(data, oldData));
+            using IServiceScope scope = serviceProvider.CreateScope();
+            ManaxContext manaxContext = scope.ServiceProvider.GetRequiredService<ManaxContext>();
+            Task.Run(() => CheckModifications(data, oldData,manaxContext));
             return Ok();
         }   
     }
     
-    private void CheckModifications(SettingsData newData, SettingsData oldData)
+    private void CheckModifications(SettingsData newData, SettingsData oldData,ManaxContext manaxContext)
     {
         lock (_lock)
         {
-            using IServiceScope scope = serviceProvider.CreateScope();
-            ManaxContext scopedContext = scope.ServiceProvider.GetRequiredService<ManaxContext>();
-            HandlePosterModifications(newData, oldData, scopedContext);
+            HandlePosterModifications(newData, oldData, manaxContext);
         }
     }
 
