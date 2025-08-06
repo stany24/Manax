@@ -7,7 +7,7 @@ namespace ManaxTests.Mocks;
 
 public class TestData
 {
-    public Mock<ManaxContext> Context { get; set; }
-    public List<Chapter> Chapters { get; set; }
-    public List<Serie> Series { get; set; }
+    public Mock<ManaxContext> Context { get; init; } = new();
+    public List<Chapter> Chapters { get; init; } = [];
+    public List<Serie> Series { get; init; } = [];
 }

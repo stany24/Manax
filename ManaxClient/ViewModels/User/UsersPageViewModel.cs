@@ -8,7 +8,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using ManaxClient.Controls.Popups.User;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
-using ManaxLibrary.DTOs.User;
+using ManaxLibrary.DTO.User;
 using ManaxLibrary.Logging;
 using ManaxLibrary.Notifications;
 
@@ -16,7 +16,7 @@ namespace ManaxClient.ViewModels.User;
 
 public partial class UsersPageViewModel : PageViewModel
 {
-    [ObservableProperty] private ObservableCollection<UserDTO> _users = [];
+    [ObservableProperty] private ObservableCollection<UserDto> _users = [];
 
     public UsersPageViewModel()
     {
@@ -31,7 +31,7 @@ public partial class UsersPageViewModel : PageViewModel
             List<long> ids = usersIdsResponse.GetValue();
             foreach (long id in ids)
             {
-                Optional<UserDTO> userResponse = await ManaxApiUserClient.GetUserAsync(id);
+                Optional<UserDto> userResponse = await ManaxApiUserClient.GetUserAsync(id);
                 if (userResponse.Failed)
                 {
                     InfoEmitted?.Invoke(this, userResponse.Error);
@@ -52,17 +52,17 @@ public partial class UsersPageViewModel : PageViewModel
 
     private void OnUserDeleted(long userId)
     {
-        UserDTO? user = Users.FirstOrDefault(u => u.Id == userId);
+        UserDto? user = Users.FirstOrDefault(u => u.Id == userId);
         if (user == null) return;
         Dispatcher.UIThread.Post(() => Users.Remove(user));
     }
 
-    private void OnUserCreated(UserDTO user)
+    private void OnUserCreated(UserDto user)
     {
         Dispatcher.UIThread.Post(() => Users.Add(user));
     }
 
-    public void DeleteUser(UserDTO user)
+    public void DeleteUser(UserDto user)
     {
         Task.Run(async () =>
         {
@@ -82,7 +82,7 @@ public partial class UsersPageViewModel : PageViewModel
             try
             {
                 popup.Close();
-                UserCreateDTO? user = popup.GetResult();
+                UserCreateDto? user = popup.GetResult();
                 if (user == null) return;
                 Optional<long> postUserResponse = await ManaxApiUserClient.PostUserAsync(user);
                 if (postUserResponse.Failed)

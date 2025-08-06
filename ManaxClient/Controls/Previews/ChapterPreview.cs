@@ -4,15 +4,15 @@ using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Data.Converters;
 using Avalonia.Media;
-using ManaxLibrary.DTOs.Chapter;
+using ManaxLibrary.DTO.Chapter;
 
 namespace ManaxClient.Controls.Previews;
 
 public class ChapterPreview : Button
 {
-    public static readonly AttachedProperty<ChapterDTO> ChapterProperty =
-        AvaloniaProperty.RegisterAttached<ChapterPreview, Grid, ChapterDTO>(
-            "Chapter", new ChapterDTO(), false, BindingMode.OneTime);
+    public static readonly AttachedProperty<ChapterDto> ChapterProperty =
+        AvaloniaProperty.RegisterAttached<ChapterPreview, Grid, ChapterDto>(
+            "Chapter", new ChapterDto(), false, BindingMode.OneTime);
 
     public ChapterPreview()
     {
@@ -41,18 +41,18 @@ public class ChapterPreview : Button
         Content = border;
     }
 
-    public ChapterDTO Chapter
+    public ChapterDto Chapter
     {
         get => GetChapter(this);
         set => SetChapter(this, value);
     }
 
-    public static void SetChapter(AvaloniaObject element, ChapterDTO serieValue)
+    public static void SetChapter(AvaloniaObject element, ChapterDto serieValue)
     {
         element.SetValue(ChapterProperty, serieValue);
     }
 
-    public static ChapterDTO GetChapter(AvaloniaObject element)
+    public static ChapterDto GetChapter(AvaloniaObject element)
     {
         return element.GetValue(ChapterProperty);
     }

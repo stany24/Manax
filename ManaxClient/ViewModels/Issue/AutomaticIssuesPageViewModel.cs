@@ -1,16 +1,17 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.ComponentModel;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
-using ManaxLibrary.DTOs.Issue.Automatic;
+using ManaxLibrary.DTO.Issue.Automatic;
 
 namespace ManaxClient.ViewModels.Issue;
 
 public partial class AutomaticIssuesPageViewModel : PageViewModel
 {
-    // Collections
-    private List<AutomaticIssueChapterDTO> _allInternalChapterIssues = [];
-    private List<AutomaticIssueSerieDTO> _allInternalSerieIssues = [];
+    [ObservableProperty] private List<AutomaticIssueChapterDto> _allInternalChapterIssues = [];
+    [ObservableProperty] private List<AutomaticIssueSerieDto> _allInternalSerieIssues = [];
+    
     public AutomaticIssuesPageViewModel()
     {
         LoadData();
@@ -20,24 +21,24 @@ public partial class AutomaticIssuesPageViewModel : PageViewModel
     {
         Task.Run(async () =>
         {
-            Optional<List<AutomaticIssueSerieDTO>> allAutomaticSerieIssuesResponse = await ManaxApiIssueClient.GetAllAutomaticSerieIssuesAsync();
+            Optional<List<AutomaticIssueSerieDto>> allAutomaticSerieIssuesResponse = await ManaxApiIssueClient.GetAllAutomaticSerieIssuesAsync();
             if (allAutomaticSerieIssuesResponse.Failed)
             {
                 InfoEmitted?.Invoke(this, allAutomaticSerieIssuesResponse.Error);
             }
             else
             {
-                _allInternalSerieIssues = allAutomaticSerieIssuesResponse.GetValue();
+                AllInternalSerieIssues = allAutomaticSerieIssuesResponse.GetValue();
             }
             
-            Optional<List<AutomaticIssueChapterDTO>> allAutomaticChapterIssuesResponse = await ManaxApiIssueClient.GetAllAutomaticChapterIssuesAsync();
+            Optional<List<AutomaticIssueChapterDto>> allAutomaticChapterIssuesResponse = await ManaxApiIssueClient.GetAllAutomaticChapterIssuesAsync();
             if (allAutomaticChapterIssuesResponse.Failed)
             {
                 InfoEmitted?.Invoke(this, allAutomaticChapterIssuesResponse.Error);
             }
             else
             {
-                _allInternalChapterIssues = allAutomaticChapterIssuesResponse.GetValue();
+                AllInternalChapterIssues = allAutomaticChapterIssuesResponse.GetValue();
             }
         });
     }

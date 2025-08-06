@@ -1,6 +1,6 @@
 using System.Security.Claims;
 using AutoMapper;
-using ManaxLibrary.DTOs.User;
+using ManaxLibrary.DTO.User;
 using ManaxLibrary.Logging;
 using ManaxServer.Auth;
 using ManaxServer.Localization;
@@ -30,15 +30,15 @@ public class UserController(ManaxContext context, IMapper mapper) : ControllerBa
     // GET: api/User/5
     [HttpGet("{id:long}")]
     [AuthorizeRole(UserRole.Admin)]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserDTO))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserDto))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<UserDTO>> GetUser(long id)
+    public async Task<ActionResult<UserDto>> GetUser(long id)
     {
         User? user = await context.Users.FindAsync(id);
 
         if (user == null) return NotFound(Localizer.Format("UserNotFound", id));
 
-        return mapper.Map<UserDTO>(user);
+        return mapper.Map<UserDto>(user);
     }
 
     // PUT: api/User/5
@@ -47,7 +47,7 @@ public class UserController(ManaxContext context, IMapper mapper) : ControllerBa
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> PutUser(long id, UserUpdateDTO userUpdate)
+    public async Task<IActionResult> PutUser(long id, UserUpdateDto userUpdate)
     {
         User? user = await context.Users.FindAsync(id);
 
@@ -75,7 +75,7 @@ public class UserController(ManaxContext context, IMapper mapper) : ControllerBa
     [HttpPost("create")]
     [AuthorizeRole(UserRole.Admin)]
     [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(long))]
-    public async Task<ActionResult<long>> PostUser(UserCreateDTO userCreate)
+    public async Task<ActionResult<long>> PostUser(UserCreateDto userCreate)
     {
         User? user = mapper.Map<User>(userCreate);
         user.Creation = DateTime.UtcNow;
@@ -83,7 +83,7 @@ public class UserController(ManaxContext context, IMapper mapper) : ControllerBa
 
         context.Users.Add(user);
         await context.SaveChangesAsync();
-        NotificationService.NotifyUserCreatedAsync(mapper.Map<UserDTO>(user));
+        NotificationService.NotifyUserCreatedAsync(mapper.Map<UserDto>(user));
 
         return user.Id;
     }
@@ -123,7 +123,7 @@ public class UserController(ManaxContext context, IMapper mapper) : ControllerBa
     [HttpPost("/api/login")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<IActionResult> Login(UserLoginDTO loginDto)
+    public async Task<IActionResult> Login(UserLoginDto loginDto)
     {
         LoginAttempt loginAttempt = new()
         {
@@ -154,10 +154,10 @@ public class UserController(ManaxContext context, IMapper mapper) : ControllerBa
     // GET: api/User/current
     [HttpGet("current")]
     [AuthorizeRole(UserRole.User)]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserDTO))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserDto))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<ActionResult<UserDTO>> GetCurrentUser()
+    public async Task<ActionResult<UserDto>> GetCurrentUser()
     {
         long? userId = GetCurrentUserId(HttpContext);
         if (userId == null) return Unauthorized(Localizer.Format("UserMustBeLoggedInInfo"));
@@ -165,7 +165,7 @@ public class UserController(ManaxContext context, IMapper mapper) : ControllerBa
         User? user = await context.Users.FindAsync(userId);
         if (user == null) return NotFound(Localizer.Format("UserNotFound", userId));
 
-        return mapper.Map<UserDTO>(user);
+        return mapper.Map<UserDto>(user);
     }
 
     [HttpPost("/api/claim")]

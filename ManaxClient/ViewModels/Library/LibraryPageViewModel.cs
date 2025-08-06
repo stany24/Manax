@@ -16,9 +16,9 @@ using ManaxClient.ViewModels.Home;
 using ManaxClient.ViewModels.Serie;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
-using ManaxLibrary.DTOs.Library;
-using ManaxLibrary.DTOs.Search;
-using ManaxLibrary.DTOs.Serie;
+using ManaxLibrary.DTO.Library;
+using ManaxLibrary.DTO.Search;
+using ManaxLibrary.DTO.Serie;
 using ManaxLibrary.Logging;
 using ManaxLibrary.Notifications;
 
@@ -26,7 +26,7 @@ namespace ManaxClient.ViewModels.Library;
 
 public partial class LibraryPageViewModel : PageViewModel
 {
-    [ObservableProperty] private LibraryDTO? _library;
+    [ObservableProperty] private LibraryDto? _library;
     [ObservableProperty] private SortedObservableCollection<ClientSerie> _series;
     [ObservableProperty] private bool _isFolderPickerOpen;
     private readonly object _serieLock = new();
@@ -48,7 +48,7 @@ public partial class LibraryPageViewModel : PageViewModel
         ServerNotification.OnSerieDeleted -= OnSerieDeleted;
     }
     
-    private void OnSerieCreated(SerieDTO serie)
+    private void OnSerieCreated(SerieDto serie)
     {
         Logger.LogInfo("A new Serie has been created in "+Library?.Name);
         if (serie.LibraryId != Library?.Id) return;
@@ -114,7 +114,7 @@ public partial class LibraryPageViewModel : PageViewModel
     {
         try
         {
-            Optional<LibraryDTO> libraryResponse = await ManaxApiLibraryClient.GetLibraryAsync(libraryId);
+            Optional<LibraryDto> libraryResponse = await ManaxApiLibraryClient.GetLibraryAsync(libraryId);
             if (libraryResponse.Failed)
             {
                 InfoEmitted?.Invoke(this, libraryResponse.Error);
@@ -156,7 +156,7 @@ public partial class LibraryPageViewModel : PageViewModel
                     if(Series.FirstOrDefault(s => s.Info.Id == serieId) != null) {continue;}
                 }
 
-                Optional<SerieDTO> serieInfoAsync = await ManaxApiSerieClient.GetSerieInfoAsync(serieId);
+                Optional<SerieDto> serieInfoAsync = await ManaxApiSerieClient.GetSerieInfoAsync(serieId);
                 if (serieInfoAsync.Failed)
                 {
                     InfoEmitted?.Invoke(this, serieInfoAsync.Error);

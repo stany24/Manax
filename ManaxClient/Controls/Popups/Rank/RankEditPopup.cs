@@ -3,11 +3,11 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
-using ManaxLibrary.DTOs.Rank;
+using ManaxLibrary.DTO.Rank;
 
 namespace ManaxClient.Controls.Popups.Rank;
 
-public class RankEditPopup(RankDTO rank) : ConfirmCancelPopup
+public class RankEditPopup(RankDto rank) : ConfirmCancelPopup
 {
     private TextBox _nameBox = null!;
     private NumericUpDown _valueBox = null!;
@@ -72,7 +72,7 @@ public class RankEditPopup(RankDTO rank) : ConfirmCancelPopup
         CloseRequested?.Invoke(this, EventArgs.Empty);
     }
 
-    public RankDTO GetResult()
+    public RankDto GetResult()
     {
         return rank;
     }

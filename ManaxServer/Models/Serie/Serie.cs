@@ -5,7 +5,7 @@
 // ReSharper disable MemberCanBePrivate.Global
 
 using System.ComponentModel.DataAnnotations.Schema;
-using ManaxLibrary.DTOs.Serie;
+using ManaxLibrary.DTO.Serie;
 
 namespace ManaxServer.Models.Serie;
 

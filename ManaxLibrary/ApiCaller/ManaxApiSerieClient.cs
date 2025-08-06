@@ -1,6 +1,6 @@
 using System.Net.Http.Json;
-using ManaxLibrary.DTOs.Search;
-using ManaxLibrary.DTOs.Serie;
+using ManaxLibrary.DTO.Search;
+using ManaxLibrary.DTO.Serie;
 
 namespace ManaxLibrary.ApiCaller;
 
@@ -16,14 +16,14 @@ public static class ManaxApiSerieClient
             : new Optional<List<long>>(ids);
     }
 
-    public static async Task<Optional<SerieDTO>> GetSerieInfoAsync(long id)
+    public static async Task<Optional<SerieDto>> GetSerieInfoAsync(long id)
     {
         HttpResponseMessage response = await ManaxApiClient.Client.GetAsync($"api/serie/{id}");
-        if (!response.IsSuccessStatusCode) return new Optional<SerieDTO>(response);
-        SerieDTO? serie = await response.Content.ReadFromJsonAsync<SerieDTO>();
+        if (!response.IsSuccessStatusCode) return new Optional<SerieDto>(response);
+        SerieDto? serie = await response.Content.ReadFromJsonAsync<SerieDto>();
         return serie == null
-            ? new Optional<SerieDTO>($"Failed to read serie info for ID {id} from response.")
-            : new Optional<SerieDTO>(serie);
+            ? new Optional<SerieDto>($"Failed to read serie info for ID {id} from response.")
+            : new Optional<SerieDto>(serie);
     }
 
     public static async Task<Optional<List<long>>> GetSerieChaptersAsync(long id)
@@ -36,7 +36,7 @@ public static class ManaxApiSerieClient
             : new Optional<List<long>>(ids);
     }
 
-    public static async Task<Optional<long>> PostSerieAsync(SerieCreateDTO serieCreate)
+    public static async Task<Optional<long>> PostSerieAsync(SerieCreateDto serieCreate)
     {
         HttpResponseMessage response = await ManaxApiClient.Client.PostAsJsonAsync("/api/serie", serieCreate);
         if (!response.IsSuccessStatusCode) return new Optional<long>(response);
@@ -44,7 +44,7 @@ public static class ManaxApiSerieClient
         return new Optional<long>(id);
     }
 
-    public static async Task<Optional<bool>> PutSerieAsync(long id, SerieUpdateDTO serieUpdate)
+    public static async Task<Optional<bool>> PutSerieAsync(long id, SerieUpdateDto serieUpdate)
     {
         HttpResponseMessage response = await ManaxApiClient.Client.PutAsJsonAsync($"api/serie/{id}", serieUpdate);
         return response.IsSuccessStatusCode 

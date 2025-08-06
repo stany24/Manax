@@ -1,7 +1,7 @@
 using System.IO.Compression;
 using AutoMapper;
-using ManaxLibrary.DTOs.Chapter;
-using ManaxLibrary.DTOs.User;
+using ManaxLibrary.DTO.Chapter;
+using ManaxLibrary.DTO.User;
 using ManaxServer.Auth;
 using ManaxServer.Localization;
 using ManaxServer.Models;
@@ -28,15 +28,15 @@ public class ChapterController(ManaxContext context, IMapper mapper) : Controlle
     // GET: api/Chapter/5
     [HttpGet("{id:long}")]
     [AuthorizeRole(UserRole.User)]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ChapterDTO))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ChapterDto))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<ChapterDTO>> GetChapter(long id)
+    public async Task<ActionResult<ChapterDto>> GetChapter(long id)
     {
         Chapter? chapter = await context.Chapters.FindAsync(id);
         
         if (chapter == null) return NotFound(Localizer.Format("ChapterNotFound",id));
 
-        return mapper.Map<ChapterDTO>(chapter);
+        return mapper.Map<ChapterDto>(chapter);
     }
 
     // DELETE: api/Chapter/5

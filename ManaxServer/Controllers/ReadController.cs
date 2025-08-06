@@ -1,6 +1,6 @@
 using AutoMapper;
-using ManaxLibrary.DTOs.Read;
-using ManaxLibrary.DTOs.User;
+using ManaxLibrary.DTO.Read;
+using ManaxLibrary.DTO.User;
 using ManaxServer.Auth;
 using ManaxServer.Localization;
 using ManaxServer.Models;
@@ -21,7 +21,7 @@ public class ReadController(ManaxContext context, IMapper mapper) : ControllerBa
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<IActionResult> Read(ReadCreateDTO readCreate)
+    public async Task<IActionResult> Read(ReadCreateDto readCreate)
     {
         long? userId = UserController.GetCurrentUserId(HttpContext);
         if (userId == null) return Unauthorized(Localizer.Format("UserMustBeLoggedInRead"));

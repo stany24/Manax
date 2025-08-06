@@ -1,4 +1,4 @@
-using ManaxLibrary.DTOs.Issue.Automatic;
+using ManaxLibrary.DTO.Issue.Automatic;
 using ManaxServer.Models;
 using ManaxServer.Models.Issue.Automatic;
 

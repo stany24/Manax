@@ -1,6 +1,6 @@
 using System.Net.Http.Json;
 using System.Text.Json;
-using ManaxLibrary.DTOs.User;
+using ManaxLibrary.DTO.User;
 
 namespace ManaxLibrary.ApiCaller;
 
@@ -29,17 +29,17 @@ public static class ManaxApiUserClient
             : new Optional<List<long>>(ids);
     }
 
-    public static async Task<Optional<UserDTO>> GetUserAsync(long id)
+    public static async Task<Optional<UserDto>> GetUserAsync(long id)
     {
         HttpResponseMessage response = await ManaxApiClient.Client.GetAsync($"api/user/{id}");
-        if (!response.IsSuccessStatusCode) return new Optional<UserDTO>(response);
-        UserDTO? user = await response.Content.ReadFromJsonAsync<UserDTO>();
+        if (!response.IsSuccessStatusCode) return new Optional<UserDto>(response);
+        UserDto? user = await response.Content.ReadFromJsonAsync<UserDto>();
         return user == null
-            ? new Optional<UserDTO>($"Failed to read user with ID {id} from response.")
-            : new Optional<UserDTO>(user);
+            ? new Optional<UserDto>($"Failed to read user with ID {id} from response.")
+            : new Optional<UserDto>(user);
     }
 
-    public static async Task<Optional<long>> PostUserAsync(UserCreateDTO user)
+    public static async Task<Optional<long>> PostUserAsync(UserCreateDto user)
     {
         HttpResponseMessage response = await ManaxApiClient.Client.PostAsJsonAsync("api/user/create", user);
         if (!response.IsSuccessStatusCode) return new Optional<long>(response);
@@ -49,7 +49,7 @@ public static class ManaxApiUserClient
             : new Optional<long>(id.Value);
     }
 
-    public static async Task<Optional<bool>> PutUserAsync(long id, UserDTO user)
+    public static async Task<Optional<bool>> PutUserAsync(long id, UserDto user)
     {
         HttpResponseMessage response = await ManaxApiClient.Client.PutAsJsonAsync($"api/user/{id}", user);
         return response.IsSuccessStatusCode
@@ -65,14 +65,14 @@ public static class ManaxApiUserClient
             : new Optional<bool>(response);
     }
 
-    public static async Task<Optional<UserDTO>> GetSelf()
+    public static async Task<Optional<UserDto>> GetSelf()
     {
         HttpResponseMessage response = await ManaxApiClient.Client.GetAsync("api/user/current");
-        if (!response.IsSuccessStatusCode) return new Optional<UserDTO>(response);
-        UserDTO? userInfo = await response.Content.ReadFromJsonAsync<UserDTO>();
-        if (userInfo == null) return new Optional<UserDTO>("Failed to read current user info from response.");
+        if (!response.IsSuccessStatusCode) return new Optional<UserDto>(response);
+        UserDto? userInfo = await response.Content.ReadFromJsonAsync<UserDto>();
+        if (userInfo == null) return new Optional<UserDto>("Failed to read current user info from response.");
         
-        return new Optional<UserDTO>(new UserDTO
+        return new Optional<UserDto>(new UserDto
         {
             Id = userInfo.Id,
             Username = userInfo.Username,

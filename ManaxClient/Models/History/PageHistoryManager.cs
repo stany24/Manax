@@ -15,14 +15,14 @@ public class PageHistoryManager
     public bool CanGoBack => _backStack.Count > 0;
     public bool CanGoForward => _forwardStack.Count > 0;
 
-    public event Action<PageViewModel>? PageChanged;
-    public event Action<PageViewModel>? PageChanging;
+    public event Action<PageViewModel>? OnPageChanged;
+    public event Action<PageViewModel>? OnPageChanging;
 
     private void SetCurrent(PageViewModel page)
     {
-        PageChanging?.Invoke(page);
+        OnPageChanging?.Invoke(page);
         CurrentPage = page;
-        PageChanged?.Invoke(page);
+        OnPageChanged?.Invoke(page);
     }
 
     public void SetPage(PageViewModel page)

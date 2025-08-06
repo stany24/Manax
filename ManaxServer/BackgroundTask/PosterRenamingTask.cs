@@ -1,4 +1,4 @@
-using ManaxLibrary.DTOs.Setting;
+using ManaxLibrary.DTO.Setting;
 using ManaxServer.Services;
 
 namespace ManaxServer.BackgroundTask;

@@ -1,5 +1,5 @@
 using System.Text.Json;
-using ManaxLibrary.DTOs.Setting;
+using ManaxLibrary.DTO.Setting;
 
 namespace ManaxServer.Settings;
 

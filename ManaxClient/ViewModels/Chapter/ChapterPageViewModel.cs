@@ -8,7 +8,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using ManaxClient.Models;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
-using ManaxLibrary.DTOs.Chapter;
+using ManaxLibrary.DTO.Chapter;
 using ManaxLibrary.Logging;
 
 namespace ManaxClient.ViewModels.Chapter;
@@ -22,13 +22,13 @@ public partial class ChapterPageViewModel : PageViewModel
         ControlBarVisible = false;
         Task.Run(async () =>
         {
-            Optional<ChapterDTO> chapterResponse = await ManaxApiChapterClient.GetChapterAsync(chapterId);
+            Optional<ChapterDto> chapterResponse = await ManaxApiChapterClient.GetChapterAsync(chapterId);
             if (chapterResponse.Failed)
             {
                 InfoEmitted?.Invoke(this, chapterResponse.Error);
                 return;
             }
-            ChapterDTO chapter = chapterResponse.GetValue();
+            ChapterDto chapter = chapterResponse.GetValue();
             Dispatcher.UIThread.Post(() =>
             {
                 Chapter.Info = chapter;

@@ -1,8 +1,8 @@
 using System.Text.RegularExpressions;
 using AutoMapper;
-using ManaxLibrary.DTOs.Search;
-using ManaxLibrary.DTOs.Serie;
-using ManaxLibrary.DTOs.User;
+using ManaxLibrary.DTO.Search;
+using ManaxLibrary.DTO.Serie;
+using ManaxLibrary.DTO.User;
 using ManaxServer.Auth;
 using ManaxServer.Localization;
 using ManaxServer.Models;
@@ -31,16 +31,16 @@ public class SerieController(ManaxContext context, IMapper mapper) : ControllerB
     // GET: api/serie/{id}
     [HttpGet("{id:long}")]
     [AuthorizeRole(UserRole.User)]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SerieDTO))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SerieDto))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<SerieDTO>> GetSerie(long id)
+    public async Task<ActionResult<SerieDto>> GetSerie(long id)
     {
         Serie? serie = await context.Series
             .FirstOrDefaultAsync(l => l.Id == id);
 
         if (serie == null) return NotFound(Localizer.Format("SerieNotFound", id));
 
-        return mapper.Map<SerieDTO>(serie);
+        return mapper.Map<SerieDto>(serie);
     }
 
     // GET: api/series/{id}/chapters
@@ -83,7 +83,7 @@ public class SerieController(ManaxContext context, IMapper mapper) : ControllerB
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> PutSerie(long id, SerieUpdateDTO serieUpdate)
+    public async Task<IActionResult> PutSerie(long id, SerieUpdateDto serieUpdate)
     {
         Serie? serie = await context.Series.FindAsync(id);
 
@@ -95,7 +95,7 @@ public class SerieController(ManaxContext context, IMapper mapper) : ControllerB
         try
         {
             await context.SaveChangesAsync();
-            NotificationService.NotifySerieUpdatedAsync(mapper.Map<SerieDTO>(serie));
+            NotificationService.NotifySerieUpdatedAsync(mapper.Map<SerieDto>(serie));
         }
         catch (DbUpdateConcurrencyException)
         {
@@ -110,7 +110,7 @@ public class SerieController(ManaxContext context, IMapper mapper) : ControllerB
     [AuthorizeRole(UserRole.Admin)]
     [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(long))]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<long>> PostSerie(SerieCreateDTO serieCreate)
+    public async Task<ActionResult<long>> PostSerie(SerieCreateDto serieCreate)
     {
         Library? library = context.Libraries.FirstOrDefault(l => l.Id == serieCreate.LibraryId);
         if (library == null)
@@ -134,7 +134,7 @@ public class SerieController(ManaxContext context, IMapper mapper) : ControllerB
             };
             context.Series.Add(serie);
             await context.SaveChangesAsync();
-            NotificationService.NotifySerieCreatedAsync(mapper.Map<SerieDTO>(serie));
+            NotificationService.NotifySerieCreatedAsync(mapper.Map<SerieDto>(serie));
             return serie.Id;
         }
         catch (Exception)

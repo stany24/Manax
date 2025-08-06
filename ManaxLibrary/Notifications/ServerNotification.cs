@@ -1,8 +1,8 @@
-using ManaxLibrary.DTOs.Chapter;
-using ManaxLibrary.DTOs.Library;
-using ManaxLibrary.DTOs.Rank;
-using ManaxLibrary.DTOs.Serie;
-using ManaxLibrary.DTOs.User;
+using ManaxLibrary.DTO.Chapter;
+using ManaxLibrary.DTO.Library;
+using ManaxLibrary.DTO.Rank;
+using ManaxLibrary.DTO.Serie;
+using ManaxLibrary.DTO.User;
 using ManaxLibrary.Logging;
 using Microsoft.AspNetCore.SignalR.Client;
 
@@ -17,22 +17,22 @@ public static class ServerNotification
     public static event Action<Dictionary<string, int>>? OnRunningTasks;
     public static event Action<long>? OnPosterModified;
     
-    public static event Action<LibraryDTO>? OnLibraryCreated;
+    public static event Action<LibraryDto>? OnLibraryCreated;
     public static event Action<long>? OnLibraryDeleted;
-    public static event Action<LibraryDTO>? OnLibraryUpdated;
+    public static event Action<LibraryDto>? OnLibraryUpdated;
     
-    public static event Action<SerieDTO>? OnSerieCreated;
-    public static event Action<SerieDTO>? OnSerieUpdated;
+    public static event Action<SerieDto>? OnSerieCreated;
+    public static event Action<SerieDto>? OnSerieUpdated;
     public static event Action<long>? OnSerieDeleted;
     
-    public static event Action<RankDTO>? OnRankCreated;
-    public static event Action<RankDTO>? OnRankUpdated;
+    public static event Action<RankDto>? OnRankCreated;
+    public static event Action<RankDto>? OnRankUpdated;
     public static event Action<long>? OnRankDeleted;
     
-    public static event Action<ChapterDTO>? OnChapterAdded;
+    public static event Action<ChapterDto>? OnChapterAdded;
     public static event Action<long>? OnChapterDeleted;
     
-    public static event Action<UserDTO>? OnUserCreated;
+    public static event Action<UserDto>? OnUserCreated;
     public static event Action<long>? OnUserDeleted;
     
     public static async Task InitializeAsync(Uri host, string token)
@@ -48,7 +48,7 @@ public static class ServerNotification
             .WithAutomaticReconnect()
             .Build();
         
-        _hubConnection.On<LibraryDTO>(nameof(NotificationType.LibraryCreated), libraryData =>
+        _hubConnection.On<LibraryDto>(nameof(NotificationType.LibraryCreated), libraryData =>
         {
             OnLibraryCreated?.Invoke(libraryData);
         });
@@ -58,17 +58,17 @@ public static class ServerNotification
             OnLibraryDeleted?.Invoke(libraryId);
         });
         
-        _hubConnection.On<LibraryDTO>(nameof(NotificationType.LibraryUpdated), libraryData =>
+        _hubConnection.On<LibraryDto>(nameof(NotificationType.LibraryUpdated), libraryData =>
         {
             OnLibraryUpdated?.Invoke(libraryData);
         });
         
-        _hubConnection.On<SerieDTO>(nameof(NotificationType.SerieCreated), serieData =>
+        _hubConnection.On<SerieDto>(nameof(NotificationType.SerieCreated), serieData =>
         {
             OnSerieCreated?.Invoke(serieData);
         });
         
-        _hubConnection.On<SerieDTO>(nameof(NotificationType.SerieUpdated), serieData =>
+        _hubConnection.On<SerieDto>(nameof(NotificationType.SerieUpdated), serieData =>
         {
             OnSerieUpdated?.Invoke(serieData);
         });
@@ -78,12 +78,12 @@ public static class ServerNotification
             OnSerieDeleted?.Invoke(serieId);
         });
         
-        _hubConnection.On<RankDTO>(nameof(NotificationType.RankCreated), rankData =>
+        _hubConnection.On<RankDto>(nameof(NotificationType.RankCreated), rankData =>
         {
             OnRankCreated?.Invoke(rankData);
         });
         
-        _hubConnection.On<RankDTO>(nameof(NotificationType.RankUpdated), rankData =>
+        _hubConnection.On<RankDto>(nameof(NotificationType.RankUpdated), rankData =>
         {
             OnRankUpdated?.Invoke(rankData);
         });
@@ -93,7 +93,7 @@ public static class ServerNotification
             OnRankDeleted?.Invoke(rankId);
         });
         
-        _hubConnection.On<ChapterDTO>(nameof(NotificationType.ChapterAdded), chapterData =>
+        _hubConnection.On<ChapterDto>(nameof(NotificationType.ChapterAdded), chapterData =>
         {
             OnChapterAdded?.Invoke(chapterData);
         });
@@ -103,7 +103,7 @@ public static class ServerNotification
             OnChapterDeleted?.Invoke(chapterId);
         });
         
-        _hubConnection.On<UserDTO>(nameof(NotificationType.UserCreated), userData =>
+        _hubConnection.On<UserDto>(nameof(NotificationType.UserCreated), userData =>
         {
             OnUserCreated?.Invoke(userData);
         });

@@ -7,5 +7,5 @@ public enum TaskPriority
     ChapterCheck = 10,
     
     PosterRenaming = 6,
-    PosterCheck = 5,
+    PosterCheck = 5
 }

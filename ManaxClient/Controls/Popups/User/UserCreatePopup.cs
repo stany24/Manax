@@ -3,7 +3,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
-using ManaxLibrary.DTOs.User;
+using ManaxLibrary.DTO.User;
 
 namespace ManaxClient.Controls.Popups.User;
 
@@ -12,7 +12,7 @@ public class UserCreatePopup(bool owner) : ConfirmCancelPopup
     private TextBox _usernameBox = null!;
     private TextBox _passwordBox = null!;
     private ComboBox _roleComboBox = null!;
-    private UserCreateDTO? _result;
+    private UserCreateDto? _result;
 
     protected override Grid GetFormGrid()
     {
@@ -80,11 +80,11 @@ public class UserCreatePopup(bool owner) : ConfirmCancelPopup
         string? username = _usernameBox.Text?.Trim();
         string? password = _passwordBox.Text?.Trim();
         if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password) || _roleComboBox.SelectedItem is not UserRole role) return;
-        _result = new UserCreateDTO { Username = username, Password = password, Role = role};
+        _result = new UserCreateDto { Username = username, Password = password, Role = role};
         CloseRequested?.Invoke(this, EventArgs.Empty);
     }
 
-    public UserCreateDTO? GetResult()
+    public UserCreateDto? GetResult()
     {
         return _result;
     }

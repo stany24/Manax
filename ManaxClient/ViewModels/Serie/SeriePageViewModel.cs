@@ -12,9 +12,9 @@ using ManaxClient.Models.Collections;
 using ManaxClient.ViewModels.Chapter;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
-using ManaxLibrary.DTOs.Chapter;
-using ManaxLibrary.DTOs.Rank;
-using ManaxLibrary.DTOs.Serie;
+using ManaxLibrary.DTO.Chapter;
+using ManaxLibrary.DTO.Rank;
+using ManaxLibrary.DTO.Serie;
 using ManaxLibrary.Notifications;
 using Logger = ManaxLibrary.Logging.Logger;
 
@@ -22,19 +22,19 @@ namespace ManaxClient.ViewModels.Serie;
 
 public partial class SeriePageViewModel : PageViewModel
 {
-    [ObservableProperty] private SortedObservableCollection<ChapterDTO> _chapters;
+    [ObservableProperty] private SortedObservableCollection<ChapterDto> _chapters;
     [ObservableProperty] private Bitmap? _poster;
-    [ObservableProperty] private ObservableCollection<RankDTO> _ranks = [];
-    [ObservableProperty] private RankDTO? _selectedRank;
-    [ObservableProperty] private SerieDTO? _serie;
+    [ObservableProperty] private ObservableCollection<RankDto> _ranks = [];
+    [ObservableProperty] private RankDto? _selectedRank;
+    [ObservableProperty] private SerieDto? _serie;
 
     public SeriePageViewModel(long serieId)
     {
-        Chapters = new SortedObservableCollection<ChapterDTO>([])
+        Chapters = new SortedObservableCollection<ChapterDto>([])
         {
             SortingSelector = dto => dto.Number
         };
-        Serie = new SerieDTO { Id = serieId };
+        Serie = new SerieDto { Id = serieId };
         Task.Run(() => { LoadSerieInfo(serieId); });
         Task.Run(() => { LoadPoster(serieId); });
         Task.Run(() => { LoadChapters(serieId); });
@@ -53,7 +53,7 @@ public partial class SeriePageViewModel : PageViewModel
         ServerNotification.OnChapterDeleted -= OnChapterDeleted;
     }
 
-    private void UpdateSerieInfo(SerieDTO serie)
+    private void UpdateSerieInfo(SerieDto serie)
     {
         if(serie.Id != Serie?.Id) return;
         Dispatcher.UIThread.Post(() =>
@@ -62,7 +62,7 @@ public partial class SeriePageViewModel : PageViewModel
         });
     }
     
-    private void OnChapterAdded(ChapterDTO chapter)
+    private void OnChapterAdded(ChapterDto chapter)
     {
         if (chapter.SerieId != Serie?.Id) return;
         Dispatcher.UIThread.Post(() => Chapters.Add(chapter));
@@ -70,35 +70,43 @@ public partial class SeriePageViewModel : PageViewModel
     
     private void OnChapterDeleted(long chapterId)
     {
-        ChapterDTO? chapter = Chapters.FirstOrDefault(c => c.Id == chapterId);
+        ChapterDto? chapter = Chapters.FirstOrDefault(c => c.Id == chapterId);
         if (chapter == null) return;
         Dispatcher.UIThread.Post(() => Chapters.Remove(chapter));
     }
 
     private async void LoadRanks(long serieId)
     {
-        Optional<List<RankDTO>> ranksResponse = await ManaxApiRankClient.GetRanksAsync();
-        if (ranksResponse.Failed)
+        try
         {
-            InfoEmitted?.Invoke(this,ranksResponse.Error);
-            return;
-        }
-        List<RankDTO> ranks = ranksResponse.GetValue();
-        Dispatcher.UIThread.Post(() =>
-        {
-            foreach (RankDTO rank in ranks) Ranks.Add(rank);
-        });
+            Optional<List<RankDto>> ranksResponse = await ManaxApiRankClient.GetRanksAsync();
+            if (ranksResponse.Failed)
+            {
+                InfoEmitted?.Invoke(this,ranksResponse.Error);
+                return;
+            }
+            List<RankDto> ranks = ranksResponse.GetValue();
+            Dispatcher.UIThread.Post(() =>
+            {
+                foreach (RankDto rank in ranks) Ranks.Add(rank);
+            });
 
-        Optional<List<UserRankDTO>> rankingResponse = await ManaxApiRankClient.GetRankingAsync();
-        if (rankingResponse.Failed)
-        {
-            InfoEmitted?.Invoke(this, rankingResponse.Error);
-            return;
+            Optional<List<UserRankDto>> rankingResponse = await ManaxApiRankClient.GetRankingAsync();
+            if (rankingResponse.Failed)
+            {
+                InfoEmitted?.Invoke(this, rankingResponse.Error);
+                return;
+            }
+            UserRankDto? rank = rankingResponse.GetValue().FirstOrDefault(rank => rank.SerieId == serieId);
+            if (rank == null) return;
+            RankDto? userRank = ranks.FirstOrDefault(r => r.Id == rank.RankId);
+            Dispatcher.UIThread.Invoke(() => { SelectedRank = userRank; });
         }
-        UserRankDTO? rank = rankingResponse.GetValue().FirstOrDefault(rank => rank.SerieId == serieId);
-        if (rank == null) return;
-        RankDTO? userRank = ranks.FirstOrDefault(r => r.Id == rank.RankId);
-        Dispatcher.UIThread.Invoke(() => { SelectedRank = userRank; });
+        catch (Exception e)
+        {
+            InfoEmitted?.Invoke(this, "Error loading ranks");
+            Logger.LogError("Failed to load ranks for serie with ID: " + serieId, e, Environment.StackTrace);
+        }
     }
 
     private void BindToRankChange(long serieId)
@@ -107,7 +115,7 @@ public partial class SeriePageViewModel : PageViewModel
         {
             if (args.PropertyName != nameof(SelectedRank)) return;
             if (SelectedRank == null) return;
-            UserRankCreateDTO userRankCreateDto = new()
+            UserRankCreateDto userRankCreateDto = new()
             {
                 SerieId = serieId,
                 RankId = SelectedRank.Id
@@ -124,7 +132,7 @@ public partial class SeriePageViewModel : PageViewModel
     {
         try
         {
-            Optional<SerieDTO> serieInfoResponse = await ManaxApiSerieClient.GetSerieInfoAsync(serieId);
+            Optional<SerieDto> serieInfoResponse = await ManaxApiSerieClient.GetSerieInfoAsync(serieId);
             if (serieInfoResponse.Failed)
             {
                 InfoEmitted?.Invoke(this,serieInfoResponse.Error);
@@ -171,10 +179,10 @@ public partial class SeriePageViewModel : PageViewModel
                 return;
             }
             List<long> chaptersIds = response.GetValue();
-            List<ChapterDTO> chapters = [];
+            List<ChapterDto> chapters = [];
             foreach (long chapterId in chaptersIds)
             {
-                Optional<ChapterDTO> chapterResponse = await ManaxApiChapterClient.GetChapterAsync(chapterId);
+                Optional<ChapterDto> chapterResponse = await ManaxApiChapterClient.GetChapterAsync(chapterId);
                 if (chapterResponse.Failed)
                 {
                     InfoEmitted?.Invoke(this, chapterResponse.Error);
@@ -184,7 +192,7 @@ public partial class SeriePageViewModel : PageViewModel
             }
             Dispatcher.UIThread.Post(() =>
             {
-                foreach (ChapterDTO chapter in chapters)
+                foreach (ChapterDto chapter in chapters)
                 {
                     Chapters.Add(chapter);
                 }
@@ -197,7 +205,7 @@ public partial class SeriePageViewModel : PageViewModel
         }
     }
 
-    public void MoveToChapterPage(ChapterDTO chapter)
+    public void MoveToChapterPage(ChapterDto chapter)
     {
         ChapterPageViewModel chapterPageViewModel = new(chapter.Id);
         PageChangedRequested?.Invoke(this, chapterPageViewModel);
@@ -212,7 +220,7 @@ public partial class SeriePageViewModel : PageViewModel
             try
             {
                 popup.Close();
-                SerieUpdateDTO? serie = popup.GetResult();
+                SerieUpdateDto? serie = popup.GetResult();
                 if (serie == null) return;
                 Optional<bool> serieResponse = await ManaxApiSerieClient.PutSerieAsync(Serie.Id, serie);
                 if (serieResponse.Failed){

@@ -1,13 +1,13 @@
 using System.Reflection;
 using AutoMapper;
-using ManaxLibrary.DTOs.Chapter;
-using ManaxLibrary.DTOs.Serie;
+using ManaxLibrary.DTO.Chapter;
+using ManaxLibrary.DTO.Serie;
 using ManaxServer.Models;
 using ManaxServer.Models.Chapter;
 using ManaxServer.Models.Serie;
 using Microsoft.EntityFrameworkCore;
 using Moq;
-using Status = ManaxLibrary.DTOs.Serie.Status;
+using Status = ManaxLibrary.DTO.Serie.Status;
 
 namespace ManaxTests.Mocks;
 
@@ -104,8 +104,8 @@ public static class TestDbContextFactory
     {
         Mock<IMapper> mockMapper = new();
         
-        mockMapper.Setup(m => m.Map<ChapterDTO>(It.IsAny<Chapter>()))
-            .Returns<Chapter>(chapter => new ChapterDTO
+        mockMapper.Setup(m => m.Map<ChapterDto>(It.IsAny<Chapter>()))
+            .Returns<Chapter>(chapter => new ChapterDto
             {
                 Id = chapter.Id,
                 SerieId = chapter.SerieId,
@@ -116,8 +116,8 @@ public static class TestDbContextFactory
                 LastModification = chapter.LastModification
             });
 
-        mockMapper.Setup(m => m.Map<SerieDTO>(It.IsAny<Serie>()))
-            .Returns<Serie>(serie => new SerieDTO
+        mockMapper.Setup(m => m.Map<SerieDto>(It.IsAny<Serie>()))
+            .Returns<Serie>(serie => new SerieDto
             {
                 Id = serie.Id,
                 LibraryId = serie.LibraryId,
@@ -128,8 +128,8 @@ public static class TestDbContextFactory
                 LastModification = serie.LastModification
             });
             
-        mockMapper.Setup(m => m.Map(It.IsAny<SerieUpdateDTO>(), It.IsAny<Serie>()))
-            .Callback<SerieUpdateDTO, Serie>((updateDto, serie) =>
+        mockMapper.Setup(m => m.Map(It.IsAny<SerieUpdateDto>(), It.IsAny<Serie>()))
+            .Callback<SerieUpdateDto, Serie>((updateDto, serie) =>
             {
                 serie.Title = updateDto.Title;
                 serie.Description = updateDto.Description;
@@ -168,7 +168,7 @@ public static class TestDbContextFactory
                 });
         }
 
-        mockDbSet.Setup(d => d.Remove(It.IsAny<T>())).Callback<T>((entity) => data.Remove(entity));
+        mockDbSet.Setup(d => d.Remove(It.IsAny<T>())).Callback<T>(entity => data.Remove(entity));
 
         return mockDbSet;
     }

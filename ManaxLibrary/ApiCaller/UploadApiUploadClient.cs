@@ -1,5 +1,5 @@
 using System.Net.Http.Headers;
-using ManaxLibrary.DTOs.Serie;
+using ManaxLibrary.DTO.Serie;
 
 namespace ManaxLibrary.ApiCaller;
 
@@ -7,7 +7,7 @@ public static class UploadApiUploadClient
 {
     public static async Task<Optional<bool>> UploadSerieAsync(string directory, long libraryId)
     {
-        SerieCreateDTO serieCreate = new()
+        SerieCreateDto serieCreate = new()
         {
             Title = Path.GetFileName(directory[..directory.LastIndexOf(Path.DirectorySeparatorChar)]),
             LibraryId = libraryId
@@ -38,7 +38,7 @@ public static class UploadApiUploadClient
                 return new Optional<bool>(uploadChapterResponse.Error);
         }
 
-        return new Optional<bool>(true);
+        return new Optional<bool>(posterError == null);
     }
 
     public static async Task<Optional<bool>> UploadChapterAsync(ByteArrayContent file, string fileName,
@@ -49,7 +49,7 @@ public static class UploadApiUploadClient
         content.Add(file, "file", fileName);
         content.Add(new StringContent(serieId.ToString()), "serieId");
         HttpResponseMessage response = await ManaxApiClient.Client.PostAsync("api/upload/chapter", content);
-        return new Optional<bool>(true);
+        return new Optional<bool>(response.IsSuccessStatusCode);
     }
 
     public static async Task<Optional<bool>> ReplaceChapterAsync(ByteArrayContent file, string fileName,
@@ -60,7 +60,7 @@ public static class UploadApiUploadClient
         content.Add(file, "file", fileName);
         content.Add(new StringContent(serieId.ToString()), "serieId");
         HttpResponseMessage response = await ManaxApiClient.Client.PostAsync("api/upload/chapter/replace", content);
-        return new Optional<bool>(true);
+        return new Optional<bool>(response.IsSuccessStatusCode);
     }
 
     public static async Task<Optional<bool>> UploadPosterAsync(string file, string fileName, long serieId)
@@ -71,7 +71,7 @@ public static class UploadApiUploadClient
         content.Add(img, "file", fileName);
         content.Add(new StringContent(serieId.ToString()), "serieId");
         HttpResponseMessage response = await ManaxApiClient.Client.PostAsync("api/upload/poster", content);
-        return new Optional<bool>(true);
+        return new Optional<bool>(response.IsSuccessStatusCode);
     }
 
     public static async Task<Optional<bool>> ReplacePosterAsync(string file, string fileName, long serieId)
@@ -82,6 +82,6 @@ public static class UploadApiUploadClient
         content.Add(img, "file", fileName);
         content.Add(new StringContent(serieId.ToString()), "serieId");
         HttpResponseMessage response = await ManaxApiClient.Client.PostAsync("api/upload/poster/replace", content);
-        return new Optional<bool>(true);
+        return new Optional<bool>(response.IsSuccessStatusCode);
     }
 }

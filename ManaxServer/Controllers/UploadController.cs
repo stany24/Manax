@@ -2,9 +2,9 @@ using System.IO.Compression;
 using System.Text.RegularExpressions;
 using AutoMapper;
 using ImageMagick;
-using ManaxLibrary.DTOs.Chapter;
-using ManaxLibrary.DTOs.Setting;
-using ManaxLibrary.DTOs.User;
+using ManaxLibrary.DTO.Chapter;
+using ManaxLibrary.DTO.Setting;
+using ManaxLibrary.DTO.User;
 using ManaxServer.Auth;
 using ManaxServer.BackgroundTask;
 using ManaxServer.Localization;
@@ -103,7 +103,7 @@ public partial class UploadController(ManaxContext context, IMapper mapper) : Co
 
         context.Chapters.Add(chapter);
         await context.SaveChangesAsync();
-        if (!replacing) { NotificationService.NotifyChapterAddedAsync(mapper.Map<ChapterDTO>(chapter)); }
+        if (!replacing) { NotificationService.NotifyChapterAddedAsync(mapper.Map<ChapterDto>(chapter)); }
 
         _ = TaskManagerService.AddTaskAsync(new ChapterCheckTask(chapter.Id));
         _ = TaskManagerService.AddTaskAsync(new SerieCheckTask(chapter.SerieId));

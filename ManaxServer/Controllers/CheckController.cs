@@ -1,4 +1,4 @@
-using ManaxLibrary.DTOs.User;
+using ManaxLibrary.DTO.User;
 using ManaxServer.Auth;
 using ManaxServer.BackgroundTask;
 using ManaxServer.Localization;

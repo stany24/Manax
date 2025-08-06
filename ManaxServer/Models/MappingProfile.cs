@@ -1,12 +1,12 @@
 using AutoMapper;
-using ManaxLibrary.DTOs.Chapter;
-using ManaxLibrary.DTOs.Issue.Automatic;
-using ManaxLibrary.DTOs.Issue.Reported;
-using ManaxLibrary.DTOs.Library;
-using ManaxLibrary.DTOs.Rank;
-using ManaxLibrary.DTOs.Read;
-using ManaxLibrary.DTOs.Serie;
-using ManaxLibrary.DTOs.User;
+using ManaxLibrary.DTO.Chapter;
+using ManaxLibrary.DTO.Issue.Automatic;
+using ManaxLibrary.DTO.Issue.Reported;
+using ManaxLibrary.DTO.Library;
+using ManaxLibrary.DTO.Rank;
+using ManaxLibrary.DTO.Read;
+using ManaxLibrary.DTO.Serie;
+using ManaxLibrary.DTO.User;
 using ManaxServer.Models.Issue.Automatic;
 using ManaxServer.Models.Issue.Reported;
 using ManaxServer.Models.Rank;
@@ -17,42 +17,42 @@ public class MappingProfile : Profile
 {
     public MappingProfile()
     {
-        // Mappings entre modèles et DTOs seront configurés ici
-        // Exemple : CreateMap<ModeleSource, DTODestination>();
+        // Mappings entre modèles et Dtos seront configurés ici
+        // Exemple : CreateMap<ModeleSource, DtoDestination>();
 
         // Mappings des User
-        CreateMap<User.User, UserDTO>();
-        CreateMap<UserCreateDTO, User.User>();
-        CreateMap<UserUpdateDTO, User.User>();
+        CreateMap<User.User, UserDto>();
+        CreateMap<UserCreateDto, User.User>();
+        CreateMap<UserUpdateDto, User.User>();
 
         // Mappings des Serie
-        CreateMap<Serie.Serie, SerieDTO>();
-        CreateMap<SerieCreateDTO, Serie.Serie>();
-        CreateMap<SerieUpdateDTO, Serie.Serie>();
+        CreateMap<Serie.Serie, SerieDto>();
+        CreateMap<SerieCreateDto, Serie.Serie>();
+        CreateMap<SerieUpdateDto, Serie.Serie>();
 
         // Mappings des Library
-        CreateMap<Library.Library, LibraryDTO>();
-        CreateMap<LibraryCreateDTO, Library.Library>();
-        CreateMap<LibraryUpdateDTO, Library.Library>();
+        CreateMap<Library.Library, LibraryDto>();
+        CreateMap<LibraryCreateDto, Library.Library>();
+        CreateMap<LibraryUpdateDto, Library.Library>();
 
         // Mappings des Issue
-        CreateMap<ReportedIssueChapter, ReportedIssueChapterDTO>();
-        CreateMap<ReportedIssueChapterCreateDTO, ReportedIssueChapter>();
-        CreateMap<ReportedIssueSerie, ReportedIssueSerieDTO>();
-        CreateMap<ReportedIssueSerieCreateDTO, ReportedIssueSerie>();
-        CreateMap<AutomaticIssueSerie, AutomaticIssueSerieDTO>();
-        CreateMap<AutomaticIssueChapter, AutomaticIssueChapterDTO>();
+        CreateMap<ReportedIssueChapter, ReportedIssueChapterDto>();
+        CreateMap<ReportedIssueChapterCreateDto, ReportedIssueChapter>();
+        CreateMap<ReportedIssueSerie, ReportedIssueSerieDto>();
+        CreateMap<ReportedIssueSerieCreateDto, ReportedIssueSerie>();
+        CreateMap<AutomaticIssueSerie, AutomaticIssueSerieDto>();
+        CreateMap<AutomaticIssueChapter, AutomaticIssueChapterDto>();
 
         // Mappings des Chapter
-        CreateMap<Chapter.Chapter, ChapterDTO>();
+        CreateMap<Chapter.Chapter, ChapterDto>();
 
         // Mappings des Read
-        CreateMap<Read.Read, ReadDTO>();
-        CreateMap<ReadCreateDTO, Read.Read>();
+        CreateMap<Read.Read, ReadDto>();
+        CreateMap<ReadCreateDto, Read.Read>();
 
         // Mappings des Rank
-        CreateMap<Rank.Rank, RankDTO>();
-        CreateMap<RankCreateDTO,Rank.Rank>();
-        CreateMap<UserRank, UserRankDTO>();
+        CreateMap<Rank.Rank, RankDto>();
+        CreateMap<RankCreateDto,Rank.Rank>();
+        CreateMap<UserRank, UserRankDto>();
     }
 }

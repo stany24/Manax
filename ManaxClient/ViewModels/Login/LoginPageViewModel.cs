@@ -5,7 +5,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using ManaxClient.ViewModels.Home;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
-using ManaxLibrary.DTOs.User;
+using ManaxLibrary.DTO.User;
 using Logger = ManaxLibrary.Logging.Logger;
 
 namespace ManaxClient.ViewModels.Login;
@@ -69,7 +69,7 @@ public partial class LoginPageViewModel : PageViewModel
 
             ManaxApiConfig.SetToken(token);
 
-            Optional<UserDTO> selfResponse = await ManaxApiUserClient.GetSelf();
+            Optional<UserDto> selfResponse = await ManaxApiUserClient.GetSelf();
 
             if (selfResponse.Failed)
             {
@@ -78,7 +78,7 @@ public partial class LoginPageViewModel : PageViewModel
                 return;
             }
             
-            UserDTO self = selfResponse.GetValue();
+            UserDto self = selfResponse.GetValue();
             _isAdmin = self.Role is UserRole.Admin or UserRole.Owner;
             _isOwner = self.Role is UserRole.Owner;
             InfoEmitted?.Invoke(this, $"Logged in as {self.Username} ({self.Role})");

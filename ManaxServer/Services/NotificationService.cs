@@ -1,8 +1,8 @@
-using ManaxLibrary.DTOs.Chapter;
-using ManaxLibrary.DTOs.Library;
-using ManaxLibrary.DTOs.Rank;
-using ManaxLibrary.DTOs.Serie;
-using ManaxLibrary.DTOs.User;
+using ManaxLibrary.DTO.Chapter;
+using ManaxLibrary.DTO.Library;
+using ManaxLibrary.DTO.Rank;
+using ManaxLibrary.DTO.Serie;
+using ManaxLibrary.DTO.User;
 using ManaxLibrary.Logging;
 using ManaxLibrary.Notifications;
 using Microsoft.AspNetCore.SignalR;
@@ -35,7 +35,7 @@ public static class NotificationService
         }
     }
     
-    public static void NotifyLibraryCreatedAsync(LibraryDTO library)
+    public static void NotifyLibraryCreatedAsync(LibraryDto library)
     {
         TrySendToAllClientsAsync(NotificationType.LibraryCreated, library);
     }
@@ -45,17 +45,17 @@ public static class NotificationService
         TrySendToAllClientsAsync(NotificationType.LibraryDeleted, id);
     }
 
-    public static void NotifyLibraryUpdatedAsync(LibraryDTO library)
+    public static void NotifyLibraryUpdatedAsync(LibraryDto library)
     {
         TrySendToAllClientsAsync(NotificationType.LibraryUpdated, library);
     }
 
-    public static void NotifySerieCreatedAsync(SerieDTO serie)
+    public static void NotifySerieCreatedAsync(SerieDto serie)
     {
         TrySendToAllClientsAsync(NotificationType.SerieCreated, serie);
     }
 
-    public static void NotifySerieUpdatedAsync(SerieDTO serie)
+    public static void NotifySerieUpdatedAsync(SerieDto serie)
     {
         TrySendToAllClientsAsync(NotificationType.SerieUpdated, serie);
     }
@@ -65,12 +65,12 @@ public static class NotificationService
         TrySendToAllClientsAsync(NotificationType.SerieDeleted, serieId);
     }
     
-    public static void NotifyRankCreatedAsync(RankDTO rank)
+    public static void NotifyRankCreatedAsync(RankDto rank)
     {
         TrySendToAllClientsAsync(NotificationType.RankCreated, rank);
     }
 
-    public static void NotifyRankUpdatedAsync(RankDTO rank)
+    public static void NotifyRankUpdatedAsync(RankDto rank)
     {
         TrySendToAllClientsAsync(NotificationType.RankUpdated, rank);
     }
@@ -80,7 +80,7 @@ public static class NotificationService
         TrySendToAllClientsAsync(NotificationType.RankDeleted, rankId);
     }
 
-    public static void NotifyChapterAddedAsync(ChapterDTO chapter)
+    public static void NotifyChapterAddedAsync(ChapterDto chapter)
     {
         TrySendToAllClientsAsync(NotificationType.ChapterAdded, chapter);
     }
@@ -90,7 +90,7 @@ public static class NotificationService
         TrySendToAllClientsAsync(NotificationType.ChapterRemoved, chapterId);
     }
     
-    public static void NotifyUserCreatedAsync(UserDTO user)
+    public static void NotifyUserCreatedAsync(UserDto user)
     {
         TrySendToAllClientsAsync(NotificationType.UserCreated, user);
     }

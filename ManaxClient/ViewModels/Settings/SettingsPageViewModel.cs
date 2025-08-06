@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
-using ManaxLibrary.DTOs.Setting;
+using ManaxLibrary.DTO.Setting;
 using ManaxLibrary.Logging;
 
 namespace ManaxClient.ViewModels.Settings;

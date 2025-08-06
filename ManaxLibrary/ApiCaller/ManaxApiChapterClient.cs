@@ -1,5 +1,5 @@
 using System.Net.Http.Json;
-using ManaxLibrary.DTOs.Chapter;
+using ManaxLibrary.DTO.Chapter;
 
 namespace ManaxLibrary.ApiCaller;
 
@@ -15,14 +15,14 @@ public static class ManaxApiChapterClient
             : new Optional<List<long>>(ids);
     }
 
-    public static async Task<Optional<ChapterDTO>> GetChapterAsync(long id)
+    public static async Task<Optional<ChapterDto>> GetChapterAsync(long id)
     {
         HttpResponseMessage response = await ManaxApiClient.Client.GetAsync($"api/chapter/{id}");
-        if (!response.IsSuccessStatusCode) return new Optional<ChapterDTO>(response);
-        ChapterDTO? chapter = await response.Content.ReadFromJsonAsync<ChapterDTO>();
+        if (!response.IsSuccessStatusCode) return new Optional<ChapterDto>(response);
+        ChapterDto? chapter = await response.Content.ReadFromJsonAsync<ChapterDto>();
         return chapter == null
-            ? new Optional<ChapterDTO>($"Failed to read chapter with ID {id} from response.")
-            : new Optional<ChapterDTO>(chapter);
+            ? new Optional<ChapterDto>($"Failed to read chapter with ID {id} from response.")
+            : new Optional<ChapterDto>(chapter);
     }
 
     public static async Task<Optional<byte[]>> GetChapterPageAsync(long id, int number)
@@ -45,17 +45,17 @@ public static class ManaxApiChapterClient
             : new Optional<byte[]>(data);
     }
 
-    public static async Task<Optional<ChapterDTO>> PostChapterAsync(ChapterDTO chapter)
+    public static async Task<Optional<ChapterDto>> PostChapterAsync(ChapterDto chapter)
     {
         HttpResponseMessage response = await ManaxApiClient.Client.PostAsJsonAsync("api/chapter", chapter);
-        if (!response.IsSuccessStatusCode) return new Optional<ChapterDTO>(response);
-        ChapterDTO? createdChapter = await response.Content.ReadFromJsonAsync<ChapterDTO>();
+        if (!response.IsSuccessStatusCode) return new Optional<ChapterDto>(response);
+        ChapterDto? createdChapter = await response.Content.ReadFromJsonAsync<ChapterDto>();
         return createdChapter == null
-            ? new Optional<ChapterDTO>("Failed to read created chapter from response.")
-            : new Optional<ChapterDTO>(createdChapter);
+            ? new Optional<ChapterDto>("Failed to read created chapter from response.")
+            : new Optional<ChapterDto>(createdChapter);
     }
 
-    public static async Task<Optional<bool>> PutChapterAsync(long id, ChapterDTO chapter)
+    public static async Task<Optional<bool>> PutChapterAsync(long id, ChapterDto chapter)
     {
         HttpResponseMessage response = await ManaxApiClient.Client.PutAsJsonAsync($"api/chapter/{id}", chapter);
         return response.IsSuccessStatusCode

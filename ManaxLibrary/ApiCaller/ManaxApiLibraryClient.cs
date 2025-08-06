@@ -1,5 +1,5 @@
 using System.Net.Http.Json;
-using ManaxLibrary.DTOs.Library;
+using ManaxLibrary.DTO.Library;
 
 namespace ManaxLibrary.ApiCaller;
 
@@ -15,17 +15,17 @@ public static class ManaxApiLibraryClient
             : new Optional<List<long>>(ids);
     }
 
-    public static async Task<Optional<LibraryDTO>> GetLibraryAsync(long id)
+    public static async Task<Optional<LibraryDto>> GetLibraryAsync(long id)
     {
         HttpResponseMessage response = await ManaxApiClient.Client.GetAsync($"api/library/{id}");
-        if (!response.IsSuccessStatusCode) return new Optional<LibraryDTO>(response);
-        LibraryDTO? library = await response.Content.ReadFromJsonAsync<LibraryDTO>();
+        if (!response.IsSuccessStatusCode) return new Optional<LibraryDto>(response);
+        LibraryDto? library = await response.Content.ReadFromJsonAsync<LibraryDto>();
         return library == null
-            ? new Optional<LibraryDTO>($"Failed to read library with ID {id} from response.")
-            : new Optional<LibraryDTO>(library);
+            ? new Optional<LibraryDto>($"Failed to read library with ID {id} from response.")
+            : new Optional<LibraryDto>(library);
     }
 
-    public static async Task<Optional<long>> PostLibraryAsync(LibraryCreateDTO library)
+    public static async Task<Optional<long>> PostLibraryAsync(LibraryCreateDto library)
     {
         HttpResponseMessage response = await ManaxApiClient.Client.PostAsJsonAsync("api/library/create", library);
         if (!response.IsSuccessStatusCode) return new Optional<long>(response);
@@ -35,7 +35,7 @@ public static class ManaxApiLibraryClient
             : new Optional<long>(id.Value);
     }
 
-    public static async Task<Optional<bool>> PutLibraryAsync(long id, LibraryCreateDTO library)
+    public static async Task<Optional<bool>> PutLibraryAsync(long id, LibraryCreateDto library)
     {
         HttpResponseMessage response = await ManaxApiClient.Client.PutAsJsonAsync($"api/library/{id}", library);
         return response.IsSuccessStatusCode

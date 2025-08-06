@@ -8,7 +8,7 @@ using ManaxClient.Controls.Popups.Rank;
 using ManaxClient.Models.Collections;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
-using ManaxLibrary.DTOs.Rank;
+using ManaxLibrary.DTO.Rank;
 using ManaxLibrary.Logging;
 using ManaxLibrary.Notifications;
 
@@ -17,7 +17,7 @@ namespace ManaxClient.ViewModels.Rank;
 public partial class RankPageViewModel : PageViewModel
 {
     [ObservableProperty]
-    private SortedObservableCollection<RankDTO> _ranks = new([]);
+    private SortedObservableCollection<RankDto> _ranks = new([]);
     
     public RankPageViewModel()
     {
@@ -31,7 +31,7 @@ public partial class RankPageViewModel : PageViewModel
     {
         Dispatcher.UIThread.Post(() =>
         {
-            RankDTO? firstOrDefault = Ranks.FirstOrDefault(r => r.Id == obj);
+            RankDto? firstOrDefault = Ranks.FirstOrDefault(r => r.Id == obj);
             if (firstOrDefault != null)
             {
                 Ranks.Remove(firstOrDefault);
@@ -39,7 +39,7 @@ public partial class RankPageViewModel : PageViewModel
         });
     }
 
-    private void OnRankCreated(RankDTO obj)
+    private void OnRankCreated(RankDto obj)
     {
         Dispatcher.UIThread.Post(() =>
         {
@@ -48,11 +48,11 @@ public partial class RankPageViewModel : PageViewModel
         });
     }
 
-    private void OnRankUpdated(RankDTO rank)
+    private void OnRankUpdated(RankDto rank)
     {
         Dispatcher.UIThread.Post(() =>
         {
-            RankDTO? firstOrDefault = Ranks.FirstOrDefault(r => r.Id == rank.Id);
+            RankDto? firstOrDefault = Ranks.FirstOrDefault(r => r.Id == rank.Id);
             if(firstOrDefault != null){Ranks.Remove(firstOrDefault);}
             Ranks.Add(rank);
         });
@@ -62,7 +62,7 @@ public partial class RankPageViewModel : PageViewModel
     {
         try
         {
-            Optional<List<RankDTO>> ranksResponse = await ManaxApiRankClient.GetRanksAsync();
+            Optional<List<RankDto>> ranksResponse = await ManaxApiRankClient.GetRanksAsync();
             if (ranksResponse.Failed)
             {
                 InfoEmitted?.Invoke(this, ranksResponse.Error);
@@ -70,7 +70,7 @@ public partial class RankPageViewModel : PageViewModel
             }
             Dispatcher.UIThread.Post(() =>
             {
-                Ranks = new SortedObservableCollection<RankDTO>(ranksResponse.GetValue())
+                Ranks = new SortedObservableCollection<RankDto>(ranksResponse.GetValue())
                 {
                     SortingSelector = r => r.Value,
                     Descending = true
@@ -84,14 +84,14 @@ public partial class RankPageViewModel : PageViewModel
         }   
     }
 
-    public void UpdateRank(RankDTO rank)
+    public void UpdateRank(RankDto rank)
     {
         RankEditPopup rankEditPopup = new(rank);
-        rankEditPopup.CloseRequested += async (_,_) =>
+        rankEditPopup.CloseRequested += async void (_,_) =>
         {
             try
             {
-                RankDTO result = rankEditPopup.GetResult();
+                RankDto result = rankEditPopup.GetResult();
                 Optional<bool> updateRankAsync = await ManaxApiRankClient.UpdateRankAsync(result);
                 if (updateRankAsync.Failed) { InfoEmitted?.Invoke(this,updateRankAsync.Error); }
                 else { rankEditPopup.Close(); }
@@ -105,7 +105,7 @@ public partial class RankPageViewModel : PageViewModel
         PopupRequested?.Invoke(this, rankEditPopup);
     }
 
-    public void DeleteRank(RankDTO rank)
+    public void DeleteRank(RankDto rank)
     {
         Task.Run(async () =>
         {
@@ -127,13 +127,13 @@ public partial class RankPageViewModel : PageViewModel
     
     public void CreateRank()
     {
-        RankEditPopup rankCreatePopup = new(new RankDTO {Name = "New Rank", Value = 10});
-        rankCreatePopup.CloseRequested += async (_, _) =>
+        RankEditPopup rankCreatePopup = new(new RankDto {Name = "New Rank", Value = 10});
+        rankCreatePopup.CloseRequested += async void (_, _) =>
         {
             try
             {
-                RankDTO result = rankCreatePopup.GetResult();
-                Optional<bool> rankResponse = await ManaxApiRankClient.CreateRankAsync(new RankCreateDTO {Name = result.Name, Value = result.Value});
+                RankDto result = rankCreatePopup.GetResult();
+                Optional<bool> rankResponse = await ManaxApiRankClient.CreateRankAsync(new RankCreateDto {Name = result.Name, Value = result.Value});
 
                 if (rankResponse.Failed)
                 {

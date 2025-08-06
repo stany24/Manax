@@ -1,5 +1,5 @@
 using AutoMapper;
-using ManaxLibrary.DTOs.Chapter;
+using ManaxLibrary.DTO.Chapter;
 using ManaxServer.Controllers;
 using ManaxServer.Models;
 using ManaxServer.Models.Chapter;
@@ -51,12 +51,12 @@ public class TestChapterController
     public async Task GetChapter_WithValidId_ReturnsChapter()
     {
         Chapter chapter = _chapters[0];
-        ActionResult<ChapterDTO> result = await _controller.GetChapter(chapter.Id);
+        ActionResult<ChapterDto> result = await _controller.GetChapter(chapter.Id);
             
         OkObjectResult? okResult = result.Result as OkObjectResult;
         Assert.IsNull(okResult);
             
-        ChapterDTO? returnedChapter = result.Value;
+        ChapterDto? returnedChapter = result.Value;
         Assert.IsNotNull(returnedChapter);
         Assert.AreEqual(chapter.Id, returnedChapter.Id);
         Assert.AreEqual(chapter.Id, returnedChapter.SerieId);
@@ -66,7 +66,7 @@ public class TestChapterController
     [TestMethod]
     public async Task GetChapter_WithInvalidId_ReturnsNotFound()
     {
-        ActionResult<ChapterDTO> result = await _controller.GetChapter(999999);
+        ActionResult<ChapterDto> result = await _controller.GetChapter(999999);
             
         Assert.IsInstanceOfType(result.Result, typeof(NotFoundObjectResult));
     }

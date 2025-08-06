@@ -3,16 +3,16 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
-using ManaxLibrary.DTOs.Serie;
+using ManaxLibrary.DTO.Serie;
 
 namespace ManaxClient.Controls.Popups.Serie;
 
-public class SerieUpdatePopup(SerieDTO serie) : ConfirmCancelPopup
+public class SerieUpdatePopup(SerieDto serie) : ConfirmCancelPopup
 {
     private TextBox _titleBox = null!;
     private TextBox _descriptionBox = null!;
     private ComboBox _statusComboBox = null!;
-    private SerieUpdateDTO? _result;
+    private SerieUpdateDto? _result;
 
     protected override Grid GetFormGrid()
     {
@@ -78,11 +78,11 @@ public class SerieUpdatePopup(SerieDTO serie) : ConfirmCancelPopup
         string? title = _titleBox.Text?.Trim();
         string? description = _descriptionBox.Text?.Trim();
         if (string.IsNullOrEmpty(title) || string.IsNullOrEmpty(description) || _statusComboBox.SelectedItem is not Status status) return;
-        _result = new SerieUpdateDTO { Title = title, Description = description, Status = status};
+        _result = new SerieUpdateDto { Title = title, Description = description, Status = status};
         CloseRequested?.Invoke(this, EventArgs.Empty);
     }
 
-    public SerieUpdateDTO? GetResult()
+    public SerieUpdateDto? GetResult()
     {
         return _result;
     }

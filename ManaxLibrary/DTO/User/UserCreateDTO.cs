@@ -1,0 +1,17 @@
+// ReSharper disable InconsistentNaming
+// ReSharper disable PropertyCanBeMadeInitOnly.Global
+// ReSharper disable UnusedAutoPropertyAccessor.Global
+// ReSharper disable UnusedMember.Global
+
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
+
+using System.ComponentModel.DataAnnotations;
+
+namespace ManaxLibrary.DTO.User;
+
+public class UserCreateDto
+{
+    public UserRole Role { get; set; } = UserRole.User;
+    [Required] [MaxLength(50)] public string Username { get; set; } = string.Empty;
+    [Required] [MaxLength(128)] public string Password { get; set; } = string.Empty;
+}

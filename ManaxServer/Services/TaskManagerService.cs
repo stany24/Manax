@@ -86,23 +86,31 @@ public static class TaskManagerService
     
     private static async void PublishTasks(CancellationToken cancellationToken)
     {
-        while (!cancellationToken.IsCancellationRequested)
+        try
         {
-            Thread.Sleep(1000);
-            await TaskSemaphore.WaitAsync(cancellationToken);
-            try
+            while (!cancellationToken.IsCancellationRequested)
             {
-                if(WaitingTasks.Count == 0){continue;}
-                Dictionary<string, int> tasks = WaitingTasks.GroupBy(t => t.GetName())
-                    .Select(g => new KeyValuePair<string, int>(g.Key, g.Count()))
-                    .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
-               NotificationService.NotifyRunningTasksAsync(tasks);
-            }
-            finally
-            {
-                TaskSemaphore.Release();
+                Thread.Sleep(1000);
+                await TaskSemaphore.WaitAsync(cancellationToken);
+                try
+                {
+                    if(WaitingTasks.Count == 0){continue;}
+                    Dictionary<string, int> tasks = WaitingTasks.GroupBy(t => t.GetName())
+                        .Select(g => new KeyValuePair<string, int>(g.Key, g.Count()))
+                        .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+                    NotificationService.NotifyRunningTasksAsync(tasks);
+                }
+                finally
+                {
+                    TaskSemaphore.Release();
+                }
             }
         }
+        catch (Exception e)
+        {
+            Logger.LogError("Error in TaskManagerService PublishTasks", e, Environment.StackTrace);
+        }
+        
     }
 
     public static void Shutdown()

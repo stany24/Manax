@@ -1,7 +1,7 @@
 using AutoMapper;
-using ManaxLibrary.DTOs.Issue.Automatic;
-using ManaxLibrary.DTOs.Issue.Reported;
-using ManaxLibrary.DTOs.User;
+using ManaxLibrary.DTO.Issue.Automatic;
+using ManaxLibrary.DTO.Issue.Reported;
+using ManaxLibrary.DTO.User;
 using ManaxServer.Auth;
 using ManaxServer.Localization;
 using ManaxServer.Models;
@@ -18,45 +18,45 @@ public class IssueController(ManaxContext context, IMapper mapper) : ControllerB
 {
     [HttpGet("chapter/automatic")]
     [AuthorizeRole(UserRole.Admin)]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<AutomaticIssueChapterDTO>))]
-    public async Task<ActionResult<IEnumerable<AutomaticIssueChapterDTO>>> GetAllAutomaticChapterIssues()
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<AutomaticIssueChapterDto>))]
+    public async Task<ActionResult<IEnumerable<AutomaticIssueChapterDto>>> GetAllAutomaticChapterIssues()
     {
         List<AutomaticIssueChapter> issues = await context.AutomaticIssuesChapter.ToListAsync();
-        return mapper.Map<List<AutomaticIssueChapterDTO>>(issues);
+        return mapper.Map<List<AutomaticIssueChapterDto>>(issues);
     }
     
     [HttpGet("serie/automatic")]
     [AuthorizeRole(UserRole.Admin)]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<AutomaticIssueSerieDTO>))]
-    public async Task<ActionResult<IEnumerable<AutomaticIssueSerieDTO>>> GetAllAutomaticSerieIssues()
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<AutomaticIssueSerieDto>))]
+    public async Task<ActionResult<IEnumerable<AutomaticIssueSerieDto>>> GetAllAutomaticSerieIssues()
     {
         List<AutomaticIssueSerie> issues = await context.AutomaticIssuesSerie.ToListAsync();
-        return mapper.Map<List<AutomaticIssueSerieDTO>>(issues);
+        return mapper.Map<List<AutomaticIssueSerieDto>>(issues);
     }
     
     [HttpGet("chapter/reported")]
     [AuthorizeRole(UserRole.Admin)]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<ReportedIssueChapterDTO>))]
-    public async Task<ActionResult<IEnumerable<ReportedIssueChapterDTO>>> GetAllReportedChapterIssues()
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<ReportedIssueChapterDto>))]
+    public async Task<ActionResult<IEnumerable<ReportedIssueChapterDto>>> GetAllReportedChapterIssues()
     {
         List<ReportedIssueChapter> issues = await context.ReportedIssuesChapter.ToListAsync();
-        return mapper.Map<List<ReportedIssueChapterDTO>>(issues);
+        return mapper.Map<List<ReportedIssueChapterDto>>(issues);
     }
     
     [HttpGet("serie/reported")]
     [AuthorizeRole(UserRole.Admin)]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<ReportedIssueSerieDTO>))]
-    public async Task<ActionResult<IEnumerable<ReportedIssueSerieDTO>>> GetAllReportedSerieIssues()
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<ReportedIssueSerieDto>))]
+    public async Task<ActionResult<IEnumerable<ReportedIssueSerieDto>>> GetAllReportedSerieIssues()
     {
         List<ReportedIssueSerie> issues = await context.ReportedIssuesSerie.ToListAsync();
-        return mapper.Map<List<ReportedIssueSerieDTO>>(issues);
+        return mapper.Map<List<ReportedIssueSerieDto>>(issues);
     }
 
     [HttpPost("chapter")]
     [AuthorizeRole(UserRole.User)]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<ActionResult> CreateChapterIssue(ReportedIssueChapterCreateDTO reportedIssueChapterCreate)
+    public async Task<ActionResult> CreateChapterIssue(ReportedIssueChapterCreateDto reportedIssueChapterCreate)
     {
         ReportedIssueChapter? issue = mapper.Map<ReportedIssueChapter>(reportedIssueChapterCreate);
 
@@ -70,7 +70,7 @@ public class IssueController(ManaxContext context, IMapper mapper) : ControllerB
     [AuthorizeRole(UserRole.User)]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<ActionResult> CreateSerieIssue(ReportedIssueSerieCreateDTO reportedIssueSerieCreate)
+    public async Task<ActionResult> CreateSerieIssue(ReportedIssueSerieCreateDto reportedIssueSerieCreate)
     {
         ReportedIssueSerie? issue = mapper.Map<ReportedIssueSerie>(reportedIssueSerieCreate);
 

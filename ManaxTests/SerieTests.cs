@@ -1,5 +1,5 @@
 using AutoMapper;
-using ManaxLibrary.DTOs.Serie;
+using ManaxLibrary.DTO.Serie;
 using ManaxServer.Controllers;
 using ManaxServer.Models;
 using ManaxServer.Models.Chapter;
@@ -31,8 +31,8 @@ public class TestSerieController
         _mockMapper = TestDbContextFactory.CreateMockMapper();
 
 
-        _mockMapper.Setup(m => m.Map(It.IsAny<SerieUpdateDTO>(), It.IsAny<Serie>()))
-            .Callback<SerieUpdateDTO, Serie>((updateDto, serie) =>
+        _mockMapper.Setup(m => m.Map(It.IsAny<SerieUpdateDto>(), It.IsAny<Serie>()))
+            .Callback<SerieUpdateDto, Serie>((updateDto, serie) =>
             {
                 serie.Title = updateDto.Title;
                 serie.Description = updateDto.Description;
@@ -63,9 +63,9 @@ public class TestSerieController
     public async Task GetSerie_WithValidId_ReturnsSerie()
     {
         Serie serie = _series[0];
-        ActionResult<SerieDTO> result = await _controller.GetSerie(serie.Id);
+        ActionResult<SerieDto> result = await _controller.GetSerie(serie.Id);
             
-        SerieDTO? returnedSerie = result.Value;
+        SerieDto? returnedSerie = result.Value;
         Assert.IsNotNull(returnedSerie);
         Assert.AreEqual(serie.Id, returnedSerie.Id);
         Assert.AreEqual(serie.Id, returnedSerie.LibraryId);
@@ -77,7 +77,7 @@ public class TestSerieController
     [TestMethod]
     public async Task GetSerie_WithInvalidId_ReturnsNotFound()
     {
-        ActionResult<SerieDTO> result = await _controller.GetSerie(999999);
+        ActionResult<SerieDto> result = await _controller.GetSerie(999999);
             
         Assert.IsInstanceOfType(result.Result, typeof(NotFoundObjectResult));
     }
@@ -117,7 +117,7 @@ public class TestSerieController
     public async Task PutSerie_WithValidId_UpdatesSerie()
     {
         Serie serie = _series[0];
-        SerieUpdateDTO updateDto = new()
+        SerieUpdateDto updateDto = new()
         {
             Title = "Updated Title",
             Description = "Updated Description",
@@ -139,7 +139,7 @@ public class TestSerieController
     [TestMethod]
     public async Task PutSerie_WithInvalidId_ReturnsNotFound()
     {
-        SerieUpdateDTO updateDto = new()
+        SerieUpdateDto updateDto = new()
         {
             Title = "Updated Title",
             Description = "Updated Description",

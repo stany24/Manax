@@ -1,8 +1,8 @@
 using System.IO.Compression;
 using System.Text.RegularExpressions;
 using ImageMagick;
-using ManaxLibrary.DTOs.Issue.Automatic;
-using ManaxLibrary.DTOs.Setting;
+using ManaxLibrary.DTO.Issue.Automatic;
+using ManaxLibrary.DTO.Setting;
 using ManaxServer.Models;
 using ManaxServer.Models.Chapter;
 using ManaxServer.Models.Serie;
@@ -63,11 +63,9 @@ public static partial class FixService
             IssueManagerService.RemoveSerieIssue(serieId, AutomaticIssueSerieType.PosterCouldNotOpen);
             IssueManagerService.ManageSerieIssue(serieId, AutomaticIssueSerieType.PosterTooSmall,poster.Width < min);
 
-            if (poster.Width > max)
-            {
-                poster.Resize(max,poster.Height * max / poster.Width);
-                poster.Write(posterPath);
-            }
+            if (poster.Width <= max) return;
+            poster.Resize(max,poster.Height * max / poster.Width);
+            poster.Write(posterPath);
         }
         catch (Exception)
         {
@@ -184,12 +182,10 @@ public static partial class FixService
                 uint min = SettingsManager.Data.MinChapterWidth;
                 uint max = SettingsManager.Data.MaxChapterWidth;
                 IssueManagerService.ManageChapterIssue(id, AutomaticIssueChapterType.ImageTooSmall,image.Width < min);
-                if (image.Width > max)
-                {
-                    image.Resize(max,image.Height * max / image.Width);
-                    image.Write(image.FileName!);
-                    modified = true;
-                }
+                if (image.Width <= max) continue;
+                image.Resize(max,image.Height * max / image.Width);
+                image.Write(image.FileName!);
+                modified = true;
             }
             catch
             {

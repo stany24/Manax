@@ -1,6 +1,6 @@
 using AutoMapper;
-using ManaxLibrary.DTOs.Library;
-using ManaxLibrary.DTOs.User;
+using ManaxLibrary.DTO.Library;
+using ManaxLibrary.DTO.User;
 using ManaxServer.Auth;
 using ManaxServer.Localization;
 using ManaxServer.Models;
@@ -27,9 +27,9 @@ public class LibraryController(ManaxContext context, IMapper mapper) : Controlle
     // GET: api/library/{id}
     [HttpGet("{id:long}")]
     [AuthorizeRole(UserRole.User)]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(LibraryDTO))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(LibraryDto))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<LibraryDTO>> GetLibrary(long id)
+    public async Task<ActionResult<LibraryDto>> GetLibrary(long id)
     {
         Library? library = await context.Libraries
             .AsNoTracking()
@@ -37,7 +37,7 @@ public class LibraryController(ManaxContext context, IMapper mapper) : Controlle
 
         if (library == null) return NotFound(Localizer.Format("LibraryNotFound", id));
 
-        return mapper.Map<LibraryDTO>(library);
+        return mapper.Map<LibraryDto>(library);
     }
 
     // PUT: api/Library/5
@@ -47,7 +47,7 @@ public class LibraryController(ManaxContext context, IMapper mapper) : Controlle
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
-    public async Task<IActionResult> PutLibrary(long id, LibraryUpdateDTO libraryUpdate)
+    public async Task<IActionResult> PutLibrary(long id, LibraryUpdateDto libraryUpdate)
     {
         Library? library = await context.Libraries.FindAsync(id);
 
@@ -80,7 +80,7 @@ public class LibraryController(ManaxContext context, IMapper mapper) : Controlle
             return Conflict(Localizer.Format("LibraryNameOrPathNotUnique"));
         }
 
-        NotificationService.NotifyLibraryCreatedAsync(mapper.Map<LibraryDTO>(library));
+        NotificationService.NotifyLibraryUpdatedAsync(mapper.Map<LibraryDto>(library));
         return NoContent();
     }
 
@@ -89,7 +89,7 @@ public class LibraryController(ManaxContext context, IMapper mapper) : Controlle
     [AuthorizeRole(UserRole.Admin)]
     [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(long))]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
-    public async Task<ActionResult<long>> PostLibrary(LibraryCreateDTO libraryCreate)
+    public async Task<ActionResult<long>> PostLibrary(LibraryCreateDto libraryCreate)
     {
         if (!libraryCreate.Path.EndsWith(Path.DirectorySeparatorChar.ToString()))
             libraryCreate.Path += Path.DirectorySeparatorChar;
@@ -118,7 +118,7 @@ public class LibraryController(ManaxContext context, IMapper mapper) : Controlle
             return Conflict(Localizer.Format("LibraryNameOrPathNotUnique"));
         }
 
-        NotificationService.NotifyLibraryCreatedAsync(mapper.Map<LibraryDTO>(library));
+        NotificationService.NotifyLibraryCreatedAsync(mapper.Map<LibraryDto>(library));
         return library.Id;
     }
 

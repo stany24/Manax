@@ -19,7 +19,7 @@ using ManaxClient.ViewModels.Settings;
 using ManaxClient.ViewModels.User;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
-using ManaxLibrary.DTOs.Library;
+using ManaxLibrary.DTO.Library;
 using ManaxLibrary.Logging;
 using ManaxLibrary.Notifications;
 
@@ -33,13 +33,13 @@ public partial class MainWindowViewModel : ObservableObject
     [ObservableProperty] private bool _isOwner;
     [ObservableProperty] private Popup? _popup;
     [ObservableProperty] private ObservableCollection<TaskItem> _runningTasks = [];
-    [ObservableProperty] private ObservableCollection<LibraryDTO> _libraries = [];
+    [ObservableProperty] private ObservableCollection<LibraryDto> _libraries = [];
     [ObservableProperty] private double _width;
     [ObservableProperty] private double _height;
 
     public MainWindowViewModel()
     {
-        _history.PageChanged += _ =>
+        _history.OnPageChanged += _ =>
         {
             if (CurrentPageViewModel == null) return;
             CurrentPageViewModel.Admin = IsAdmin;
@@ -51,7 +51,7 @@ public partial class MainWindowViewModel : ObservableObject
             CurrentPageViewModel.NextRequested += (_, _) => GoForward();
         };
 
-        _history.PageChanging += _ =>
+        _history.OnPageChanging += _ =>
         {
             if (CurrentPageViewModel is not LoginPageViewModel login) return;
             Dispatcher.UIThread.Post(() =>
@@ -89,7 +89,7 @@ public partial class MainWindowViewModel : ObservableObject
         });
     }
     
-    private void OnLibraryCreatedHandler(LibraryDTO library)
+    private void OnLibraryCreatedHandler(LibraryDto library)
     {
         Dispatcher.UIThread.Invoke(() =>
         {
@@ -98,11 +98,11 @@ public partial class MainWindowViewModel : ObservableObject
         });
     }
     
-    private void OnLibraryUpdatedHandler(LibraryDTO library)
+    private void OnLibraryUpdatedHandler(LibraryDto library)
     {
         Dispatcher.UIThread.Invoke(() =>
         {
-            LibraryDTO? old = Libraries.FirstOrDefault(l => l.Id == library.Id);
+            LibraryDto? old = Libraries.FirstOrDefault(l => l.Id == library.Id);
             if(old != null){Libraries.Remove(old);}
             Libraries.Add(library);
             ShowInfo($"Library '{old?.Name ?? "null"}' was updated to '{library.Name}'");
@@ -113,7 +113,7 @@ public partial class MainWindowViewModel : ObservableObject
     {
         Dispatcher.UIThread.Invoke(() =>
         {
-            LibraryDTO? library = Libraries.FirstOrDefault(l => l.Id == libraryId);
+            LibraryDto? library = Libraries.FirstOrDefault(l => l.Id == libraryId);
             if (library == null) return;
             Libraries.Remove(library);
             ShowInfo($"Library '{library.Name}' was deleted");
@@ -134,7 +134,7 @@ public partial class MainWindowViewModel : ObservableObject
             List<long> ids = libraryIdsResponse.GetValue();
             foreach (long id in ids)
             {
-                Optional<LibraryDTO> libraryResponse = await ManaxApiLibraryClient.GetLibraryAsync(id);
+                Optional<LibraryDto> libraryResponse = await ManaxApiLibraryClient.GetLibraryAsync(id);
                 if (libraryResponse.Failed)
                 {
                     ShowInfo(libraryResponse.Error);
@@ -197,7 +197,7 @@ public partial class MainWindowViewModel : ObservableObject
             try
             {
                 popup.Close();
-                LibraryCreateDTO? library = popup.GetResult();
+                LibraryCreateDto? library = popup.GetResult();
                 if (library == null) return;
                 Optional<long> postLibraryResponse = await ManaxApiLibraryClient.PostLibraryAsync(library);
                 if (postLibraryResponse.Failed)

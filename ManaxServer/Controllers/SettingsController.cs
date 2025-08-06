@@ -1,6 +1,6 @@
-using ManaxLibrary.DTOs.Chapter;
-using ManaxLibrary.DTOs.Setting;
-using ManaxLibrary.DTOs.User;
+using ManaxLibrary.DTO.Chapter;
+using ManaxLibrary.DTO.Setting;
+using ManaxLibrary.DTO.User;
 using ManaxServer.Auth;
 using ManaxServer.BackgroundTask;
 using ManaxServer.Localization;
@@ -27,7 +27,7 @@ public class SettingsController(IServiceProvider serviceProvider) : ControllerBa
 
     [HttpPut]
     [AuthorizeRole(UserRole.Owner)]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ChapterDTO))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ChapterDto))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public IActionResult ChangeSettings(SettingsData data)
     {

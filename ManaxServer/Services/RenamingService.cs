@@ -1,5 +1,5 @@
 using ImageMagick;
-using ManaxLibrary.DTOs.Setting;
+using ManaxLibrary.DTO.Setting;
 using ManaxServer.Models;
 
 namespace ManaxServer.Services;

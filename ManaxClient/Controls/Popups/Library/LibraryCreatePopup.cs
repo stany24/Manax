@@ -3,7 +3,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
-using ManaxLibrary.DTOs.Library;
+using ManaxLibrary.DTO.Library;
 
 namespace ManaxClient.Controls.Popups.Library;
 
@@ -11,7 +11,7 @@ public class LibraryCreatePopup : ConfirmCancelPopup
 {
     private TextBox _nameBox = null!;
     private TextBox _pathBox = null!;
-    private LibraryCreateDTO? _result;
+    private LibraryCreateDto? _result;
 
     protected override Grid GetFormGrid()
     {
@@ -59,11 +59,11 @@ public class LibraryCreatePopup : ConfirmCancelPopup
         string? name = _nameBox.Text?.Trim();
         string? path = _pathBox.Text?.Trim();
         if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(path)) return;
-        _result = new LibraryCreateDTO { Name = name, Path = path };
+        _result = new LibraryCreateDto { Name = name, Path = path };
         CloseRequested?.Invoke(this, EventArgs.Empty);
     }
 
-    public LibraryCreateDTO? GetResult()
+    public LibraryCreateDto? GetResult()
     {
         return _result;
     }
