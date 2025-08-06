@@ -48,12 +48,14 @@ public class SerieController(ManaxContext context, IMapper mapper) : ControllerB
     [AuthorizeRole(UserRole.User)]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<long>))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public IEnumerable<long> GetSerieChapters(long id)
+    public ActionResult<List<long>> GetSerieChapters(long id)
     {
-        IEnumerable<long> chaptersIds = context.Chapters
+        Serie? serie = context.Series.FirstOrDefault(s => s.Id == id);
+        if (serie == null) return NotFound();
+        List<long> chaptersIds = context.Chapters
             .Where(c => c.SerieId == id)
             .OrderBy(c => c.FileName)
-            .Select(c => c.Id);
+            .Select(c => c.Id).ToList();
 
         return chaptersIds;
     }

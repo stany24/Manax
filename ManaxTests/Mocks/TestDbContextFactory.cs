@@ -13,7 +13,7 @@ namespace ManaxTests.Mocks;
 
 public static class TestDbContextFactory
 {
-    public static (Mock<ManaxContext> Context, List<Chapter> Chapters, List<Serie> Series) CreateMockContext()
+    public static TestData CreateMockContext()
     {
         List<Serie> series =
         [
@@ -92,7 +92,12 @@ public static class TestDbContextFactory
         mockContext.Setup(c => c.Chapters).Returns(mockChapterDbSet.Object);
         mockContext.Setup(c => c.SaveChangesAsync(It.IsAny<CancellationToken>())).ReturnsAsync(1);
 
-        return (mockContext, chapters, series);
+        return new TestData
+        {
+            Context = mockContext,
+            Chapters = chapters,
+            Series = series
+        };
     }
     
     public static Mock<IMapper> CreateMockMapper()
