@@ -10,21 +10,14 @@ using ManaxServer.Settings;
 
 namespace ManaxServer.Services;
 
-public static partial class FixService
+public partial class FixService(IServiceScopeFactory scopeFactory) : Service
 {
-    private static IServiceScopeFactory _scopeFactory = null!;
-
     [GeneratedRegex("\\d{1,4}")]
-    private static partial Regex RegexNumber();
+    private partial Regex RegexNumber();
 
-    public static void Initialize(IServiceScopeFactory scopeFactory)
+    public void FixSerie(long serieId)
     {
-        _scopeFactory = scopeFactory;
-    }
-
-    public static void FixSerie(long serieId)
-    {
-        using IServiceScope scope = _scopeFactory.CreateScope();
+        using IServiceScope scope = scopeFactory.CreateScope();
         ManaxContext manaxContext = scope.ServiceProvider.GetRequiredService<ManaxContext>();
         Serie? serie = manaxContext.Series.Find(serieId);
         if (serie == null) return;
@@ -34,17 +27,17 @@ public static partial class FixService
         FixDescription(serie);
     }
 
-    private static void FixDescription(Serie serie)
+    private void FixDescription(Serie serie)
     {
         uint max = SettingsManager.Data.MaxDescriptionLength;
         uint min = SettingsManager.Data.MinDescriptionLength;
-        IssueManagerService.ManageSerieIssue(serie.Id, AutomaticIssueSerieType.DescriptionTooLong, serie.Description.Length > max);
-        IssueManagerService.ManageSerieIssue(serie.Id, AutomaticIssueSerieType.DescriptionTooShort, serie.Description.Length < min);
+        ServicesManager.Issue.ManageSerieIssue(serie.Id, AutomaticIssueSerieType.DescriptionTooLong, serie.Description.Length > max);
+        ServicesManager.Issue.ManageSerieIssue(serie.Id, AutomaticIssueSerieType.DescriptionTooShort, serie.Description.Length < min);
     }
 
-    public static void FixPoster(long serieId)
+    public void FixPoster(long serieId)
     {
-        using IServiceScope scope = _scopeFactory.CreateScope();
+        using IServiceScope scope = scopeFactory.CreateScope();
         ManaxContext manaxContext = scope.ServiceProvider.GetRequiredService<ManaxContext>();
         Serie? serie = manaxContext.Series.Find(serieId);
         if (serie == null) { return; }
@@ -52,7 +45,7 @@ public static partial class FixService
         string directory = serie.Path;
         string fileName = SettingsManager.Data.PosterName +"."+ SettingsManager.Data.ImageFormat.ToString().ToLower();
         string posterPath = Path.Combine(directory, fileName);
-        IssueManagerService.ManageSerieIssue(serie.Id, AutomaticIssueSerieType.PosterMissing,!File.Exists(posterPath));
+        ServicesManager.Issue.ManageSerieIssue(serie.Id, AutomaticIssueSerieType.PosterMissing,!File.Exists(posterPath));
         if (!File.Exists(posterPath)) { return; }
         
         uint min = SettingsManager.Data.MinPosterWidth;
@@ -60,8 +53,8 @@ public static partial class FixService
         try
         {
             using MagickImage poster = new(posterPath);
-            IssueManagerService.RemoveSerieIssue(serieId, AutomaticIssueSerieType.PosterCouldNotOpen);
-            IssueManagerService.ManageSerieIssue(serieId, AutomaticIssueSerieType.PosterTooSmall,poster.Width < min);
+            ServicesManager.Issue.RemoveSerieIssue(serieId, AutomaticIssueSerieType.PosterCouldNotOpen);
+            ServicesManager.Issue.ManageSerieIssue(serieId, AutomaticIssueSerieType.PosterTooSmall,poster.Width < min);
 
             if (poster.Width <= max) return;
             poster.Resize(max,poster.Height * max / poster.Width);
@@ -69,14 +62,14 @@ public static partial class FixService
         }
         catch (Exception)
         {
-            IssueManagerService.CreateSerieIssue(serieId, AutomaticIssueSerieType.PosterCouldNotOpen);
+            ServicesManager.Issue.CreateSerieIssue(serieId, AutomaticIssueSerieType.PosterCouldNotOpen);
         }
     }
 
-    private static void CheckMissingChapters(Serie serie)
+    private void CheckMissingChapters(Serie serie)
     {
         string[] chapters = Directory.GetFiles(serie.Path);
-        IssueManagerService.ManageSerieIssue(serie.Id, AutomaticIssueSerieType.MissingChapter, chapters.Length == 0);
+        ServicesManager.Issue.ManageSerieIssue(serie.Id, AutomaticIssueSerieType.MissingChapter, chapters.Length == 0);
         if (chapters.Length == 0) { return; }
 
         Array.Sort(chapters);
@@ -84,12 +77,12 @@ public static partial class FixService
         string last = Path.GetFileName(chapters[^1]);
         Match match = regex.Match(last);
         if (!match.Success) return;
-        IssueManagerService.ManageSerieIssue(serie.Id, AutomaticIssueSerieType.MissingChapter, chapters.Length != Convert.ToInt32(match.Value));
+        ServicesManager.Issue.ManageSerieIssue(serie.Id, AutomaticIssueSerieType.MissingChapter, chapters.Length != Convert.ToInt32(match.Value));
     }
 
-    public static void FixChapter(long chapterId)
+    public void FixChapter(long chapterId)
     {
-        using IServiceScope scope = _scopeFactory.CreateScope();
+        using IServiceScope scope = scopeFactory.CreateScope();
         ManaxContext manaxContext = scope.ServiceProvider.GetRequiredService<ManaxContext>();
         Chapter? chapter = manaxContext.Chapters.Find(chapterId);
         if (chapter == null) return;
@@ -99,7 +92,7 @@ public static partial class FixService
         FixChapterDeep(chapter);
     }
 
-    private static void FixChapterDeep(Chapter chapter)
+    private void FixChapterDeep(Chapter chapter)
     {
         string copyName = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
         
@@ -110,7 +103,7 @@ public static partial class FixService
         catch
         {
             if (Directory.Exists(copyName)) Directory.Delete(copyName, true);
-            IssueManagerService.CreateChapterIssue(chapter.Id, AutomaticIssueChapterType.CouldNotOpen);
+            ServicesManager.Issue.CreateChapterIssue(chapter.Id, AutomaticIssueChapterType.CouldNotOpen);
             return;
         }
 
@@ -128,7 +121,7 @@ public static partial class FixService
         Directory.Delete(copyName, true);
     }
 
-    private static MagickImage?[] LoadImages(long chapterId,string[] files)
+    private MagickImage?[] LoadImages(long chapterId,string[] files)
     {
         MagickImage?[] images = new MagickImage[files.Length];
         for (int i = 0; i < files.Length; i++)
@@ -140,14 +133,14 @@ public static partial class FixService
             catch
             {
                 images[i] = null;
-                IssueManagerService.CreateChapterIssue(chapterId, AutomaticIssueChapterType.CouldNotOpen);
+                ServicesManager.Issue.CreateChapterIssue(chapterId, AutomaticIssueChapterType.CouldNotOpen);
             }
         }
 
         return images;
     }
 
-    private static bool FixPagesNaming(MagickImage?[] images)
+    private bool FixPagesNaming(MagickImage?[] images)
     {
         bool modified = false;
         string? directory = null;
@@ -170,7 +163,7 @@ public static partial class FixService
         return modified;
     }
 
-    private static bool CheckWidthOfChapter(long id, MagickImage?[] images)
+    private bool CheckWidthOfChapter(long id, MagickImage?[] images)
     {
         bool modified = false;
         foreach (MagickImage? image in images)
@@ -178,10 +171,10 @@ public static partial class FixService
             try
             {
                 if (image == null) continue;
-                IssueManagerService.RemoveChapterIssue(id, AutomaticIssueChapterType.CouldNotOpen);
+                ServicesManager.Issue.RemoveChapterIssue(id, AutomaticIssueChapterType.CouldNotOpen);
                 uint min = SettingsManager.Data.MinChapterWidth;
                 uint max = SettingsManager.Data.MaxChapterWidth;
-                IssueManagerService.ManageChapterIssue(id, AutomaticIssueChapterType.ImageTooSmall,image.Width < min);
+                ServicesManager.Issue.ManageChapterIssue(id, AutomaticIssueChapterType.ImageTooSmall,image.Width < min);
                 if (image.Width <= max) continue;
                 image.Resize(max,image.Height * max / image.Width);
                 image.Write(image.FileName!);
@@ -189,13 +182,13 @@ public static partial class FixService
             }
             catch
             {
-                IssueManagerService.CreateChapterIssue(id, AutomaticIssueChapterType.CouldNotOpen);
+                ServicesManager.Issue.CreateChapterIssue(id, AutomaticIssueChapterType.CouldNotOpen);
             }
         }
         return modified;
     }
 
-    private static bool FixChapterFilesFormat(MagickImage?[] images)
+    private bool FixChapterFilesFormat(MagickImage?[] images)
     {
         bool modified = false;
         MagickFormat format = GetMagickFormat(SettingsManager.Data.ImageFormat);
@@ -213,7 +206,7 @@ public static partial class FixService
         return modified;
     }
     
-    private static MagickFormat GetMagickFormat(ImageFormat format)
+    private MagickFormat GetMagickFormat(ImageFormat format)
     {
         return format switch
         {

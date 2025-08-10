@@ -7,7 +7,7 @@ public class ChapterCheckTask(long chapterId) : ITask
     private readonly long _chapterId = chapterId;
     public void Execute()
     {
-        FixService.FixChapter(_chapterId);
+        ServicesManager.Fix.FixChapter(_chapterId);
     }
 
     public string GetName()

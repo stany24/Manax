@@ -11,7 +11,7 @@ public class PosterRenamingTask(string oldName,string newName,ImageFormat oldFor
     private readonly ImageFormat _newFormat = newFormat;
     public void Execute()
     {
-        RenamingService.RenamePosters(_oldName, _newName, _oldFormat, _newFormat);
+        ServicesManager.Renaming.RenamePosters(_oldName, _newName, _oldFormat, _newFormat);
     }
 
     public string GetName()

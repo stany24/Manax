@@ -58,7 +58,7 @@ public class SettingsController(IServiceProvider serviceProvider) : ControllerBa
     {
         if(newData.PosterName != oldData.PosterName || newData.PosterFormat != oldData.PosterFormat )
         {
-            _ = TaskManagerService.AddTaskAsync(new PosterRenamingTask(oldData.PosterName, newData.PosterName,
+            _ = ServicesManager.Task.AddTaskAsync(new PosterRenamingTask(oldData.PosterName, newData.PosterName,
                 oldData.PosterFormat, newData.PosterFormat));
         }
         
@@ -66,7 +66,7 @@ public class SettingsController(IServiceProvider serviceProvider) : ControllerBa
         {
             foreach (long serieId in context.Series.Select(serie => serie.Id ))
             {
-                _ = TaskManagerService.AddTaskAsync(new PosterCheckTask(serieId));
+                _ = ServicesManager.Task.AddTaskAsync(new PosterCheckTask(serieId));
             }
         }
     }

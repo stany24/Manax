@@ -95,7 +95,7 @@ public class SerieController(ManaxContext context, IMapper mapper) : ControllerB
         try
         {
             await context.SaveChangesAsync();
-            NotificationService.NotifySerieUpdatedAsync(mapper.Map<SerieDto>(serie));
+            ServicesManager.Notification.NotifySerieUpdatedAsync(mapper.Map<SerieDto>(serie));
         }
         catch (DbUpdateConcurrencyException)
         {
@@ -134,7 +134,7 @@ public class SerieController(ManaxContext context, IMapper mapper) : ControllerB
             };
             context.Series.Add(serie);
             await context.SaveChangesAsync();
-            NotificationService.NotifySerieCreatedAsync(mapper.Map<SerieDto>(serie));
+            ServicesManager.Notification.NotifySerieCreatedAsync(mapper.Map<SerieDto>(serie));
             return serie.Id;
         }
         catch (Exception)
@@ -155,7 +155,7 @@ public class SerieController(ManaxContext context, IMapper mapper) : ControllerB
 
         context.Series.Remove(serie);
         await context.SaveChangesAsync();
-        NotificationService.NotifySerieDeletedAsync(serie.Id);
+        ServicesManager.Notification.NotifySerieDeletedAsync(serie.Id);
 
         return NoContent();
     }

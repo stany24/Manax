@@ -4,21 +4,21 @@ using ManaxServer.Localization;
 
 namespace ManaxServer.Services;
 
-public static class TaskManagerService
+public class TaskService : Service
 {
     private const int MaxTasks = 12;
-    private static readonly SortedSet<ITask> WaitingTasks = new(TaskPriorityComparer.Instance);
-    private static readonly List<(ITask Task, Task RunningTask)> RunningTasks = [];
-    private static readonly SemaphoreSlim TaskSemaphore = new(1, 1);
-    private static readonly CancellationTokenSource CancellationTokenSource = new();
+    private readonly SortedSet<ITask> WaitingTasks = new(TaskPriorityComparer.Instance);
+    private readonly List<(ITask Task, Task RunningTask)> RunningTasks = [];
+    private readonly SemaphoreSlim TaskSemaphore = new(1, 1);
+    private readonly CancellationTokenSource CancellationTokenSource = new();
 
-    static TaskManagerService()
+    public TaskService()
     {
         Task.Run(() => TaskLoopAsync(CancellationTokenSource.Token));
         Task.Run(() => PublishTasks(CancellationTokenSource.Token));
     }
 
-    public static async Task AddTaskAsync(ITask task)
+    public async Task AddTaskAsync(ITask task)
     {
         await TaskSemaphore.WaitAsync();
         try
@@ -36,7 +36,7 @@ public static class TaskManagerService
         }
     }
     
-    private static async Task RemoveTaskAsync(Task runningTask, CancellationToken cancellationToken)
+    private async Task RemoveTaskAsync(Task runningTask, CancellationToken cancellationToken)
     {
         await TaskSemaphore.WaitAsync(cancellationToken);
         try
@@ -49,7 +49,7 @@ public static class TaskManagerService
         }
     }
 
-    private static async Task TaskLoopAsync(CancellationToken cancellationToken)
+    private async Task TaskLoopAsync(CancellationToken cancellationToken)
     {
         while (!cancellationToken.IsCancellationRequested)
         {
@@ -84,7 +84,7 @@ public static class TaskManagerService
         }
     }
     
-    private static async void PublishTasks(CancellationToken cancellationToken)
+    private async void PublishTasks(CancellationToken cancellationToken)
     {
         try
         {
@@ -98,7 +98,7 @@ public static class TaskManagerService
                     Dictionary<string, int> tasks = WaitingTasks.GroupBy(t => t.GetName())
                         .Select(g => new KeyValuePair<string, int>(g.Key, g.Count()))
                         .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
-                    NotificationService.NotifyRunningTasksAsync(tasks);
+                    ServicesManager.Notification.NotifyRunningTasksAsync(tasks);
                 }
                 finally
                 {
@@ -113,7 +113,7 @@ public static class TaskManagerService
         
     }
 
-    public static void Shutdown()
+    public void Shutdown()
     {
         CancellationTokenSource.Cancel();
     }

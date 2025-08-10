@@ -4,18 +4,11 @@ using ManaxServer.Models.Issue.Automatic;
 
 namespace ManaxServer.Services;
 
-internal static class IssueManagerService
+public class IssueService(IServiceScopeFactory scopeFactory) : Service
 {
-    private static IServiceScopeFactory _scopeFactory = null!;
-
-    internal static void Initialize(IServiceScopeFactory scopeFactory)
+    public void CreateSerieIssue(long serieId, AutomaticIssueSerieType problem)
     {
-        _scopeFactory = scopeFactory;
-    }
-
-    internal static void CreateSerieIssue(long serieId, AutomaticIssueSerieType problem)
-    {
-        using IServiceScope scope = _scopeFactory.CreateScope();
+        using IServiceScope scope = scopeFactory.CreateScope();
         ManaxContext context = scope.ServiceProvider.GetRequiredService<ManaxContext>();
 
         if (context.AutomaticIssuesSerie.Any(i => i.Problem == problem && i.SerieId == serieId)) {return;}
@@ -31,7 +24,7 @@ internal static class IssueManagerService
         context.SaveChanges();
     }
     
-    internal static void ManageSerieIssue(long serieId, AutomaticIssueSerieType problem, bool create)
+    public void ManageSerieIssue(long serieId, AutomaticIssueSerieType problem, bool create)
     {
         if (create)
         {
@@ -43,9 +36,9 @@ internal static class IssueManagerService
         }
     }
 
-    internal static void RemoveSerieIssue(long serieId, AutomaticIssueSerieType problem)
+    public void RemoveSerieIssue(long serieId, AutomaticIssueSerieType problem)
     {
-        using IServiceScope scope = _scopeFactory.CreateScope();
+        using IServiceScope scope = scopeFactory.CreateScope();
         ManaxContext context = scope.ServiceProvider.GetRequiredService<ManaxContext>();
         AutomaticIssueSerie? issue = context.AutomaticIssuesSerie
             .FirstOrDefault(i => i.Problem == problem && i.SerieId == serieId);
@@ -54,9 +47,9 @@ internal static class IssueManagerService
         context.SaveChanges();
     }
 
-    internal static void CreateChapterIssue(long chapterId, AutomaticIssueChapterType problem)
+    public void CreateChapterIssue(long chapterId, AutomaticIssueChapterType problem)
     {
-        using IServiceScope scope = _scopeFactory.CreateScope();
+        using IServiceScope scope = scopeFactory.CreateScope();
         ManaxContext context = scope.ServiceProvider.GetRequiredService<ManaxContext>();
 
         if (context.AutomaticIssuesChapter.Any(i => i.Problem== problem && i.ChapterId == chapterId)) return;
@@ -72,7 +65,7 @@ internal static class IssueManagerService
         context.SaveChanges();
     }
     
-    internal static void ManageChapterIssue(long serieId, AutomaticIssueChapterType problem, bool create)
+    public void ManageChapterIssue(long serieId, AutomaticIssueChapterType problem, bool create)
     {
         if (create)
         {
@@ -84,9 +77,9 @@ internal static class IssueManagerService
         }
     }
 
-    internal static void RemoveChapterIssue(long serieId, AutomaticIssueChapterType problem)
+    public void RemoveChapterIssue(long serieId, AutomaticIssueChapterType problem)
     {
-        using IServiceScope scope = _scopeFactory.CreateScope();
+        using IServiceScope scope = scopeFactory.CreateScope();
         ManaxContext context = scope.ServiceProvider.GetRequiredService<ManaxContext>();
         AutomaticIssueChapter? issue = context.AutomaticIssuesChapter
             .FirstOrDefault(i => i.Problem == problem && i.ChapterId == serieId);

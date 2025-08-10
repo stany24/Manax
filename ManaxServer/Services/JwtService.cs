@@ -6,13 +6,13 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace ManaxServer.Services;
 
-public static class JwtService
+public class JwtService : Service
 {
     private const string Issuer = "ManaxServer";
     private const string Audience = "ManaxClient";
-    private static string? _secretKey;
+    private string? _secretKey;
 
-    public static string GetSecretKey()
+    public string GetSecretKey()
     {
         if (!string.IsNullOrEmpty(_secretKey))
             return _secretKey;
@@ -24,7 +24,7 @@ public static class JwtService
         return _secretKey;
     }
 
-    public static string GenerateToken(User user)
+    public string GenerateToken(User user)
     {
         string secret = GetSecretKey();
         JwtSecurityTokenHandler tokenHandler = new();
@@ -46,7 +46,7 @@ public static class JwtService
         return tokenHandler.WriteToken(token);
     }
 
-    public static ClaimsPrincipal? ValidateToken(string token)
+    public ClaimsPrincipal? ValidateToken(string token)
     {
         string secret = GetSecretKey();
         JwtSecurityTokenHandler tokenHandler = new();

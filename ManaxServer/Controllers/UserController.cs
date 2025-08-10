@@ -6,7 +6,6 @@ using ManaxServer.Auth;
 using ManaxServer.Localization;
 using ManaxServer.Models;
 using ManaxServer.Models.User;
-using ManaxServer.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -56,7 +55,7 @@ public class UserController(ManaxContext context, IMapper mapper) : ControllerBa
         mapper.Map(userUpdate, user);
 
         if (!string.IsNullOrEmpty(userUpdate.Password))
-            user.PasswordHash = HashService.HashPassword(userUpdate.Password);
+            user.PasswordHash = Services.ServicesManager.Hash.HashPassword(userUpdate.Password);
 
         try
         {
@@ -79,11 +78,11 @@ public class UserController(ManaxContext context, IMapper mapper) : ControllerBa
     {
         User? user = mapper.Map<User>(userCreate);
         user.Creation = DateTime.UtcNow;
-        user.PasswordHash = HashService.HashPassword(userCreate.Password);
+        user.PasswordHash = Services.ServicesManager.Hash.HashPassword(userCreate.Password);
 
         context.Users.Add(user);
         await context.SaveChangesAsync();
-        NotificationService.NotifyUserCreatedAsync(mapper.Map<UserDto>(user));
+        Services.ServicesManager.Notification.NotifyUserCreatedAsync(mapper.Map<UserDto>(user));
 
         return user.Id;
     }
@@ -114,7 +113,7 @@ public class UserController(ManaxContext context, IMapper mapper) : ControllerBa
 
         context.Users.Remove(userToDelete);
         await context.SaveChangesAsync();
-        NotificationService.NotifyUserDeletedAsync(userToDelete.Id);
+        Services.ServicesManager.Notification.NotifyUserDeletedAsync(userToDelete.Id);
 
         return NoContent();
     }
@@ -134,7 +133,7 @@ public class UserController(ManaxContext context, IMapper mapper) : ControllerBa
             Success = false
         };
         User? user = await context.Users.FirstOrDefaultAsync(u => u.Username == loginDto.Username);
-        if (user == null || !HashService.VerifyPassword(loginDto.Password, user.PasswordHash))
+        if (user == null || !Services.ServicesManager.Hash.VerifyPassword(loginDto.Password, user.PasswordHash))
         {
             Logger.LogWarning("Failed login attempt for user "+loginDto.Username+" from "+loginAttempt.Origin,Environment.StackTrace);
             context.LoginAttempts.Add(loginAttempt);
@@ -147,7 +146,7 @@ public class UserController(ManaxContext context, IMapper mapper) : ControllerBa
         context.LoginAttempts.Add(loginAttempt);
         await context.SaveChangesAsync();
 
-        string token = JwtService.GenerateToken(user);
+        string token = Services.ServicesManager.Jwt.GenerateToken(user);
         return Ok(new { token });
     }
 
@@ -195,7 +194,7 @@ public class UserController(ManaxContext context, IMapper mapper) : ControllerBa
             {
                 Role = UserRole.Owner,
                 Username = request.Username,
-                PasswordHash = HashService.HashPassword(request.Password)
+                PasswordHash = Services.ServicesManager.Hash.HashPassword(request.Password)
             };
 
             loginAttempt.Success = true;
@@ -203,7 +202,7 @@ public class UserController(ManaxContext context, IMapper mapper) : ControllerBa
             context.Users.Add(user);
             context.SaveChanges();
 
-            string token = JwtService.GenerateToken(user);
+            string token = Services.ServicesManager.Jwt.GenerateToken(user);
             return Ok(new { token });
         }
     }

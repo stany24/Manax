@@ -25,7 +25,7 @@ public class CheckController(ManaxContext context) : ControllerBase
 
         if (serie == null) return NotFound(Localizer.Format("SerieNotFound", id));
 
-        _ = TaskManagerService.AddTaskAsync(new SerieCheckTask(serie.Id));
+        _ = ServicesManager.Task.AddTaskAsync(new SerieCheckTask(serie.Id));
 
         return Ok();
     }
@@ -41,7 +41,7 @@ public class CheckController(ManaxContext context) : ControllerBase
 
         if (chapter == null) return NotFound(Localizer.Format("ChapterNotFound", id));
 
-        _ = TaskManagerService.AddTaskAsync(new ChapterCheckTask(chapter.Id));
+        _ = ServicesManager.Task.AddTaskAsync(new ChapterCheckTask(chapter.Id));
 
         return Ok();
     }

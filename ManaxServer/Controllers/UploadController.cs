@@ -103,10 +103,10 @@ public partial class UploadController(ManaxContext context, IMapper mapper) : Co
 
         context.Chapters.Add(chapter);
         await context.SaveChangesAsync();
-        if (!replacing) { NotificationService.NotifyChapterAddedAsync(mapper.Map<ChapterDto>(chapter)); }
+        if (!replacing) { ServicesManager.Notification.NotifyChapterAddedAsync(mapper.Map<ChapterDto>(chapter)); }
 
-        _ = TaskManagerService.AddTaskAsync(new ChapterCheckTask(chapter.Id));
-        _ = TaskManagerService.AddTaskAsync(new SerieCheckTask(chapter.SerieId));
+        _ = ServicesManager.Task.AddTaskAsync(new ChapterCheckTask(chapter.Id));
+        _ = ServicesManager.Task.AddTaskAsync(new SerieCheckTask(chapter.SerieId));
         
         return Ok();
     }
@@ -161,8 +161,8 @@ public partial class UploadController(ManaxContext context, IMapper mapper) : Co
             MagickImage image = new(file.OpenReadStream());
             image.Quality = SettingsManager.Data.PosterQuality;
             await image.WriteAsync(path, GetMagickFormat(format));
-            _ = TaskManagerService.AddTaskAsync(new PosterCheckTask(serie.Id));
-            NotificationService.NotifyPosterModifiedAsync(serie.Id);
+            _ = ServicesManager.Task.AddTaskAsync(new PosterCheckTask(serie.Id));
+            ServicesManager.Notification.NotifyPosterModifiedAsync(serie.Id);
         }
         catch (Exception e)
         {

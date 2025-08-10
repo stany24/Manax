@@ -1,15 +1,13 @@
 using ManaxLibrary.DTO.Issue.Automatic;
 using ManaxLibrary.Logging;
+using ManaxServer.Hubs;
 using ManaxServer.Middleware;
 using ManaxServer.Models;
 using ManaxServer.Models.Issue.Reported;
 using ManaxServer.Models.Rank;
-using ManaxServer.Services;
-using ManaxServer.Hubs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
-using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Primitives;
 using Microsoft.IdentityModel.Tokens;
@@ -56,8 +54,8 @@ public class Program
         WebApplication app = builder.Build();
 
         Migrate(app);
-
-        InitializeServices(app);
+        
+        Services.ServicesManager.Initialize(app);
 
         app.UseMiddleware<GlobalExceptionMiddleware>();
 
@@ -118,18 +116,10 @@ public class Program
             manaxContext.SaveChanges();
         }
     }
-
-    private static void InitializeServices(WebApplication app)
-    {
-        FixService.Initialize(app.Services.GetRequiredService<IServiceScopeFactory>());
-        RenamingService.Initialize(app.Services.GetRequiredService<IServiceScopeFactory>());
-        IssueManagerService.Initialize(app.Services.GetRequiredService<IServiceScopeFactory>());
-        NotificationService.Initialize(app.Services.GetRequiredService<IHubContext<NotificationHub>>());
-    }
     
     private static void AddAuthentication(WebApplicationBuilder builder)
     {
-        string secretKey = JwtService.GetSecretKey();
+        string secretKey = Services.ServicesManager.Jwt.GetSecretKey();
         builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
             {

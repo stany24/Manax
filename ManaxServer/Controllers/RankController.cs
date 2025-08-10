@@ -33,7 +33,7 @@ public class RankController(ManaxContext context, IMapper mapper) : ControllerBa
         Rank rank = mapper.Map<Rank>(rankCreate);
         context.Ranks.Add(rank);
         await context.SaveChangesAsync();
-        NotificationService.NotifyRankCreatedAsync(mapper.Map<RankDto>(rank));
+        ServicesManager.Notification.NotifyRankCreatedAsync(mapper.Map<RankDto>(rank));
         return rank.Id;
     }
 
@@ -59,7 +59,7 @@ public class RankController(ManaxContext context, IMapper mapper) : ControllerBa
         {
             return BadRequest(e.Message);
         }
-        NotificationService.NotifyRankUpdatedAsync(mapper.Map<RankDto>(found));
+        ServicesManager.Notification.NotifyRankUpdatedAsync(mapper.Map<RankDto>(found));
         return NoContent();
     }
 
@@ -74,7 +74,7 @@ public class RankController(ManaxContext context, IMapper mapper) : ControllerBa
         if (rank == null) return NotFound(Localizer.Format("RankNotFound", id));
         context.Ranks.Remove(rank);
         await context.SaveChangesAsync();
-        NotificationService.NotifyRankDeletedAsync(id);
+        ServicesManager.Notification.NotifyRankDeletedAsync(id);
         return NoContent();
     }
 

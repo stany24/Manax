@@ -4,7 +4,7 @@ using Konscious.Security.Cryptography;
 
 namespace ManaxServer.Services;
 
-public static class HashService
+public class HashService : Service
 {
     // Format: Base64(Salt):Base64(Hash)
     private const int MemorySize = 64; // kB
@@ -13,7 +13,7 @@ public static class HashService
     private const int SaltSize = 16; // 128 bits
     private const int HashSize = 32; // 256 bits
 
-    private static byte[] GenerateSalt()
+    private byte[] GenerateSalt()
     {
         byte[] salt = new byte[SaltSize];
         using RandomNumberGenerator rng = RandomNumberGenerator.Create();
@@ -21,7 +21,7 @@ public static class HashService
         return salt;
     }
 
-    public static string HashPassword(string password)
+    public string HashPassword(string password)
     {
         byte[] salt = GenerateSalt();
         byte[] hash = HashPasswordWithSalt(password, salt);
@@ -30,7 +30,7 @@ public static class HashService
         return $"{Convert.ToBase64String(salt)}:{Convert.ToBase64String(hash)}";
     }
 
-    public static bool VerifyPassword(string password, string storedHash)
+    public bool VerifyPassword(string password, string storedHash)
     {
         string[] parts = storedHash.Split(':');
         if (parts.Length != 2) {return false;}
@@ -45,7 +45,7 @@ public static class HashService
         catch { return false; }
     }
 
-    private static byte[] HashPasswordWithSalt(string password, byte[] salt)
+    private byte[] HashPasswordWithSalt(string password, byte[] salt)
     {
         byte[] passwordBytes = Encoding.UTF8.GetBytes(password);
 

@@ -19,7 +19,7 @@ public class AuthorizeRoleAttribute(UserRole minRole) : Attribute, IAuthorizatio
         }
 
         string token = authHeader["Bearer ".Length..].Trim();
-        ClaimsPrincipal? principal = JwtService.ValidateToken(token);
+        ClaimsPrincipal? principal = ServicesManager.Jwt.ValidateToken(token);
         if (principal == null)
         {
             context.Result = new UnauthorizedResult();

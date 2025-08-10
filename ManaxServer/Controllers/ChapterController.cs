@@ -51,7 +51,7 @@ public class ChapterController(ManaxContext context, IMapper mapper) : Controlle
 
         context.Chapters.Remove(chapter);
         await context.SaveChangesAsync();
-        NotificationService.NotifyChapterRemovedAsync(chapter.Id);
+        ServicesManager.Notification.NotifyChapterRemovedAsync(chapter.Id);
 
         return NoContent();
     }

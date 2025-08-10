@@ -138,4 +138,7 @@
     <data name="SettingsUpdateNotForced" xml:space="preserve">
         <value>The settings given have an issue, fix it or force the change.</value>
     </data>
+    <data name="ServiceInitialized" xml:space="preserve">
+        <value>Service {0} was initialized.</value>
+    </data>
 </root>

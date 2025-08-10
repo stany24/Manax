@@ -4,24 +4,16 @@ using ManaxServer.Models;
 
 namespace ManaxServer.Services;
 
-public static class RenamingService
+public class RenamingService(IServiceScopeFactory scopeFactory) : Service
 {
-    private static IServiceScopeFactory _scopeFactory = null!;
-
-    public static void Initialize(IServiceScopeFactory scopeFactory)
-    {
-        _scopeFactory = scopeFactory;
-    }
-    
-
-    public static void RenameChapters()
+    public void RenameChapters()
     {
         
     }
 
-    public static void RenamePosters(string oldName, string newName, ImageFormat oldFormat, ImageFormat newFormat)
+    public void RenamePosters(string oldName, string newName, ImageFormat oldFormat, ImageFormat newFormat)
     {
-        using IServiceScope scope = _scopeFactory.CreateScope();
+        using IServiceScope scope = scopeFactory.CreateScope();
         ManaxContext manaxContext = scope.ServiceProvider.GetRequiredService<ManaxContext>();
         manaxContext.Series
             .Select(serie =>  serie.Path)
@@ -47,7 +39,7 @@ public static class RenamingService
             });
     }
     
-    private static MagickFormat GetMagickFormat(ImageFormat format)
+    private MagickFormat GetMagickFormat(ImageFormat format)
     {
         return format switch
         {

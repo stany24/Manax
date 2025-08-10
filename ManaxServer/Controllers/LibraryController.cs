@@ -80,7 +80,7 @@ public class LibraryController(ManaxContext context, IMapper mapper) : Controlle
             return Conflict(Localizer.Format("LibraryNameOrPathNotUnique"));
         }
 
-        NotificationService.NotifyLibraryUpdatedAsync(mapper.Map<LibraryDto>(library));
+        ServicesManager.Notification.NotifyLibraryUpdatedAsync(mapper.Map<LibraryDto>(library));
         return NoContent();
     }
 
@@ -118,7 +118,7 @@ public class LibraryController(ManaxContext context, IMapper mapper) : Controlle
             return Conflict(Localizer.Format("LibraryNameOrPathNotUnique"));
         }
 
-        NotificationService.NotifyLibraryCreatedAsync(mapper.Map<LibraryDto>(library));
+        ServicesManager.Notification.NotifyLibraryCreatedAsync(mapper.Map<LibraryDto>(library));
         return library.Id;
     }
 
@@ -134,7 +134,7 @@ public class LibraryController(ManaxContext context, IMapper mapper) : Controlle
 
         context.Libraries.Remove(library);
         await context.SaveChangesAsync();
-        NotificationService.NotifyLibraryDeletedAsync(library.Id);
+        ServicesManager.Notification.NotifyLibraryDeletedAsync(library.Id);
 
         return Ok();
     }
