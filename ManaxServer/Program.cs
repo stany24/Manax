@@ -31,51 +31,7 @@ public class Program
         // SignalR configuration 
         builder.Services.AddSignalR();
 
-        string secretKey = JwtService.GetSecretKey();
-        builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer(options =>
-            {
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidateLifetime = true,
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Convert.FromBase64String(secretKey))
-                };
-
-                // Special configuration for SignalR
-                options.Events = new JwtBearerEvents
-                {
-                    OnMessageReceived = context =>
-                    {
-                        StringValues accessToken = context.Request.Query["access_token"];
-                        PathString path = context.HttpContext.Request.Path;
-
-                        if (string.IsNullOrEmpty(accessToken) || !path.StartsWithSegments("/notificationHub"))
-                            return Task.CompletedTask;
-                        context.Token = accessToken;
-                            
-                        context.Options.TokenValidationParameters = new TokenValidationParameters
-                        {
-                            ValidateIssuer = false,
-                            ValidateAudience = false,
-                            ValidateLifetime = true,
-                            ValidateIssuerSigningKey = true,
-                            IssuerSigningKey = new SymmetricSecurityKey(Convert.FromBase64String(secretKey))
-                        };
-                            
-                        Logger.LogInfo("Token extrait de la requête SignalR: "+path+" - Validation adaptée");
-
-                        return Task.CompletedTask;
-                    },
-                    OnAuthenticationFailed = context =>
-                    {
-                        Logger.LogError("Échec d'authentification SignalR",context.Exception,Environment.StackTrace);
-                        return Task.CompletedTask;
-                    }
-                };
-            });
+        AddAuthentication(builder);
 
         builder.Services.AddDbContext<ManaxContext>(opt =>
             opt.UseSqlite($"Data Source={Path.Combine(AppContext.BaseDirectory, "database.db")}"));
@@ -101,11 +57,7 @@ public class Program
 
         Migrate(app);
 
-        // Initialisation of services
-        FixService.Initialize(app.Services.GetRequiredService<IServiceScopeFactory>());
-        RenamingService.Initialize(app.Services.GetRequiredService<IServiceScopeFactory>());
-        IssueManagerService.Initialize(app.Services.GetRequiredService<IServiceScopeFactory>());
-        NotificationService.Initialize(app.Services.GetRequiredService<IHubContext<NotificationHub>>());
+        InitializeServices(app);
 
         app.UseMiddleware<GlobalExceptionMiddleware>();
 
@@ -165,5 +117,62 @@ public class Program
                 manaxContext.ReportedIssueChapterTypes.Add(new ReportedIssueChapterType { Name = serieIssueTypeEnum.ToString() });
             manaxContext.SaveChanges();
         }
+    }
+
+    private static void InitializeServices(WebApplication app)
+    {
+        FixService.Initialize(app.Services.GetRequiredService<IServiceScopeFactory>());
+        RenamingService.Initialize(app.Services.GetRequiredService<IServiceScopeFactory>());
+        IssueManagerService.Initialize(app.Services.GetRequiredService<IServiceScopeFactory>());
+        NotificationService.Initialize(app.Services.GetRequiredService<IHubContext<NotificationHub>>());
+    }
+    
+    private static void AddAuthentication(WebApplicationBuilder builder)
+    {
+        string secretKey = JwtService.GetSecretKey();
+        builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Convert.FromBase64String(secretKey))
+                };
+
+                // Special configuration for SignalR
+                options.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context =>
+                    {
+                        StringValues accessToken = context.Request.Query["access_token"];
+                        PathString path = context.HttpContext.Request.Path;
+
+                        if (string.IsNullOrEmpty(accessToken) || !path.StartsWithSegments("/notificationHub"))
+                            return Task.CompletedTask;
+                        context.Token = accessToken;
+                            
+                        context.Options.TokenValidationParameters = new TokenValidationParameters
+                        {
+                            ValidateIssuer = false,
+                            ValidateAudience = false,
+                            ValidateLifetime = true,
+                            ValidateIssuerSigningKey = true,
+                            IssuerSigningKey = new SymmetricSecurityKey(Convert.FromBase64String(secretKey))
+                        };
+                            
+                        Logger.LogInfo("Token extrait de la requête SignalR: "+path+" - Validation adaptée");
+
+                        return Task.CompletedTask;
+                    },
+                    OnAuthenticationFailed = context =>
+                    {
+                        Logger.LogError("Échec d'authentification SignalR",context.Exception,Environment.StackTrace);
+                        return Task.CompletedTask;
+                    }
+                };
+            });
     }
 }

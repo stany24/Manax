@@ -22,7 +22,7 @@
         <value>Le chapitre avec l'ID {0} n'existe pas</value>
     </data>
     <data name="HubConnected" xml:space="preserve">
-        <value>Client connecté: {0} - Utilisateur: {1}</value>
+        <value>Client connecté au hub de notifications: {0} - Utilisateur: {1}</value>
     </data>
     <data name="HubConnectionError" xml:space="preserve">
         <value>Erreur lors de la connexion du client {0}</value>

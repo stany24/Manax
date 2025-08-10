@@ -112,7 +112,7 @@
         <value>You must be logged in to read chapters.</value>
     </data>
     <data name="HubConnected" xml:space="preserve">
-        <value>Client connected: {0} - User: {1}</value>
+        <value>Client connected to notification hub: {0} - User: {1}</value>
     </data>
     <data name="HubConnectionError" xml:space="preserve">
         <value>Erreur when connecting client {0}</value>
