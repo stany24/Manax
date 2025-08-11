@@ -1,12 +1,11 @@
 using AutoMapper;
 using ManaxLibrary.DTO.Read;
-using ManaxLibrary.DTO.User;
-using ManaxServer.Auth;
 using ManaxServer.Localization;
 using ManaxServer.Models;
 using ManaxServer.Models.Chapter;
 using ManaxServer.Models.Read;
 using ManaxServer.Models.User;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,7 +16,7 @@ namespace ManaxServer.Controllers;
 public class ReadController(ManaxContext context, IMapper mapper) : ControllerBase
 {
     [HttpPut("read")]
-    [AuthorizeRole(UserRole.User)]
+    [Authorize(Roles = "User,Admin,Owner")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -53,7 +52,7 @@ public class ReadController(ManaxContext context, IMapper mapper) : ControllerBa
     }
 
     [HttpPut("unread")]
-    [AuthorizeRole(UserRole.User)]
+    [Authorize(Roles = "User,Admin,Owner")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]

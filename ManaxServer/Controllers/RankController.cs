@@ -1,11 +1,10 @@
 using AutoMapper;
 using ManaxLibrary.DTO.Rank;
-using ManaxLibrary.DTO.User;
-using ManaxServer.Auth;
 using ManaxServer.Localization;
 using ManaxServer.Models;
 using ManaxServer.Models.Rank;
 using ManaxServer.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,7 +16,7 @@ public class RankController(ManaxContext context, IMapper mapper) : ControllerBa
 {
     // GET: api/rank
     [HttpGet("/api/ranks")]
-    [AuthorizeRole(UserRole.User)]
+    [Authorize(Roles = "User,Admin,Owner")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<RankDto>))]
     public async Task<ActionResult<IEnumerable<RankDto>>> GetRanks()
     {
@@ -26,7 +25,7 @@ public class RankController(ManaxContext context, IMapper mapper) : ControllerBa
 
     // POST: api/rank
     [HttpPost]
-    [AuthorizeRole(UserRole.Admin)]
+    [Authorize(Roles = "Admin,Owner")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(long))]
     public async Task<ActionResult<long>> CreateRank(RankCreateDto rankCreate)
     {
@@ -39,7 +38,7 @@ public class RankController(ManaxContext context, IMapper mapper) : ControllerBa
 
     // PUT: api/rank/5
     [HttpPut("{id:long}")]
-    [AuthorizeRole(UserRole.Admin)]
+    [Authorize(Roles = "Admin,Owner")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -65,7 +64,7 @@ public class RankController(ManaxContext context, IMapper mapper) : ControllerBa
 
     // DELETE: api/rank/5
     [HttpDelete("{id:long}")]
-    [AuthorizeRole(UserRole.Admin)]
+    [Authorize(Roles = "Admin,Owner")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteRank(long id)
@@ -79,7 +78,7 @@ public class RankController(ManaxContext context, IMapper mapper) : ControllerBa
     }
 
     [HttpPost("set")]
-    [AuthorizeRole(UserRole.User)]
+    [Authorize(Roles = "User,Admin,Owner")]
     public async Task<IActionResult> SetUserRank(UserRankCreateDto rank)
     {
         long? userId = UserController.GetCurrentUserId(HttpContext);
@@ -108,7 +107,7 @@ public class RankController(ManaxContext context, IMapper mapper) : ControllerBa
 
     // GET: api/rank
     [HttpGet("/api/ranking")]
-    [AuthorizeRole(UserRole.User)]
+    [Authorize(Roles = "User,Admin,Owner")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<UserRankDto>))]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult<IEnumerable<UserRankDto>>> GetRanking()

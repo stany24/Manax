@@ -4,8 +4,6 @@ using AutoMapper;
 using ImageMagick;
 using ManaxLibrary.DTO.Chapter;
 using ManaxLibrary.DTO.Setting;
-using ManaxLibrary.DTO.User;
-using ManaxServer.Auth;
 using ManaxServer.Localization;
 using ManaxServer.Models;
 using ManaxServer.Models.Chapter;
@@ -13,6 +11,7 @@ using ManaxServer.Models.Serie;
 using ManaxServer.Services;
 using ManaxServer.Settings;
 using ManaxServer.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ManaxServer.Controllers;
@@ -26,7 +25,7 @@ public partial class UploadController(ManaxContext context, IMapper mapper) : Co
 
     // POST: api/upload/chapter
     [HttpPost("chapter")]
-    [AuthorizeRole(UserRole.Admin)]
+    [Authorize(Roles = "Admin,Owner")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> UploadChapter(IFormFile file, [FromForm] long serieId)
@@ -36,7 +35,7 @@ public partial class UploadController(ManaxContext context, IMapper mapper) : Co
 
     // POST: api/upload/chapter/replace
     [HttpPost("chapter/replace")]
-    [AuthorizeRole(UserRole.Admin)]
+    [Authorize(Roles = "Admin,Owner")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> ReplaceChapter(IFormFile file, [FromForm] long serieId)
@@ -46,7 +45,7 @@ public partial class UploadController(ManaxContext context, IMapper mapper) : Co
 
     // POST: api/upload/poster
     [HttpPost("poster")]
-    [AuthorizeRole(UserRole.Admin)]
+    [Authorize(Roles = "Admin,Owner")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> UploadPoster(IFormFile file, [FromForm] long serieId)
@@ -56,7 +55,7 @@ public partial class UploadController(ManaxContext context, IMapper mapper) : Co
 
     // POST: api/upload/poster/replace
     [HttpPost("poster/replace")]
-    [AuthorizeRole(UserRole.Admin)]
+    [Authorize(Roles = "Admin,Owner")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> ReplacePoster(IFormFile file, [FromForm] long serieId)

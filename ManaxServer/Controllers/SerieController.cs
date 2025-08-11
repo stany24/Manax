@@ -2,14 +2,13 @@ using System.Text.RegularExpressions;
 using AutoMapper;
 using ManaxLibrary.DTO.Search;
 using ManaxLibrary.DTO.Serie;
-using ManaxLibrary.DTO.User;
-using ManaxServer.Auth;
 using ManaxServer.Localization;
 using ManaxServer.Models;
 using ManaxServer.Models.Library;
 using ManaxServer.Models.Serie;
 using ManaxServer.Services;
 using ManaxServer.Settings;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -21,7 +20,7 @@ public class SerieController(ManaxContext context, IMapper mapper) : ControllerB
 {
     // GET: api/Serie
     [HttpGet("/api/series")]
-    [AuthorizeRole(UserRole.User)]
+    [Authorize(Roles = "User,Admin,Owner")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<long>))]
     public async Task<ActionResult<IEnumerable<long>>> GetSeries()
     {
@@ -30,7 +29,7 @@ public class SerieController(ManaxContext context, IMapper mapper) : ControllerB
 
     // GET: api/serie/{id}
     [HttpGet("{id:long}")]
-    [AuthorizeRole(UserRole.User)]
+    [Authorize(Roles = "User,Admin,Owner")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SerieDto))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<SerieDto>> GetSerie(long id)
@@ -45,7 +44,7 @@ public class SerieController(ManaxContext context, IMapper mapper) : ControllerB
 
     // GET: api/series/{id}/chapters
     [HttpGet("/api/series/{id:long}/chapters")]
-    [AuthorizeRole(UserRole.User)]
+    [Authorize(Roles = "User,Admin,Owner")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<long>))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public ActionResult<List<long>> GetSerieChapters(long id)
@@ -62,7 +61,7 @@ public class SerieController(ManaxContext context, IMapper mapper) : ControllerB
 
     // GET: api/serie/{id}/poster
     [HttpGet("{id:long}/poster")]
-    [AuthorizeRole(UserRole.User)]
+    [Authorize(Roles = "User,Admin,Owner")]
     [Produces("image/webp")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -79,7 +78,7 @@ public class SerieController(ManaxContext context, IMapper mapper) : ControllerB
 
     // PUT: api/Serie/5
     [HttpPut("{id:long}")]
-    [AuthorizeRole(UserRole.Admin)]
+    [Authorize(Roles = "Admin,Owner")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -107,7 +106,7 @@ public class SerieController(ManaxContext context, IMapper mapper) : ControllerB
 
     // POST: api/Serie
     [HttpPost]
-    [AuthorizeRole(UserRole.Admin)]
+    [Authorize(Roles = "Admin,Owner")]
     [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(long))]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<long>> PostSerie(SerieCreateDto serieCreate)
@@ -145,7 +144,7 @@ public class SerieController(ManaxContext context, IMapper mapper) : ControllerB
 
     // DELETE: api/Serie/5
     [HttpDelete("{id:long}")]
-    [AuthorizeRole(UserRole.Admin)]
+    [Authorize(Roles = "Admin,Owner")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteSerie(long id)
@@ -161,7 +160,7 @@ public class SerieController(ManaxContext context, IMapper mapper) : ControllerB
     }
     
     [HttpPost("search")]
-    [AuthorizeRole(UserRole.User)]
+    [Authorize(Roles = "User,Admin,Owner")]
     public List<long> Search(Search search)
     {
         Regex regex = new(search.RegexSearch, RegexOptions.IgnoreCase | RegexOptions.Compiled);

@@ -1,11 +1,10 @@
 using AutoMapper;
 using ManaxLibrary.DTO.Library;
-using ManaxLibrary.DTO.User;
-using ManaxServer.Auth;
 using ManaxServer.Localization;
 using ManaxServer.Models;
 using ManaxServer.Models.Library;
 using ManaxServer.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,7 +16,7 @@ public class LibraryController(ManaxContext context, IMapper mapper) : Controlle
 {
     // GET: api/Library
     [HttpGet("/api/Libraries")]
-    [AuthorizeRole(UserRole.User)]
+    [Authorize(Roles = "User,Admin,Owner")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<long>))]
     public async Task<ActionResult<IEnumerable<long>>> GetLibraries()
     {
@@ -26,7 +25,7 @@ public class LibraryController(ManaxContext context, IMapper mapper) : Controlle
 
     // GET: api/library/{id}
     [HttpGet("{id:long}")]
-    [AuthorizeRole(UserRole.User)]
+    [Authorize(Roles = "User,Admin,Owner")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(LibraryDto))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<LibraryDto>> GetLibrary(long id)
@@ -42,7 +41,7 @@ public class LibraryController(ManaxContext context, IMapper mapper) : Controlle
 
     // PUT: api/Library/5
     [HttpPut("{id:long}")]
-    [AuthorizeRole(UserRole.Admin)]
+    [Authorize(Roles = "Admin,Owner")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -86,7 +85,7 @@ public class LibraryController(ManaxContext context, IMapper mapper) : Controlle
 
     // POST: api/Library
     [HttpPost("create")]
-    [AuthorizeRole(UserRole.Admin)]
+    [Authorize(Roles = "Admin,Owner")]
     [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(long))]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<ActionResult<long>> PostLibrary(LibraryCreateDto libraryCreate)
@@ -124,7 +123,7 @@ public class LibraryController(ManaxContext context, IMapper mapper) : Controlle
 
     // DELETE: api/Library/5
     [HttpDelete("{id:long}")]
-    [AuthorizeRole(UserRole.Admin)]
+    [Authorize(Roles = "Admin,Owner")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteLibrary(long id)

@@ -1,11 +1,10 @@
-using ManaxLibrary.DTO.User;
-using ManaxServer.Auth;
 using ManaxServer.Localization;
 using ManaxServer.Models;
 using ManaxServer.Models.Chapter;
 using ManaxServer.Models.Serie;
 using ManaxServer.Services;
 using ManaxServer.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,7 +15,7 @@ namespace ManaxServer.Controllers;
 public class CheckController(ManaxContext context) : ControllerBase
 {
     [HttpGet("serie/{id:long}")]
-    [AuthorizeRole(UserRole.Admin)]
+    [Authorize(Roles = "Admin,Owner")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> CheckSerie(long id)
@@ -31,7 +30,7 @@ public class CheckController(ManaxContext context) : ControllerBase
     }
 
     [HttpGet("chapter/{id:long}")]
-    [AuthorizeRole(UserRole.Admin)]
+    [Authorize(Roles = "Admin,Owner")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> CheckChapter(long id)

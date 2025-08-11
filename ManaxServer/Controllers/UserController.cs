@@ -2,10 +2,11 @@ using System.Security.Claims;
 using AutoMapper;
 using ManaxLibrary.DTO.User;
 using ManaxLibrary.Logging;
-using ManaxServer.Auth;
 using ManaxServer.Localization;
 using ManaxServer.Models;
+using ManaxServer.Models.Auth;
 using ManaxServer.Models.User;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,7 +20,7 @@ public class UserController(ManaxContext context, IMapper mapper) : ControllerBa
 
     // GET: api/Users
     [HttpGet("/api/Users")]
-    [AuthorizeRole(UserRole.Admin)]
+    [Authorize(Roles = "Admin,Owner")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<long>))]
     public async Task<ActionResult<IEnumerable<long>>> GetUsers()
     {
@@ -28,7 +29,7 @@ public class UserController(ManaxContext context, IMapper mapper) : ControllerBa
 
     // GET: api/User/5
     [HttpGet("{id:long}")]
-    [AuthorizeRole(UserRole.Admin)]
+    [Authorize(Roles = "Admin,Owner")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserDto))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<UserDto>> GetUser(long id)
@@ -42,7 +43,7 @@ public class UserController(ManaxContext context, IMapper mapper) : ControllerBa
 
     // PUT: api/User/5
     [HttpPut("{id:long}")]
-    [AuthorizeRole(UserRole.Admin)]
+    [Authorize(Roles = "Admin,Owner")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -72,7 +73,7 @@ public class UserController(ManaxContext context, IMapper mapper) : ControllerBa
 
     // POST: api/User
     [HttpPost("create")]
-    [AuthorizeRole(UserRole.Admin)]
+    [Authorize(Roles = "Admin,Owner")]
     [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(long))]
     public async Task<ActionResult<long>> PostUser(UserCreateDto userCreate)
     {
@@ -89,7 +90,7 @@ public class UserController(ManaxContext context, IMapper mapper) : ControllerBa
 
     // DELETE: api/User/5
     [HttpDelete("{id:long}")]
-    [AuthorizeRole(UserRole.Admin)]
+    [Authorize(Roles = "Admin,Owner")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -152,7 +153,7 @@ public class UserController(ManaxContext context, IMapper mapper) : ControllerBa
 
     // GET: api/User/current
     [HttpGet("current")]
-    [AuthorizeRole(UserRole.User)]
+    [Authorize(Roles = "User,Admin,Owner")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserDto))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]

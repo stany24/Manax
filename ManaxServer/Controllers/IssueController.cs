@@ -1,12 +1,11 @@
 using AutoMapper;
 using ManaxLibrary.DTO.Issue.Automatic;
 using ManaxLibrary.DTO.Issue.Reported;
-using ManaxLibrary.DTO.User;
-using ManaxServer.Auth;
 using ManaxServer.Localization;
 using ManaxServer.Models;
 using ManaxServer.Models.Issue.Automatic;
 using ManaxServer.Models.Issue.Reported;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,7 +16,7 @@ namespace ManaxServer.Controllers;
 public class IssueController(ManaxContext context, IMapper mapper) : ControllerBase
 {
     [HttpGet("chapter/automatic")]
-    [AuthorizeRole(UserRole.Admin)]
+    [Authorize(Roles = "Admin,Owner")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<AutomaticIssueChapterDto>))]
     public async Task<ActionResult<IEnumerable<AutomaticIssueChapterDto>>> GetAllAutomaticChapterIssues()
     {
@@ -26,7 +25,7 @@ public class IssueController(ManaxContext context, IMapper mapper) : ControllerB
     }
     
     [HttpGet("serie/automatic")]
-    [AuthorizeRole(UserRole.Admin)]
+    [Authorize(Roles = "Admin,Owner")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<AutomaticIssueSerieDto>))]
     public async Task<ActionResult<IEnumerable<AutomaticIssueSerieDto>>> GetAllAutomaticSerieIssues()
     {
@@ -35,7 +34,7 @@ public class IssueController(ManaxContext context, IMapper mapper) : ControllerB
     }
     
     [HttpGet("chapter/reported")]
-    [AuthorizeRole(UserRole.Admin)]
+    [Authorize(Roles = "Admin,Owner")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<ReportedIssueChapterDto>))]
     public async Task<ActionResult<IEnumerable<ReportedIssueChapterDto>>> GetAllReportedChapterIssues()
     {
@@ -44,7 +43,7 @@ public class IssueController(ManaxContext context, IMapper mapper) : ControllerB
     }
     
     [HttpGet("serie/reported")]
-    [AuthorizeRole(UserRole.Admin)]
+    [Authorize(Roles = "Admin,Owner")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<ReportedIssueSerieDto>))]
     public async Task<ActionResult<IEnumerable<ReportedIssueSerieDto>>> GetAllReportedSerieIssues()
     {
@@ -53,7 +52,7 @@ public class IssueController(ManaxContext context, IMapper mapper) : ControllerB
     }
 
     [HttpPost("chapter")]
-    [AuthorizeRole(UserRole.User)]
+    [Authorize(Roles = "User,Admin,Owner")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult> CreateChapterIssue(ReportedIssueChapterCreateDto reportedIssueChapterCreate)
@@ -67,7 +66,7 @@ public class IssueController(ManaxContext context, IMapper mapper) : ControllerB
     }
     
     [HttpPost("serie")]
-    [AuthorizeRole(UserRole.User)]
+    [Authorize(Roles = "User,Admin,Owner")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult> CreateSerieIssue(ReportedIssueSerieCreateDto reportedIssueSerieCreate)
@@ -81,7 +80,7 @@ public class IssueController(ManaxContext context, IMapper mapper) : ControllerB
     }
 
     [HttpPut("chapter/{id:long}/close")]
-    [AuthorizeRole(UserRole.Admin)]
+    [Authorize(Roles = "Admin,Owner")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> CloseChapterIssue(long id)
@@ -97,7 +96,7 @@ public class IssueController(ManaxContext context, IMapper mapper) : ControllerB
     }
     
     [HttpPut("serie/{id:long}/close")]
-    [AuthorizeRole(UserRole.Admin)]
+    [Authorize(Roles = "Admin,Owner")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> CloseSerieIssue(long id)

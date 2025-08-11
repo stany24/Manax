@@ -1,12 +1,11 @@
 using ManaxLibrary.DTO.Chapter;
 using ManaxLibrary.DTO.Setting;
-using ManaxLibrary.DTO.User;
-using ManaxServer.Auth;
 using ManaxServer.Localization;
 using ManaxServer.Models;
 using ManaxServer.Services;
 using ManaxServer.Settings;
 using ManaxServer.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ManaxServer.Controllers;
@@ -18,7 +17,7 @@ public class SettingsController(IServiceProvider serviceProvider) : ControllerBa
     private readonly object _lock = new();
 
     [HttpGet]
-    [AuthorizeRole(UserRole.Owner)]
+    [Authorize(Roles = "Owner")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SettingsData))]
     public SettingsData GetSettings()
     {
@@ -26,7 +25,7 @@ public class SettingsController(IServiceProvider serviceProvider) : ControllerBa
     }
 
     [HttpPut]
-    [AuthorizeRole(UserRole.Owner)]
+    [Authorize(Roles = "Owner")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ChapterDto))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public IActionResult ChangeSettings(SettingsData data)

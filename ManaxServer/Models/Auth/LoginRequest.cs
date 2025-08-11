@@ -3,7 +3,7 @@
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
 
-namespace ManaxServer.Auth;
+namespace ManaxServer.Models.Auth;
 
 public class LoginRequest
 {
