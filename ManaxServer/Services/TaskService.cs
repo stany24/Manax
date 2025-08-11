@@ -88,17 +88,27 @@ public class TaskService : Service
     {
         try
         {
+            bool cleaned = true;
             while (!cancellationToken.IsCancellationRequested)
             {
                 Thread.Sleep(1000);
                 await TaskSemaphore.WaitAsync(cancellationToken);
                 try
                 {
-                    if(WaitingTasks.Count == 0){continue;}
+                    if (WaitingTasks.Count == 0)
+                    {
+                        if (!cleaned)
+                        {
+                            ServicesManager.Notification.NotifyRunningTasksAsync(new Dictionary<string, int>());
+                            cleaned = true;
+                        }
+                        continue;
+                    }
                     Dictionary<string, int> tasks = WaitingTasks.GroupBy(t => t.GetName())
                         .Select(g => new KeyValuePair<string, int>(g.Key, g.Count()))
                         .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
                     ServicesManager.Notification.NotifyRunningTasksAsync(tasks);
+                    cleaned = false;
                 }
                 finally
                 {
