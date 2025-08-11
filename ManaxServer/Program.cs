@@ -1,10 +1,10 @@
 using ManaxLibrary.DTO.Issue.Automatic;
 using ManaxLibrary.Logging;
-using ManaxServer.Hubs;
 using ManaxServer.Middleware;
 using ManaxServer.Models;
 using ManaxServer.Models.Issue.Reported;
 using ManaxServer.Models.Rank;
+using ManaxServer.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
@@ -72,7 +72,7 @@ public class Program
 
         app.MapControllers();
         
-        app.MapHub<NotificationHub>("/notificationHub");
+        app.MapHub<NotificationService>("/notificationHub");
 
         app.Run();
     }
