@@ -1,8 +1,8 @@
 using ManaxServer.Services;
 
-namespace ManaxServer.BackgroundTask;
+namespace ManaxServer.Tasks;
 
-public class ChapterCheckTask(long chapterId) : ITask
+public class FixChapterTask(long chapterId) : ITask
 {
     private readonly long _chapterId = chapterId;
     public void Execute()
@@ -15,14 +15,14 @@ public class ChapterCheckTask(long chapterId) : ITask
         return "Chapter check";
     }
 
-    public int GetPriority()
+    public TaskPriority GetPriority()
     {
-        return (int)TaskPriority.ChapterCheck;
+        return TaskPriority.ChapterCheck;
     }
 
     public override bool Equals(object? obj)
     {
-        if (obj is not  ChapterCheckTask chapterCheckTask) { return false; }
+        if (obj is not  FixChapterTask chapterCheckTask) { return false; }
         return chapterCheckTask._chapterId == _chapterId;
     }
 

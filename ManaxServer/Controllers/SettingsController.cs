@@ -2,11 +2,11 @@ using ManaxLibrary.DTO.Chapter;
 using ManaxLibrary.DTO.Setting;
 using ManaxLibrary.DTO.User;
 using ManaxServer.Auth;
-using ManaxServer.BackgroundTask;
 using ManaxServer.Localization;
 using ManaxServer.Models;
 using ManaxServer.Services;
 using ManaxServer.Settings;
+using ManaxServer.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ManaxServer.Controllers;
@@ -66,7 +66,7 @@ public class SettingsController(IServiceProvider serviceProvider) : ControllerBa
         {
             foreach (long serieId in context.Series.Select(serie => serie.Id ))
             {
-                _ = ServicesManager.Task.AddTaskAsync(new PosterCheckTask(serieId));
+                _ = ServicesManager.Task.AddTaskAsync(new FixPosterTask(serieId));
             }
         }
     }

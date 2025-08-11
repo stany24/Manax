@@ -1,4 +1,4 @@
-namespace ManaxServer.BackgroundTask;
+namespace ManaxServer.Tasks;
 
 public enum TaskPriority
 {

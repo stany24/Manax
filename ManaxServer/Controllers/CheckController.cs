@@ -1,11 +1,11 @@
 using ManaxLibrary.DTO.User;
 using ManaxServer.Auth;
-using ManaxServer.BackgroundTask;
 using ManaxServer.Localization;
 using ManaxServer.Models;
 using ManaxServer.Models.Chapter;
 using ManaxServer.Models.Serie;
 using ManaxServer.Services;
+using ManaxServer.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -25,7 +25,7 @@ public class CheckController(ManaxContext context) : ControllerBase
 
         if (serie == null) return NotFound(Localizer.Format("SerieNotFound", id));
 
-        _ = ServicesManager.Task.AddTaskAsync(new SerieCheckTask(serie.Id));
+        _ = ServicesManager.Task.AddTaskAsync(new FixSerieTask(serie.Id));
 
         return Ok();
     }
@@ -41,7 +41,7 @@ public class CheckController(ManaxContext context) : ControllerBase
 
         if (chapter == null) return NotFound(Localizer.Format("ChapterNotFound", id));
 
-        _ = ServicesManager.Task.AddTaskAsync(new ChapterCheckTask(chapter.Id));
+        _ = ServicesManager.Task.AddTaskAsync(new FixChapterTask(chapter.Id));
 
         return Ok();
     }

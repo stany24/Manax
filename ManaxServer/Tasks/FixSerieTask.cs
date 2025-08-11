@@ -1,28 +1,28 @@
 using ManaxServer.Services;
 
-namespace ManaxServer.BackgroundTask;
+namespace ManaxServer.Tasks;
 
-public class PosterCheckTask(long serieId) : ITask
+public class FixSerieTask(long serieId) : ITask
 {
     private readonly long _serieId = serieId;
     public void Execute()
     {
-        ServicesManager.Fix.FixPoster(_serieId);
+        ServicesManager.Fix.FixSerie(_serieId);
     }
 
     public string GetName()
     {
-        return "Poster check";
+        return "Serie check";
     }
 
-    public int GetPriority()
+    public TaskPriority GetPriority()
     {
-        return (int)TaskPriority.PosterCheck;
+        return TaskPriority.SerieCheck;
     }
     
     public override bool Equals(object? obj)
     {
-        if (obj is not PosterCheckTask serieCheckTask) { return false; }
+        if (obj is not  FixSerieTask serieCheckTask) { return false; }
         return serieCheckTask._serieId == _serieId;
     }
 

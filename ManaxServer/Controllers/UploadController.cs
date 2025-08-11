@@ -6,13 +6,13 @@ using ManaxLibrary.DTO.Chapter;
 using ManaxLibrary.DTO.Setting;
 using ManaxLibrary.DTO.User;
 using ManaxServer.Auth;
-using ManaxServer.BackgroundTask;
 using ManaxServer.Localization;
 using ManaxServer.Models;
 using ManaxServer.Models.Chapter;
 using ManaxServer.Models.Serie;
 using ManaxServer.Services;
 using ManaxServer.Settings;
+using ManaxServer.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ManaxServer.Controllers;
@@ -105,8 +105,8 @@ public partial class UploadController(ManaxContext context, IMapper mapper) : Co
         await context.SaveChangesAsync();
         if (!replacing) { ServicesManager.Notification.NotifyChapterAddedAsync(mapper.Map<ChapterDto>(chapter)); }
 
-        _ = ServicesManager.Task.AddTaskAsync(new ChapterCheckTask(chapter.Id));
-        _ = ServicesManager.Task.AddTaskAsync(new SerieCheckTask(chapter.SerieId));
+        _ = ServicesManager.Task.AddTaskAsync(new FixChapterTask(chapter.Id));
+        _ = ServicesManager.Task.AddTaskAsync(new FixSerieTask(chapter.SerieId));
         
         return Ok();
     }
@@ -161,7 +161,7 @@ public partial class UploadController(ManaxContext context, IMapper mapper) : Co
             MagickImage image = new(file.OpenReadStream());
             image.Quality = SettingsManager.Data.PosterQuality;
             await image.WriteAsync(path, GetMagickFormat(format));
-            _ = ServicesManager.Task.AddTaskAsync(new PosterCheckTask(serie.Id));
+            _ = ServicesManager.Task.AddTaskAsync(new FixPosterTask(serie.Id));
             ServicesManager.Notification.NotifyPosterModifiedAsync(serie.Id);
         }
         catch (Exception e)
