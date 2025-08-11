@@ -4,7 +4,7 @@ using ManaxLibrary.DTO.User;
 using ManaxLibrary.Logging;
 using ManaxServer.Localization;
 using ManaxServer.Models;
-using ManaxServer.Models.Auth;
+using ManaxServer.Models.Claim;
 using ManaxServer.Models.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -171,7 +171,7 @@ public class UserController(ManaxContext context, IMapper mapper) : ControllerBa
     [HttpPost("/api/claim")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(bool))]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
-    public ActionResult Claim(LoginRequest request)
+    public ActionResult Claim(ClaimRequest request)
     {
         LoginAttempt loginAttempt = new()
         {
