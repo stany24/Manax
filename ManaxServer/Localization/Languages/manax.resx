@@ -141,4 +141,10 @@
     <data name="ServiceInitialized" xml:space="preserve">
         <value>Service {0} was initialized.</value>
     </data>
+    <data name="HubMessageSentAdmins" xml:space="preserve">
+        <value>Message sent to all admins: {0}</value>
+    </data>
+    <data name="HubMessageSentOwner" xml:space="preserve">
+        <value>Message sent to the owner: {0}</value>
+    </data>
 </root>

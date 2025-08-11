@@ -55,7 +55,7 @@ public class Program
 
         Migrate(app);
         
-        Services.ServicesManager.Initialize(app);
+        ServicesManager.Initialize(app);
 
         app.UseMiddleware<GlobalExceptionMiddleware>();
 
@@ -119,7 +119,7 @@ public class Program
     
     private static void AddAuthentication(WebApplicationBuilder builder)
     {
-        string secretKey = Services.ServicesManager.Jwt.GetSecretKey();
+        string secretKey = ServicesManager.Jwt.GetSecretKey();
         builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
             {

@@ -51,4 +51,10 @@
     <data name="ServiceInitialized" xml:space="preserve">
         <value>Le service {0} à été initializé.</value>
     </data>
+    <data name="HubMessageSentAdmins" xml:space="preserve">
+        <value>Message envoyé à tous les administrateurs:  {0}</value>
+    </data>
+    <data name="HubMessageSentOwner" xml:space="preserve">
+        <value>Message envoyé au propriétaire:  {0}</value>
+    </data>
 </root>

@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using ManaxLibrary.DTO.Chapter;
 using ManaxLibrary.DTO.Library;
 using ManaxLibrary.DTO.Rank;
@@ -19,13 +20,25 @@ public class NotificationService(IHubContext<NotificationService> hubContext) : 
         try
         {
             Logger.LogInfo(Localizer.Format("HubConnected", Context.ConnectionId, Context.User?.Identity?.Name ?? "Unknown"));
+            ClaimsPrincipal? user = Context.User;
+            if (user != null)
+            {
+                bool isAdmin = user.HasClaim(c => c.Type is "role" or ClaimTypes.Role && c.Value is "Admin" or "Owner");
+                bool isOwner = user.HasClaim(c => c.Type is "role" or ClaimTypes.Role && c.Value == "Owner");
+                if (isAdmin)
+                {
+                    await Groups.AddToGroupAsync(Context.ConnectionId, "Admins");
+                }
+                if (isOwner)
+                {
+                    await Groups.AddToGroupAsync(Context.ConnectionId, "Owner");
+                }
+            }
             await base.OnConnectedAsync();
-            
             await Clients.Caller.SendAsync("Connected", Localizer.Format("HubConnectionSuccess"));
         }
         catch (Exception ex)
         {
-            
             Logger.LogError(Localizer.Format("HubConnectionError", Context.ConnectionId),ex,Environment.StackTrace);
         }
     }
@@ -62,6 +75,34 @@ public class NotificationService(IHubContext<NotificationService> hubContext) : 
         catch (Exception ex)
         {
             Logger.LogError(Localizer.Format("HubMessageError",methodName),ex, Environment.StackTrace );
+        }
+    }
+
+    private void TrySendToAdminsAsync(NotificationType type, object? arg)
+    {
+        string methodName = type.ToString();
+        try
+        {
+            hubContext.Clients.Group("Admins").SendAsync(methodName, arg);
+            Logger.LogInfo(Localizer.Format("HubMessageSentAdmins",methodName));
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(Localizer.Format("HubMessageErrorAdmins",methodName),ex, Environment.StackTrace );
+        }
+    }
+
+    private void TrySendToOwnerAsync(NotificationType type, object? arg)
+    {
+        string methodName = type.ToString();
+        try
+        {
+            hubContext.Clients.Group("Owner").SendAsync(methodName, arg);
+            Logger.LogInfo(Localizer.Format("HubMessageSentOwner",methodName));
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(Localizer.Format("HubMessageErrorOwner",methodName),ex, Environment.StackTrace );
         }
     }
     
@@ -122,17 +163,17 @@ public class NotificationService(IHubContext<NotificationService> hubContext) : 
     
     public void NotifyUserCreatedAsync(UserDto user)
     {
-        TrySendToAllClientsAsync(NotificationType.UserCreated, user);
+        TrySendToAdminsAsync(NotificationType.UserCreated, user);
     }
     
     public void NotifyUserDeletedAsync(long userId)
     {
-        TrySendToAllClientsAsync(NotificationType.UserDeleted, userId);
+        TrySendToAdminsAsync(NotificationType.UserDeleted, userId);
     }
 
     public void NotifyRunningTasksAsync(Dictionary<string, int> tasks)
     {
-        TrySendToAllClientsAsync(NotificationType.RunningTasks, tasks);
+        TrySendToAdminsAsync(NotificationType.RunningTasks, tasks);
     }
 
     public void NotifyPosterModifiedAsync(long serieId)
