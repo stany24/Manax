@@ -1,13 +1,14 @@
-using ManaxServer.Services;
+using ManaxServer.Services.Fix;
 
 namespace ManaxServer.Tasks;
 
-public class FixChapterTask(long chapterId) : ITask
+public class FixChapterTask(IFixService fixService, long chapterId) : ITask
 {
     private readonly long _chapterId = chapterId;
+
     public void Execute()
     {
-        ServicesManager.Fix.FixChapter(_chapterId);
+        fixService.FixChapter(_chapterId);
     }
 
     public string GetName()
@@ -22,7 +23,7 @@ public class FixChapterTask(long chapterId) : ITask
 
     public override bool Equals(object? obj)
     {
-        if (obj is not  FixChapterTask chapterCheckTask) { return false; }
+        if (obj is not FixChapterTask chapterCheckTask) { return false; }
         return chapterCheckTask._chapterId == _chapterId;
     }
 

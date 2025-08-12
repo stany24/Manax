@@ -4,7 +4,7 @@ using ManaxLibrary.DTO.Chapter;
 using ManaxServer.Localization;
 using ManaxServer.Models;
 using ManaxServer.Models.Chapter;
-using ManaxServer.Services;
+using ManaxServer.Services.Notification;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -13,7 +13,7 @@ namespace ManaxServer.Controllers;
 
 [Route("api/chapter")]
 [ApiController]
-public class ChapterController(ManaxContext context, IMapper mapper) : ControllerBase
+public class ChapterController(ManaxContext context, IMapper mapper, INotificationService notificationService) : ControllerBase
 {
     // GET: api/Chapter
     [HttpGet("/api/chapters")]
@@ -50,7 +50,7 @@ public class ChapterController(ManaxContext context, IMapper mapper) : Controlle
 
         context.Chapters.Remove(chapter);
         await context.SaveChangesAsync();
-        ServicesManager.Notification.NotifyChapterRemovedAsync(chapter.Id);
+        notificationService.NotifyChapterRemovedAsync(chapter.Id);
 
         return NoContent();
     }

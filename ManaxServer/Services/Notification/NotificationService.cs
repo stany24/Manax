@@ -9,11 +9,11 @@ using ManaxLibrary.Notifications;
 using ManaxServer.Localization;
 using Microsoft.AspNetCore.SignalR;
 
-namespace ManaxServer.Services;
+namespace ManaxServer.Services.Notification;
 
-public class NotificationService(IHubContext<NotificationService> hubContext) : Hub
+public class NotificationService(IHubContext<NotificationService> hubContext) : Hub, INotificationService
 {
-    public override async Task OnConnectedAsync()
+    public override async System.Threading.Tasks.Task OnConnectedAsync()
     {
         try
         {
@@ -41,7 +41,7 @@ public class NotificationService(IHubContext<NotificationService> hubContext) : 
         }
     }
 
-    public override async Task OnDisconnectedAsync(Exception? exception)
+    public override async System.Threading.Tasks.Task OnDisconnectedAsync(Exception? exception)
     {
         try
         {

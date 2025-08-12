@@ -4,6 +4,7 @@ using ManaxServer.Controllers;
 using ManaxServer.Models;
 using ManaxServer.Models.Chapter;
 using ManaxServer.Models.Serie;
+using ManaxServer.Services.Notification;
 using ManaxTests.Mocks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -16,6 +17,7 @@ public class TestSerieController
 {
     private Mock<ManaxContext> _mockContext = null!;
     private Mock<IMapper> _mockMapper = null!;
+    private Mock<INotificationService> _mockNotificationService = null!;
     private SerieController _controller = null!;
     private List<Serie> _series = null!;
     private List<Chapter> _chapters = null!;
@@ -29,7 +31,7 @@ public class TestSerieController
         _chapters = data.Chapters;
             
         _mockMapper = TestDbContextFactory.CreateMockMapper();
-
+        _mockNotificationService = new Mock<INotificationService>();
 
         _mockMapper.Setup(m => m.Map(It.IsAny<SerieUpdateDto>(), It.IsAny<Serie>()))
             .Callback<SerieUpdateDto, Serie>((updateDto, serie) =>
@@ -39,7 +41,7 @@ public class TestSerieController
                 serie.Status = updateDto.Status;
             });
 
-        _controller = new SerieController(_mockContext.Object, _mockMapper.Object);
+        _controller = new SerieController(_mockContext.Object, _mockMapper.Object, _mockNotificationService.Object);
     }
 
     [TestMethod]

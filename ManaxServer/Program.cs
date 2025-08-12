@@ -4,13 +4,21 @@ using ManaxServer.Middleware;
 using ManaxServer.Models;
 using ManaxServer.Models.Issue.Reported;
 using ManaxServer.Models.Rank;
-using ManaxServer.Services;
+using ManaxServer.Services.Fix;
+using ManaxServer.Services.Hash;
+using ManaxServer.Services.Issue;
+using ManaxServer.Services.Jwt;
+using ManaxServer.Services.Notification;
+using ManaxServer.Services.Renaming;
+using ManaxServer.Services.Task;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Primitives;
 using Microsoft.IdentityModel.Tokens;
+using FixService = ManaxServer.Services.Fix.FixService;
 
 namespace ManaxServer;
 
@@ -36,6 +44,15 @@ public class Program
 
         // AutoMapper configuration 
         builder.Services.AddAutoMapper(typeof(MappingProfile));
+        
+        // Services
+        builder.Services.AddSingleton<IHashService>(_ => new HashService());
+        builder.Services.AddSingleton<ITaskService>(_ => new TaskService());
+        builder.Services.AddScoped<IFixService>(provider => new FixService(provider.GetRequiredService<IServiceScopeFactory>(), provider.GetRequiredService<IIssueService>()));
+        builder.Services.AddScoped<IIssueService>(provider => new IssueService(provider.GetRequiredService<IServiceScopeFactory>()));
+        builder.Services.AddScoped<IRenamingService>(provider => new RenamingService(provider.GetRequiredService<IServiceScopeFactory>()));
+        builder.Services.AddSingleton<INotificationService>(provider =>
+            new NotificationService(provider.GetRequiredService<IHubContext<NotificationService>>()));
 
         builder.Services.Configure<KestrelServerOptions>(options =>
         {
@@ -55,8 +72,6 @@ public class Program
 
         Migrate(app);
         
-        ServicesManager.Initialize(app);
-
         app.UseMiddleware<GlobalExceptionMiddleware>();
 
         if (app.Environment.IsDevelopment())
@@ -119,7 +134,10 @@ public class Program
     
     private static void AddAuthentication(WebApplicationBuilder builder)
     {
-        string secretKey = ServicesManager.Jwt.GetSecretKey();
+        JwtService jwtService = new();
+        string secretKey = jwtService.GetSecretKey();
+        builder.Services.AddSingleton<IJwtService>(jwtService);
+        
         builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
             {

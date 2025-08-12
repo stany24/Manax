@@ -4,9 +4,9 @@ using System.Security.Cryptography;
 using ManaxServer.Models.User;
 using Microsoft.IdentityModel.Tokens;
 
-namespace ManaxServer.Services;
+namespace ManaxServer.Services.Jwt;
 
-public class JwtService : Service
+public class JwtService : Service, IJwtService
 {
     private const string Issuer = "ManaxServer";
     private const string Audience = "ManaxClient";

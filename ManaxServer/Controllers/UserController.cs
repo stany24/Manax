@@ -6,6 +6,9 @@ using ManaxServer.Localization;
 using ManaxServer.Models;
 using ManaxServer.Models.Claim;
 using ManaxServer.Models.User;
+using ManaxServer.Services.Hash;
+using ManaxServer.Services.Jwt;
+using ManaxServer.Services.Notification;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -14,7 +17,7 @@ namespace ManaxServer.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class UserController(ManaxContext context, IMapper mapper) : ControllerBase
+public class UserController(ManaxContext context, IMapper mapper, IHashService hashService, IJwtService jwtService, INotificationService notificationService) : ControllerBase
 {
     private readonly object _claimLock = new();
 
@@ -56,16 +59,15 @@ public class UserController(ManaxContext context, IMapper mapper) : ControllerBa
         mapper.Map(userUpdate, user);
 
         if (!string.IsNullOrEmpty(userUpdate.Password))
-            user.PasswordHash = Services.ServicesManager.Hash.HashPassword(userUpdate.Password);
+            user.PasswordHash = hashService.HashPassword(userUpdate.Password);
 
         try
         {
             await context.SaveChangesAsync();
         }
-        catch (DbUpdateConcurrencyException)
+        catch (DbUpdateConcurrencyException) when (!UserExists(id))
         {
-            if (!context.Users.Any(e => e.Id == id)) return NotFound();
-            throw;
+            return NotFound();
         }
 
         return NoContent();
@@ -79,11 +81,11 @@ public class UserController(ManaxContext context, IMapper mapper) : ControllerBa
     {
         User? user = mapper.Map<User>(userCreate);
         user.Creation = DateTime.UtcNow;
-        user.PasswordHash = Services.ServicesManager.Hash.HashPassword(userCreate.Password);
+        user.PasswordHash = hashService.HashPassword(userCreate.Password);
 
         context.Users.Add(user);
         await context.SaveChangesAsync();
-        Services.ServicesManager.Notification.NotifyUserCreatedAsync(mapper.Map<UserDto>(user));
+        notificationService.NotifyUserCreatedAsync(mapper.Map<UserDto>(user));
 
         return user.Id;
     }
@@ -114,7 +116,7 @@ public class UserController(ManaxContext context, IMapper mapper) : ControllerBa
 
         context.Users.Remove(userToDelete);
         await context.SaveChangesAsync();
-        Services.ServicesManager.Notification.NotifyUserDeletedAsync(userToDelete.Id);
+        notificationService.NotifyUserDeletedAsync(userToDelete.Id);
 
         return NoContent();
     }
@@ -134,7 +136,7 @@ public class UserController(ManaxContext context, IMapper mapper) : ControllerBa
             Success = false
         };
         User? user = await context.Users.FirstOrDefaultAsync(u => u.Username == loginDto.Username);
-        if (user == null || !Services.ServicesManager.Hash.VerifyPassword(loginDto.Password, user.PasswordHash))
+        if (user == null || !hashService.VerifyPassword(loginDto.Password, user.PasswordHash))
         {
             Logger.LogWarning("Failed login attempt for user "+loginDto.Username+" from "+loginAttempt.Origin,Environment.StackTrace);
             context.LoginAttempts.Add(loginAttempt);
@@ -147,7 +149,7 @@ public class UserController(ManaxContext context, IMapper mapper) : ControllerBa
         context.LoginAttempts.Add(loginAttempt);
         await context.SaveChangesAsync();
 
-        string token = Services.ServicesManager.Jwt.GenerateToken(user);
+        string token = jwtService.GenerateToken(user);
         return Ok(new { token });
     }
 
@@ -195,7 +197,7 @@ public class UserController(ManaxContext context, IMapper mapper) : ControllerBa
             {
                 Role = UserRole.Owner,
                 Username = request.Username,
-                PasswordHash = Services.ServicesManager.Hash.HashPassword(request.Password)
+                PasswordHash = hashService.HashPassword(request.Password)
             };
 
             loginAttempt.Success = true;
@@ -203,7 +205,7 @@ public class UserController(ManaxContext context, IMapper mapper) : ControllerBa
             context.Users.Add(user);
             context.SaveChanges();
 
-            string token = Services.ServicesManager.Jwt.GenerateToken(user);
+            string token = jwtService.GenerateToken(user);
             return Ok(new { token });
         }
     }
@@ -214,4 +216,6 @@ public class UserController(ManaxContext context, IMapper mapper) : ControllerBa
         if (userIdClaim == null || !long.TryParse(userIdClaim, out long userId)) return null;
         return userId;
     }
+
+    private bool UserExists(long id) => context.Users.Any(e => e.Id == id);
 }

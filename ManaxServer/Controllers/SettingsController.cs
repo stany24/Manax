@@ -2,7 +2,9 @@ using ManaxLibrary.DTO.Chapter;
 using ManaxLibrary.DTO.Setting;
 using ManaxServer.Localization;
 using ManaxServer.Models;
-using ManaxServer.Services;
+using ManaxServer.Services.Fix;
+using ManaxServer.Services.Renaming;
+using ManaxServer.Services.Task;
 using ManaxServer.Settings;
 using ManaxServer.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -12,7 +14,7 @@ namespace ManaxServer.Controllers;
 
 [Route("api/settings")]
 [ApiController]
-public class SettingsController(IServiceProvider serviceProvider) : ControllerBase
+public class SettingsController(IServiceProvider serviceProvider, ITaskService taskService, IRenamingService renamingService, IFixService fixService) : ControllerBase
 {
     private readonly object _lock = new();
 
@@ -53,11 +55,11 @@ public class SettingsController(IServiceProvider serviceProvider) : ControllerBa
         }
     }
 
-    private static void HandlePosterModifications(SettingsData newData, SettingsData oldData, ManaxContext context)
+    private void HandlePosterModifications(SettingsData newData, SettingsData oldData, ManaxContext context)
     {
         if(newData.PosterName != oldData.PosterName || newData.PosterFormat != oldData.PosterFormat )
         {
-            _ = ServicesManager.Task.AddTaskAsync(new PosterRenamingTask(oldData.PosterName, newData.PosterName,
+            _ = taskService.AddTaskAsync(new PosterRenamingTask(renamingService,oldData.PosterName, newData.PosterName,
                 oldData.PosterFormat, newData.PosterFormat));
         }
         
@@ -65,7 +67,7 @@ public class SettingsController(IServiceProvider serviceProvider) : ControllerBa
         {
             foreach (long serieId in context.Series.Select(serie => serie.Id ))
             {
-                _ = ServicesManager.Task.AddTaskAsync(new FixPosterTask(serieId));
+                _ = taskService.AddTaskAsync(new FixPosterTask(fixService,serieId));
             }
         }
     }

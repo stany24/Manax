@@ -6,11 +6,12 @@ using ManaxLibrary.DTO.Setting;
 using ManaxServer.Models;
 using ManaxServer.Models.Chapter;
 using ManaxServer.Models.Serie;
+using ManaxServer.Services.Issue;
 using ManaxServer.Settings;
 
-namespace ManaxServer.Services;
+namespace ManaxServer.Services.Fix;
 
-public partial class FixService(IServiceScopeFactory scopeFactory) : Service
+public partial class FixService(IServiceScopeFactory scopeFactory, IIssueService issueService) : Service, IFixService
 {
     [GeneratedRegex("\\d{1,4}")]
     private partial Regex RegexNumber();
@@ -31,8 +32,8 @@ public partial class FixService(IServiceScopeFactory scopeFactory) : Service
     {
         uint max = SettingsManager.Data.MaxDescriptionLength;
         uint min = SettingsManager.Data.MinDescriptionLength;
-        ServicesManager.Issue.ManageSerieIssue(serie.Id, AutomaticIssueSerieType.DescriptionTooLong, serie.Description.Length > max);
-        ServicesManager.Issue.ManageSerieIssue(serie.Id, AutomaticIssueSerieType.DescriptionTooShort, serie.Description.Length < min);
+        issueService.ManageSerieIssue(serie.Id, AutomaticIssueSerieType.DescriptionTooLong, serie.Description.Length > max);
+        issueService.ManageSerieIssue(serie.Id, AutomaticIssueSerieType.DescriptionTooShort, serie.Description.Length < min);
     }
 
     public void FixPoster(long serieId)
@@ -45,7 +46,7 @@ public partial class FixService(IServiceScopeFactory scopeFactory) : Service
         string directory = serie.Path;
         string fileName = SettingsManager.Data.PosterName +"."+ SettingsManager.Data.ImageFormat.ToString().ToLower();
         string posterPath = Path.Combine(directory, fileName);
-        ServicesManager.Issue.ManageSerieIssue(serie.Id, AutomaticIssueSerieType.PosterMissing,!File.Exists(posterPath));
+        issueService.ManageSerieIssue(serie.Id, AutomaticIssueSerieType.PosterMissing,!File.Exists(posterPath));
         if (!File.Exists(posterPath)) { return; }
         
         uint min = SettingsManager.Data.MinPosterWidth;
@@ -53,8 +54,8 @@ public partial class FixService(IServiceScopeFactory scopeFactory) : Service
         try
         {
             using MagickImage poster = new(posterPath);
-            ServicesManager.Issue.RemoveSerieIssue(serieId, AutomaticIssueSerieType.PosterCouldNotOpen);
-            ServicesManager.Issue.ManageSerieIssue(serieId, AutomaticIssueSerieType.PosterTooSmall,poster.Width < min);
+            issueService.RemoveSerieIssue(serieId, AutomaticIssueSerieType.PosterCouldNotOpen);
+            issueService.ManageSerieIssue(serieId, AutomaticIssueSerieType.PosterTooSmall,poster.Width < min);
 
             if (poster.Width <= max) return;
             poster.Resize(max,poster.Height * max / poster.Width);
@@ -62,14 +63,14 @@ public partial class FixService(IServiceScopeFactory scopeFactory) : Service
         }
         catch (Exception)
         {
-            ServicesManager.Issue.CreateSerieIssue(serieId, AutomaticIssueSerieType.PosterCouldNotOpen);
+            issueService.CreateSerieIssue(serieId, AutomaticIssueSerieType.PosterCouldNotOpen);
         }
     }
 
     private void CheckMissingChapters(Serie serie)
     {
         string[] chapters = Directory.GetFiles(serie.Path);
-        ServicesManager.Issue.ManageSerieIssue(serie.Id, AutomaticIssueSerieType.MissingChapter, chapters.Length == 0);
+        issueService.ManageSerieIssue(serie.Id, AutomaticIssueSerieType.MissingChapter, chapters.Length == 0);
         if (chapters.Length == 0) { return; }
 
         Array.Sort(chapters);
@@ -77,7 +78,7 @@ public partial class FixService(IServiceScopeFactory scopeFactory) : Service
         string last = Path.GetFileName(chapters[^1]);
         Match match = regex.Match(last);
         if (!match.Success) return;
-        ServicesManager.Issue.ManageSerieIssue(serie.Id, AutomaticIssueSerieType.MissingChapter, chapters.Length != Convert.ToInt32(match.Value));
+        issueService.ManageSerieIssue(serie.Id, AutomaticIssueSerieType.MissingChapter, chapters.Length != Convert.ToInt32(match.Value));
     }
 
     public void FixChapter(long chapterId)
@@ -103,7 +104,7 @@ public partial class FixService(IServiceScopeFactory scopeFactory) : Service
         catch
         {
             if (Directory.Exists(copyName)) Directory.Delete(copyName, true);
-            ServicesManager.Issue.CreateChapterIssue(chapter.Id, AutomaticIssueChapterType.CouldNotOpen);
+            issueService.CreateChapterIssue(chapter.Id, AutomaticIssueChapterType.CouldNotOpen);
             return;
         }
 
@@ -133,7 +134,7 @@ public partial class FixService(IServiceScopeFactory scopeFactory) : Service
             catch
             {
                 images[i] = null;
-                ServicesManager.Issue.CreateChapterIssue(chapterId, AutomaticIssueChapterType.CouldNotOpen);
+                issueService.CreateChapterIssue(chapterId, AutomaticIssueChapterType.CouldNotOpen);
             }
         }
 
@@ -171,10 +172,10 @@ public partial class FixService(IServiceScopeFactory scopeFactory) : Service
             try
             {
                 if (image == null) continue;
-                ServicesManager.Issue.RemoveChapterIssue(id, AutomaticIssueChapterType.CouldNotOpen);
+                issueService.RemoveChapterIssue(id, AutomaticIssueChapterType.CouldNotOpen);
                 uint min = SettingsManager.Data.MinChapterWidth;
                 uint max = SettingsManager.Data.MaxChapterWidth;
-                ServicesManager.Issue.ManageChapterIssue(id, AutomaticIssueChapterType.ImageTooSmall,image.Width < min);
+                issueService.ManageChapterIssue(id, AutomaticIssueChapterType.ImageTooSmall,image.Width < min);
                 if (image.Width <= max) continue;
                 image.Resize(max,image.Height * max / image.Width);
                 image.Write(image.FileName!);
@@ -182,7 +183,7 @@ public partial class FixService(IServiceScopeFactory scopeFactory) : Service
             }
             catch
             {
-                ServicesManager.Issue.CreateChapterIssue(id, AutomaticIssueChapterType.CouldNotOpen);
+                issueService.CreateChapterIssue(id, AutomaticIssueChapterType.CouldNotOpen);
             }
         }
         return modified;

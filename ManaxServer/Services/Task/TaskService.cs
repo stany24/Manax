@@ -1,24 +1,27 @@
 using ManaxLibrary.Logging;
 using ManaxServer.Localization;
+using ManaxServer.Services.Notification;
 using ManaxServer.Tasks;
 
-namespace ManaxServer.Services;
+namespace ManaxServer.Services.Task;
 
-public class TaskService : Service
+public class TaskService : Service,ITaskService
 {
     private const int MaxTasks = 12;
     private readonly SortedSet<ITask> _waitingTasks = new(TaskPriorityComparer.Instance);
-    private readonly List<(ITask Task, Task RunningTask)> _runningTasks = [];
+    private readonly List<(ITask Task, System.Threading.Tasks.Task RunningTask)> _runningTasks = [];
     private readonly SemaphoreSlim _taskSemaphore = new(1, 1);
     private readonly CancellationTokenSource _cancellationTokenSource = new();
+    private readonly NotificationService _notificationService;
 
-    public TaskService()
+    public TaskService(NotificationService? notificationService = null)
     {
-        Task.Run(() => TaskLoopAsync(_cancellationTokenSource.Token));
-        Task.Run(() => PublishTasks(_cancellationTokenSource.Token));
+        _notificationService = notificationService ?? new NotificationService(null);
+        System.Threading.Tasks.Task.Run(() => TaskLoopAsync(_cancellationTokenSource.Token));
+        System.Threading.Tasks.Task.Run(() => PublishTasks(_cancellationTokenSource.Token));
     }
 
-    public async Task AddTaskAsync(ITask task)
+    public async System.Threading.Tasks.Task AddTaskAsync(ITask task)
     {
         await _taskSemaphore.WaitAsync();
         try
@@ -36,7 +39,7 @@ public class TaskService : Service
         }
     }
     
-    private async Task RemoveTaskAsync(Task runningTask, CancellationToken cancellationToken)
+    private async System.Threading.Tasks.Task RemoveTaskAsync(System.Threading.Tasks.Task runningTask, CancellationToken cancellationToken)
     {
         await _taskSemaphore.WaitAsync(cancellationToken);
         try
@@ -49,7 +52,7 @@ public class TaskService : Service
         }
     }
 
-    private async Task TaskLoopAsync(CancellationToken cancellationToken)
+    private async System.Threading.Tasks.Task TaskLoopAsync(CancellationToken cancellationToken)
     {
         while (!cancellationToken.IsCancellationRequested)
         {
@@ -61,7 +64,7 @@ public class TaskService : Service
                     ITask? task = _waitingTasks.Min;
                     if (task is null) continue;
                     _waitingTasks.Remove(task);
-                    Task runningTask = Task.Run(() =>
+                    System.Threading.Tasks.Task runningTask = System.Threading.Tasks.Task.Run(() =>
                     {
                         try
                         {
@@ -80,7 +83,7 @@ public class TaskService : Service
             {
                 _taskSemaphore.Release();
             }
-            await Task.Delay(100, cancellationToken);
+            await System.Threading.Tasks.Task.Delay(100, cancellationToken);
         }
     }
     
@@ -99,7 +102,7 @@ public class TaskService : Service
                     {
                         if (!cleaned)
                         {
-                            ServicesManager.Notification.NotifyRunningTasksAsync(new Dictionary<string, int>());
+                            _notificationService.NotifyRunningTasksAsync(new Dictionary<string, int>());
                             cleaned = true;
                         }
                         continue;
@@ -107,7 +110,7 @@ public class TaskService : Service
                     Dictionary<string, int> tasks = _waitingTasks.GroupBy(t => t.GetName())
                         .Select(g => new KeyValuePair<string, int>(g.Key, g.Count()))
                         .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
-                    ServicesManager.Notification.NotifyRunningTasksAsync(tasks);
+                    _notificationService.NotifyRunningTasksAsync(tasks);
                     cleaned = false;
                 }
                 finally
@@ -120,7 +123,6 @@ public class TaskService : Service
         {
             Logger.LogError("Error in TaskManagerService PublishTasks", e, Environment.StackTrace);
         }
-        
     }
 
     public void Shutdown()

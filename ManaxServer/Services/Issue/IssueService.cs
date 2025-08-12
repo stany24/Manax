@@ -2,9 +2,9 @@ using ManaxLibrary.DTO.Issue.Automatic;
 using ManaxServer.Models;
 using ManaxServer.Models.Issue.Automatic;
 
-namespace ManaxServer.Services;
+namespace ManaxServer.Services.Issue;
 
-public class IssueService(IServiceScopeFactory scopeFactory) : Service
+public class IssueService(IServiceScopeFactory scopeFactory) : Service, IIssueService
 {
     public void CreateSerieIssue(long serieId, AutomaticIssueSerieType problem)
     {

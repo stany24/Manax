@@ -1,13 +1,14 @@
-using ManaxServer.Services;
+using ManaxServer.Services.Fix;
 
 namespace ManaxServer.Tasks;
 
-public class FixPosterTask(long serieId) : ITask
+public class FixPosterTask(IFixService fixService, long serieId) : ITask
 {
     private readonly long _serieId = serieId;
+
     public void Execute()
     {
-        ServicesManager.Fix.FixPoster(_serieId);
+        fixService.FixPoster(_serieId);
     }
 
     public string GetName()

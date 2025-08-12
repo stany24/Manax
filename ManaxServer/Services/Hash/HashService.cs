@@ -2,9 +2,9 @@ using System.Security.Cryptography;
 using System.Text;
 using Konscious.Security.Cryptography;
 
-namespace ManaxServer.Services;
+namespace ManaxServer.Services.Hash;
 
-public class HashService : Service
+public class HashService : Service, IHashService
 {
     // Format: Base64(Salt):Base64(Hash)
     private const int MemorySize = 64; // kB

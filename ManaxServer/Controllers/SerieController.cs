@@ -6,7 +6,7 @@ using ManaxServer.Localization;
 using ManaxServer.Models;
 using ManaxServer.Models.Library;
 using ManaxServer.Models.Serie;
-using ManaxServer.Services;
+using ManaxServer.Services.Notification;
 using ManaxServer.Settings;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -16,7 +16,7 @@ namespace ManaxServer.Controllers;
 
 [Route("api/serie")]
 [ApiController]
-public class SerieController(ManaxContext context, IMapper mapper) : ControllerBase
+public class SerieController(ManaxContext context, IMapper mapper, INotificationService notificationService) : ControllerBase
 {
     // GET: api/Serie
     [HttpGet("/api/series")]
@@ -94,7 +94,7 @@ public class SerieController(ManaxContext context, IMapper mapper) : ControllerB
         try
         {
             await context.SaveChangesAsync();
-            ServicesManager.Notification.NotifySerieUpdatedAsync(mapper.Map<SerieDto>(serie));
+            notificationService.NotifySerieUpdatedAsync(mapper.Map<SerieDto>(serie));
         }
         catch (DbUpdateConcurrencyException)
         {
@@ -133,7 +133,7 @@ public class SerieController(ManaxContext context, IMapper mapper) : ControllerB
             };
             context.Series.Add(serie);
             await context.SaveChangesAsync();
-            ServicesManager.Notification.NotifySerieCreatedAsync(mapper.Map<SerieDto>(serie));
+            notificationService.NotifySerieCreatedAsync(mapper.Map<SerieDto>(serie));
             return serie.Id;
         }
         catch (Exception)
@@ -154,7 +154,7 @@ public class SerieController(ManaxContext context, IMapper mapper) : ControllerB
 
         context.Series.Remove(serie);
         await context.SaveChangesAsync();
-        ServicesManager.Notification.NotifySerieDeletedAsync(serie.Id);
+        notificationService.NotifySerieDeletedAsync(serie.Id);
 
         return NoContent();
     }

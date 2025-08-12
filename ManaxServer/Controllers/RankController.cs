@@ -3,7 +3,7 @@ using ManaxLibrary.DTO.Rank;
 using ManaxServer.Localization;
 using ManaxServer.Models;
 using ManaxServer.Models.Rank;
-using ManaxServer.Services;
+using ManaxServer.Services.Notification;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,7 +12,7 @@ namespace ManaxServer.Controllers;
 
 [Route("api/rank")]
 [ApiController]
-public class RankController(ManaxContext context, IMapper mapper) : ControllerBase
+public class RankController(ManaxContext context, IMapper mapper, INotificationService notificationService) : ControllerBase
 {
     // GET: api/rank
     [HttpGet("/api/ranks")]
@@ -32,7 +32,7 @@ public class RankController(ManaxContext context, IMapper mapper) : ControllerBa
         Rank rank = mapper.Map<Rank>(rankCreate);
         context.Ranks.Add(rank);
         await context.SaveChangesAsync();
-        ServicesManager.Notification.NotifyRankCreatedAsync(mapper.Map<RankDto>(rank));
+        notificationService.NotifyRankCreatedAsync(mapper.Map<RankDto>(rank));
         return rank.Id;
     }
 
@@ -58,7 +58,7 @@ public class RankController(ManaxContext context, IMapper mapper) : ControllerBa
         {
             return BadRequest(e.Message);
         }
-        ServicesManager.Notification.NotifyRankUpdatedAsync(mapper.Map<RankDto>(found));
+        notificationService.NotifyRankUpdatedAsync(mapper.Map<RankDto>(found));
         return NoContent();
     }
 
@@ -73,7 +73,7 @@ public class RankController(ManaxContext context, IMapper mapper) : ControllerBa
         if (rank == null) return NotFound(Localizer.Format("RankNotFound", id));
         context.Ranks.Remove(rank);
         await context.SaveChangesAsync();
-        ServicesManager.Notification.NotifyRankDeletedAsync(id);
+        notificationService.NotifyRankDeletedAsync(id);
         return NoContent();
     }
 

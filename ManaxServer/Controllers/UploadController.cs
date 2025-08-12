@@ -8,17 +8,20 @@ using ManaxServer.Localization;
 using ManaxServer.Models;
 using ManaxServer.Models.Chapter;
 using ManaxServer.Models.Serie;
-using ManaxServer.Services;
+using ManaxServer.Services.Fix;
+using ManaxServer.Services.Notification;
+using ManaxServer.Services.Task;
 using ManaxServer.Settings;
 using ManaxServer.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using FixService = ManaxServer.Services.Fix.FixService;
 
 namespace ManaxServer.Controllers;
 
 [Route("api/upload")]
 [ApiController]
-public partial class UploadController(ManaxContext context, IMapper mapper) : ControllerBase
+public partial class UploadController(ManaxContext context, IMapper mapper, INotificationService notificationService, ITaskService taskService, IFixService fixService) : ControllerBase
 {
     [GeneratedRegex("\\d{1,4}")]
     private static partial Regex RegexNumber();
@@ -102,10 +105,10 @@ public partial class UploadController(ManaxContext context, IMapper mapper) : Co
 
         context.Chapters.Add(chapter);
         await context.SaveChangesAsync();
-        if (!replacing) { ServicesManager.Notification.NotifyChapterAddedAsync(mapper.Map<ChapterDto>(chapter)); }
+        if (!replacing) { notificationService.NotifyChapterAddedAsync(mapper.Map<ChapterDto>(chapter)); }
 
-        _ = ServicesManager.Task.AddTaskAsync(new FixChapterTask(chapter.Id));
-        _ = ServicesManager.Task.AddTaskAsync(new FixSerieTask(chapter.SerieId));
+        _ = taskService.AddTaskAsync(new FixChapterTask(fixService,chapter.Id));
+        _ = taskService.AddTaskAsync(new FixSerieTask(fixService,chapter.SerieId));
         
         return Ok();
     }
@@ -160,8 +163,8 @@ public partial class UploadController(ManaxContext context, IMapper mapper) : Co
             MagickImage image = new(file.OpenReadStream());
             image.Quality = SettingsManager.Data.PosterQuality;
             await image.WriteAsync(path, GetMagickFormat(format));
-            _ = ServicesManager.Task.AddTaskAsync(new FixPosterTask(serie.Id));
-            ServicesManager.Notification.NotifyPosterModifiedAsync(serie.Id);
+            _ = taskService.AddTaskAsync(new FixPosterTask(fixService,serie.Id));
+            notificationService.NotifyPosterModifiedAsync(serie.Id);
         }
         catch (Exception e)
         {

@@ -2,7 +2,8 @@ using ManaxServer.Localization;
 using ManaxServer.Models;
 using ManaxServer.Models.Chapter;
 using ManaxServer.Models.Serie;
-using ManaxServer.Services;
+using ManaxServer.Services.Fix;
+using ManaxServer.Services.Task;
 using ManaxServer.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,7 +13,7 @@ namespace ManaxServer.Controllers;
 
 [Route("api/scan")]
 [ApiController]
-public class CheckController(ManaxContext context) : ControllerBase
+public class CheckController(ManaxContext context, ITaskService taskService, IFixService fixService) : ControllerBase
 {
     [HttpGet("serie/{id:long}")]
     [Authorize(Roles = "Admin,Owner")]
@@ -24,7 +25,7 @@ public class CheckController(ManaxContext context) : ControllerBase
 
         if (serie == null) return NotFound(Localizer.Format("SerieNotFound", id));
 
-        _ = ServicesManager.Task.AddTaskAsync(new FixSerieTask(serie.Id));
+        _ = taskService.AddTaskAsync(new FixSerieTask(fixService,serie.Id));
 
         return Ok();
     }
@@ -40,7 +41,7 @@ public class CheckController(ManaxContext context) : ControllerBase
 
         if (chapter == null) return NotFound(Localizer.Format("ChapterNotFound", id));
 
-        _ = ServicesManager.Task.AddTaskAsync(new FixChapterTask(chapter.Id));
+        _ = taskService.AddTaskAsync(new FixChapterTask(fixService,chapter.Id));
 
         return Ok();
     }

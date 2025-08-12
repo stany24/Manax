@@ -1,16 +1,22 @@
 using ManaxLibrary.DTO.Setting;
-using ManaxServer.Services;
+using ManaxServer.Services.Renaming;
 
 namespace ManaxServer.Tasks;
 
-public class PosterRenamingTask(string oldName,string newName,ImageFormat oldFormat, ImageFormat newFormat) : ITask
+public class PosterRenamingTask(
+    IRenamingService renamingService,
+    string oldName,
+    string newName,
+    ImageFormat oldFormat,
+    ImageFormat newFormat)
+    : ITask
 {
     private readonly string _oldName = oldName;
     private readonly ImageFormat _oldFormat = oldFormat;
 
     public void Execute()
     {
-        ServicesManager.Renaming.RenamePosters(_oldName, newName, _oldFormat, newFormat);
+        renamingService.RenamePosters(_oldName, newName, _oldFormat, newFormat);
     }
 
     public string GetName()
@@ -25,8 +31,8 @@ public class PosterRenamingTask(string oldName,string newName,ImageFormat oldFor
     
     public override bool Equals(object? obj)
     {
-        if (obj is not PosterRenamingTask serieCheckTask) { return false; }
-        return serieCheckTask._oldName == _oldName && serieCheckTask._oldFormat == _oldFormat;
+        if (obj is not PosterRenamingTask task) { return false; }
+        return task._oldName == _oldName && task._oldFormat == _oldFormat;
     }
 
     public override int GetHashCode()

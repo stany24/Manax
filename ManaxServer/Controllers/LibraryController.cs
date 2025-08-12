@@ -3,7 +3,7 @@ using ManaxLibrary.DTO.Library;
 using ManaxServer.Localization;
 using ManaxServer.Models;
 using ManaxServer.Models.Library;
-using ManaxServer.Services;
+using ManaxServer.Services.Notification;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,7 +12,7 @@ namespace ManaxServer.Controllers;
 
 [Route("api/library")]
 [ApiController]
-public class LibraryController(ManaxContext context, IMapper mapper) : ControllerBase
+public class LibraryController(ManaxContext context, IMapper mapper, INotificationService notificationService) : ControllerBase
 {
     // GET: api/Library
     [HttpGet("/api/Libraries")]
@@ -79,7 +79,7 @@ public class LibraryController(ManaxContext context, IMapper mapper) : Controlle
             return Conflict(Localizer.Format("LibraryNameOrPathNotUnique"));
         }
 
-        ServicesManager.Notification.NotifyLibraryUpdatedAsync(mapper.Map<LibraryDto>(library));
+        notificationService.NotifyLibraryUpdatedAsync(mapper.Map<LibraryDto>(library));
         return NoContent();
     }
 
@@ -117,7 +117,7 @@ public class LibraryController(ManaxContext context, IMapper mapper) : Controlle
             return Conflict(Localizer.Format("LibraryNameOrPathNotUnique"));
         }
 
-        ServicesManager.Notification.NotifyLibraryCreatedAsync(mapper.Map<LibraryDto>(library));
+        notificationService.NotifyLibraryCreatedAsync(mapper.Map<LibraryDto>(library));
         return library.Id;
     }
 
@@ -133,7 +133,7 @@ public class LibraryController(ManaxContext context, IMapper mapper) : Controlle
 
         context.Libraries.Remove(library);
         await context.SaveChangesAsync();
-        ServicesManager.Notification.NotifyLibraryDeletedAsync(library.Id);
+        notificationService.NotifyLibraryDeletedAsync(library.Id);
 
         return Ok();
     }

@@ -2,9 +2,9 @@ using ImageMagick;
 using ManaxLibrary.DTO.Setting;
 using ManaxServer.Models;
 
-namespace ManaxServer.Services;
+namespace ManaxServer.Services.Renaming;
 
-public class RenamingService(IServiceScopeFactory scopeFactory) : Service
+public class RenamingService(IServiceScopeFactory scopeFactory) : Service, IRenamingService
 {
     public void RenameChapters()
     {

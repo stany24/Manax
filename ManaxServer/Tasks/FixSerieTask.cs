@@ -1,13 +1,14 @@
-using ManaxServer.Services;
+using ManaxServer.Services.Fix;
 
 namespace ManaxServer.Tasks;
 
-public class FixSerieTask(long serieId) : ITask
+public class FixSerieTask(IFixService fixService,long serieId) : ITask
 {
     private readonly long _serieId = serieId;
+
     public void Execute()
     {
-        ServicesManager.Fix.FixSerie(_serieId);
+        fixService.FixSerie(_serieId);
     }
 
     public string GetName()
@@ -22,7 +23,7 @@ public class FixSerieTask(long serieId) : ITask
     
     public override bool Equals(object? obj)
     {
-        if (obj is not  FixSerieTask serieCheckTask) { return false; }
+        if (obj is not FixSerieTask serieCheckTask) { return false; }
         return serieCheckTask._serieId == _serieId;
     }
 
