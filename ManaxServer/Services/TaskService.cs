@@ -7,45 +7,45 @@ namespace ManaxServer.Services;
 public class TaskService : Service
 {
     private const int MaxTasks = 12;
-    private readonly SortedSet<ITask> WaitingTasks = new(TaskPriorityComparer.Instance);
-    private readonly List<(ITask Task, Task RunningTask)> RunningTasks = [];
-    private readonly SemaphoreSlim TaskSemaphore = new(1, 1);
-    private readonly CancellationTokenSource CancellationTokenSource = new();
+    private readonly SortedSet<ITask> _waitingTasks = new(TaskPriorityComparer.Instance);
+    private readonly List<(ITask Task, Task RunningTask)> _runningTasks = [];
+    private readonly SemaphoreSlim _taskSemaphore = new(1, 1);
+    private readonly CancellationTokenSource _cancellationTokenSource = new();
 
     public TaskService()
     {
-        Task.Run(() => TaskLoopAsync(CancellationTokenSource.Token));
-        Task.Run(() => PublishTasks(CancellationTokenSource.Token));
+        Task.Run(() => TaskLoopAsync(_cancellationTokenSource.Token));
+        Task.Run(() => PublishTasks(_cancellationTokenSource.Token));
     }
 
     public async Task AddTaskAsync(ITask task)
     {
-        await TaskSemaphore.WaitAsync();
+        await _taskSemaphore.WaitAsync();
         try
         {
-            bool alreadyWaiting = WaitingTasks.Contains(task);
-            bool alreadyRunning = RunningTasks.Any(rt => rt.Task.Equals(task));
+            bool alreadyWaiting = _waitingTasks.Contains(task);
+            bool alreadyRunning = _runningTasks.Any(rt => rt.Task.Equals(task));
             if (!alreadyWaiting && !alreadyRunning)
             {
-                WaitingTasks.Add(task);
+                _waitingTasks.Add(task);
             }
         }
         finally
         {
-            TaskSemaphore.Release();
+            _taskSemaphore.Release();
         }
     }
     
     private async Task RemoveTaskAsync(Task runningTask, CancellationToken cancellationToken)
     {
-        await TaskSemaphore.WaitAsync(cancellationToken);
+        await _taskSemaphore.WaitAsync(cancellationToken);
         try
         {
-            RunningTasks.RemoveAll(rt => rt.RunningTask == runningTask);
+            _runningTasks.RemoveAll(rt => rt.RunningTask == runningTask);
         }
         finally
         {
-            TaskSemaphore.Release();
+            _taskSemaphore.Release();
         }
     }
 
@@ -53,14 +53,14 @@ public class TaskService : Service
     {
         while (!cancellationToken.IsCancellationRequested)
         {
-            await TaskSemaphore.WaitAsync(cancellationToken);
+            await _taskSemaphore.WaitAsync(cancellationToken);
             try
             {
-                if (RunningTasks.Count < MaxTasks && WaitingTasks.Count > 0)
+                if (_runningTasks.Count < MaxTasks && _waitingTasks.Count > 0)
                 {
-                    ITask? task = WaitingTasks.Min;
+                    ITask? task = _waitingTasks.Min;
                     if (task is null) continue;
-                    WaitingTasks.Remove(task);
+                    _waitingTasks.Remove(task);
                     Task runningTask = Task.Run(() =>
                     {
                         try
@@ -72,13 +72,13 @@ public class TaskService : Service
                             Logger.LogError(Localizer.Format("TaskError",task.GetName()), e, Environment.StackTrace);
                         }
                     }, cancellationToken);
-                    RunningTasks.Add((task, runningTask));
+                    _runningTasks.Add((task, runningTask));
                     _ = runningTask.ContinueWith(async _ => await RemoveTaskAsync(runningTask, cancellationToken), cancellationToken);
                 }
             }
             finally
             {
-                TaskSemaphore.Release();
+                _taskSemaphore.Release();
             }
             await Task.Delay(100, cancellationToken);
         }
@@ -92,10 +92,10 @@ public class TaskService : Service
             while (!cancellationToken.IsCancellationRequested)
             {
                 Thread.Sleep(1000);
-                await TaskSemaphore.WaitAsync(cancellationToken);
+                await _taskSemaphore.WaitAsync(cancellationToken);
                 try
                 {
-                    if (WaitingTasks.Count == 0)
+                    if (_waitingTasks.Count == 0)
                     {
                         if (!cleaned)
                         {
@@ -104,7 +104,7 @@ public class TaskService : Service
                         }
                         continue;
                     }
-                    Dictionary<string, int> tasks = WaitingTasks.GroupBy(t => t.GetName())
+                    Dictionary<string, int> tasks = _waitingTasks.GroupBy(t => t.GetName())
                         .Select(g => new KeyValuePair<string, int>(g.Key, g.Count()))
                         .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
                     ServicesManager.Notification.NotifyRunningTasksAsync(tasks);
@@ -112,7 +112,7 @@ public class TaskService : Service
                 }
                 finally
                 {
-                    TaskSemaphore.Release();
+                    _taskSemaphore.Release();
                 }
             }
         }
@@ -125,7 +125,7 @@ public class TaskService : Service
 
     public void Shutdown()
     {
-        CancellationTokenSource.Cancel();
+        _cancellationTokenSource.Cancel();
     }
 }
 

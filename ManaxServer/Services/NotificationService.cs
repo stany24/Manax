@@ -7,12 +7,10 @@ using ManaxLibrary.DTO.User;
 using ManaxLibrary.Logging;
 using ManaxLibrary.Notifications;
 using ManaxServer.Localization;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 
 namespace ManaxServer.Services;
 
-[Authorize]
 public class NotificationService(IHubContext<NotificationService> hubContext) : Hub
 {
     public override async Task OnConnectedAsync()

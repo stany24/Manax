@@ -3,9 +3,9 @@ using ManaxServer.Localization;
 
 namespace ManaxServer.Services;
 
-public class Service
+public abstract class Service
 {
-    public Service()
+    protected Service()
     {
         Logger.LogInfo(Localizer.Format("ServiceInitialized", GetType().Name));
     }

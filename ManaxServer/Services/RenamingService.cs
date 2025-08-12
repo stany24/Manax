@@ -39,7 +39,7 @@ public class RenamingService(IServiceScopeFactory scopeFactory) : Service
             });
     }
     
-    private MagickFormat GetMagickFormat(ImageFormat format)
+    private static MagickFormat GetMagickFormat(ImageFormat format)
     {
         return format switch
         {
