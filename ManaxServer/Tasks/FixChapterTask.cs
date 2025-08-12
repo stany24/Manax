@@ -1,3 +1,4 @@
+using ManaxServer.Localization;
 using ManaxServer.Services.Fix;
 
 namespace ManaxServer.Tasks;
@@ -13,7 +14,7 @@ public class FixChapterTask(IFixService fixService, long chapterId) : ITask
 
     public string GetName()
     {
-        return "Chapter check";
+        return Localizer.GetString("TaskChapterCheck");
     }
 
     public TaskPriority GetPriority()

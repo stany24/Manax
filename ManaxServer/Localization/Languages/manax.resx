@@ -130,7 +130,7 @@
         <value>Message sent to all clients: {0}</value>
     </data>
     <data name="HubMessageError" xml:space="preserve">
-        <value>Erreur while sending notification {0}</value>
+        <value>Erreur while sending notification tu users {0}</value>
     </data>
     <data name="TaskError" xml:space="preserve">
         <value>Error executing task: {0}</value>
@@ -146,5 +146,20 @@
     </data>
     <data name="HubMessageSentOwner" xml:space="preserve">
         <value>Message sent to the owner: {0}</value>
+    </data>
+    <data name="TaskPosterRenaming" xml:space="preserve">
+        <value>Poster renaming</value>
+    </data>
+    <data name="TaskChapterCheck" xml:space="preserve">
+        <value>Chapter check</value>
+    </data>
+    <data name="TaskPosterCheck" xml:space="preserve">
+        <value>Poster check</value>
+    </data>
+    <data name="TaskSerieCheck" xml:space="preserve">
+        <value>Serie check</value>
+    </data>
+    <data name="HubMessageErrorAdmins" xml:space="preserve">
+        <value>Erreur while sending notification to admins {0}</value>
     </data>
 </root>

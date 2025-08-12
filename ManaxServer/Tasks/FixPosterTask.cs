@@ -1,3 +1,4 @@
+using ManaxServer.Localization;
 using ManaxServer.Services.Fix;
 
 namespace ManaxServer.Tasks;
@@ -13,7 +14,7 @@ public class FixPosterTask(IFixService fixService, long serieId) : ITask
 
     public string GetName()
     {
-        return "Poster check";
+        return Localizer.GetString("TaskPosterCheck");
     }
 
     public TaskPriority GetPriority()

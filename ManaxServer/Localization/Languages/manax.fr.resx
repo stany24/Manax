@@ -40,7 +40,7 @@
         <value>Message envoyé à tous les clients:  {0}</value>
     </data>
     <data name="HubMessageError" xml:space="preserve">
-        <value>Erreur lors de l'envoi de la notification pendant l'envoi de {0}</value>
+        <value>Erreur lors de l'envoi de la notification pendant l'envoi de {0} aux utilisateurs</value>
     </data>
     <data name="TaskError" xml:space="preserve">
         <value>Erreur pendant l'execution de la tache: {0}</value>
@@ -56,5 +56,20 @@
     </data>
     <data name="HubMessageSentOwner" xml:space="preserve">
         <value>Message envoyé au propriétaire:  {0}</value>
+    </data>
+    <data name="TaskPosterRenaming" xml:space="preserve">
+        <value>Renommage des posters</value>
+    </data>
+    <data name="TaskChapterCheck" xml:space="preserve">
+        <value>Vérification du chapitre</value>
+    </data>
+    <data name="TaskPosterCheck" xml:space="preserve">
+        <value>Vérification du poster</value>
+    </data>
+    <data name="TaskSerieCheck" xml:space="preserve">
+        <value>Vérification de la série</value>
+    </data>
+    <data name="HubMessageErrorAdmins" xml:space="preserve">
+        <value>Erreur lors de l'envoi de la notification pendant l'envoi de {0} aux administrateurs</value>
     </data>
 </root>

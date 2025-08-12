@@ -1,4 +1,5 @@
 using ManaxLibrary.DTO.Setting;
+using ManaxServer.Localization;
 using ManaxServer.Services.Renaming;
 
 namespace ManaxServer.Tasks;
@@ -21,7 +22,7 @@ public class PosterRenamingTask(
 
     public string GetName()
     {
-        return "Poster renaming";
+        return Localizer.GetString("TaskPosterRenaming");
     }
 
     public TaskPriority GetPriority()
