@@ -15,7 +15,6 @@ using ManaxServer.Settings;
 using ManaxServer.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using FixService = ManaxServer.Services.Fix.FixService;
 
 namespace ManaxServer.Controllers;
 
@@ -91,7 +90,7 @@ public partial class UploadController(ManaxContext context, IMapper mapper, INot
         await SaveFileAsync(file, filePath);
 
         int number = ExtractChapterNumber(file.FileName);
-        DateTime creation = GetChapterCreationDate(replacing, filePath);
+        DateTime creation = GetChapterCreationDate(filePath);
 
         Chapter chapter = new()
         {
@@ -100,10 +99,12 @@ public partial class UploadController(ManaxContext context, IMapper mapper, INot
             FileName = file.FileName,
             Number = number,
             Pages = pagesCount,
-            Creation = creation
+            Creation = creation,
+            LastModification = DateTime.UtcNow
         };
 
         context.Chapters.Add(chapter);
+        serie.LastModification = DateTime.UtcNow;
         await context.SaveChangesAsync();
         if (!replacing) { notificationService.NotifyChapterAddedAsync(mapper.Map<ChapterDto>(chapter)); }
 
@@ -142,9 +143,8 @@ public partial class UploadController(ManaxContext context, IMapper mapper, INot
         return match.Success ? Convert.ToInt32(match.Value) : 0;
     }
 
-    private DateTime GetChapterCreationDate(bool replacing, string filePath)
+    private DateTime GetChapterCreationDate(string filePath)
     {
-        if (!replacing) return DateTime.UtcNow;
         Chapter? replacedChapter = context.Chapters.FirstOrDefault(c => c.FileName == filePath);
         return replacedChapter?.Creation ?? DateTime.UtcNow;
     }
