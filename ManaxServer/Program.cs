@@ -43,16 +43,19 @@ public class Program
             opt.UseSqlite($"Data Source={Path.Combine(AppContext.BaseDirectory, "database.db")}"));
 
         // AutoMapper configuration 
-        builder.Services.AddAutoMapper(typeof(MappingProfile));
+        builder.Services.AddAutoMapper(config => 
+        {
+            config.AddProfile<MappingProfile>();
+        });
         
         // Services
+        builder.Services.AddSingleton<INotificationService>(provider => new NotificationService(provider.GetRequiredService<IHubContext<NotificationService>>()));
         builder.Services.AddSingleton<IHashService>(_ => new HashService());
-        builder.Services.AddSingleton<ITaskService>(_ => new TaskService());
+        builder.Services.AddSingleton<ITaskService>(provider => new TaskService(provider.GetRequiredService<INotificationService>()));
         builder.Services.AddScoped<IFixService>(provider => new FixService(provider.GetRequiredService<IServiceScopeFactory>(), provider.GetRequiredService<IIssueService>()));
         builder.Services.AddScoped<IIssueService>(provider => new IssueService(provider.GetRequiredService<IServiceScopeFactory>()));
         builder.Services.AddScoped<IRenamingService>(provider => new RenamingService(provider.GetRequiredService<IServiceScopeFactory>()));
-        builder.Services.AddSingleton<INotificationService>(provider =>
-            new NotificationService(provider.GetRequiredService<IHubContext<NotificationService>>()));
+        
 
         builder.Services.Configure<KestrelServerOptions>(options =>
         {

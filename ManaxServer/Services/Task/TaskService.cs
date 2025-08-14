@@ -12,11 +12,11 @@ public class TaskService : Service,ITaskService
     private readonly List<(ITask Task, System.Threading.Tasks.Task RunningTask)> _runningTasks = [];
     private readonly SemaphoreSlim _taskSemaphore = new(1, 1);
     private readonly CancellationTokenSource _cancellationTokenSource = new();
-    private readonly NotificationService _notificationService;
+    private readonly INotificationService _notificationService;
 
-    public TaskService(NotificationService? notificationService = null)
+    public TaskService(INotificationService notificationService)
     {
-        _notificationService = notificationService ?? new NotificationService(null);
+        _notificationService = notificationService;
         System.Threading.Tasks.Task.Run(() => TaskLoopAsync(_cancellationTokenSource.Token));
         System.Threading.Tasks.Task.Run(() => PublishTasks(_cancellationTokenSource.Token));
     }
