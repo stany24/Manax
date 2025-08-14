@@ -110,6 +110,17 @@
           <DependentUpon>HomePageView.axaml</DependentUpon>
           <SubType>Code</SubType>
         </Compile>
+        <Compile Update="Views\Stats\UserStatsPageView.axaml.cs">
+          <DependentUpon>UserStatsPageView.axaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\Stats\UserIssuesPageView.axaml.cs">
+          <DependentUpon>UserIssuesPageView.axaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\Stats\ServerStatsPageView.axaml.cs">
+          <DependentUpon>ServerStatsPageView.axaml</DependentUpon>
+        </Compile>
     </ItemGroup>
 
     <ItemGroup>

@@ -94,6 +94,19 @@
                     Command="{Binding ChangePageSettings}">
                     Settings
                 </Button>
+                <Button
+                    HorizontalAlignment="Stretch"
+                    HorizontalContentAlignment="Center"
+                    Command="{Binding ChangePageUserStats}">
+                    Stats
+                </Button>
+                <Button
+                    HorizontalAlignment="Stretch"
+                    HorizontalContentAlignment="Center"
+                    IsVisible="{Binding IsAdmin}"
+                    Command="{Binding ChangePageServerStats}">
+                    Server Stats
+                </Button>
                 <TextBlock
                     Margin="5,5,5,5"
                     FontWeight="Bold"

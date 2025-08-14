@@ -6,7 +6,6 @@ using ManaxServer.Models.Chapter;
 using ManaxServer.Services.Notification;
 using ManaxTests.Mocks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 
 namespace ManaxTests;
