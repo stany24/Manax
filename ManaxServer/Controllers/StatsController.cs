@@ -76,7 +76,9 @@ public class StatsController(ManaxContext context, IMapper mapper) : ControllerB
         }
         ServerStats stats = new()
         {
-            DiskSize = diskSize
+            DiskSize = diskSize,
+            Users = await context.Users.CountAsync(),
+            ActiveUsers = await context.Users.CountAsync(u => u.LastLogin > DateTime.UtcNow - TimeSpan.FromDays(7))
         };
 
         return stats;

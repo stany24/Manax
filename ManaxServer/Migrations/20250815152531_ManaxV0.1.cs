@@ -92,7 +92,8 @@ namespace ManaxServer.Migrations
                     Username = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
                     PasswordHash = table.Column<string>(type: "TEXT", maxLength: 128, nullable: false),
                     Role = table.Column<int>(type: "INTEGER", nullable: false),
-                    Creation = table.Column<DateTime>(type: "TEXT", nullable: false)
+                    Creation = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    LastLogin = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {

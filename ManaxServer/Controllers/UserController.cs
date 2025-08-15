@@ -144,6 +144,7 @@ public class UserController(ManaxContext context, IMapper mapper, IHashService h
             return Unauthorized(Localizer.Format("UserInvalidLogin"));
         }
         
+        user.LastLogin = DateTime.UtcNow;
         loginAttempt.Success = true;
         Logger.LogInfo("User "+loginDto.Username+" logged in successfully from "+loginAttempt.Origin);
         context.LoginAttempts.Add(loginAttempt);

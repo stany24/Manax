@@ -15,7 +15,7 @@ namespace ManaxServer.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "9.0.7");
+            modelBuilder.HasAnnotation("ProductVersion", "9.0.8");
 
             modelBuilder.Entity("ManaxServer.Models.Chapter.Chapter", b =>
                 {
@@ -344,6 +344,9 @@ namespace ManaxServer.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("Creation")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("LastLogin")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("PasswordHash")

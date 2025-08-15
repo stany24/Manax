@@ -17,4 +17,5 @@ public class User
     public UserRole Role { get; set; }
     
     public DateTime Creation { get; set; }
+    public DateTime LastLogin { get; set; }
 }

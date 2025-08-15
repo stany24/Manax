@@ -2,9 +2,12 @@
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
-        <TargetFramework>netcoreapp3.0</TargetFramework>
         <AssemblyName>ManaxServer</AssemblyName>
         <RootNamespace>ManaxServer</RootNamespace>
+        <TargetFramework>net8.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     </PropertyGroup>
 
     <PropertyGroup>
@@ -18,6 +21,8 @@
         <!-- <BeautyHiddens>hostfxr;hostpolicy;*.deps.json;*.runtimeconfig*.json</BeautyHiddens> -->
         <!-- set to True if you want to disable -->
         <DisableBeauty>False</DisableBeauty>
+        <!-- Condition added to only enable NetBeauty in Release mode -->
+        <DisableBeauty Condition="'$(Configuration)' == 'Debug'">True</DisableBeauty>
         <!-- set to False if you want to beauty on build -->
         <BeautyOnPublishOnly>False</BeautyOnPublishOnly>
         <!-- DO NOT TOUCH THIS OPTION -->
@@ -44,13 +49,6 @@
         <!-- set to a repo mirror if you have troble in connecting github -->
         <!-- <BeautyGitCDN>https://gitee.com/liesauer/HostFXRPatcher</BeautyGitCDN> -->
         <!-- <BeautyGitTree>master</BeautyGitTree> -->
-    </PropertyGroup>
-
-    <PropertyGroup>
-        <TargetFramework>net8.0</TargetFramework>
-        <Nullable>enable</Nullable>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     </PropertyGroup>
 
     <ItemGroup>
@@ -91,4 +89,3 @@
     </ItemGroup>
 
 </Project>
-
