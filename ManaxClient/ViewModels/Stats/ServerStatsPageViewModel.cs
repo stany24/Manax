@@ -1,7 +1,10 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
+using LiveChartsCore;
+using LiveChartsCore.SkiaSharpView.Extensions;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTO.Stats;
@@ -11,7 +14,8 @@ namespace ManaxClient.ViewModels.Stats;
 
 public partial class ServerStatsPageViewModel : PageViewModel
 {
-    [ObservableProperty] private ServerStats _serverStats = null!;
+    [ObservableProperty] private IEnumerable<ISeries>? _userSeries;
+    [ObservableProperty] private ServerStats? _serverStats;
     
     public ServerStatsPageViewModel()
     {
@@ -33,6 +37,7 @@ public partial class ServerStatsPageViewModel : PageViewModel
             Dispatcher.UIThread.Post(() =>
             {
                 ServerStats = serverStats.GetValue();
+                UpdateChartData();
             });
         }
         catch (Exception e)
@@ -40,5 +45,19 @@ public partial class ServerStatsPageViewModel : PageViewModel
             Logger.LogError($"An error occurred while loading server stats: {e.Message}",e, Environment.StackTrace);
             InfoEmitted?.Invoke(this, $"An error occurred while loading server stats: {e.Message}");
         }
+    }
+    
+    private void UpdateChartData()
+    {
+        if (ServerStats == null) return;
+        UserSeries =  GaugeGenerator.BuildSolidGauge(
+            new GaugeItem(
+                ServerStats.ActiveUsers,
+                series =>
+                {
+                    series.MaxRadialColumnWidth = 50;
+                    series.DataLabelsSize = 50;
+                    series.Name = $"Utilisateurs actifs: {ServerStats.ActiveUsers} / {ServerStats.Users}";
+                }));
     }
 }

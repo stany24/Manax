@@ -74,11 +74,14 @@ public class StatsController(ManaxContext context, IMapper mapper) : ControllerB
             DirectoryInfo dirInfo = new(library.Path);
             diskSize += GetDirectorySize(dirInfo);
         }
+        
+        DateTime recently = DateTime.UtcNow.AddDays(-7);
+        
         ServerStats stats = new()
         {
             DiskSize = diskSize,
             Users = await context.Users.CountAsync(),
-            ActiveUsers = await context.Users.CountAsync(u => u.LastLogin > DateTime.UtcNow - TimeSpan.FromDays(7))
+            ActiveUsers = await context.Users.Where(u => u.LastLogin > recently).CountAsync()
         };
 
         return stats;
