@@ -38,7 +38,7 @@ public partial class SeriePageViewModel : PageViewModel
         Task.Run(() => { LoadSerieInfo(serieId); });
         Task.Run(() => { LoadPoster(serieId); });
         Task.Run(() => { LoadChapters(serieId); });
-        Task.Run(() => { LoadRanks(serieId); }).ContinueWith(_ => BindToRankChange(serieId));
+        Task.Run(() => { LoadRanks(serieId); });
         ServerNotification.OnSerieUpdated += UpdateSerieInfo;
         ServerNotification.OnPosterModified += LoadPoster;
         ServerNotification.OnChapterAdded += OnChapterAdded;
@@ -98,9 +98,14 @@ public partial class SeriePageViewModel : PageViewModel
                 return;
             }
             UserRankDto? rank = rankingResponse.GetValue().FirstOrDefault(rank => rank.SerieId == serieId);
-            if (rank == null) return;
+            if (rank == null)
+            {
+                BindToRankChange(serieId);
+                return;
+            }
             RankDto? userRank = ranks.FirstOrDefault(r => r.Id == rank.RankId);
             Dispatcher.UIThread.Invoke(() => { SelectedRank = userRank; });
+            BindToRankChange(serieId);
         }
         catch (Exception e)
         {

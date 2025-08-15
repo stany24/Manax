@@ -222,11 +222,12 @@ public partial class LibraryPageViewModel : PageViewModel
                     Title = "Sélectionnez un dossier à uploader",
                     AllowMultiple = false
                 });
+            IsFolderPickerOpen = false;
 
             if (folders.Count == 0) return;
             string folderPath = folders[0].Path.LocalPath;
             if (string.IsNullOrEmpty(folderPath)) return;
-
+            
             Optional<bool> uploadSerieResponse = await UploadApiUploadClient.UploadSerieAsync(folderPath, Library.Id);
             if (uploadSerieResponse.Failed)
             {
@@ -241,10 +242,6 @@ public partial class LibraryPageViewModel : PageViewModel
         catch (Exception e)
         {
             Logger.LogError("Error uploading series", e, Environment.StackTrace);
-        }
-        finally
-        {
-            IsFolderPickerOpen = false;
         }
     }
 }
