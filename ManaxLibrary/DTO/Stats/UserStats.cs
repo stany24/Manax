@@ -10,5 +10,5 @@ public class UserStats
     public long ChaptersTotal { get; set; }
     public long ChaptersRead { get; set; }
     
-    public Dictionary<RankDto,int> Ranks { get; set; } = new Dictionary<RankDto, int>();
+    public List<RankCount> Ranks { get; set; } = [];
 }

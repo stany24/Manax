@@ -38,24 +38,21 @@ public class StatsController(ManaxContext context, IMapper mapper) : ControllerB
             .Where(r => r.UserId == currentUserId.Value)
             .Select(r => r.ChapterId)
             .ToList();
-        
-        Dictionary<Rank,int> ranks = context.UserRanks
-            .Where(r => r.UserId == currentUserId.Value)
-            .GroupBy( r => r.Rank)
-            .ToDictionary(g => g.Key, g => g.Count());
 
-        Dictionary<RankDto,int> ranksDto = ranks.ToDictionary(
-            kvp => mapper.Map<RankDto>(kvp.Key),
-            kvp => kvp.Value
-        );
-        
+        List<RankCount> ranks = context.UserRanks
+            .Where(r => r.UserId == currentUserId.Value)
+            .GroupBy(r => r.Rank)
+            .Select(rankPair => new RankCount { Rank = mapper.Map<RankDto>(rankPair.Key), Count = rankPair.Count() })
+            .ToList();
+
+
         UserStats stats = new()
         {
             SeriesTotal = await context.Series.CountAsync(),
             ChaptersTotal = await context.Chapters.CountAsync(),
             ChaptersRead = chaptersRead.Count,
             SeriesRead = await context.Series.Where(s => chaptersRead.Contains(s.Id)).CountAsync(),
-            Ranks = ranksDto
+            Ranks = ranks
         };
 
         return stats;

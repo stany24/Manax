@@ -3,9 +3,69 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:issue="clr-namespace:ManaxClient.ViewModels.Issue"
     xmlns:stats="clr-namespace:ManaxClient.ViewModels.Stats"
+    xmlns:avalonia="clr-namespace:LiveChartsCore.SkiaSharpView.Avalonia;assembly=LiveChartsCore.SkiaSharpView.Avalonia"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Stats.UserStatsPageView"
     x:DataType="stats:UserStatsPageViewModel">
+    
+    <ScrollViewer>
+        <StackPanel>
+            <TextBlock 
+                Text="Statistiques Utilisateur" 
+                FontSize="24" 
+                FontWeight="Bold" 
+                HorizontalAlignment="Center"
+                Margin="0,20,0,20"/>
+                
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="30">
+                <StackPanel>
+                    <TextBlock 
+                        Text="Séries" 
+                        FontSize="18" 
+                        HorizontalAlignment="Center"
+                        Margin="0,0,0,10"/>
+                    <avalonia:PieChart
+                        Series="{Binding SeriesSeries}"
+                        InitialRotation="-90"
+                        MinValue="0"
+                        MaxValue="{Binding UserStats.SeriesTotal}"
+                        Width="300"
+                        Height="300">
+                    </avalonia:PieChart>
+                </StackPanel>
+                
+                <StackPanel>
+                    <TextBlock 
+                        Text="Chapitres" 
+                        FontSize="18" 
+                        HorizontalAlignment="Center"
+                        Margin="0,0,0,10"/>
+                    <avalonia:PieChart
+                        Series="{Binding ChaptersSeries}"
+                        InitialRotation="-90"
+                        MinValue="0"
+                        MaxValue="{Binding UserStats.ChaptersTotal}"
+                        Width="300"
+                        Height="300">
+                    </avalonia:PieChart>
+                </StackPanel>
+            </StackPanel>
+            
+            <!-- Graphique à barres pour les rangs -->
+            <TextBlock 
+                Text="Distribution des Rangs" 
+                FontSize="18" 
+                HorizontalAlignment="Center"
+                Margin="0,30,0,10"/>
+                
+            <avalonia:CartesianChart
+                Series="{Binding RanksSeries}"
+                XAxes="{Binding XAxes}"
+                Height="300"
+                Width="600"
+                Margin="0,0,0,20">
+            </avalonia:CartesianChart>
+        </StackPanel>
+    </ScrollViewer>
 </UserControl>

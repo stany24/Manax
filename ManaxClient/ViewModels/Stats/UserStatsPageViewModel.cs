@@ -1,9 +1,17 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
+using LiveChartsCore;
+using LiveChartsCore.SkiaSharpView;
+using LiveChartsCore.SkiaSharpView.Extensions;
+using LiveChartsCore.SkiaSharpView.Painting;
+using SkiaSharp;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
+using ManaxLibrary.DTO.Rank;
 using ManaxLibrary.DTO.Stats;
 using ManaxLibrary.Logging;
 
@@ -12,6 +20,10 @@ namespace ManaxClient.ViewModels.Stats;
 public partial class UserStatsPageViewModel : PageViewModel
 {
     [ObservableProperty] private UserStats _userStats = null!;
+    [ObservableProperty] private IEnumerable<ISeries>? _seriesSeries;
+    [ObservableProperty] private IEnumerable<ISeries>? _chaptersSeries;
+    [ObservableProperty] private IEnumerable<ISeries>? _ranksSeries;
+    [ObservableProperty] private List<Axis>? _xAxes;
     
     public UserStatsPageViewModel()
     {
@@ -33,6 +45,7 @@ public partial class UserStatsPageViewModel : PageViewModel
             Dispatcher.UIThread.Post(() =>
             {
                 UserStats = userStats.GetValue();
+                UpdateChartData();
             });
         }
         catch (Exception e)
@@ -40,5 +53,60 @@ public partial class UserStatsPageViewModel : PageViewModel
             Logger.LogError($"An error occurred while loading user stats: {e.Message}",e, Environment.StackTrace);
             InfoEmitted?.Invoke(this, $"An error occurred while loading user stats: {e.Message}");
         }
+    }
+    
+    private void UpdateChartData()
+    {
+        SeriesSeries = GaugeGenerator.BuildSolidGauge(
+            new GaugeItem(
+                UserStats.SeriesRead,
+                series =>
+                {
+                    series.MaxRadialColumnWidth = 50;
+                    series.DataLabelsSize = 50;
+                    series.Name = $"Séries lues: {UserStats.SeriesRead} / {UserStats.SeriesTotal}";
+                }));
+
+        ChaptersSeries = GaugeGenerator.BuildSolidGauge(
+            new GaugeItem(
+                UserStats.ChaptersRead,
+                series =>
+                {
+                    series.MaxRadialColumnWidth = 50;
+                    series.DataLabelsSize = 50;
+                    series.Name = $"Chapitres lus: {UserStats.ChaptersRead} / {UserStats.ChaptersTotal}";
+                }));
+
+        if (UserStats.Ranks.Count == 0) return;
+        
+        List<RankCount> sortedRanks = UserStats.Ranks.OrderBy(r => r.Rank.Value).ToList();
+        List<double> values = [];
+        List<string> labels = [];
+            
+        foreach (RankCount rankCount in sortedRanks)
+        {
+            values.Add(rankCount.Count);
+            labels.Add(rankCount.Rank.Name);
+        }
+            
+        RanksSeries =
+        [
+            new ColumnSeries<double>
+            {
+                Values = values,
+                Name = "Nombre de séries",
+                Fill = new SolidColorPaint(SKColors.DodgerBlue),
+            }
+        ];
+            
+        XAxes =
+        [
+            new Axis()
+            {
+                Labels = labels,
+                LabelsRotation = -15,
+                TextSize = 14
+            }
+        ];
     }
 }
