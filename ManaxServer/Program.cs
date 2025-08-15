@@ -8,6 +8,7 @@ using ManaxServer.Services.Fix;
 using ManaxServer.Services.Hash;
 using ManaxServer.Services.Issue;
 using ManaxServer.Services.Jwt;
+using ManaxServer.Services.Mapper;
 using ManaxServer.Services.Notification;
 using ManaxServer.Services.Renaming;
 using ManaxServer.Services.Task;
@@ -41,12 +42,6 @@ public class Program
 
         builder.Services.AddDbContext<ManaxContext>(opt =>
             opt.UseSqlite($"Data Source={Path.Combine(AppContext.BaseDirectory, "database.db")}"));
-
-        // AutoMapper configuration 
-        builder.Services.AddAutoMapper(config => 
-        {
-            config.AddProfile<MappingProfile>();
-        });
         
         // Services
         builder.Services.AddSingleton<INotificationService>(provider => new NotificationService(provider.GetRequiredService<IHubContext<NotificationService>>()));
@@ -55,6 +50,7 @@ public class Program
         builder.Services.AddScoped<IFixService>(provider => new FixService(provider.GetRequiredService<IServiceScopeFactory>(), provider.GetRequiredService<IIssueService>()));
         builder.Services.AddScoped<IIssueService>(provider => new IssueService(provider.GetRequiredService<IServiceScopeFactory>()));
         builder.Services.AddScoped<IRenamingService>(provider => new RenamingService(provider.GetRequiredService<IServiceScopeFactory>()));
+        builder.Services.AddScoped<IMapper>(_ => new ManaxMapper(new ManaxMapping()));
         
 
         builder.Services.Configure<KestrelServerOptions>(options =>

@@ -1,11 +1,11 @@
 using System.Text.RegularExpressions;
-using AutoMapper;
 using ManaxLibrary.DTO.Search;
 using ManaxLibrary.DTO.Serie;
 using ManaxServer.Localization;
 using ManaxServer.Models;
 using ManaxServer.Models.Library;
 using ManaxServer.Models.Serie;
+using ManaxServer.Services.Mapper;
 using ManaxServer.Services.Notification;
 using ManaxServer.Settings;
 using Microsoft.AspNetCore.Authorization;

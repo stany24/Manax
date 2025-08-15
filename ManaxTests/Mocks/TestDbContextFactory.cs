@@ -1,10 +1,10 @@
 using System.Reflection;
-using AutoMapper;
 using ManaxLibrary.DTO.Chapter;
 using ManaxLibrary.DTO.Serie;
 using ManaxServer.Models;
 using ManaxServer.Models.Chapter;
 using ManaxServer.Models.Serie;
+using ManaxServer.Services.Mapper;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using Status = ManaxLibrary.DTO.Serie.Status;
@@ -98,45 +98,6 @@ public static class TestDbContextFactory
             Chapters = chapters,
             Series = series
         };
-    }
-    
-    public static Mock<IMapper> CreateMockMapper()
-    {
-        Mock<IMapper> mockMapper = new();
-        
-        mockMapper.Setup(m => m.Map<ChapterDto>(It.IsAny<Chapter>()))
-            .Returns<Chapter>(chapter => new ChapterDto
-            {
-                Id = chapter.Id,
-                SerieId = chapter.SerieId,
-                FileName = chapter.FileName,
-                Number = chapter.Number,
-                Pages = chapter.Pages,
-                Creation = chapter.Creation,
-                LastModification = chapter.LastModification
-            });
-
-        mockMapper.Setup(m => m.Map<SerieDto>(It.IsAny<Serie>()))
-            .Returns<Serie>(serie => new SerieDto
-            {
-                Id = serie.Id,
-                LibraryId = serie.LibraryId,
-                Title = serie.Title,
-                Description = serie.Description,
-                Status = serie.Status,
-                Creation = serie.Creation,
-                LastModification = serie.LastModification
-            });
-            
-        mockMapper.Setup(m => m.Map(It.IsAny<SerieUpdateDto>(), It.IsAny<Serie>()))
-            .Callback<SerieUpdateDto, Serie>((updateDto, serie) =>
-            {
-                serie.Title = updateDto.Title;
-                serie.Description = updateDto.Description;
-                serie.Status = updateDto.Status;
-            });
-
-        return mockMapper;
     }
     
     private static Mock<DbSet<T>> SetupMockDbSet<T>(List<T> data) where T : class

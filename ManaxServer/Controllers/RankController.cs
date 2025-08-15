@@ -1,8 +1,8 @@
-using AutoMapper;
 using ManaxLibrary.DTO.Rank;
 using ManaxServer.Localization;
 using ManaxServer.Models;
 using ManaxServer.Models.Rank;
+using ManaxServer.Services.Mapper;
 using ManaxServer.Services.Notification;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

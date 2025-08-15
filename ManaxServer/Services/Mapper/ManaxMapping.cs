@@ -1,4 +1,3 @@
-using AutoMapper;
 using ManaxLibrary.DTO.Chapter;
 using ManaxLibrary.DTO.Issue.Automatic;
 using ManaxLibrary.DTO.Issue.Reported;
@@ -11,29 +10,27 @@ using ManaxServer.Models.Issue.Automatic;
 using ManaxServer.Models.Issue.Reported;
 using ManaxServer.Models.Rank;
 
-namespace ManaxServer.Models;
+namespace ManaxServer.Services.Mapper;
 
-public class MappingProfile : Profile
+public class ManaxMapping : Mapping
 {
-    public MappingProfile()
+    public ManaxMapping()
     {
-        // Mappings entre modèles et Dtos seront configurés ici
-        // Exemple : CreateMap<ModeleSource, DtoDestination>();
 
         // Mappings des User
-        CreateMap<User.User, UserDto>();
-        CreateMap<UserCreateDto, User.User>();
-        CreateMap<UserUpdateDto, User.User>();
+        CreateMap<Models.User.User, UserDto>();
+        CreateMap<UserCreateDto, Models.User.User>();
+        CreateMap<UserUpdateDto, Models.User.User>();
 
         // Mappings des Serie
-        CreateMap<Serie.Serie, SerieDto>();
-        CreateMap<SerieCreateDto, Serie.Serie>();
-        CreateMap<SerieUpdateDto, Serie.Serie>();
+        CreateMap<Models.Serie.Serie, SerieDto>();
+        CreateMap<SerieCreateDto, Models.Serie.Serie>();
+        CreateMap<SerieUpdateDto, Models.Serie.Serie>();
 
         // Mappings des Library
-        CreateMap<Library.Library, LibraryDto>();
-        CreateMap<LibraryCreateDto, Library.Library>();
-        CreateMap<LibraryUpdateDto, Library.Library>();
+        CreateMap<Models.Library.Library, LibraryDto>();
+        CreateMap<LibraryCreateDto, Models.Library.Library>();
+        CreateMap<LibraryUpdateDto, Models.Library.Library>();
 
         // Mappings des Issue
         CreateMap<ReportedIssueChapter, ReportedIssueChapterDto>();
@@ -44,15 +41,15 @@ public class MappingProfile : Profile
         CreateMap<AutomaticIssueChapter, AutomaticIssueChapterDto>();
 
         // Mappings des Chapter
-        CreateMap<Chapter.Chapter, ChapterDto>();
+        CreateMap<Models.Chapter.Chapter, ChapterDto>();
 
         // Mappings des Read
-        CreateMap<Read.Read, ReadDto>();
-        CreateMap<ReadCreateDto, Read.Read>();
+        CreateMap<Models.Read.Read, ReadDto>();
+        CreateMap<ReadCreateDto, Models.Read.Read>();
 
         // Mappings des Rank
-        CreateMap<Rank.Rank, RankDto>();
-        CreateMap<RankCreateDto,Rank.Rank>();
+        CreateMap<Models.Rank.Rank, RankDto>();
+        CreateMap<RankCreateDto,Models.Rank.Rank>();
         CreateMap<UserRank, UserRankDto>();
     }
 }

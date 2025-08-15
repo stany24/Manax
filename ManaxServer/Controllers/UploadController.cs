@@ -1,6 +1,5 @@
 using System.IO.Compression;
 using System.Text.RegularExpressions;
-using AutoMapper;
 using ImageMagick;
 using ManaxLibrary.DTO.Chapter;
 using ManaxLibrary.DTO.Setting;
@@ -9,6 +8,7 @@ using ManaxServer.Models;
 using ManaxServer.Models.Chapter;
 using ManaxServer.Models.Serie;
 using ManaxServer.Services.Fix;
+using ManaxServer.Services.Mapper;
 using ManaxServer.Services.Notification;
 using ManaxServer.Services.Task;
 using ManaxServer.Settings;

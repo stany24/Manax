@@ -1,5 +1,4 @@
 using System.Security.Claims;
-using AutoMapper;
 using ManaxLibrary.DTO.User;
 using ManaxLibrary.Logging;
 using ManaxServer.Localization;
@@ -8,6 +7,7 @@ using ManaxServer.Models.Claim;
 using ManaxServer.Models.User;
 using ManaxServer.Services.Hash;
 using ManaxServer.Services.Jwt;
+using ManaxServer.Services.Mapper;
 using ManaxServer.Services.Notification;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

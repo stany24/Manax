@@ -1,8 +1,8 @@
-using AutoMapper;
 using ManaxLibrary.DTO.Chapter;
 using ManaxServer.Controllers;
 using ManaxServer.Models;
 using ManaxServer.Models.Chapter;
+using ManaxServer.Services.Mapper;
 using ManaxServer.Services.Notification;
 using ManaxTests.Mocks;
 using Microsoft.AspNetCore.Mvc;
@@ -14,7 +14,7 @@ namespace ManaxTests;
 public class TestChapterController
 {
     private Mock<ManaxContext> _mockContext = null!;
-    private Mock<IMapper> _mockMapper = null!;
+    private ManaxMapper _mockMapper = null!;
     private Mock<INotificationService> _mockNotificationService = null!;
     private ChapterController _controller = null!;
     private List<Chapter> _chapters = null!;
@@ -26,10 +26,10 @@ public class TestChapterController
         _mockContext = data.Context;
         _chapters = data.Chapters;
             
-        _mockMapper = TestDbContextFactory.CreateMockMapper();
+        _mockMapper = new ManaxMapper(new ManaxMapping());
         _mockNotificationService = new Mock<INotificationService>();
 
-        _controller = new ChapterController(_mockContext.Object, _mockMapper.Object, _mockNotificationService.Object);
+        _controller = new ChapterController(_mockContext.Object, _mockMapper, _mockNotificationService.Object);
     }
 
     [TestMethod]

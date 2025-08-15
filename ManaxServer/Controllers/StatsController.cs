@@ -1,4 +1,3 @@
-using AutoMapper;
 using ManaxLibrary.DTO.Rank;
 using ManaxLibrary.DTO.Stats;
 using ManaxServer.Localization;
@@ -6,6 +5,7 @@ using ManaxServer.Models;
 using ManaxServer.Models.Library;
 using ManaxServer.Models.Rank;
 using ManaxServer.Models.User;
+using ManaxServer.Services.Mapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;

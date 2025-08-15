@@ -1,9 +1,9 @@
 using System.IO.Compression;
-using AutoMapper;
 using ManaxLibrary.DTO.Chapter;
 using ManaxServer.Localization;
 using ManaxServer.Models;
 using ManaxServer.Models.Chapter;
+using ManaxServer.Services.Mapper;
 using ManaxServer.Services.Notification;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

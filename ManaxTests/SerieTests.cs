@@ -1,9 +1,9 @@
-using AutoMapper;
 using ManaxLibrary.DTO.Serie;
 using ManaxServer.Controllers;
 using ManaxServer.Models;
 using ManaxServer.Models.Chapter;
 using ManaxServer.Models.Serie;
+using ManaxServer.Services.Mapper;
 using ManaxServer.Services.Notification;
 using ManaxTests.Mocks;
 using Microsoft.AspNetCore.Mvc;
@@ -15,7 +15,7 @@ namespace ManaxTests;
 public class TestSerieController
 {
     private Mock<ManaxContext> _mockContext = null!;
-    private Mock<IMapper> _mockMapper = null!;
+    private ManaxMapper _mockMapper = null!;
     private Mock<INotificationService> _mockNotificationService = null!;
     private SerieController _controller = null!;
     private List<Serie> _series = null!;
@@ -28,19 +28,11 @@ public class TestSerieController
         _mockContext = data.Context;
         _series = data.Series;
         _chapters = data.Chapters;
-            
-        _mockMapper = TestDbContextFactory.CreateMockMapper();
+
+        _mockMapper = new ManaxMapper(new ManaxMapping());
         _mockNotificationService = new Mock<INotificationService>();
 
-        _mockMapper.Setup(m => m.Map(It.IsAny<SerieUpdateDto>(), It.IsAny<Serie>()))
-            .Callback<SerieUpdateDto, Serie>((updateDto, serie) =>
-            {
-                serie.Title = updateDto.Title;
-                serie.Description = updateDto.Description;
-                serie.Status = updateDto.Status;
-            });
-
-        _controller = new SerieController(_mockContext.Object, _mockMapper.Object, _mockNotificationService.Object);
+        _controller = new SerieController(_mockContext.Object, _mockMapper, _mockNotificationService.Object);
     }
 
     [TestMethod]
