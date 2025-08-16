@@ -17,7 +17,7 @@ public class RankController(ManaxContext context, IMapper mapper, INotificationS
     // GET: api/rank
     [HttpGet("/api/ranks")]
     [Authorize(Roles = "User,Admin,Owner")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<RankDto>))]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<RankDto>>> GetRanks()
     {
         return await context.Ranks.Select(r => mapper.Map<RankDto>(r)).ToListAsync();
@@ -26,7 +26,7 @@ public class RankController(ManaxContext context, IMapper mapper, INotificationS
     // POST: api/rank
     [HttpPost]
     [Authorize(Roles = "Admin,Owner")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(long))]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<long>> CreateRank(RankCreateDto rankCreate)
     {
         Rank rank = mapper.Map<Rank>(rankCreate);
@@ -59,7 +59,7 @@ public class RankController(ManaxContext context, IMapper mapper, INotificationS
             return BadRequest(e.Message);
         }
         notificationService.NotifyRankUpdatedAsync(mapper.Map<RankDto>(found));
-        return NoContent();
+        return Ok();
     }
 
     // DELETE: api/rank/5
@@ -74,11 +74,13 @@ public class RankController(ManaxContext context, IMapper mapper, INotificationS
         context.Ranks.Remove(rank);
         await context.SaveChangesAsync();
         notificationService.NotifyRankDeletedAsync(id);
-        return NoContent();
+        return Ok();
     }
 
     [HttpPost("set")]
     [Authorize(Roles = "User,Admin,Owner")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> SetUserRank(UserRankCreateDto rank)
     {
         long? userId = UserController.GetCurrentUserId(HttpContext);
@@ -102,13 +104,13 @@ public class RankController(ManaxContext context, IMapper mapper, INotificationS
         }
 
         await context.SaveChangesAsync();
-        return NoContent();
+        return Ok();
     }
 
     // GET: api/rank
     [HttpGet("/api/ranking")]
     [Authorize(Roles = "User,Admin,Owner")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<UserRankDto>))]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult<IEnumerable<UserRankDto>>> GetRanking()
     {

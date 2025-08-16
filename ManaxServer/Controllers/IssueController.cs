@@ -17,7 +17,7 @@ public class IssueController(ManaxContext context, IMapper mapper) : ControllerB
 {
     [HttpGet("chapter/automatic")]
     [Authorize(Roles = "Admin,Owner")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<AutomaticIssueChapterDto>))]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<AutomaticIssueChapterDto>>> GetAllAutomaticChapterIssues()
     {
         List<AutomaticIssueChapter> issues = await context.AutomaticIssuesChapter.ToListAsync();
@@ -26,7 +26,7 @@ public class IssueController(ManaxContext context, IMapper mapper) : ControllerB
     
     [HttpGet("serie/automatic")]
     [Authorize(Roles = "Admin,Owner")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<AutomaticIssueSerieDto>))]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<AutomaticIssueSerieDto>>> GetAllAutomaticSerieIssues()
     {
         List<AutomaticIssueSerie> issues = await context.AutomaticIssuesSerie.ToListAsync();
@@ -35,7 +35,7 @@ public class IssueController(ManaxContext context, IMapper mapper) : ControllerB
     
     [HttpGet("chapter/reported")]
     [Authorize(Roles = "Admin,Owner")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<ReportedIssueChapterDto>))]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<ReportedIssueChapterDto>>> GetAllReportedChapterIssues()
     {
         List<ReportedIssueChapter> issues = await context.ReportedIssuesChapter.ToListAsync();
@@ -44,7 +44,7 @@ public class IssueController(ManaxContext context, IMapper mapper) : ControllerB
     
     [HttpGet("serie/reported")]
     [Authorize(Roles = "Admin,Owner")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<ReportedIssueSerieDto>))]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<ReportedIssueSerieDto>>> GetAllReportedSerieIssues()
     {
         List<ReportedIssueSerie> issues = await context.ReportedIssuesSerie.ToListAsync();
@@ -62,7 +62,7 @@ public class IssueController(ManaxContext context, IMapper mapper) : ControllerB
         context.ReportedIssuesChapter.Add(issue);
         await context.SaveChangesAsync();
 
-        return NoContent();
+        return Created();
     }
     
     [HttpPost("serie")]
@@ -76,12 +76,12 @@ public class IssueController(ManaxContext context, IMapper mapper) : ControllerB
         context.ReportedIssuesSerie.Add(issue);
         await context.SaveChangesAsync();
 
-        return NoContent();
+        return Created();
     }
 
     [HttpPut("chapter/{id:long}/close")]
     [Authorize(Roles = "Admin,Owner")]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> CloseChapterIssue(long id)
     {
@@ -92,12 +92,12 @@ public class IssueController(ManaxContext context, IMapper mapper) : ControllerB
         context.ReportedIssuesChapter.Remove(issue);
         await context.SaveChangesAsync();
 
-        return NoContent();
+        return Ok();
     }
     
     [HttpPut("serie/{id:long}/close")]
     [Authorize(Roles = "Admin,Owner")]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> CloseSerieIssue(long id)
     {
@@ -108,6 +108,6 @@ public class IssueController(ManaxContext context, IMapper mapper) : ControllerB
         context.ReportedIssuesSerie.Remove(issue);
         await context.SaveChangesAsync();
 
-        return NoContent();
+        return Ok();
     }
 }

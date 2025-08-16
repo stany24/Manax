@@ -24,7 +24,7 @@ public class UserController(ManaxContext context, IMapper mapper, IHashService h
     // GET: api/Users
     [HttpGet("/api/Users")]
     [Authorize(Roles = "Admin,Owner")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<long>))]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<long>>> GetUsers()
     {
         return await context.Users.Select(user => user.Id).ToListAsync();
@@ -33,7 +33,7 @@ public class UserController(ManaxContext context, IMapper mapper, IHashService h
     // GET: api/User/5
     [HttpGet("{id:long}")]
     [Authorize(Roles = "Admin,Owner")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserDto))]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<UserDto>> GetUser(long id)
     {
@@ -47,9 +47,8 @@ public class UserController(ManaxContext context, IMapper mapper, IHashService h
     // PUT: api/User/5
     [HttpPut("{id:long}")]
     [Authorize(Roles = "Admin,Owner")]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> PutUser(long id, UserUpdateDto userUpdate)
     {
         User? user = await context.Users.FindAsync(id);
@@ -70,13 +69,13 @@ public class UserController(ManaxContext context, IMapper mapper, IHashService h
             return NotFound();
         }
 
-        return NoContent();
+        return Ok();
     }
 
     // POST: api/User
     [HttpPost("create")]
     [Authorize(Roles = "Admin,Owner")]
-    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(long))]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<long>> PostUser(UserCreateDto userCreate)
     {
         User? user = mapper.Map<User>(userCreate);
@@ -93,9 +92,10 @@ public class UserController(ManaxContext context, IMapper mapper, IHashService h
     // DELETE: api/User/5
     [HttpDelete("{id:long}")]
     [Authorize(Roles = "Admin,Owner")]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> DeleteUser(long id)
     {
         User? userToDelete = await context.Users.FindAsync(id);
@@ -118,7 +118,7 @@ public class UserController(ManaxContext context, IMapper mapper, IHashService h
         await context.SaveChangesAsync();
         notificationService.NotifyUserDeletedAsync(userToDelete.Id);
 
-        return NoContent();
+        return Ok();
     }
 
     // POST: api/User/login
@@ -161,7 +161,7 @@ public class UserController(ManaxContext context, IMapper mapper, IHashService h
     }
 
     [HttpPost("/api/claim")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(bool))]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public ActionResult<UserLoginResultDto> Claim(ClaimRequest request)
     {

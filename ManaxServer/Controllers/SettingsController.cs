@@ -20,7 +20,7 @@ public class SettingsController(IServiceProvider serviceProvider, ITaskService t
 
     [HttpGet]
     [Authorize(Roles = "Owner")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SettingsData))]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public SettingsData GetSettings()
     {
         return SettingsManager.Data;
@@ -28,7 +28,7 @@ public class SettingsController(IServiceProvider serviceProvider, ITaskService t
 
     [HttpPut]
     [Authorize(Roles = "Owner")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ChapterDto))]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public IActionResult ChangeSettings(SettingsData data)
     {

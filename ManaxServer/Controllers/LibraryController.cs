@@ -17,7 +17,7 @@ public class LibraryController(ManaxContext context, IMapper mapper, INotificati
     // GET: api/Library
     [HttpGet("/api/Libraries")]
     [Authorize(Roles = "User,Admin,Owner")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<long>))]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<long>>> GetLibraries()
     {
         return await context.Libraries.Select(t => t.Id).ToListAsync();
@@ -26,7 +26,7 @@ public class LibraryController(ManaxContext context, IMapper mapper, INotificati
     // GET: api/library/{id}
     [HttpGet("{id:long}")]
     [Authorize(Roles = "User,Admin,Owner")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(LibraryDto))]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<LibraryDto>> GetLibrary(long id)
     {
@@ -42,7 +42,7 @@ public class LibraryController(ManaxContext context, IMapper mapper, INotificati
     // PUT: api/Library/5
     [HttpPut("{id:long}")]
     [Authorize(Roles = "Admin,Owner")]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
@@ -80,13 +80,13 @@ public class LibraryController(ManaxContext context, IMapper mapper, INotificati
         }
 
         notificationService.NotifyLibraryUpdatedAsync(mapper.Map<LibraryDto>(library));
-        return NoContent();
+        return Ok();
     }
 
     // POST: api/Library
     [HttpPost("create")]
     [Authorize(Roles = "Admin,Owner")]
-    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(long))]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<ActionResult<long>> PostLibrary(LibraryCreateDto libraryCreate)
     {

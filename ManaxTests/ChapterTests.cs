@@ -5,6 +5,7 @@ using ManaxServer.Models.Chapter;
 using ManaxServer.Services.Mapper;
 using ManaxServer.Services.Notification;
 using ManaxTests.Mocks;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 
@@ -80,7 +81,7 @@ public class TestChapterController
         int startNumber = _chapters.Count;
         IActionResult result = await _controller.DeleteChapter(chapter.Id);
             
-        Assert.IsInstanceOfType(result, typeof(NoContentResult));
+        Assert.IsInstanceOfType(result, typeof(OkResult));
         _mockContext.Verify(m => m.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
             
         Assert.AreEqual(startNumber-1, _chapters.Count);

@@ -18,7 +18,7 @@ public class ChapterController(ManaxContext context, IMapper mapper, INotificati
     // GET: api/Chapter
     [HttpGet("/api/chapters")]
     [Authorize(Roles = "User,Admin,Owner")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<long>))]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<long>>> GetChapters()
     {
         return await context.Chapters.Select(chapter => chapter.Id).ToListAsync();
@@ -27,7 +27,7 @@ public class ChapterController(ManaxContext context, IMapper mapper, INotificati
     // GET: api/Chapter/5
     [HttpGet("{id:long}")]
     [Authorize(Roles = "User,Admin,Owner")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ChapterDto))]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<ChapterDto>> GetChapter(long id)
     {
@@ -41,7 +41,7 @@ public class ChapterController(ManaxContext context, IMapper mapper, INotificati
     // DELETE: api/Chapter/5
     [HttpDelete("{id:long}")]
     [Authorize(Roles = "Admin,Owner")]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteChapter(long id)
     {
@@ -52,7 +52,7 @@ public class ChapterController(ManaxContext context, IMapper mapper, INotificati
         await context.SaveChangesAsync();
         notificationService.NotifyChapterRemovedAsync(chapter.Id);
 
-        return NoContent();
+        return Ok();
     }
 
     // GET: api/Chapter/{id}/page/{number}

@@ -21,7 +21,7 @@ public class SerieController(ManaxContext context, IMapper mapper, INotification
     // GET: api/Serie
     [HttpGet("/api/series")]
     [Authorize(Roles = "User,Admin,Owner")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<long>))]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<long>>> GetSeries()
     {
         return await context.Series.Select(serie => serie.Id).ToListAsync();
@@ -30,7 +30,7 @@ public class SerieController(ManaxContext context, IMapper mapper, INotification
     // GET: api/serie/{id}
     [HttpGet("{id:long}")]
     [Authorize(Roles = "User,Admin,Owner")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SerieDto))]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<SerieDto>> GetSerie(long id)
     {
@@ -45,7 +45,7 @@ public class SerieController(ManaxContext context, IMapper mapper, INotification
     // GET: api/series/{id}/chapters
     [HttpGet("/api/series/{id:long}/chapters")]
     [Authorize(Roles = "User,Admin,Owner")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<long>))]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public ActionResult<List<long>> GetSerieChapters(long id)
     {
@@ -107,7 +107,7 @@ public class SerieController(ManaxContext context, IMapper mapper, INotification
     // POST: api/Serie
     [HttpPost]
     [Authorize(Roles = "Admin,Owner")]
-    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(long))]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<long>> PostSerie(SerieCreateDto serieCreate)
     {
@@ -145,7 +145,7 @@ public class SerieController(ManaxContext context, IMapper mapper, INotification
     // DELETE: api/Serie/5
     [HttpDelete("{id:long}")]
     [Authorize(Roles = "Admin,Owner")]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteSerie(long id)
     {
@@ -156,11 +156,12 @@ public class SerieController(ManaxContext context, IMapper mapper, INotification
         await context.SaveChangesAsync();
         notificationService.NotifySerieDeletedAsync(serie.Id);
 
-        return NoContent();
+        return Ok();
     }
     
     [HttpPost("search")]
     [Authorize(Roles = "User,Admin,Owner")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public List<long> Search(Search search)
     {
         Regex regex = new(search.RegexSearch, RegexOptions.IgnoreCase | RegexOptions.Compiled);

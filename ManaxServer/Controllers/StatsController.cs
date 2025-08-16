@@ -19,7 +19,9 @@ public class StatsController(ManaxContext context, IMapper mapper) : ControllerB
     // GET: api/Chapter
     [HttpGet("/api/stats")]
     [Authorize(Roles = "User,Admin,Owner")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserStats))]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<UserStats>> GetStats()
     {
         long? currentUserId = UserController.GetCurrentUserId(HttpContext);
@@ -60,7 +62,7 @@ public class StatsController(ManaxContext context, IMapper mapper) : ControllerB
     
     [HttpGet("/api/server-stats")]
     [Authorize(Roles = "Admin,Owner")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ServerStats))]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<ServerStats>> GetServerStats()
     {
         long diskSize = 0;
