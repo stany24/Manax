@@ -14,25 +14,26 @@ namespace ManaxTests;
 [TestClass]
 public class TestSerieController
 {
-    private Mock<ManaxContext> _mockContext = null!;
-    private ManaxMapper _mockMapper = null!;
+    private ManaxContext _context = null!;
+    private ManaxMapper _mapper = null!;
     private Mock<INotificationService> _mockNotificationService = null!;
     private SerieController _controller = null!;
-    private List<Serie> _series = null!;
-    private List<Chapter> _chapters = null!;
 
     [TestInitialize]
     public void Setup()
     {
-        TestData data = TestDbContextFactory.CreateMockContext();
-        _mockContext = data.Context;
-        _series = data.Series;
-        _chapters = data.Chapters;
+        _context= InMemoryTestDbContextFactory.CreateTestContext();
 
-        _mockMapper = new ManaxMapper(new ManaxMapping());
+        _mapper = new ManaxMapper(new ManaxMapping());
         _mockNotificationService = new Mock<INotificationService>();
 
-        _controller = new SerieController(_mockContext.Object, _mockMapper, _mockNotificationService.Object);
+        _controller = new SerieController(_context, _mapper, _mockNotificationService.Object);
+    }
+
+    [TestCleanup]
+    public void Cleanup()
+    {
+        _context.Dispose();
     }
 
     [TestMethod]
@@ -45,17 +46,18 @@ public class TestSerieController
             
         List<long>? returnedIds = result.Value as List<long>;
         Assert.IsNotNull(returnedIds);
-        Assert.AreEqual(_series.Count, returnedIds.Count);
-        foreach (Serie serie in _series)
+        
+        Assert.AreEqual(_context.Series.Count(), returnedIds.Count);
+        foreach (Serie serie in _context.Series)
         {
-            Assert.IsTrue(returnedIds.Contains(serie.Id));
+            Assert.Contains(serie.Id, returnedIds);
         }
     }
         
     [TestMethod]
     public async Task GetSerie_WithValidId_ReturnsSerie()
     {
-        Serie serie = _series[0];
+        Serie serie = _context.Series.First();
         ActionResult<SerieDto> result = await _controller.GetSerie(serie.Id);
             
         SerieDto? returnedSerie = result.Value;
@@ -78,8 +80,8 @@ public class TestSerieController
     [TestMethod]
     public void GetSerieChapters_WithValidId_ReturnsChapterIds()
     {
-        Serie serie = _series[0];
-        List<Chapter> chaptersOfSerie = _chapters.Where(c => c.SerieId == serie.Id).ToList();
+        Serie serie = _context.Series.First();
+        List<Chapter> chaptersOfSerie = _context.Chapters.Where(c => c.SerieId == serie.Id).ToList();
         
         ActionResult<List<long>> result = _controller.GetSerieChapters(serie.Id);
         
@@ -91,7 +93,7 @@ public class TestSerieController
         Assert.AreEqual(chaptersOfSerie.Count, returnedIds.Count);
         foreach (Chapter chapter in chaptersOfSerie)
         {
-            Assert.IsTrue(returnedIds.Contains(chapter.Id));
+            Assert.Contains(chapter.Id, returnedIds);
         }
     }
         
@@ -109,7 +111,7 @@ public class TestSerieController
     [TestMethod]
     public async Task PutSerie_WithValidId_UpdatesSerie()
     {
-        Serie serie = _series[0];
+        Serie serie = _context.Series.First();
         SerieUpdateDto updateDto = new()
         {
             Title = "Updated Title",
@@ -121,12 +123,11 @@ public class TestSerieController
             
         Assert.IsInstanceOfType(result, typeof(OkResult));
             
-        Serie updatedSerie = _series.First(s => s.Id == serie.Id);
+        Serie? updatedSerie = await _context.Series.FindAsync(serie.Id);
+        Assert.IsNotNull(updatedSerie);
         Assert.AreEqual(updateDto.Title, updatedSerie.Title);
         Assert.AreEqual(updateDto.Description, updatedSerie.Description);
         Assert.AreEqual(updateDto.Status, updatedSerie.Status);
-            
-        _mockContext.Verify(m => m.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
     }
         
     [TestMethod]
@@ -142,6 +143,5 @@ public class TestSerieController
         IActionResult result = await _controller.PutSerie(999999, updateDto);
             
         Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
-        _mockContext.Verify(m => m.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
     }
 }
