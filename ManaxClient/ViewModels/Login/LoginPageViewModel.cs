@@ -31,13 +31,13 @@ public partial class LoginPageViewModel : PageViewModel
         Task.Run(async () =>
         {
             ManaxApiConfig.SetHost(new Uri(Host + $":{Port}/"));
-            Optional<string> loginResponse = await ManaxApiUserClient.LoginAsync(Username, Password);
+            Optional<UserLoginResultDto> loginResponse = await ManaxApiUserClient.LoginAsync(Username, Password);
             if (loginResponse.Failed)
             {
                 InfoEmitted?.Invoke(this, loginResponse.Error);
                 return;
             }
-            CheckToken(loginResponse.GetValue(), "Invalid username or password");
+            CheckToken(loginResponse.GetValue());
         });
     }
 
@@ -47,38 +47,23 @@ public partial class LoginPageViewModel : PageViewModel
         Task.Run(async () =>
         {
             ManaxApiConfig.SetHost(new Uri(Host + $":{Port}/"));
-            Optional<string> claimResponse = await ManaxApiUserClient.ClaimAsync(Username, Password);
+            Optional<UserLoginResultDto> claimResponse = await ManaxApiUserClient.ClaimAsync(Username, Password);
             if (claimResponse.Failed)
             {
                 InfoEmitted?.Invoke(this, claimResponse.Error);
                 return;
             }
-            CheckToken(claimResponse.GetValue(), "Could not claim server");
+            CheckToken(claimResponse.GetValue());
         });
     }
 
-    private async void CheckToken(string? token, string errorMessage)
+    private void CheckToken(UserLoginResultDto result)
     {
         try
         {
-            if (token == null)
-            {
-                Dispatcher.UIThread.Post(() => { LoginError = errorMessage; });
-                return;
-            }
-
-            ManaxApiConfig.SetToken(token);
-
-            Optional<UserDto> selfResponse = await ManaxApiUserClient.GetSelf();
-
-            if (selfResponse.Failed)
-            {
-                ManaxApiConfig.SetToken("");
-                Dispatcher.UIThread.Post(() => { LoginError = "Failed to retrieve user information"; });
-                return;
-            }
+            ManaxApiConfig.SetToken(result.Token);
             
-            UserDto self = selfResponse.GetValue();
+            UserDto self = result.User;
             _isAdmin = self.Role is UserRole.Admin or UserRole.Owner;
             _isOwner = self.Role is UserRole.Owner;
             InfoEmitted?.Invoke(this, $"Logged in as {self.Username} ({self.Role})");

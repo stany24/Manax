@@ -6,17 +6,14 @@ namespace ManaxLibrary.ApiCaller;
 
 public static class ManaxApiUserClient
 {
-    public static async Task<Optional<string>> LoginAsync(string username, string password)
+    public static async Task<Optional<UserLoginResultDto>> LoginAsync(string username, string password)
     {
-        HttpResponseMessage response =
-            await ManaxApiClient.Client.PostAsJsonAsync("/api/login", new { username, password });
-        if (!response.IsSuccessStatusCode) return new Optional<string>(response);
-        string json = await response.Content.ReadAsStringAsync();
-        using JsonDocument doc = JsonDocument.Parse(json);
-        string? token = doc.RootElement.GetProperty("token").GetString();
-        return token == null
-            ? new Optional<string>("Failed to read token from response.")
-            : new Optional<string>(token,false);
+        HttpResponseMessage response = await ManaxApiClient.Client.PostAsJsonAsync("/api/login", new { username, password });
+        if (!response.IsSuccessStatusCode) return new Optional<UserLoginResultDto>(response);
+        UserLoginResultDto? user = await response.Content.ReadFromJsonAsync<UserLoginResultDto>();
+        return user == null
+            ? new Optional<UserLoginResultDto>($"Failed to read response content")
+            : new Optional<UserLoginResultDto>(user);
     }
 
     public static async Task<Optional<List<long>>> GetUsersIdsAsync()
@@ -65,31 +62,14 @@ public static class ManaxApiUserClient
             : new Optional<bool>(response);
     }
 
-    public static async Task<Optional<UserDto>> GetSelf()
-    {
-        HttpResponseMessage response = await ManaxApiClient.Client.GetAsync("api/user/current");
-        if (!response.IsSuccessStatusCode) return new Optional<UserDto>(response);
-        UserDto? userInfo = await response.Content.ReadFromJsonAsync<UserDto>();
-        if (userInfo == null) return new Optional<UserDto>("Failed to read current user info from response.");
-        
-        return new Optional<UserDto>(new UserDto
-        {
-            Id = userInfo.Id,
-            Username = userInfo.Username,
-            Role = userInfo.Role
-        });
-    }
-
-    public static async Task<Optional<string>> ClaimAsync(string username, string password)
+    public static async Task<Optional<UserLoginResultDto>> ClaimAsync(string username, string password)
     {
         HttpResponseMessage response =
             await ManaxApiClient.Client.PostAsJsonAsync("/api/claim", new { username, password });
-        if (!response.IsSuccessStatusCode) return new Optional<string>(response);
-        string json = await response.Content.ReadAsStringAsync();
-        using JsonDocument doc = JsonDocument.Parse(json);
-        string? token = doc.RootElement.GetProperty("token").GetString();
-        return token == null
-            ? new Optional<string>("Failed to read token from response.")
-            : new Optional<string>(token,false);
+        if (!response.IsSuccessStatusCode) return new Optional<UserLoginResultDto>(response);
+        UserLoginResultDto? user = await response.Content.ReadFromJsonAsync<UserLoginResultDto>();
+        return user == null
+            ? new Optional<UserLoginResultDto>($"Failed to read response content")
+            : new Optional<UserLoginResultDto>(user);
     }
 }

@@ -125,7 +125,7 @@ public class UserController(ManaxContext context, IMapper mapper, IHashService h
     [HttpPost("/api/login")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<IActionResult> Login(UserLoginDto loginDto)
+    public async Task<ActionResult<UserLoginResultDto>> Login(UserLoginDto loginDto)
     {
         LoginAttempt loginAttempt = new()
         {
@@ -151,30 +151,19 @@ public class UserController(ManaxContext context, IMapper mapper, IHashService h
         await context.SaveChangesAsync();
 
         string token = jwtService.GenerateToken(user);
-        return Ok(new { token });
-    }
-
-    // GET: api/User/current
-    [HttpGet("current")]
-    [Authorize(Roles = "User,Admin,Owner")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserDto))]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<ActionResult<UserDto>> GetCurrentUser()
-    {
-        long? userId = GetCurrentUserId(HttpContext);
-        if (userId == null) return Unauthorized(Localizer.Format("UserMustBeLoggedInInfo"));
-
-        User? user = await context.Users.FindAsync(userId);
-        if (user == null) return NotFound(Localizer.Format("UserNotFound", userId));
-
-        return mapper.Map<UserDto>(user);
+        UserDto userDto = mapper.Map<UserDto>(user);
+        UserLoginResultDto loginResult = new()
+        {
+            Token = token,
+            User = userDto
+        };
+        return loginResult;
     }
 
     [HttpPost("/api/claim")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(bool))]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
-    public ActionResult Claim(ClaimRequest request)
+    public ActionResult<UserLoginResultDto> Claim(ClaimRequest request)
     {
         LoginAttempt loginAttempt = new()
         {
@@ -207,7 +196,13 @@ public class UserController(ManaxContext context, IMapper mapper, IHashService h
             context.SaveChanges();
 
             string token = jwtService.GenerateToken(user);
-            return Ok(new { token });
+            UserDto userDto = mapper.Map<UserDto>(user);
+            UserLoginResultDto loginResult = new()
+            {
+                Token = token,
+                User = userDto
+            };
+            return loginResult;
         }
     }
 
