@@ -15,6 +15,7 @@
                 Content="{Binding Chapter.Info.FileName}" />
         </StackPanel>
         <ScrollViewer
+            Offset="{Binding ScrollOffset,Mode=TwoWay}"
             VerticalScrollBarVisibility="Auto"
             HorizontalScrollBarVisibility="Disabled">
             <ItemsControl

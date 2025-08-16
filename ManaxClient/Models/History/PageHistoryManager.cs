@@ -20,6 +20,7 @@ public class PageHistoryManager
 
     private void SetCurrent(PageViewModel page)
     {
+        CurrentPage?.OnPageClosed();
         OnPageChanging?.Invoke(page);
         CurrentPage = page;
         OnPageChanged?.Invoke(page);

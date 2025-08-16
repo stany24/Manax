@@ -11,6 +11,7 @@ namespace ManaxLibrary.DTO.Read;
 public class ReadDto
 {
     public long ChapterId { get; set; }
+    public int Page { get; set; }
     public DateTime Date { get; set; }
     public ChapterDto Chapter { get; set; }
     public UserDto User { get; set; }

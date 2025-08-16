@@ -260,7 +260,8 @@ namespace ManaxServer.Migrations
                 {
                     ChapterId = table.Column<long>(type: "INTEGER", nullable: false),
                     UserId = table.Column<long>(type: "INTEGER", nullable: false),
-                    Date = table.Column<DateTime>(type: "TEXT", nullable: false)
+                    Date = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Page = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {

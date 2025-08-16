@@ -11,6 +11,8 @@ namespace ManaxServer.Models.Read;
 public class Read
 {
     public DateTime Date { get; set; }
+    
+    public int Page { get; set; }
 
     public long ChapterId { get; set; }
 

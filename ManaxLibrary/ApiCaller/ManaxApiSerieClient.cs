@@ -1,4 +1,5 @@
 using System.Net.Http.Json;
+using ManaxLibrary.DTO.Read;
 using ManaxLibrary.DTO.Search;
 using ManaxLibrary.DTO.Serie;
 
@@ -34,6 +35,16 @@ public static class ManaxApiSerieClient
         return ids == null
             ? new Optional<List<long>>("Failed to read chapter IDs from response.")
             : new Optional<List<long>>(ids);
+    }
+    
+    public static async Task<Optional<List<ReadDto>>> GetSerieChaptersReadAsync(long id)
+    {
+        HttpResponseMessage response = await ManaxApiClient.Client.GetAsync($"api/series/{id}/reads");
+        if (!response.IsSuccessStatusCode) return new Optional<List<ReadDto>>(response);
+        List<ReadDto>? ids = await response.Content.ReadFromJsonAsync<List<ReadDto>>();
+        return ids == null
+            ? new Optional<List<ReadDto>>("Failed to read chapter IDs from response.")
+            : new Optional<List<ReadDto>>(ids);
     }
 
     public static async Task<Optional<long>> PostSerieAsync(SerieCreateDto serieCreate)

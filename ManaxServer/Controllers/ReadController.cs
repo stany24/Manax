@@ -36,10 +36,11 @@ public class ReadController(ManaxContext context, IMapper mapper) : ControllerBa
         if (existingRead != null)
         {
             existingRead.Date = DateTime.UtcNow;
+            existingRead.Page = readCreate.Page;
         }
         else
         {
-            Read? read = mapper.Map<Read>(readCreate);
+            Read read = mapper.Map<Read>(readCreate);
             read.User = user;
             read.Chapter = chapter;
             read.Date = DateTime.UtcNow;

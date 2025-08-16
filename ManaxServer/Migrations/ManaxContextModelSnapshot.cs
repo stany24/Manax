@@ -257,6 +257,9 @@ namespace ManaxServer.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("Page")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("ChapterId", "UserId");
 
                     b.HasIndex("UserId");

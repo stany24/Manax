@@ -24,4 +24,6 @@ public abstract partial class PageViewModel : ObservableObject
     {
         NextRequested?.Invoke(this, EventArgs.Empty);
     }
+    
+    public virtual void OnPageClosed(){}
 }

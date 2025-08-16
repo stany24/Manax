@@ -8,12 +8,14 @@ using Avalonia.Media.Imaging;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using ManaxClient.Controls.Popups.Serie;
+using ManaxClient.Models;
 using ManaxClient.Models.Collections;
 using ManaxClient.ViewModels.Chapter;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTO.Chapter;
 using ManaxLibrary.DTO.Rank;
+using ManaxLibrary.DTO.Read;
 using ManaxLibrary.DTO.Serie;
 using ManaxLibrary.Notifications;
 using Logger = ManaxLibrary.Logging.Logger;
@@ -22,7 +24,7 @@ namespace ManaxClient.ViewModels.Serie;
 
 public partial class SeriePageViewModel : PageViewModel
 {
-    [ObservableProperty] private SortedObservableCollection<ChapterDto> _chapters;
+    [ObservableProperty] private SortedObservableCollection<ClientChapter> _chapters;
     [ObservableProperty] private Bitmap? _poster;
     [ObservableProperty] private ObservableCollection<RankDto> _ranks = [];
     [ObservableProperty] private RankDto? _selectedRank;
@@ -30,9 +32,9 @@ public partial class SeriePageViewModel : PageViewModel
 
     public SeriePageViewModel(long serieId)
     {
-        Chapters = new SortedObservableCollection<ChapterDto>([])
+        Chapters = new SortedObservableCollection<ClientChapter>([])
         {
-            SortingSelector = dto => dto.Number
+            SortingSelector = dto => dto.Info.Number
         };
         Serie = new SerieDto { Id = serieId };
         Task.Run(() => { LoadSerieInfo(serieId); });
@@ -62,12 +64,12 @@ public partial class SeriePageViewModel : PageViewModel
     private void OnChapterAdded(ChapterDto chapter)
     {
         if (chapter.SerieId != Serie?.Id) return;
-        Dispatcher.UIThread.Post(() => Chapters.Add(chapter));
+        Dispatcher.UIThread.Post(() => Chapters.Add(new ClientChapter {Info = chapter}));
     }
 
     private void OnChapterDeleted(long chapterId)
     {
-        ChapterDto? chapter = Chapters.FirstOrDefault(c => c.Id == chapterId);
+        ClientChapter? chapter = Chapters.FirstOrDefault(c => c.Info.Id == chapterId);
         if (chapter == null) return;
         Dispatcher.UIThread.Post(() => Chapters.Remove(chapter));
     }
@@ -202,9 +204,40 @@ public partial class SeriePageViewModel : PageViewModel
                 chapters.Add(chapterResponse.GetValue());
             }
 
+            Dispatcher.UIThread.Invoke(() =>
+            {
+                foreach (ChapterDto chapter in chapters) Chapters.Add(new ClientChapter {Info = chapter});
+            });
+            LoadReads(serieId);
+        }
+        catch (Exception e)
+        {
+            InfoEmitted?.Invoke(this, "Error loading chapters");
+            Logger.LogError("Failed to load chapters for serie with ID: " + serieId, e, Environment.StackTrace);
+        }
+    }
+    
+    private async void LoadReads(long serieId)
+    {
+        try
+        {
+            Optional<List<ReadDto>> response = await ManaxApiSerieClient.GetSerieChaptersReadAsync(serieId);
+            if (response.Failed)
+            {
+                InfoEmitted?.Invoke(this, response.Error);
+                return;
+            }
+            
+            List<ReadDto> reads = response.GetValue();
+
             Dispatcher.UIThread.Post(() =>
             {
-                foreach (ChapterDto chapter in chapters) Chapters.Add(chapter);
+                foreach (ReadDto read in reads)
+                {
+                    ClientChapter? chapter = Chapters.FirstOrDefault(c => c.Info.Id == read.ChapterId);
+                    if (chapter == null) continue;
+                    chapter.Read = read;
+                }
             });
         }
         catch (Exception e)
@@ -214,9 +247,9 @@ public partial class SeriePageViewModel : PageViewModel
         }
     }
 
-    public void MoveToChapterPage(ChapterDto chapter)
+    public void MoveToChapterPage(ClientChapter chapter)
     {
-        ChapterPageViewModel chapterPageViewModel = new(chapter.Id);
+        ChapterPageViewModel chapterPageViewModel = new(chapter);
         PageChangedRequested?.Invoke(this, chapterPageViewModel);
     }
 

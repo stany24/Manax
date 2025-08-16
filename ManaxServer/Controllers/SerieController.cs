@@ -1,4 +1,5 @@
 using System.Text.RegularExpressions;
+using ManaxLibrary.DTO.Read;
 using ManaxLibrary.DTO.Search;
 using ManaxLibrary.DTO.Serie;
 using ManaxServer.Localization;
@@ -58,6 +59,24 @@ public class SerieController(ManaxContext context, IMapper mapper, INotification
             .Select(c => c.Id).ToList();
 
         return chaptersIds;
+    }
+    
+    // GET: api/series/{id}/chapters
+    [HttpGet("/api/series/{id:long}/reads")]
+    [Authorize(Roles = "User,Admin,Owner")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public ActionResult<List<ReadDto>> GetSerieReads(long id)
+    {
+        Serie? serie = context.Series.FirstOrDefault(s => s.Id == id);
+        if (serie == null) return NotFound();
+        List<ReadDto> reads = context.Reads
+            .Where(r => r.Chapter.SerieId == id)
+            .Where(r => r.UserId == UserController.GetCurrentUserId(HttpContext))
+            .Select(r => mapper.Map<ReadDto>(r))
+            .ToList();
+
+        return reads;
     }
 
     // GET: api/serie/{id}/poster
