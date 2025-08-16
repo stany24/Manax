@@ -12,7 +12,8 @@ namespace ManaxServer.Controllers;
 
 [Route("api/rank")]
 [ApiController]
-public class RankController(ManaxContext context, IMapper mapper, INotificationService notificationService) : ControllerBase
+public class RankController(ManaxContext context, IMapper mapper, INotificationService notificationService)
+    : ControllerBase
 {
     // GET: api/rank
     [HttpGet("/api/ranks")]
@@ -51,13 +52,13 @@ public class RankController(ManaxContext context, IMapper mapper, INotificationS
         found.Value = rank.Value;
         try
         {
-
             await context.SaveChangesAsync();
         }
         catch (DbUpdateException e)
         {
             return BadRequest(e.Message);
         }
+
         notificationService.NotifyRankUpdatedAsync(mapper.Map<RankDto>(found));
         return Ok();
     }

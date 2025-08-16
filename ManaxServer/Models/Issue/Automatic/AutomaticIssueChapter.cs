@@ -9,7 +9,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ManaxServer.Models.Issue.Automatic;
 
-
 [PrimaryKey(nameof(ChapterId), nameof(Problem))]
 public class AutomaticIssueChapter
 {

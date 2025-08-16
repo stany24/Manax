@@ -21,10 +21,10 @@ public class FixPosterTask(IFixService fixService, long serieId) : ITask
     {
         return TaskPriority.PosterCheck;
     }
-    
+
     public override bool Equals(object? obj)
     {
-        if (obj is not FixPosterTask serieCheckTask) { return false; }
+        if (obj is not FixPosterTask serieCheckTask) return false;
         return serieCheckTask._serieId == _serieId;
     }
 

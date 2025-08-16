@@ -8,7 +8,9 @@ namespace ManaxClient.Models.Collections;
 
 public class SortedObservableCollection<T>(IEnumerable<T> collection) : ObservableCollection<T>(collection)
 {
-    private Func<T,object>? _sortingSelector;
+    private bool _descending;
+    private Func<T, object>? _sortingSelector;
+
     public Func<T, object>? SortingSelector
     {
         get => _sortingSelector;
@@ -18,8 +20,6 @@ public class SortedObservableCollection<T>(IEnumerable<T> collection) : Observab
             Sort();
         }
     }
-
-    private bool _descending;
 
     public bool Descending
     {
@@ -34,27 +34,25 @@ public class SortedObservableCollection<T>(IEnumerable<T> collection) : Observab
     protected override void OnCollectionChanged(NotifyCollectionChangedEventArgs e)
     {
         base.OnCollectionChanged(e);
-        if (e.Action is NotifyCollectionChangedAction.Remove or NotifyCollectionChangedAction.Reset) { return; }
+        if (e.Action is NotifyCollectionChangedAction.Remove or NotifyCollectionChangedAction.Reset) return;
         Sort();
     }
 
     private void Sort()
     {
-        if (SortingSelector is null) { return; }
-                      
+        if (SortingSelector is null) return;
+
         IEnumerable<(T Item, int Index)> query = this
             .Select((item, index) => (Item: item, Index: index));
         query = Descending
             ? query.OrderByDescending(tuple => SortingSelector(tuple.Item))
             : query.OrderBy(tuple => SortingSelector(tuple.Item));
 
-        IEnumerable<(int OldIndex, int NewIndex)> map = query.Select((tuple, index) => (OldIndex:tuple.Index, NewIndex:index))
+        IEnumerable<(int OldIndex, int NewIndex)> map = query
+            .Select((tuple, index) => (OldIndex: tuple.Index, NewIndex: index))
             .Where(o => o.OldIndex != o.NewIndex);
 
         using IEnumerator<(int OldIndex, int NewIndex)> enumerator = map.GetEnumerator();
-        if (enumerator.MoveNext())
-        {
-            Move(enumerator.Current.OldIndex, enumerator.Current.NewIndex);
-        }
+        if (enumerator.MoveNext()) Move(enumerator.Current.OldIndex, enumerator.Current.NewIndex);
     }
 }

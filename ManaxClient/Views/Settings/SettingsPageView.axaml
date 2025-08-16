@@ -9,93 +9,101 @@
     x:DataType="login:SettingsPageViewModel">
     <StackPanel
         Orientation="Vertical">
-        
-        
+
+
         <Label
-            FontSize="24">Poster</Label>
-        
+            FontSize="24">
+            Poster
+        </Label>
+
         <Label>Poster name</Label>
         <TextBox
-            Text="{Binding Settings.PosterName}"></TextBox>
-        
+            Text="{Binding Settings.PosterName}" />
+
         <Label>Poster quality</Label>
         <NumericUpDown
             FormatString="0"
             Value="{Binding Settings.PosterQuality}"
             Maximum="100"
-            Minimum="1"></NumericUpDown>
-        
+            Minimum="1" />
+
         <Label>Poster Format</Label>
         <ComboBox
             SelectedItem="{Binding Settings.PosterFormat}"
-            ItemsSource="{Binding AllImageFormats}"></ComboBox>
-        
+            ItemsSource="{Binding AllImageFormats}" />
+
         <Label>Max poster width</Label>
         <NumericUpDown
             FormatString="0"
             Value="{Binding Settings.MaxPosterWidth}"
-            Minimum="{Binding Settings.MinPosterWidth}"></NumericUpDown>
-        
+            Minimum="{Binding Settings.MinPosterWidth}" />
+
         <Label>Min poster width</Label>
         <NumericUpDown
             FormatString="0"
             Value="{Binding Settings.MinPosterWidth}"
             Maximum="{Binding Settings.MaxPosterWidth}"
-            Minimum="1"></NumericUpDown>
-        
-        
+            Minimum="1" />
+
+
         <Label
-            FontSize="24">Chapter</Label>
-        
+            FontSize="24">
+            Chapter
+        </Label>
+
         <Label>Max chapter page width</Label>
         <NumericUpDown
             FormatString="0"
             Value="{Binding Settings.MaxChapterWidth}"
-            Minimum="{Binding Settings.MinChapterWidth}"></NumericUpDown>
-        
+            Minimum="{Binding Settings.MinChapterWidth}" />
+
         <Label>Min chapter page width</Label>
         <NumericUpDown
             Value="{Binding Settings.MinChapterWidth}"
             Maximum="{Binding Settings.MaxChapterWidth}"
-            Minimum="1"></NumericUpDown>
-        
+            Minimum="1" />
+
         <Label>Image Format</Label>
         <ComboBox
             SelectedItem="{Binding Settings.ImageFormat}"
-            ItemsSource="{Binding AllImageFormats}"></ComboBox>
-        
+            ItemsSource="{Binding AllImageFormats}" />
+
         <Label>Archive Format</Label>
         <ComboBox
             SelectedItem="{Binding Settings.ArchiveFormat}"
-            ItemsSource="{Binding AllArchiveFormats}"></ComboBox>
-        
-        
+            ItemsSource="{Binding AllArchiveFormats}" />
+
+
         <Label
-            FontSize="24">Serie</Label>
-        
+            FontSize="24">
+            Serie
+        </Label>
+
         <Label>Max description length</Label>
         <NumericUpDown
             FormatString="0"
             Value="{Binding Settings.MaxDescriptionLength}"
-            Minimum="{Binding Settings.MinDescriptionLength}"></NumericUpDown>
-        
+            Minimum="{Binding Settings.MinDescriptionLength}" />
+
         <Label>Min description length</Label>
         <NumericUpDown
             FormatString="0"
             Value="{Binding Settings.MinDescriptionLength}"
             Maximum="{Binding Settings.MaxDescriptionLength}"
-            Minimum="1"></NumericUpDown>
-        
+            Minimum="1" />
+
         <Label
-            Content="{Binding Settings.Issue}"></Label>
+            Content="{Binding Settings.Issue}" />
         <Label
-            Content="{Binding Problem}"></Label>
+            Content="{Binding Problem}" />
         <Label
-            Content="{Binding Success}"></Label>
-        
+            Content="{Binding Success}" />
+
         <Button
             IsEnabled="{Binding Settings.IsValid}"
-            Command="{Binding Update}">Update</Button>
-        
+            Command="{Binding Update}">
+            Update
+        </Button>
+
     </StackPanel>
 </UserControl>

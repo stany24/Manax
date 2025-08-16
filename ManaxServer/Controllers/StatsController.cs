@@ -3,7 +3,6 @@ using ManaxLibrary.DTO.Stats;
 using ManaxServer.Localization;
 using ManaxServer.Models;
 using ManaxServer.Models.Library;
-using ManaxServer.Models.Rank;
 using ManaxServer.Models.User;
 using ManaxServer.Services.Mapper;
 using Microsoft.AspNetCore.Authorization;
@@ -25,17 +24,11 @@ public class StatsController(ManaxContext context, IMapper mapper) : ControllerB
     public async Task<ActionResult<UserStats>> GetStats()
     {
         long? currentUserId = UserController.GetCurrentUserId(HttpContext);
-        if (currentUserId == null)
-        {
-            return Unauthorized(Localizer.Format("Unauthorized"));
-        }
-        
+        if (currentUserId == null) return Unauthorized(Localizer.Format("Unauthorized"));
+
         User? user = await context.Users.FirstOrDefaultAsync(u => u.Id == currentUserId.Value);
-        if (user == null)
-        {
-            return NotFound(Localizer.Format("UserNotFound", currentUserId.Value));
-        }
-        
+        if (user == null) return NotFound(Localizer.Format("UserNotFound", currentUserId.Value));
+
         List<long> chaptersRead = context.Reads
             .Where(r => r.UserId == currentUserId.Value)
             .Select(r => r.ChapterId)
@@ -59,7 +52,7 @@ public class StatsController(ManaxContext context, IMapper mapper) : ControllerB
 
         return stats;
     }
-    
+
     [HttpGet("/api/server-stats")]
     [Authorize(Roles = "Admin,Owner")]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -68,14 +61,14 @@ public class StatsController(ManaxContext context, IMapper mapper) : ControllerB
         long diskSize = 0;
         await foreach (Library library in context.Libraries)
         {
-            if (!Directory.Exists(library.Path)) { continue; }
-            
+            if (!Directory.Exists(library.Path)) continue;
+
             DirectoryInfo dirInfo = new(library.Path);
             diskSize += GetDirectorySize(dirInfo);
         }
-        
+
         DateTime recently = DateTime.UtcNow.AddDays(-7);
-        
+
         ServerStats stats = new()
         {
             DiskSize = diskSize,
@@ -85,13 +78,13 @@ public class StatsController(ManaxContext context, IMapper mapper) : ControllerB
 
         return stats;
     }
-    
-    private static long GetDirectorySize(DirectoryInfo d) 
+
+    private static long GetDirectorySize(DirectoryInfo d)
     {
         FileInfo[] fis = d.GetFiles();
         long size = fis.Sum(fi => fi.Length);
         DirectoryInfo[] dis = d.GetDirectories();
         size += dis.Sum(GetDirectorySize);
-        return size;  
+        return size;
     }
 }

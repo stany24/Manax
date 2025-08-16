@@ -55,19 +55,16 @@ public partial class SeriePageViewModel : PageViewModel
 
     private void UpdateSerieInfo(SerieDto serie)
     {
-        if(serie.Id != Serie?.Id) return;
-        Dispatcher.UIThread.Post(() =>
-        {
-            Serie = serie;
-        });
+        if (serie.Id != Serie?.Id) return;
+        Dispatcher.UIThread.Post(() => { Serie = serie; });
     }
-    
+
     private void OnChapterAdded(ChapterDto chapter)
     {
         if (chapter.SerieId != Serie?.Id) return;
         Dispatcher.UIThread.Post(() => Chapters.Add(chapter));
     }
-    
+
     private void OnChapterDeleted(long chapterId)
     {
         ChapterDto? chapter = Chapters.FirstOrDefault(c => c.Id == chapterId);
@@ -82,9 +79,10 @@ public partial class SeriePageViewModel : PageViewModel
             Optional<List<RankDto>> ranksResponse = await ManaxApiRankClient.GetRanksAsync();
             if (ranksResponse.Failed)
             {
-                InfoEmitted?.Invoke(this,ranksResponse.Error);
+                InfoEmitted?.Invoke(this, ranksResponse.Error);
                 return;
             }
+
             List<RankDto> ranks = ranksResponse.GetValue();
             Dispatcher.UIThread.Post(() =>
             {
@@ -97,12 +95,14 @@ public partial class SeriePageViewModel : PageViewModel
                 InfoEmitted?.Invoke(this, rankingResponse.Error);
                 return;
             }
+
             UserRankDto? rank = rankingResponse.GetValue().FirstOrDefault(rank => rank.SerieId == serieId);
             if (rank == null)
             {
                 BindToRankChange(serieId);
                 return;
             }
+
             RankDto? userRank = ranks.FirstOrDefault(r => r.Id == rank.RankId);
             Dispatcher.UIThread.Invoke(() => { SelectedRank = userRank; });
             BindToRankChange(serieId);
@@ -132,22 +132,19 @@ public partial class SeriePageViewModel : PageViewModel
             });
         };
     }
-    
+
     private async void LoadSerieInfo(long serieId)
     {
         try
         {
             Optional<SerieDto> serieInfoResponse = await ManaxApiSerieClient.GetSerieInfoAsync(serieId);
-            if (serieInfoResponse.Failed)
-            {
-                InfoEmitted?.Invoke(this,serieInfoResponse.Error);
-            }
+            if (serieInfoResponse.Failed) InfoEmitted?.Invoke(this, serieInfoResponse.Error);
             Dispatcher.UIThread.Post(() => Serie = serieInfoResponse.GetValue());
         }
         catch (Exception e)
         {
             InfoEmitted?.Invoke(this, "Error loading serie info");
-            Logger.LogError("Failed to load serie with ID: " + serieId,e, Environment.StackTrace);
+            Logger.LogError("Failed to load serie with ID: " + serieId, e, Environment.StackTrace);
         }
     }
 
@@ -155,7 +152,7 @@ public partial class SeriePageViewModel : PageViewModel
     {
         try
         {
-            if(serieId != Serie?.Id) return;
+            if (serieId != Serie?.Id) return;
             Optional<byte[]> seriePosterResponse = await ManaxApiSerieClient.GetSeriePosterAsync(serieId);
             if (seriePosterResponse.Failed)
             {
@@ -163,8 +160,15 @@ public partial class SeriePageViewModel : PageViewModel
                 Poster = null;
                 return;
             }
-            try { Poster = new Bitmap(new MemoryStream(seriePosterResponse.GetValue())); }
-            catch { Poster = null; }
+
+            try
+            {
+                Poster = new Bitmap(new MemoryStream(seriePosterResponse.GetValue()));
+            }
+            catch
+            {
+                Poster = null;
+            }
         }
         catch (Exception e)
         {
@@ -183,6 +187,7 @@ public partial class SeriePageViewModel : PageViewModel
                 InfoEmitted?.Invoke(this, response.Error);
                 return;
             }
+
             List<long> chaptersIds = response.GetValue();
             List<ChapterDto> chapters = [];
             foreach (long chapterId in chaptersIds)
@@ -193,14 +198,13 @@ public partial class SeriePageViewModel : PageViewModel
                     InfoEmitted?.Invoke(this, chapterResponse.Error);
                     continue;
                 }
+
                 chapters.Add(chapterResponse.GetValue());
             }
+
             Dispatcher.UIThread.Post(() =>
             {
-                foreach (ChapterDto chapter in chapters)
-                {
-                    Chapters.Add(chapter);
-                }
+                foreach (ChapterDto chapter in chapters) Chapters.Add(chapter);
             });
         }
         catch (Exception e)
@@ -215,7 +219,7 @@ public partial class SeriePageViewModel : PageViewModel
         ChapterPageViewModel chapterPageViewModel = new(chapter.Id);
         PageChangedRequested?.Invoke(this, chapterPageViewModel);
     }
-    
+
     public void UpdateSerie()
     {
         if (Serie == null) return;
@@ -228,14 +232,12 @@ public partial class SeriePageViewModel : PageViewModel
                 SerieUpdateDto? serie = popup.GetResult();
                 if (serie == null) return;
                 Optional<bool> serieResponse = await ManaxApiSerieClient.PutSerieAsync(Serie.Id, serie);
-                if (serieResponse.Failed){
-                    InfoEmitted?.Invoke(this, serieResponse.Error);
-                }
+                if (serieResponse.Failed) InfoEmitted?.Invoke(this, serieResponse.Error);
             }
             catch (Exception e)
             {
                 InfoEmitted?.Invoke(this, "Error updating serie");
-                Logger.LogError("Failed to update serie with ID: " + Serie.Id,e, Environment.StackTrace);
+                Logger.LogError("Failed to update serie with ID: " + Serie.Id, e, Environment.StackTrace);
             }
         };
         PopupRequested?.Invoke(this, popup);

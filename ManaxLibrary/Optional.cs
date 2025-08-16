@@ -4,9 +4,7 @@ namespace ManaxLibrary;
 
 public class Optional<T>
 {
-    public string Error { get; } = string.Empty;
     private readonly T? _value;
-    public bool Failed => Error != string.Empty;
 
     public Optional(T value)
     {
@@ -14,7 +12,7 @@ public class Optional<T>
     }
 
     /// <summary>
-    /// When T is a string set isError to false to set the value instead of the error.
+    ///     When T is a string set isError to false to set the value instead of the error.
     /// </summary>
     /// <param name="error"></param>
     /// <param name="isError"></param>
@@ -28,7 +26,6 @@ public class Optional<T>
         }
         else
         {
-            
             if (typeof(T) != typeof(string))
                 throw new InvalidOperationException("Optional must be of type string when isError is false.");
             _value = (T)(object)error;
@@ -41,9 +38,12 @@ public class Optional<T>
         Error = error;
         Logger.LogFailure(error, Environment.StackTrace);
     }
-    
+
+    public string Error { get; } = string.Empty;
+    public bool Failed => Error != string.Empty;
+
     /// <summary>
-    /// Return the value if the Optional is successful, you should call this method in a code path where Failed == false.
+    ///     Return the value if the Optional is successful, you should call this method in a code path where Failed == false.
     /// </summary>
     /// <returns></returns>
     /// <exception cref="InvalidOperationException"></exception>

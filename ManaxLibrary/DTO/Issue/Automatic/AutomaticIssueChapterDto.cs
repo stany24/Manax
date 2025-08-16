@@ -5,7 +5,6 @@
 
 namespace ManaxLibrary.DTO.Issue.Automatic;
 
-
 public class AutomaticIssueChapterDto
 {
     public DateTime CreatedAt { get; set; }

@@ -9,10 +9,10 @@ namespace ManaxClient.Controls.Popups.Serie;
 
 public class SerieUpdatePopup(SerieDto serie) : ConfirmCancelPopup
 {
-    private TextBox _titleBox = null!;
     private TextBox _descriptionBox = null!;
-    private ComboBox _statusComboBox = null!;
     private SerieUpdateDto? _result;
+    private ComboBox _statusComboBox = null!;
+    private TextBox _titleBox = null!;
 
     protected override Grid GetFormGrid()
     {
@@ -53,7 +53,7 @@ public class SerieUpdatePopup(SerieDto serie) : ConfirmCancelPopup
         Grid.SetColumn(_descriptionBox, 2);
         grid.Children.Add(_descriptionBox);
         _descriptionBox.Text = serie.Description;
-        
+
         TextBlock statusLabel = new()
         {
             Text = "Status:",
@@ -67,7 +67,7 @@ public class SerieUpdatePopup(SerieDto serie) : ConfirmCancelPopup
         Grid.SetRow(_statusComboBox, 2);
         Grid.SetColumn(_statusComboBox, 2);
         grid.Children.Add(_statusComboBox);
-        foreach (object value in Enum.GetValues(typeof(Status))) { _statusComboBox.Items.Add(value); }
+        foreach (object value in Enum.GetValues(typeof(Status))) _statusComboBox.Items.Add(value);
         _statusComboBox.SelectedItem = serie.Status;
 
         return grid;
@@ -77,8 +77,9 @@ public class SerieUpdatePopup(SerieDto serie) : ConfirmCancelPopup
     {
         string? title = _titleBox.Text?.Trim();
         string? description = _descriptionBox.Text?.Trim();
-        if (string.IsNullOrEmpty(title) || string.IsNullOrEmpty(description) || _statusComboBox.SelectedItem is not Status status) return;
-        _result = new SerieUpdateDto { Title = title, Description = description, Status = status};
+        if (string.IsNullOrEmpty(title) || string.IsNullOrEmpty(description) ||
+            _statusComboBox.SelectedItem is not Status status) return;
+        _result = new SerieUpdateDto { Title = title, Description = description, Status = status };
         CloseRequested?.Invoke(this, EventArgs.Empty);
     }
 

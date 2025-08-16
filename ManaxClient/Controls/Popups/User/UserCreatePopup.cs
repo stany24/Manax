@@ -9,10 +9,10 @@ namespace ManaxClient.Controls.Popups.User;
 
 public class UserCreatePopup(bool owner) : ConfirmCancelPopup
 {
-    private TextBox _usernameBox = null!;
     private TextBox _passwordBox = null!;
-    private ComboBox _roleComboBox = null!;
     private UserCreateDto? _result;
+    private ComboBox _roleComboBox = null!;
+    private TextBox _usernameBox = null!;
 
     protected override Grid GetFormGrid()
     {
@@ -51,7 +51,7 @@ public class UserCreatePopup(bool owner) : ConfirmCancelPopup
         Grid.SetRow(_passwordBox, 1);
         Grid.SetColumn(_passwordBox, 2);
         grid.Children.Add(_passwordBox);
-        
+
         TextBlock roleLabel = new()
         {
             Text = "Role:",
@@ -67,10 +67,7 @@ public class UserCreatePopup(bool owner) : ConfirmCancelPopup
         grid.Children.Add(_roleComboBox);
         _roleComboBox.Items.Add(UserRole.User);
         _roleComboBox.SelectedItem = UserRole.User;
-        if (owner)
-        {
-            _roleComboBox.Items.Add(UserRole.Admin);
-        }
+        if (owner) _roleComboBox.Items.Add(UserRole.Admin);
 
         return grid;
     }
@@ -79,8 +76,9 @@ public class UserCreatePopup(bool owner) : ConfirmCancelPopup
     {
         string? username = _usernameBox.Text?.Trim();
         string? password = _passwordBox.Text?.Trim();
-        if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password) || _roleComboBox.SelectedItem is not UserRole role) return;
-        _result = new UserCreateDto { Username = username, Password = password, Role = role};
+        if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password) ||
+            _roleComboBox.SelectedItem is not UserRole role) return;
+        _result = new UserCreateDto { Username = username, Password = password, Role = role };
         CloseRequested?.Invoke(this, EventArgs.Empty);
     }
 

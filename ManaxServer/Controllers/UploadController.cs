@@ -20,7 +20,12 @@ namespace ManaxServer.Controllers;
 
 [Route("api/upload")]
 [ApiController]
-public partial class UploadController(ManaxContext context, IMapper mapper, INotificationService notificationService, ITaskService taskService, IFixService fixService) : ControllerBase
+public partial class UploadController(
+    ManaxContext context,
+    IMapper mapper,
+    INotificationService notificationService,
+    ITaskService taskService,
+    IFixService fixService) : ControllerBase
 {
     [GeneratedRegex("\\d{1,4}")]
     private static partial Regex RegexNumber();
@@ -84,7 +89,9 @@ public partial class UploadController(ManaxContext context, IMapper mapper, INot
                 System.IO.File.Delete(filePath);
             }
             else
+            {
                 return BadRequest(Localizer.GetString("ChapterAlreadyExists"));
+            }
         }
 
         await SaveFileAsync(file, filePath);
@@ -106,11 +113,11 @@ public partial class UploadController(ManaxContext context, IMapper mapper, INot
         context.Chapters.Add(chapter);
         serie.LastModification = DateTime.UtcNow;
         await context.SaveChangesAsync();
-        if (!replacing) { notificationService.NotifyChapterAddedAsync(mapper.Map<ChapterDto>(chapter)); }
+        if (!replacing) notificationService.NotifyChapterAddedAsync(mapper.Map<ChapterDto>(chapter));
 
-        _ = taskService.AddTaskAsync(new FixChapterTask(fixService,chapter.Id));
-        _ = taskService.AddTaskAsync(new FixSerieTask(fixService,chapter.SerieId));
-        
+        _ = taskService.AddTaskAsync(new FixChapterTask(fixService, chapter.Id));
+        _ = taskService.AddTaskAsync(new FixSerieTask(fixService, chapter.SerieId));
+
         return Ok();
     }
 
@@ -156,14 +163,14 @@ public partial class UploadController(ManaxContext context, IMapper mapper, INot
             return BadRequest(Localizer.GetString("SerieNotFound"));
 
         ImageFormat format = SettingsManager.Data.PosterFormat;
-        string path = Path.Combine(serie.Path,SettingsManager.Data.PosterName +"."+format.ToString().ToLower());
+        string path = Path.Combine(serie.Path, SettingsManager.Data.PosterName + "." + format.ToString().ToLower());
         if (System.IO.File.Exists(path) && !replace) return BadRequest(Localizer.GetString("PosterAlreadyExists"));
         try
         {
             MagickImage image = new(file.OpenReadStream());
             image.Quality = SettingsManager.Data.PosterQuality;
             await image.WriteAsync(path, GetMagickFormat(format));
-            _ = taskService.AddTaskAsync(new FixPosterTask(fixService,serie.Id));
+            _ = taskService.AddTaskAsync(new FixPosterTask(fixService, serie.Id));
             notificationService.NotifyPosterModifiedAsync(serie.Id);
         }
         catch (Exception e)

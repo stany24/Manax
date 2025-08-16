@@ -32,7 +32,7 @@ public static class ManaxApiSerieClient
         if (!response.IsSuccessStatusCode) return new Optional<List<long>>(response);
         List<long>? ids = await response.Content.ReadFromJsonAsync<List<long>>();
         return ids == null
-            ? new Optional<List<long>>("Failed to read chapter IDs from response.") 
+            ? new Optional<List<long>>("Failed to read chapter IDs from response.")
             : new Optional<List<long>>(ids);
     }
 
@@ -47,7 +47,7 @@ public static class ManaxApiSerieClient
     public static async Task<Optional<bool>> PutSerieAsync(long id, SerieUpdateDto serieUpdate)
     {
         HttpResponseMessage response = await ManaxApiClient.Client.PutAsJsonAsync($"api/serie/{id}", serieUpdate);
-        return response.IsSuccessStatusCode 
+        return response.IsSuccessStatusCode
             ? new Optional<bool>(true)
             : new Optional<bool>(response);
     }

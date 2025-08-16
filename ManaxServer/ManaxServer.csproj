@@ -58,32 +58,32 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\ManaxLibrary\ManaxLibrary.csproj" />
+        <ProjectReference Include="..\ManaxLibrary\ManaxLibrary.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-      <EmbeddedResource Update="Localization\Languages\manax.resx">
-        <Generator>ResXFileCodeGenerator</Generator>
-        <LastGenOutput>manax.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Localization\Languages\manax.fr.resx">
-        <Generator>ResXFileCodeGenerator</Generator>
-        <LastGenOutput>manax.fr.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
+        <EmbeddedResource Update="Localization\Languages\manax.resx">
+            <Generator>ResXFileCodeGenerator</Generator>
+            <LastGenOutput>manax.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
+        <EmbeddedResource Update="Localization\Languages\manax.fr.resx">
+            <Generator>ResXFileCodeGenerator</Generator>
+            <LastGenOutput>manax.fr.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Konscious.Security.Cryptography.Argon2" Version="1.3.1" />
-      <PackageReference Include="Magick.NET-Q8-AnyCPU" Version="14.8.0" />
-      <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.19" />
-      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.8" />
-      <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.8">
-        <PrivateAssets>all</PrivateAssets>
-        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      </PackageReference>
-      <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.8" />
-      <PackageReference Include="nulastudio.NetBeauty" Version="2.1.5" />
-      <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.3" />
+        <PackageReference Include="Konscious.Security.Cryptography.Argon2" Version="1.3.1"/>
+        <PackageReference Include="Magick.NET-Q8-AnyCPU" Version="14.8.0"/>
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.19"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.8"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.8">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.8"/>
+        <PackageReference Include="nulastudio.NetBeauty" Version="2.1.5"/>
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.3"/>
     </ItemGroup>
 
 </Project>

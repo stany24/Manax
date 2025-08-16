@@ -12,7 +12,7 @@ public class ChapterDto
     public string FileName { get; set; } = string.Empty;
     public int Number { get; set; }
     public int Pages { get; set; }
-    
+
     public DateTime Creation { get; set; }
     public DateTime LastModification { get; set; }
 }

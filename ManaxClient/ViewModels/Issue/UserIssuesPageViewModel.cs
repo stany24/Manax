@@ -11,35 +11,29 @@ public partial class UserIssuesPageViewModel : PageViewModel
 {
     [ObservableProperty] private List<ReportedIssueChapterDto> _allUserChapterIssues = [];
     [ObservableProperty] private List<ReportedIssueSerieDto> _allUserSerieIssues = [];
-    
+
     public UserIssuesPageViewModel()
     {
         LoadData();
     }
-    
+
     private void LoadData()
     {
         Task.Run(async () =>
         {
-            Optional<List<ReportedIssueSerieDto>> allReportedSerieIssuesAsync = await ManaxApiIssueClient.GetAllReportedSerieIssuesAsync();
+            Optional<List<ReportedIssueSerieDto>> allReportedSerieIssuesAsync =
+                await ManaxApiIssueClient.GetAllReportedSerieIssuesAsync();
             if (allReportedSerieIssuesAsync.Failed)
-            {
-                InfoEmitted?.Invoke(this,allReportedSerieIssuesAsync.Error);
-            }
+                InfoEmitted?.Invoke(this, allReportedSerieIssuesAsync.Error);
             else
-            {
                 AllUserSerieIssues = allReportedSerieIssuesAsync.GetValue();
-            }
-            
-            Optional<List<ReportedIssueChapterDto>> allReportedChapterIssuesAsync = await ManaxApiIssueClient.GetAllReportedChapterIssuesAsync();
+
+            Optional<List<ReportedIssueChapterDto>> allReportedChapterIssuesAsync =
+                await ManaxApiIssueClient.GetAllReportedChapterIssuesAsync();
             if (allReportedChapterIssuesAsync.Failed)
-            {
-                InfoEmitted?.Invoke(this,allReportedChapterIssuesAsync.Error);
-            }
+                InfoEmitted?.Invoke(this, allReportedChapterIssuesAsync.Error);
             else
-            {
                 AllUserChapterIssues = allReportedChapterIssuesAsync.GetValue();
-            }
         });
     }
 }

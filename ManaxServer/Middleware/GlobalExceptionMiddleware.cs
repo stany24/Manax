@@ -23,7 +23,7 @@ public class GlobalExceptionMiddleware(
 
     private async Task HandleExceptionAsync(HttpContext context, Exception exception)
     {
-        Logger.LogError("An unhandled error occurred: ",exception, Environment.StackTrace);
+        Logger.LogError("An unhandled error occurred: ", exception, Environment.StackTrace);
 
         string traceId = Guid.NewGuid().ToString();
 

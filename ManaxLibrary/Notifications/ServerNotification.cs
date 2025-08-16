@@ -13,136 +13,105 @@ public static class ServerNotification
     private static HubConnection? _hubConnection;
     private static string _serverUrl = null!;
     private static string _token = null!;
-    
+
     public static event Action<Dictionary<string, int>>? OnRunningTasks;
     public static event Action<long>? OnPosterModified;
-    
+
     public static event Action<LibraryDto>? OnLibraryCreated;
     public static event Action<long>? OnLibraryDeleted;
     public static event Action<LibraryDto>? OnLibraryUpdated;
-    
+
     public static event Action<SerieDto>? OnSerieCreated;
     public static event Action<SerieDto>? OnSerieUpdated;
     public static event Action<long>? OnSerieDeleted;
-    
+
     public static event Action<RankDto>? OnRankCreated;
     public static event Action<RankDto>? OnRankUpdated;
     public static event Action<long>? OnRankDeleted;
-    
+
     public static event Action<ChapterDto>? OnChapterAdded;
     public static event Action<long>? OnChapterDeleted;
-    
+
     public static event Action<UserDto>? OnUserCreated;
     public static event Action<long>? OnUserDeleted;
-    
+
     public static async Task InitializeAsync(Uri host, string token)
     {
         _serverUrl = host.AbsoluteUri;
         _token = token;
-        if (_hubConnection != null) { return; }
+        if (_hubConnection != null) return;
 
         string baseUrl = _serverUrl.EndsWith('/') ? _serverUrl : _serverUrl + "/";
-        
+
         _hubConnection = new HubConnectionBuilder()
             .WithUrl($"{baseUrl}notificationHub?access_token={_token}")
             .WithAutomaticReconnect()
             .Build();
-        
-        _hubConnection.On<LibraryDto>(nameof(NotificationType.LibraryCreated), libraryData =>
-        {
-            OnLibraryCreated?.Invoke(libraryData);
-        });
-        
-        _hubConnection.On<long>(nameof(NotificationType.LibraryDeleted), libraryId =>
-        {
-            OnLibraryDeleted?.Invoke(libraryId);
-        });
-        
-        _hubConnection.On<LibraryDto>(nameof(NotificationType.LibraryUpdated), libraryData =>
-        {
-            OnLibraryUpdated?.Invoke(libraryData);
-        });
-        
-        _hubConnection.On<SerieDto>(nameof(NotificationType.SerieCreated), serieData =>
-        {
-            OnSerieCreated?.Invoke(serieData);
-        });
-        
-        _hubConnection.On<SerieDto>(nameof(NotificationType.SerieUpdated), serieData =>
-        {
-            OnSerieUpdated?.Invoke(serieData);
-        });
-        
-        _hubConnection.On<long>(nameof(NotificationType.SerieDeleted), serieId =>
-        {
-            OnSerieDeleted?.Invoke(serieId);
-        });
-        
-        _hubConnection.On<RankDto>(nameof(NotificationType.RankCreated), rankData =>
-        {
-            OnRankCreated?.Invoke(rankData);
-        });
-        
-        _hubConnection.On<RankDto>(nameof(NotificationType.RankUpdated), rankData =>
-        {
-            OnRankUpdated?.Invoke(rankData);
-        });
-        
-        _hubConnection.On<long>(nameof(NotificationType.RankDeleted), rankId =>
-        {
-            OnRankDeleted?.Invoke(rankId);
-        });
-        
-        _hubConnection.On<ChapterDto>(nameof(NotificationType.ChapterAdded), chapterData =>
-        {
-            OnChapterAdded?.Invoke(chapterData);
-        });
-        
-        _hubConnection.On<long>(nameof(NotificationType.ChapterRemoved), chapterId =>
-        {
-            OnChapterDeleted?.Invoke(chapterId);
-        });
-        
-        _hubConnection.On<UserDto>(nameof(NotificationType.UserCreated), userData =>
-        {
-            OnUserCreated?.Invoke(userData);
-        });
-        
-        _hubConnection.On<long>(nameof(NotificationType.UserDeleted), userId =>
-        {
-            OnUserDeleted?.Invoke(userId);
-        });
-        
-        _hubConnection.On<Dictionary<string, int>>(nameof(NotificationType.RunningTasks), tasks =>
-        {
-            OnRunningTasks?.Invoke(tasks);
-        });
 
-        _hubConnection.On<long>(nameof(NotificationType.PosterModified), serieId =>
-        {
-            OnPosterModified?.Invoke(serieId);
-        });
-        
-        _hubConnection.On<string>(nameof(NotificationType.Connected), message =>
-        {
-            Logger.LogInfo("SignalR Server: " + message);
-        });
+        _hubConnection.On<LibraryDto>(nameof(NotificationType.LibraryCreated),
+            libraryData => { OnLibraryCreated?.Invoke(libraryData); });
+
+        _hubConnection.On<long>(nameof(NotificationType.LibraryDeleted),
+            libraryId => { OnLibraryDeleted?.Invoke(libraryId); });
+
+        _hubConnection.On<LibraryDto>(nameof(NotificationType.LibraryUpdated),
+            libraryData => { OnLibraryUpdated?.Invoke(libraryData); });
+
+        _hubConnection.On<SerieDto>(nameof(NotificationType.SerieCreated),
+            serieData => { OnSerieCreated?.Invoke(serieData); });
+
+        _hubConnection.On<SerieDto>(nameof(NotificationType.SerieUpdated),
+            serieData => { OnSerieUpdated?.Invoke(serieData); });
+
+        _hubConnection.On<long>(nameof(NotificationType.SerieDeleted), serieId => { OnSerieDeleted?.Invoke(serieId); });
+
+        _hubConnection.On<RankDto>(nameof(NotificationType.RankCreated),
+            rankData => { OnRankCreated?.Invoke(rankData); });
+
+        _hubConnection.On<RankDto>(nameof(NotificationType.RankUpdated),
+            rankData => { OnRankUpdated?.Invoke(rankData); });
+
+        _hubConnection.On<long>(nameof(NotificationType.RankDeleted), rankId => { OnRankDeleted?.Invoke(rankId); });
+
+        _hubConnection.On<ChapterDto>(nameof(NotificationType.ChapterAdded),
+            chapterData => { OnChapterAdded?.Invoke(chapterData); });
+
+        _hubConnection.On<long>(nameof(NotificationType.ChapterRemoved),
+            chapterId => { OnChapterDeleted?.Invoke(chapterId); });
+
+        _hubConnection.On<UserDto>(nameof(NotificationType.UserCreated),
+            userData => { OnUserCreated?.Invoke(userData); });
+
+        _hubConnection.On<long>(nameof(NotificationType.UserDeleted), userId => { OnUserDeleted?.Invoke(userId); });
+
+        _hubConnection.On<Dictionary<string, int>>(nameof(NotificationType.RunningTasks),
+            tasks => { OnRunningTasks?.Invoke(tasks); });
+
+        _hubConnection.On<long>(nameof(NotificationType.PosterModified),
+            serieId => { OnPosterModified?.Invoke(serieId); });
+
+        _hubConnection.On<string>(nameof(NotificationType.Connected),
+            message => { Logger.LogInfo("SignalR Server: " + message); });
 
         _hubConnection.Closed += async exception =>
         {
-            if (exception != null) { Logger.LogError("SignalR: Connexion fermée", exception, Environment.StackTrace); }
-            else { Logger.LogInfo("SignalR: Connexion fermée"); }
+            if (exception != null)
+                Logger.LogError("SignalR: Connexion fermée", exception, Environment.StackTrace);
+            else
+                Logger.LogInfo("SignalR: Connexion fermée");
             await Task.Delay(5000);
             await ConnectAsync();
         };
-        
+
         _hubConnection.Reconnecting += exception =>
         {
-            if (exception != null) { Logger.LogError("SignalR: Tentative de reconnexion", exception, Environment.StackTrace); }
-            else { Logger.LogInfo("SignalR: Tentative de reconnexion"); }
+            if (exception != null)
+                Logger.LogError("SignalR: Tentative de reconnexion", exception, Environment.StackTrace);
+            else
+                Logger.LogInfo("SignalR: Tentative de reconnexion");
             return Task.CompletedTask;
         };
-        
+
         _hubConnection.Reconnected += connectionId =>
         {
             Logger.LogInfo("SignalR: Reconnecté avec ID: " + connectionId);
@@ -151,13 +120,13 @@ public static class ServerNotification
 
         await ConnectAsync();
     }
-    
+
     private static async Task ConnectAsync()
     {
         try
         {
             if (_hubConnection == null) return;
-            
+
             Logger.LogInfo("SignalR: Tentative de connexion...");
             await _hubConnection.StartAsync();
             Logger.LogInfo("SignalR: Connexion établie avec succès");
@@ -169,11 +138,10 @@ public static class ServerNotification
             await ConnectAsync();
         }
     }
-    
+
     public static async Task StopAsync()
     {
         if (_hubConnection != null)
-        {
             try
             {
                 await _hubConnection.StopAsync();
@@ -184,6 +152,5 @@ public static class ServerNotification
             {
                 Logger.LogError("SignalR: Erreur lors de l'arrêt de la connexion", ex, Environment.StackTrace);
             }
-        }
     }
 }

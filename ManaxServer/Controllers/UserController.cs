@@ -17,7 +17,12 @@ namespace ManaxServer.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class UserController(ManaxContext context, IMapper mapper, IHashService hashService, IJwtService jwtService, INotificationService notificationService) : ControllerBase
+public class UserController(
+    ManaxContext context,
+    IMapper mapper,
+    IHashService hashService,
+    IJwtService jwtService,
+    INotificationService notificationService) : ControllerBase
 {
     private readonly object _claimLock = new();
 
@@ -138,15 +143,16 @@ public class UserController(ManaxContext context, IMapper mapper, IHashService h
         User? user = await context.Users.FirstOrDefaultAsync(u => u.Username == loginDto.Username);
         if (user == null || !hashService.VerifyPassword(loginDto.Password, user.PasswordHash))
         {
-            Logger.LogWarning("Failed login attempt for user "+loginDto.Username+" from "+loginAttempt.Origin,Environment.StackTrace);
+            Logger.LogWarning("Failed login attempt for user " + loginDto.Username + " from " + loginAttempt.Origin,
+                Environment.StackTrace);
             context.LoginAttempts.Add(loginAttempt);
             await context.SaveChangesAsync();
             return Unauthorized(Localizer.Format("UserInvalidLogin"));
         }
-        
+
         user.LastLogin = DateTime.UtcNow;
         loginAttempt.Success = true;
-        Logger.LogInfo("User "+loginDto.Username+" logged in successfully from "+loginAttempt.Origin);
+        Logger.LogInfo("User " + loginDto.Username + " logged in successfully from " + loginAttempt.Origin);
         context.LoginAttempts.Add(loginAttempt);
         await context.SaveChangesAsync();
 
@@ -213,5 +219,8 @@ public class UserController(ManaxContext context, IMapper mapper, IHashService h
         return userId;
     }
 
-    private bool UserExists(long id) => context.Users.Any(e => e.Id == id);
+    private bool UserExists(long id)
+    {
+        return context.Users.Any(e => e.Id == id);
+    }
 }

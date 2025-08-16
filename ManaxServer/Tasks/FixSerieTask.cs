@@ -3,7 +3,7 @@ using ManaxServer.Services.Fix;
 
 namespace ManaxServer.Tasks;
 
-public class FixSerieTask(IFixService fixService,long serieId) : ITask
+public class FixSerieTask(IFixService fixService, long serieId) : ITask
 {
     private readonly long _serieId = serieId;
 
@@ -21,10 +21,10 @@ public class FixSerieTask(IFixService fixService,long serieId) : ITask
     {
         return TaskPriority.SerieCheck;
     }
-    
+
     public override bool Equals(object? obj)
     {
-        if (obj is not FixSerieTask serieCheckTask) { return false; }
+        if (obj is not FixSerieTask serieCheckTask) return false;
         return serieCheckTask._serieId == _serieId;
     }
 

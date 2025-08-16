@@ -8,10 +8,11 @@ public class ManaxMapper(Mapping mapping) : IMapper
     public T Map<T>(object source) where T : new()
     {
         Type sourceType = source.GetType();
-        bool allowed = mapping.Allowed(sourceType,typeof(T));
+        bool allowed = mapping.Allowed(sourceType, typeof(T));
         if (!allowed)
         {
-            Logger.LogError($"Cannot map from {typeof(T)} to {sourceType}",new NotImplementedException(),Environment.StackTrace);
+            Logger.LogError($"Cannot map from {typeof(T)} to {sourceType}", new NotImplementedException(),
+                Environment.StackTrace);
             throw new NotImplementedException();
         }
 
@@ -23,7 +24,7 @@ public class ManaxMapper(Mapping mapping) : IMapper
             object? value = prop.GetValue(source);
             targetProp.SetValue(foo, value);
         }
-        
+
         return foo;
     }
 
@@ -34,7 +35,8 @@ public class ManaxMapper(Mapping mapping) : IMapper
         bool allowed = mapping.Allowed(sourceType, targetType);
         if (!allowed)
         {
-            Logger.LogError($"Cannot map from {sourceType} to {targetType}", new NotImplementedException(), Environment.StackTrace);
+            Logger.LogError($"Cannot map from {sourceType} to {targetType}", new NotImplementedException(),
+                Environment.StackTrace);
             throw new NotImplementedException();
         }
 

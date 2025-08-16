@@ -42,16 +42,22 @@ public class Program
 
         builder.Services.AddDbContext<ManaxContext>(opt =>
             opt.UseSqlite($"Data Source={Path.Combine(AppContext.BaseDirectory, "database.db")}"));
-        
+
         // Services
-        builder.Services.AddSingleton<INotificationService>(provider => new NotificationService(provider.GetRequiredService<IHubContext<NotificationService>>()));
+        builder.Services.AddSingleton<INotificationService>(provider =>
+            new NotificationService(provider.GetRequiredService<IHubContext<NotificationService>>()));
         builder.Services.AddSingleton<IHashService>(_ => new HashService());
-        builder.Services.AddSingleton<ITaskService>(provider => new TaskService(provider.GetRequiredService<INotificationService>()));
-        builder.Services.AddScoped<IFixService>(provider => new FixService(provider.GetRequiredService<IServiceScopeFactory>(), provider.GetRequiredService<IIssueService>()));
-        builder.Services.AddScoped<IIssueService>(provider => new IssueService(provider.GetRequiredService<IServiceScopeFactory>()));
-        builder.Services.AddScoped<IRenamingService>(provider => new RenamingService(provider.GetRequiredService<IServiceScopeFactory>()));
+        builder.Services.AddSingleton<ITaskService>(provider =>
+            new TaskService(provider.GetRequiredService<INotificationService>()));
+        builder.Services.AddScoped<IFixService>(provider =>
+            new FixService(provider.GetRequiredService<IServiceScopeFactory>(),
+                provider.GetRequiredService<IIssueService>()));
+        builder.Services.AddScoped<IIssueService>(provider =>
+            new IssueService(provider.GetRequiredService<IServiceScopeFactory>()));
+        builder.Services.AddScoped<IRenamingService>(provider =>
+            new RenamingService(provider.GetRequiredService<IServiceScopeFactory>()));
         builder.Services.AddScoped<IMapper>(_ => new ManaxMapper(new ManaxMapping()));
-        
+
 
         builder.Services.Configure<KestrelServerOptions>(options =>
         {
@@ -70,7 +76,7 @@ public class Program
         WebApplication app = builder.Build();
 
         Migrate(app);
-        
+
         app.UseMiddleware<GlobalExceptionMiddleware>();
 
         if (app.Environment.IsDevelopment())
@@ -85,7 +91,7 @@ public class Program
         app.UseAuthorization();
 
         app.MapControllers();
-        
+
         app.MapHub<NotificationService>("/notificationHub");
 
         app.Run();
@@ -117,7 +123,8 @@ public class Program
             IEnumerable<AutomaticIssueSerieType> values =
                 Enum.GetValues(typeof(AutomaticIssueSerieType)).Cast<AutomaticIssueSerieType>();
             foreach (AutomaticIssueSerieType serieIssueTypeEnum in values)
-                manaxContext.ReportedIssueSerieTypes.Add(new ReportedIssueSerieType { Name = serieIssueTypeEnum.ToString() });
+                manaxContext.ReportedIssueSerieTypes.Add(new ReportedIssueSerieType
+                    { Name = serieIssueTypeEnum.ToString() });
             manaxContext.SaveChanges();
         }
 
@@ -126,17 +133,18 @@ public class Program
             IEnumerable<AutomaticIssueChapterType> values =
                 Enum.GetValues(typeof(AutomaticIssueChapterType)).Cast<AutomaticIssueChapterType>();
             foreach (AutomaticIssueChapterType serieIssueTypeEnum in values)
-                manaxContext.ReportedIssueChapterTypes.Add(new ReportedIssueChapterType { Name = serieIssueTypeEnum.ToString() });
+                manaxContext.ReportedIssueChapterTypes.Add(new ReportedIssueChapterType
+                    { Name = serieIssueTypeEnum.ToString() });
             manaxContext.SaveChanges();
         }
     }
-    
+
     private static void AddAuthentication(WebApplicationBuilder builder)
     {
         JwtService jwtService = new();
         string secretKey = jwtService.GetSecretKey();
         builder.Services.AddSingleton<IJwtService>(jwtService);
-        
+
         builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
             {
@@ -160,7 +168,7 @@ public class Program
                         if (string.IsNullOrEmpty(accessToken) || !path.StartsWithSegments("/notificationHub"))
                             return Task.CompletedTask;
                         context.Token = accessToken;
-                            
+
                         context.Options.TokenValidationParameters = new TokenValidationParameters
                         {
                             ValidateIssuer = false,
@@ -169,14 +177,14 @@ public class Program
                             ValidateIssuerSigningKey = true,
                             IssuerSigningKey = new SymmetricSecurityKey(Convert.FromBase64String(secretKey))
                         };
-                            
-                        Logger.LogInfo("Token extrait de la requête SignalR: "+path+" - Validation adaptée");
+
+                        Logger.LogInfo("Token extrait de la requête SignalR: " + path + " - Validation adaptée");
 
                         return Task.CompletedTask;
                     },
                     OnAuthenticationFailed = context =>
                     {
-                        Logger.LogError("Échec d'authentification SignalR",context.Exception,Environment.StackTrace);
+                        Logger.LogError("Échec d'authentification SignalR", context.Exception, Environment.StackTrace);
                         return Task.CompletedTask;
                     }
                 };

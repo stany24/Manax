@@ -16,9 +16,8 @@ namespace ManaxClient.ViewModels.Rank;
 
 public partial class RankPageViewModel : PageViewModel
 {
-    [ObservableProperty]
-    private SortedObservableCollection<RankDto> _ranks = new([]);
-    
+    [ObservableProperty] private SortedObservableCollection<RankDto> _ranks = new([]);
+
     public RankPageViewModel()
     {
         Task.Run(LoadRanks);
@@ -32,10 +31,7 @@ public partial class RankPageViewModel : PageViewModel
         Dispatcher.UIThread.Post(() =>
         {
             RankDto? firstOrDefault = Ranks.FirstOrDefault(r => r.Id == obj);
-            if (firstOrDefault != null)
-            {
-                Ranks.Remove(firstOrDefault);
-            }
+            if (firstOrDefault != null) Ranks.Remove(firstOrDefault);
         });
     }
 
@@ -53,11 +49,11 @@ public partial class RankPageViewModel : PageViewModel
         Dispatcher.UIThread.Post(() =>
         {
             RankDto? firstOrDefault = Ranks.FirstOrDefault(r => r.Id == rank.Id);
-            if(firstOrDefault != null){Ranks.Remove(firstOrDefault);}
+            if (firstOrDefault != null) Ranks.Remove(firstOrDefault);
             Ranks.Add(rank);
         });
     }
-    
+
     private async void LoadRanks()
     {
         try
@@ -68,6 +64,7 @@ public partial class RankPageViewModel : PageViewModel
                 InfoEmitted?.Invoke(this, ranksResponse.Error);
                 return;
             }
+
             Dispatcher.UIThread.Post(() =>
             {
                 Ranks = new SortedObservableCollection<RankDto>(ranksResponse.GetValue())
@@ -79,27 +76,29 @@ public partial class RankPageViewModel : PageViewModel
         }
         catch (Exception e)
         {
-            InfoEmitted?.Invoke(this,"Failed to load ranks from server");
-            Logger.LogError("Failed to load ranks from server",e,Environment.StackTrace);
-        }   
+            InfoEmitted?.Invoke(this, "Failed to load ranks from server");
+            Logger.LogError("Failed to load ranks from server", e, Environment.StackTrace);
+        }
     }
 
     public void UpdateRank(RankDto rank)
     {
         RankEditPopup rankEditPopup = new(rank);
-        rankEditPopup.CloseRequested += async void (_,_) =>
+        rankEditPopup.CloseRequested += async void (_, _) =>
         {
             try
             {
                 RankDto result = rankEditPopup.GetResult();
                 Optional<bool> updateRankAsync = await ManaxApiRankClient.UpdateRankAsync(result);
-                if (updateRankAsync.Failed) { InfoEmitted?.Invoke(this,updateRankAsync.Error); }
-                else { rankEditPopup.Close(); }
+                if (updateRankAsync.Failed)
+                    InfoEmitted?.Invoke(this, updateRankAsync.Error);
+                else
+                    rankEditPopup.Close();
             }
             catch (Exception e)
             {
-                InfoEmitted?.Invoke(this,"Failed to update rank on server");
-                Logger.LogError("Failed to update rank on server",e,Environment.StackTrace);
+                InfoEmitted?.Invoke(this, "Failed to update rank on server");
+                Logger.LogError("Failed to update rank on server", e, Environment.StackTrace);
             }
         };
         PopupRequested?.Invoke(this, rankEditPopup);
@@ -112,10 +111,7 @@ public partial class RankPageViewModel : PageViewModel
             try
             {
                 Optional<bool> deleteRankResponse = await ManaxApiRankClient.DeleteRankAsync(rank.Id);
-                if (deleteRankResponse.Failed)
-                {
-                    InfoEmitted?.Invoke(this, deleteRankResponse.Error);
-                }
+                if (deleteRankResponse.Failed) InfoEmitted?.Invoke(this, deleteRankResponse.Error);
             }
             catch (Exception e)
             {
@@ -124,25 +120,22 @@ public partial class RankPageViewModel : PageViewModel
             }
         });
     }
-    
+
     public void CreateRank()
     {
-        RankEditPopup rankCreatePopup = new(new RankDto {Name = "New Rank", Value = 10});
+        RankEditPopup rankCreatePopup = new(new RankDto { Name = "New Rank", Value = 10 });
         rankCreatePopup.CloseRequested += async void (_, _) =>
         {
             try
             {
                 RankDto result = rankCreatePopup.GetResult();
-                Optional<bool> rankResponse = await ManaxApiRankClient.CreateRankAsync(new RankCreateDto {Name = result.Name, Value = result.Value});
+                Optional<bool> rankResponse = await ManaxApiRankClient.CreateRankAsync(new RankCreateDto
+                    { Name = result.Name, Value = result.Value });
 
                 if (rankResponse.Failed)
-                {
                     InfoEmitted?.Invoke(this, rankResponse.Error);
-                }
                 else
-                {
                     rankCreatePopup.Close();
-                }
             }
             catch (Exception e)
             {

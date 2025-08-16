@@ -26,7 +26,9 @@
                     HorizontalAlignment="Stretch"
                     ColumnDefinitions="*,Auto">
                     <Label
-                        Grid.Column="0">Libraries</Label>
+                        Grid.Column="0">
+                        Libraries
+                    </Label>
                     <Button
                         Grid.Column="1"
                         IsVisible="{Binding IsAdmin}"
@@ -48,8 +50,7 @@
                                 HorizontalAlignment="Stretch"
                                 Command="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).ShowLibrary}"
                                 CommandParameter="{Binding Id}"
-                                Content="{Binding Name}">
-                            </Button>
+                                Content="{Binding Name}" />
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                     <ItemsControl.ItemsPanel>
@@ -79,7 +80,7 @@
                     Command="{Binding ChangePageUsers}">
                     Users
                 </Button>
-                
+
                 <Button
                     HorizontalAlignment="Stretch"
                     HorizontalContentAlignment="Center"
@@ -142,14 +143,14 @@
                 Content="{Binding CurrentPageViewModel}" />
 
         </DockPanel>
-        
+
         <ContentControl
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
             VerticalContentAlignment="Center"
             HorizontalContentAlignment="Center"
             Content="{Binding Popup}" />
-        
+
         <ItemsControl
             Margin="5,5,5,5"
             ItemsSource="{Binding Infos}"

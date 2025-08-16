@@ -1,4 +1,3 @@
-using ManaxLibrary.DTO.Chapter;
 using ManaxLibrary.DTO.Setting;
 using ManaxServer.Localization;
 using ManaxServer.Models;
@@ -14,7 +13,11 @@ namespace ManaxServer.Controllers;
 
 [Route("api/settings")]
 [ApiController]
-public class SettingsController(IServiceProvider serviceProvider, ITaskService taskService, IRenamingService renamingService, IFixService fixService) : ControllerBase
+public class SettingsController(
+    IServiceProvider serviceProvider,
+    ITaskService taskService,
+    IRenamingService renamingService,
+    IFixService fixService) : ControllerBase
 {
     private readonly object _lock = new();
 
@@ -35,19 +38,16 @@ public class SettingsController(IServiceProvider serviceProvider, ITaskService t
         lock (_lock)
         {
             SettingsData oldData = SettingsManager.Data;
-            if (!data.IsValid)
-            {
-                return BadRequest(Localizer.GetString("SettingsUpdateNotForced"));
-            }
+            if (!data.IsValid) return BadRequest(Localizer.GetString("SettingsUpdateNotForced"));
             SettingsManager.OverwriteSettings(data);
             using IServiceScope scope = serviceProvider.CreateScope();
             ManaxContext manaxContext = scope.ServiceProvider.GetRequiredService<ManaxContext>();
-            Task.Run(() => CheckModifications(data, oldData,manaxContext));
+            Task.Run(() => CheckModifications(data, oldData, manaxContext));
             return Ok();
-        }   
+        }
     }
-    
-    private void CheckModifications(SettingsData newData, SettingsData oldData,ManaxContext manaxContext)
+
+    private void CheckModifications(SettingsData newData, SettingsData oldData, ManaxContext manaxContext)
     {
         lock (_lock)
         {
@@ -57,18 +57,13 @@ public class SettingsController(IServiceProvider serviceProvider, ITaskService t
 
     private void HandlePosterModifications(SettingsData newData, SettingsData oldData, ManaxContext context)
     {
-        if(newData.PosterName != oldData.PosterName || newData.PosterFormat != oldData.PosterFormat )
-        {
-            _ = taskService.AddTaskAsync(new PosterRenamingTask(renamingService,oldData.PosterName, newData.PosterName,
+        if (newData.PosterName != oldData.PosterName || newData.PosterFormat != oldData.PosterFormat)
+            _ = taskService.AddTaskAsync(new PosterRenamingTask(renamingService, oldData.PosterName, newData.PosterName,
                 oldData.PosterFormat, newData.PosterFormat));
-        }
-        
-        if(newData.MaxPosterWidth != oldData.MaxPosterWidth || newData.MinPosterWidth != oldData.MinPosterWidth || newData.PosterQuality != oldData.PosterQuality)
-        {
-            foreach (long serieId in context.Series.Select(serie => serie.Id ))
-            {
-                _ = taskService.AddTaskAsync(new FixPosterTask(fixService,serieId));
-            }
-        }
+
+        if (newData.MaxPosterWidth != oldData.MaxPosterWidth || newData.MinPosterWidth != oldData.MinPosterWidth ||
+            newData.PosterQuality != oldData.PosterQuality)
+            foreach (long serieId in context.Series.Select(serie => serie.Id))
+                _ = taskService.AddTaskAsync(new FixPosterTask(fixService, serieId));
     }
 }

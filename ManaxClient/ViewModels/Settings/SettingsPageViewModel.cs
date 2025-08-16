@@ -12,16 +12,16 @@ namespace ManaxClient.ViewModels.Settings;
 
 public partial class SettingsPageViewModel : PageViewModel
 {
-    [ObservableProperty] private SettingsData _settings = null!;
-    [ObservableProperty] private List<ImageFormat> _allImageFormats;
     [ObservableProperty] private List<ArchiveFormat> _allArchiveFormats;
+    [ObservableProperty] private List<ImageFormat> _allImageFormats;
     [ObservableProperty] private string _problem = string.Empty;
+    [ObservableProperty] private SettingsData _settings = null!;
     [ObservableProperty] private string _success = string.Empty;
 
     public SettingsPageViewModel()
     {
-        AllImageFormats= new List<ImageFormat>(Enum.GetValues(typeof(ImageFormat)).Cast<ImageFormat>());
-        AllArchiveFormats= new List<ArchiveFormat>(Enum.GetValues(typeof(ArchiveFormat)).Cast<ArchiveFormat>());
+        AllImageFormats = new List<ImageFormat>(Enum.GetValues(typeof(ImageFormat)).Cast<ImageFormat>());
+        AllArchiveFormats = new List<ArchiveFormat>(Enum.GetValues(typeof(ArchiveFormat)).Cast<ArchiveFormat>());
         Task.Run(LoadSettings);
     }
 
@@ -29,7 +29,7 @@ public partial class SettingsPageViewModel : PageViewModel
     {
         try
         {
-            Optional<bool> updateTask =  await ManaxApiSettingsClient.UpdateSettingsAsync(Settings);
+            Optional<bool> updateTask = await ManaxApiSettingsClient.UpdateSettingsAsync(Settings);
             if (updateTask.Failed)
             {
                 Problem = updateTask.Error;
@@ -42,10 +42,10 @@ public partial class SettingsPageViewModel : PageViewModel
         }
         catch (Exception e)
         {
-            Logger.LogError("Error when updating settings",e, Environment.StackTrace);
+            Logger.LogError("Error when updating settings", e, Environment.StackTrace);
         }
     }
-    
+
     private async void LoadSettings()
     {
         try
@@ -54,15 +54,15 @@ public partial class SettingsPageViewModel : PageViewModel
             if (settingsAsync.Failed)
             {
                 Problem = settingsAsync.Error;
-                Logger.LogFailure("Failed to load settings",Environment.StackTrace);
+                Logger.LogFailure("Failed to load settings", Environment.StackTrace);
                 return;
             }
 
-            Settings =  settingsAsync.GetValue();
+            Settings = settingsAsync.GetValue();
         }
         catch (Exception e)
         {
-            Logger.LogError("Error when fetching settings",e,Environment.StackTrace);
+            Logger.LogError("Error when fetching settings", e, Environment.StackTrace);
         }
     }
 }

@@ -11,9 +11,9 @@ public static class InMemoryTestDbContextFactory
     public static ManaxContext CreateTestContext(string? dbName = null)
     {
         dbName ??= Guid.NewGuid().ToString();
-        
+
         DbContextOptions<ManaxContext> options = new DbContextOptionsBuilder<ManaxContext>()
-            .UseInMemoryDatabase(databaseName: dbName)
+            .UseInMemoryDatabase(dbName)
             .Options;
 
         List<Serie> series =
@@ -85,13 +85,13 @@ public static class InMemoryTestDbContextFactory
         ];
 
         ManaxContext context = new(options);
-        
+
         context.Database.EnsureDeleted();
         context.Database.EnsureCreated();
-        
+
         context.Series.AddRange(series);
         context.Chapters.AddRange(chapters);
-        
+
         context.SaveChanges();
 
         return context;

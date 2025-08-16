@@ -8,23 +8,22 @@ using LiveChartsCore;
 using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Extensions;
 using LiveChartsCore.SkiaSharpView.Painting;
-using SkiaSharp;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
-using ManaxLibrary.DTO.Rank;
 using ManaxLibrary.DTO.Stats;
 using ManaxLibrary.Logging;
+using SkiaSharp;
 
 namespace ManaxClient.ViewModels.Stats;
 
 public partial class UserStatsPageViewModel : PageViewModel
 {
-    [ObservableProperty] private UserStats _userStats = null!;
-    [ObservableProperty] private IEnumerable<ISeries>? _seriesSeries;
     [ObservableProperty] private IEnumerable<ISeries>? _chaptersSeries;
     [ObservableProperty] private IEnumerable<ISeries>? _ranksSeries;
+    [ObservableProperty] private IEnumerable<ISeries>? _seriesSeries;
+    [ObservableProperty] private UserStats _userStats = null!;
     [ObservableProperty] private List<Axis>? _xAxes;
-    
+
     public UserStatsPageViewModel()
     {
         Task.Run(LoadUserStats);
@@ -37,7 +36,7 @@ public partial class UserStatsPageViewModel : PageViewModel
             Optional<UserStats> userStats = await ManaxApiStatsClient.GetUserStats();
             if (userStats.Failed)
             {
-                Logger.LogFailure($"Failed to load user stats: {userStats.Error}",Environment.StackTrace);
+                Logger.LogFailure($"Failed to load user stats: {userStats.Error}", Environment.StackTrace);
                 InfoEmitted?.Invoke(this, $"Failed to load user stats: {userStats.Error}");
                 return;
             }
@@ -50,11 +49,11 @@ public partial class UserStatsPageViewModel : PageViewModel
         }
         catch (Exception e)
         {
-            Logger.LogError($"An error occurred while loading user stats: {e.Message}",e, Environment.StackTrace);
+            Logger.LogError($"An error occurred while loading user stats: {e.Message}", e, Environment.StackTrace);
             InfoEmitted?.Invoke(this, $"An error occurred while loading user stats: {e.Message}");
         }
     }
-    
+
     private void UpdateChartData()
     {
         SeriesSeries = GaugeGenerator.BuildSolidGauge(
@@ -78,30 +77,30 @@ public partial class UserStatsPageViewModel : PageViewModel
                 }));
 
         if (UserStats.Ranks.Count == 0) return;
-        
+
         List<RankCount> sortedRanks = UserStats.Ranks.OrderBy(r => r.Rank.Value).ToList();
         List<double> values = [];
         List<string> labels = [];
-            
+
         foreach (RankCount rankCount in sortedRanks)
         {
             values.Add(rankCount.Count);
             labels.Add(rankCount.Rank.Name);
         }
-            
+
         RanksSeries =
         [
             new ColumnSeries<double>
             {
                 Values = values,
                 Name = "Nombre de séries",
-                Fill = new SolidColorPaint(SKColors.DodgerBlue),
+                Fill = new SolidColorPaint(SKColors.DodgerBlue)
             }
         ];
-            
+
         XAxes =
         [
-            new Axis()
+            new Axis
             {
                 Labels = labels,
                 LabelsRotation = -15,

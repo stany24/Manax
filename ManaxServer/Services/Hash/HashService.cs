@@ -13,27 +13,19 @@ public class HashService : Service, IHashService
     private const int SaltSize = 16; // 128 bits
     private const int HashSize = 32; // 256 bits
 
-    private byte[] GenerateSalt()
-    {
-        byte[] salt = new byte[SaltSize];
-        using RandomNumberGenerator rng = RandomNumberGenerator.Create();
-        rng.GetBytes(salt);
-        return salt;
-    }
-
     public string HashPassword(string password)
     {
         byte[] salt = GenerateSalt();
         byte[] hash = HashPasswordWithSalt(password, salt);
 
-        
+
         return $"{Convert.ToBase64String(salt)}:{Convert.ToBase64String(hash)}";
     }
 
     public bool VerifyPassword(string password, string storedHash)
     {
         string[] parts = storedHash.Split(':');
-        if (parts.Length != 2) {return false;}
+        if (parts.Length != 2) return false;
 
         try
         {
@@ -42,7 +34,18 @@ public class HashService : Service, IHashService
             byte[] actualHash = HashPasswordWithSalt(password, salt);
             return CryptographicOperations.FixedTimeEquals(expectedHash, actualHash);
         }
-        catch { return false; }
+        catch
+        {
+            return false;
+        }
+    }
+
+    private byte[] GenerateSalt()
+    {
+        byte[] salt = new byte[SaltSize];
+        using RandomNumberGenerator rng = RandomNumberGenerator.Create();
+        rng.GetBytes(salt);
+        return salt;
     }
 
     private byte[] HashPasswordWithSalt(string password, byte[] salt)

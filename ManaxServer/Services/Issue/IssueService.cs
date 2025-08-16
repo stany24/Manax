@@ -11,7 +11,7 @@ public class IssueService(IServiceScopeFactory scopeFactory) : Service, IIssueSe
         using IServiceScope scope = scopeFactory.CreateScope();
         ManaxContext context = scope.ServiceProvider.GetRequiredService<ManaxContext>();
 
-        if (context.AutomaticIssuesSerie.Any(i => i.Problem == problem && i.SerieId == serieId)) {return;}
+        if (context.AutomaticIssuesSerie.Any(i => i.Problem == problem && i.SerieId == serieId)) return;
 
         AutomaticIssueSerie issue = new()
         {
@@ -23,17 +23,13 @@ public class IssueService(IServiceScopeFactory scopeFactory) : Service, IIssueSe
         context.AutomaticIssuesSerie.Add(issue);
         context.SaveChanges();
     }
-    
+
     public void ManageSerieIssue(long serieId, AutomaticIssueSerieType problem, bool create)
     {
         if (create)
-        {
             CreateSerieIssue(serieId, problem);
-        }
         else
-        {
             RemoveSerieIssue(serieId, problem);
-        }
     }
 
     public void RemoveSerieIssue(long serieId, AutomaticIssueSerieType problem)
@@ -52,7 +48,7 @@ public class IssueService(IServiceScopeFactory scopeFactory) : Service, IIssueSe
         using IServiceScope scope = scopeFactory.CreateScope();
         ManaxContext context = scope.ServiceProvider.GetRequiredService<ManaxContext>();
 
-        if (context.AutomaticIssuesChapter.Any(i => i.Problem== problem && i.ChapterId == chapterId)) return;
+        if (context.AutomaticIssuesChapter.Any(i => i.Problem == problem && i.ChapterId == chapterId)) return;
 
         AutomaticIssueChapter issue = new()
         {
@@ -64,17 +60,13 @@ public class IssueService(IServiceScopeFactory scopeFactory) : Service, IIssueSe
         context.AutomaticIssuesChapter.Add(issue);
         context.SaveChanges();
     }
-    
+
     public void ManageChapterIssue(long serieId, AutomaticIssueChapterType problem, bool create)
     {
         if (create)
-        {
             CreateChapterIssue(serieId, problem);
-        }
         else
-        {
             RemoveChapterIssue(serieId, problem);
-        }
     }
 
     public void RemoveChapterIssue(long serieId, AutomaticIssueChapterType problem)

@@ -18,7 +18,7 @@ public static class ManaxApiSettingsClient
     public static async Task<Optional<bool>> UpdateSettingsAsync(SettingsData data)
     {
         HttpResponseMessage response = await ManaxApiClient.Client.PutAsJsonAsync("api/settings", data);
-        return response.IsSuccessStatusCode 
+        return response.IsSuccessStatusCode
             ? new Optional<bool>(true)
             : new Optional<bool>(response);
     }

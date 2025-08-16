@@ -23,7 +23,7 @@ public class IssueController(ManaxContext context, IMapper mapper) : ControllerB
         List<AutomaticIssueChapter> issues = await context.AutomaticIssuesChapter.ToListAsync();
         return mapper.Map<List<AutomaticIssueChapterDto>>(issues);
     }
-    
+
     [HttpGet("serie/automatic")]
     [Authorize(Roles = "Admin,Owner")]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -32,7 +32,7 @@ public class IssueController(ManaxContext context, IMapper mapper) : ControllerB
         List<AutomaticIssueSerie> issues = await context.AutomaticIssuesSerie.ToListAsync();
         return mapper.Map<List<AutomaticIssueSerieDto>>(issues);
     }
-    
+
     [HttpGet("chapter/reported")]
     [Authorize(Roles = "Admin,Owner")]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -41,7 +41,7 @@ public class IssueController(ManaxContext context, IMapper mapper) : ControllerB
         List<ReportedIssueChapter> issues = await context.ReportedIssuesChapter.ToListAsync();
         return mapper.Map<List<ReportedIssueChapterDto>>(issues);
     }
-    
+
     [HttpGet("serie/reported")]
     [Authorize(Roles = "Admin,Owner")]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -64,7 +64,7 @@ public class IssueController(ManaxContext context, IMapper mapper) : ControllerB
 
         return Created();
     }
-    
+
     [HttpPost("serie")]
     [Authorize(Roles = "User,Admin,Owner")]
     [ProducesResponseType(StatusCodes.Status201Created)]
@@ -94,7 +94,7 @@ public class IssueController(ManaxContext context, IMapper mapper) : ControllerB
 
         return Ok();
     }
-    
+
     [HttpPut("serie/{id:long}/close")]
     [Authorize(Roles = "Admin,Owner")]
     [ProducesResponseType(StatusCodes.Status200OK)]

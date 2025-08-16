@@ -7,8 +7,8 @@ namespace ManaxClient.ViewModels;
 public abstract partial class PageViewModel : ObservableObject
 {
     [ObservableProperty] private bool _admin;
-    [ObservableProperty] private bool _owner;
     [ObservableProperty] private bool _controlBarVisible = true;
+    [ObservableProperty] private bool _owner;
     public EventHandler<string>? InfoEmitted;
     public EventHandler? NextRequested;
     public EventHandler<PageViewModel>? PageChangedRequested;

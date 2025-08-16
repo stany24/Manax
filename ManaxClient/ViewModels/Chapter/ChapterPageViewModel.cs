@@ -28,6 +28,7 @@ public partial class ChapterPageViewModel : PageViewModel
                 InfoEmitted?.Invoke(this, chapterResponse.Error);
                 return;
             }
+
             ChapterDto chapter = chapterResponse.GetValue();
             Dispatcher.UIThread.Post(() =>
             {
@@ -43,6 +44,7 @@ public partial class ChapterPageViewModel : PageViewModel
                     InfoEmitted?.Invoke(this, chapterPageResponse.Error);
                     continue;
                 }
+
                 try
                 {
                     Bitmap page = new(new MemoryStream(chapterPageResponse.GetValue()));
@@ -52,7 +54,7 @@ public partial class ChapterPageViewModel : PageViewModel
                 catch (Exception e)
                 {
                     InfoEmitted?.Invoke(this, "Error loading page " + index);
-                    Logger.LogError("Failed to load page " + index + " for chapter " + chapterId,e,Environment.StackTrace);
+                    Logger.LogError("Failed to load page " + index + " for chapter " + chapterId, e, Environment.StackTrace);
                 }
             }
         });

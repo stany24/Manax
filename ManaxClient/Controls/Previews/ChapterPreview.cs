@@ -19,7 +19,7 @@ public class ChapterPreview : Button
         Background = Brushes.Transparent;
         Border border = new()
         {
-            Margin = new Thickness(0,1,6,1),
+            Margin = new Thickness(0, 1, 6, 1),
             Padding = new Thickness(2),
             BorderThickness = new Thickness(1),
             BorderBrush = Brushes.Black,
@@ -35,7 +35,8 @@ public class ChapterPreview : Button
         {
             Source = this,
             Mode = BindingMode.OneWay,
-            Converter = new FuncValueConverter<string, string>(fileName => Path.GetFileNameWithoutExtension(fileName) ?? fileName ?? string.Empty)
+            Converter = new FuncValueConverter<string, string>(fileName =>
+                Path.GetFileNameWithoutExtension(fileName) ?? fileName ?? string.Empty)
         });
         border.Child = textBlock;
         Content = border;

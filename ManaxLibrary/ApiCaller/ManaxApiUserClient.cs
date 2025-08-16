@@ -1,5 +1,4 @@
 using System.Net.Http.Json;
-using System.Text.Json;
 using ManaxLibrary.DTO.User;
 
 namespace ManaxLibrary.ApiCaller;
@@ -8,11 +7,12 @@ public static class ManaxApiUserClient
 {
     public static async Task<Optional<UserLoginResultDto>> LoginAsync(string username, string password)
     {
-        HttpResponseMessage response = await ManaxApiClient.Client.PostAsJsonAsync("/api/login", new { username, password });
+        HttpResponseMessage response =
+            await ManaxApiClient.Client.PostAsJsonAsync("/api/login", new { username, password });
         if (!response.IsSuccessStatusCode) return new Optional<UserLoginResultDto>(response);
         UserLoginResultDto? user = await response.Content.ReadFromJsonAsync<UserLoginResultDto>();
         return user == null
-            ? new Optional<UserLoginResultDto>($"Failed to read response content")
+            ? new Optional<UserLoginResultDto>("Failed to read response content")
             : new Optional<UserLoginResultDto>(user);
     }
 
@@ -69,7 +69,7 @@ public static class ManaxApiUserClient
         if (!response.IsSuccessStatusCode) return new Optional<UserLoginResultDto>(response);
         UserLoginResultDto? user = await response.Content.ReadFromJsonAsync<UserLoginResultDto>();
         return user == null
-            ? new Optional<UserLoginResultDto>($"Failed to read response content")
+            ? new Optional<UserLoginResultDto>("Failed to read response content")
             : new Optional<UserLoginResultDto>(user);
     }
 }

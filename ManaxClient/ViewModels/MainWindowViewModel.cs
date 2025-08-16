@@ -29,14 +29,14 @@ namespace ManaxClient.ViewModels;
 public partial class MainWindowViewModel : ObservableObject
 {
     private readonly PageHistoryManager _history = new();
+    [ObservableProperty] private double _height;
     [ObservableProperty] private ObservableCollection<string> _infos = [];
     [ObservableProperty] private bool _isAdmin;
     [ObservableProperty] private bool _isOwner;
+    [ObservableProperty] private ObservableCollection<LibraryDto> _libraries = [];
     [ObservableProperty] private Popup? _popup;
     [ObservableProperty] private ObservableCollection<TaskItem> _runningTasks = [];
-    [ObservableProperty] private ObservableCollection<LibraryDto> _libraries = [];
     [ObservableProperty] private double _width;
-    [ObservableProperty] private double _height;
 
     public MainWindowViewModel()
     {
@@ -58,7 +58,7 @@ public partial class MainWindowViewModel : ObservableObject
             Dispatcher.UIThread.Post(() =>
             {
                 IsAdmin = login.IsAdmin();
-                IsOwner= login.IsOwner();
+                IsOwner = login.IsOwner();
                 ServerNotification.OnRunningTasks += OnRunningTasksHandler;
                 ServerNotification.OnLibraryCreated += OnLibraryCreatedHandler;
                 ServerNotification.OnLibraryUpdated += OnLibraryUpdatedHandler;
@@ -66,9 +66,13 @@ public partial class MainWindowViewModel : ObservableObject
                 LoadLibraries();
             });
         };
-        
+
         SetPage(new LoginPageViewModel());
     }
+
+    public bool CanGoBack => _history.CanGoBack;
+    public bool CanGoForward => _history.CanGoForward;
+    public PageViewModel? CurrentPageViewModel => _history.CurrentPage;
 
     ~MainWindowViewModel()
     {
@@ -76,7 +80,6 @@ public partial class MainWindowViewModel : ObservableObject
         ServerNotification.OnLibraryCreated -= OnLibraryCreatedHandler;
         ServerNotification.OnLibraryUpdated -= OnLibraryUpdatedHandler;
         ServerNotification.OnLibraryDeleted -= OnLibraryDeletedHandler;
-        
     }
 
     private void OnRunningTasksHandler(Dictionary<string, int> tasks)
@@ -89,7 +92,7 @@ public partial class MainWindowViewModel : ObservableObject
                 RunningTasks.Add(new TaskItem { TaskName = task.Key, Number = task.Value });
         });
     }
-    
+
     private void OnLibraryCreatedHandler(LibraryDto library)
     {
         Dispatcher.UIThread.Invoke(() =>
@@ -98,18 +101,18 @@ public partial class MainWindowViewModel : ObservableObject
             ShowInfo($"Library '{library.Name}' was created");
         });
     }
-    
+
     private void OnLibraryUpdatedHandler(LibraryDto library)
     {
         Dispatcher.UIThread.Invoke(() =>
         {
             LibraryDto? old = Libraries.FirstOrDefault(l => l.Id == library.Id);
-            if(old != null){Libraries.Remove(old);}
+            if (old != null) Libraries.Remove(old);
             Libraries.Add(library);
             ShowInfo($"Library '{old?.Name ?? "null"}' was updated to '{library.Name}'");
         });
     }
-    
+
     private void OnLibraryDeletedHandler(long libraryId)
     {
         Dispatcher.UIThread.Invoke(() =>
@@ -131,6 +134,7 @@ public partial class MainWindowViewModel : ObservableObject
                 ShowInfo(libraryIdsResponse.Error);
                 return;
             }
+
             Dispatcher.UIThread.Invoke(() => { Libraries.Clear(); });
             List<long> ids = libraryIdsResponse.GetValue();
             foreach (long id in ids)
@@ -141,36 +145,27 @@ public partial class MainWindowViewModel : ObservableObject
                     ShowInfo(libraryResponse.Error);
                     continue;
                 }
+
                 Dispatcher.UIThread.Post(() => Libraries.Add(libraryResponse.GetValue()));
             }
         });
     }
-    
+
     private void SetPopup(Popup? popup)
     {
         Popup = popup;
         if (Popup is not null) Popup.Closed += (_, _) => Popup = null;
     }
-    
+
     private void ShowInfo(string info)
     {
-        Dispatcher.UIThread.Invoke(() =>
-        {
-            Infos.Add(info);
-        });
+        Dispatcher.UIThread.Invoke(() => { Infos.Add(info); });
         Task.Run(() =>
         {
             Thread.Sleep(10000);
-            Dispatcher.UIThread.Invoke(() =>
-            {
-                Infos.Remove(info);
-            });
+            Dispatcher.UIThread.Invoke(() => { Infos.Remove(info); });
         });
     }
-
-    public bool CanGoBack => _history.CanGoBack;
-    public bool CanGoForward => _history.CanGoForward;
-    public PageViewModel? CurrentPageViewModel => _history.CurrentPage;
 
     public void GoBack()
     {
@@ -201,20 +196,17 @@ public partial class MainWindowViewModel : ObservableObject
                 LibraryCreateDto? library = popup.GetResult();
                 if (library == null) return;
                 Optional<long> postLibraryResponse = await ManaxApiLibraryClient.PostLibraryAsync(library);
-                if (postLibraryResponse.Failed)
-                {
-                    ShowInfo(postLibraryResponse.Error);
-                }
+                if (postLibraryResponse.Failed) ShowInfo(postLibraryResponse.Error);
             }
             catch (Exception e)
             {
-                Logger.LogError("Error creating library",e,Environment.StackTrace);
+                Logger.LogError("Error creating library", e, Environment.StackTrace);
                 Infos.Add("Error creating library");
             }
         };
         SetPopup(popup);
     }
-    
+
     public void ShowLibrary(long libraryId)
     {
         SetPage(new LibraryPageViewModel(libraryId));
@@ -229,7 +221,7 @@ public partial class MainWindowViewModel : ObservableObject
     {
         SetPage(new UserIssuesPageViewModel());
     }
-    
+
     public void ChangePageAutomaticIssues()
     {
         SetPage(new AutomaticIssuesPageViewModel());
@@ -239,22 +231,22 @@ public partial class MainWindowViewModel : ObservableObject
     {
         SetPage(new UsersPageViewModel());
     }
-    
+
     public void ChangePageRanks()
     {
         SetPage(new RankPageViewModel());
     }
-    
+
     public void ChangePageSettings()
     {
         SetPage(new SettingsPageViewModel());
     }
-    
+
     public void ChangePageUserStats()
     {
         SetPage(new UserStatsPageViewModel());
     }
-    
+
     public void ChangePageServerStats()
     {
         SetPage(new ServerStatsPageViewModel());

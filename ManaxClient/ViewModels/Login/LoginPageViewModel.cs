@@ -24,7 +24,7 @@ public partial class LoginPageViewModel : PageViewModel
     {
         ControlBarVisible = false;
     }
-    
+
     public void Login()
     {
         LoginError = string.Empty;
@@ -37,6 +37,7 @@ public partial class LoginPageViewModel : PageViewModel
                 InfoEmitted?.Invoke(this, loginResponse.Error);
                 return;
             }
+
             CheckToken(loginResponse.GetValue());
         });
     }
@@ -53,6 +54,7 @@ public partial class LoginPageViewModel : PageViewModel
                 InfoEmitted?.Invoke(this, claimResponse.Error);
                 return;
             }
+
             CheckToken(claimResponse.GetValue());
         });
     }
@@ -62,7 +64,7 @@ public partial class LoginPageViewModel : PageViewModel
         try
         {
             ManaxApiConfig.SetToken(result.Token);
-            
+
             UserDto self = result.User;
             _isAdmin = self.Role is UserRole.Admin or UserRole.Owner;
             _isOwner = self.Role is UserRole.Owner;

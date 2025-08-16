@@ -26,14 +26,15 @@ namespace ManaxClient.ViewModels.Library;
 
 public partial class LibraryPageViewModel : PageViewModel
 {
+    private readonly object _serieLock = new();
+    [ObservableProperty] private bool _isFolderPickerOpen;
     [ObservableProperty] private LibraryDto? _library;
     [ObservableProperty] private SortedObservableCollection<ClientSerie> _series;
-    [ObservableProperty] private bool _isFolderPickerOpen;
-    private readonly object _serieLock = new();
 
     public LibraryPageViewModel(long libraryId)
     {
-        Series = new SortedObservableCollection<ClientSerie>([]) {SortingSelector = serie => serie.Info.Title ,Descending = false };
+        Series = new SortedObservableCollection<ClientSerie>([])
+            { SortingSelector = serie => serie.Info.Title, Descending = false };
         Task.Run(() => { LoadLibrary(libraryId); });
         Task.Run(() => { LoadSeries(libraryId); });
         ServerNotification.OnSerieCreated += OnSerieCreated;
@@ -47,10 +48,10 @@ public partial class LibraryPageViewModel : PageViewModel
         ServerNotification.OnPosterModified -= OnPosterModified;
         ServerNotification.OnSerieDeleted -= OnSerieDeleted;
     }
-    
+
     private void OnSerieCreated(SerieDto serie)
     {
-        Logger.LogInfo("A new Serie has been created in "+Library?.Name);
+        Logger.LogInfo("A new Serie has been created in " + Library?.Name);
         if (serie.LibraryId != Library?.Id) return;
         Dispatcher.UIThread.Post(() =>
         {
@@ -62,7 +63,7 @@ public partial class LibraryPageViewModel : PageViewModel
             }
         });
     }
-    
+
     private void OnSerieDeleted(long serieId)
     {
         Dispatcher.UIThread.Post(() =>
@@ -70,14 +71,11 @@ public partial class LibraryPageViewModel : PageViewModel
             lock (_serieLock)
             {
                 ClientSerie? existingSerie = Series.FirstOrDefault(s => s.Info.Id == serieId);
-                if (existingSerie != null)
-                {
-                    Series.Remove(existingSerie);
-                }
+                if (existingSerie != null) Series.Remove(existingSerie);
             }
         });
     }
-    
+
     private async void OnPosterModified(long serieId)
     {
         try
@@ -87,6 +85,7 @@ public partial class LibraryPageViewModel : PageViewModel
             {
                 serie = Series.FirstOrDefault(s => s.Info.Id == serieId);
             }
+
             if (serie == null) return;
             Optional<byte[]> seriePosterResponse = await ManaxApiSerieClient.GetSeriePosterAsync(serieId);
             if (seriePosterResponse.Failed)
@@ -94,6 +93,7 @@ public partial class LibraryPageViewModel : PageViewModel
                 InfoEmitted?.Invoke(this, seriePosterResponse.Error);
                 return;
             }
+
             try
             {
                 Bitmap poster = new(new MemoryStream(seriePosterResponse.GetValue()));
@@ -101,15 +101,15 @@ public partial class LibraryPageViewModel : PageViewModel
             }
             catch (Exception e)
             {
-                Logger.LogError("Failed to load the new poster for serie with ID: " + serieId,e, Environment.StackTrace);
+                Logger.LogError("Failed to load the new poster for serie with ID: " + serieId, e, Environment.StackTrace);
             }
         }
         catch (Exception e)
         {
-            Logger.LogError("Failed to receive the new poster for serie with ID: " + serieId,e, Environment.StackTrace);
+            Logger.LogError("Failed to receive the new poster for serie with ID: " + serieId, e, Environment.StackTrace);
         }
     }
-    
+
     private async void LoadLibrary(long libraryId)
     {
         try
@@ -120,22 +120,25 @@ public partial class LibraryPageViewModel : PageViewModel
                 InfoEmitted?.Invoke(this, libraryResponse.Error);
                 return;
             }
+
             Dispatcher.UIThread.Post(() => Library = libraryResponse.GetValue());
         }
         catch (Exception e)
         {
-            Logger.LogError("Failed to load the library with ID: " + libraryId,e, Environment.StackTrace);
+            Logger.LogError("Failed to load the library with ID: " + libraryId, e, Environment.StackTrace);
         }
     }
-    
+
     public void DeleteLibrary()
     {
-        if(Library == null){return;}
+        if (Library == null) return;
         Task.Run(async () =>
         {
             Optional<bool> deleteLibraryResponse = await ManaxApiLibraryClient.DeleteLibraryAsync(Library.Id);
-            if (deleteLibraryResponse.Failed ) { PageChangedRequested?.Invoke(this, new HomePageViewModel()); }
-            else { InfoEmitted?.Invoke(this, "Library '" + Library.Name + "' was correctly deleted"); }
+            if (deleteLibraryResponse.Failed)
+                PageChangedRequested?.Invoke(this, new HomePageViewModel());
+            else
+                InfoEmitted?.Invoke(this, "Library '" + Library.Name + "' was correctly deleted");
         });
     }
 
@@ -143,17 +146,19 @@ public partial class LibraryPageViewModel : PageViewModel
     {
         try
         {
-            Optional<List<long>> searchResultResponse = await ManaxApiSerieClient.GetSearchResult(new Search { IncludedLibraries = [libraryId] });
+            Optional<List<long>> searchResultResponse =
+                await ManaxApiSerieClient.GetSearchResult(new Search { IncludedLibraries = [libraryId] });
             if (searchResultResponse.Failed)
             {
                 InfoEmitted?.Invoke(this, searchResultResponse.Error);
                 return;
             }
+
             foreach (long serieId in searchResultResponse.GetValue())
             {
                 lock (_serieLock)
                 {
-                    if(Series.FirstOrDefault(s => s.Info.Id == serieId) != null) {continue;}
+                    if (Series.FirstOrDefault(s => s.Info.Id == serieId) != null) continue;
                 }
 
                 Optional<SerieDto> serieInfoAsync = await ManaxApiSerieClient.GetSerieInfoAsync(serieId);
@@ -162,26 +167,23 @@ public partial class LibraryPageViewModel : PageViewModel
                     InfoEmitted?.Invoke(this, serieInfoAsync.Error);
                     continue;
                 }
+
                 ClientSerie serie = new() { Info = serieInfoAsync.GetValue() };
 
                 Optional<byte[]> seriePosterAsync = await ManaxApiSerieClient.GetSeriePosterAsync(serieId);
                 if (seriePosterAsync.Failed)
-                {
                     InfoEmitted?.Invoke(this, seriePosterAsync.Error);
-                }
                 else
-                {
                     try
                     {
                         serie.Poster = new Bitmap(new MemoryStream(seriePosterAsync.GetValue()));
                     }
                     catch (Exception e)
                     {
-                        Logger.LogError("Failed to convert byte[] to image",e,Environment.StackTrace);
+                        Logger.LogError("Failed to convert byte[] to image", e, Environment.StackTrace);
                         InfoEmitted?.Invoke(this, "Invalid image received for serie " + serieId);
                         serie.Poster = null;
                     }
-                }
 
                 Dispatcher.UIThread.Post(() =>
                 {
@@ -227,7 +229,7 @@ public partial class LibraryPageViewModel : PageViewModel
             if (folders.Count == 0) return;
             string folderPath = folders[0].Path.LocalPath;
             if (string.IsNullOrEmpty(folderPath)) return;
-            
+
             Optional<bool> uploadSerieResponse = await UploadApiUploadClient.UploadSerieAsync(folderPath, Library.Id);
             if (uploadSerieResponse.Failed)
             {

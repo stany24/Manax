@@ -8,8 +8,8 @@ namespace ManaxClient.Controls.Popups;
 
 public abstract class ConfirmCancelPopup : Popup
 {
-    private readonly Button _okButton;
     private readonly Button _cancelButton;
+    private readonly Button _okButton;
 
     protected ConfirmCancelPopup(string confirmText = "Confirm", string cancelText = "Cancel")
     {
@@ -63,4 +63,3 @@ public abstract class ConfirmCancelPopup : Popup
         CloseRequested?.Invoke(this, EventArgs.Empty);
     }
 }
-

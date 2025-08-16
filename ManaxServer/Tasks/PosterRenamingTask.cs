@@ -12,8 +12,8 @@ public class PosterRenamingTask(
     ImageFormat newFormat)
     : ITask
 {
-    private readonly string _oldName = oldName;
     private readonly ImageFormat _oldFormat = oldFormat;
+    private readonly string _oldName = oldName;
 
     public void Execute()
     {
@@ -29,10 +29,10 @@ public class PosterRenamingTask(
     {
         return TaskPriority.PosterRenaming;
     }
-    
+
     public override bool Equals(object? obj)
     {
-        if (obj is not PosterRenamingTask task) { return false; }
+        if (obj is not PosterRenamingTask task) return false;
         return task._oldName == _oldName && task._oldFormat == _oldFormat;
     }
 

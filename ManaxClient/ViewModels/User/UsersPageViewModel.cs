@@ -28,6 +28,7 @@ public partial class UsersPageViewModel : PageViewModel
                 InfoEmitted?.Invoke(this, usersIdsResponse.Error);
                 return;
             }
+
             List<long> ids = usersIdsResponse.GetValue();
             foreach (long id in ids)
             {
@@ -37,6 +38,7 @@ public partial class UsersPageViewModel : PageViewModel
                     InfoEmitted?.Invoke(this, userResponse.Error);
                     continue;
                 }
+
                 Dispatcher.UIThread.Post(() => Users.Add(userResponse.GetValue()));
             }
         });
@@ -67,8 +69,8 @@ public partial class UsersPageViewModel : PageViewModel
         Task.Run(async () =>
         {
             Optional<bool> deleteUserResponse = await ManaxApiUserClient.DeleteUserAsync(user.Id);
-            InfoEmitted?.Invoke(this, deleteUserResponse.Failed 
-                ? deleteUserResponse.Error 
+            InfoEmitted?.Invoke(this, deleteUserResponse.Failed
+                ? deleteUserResponse.Error
                 : $"User '{user.Username}' was deleted");
         });
     }
@@ -85,10 +87,7 @@ public partial class UsersPageViewModel : PageViewModel
                 UserCreateDto? user = popup.GetResult();
                 if (user == null) return;
                 Optional<long> postUserResponse = await ManaxApiUserClient.PostUserAsync(user);
-                if (postUserResponse.Failed)
-                {
-                    InfoEmitted?.Invoke(this, postUserResponse.Error);
-                }
+                if (postUserResponse.Failed) InfoEmitted?.Invoke(this, postUserResponse.Error);
             }
             catch (Exception e)
             {

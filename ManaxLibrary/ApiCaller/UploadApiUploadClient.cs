@@ -12,16 +12,16 @@ public static class UploadApiUploadClient
             Title = Path.GetFileName(directory[..directory.LastIndexOf(Path.DirectorySeparatorChar)]),
             LibraryId = libraryId
         };
-        
+
         Optional<long> serieCreateResponse = await ManaxApiSerieClient.PostSerieAsync(serieCreate);
         if (serieCreateResponse.Failed)
             return new Optional<bool>(serieCreateResponse.Error);
-        
+
         long serieId = serieCreateResponse.GetValue();
-        
+
         string? poster = Directory.GetFiles(directory, "*poster.*").FirstOrDefault();
         string? posterError = null;
-        if (poster != null) 
+        if (poster != null)
         {
             Optional<bool> posterResult = await UploadPosterAsync(poster, Path.GetFileName(poster), serieId);
             if (posterResult.Failed)

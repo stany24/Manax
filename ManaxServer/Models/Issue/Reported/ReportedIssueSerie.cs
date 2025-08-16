@@ -13,7 +13,7 @@ public class ReportedIssueSerie
     public DateTime CreatedAt { get; set; }
     public long UserId { get; set; }
 
-    [ForeignKey(nameof(UserId))] public Models.User.User User { get; set; } = null!;
+    [ForeignKey(nameof(UserId))] public User.User User { get; set; } = null!;
     public long SerieId { get; set; }
 
     [ForeignKey(nameof(SerieId))] public Serie.Serie Serie { get; set; } = null!;

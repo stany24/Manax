@@ -8,7 +8,6 @@ public class RenamingService(IServiceScopeFactory scopeFactory) : Service, IRena
 {
     public void RenameChapters()
     {
-        
     }
 
     public void RenamePosters(string oldName, string newName, ImageFormat oldFormat, ImageFormat newFormat)
@@ -16,14 +15,14 @@ public class RenamingService(IServiceScopeFactory scopeFactory) : Service, IRena
         using IServiceScope scope = scopeFactory.CreateScope();
         ManaxContext manaxContext = scope.ServiceProvider.GetRequiredService<ManaxContext>();
         manaxContext.Series
-            .Select(serie =>  serie.Path)
+            .Select(serie => serie.Path)
             .ToList()
             .ForEach(path =>
             {
                 string oldPoster = Path.Combine(path, $"{oldName}.{oldFormat.ToString().ToLower()}");
                 string newPoster = Path.Combine(path, $"{newName}.{newFormat.ToString().ToLower()}");
-                
-                if (!File.Exists(oldPoster)) { return; }
+
+                if (!File.Exists(oldPoster)) return;
 
                 if (newFormat == oldFormat)
                 {
@@ -38,7 +37,7 @@ public class RenamingService(IServiceScopeFactory scopeFactory) : Service, IRena
                 }
             });
     }
-    
+
     private static MagickFormat GetMagickFormat(ImageFormat format)
     {
         return format switch

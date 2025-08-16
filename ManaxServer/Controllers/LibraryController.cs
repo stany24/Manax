@@ -12,7 +12,8 @@ namespace ManaxServer.Controllers;
 
 [Route("api/library")]
 [ApiController]
-public class LibraryController(ManaxContext context, IMapper mapper, INotificationService notificationService) : ControllerBase
+public class LibraryController(ManaxContext context, IMapper mapper, INotificationService notificationService)
+    : ControllerBase
 {
     // GET: api/Library
     [HttpGet("/api/Libraries")]

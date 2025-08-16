@@ -1,12 +1,10 @@
+using System.Collections;
+using System.Globalization;
+using System.Reflection;
+using System.Resources;
 using ManaxLibrary.Logging;
 
 namespace ManaxServer.Localization;
-
-using System.Collections.Generic;
-using System.IO;
-using System.Resources;
-using System.Reflection;
-using System.Globalization;
 
 public static class Localizer
 {
@@ -15,30 +13,30 @@ public static class Localizer
     private static readonly Dictionary<string, string> Fallback;
     private static Dictionary<string, string> _current;
 
-    public static string GetString(string key)
-    {
-        _current.TryGetValue(key, out string? value);
-        if (value != null) return value;
-        Logger.LogWarning($"The key '{key}' was not found in the current language '{_language}'. Using fallback.",Environment.StackTrace);
-        Fallback.TryGetValue(key, out value);
-        if (value == null)
-        {
-            Logger.LogError($"The key '{key}' was not found in the fallback language. Returning the key itself.",new NotImplementedException(),Environment.StackTrace);
-        }
-        return value ?? key;
-    }
-    
-    public static string Format(string key, params object[] args)
-    {
-        string template = GetString(key);
-        return string.Format(template, args);
-    }
-
     static Localizer()
     {
         Fallback = LoadFallback();
         Languages = LoadAvailableLanguages();
         _current = Fallback;
+    }
+
+    public static string GetString(string key)
+    {
+        _current.TryGetValue(key, out string? value);
+        if (value != null) return value;
+        Logger.LogWarning($"The key '{key}' was not found in the current language '{_language}'. Using fallback.",
+            Environment.StackTrace);
+        Fallback.TryGetValue(key, out value);
+        if (value == null)
+            Logger.LogError($"The key '{key}' was not found in the fallback language. Returning the key itself.",
+                new NotImplementedException(), Environment.StackTrace);
+        return value ?? key;
+    }
+
+    public static string Format(string key, params object[] args)
+    {
+        string template = GetString(key);
+        return string.Format(template, args);
     }
 
     public static void SetLanguage(string language)
@@ -74,7 +72,7 @@ public static class Localizer
 
         string? origin = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
         if (origin == null) return languages;
-        
+
         string basePath = Path.Combine(origin, "Localization", "Languages");
         if (!Directory.Exists(basePath)) return languages;
         foreach (string file in Directory.GetFiles(basePath, "manax.*.resx"))
@@ -82,10 +80,7 @@ public static class Localizer
             string filename = Path.GetFileNameWithoutExtension(file);
             if (!filename.StartsWith(resourcePrefix)) continue;
             string lang = filename[resourcePrefix.Length..];
-            if (!string.IsNullOrEmpty(lang))
-            {
-                languages.Add(lang);
-            }
+            if (!string.IsNullOrEmpty(lang)) languages.Add(lang);
         }
 
         return languages;
@@ -94,31 +89,25 @@ public static class Localizer
     private static Dictionary<string, string> LoadResourceFile(string baseName)
     {
         Dictionary<string, string> resources = new();
-        
+
         try
         {
-            ResourceManager resourceManager = new($"ManaxServer.Localization.Languages.{baseName}", 
+            ResourceManager resourceManager = new($"ManaxServer.Localization.Languages.{baseName}",
                 Assembly.GetExecutingAssembly());
-            
+
             ResourceSet? resourceSet = resourceManager.GetResourceSet(CultureInfo.InvariantCulture, true, true);
-            
+
             if (resourceSet != null)
-            {
-                foreach (System.Collections.DictionaryEntry entry in resourceSet)
-                {
+                foreach (DictionaryEntry entry in resourceSet)
                     if (entry is { Key: string key, Value: string value })
-                    {
                         resources[key] = value;
-                    }
-                }
-            }
         }
         catch (Exception e)
         {
-            Logger.LogError("Failed to load resource File",e,Environment.StackTrace);
+            Logger.LogError("Failed to load resource File", e, Environment.StackTrace);
             return resources;
         }
-        
+
         return resources;
     }
 }

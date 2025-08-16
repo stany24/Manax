@@ -13,7 +13,7 @@ public class ReportedIssueChapter
     public DateTime CreatedAt { get; set; }
     public long UserId { get; set; }
 
-    [ForeignKey(nameof(UserId))] public Models.User.User User { get; set; } = null!;
+    [ForeignKey(nameof(UserId))] public User.User User { get; set; } = null!;
     public long ChapterId { get; set; }
 
     [ForeignKey(nameof(ChapterId))] public Chapter.Chapter Chapter { get; set; } = null!;

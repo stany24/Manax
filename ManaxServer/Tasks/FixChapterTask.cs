@@ -24,7 +24,7 @@ public class FixChapterTask(IFixService fixService, long chapterId) : ITask
 
     public override bool Equals(object? obj)
     {
-        if (obj is not FixChapterTask chapterCheckTask) { return false; }
+        if (obj is not FixChapterTask chapterCheckTask) return false;
         return chapterCheckTask._chapterId == _chapterId;
     }
 

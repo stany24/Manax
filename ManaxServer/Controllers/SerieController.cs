@@ -16,7 +16,8 @@ namespace ManaxServer.Controllers;
 
 [Route("api/serie")]
 [ApiController]
-public class SerieController(ManaxContext context, IMapper mapper, INotificationService notificationService) : ControllerBase
+public class SerieController(ManaxContext context, IMapper mapper, INotificationService notificationService)
+    : ControllerBase
 {
     // GET: api/Serie
     [HttpGet("/api/series")]
@@ -69,7 +70,8 @@ public class SerieController(ManaxContext context, IMapper mapper, INotification
     {
         Serie? serie = await context.Series.FindAsync(id);
         if (serie == null) return NotFound();
-        string posterName = SettingsManager.Data.PosterName + "." + SettingsManager.Data.ImageFormat.ToString().ToLower();
+        string posterName = SettingsManager.Data.PosterName + "." +
+                            SettingsManager.Data.ImageFormat.ToString().ToLower();
         string posterPath = Path.Combine(serie.Path, posterName);
         if (!System.IO.File.Exists(posterPath)) return NotFound(Localizer.Format("PosterNotFound", id));
         byte[] readAllBytes = await System.IO.File.ReadAllBytesAsync(posterPath);
@@ -158,29 +160,30 @@ public class SerieController(ManaxContext context, IMapper mapper, INotification
 
         return Ok();
     }
-    
+
     [HttpPost("search")]
     [Authorize(Roles = "User,Admin,Owner")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public List<long> Search(Search search)
     {
         Regex regex = new(search.RegexSearch, RegexOptions.IgnoreCase | RegexOptions.Compiled);
-        
+
         Dictionary<long, int> seriesWithChapterCount = context.Chapters
             .GroupBy(c => c.SerieId)
             .Select(g => new { SerieId = g.Key, ChapterCount = g.Count() })
             .ToDictionary(x => x.SerieId, x => x.ChapterCount);
-        
+
         List<Serie> series = context.Series
             .Where(s => search.IncludedLibraries.Contains(s.LibraryId))
             .Where(s => !search.ExcludedLibraries.Contains(s.LibraryId))
             .Where(s => search.IncludedStatuses.Contains(s.Status))
             .Where(s => !search.ExcludedStatuses.Contains(s.Status))
             .ToList();
-        
+
         return series
             .Where(s => regex.Match(s.Title).Success || regex.Match(s.Description).Success)
-            .Where(s => {
+            .Where(s =>
+            {
                 int chapterCount = seriesWithChapterCount.TryGetValue(s.Id, out int value) ? value : 0;
                 return chapterCount >= search.MinChapters && chapterCount <= search.MaxChapters;
             })

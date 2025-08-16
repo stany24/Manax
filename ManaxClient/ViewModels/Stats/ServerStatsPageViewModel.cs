@@ -14,9 +14,9 @@ namespace ManaxClient.ViewModels.Stats;
 
 public partial class ServerStatsPageViewModel : PageViewModel
 {
-    [ObservableProperty] private IEnumerable<ISeries>? _userSeries;
     [ObservableProperty] private ServerStats? _serverStats;
-    
+    [ObservableProperty] private IEnumerable<ISeries>? _userSeries;
+
     public ServerStatsPageViewModel()
     {
         Task.Run(LoadServerStats);
@@ -29,7 +29,7 @@ public partial class ServerStatsPageViewModel : PageViewModel
             Optional<ServerStats> serverStats = await ManaxApiStatsClient.GetServerStats();
             if (serverStats.Failed)
             {
-                Logger.LogFailure($"Failed to load server stats: {serverStats.Error}",Environment.StackTrace);
+                Logger.LogFailure($"Failed to load server stats: {serverStats.Error}", Environment.StackTrace);
                 InfoEmitted?.Invoke(this, $"Failed to load server stats: {serverStats.Error}");
                 return;
             }
@@ -42,15 +42,15 @@ public partial class ServerStatsPageViewModel : PageViewModel
         }
         catch (Exception e)
         {
-            Logger.LogError($"An error occurred while loading server stats: {e.Message}",e, Environment.StackTrace);
+            Logger.LogError($"An error occurred while loading server stats: {e.Message}", e, Environment.StackTrace);
             InfoEmitted?.Invoke(this, $"An error occurred while loading server stats: {e.Message}");
         }
     }
-    
+
     private void UpdateChartData()
     {
         if (ServerStats == null) return;
-        UserSeries =  GaugeGenerator.BuildSolidGauge(
+        UserSeries = GaugeGenerator.BuildSolidGauge(
             new GaugeItem(
                 ServerStats.ActiveUsers,
                 series =>

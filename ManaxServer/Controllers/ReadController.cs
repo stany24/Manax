@@ -60,7 +60,7 @@ public class ReadController(ManaxContext context, IMapper mapper) : ControllerBa
     {
         long? currentUserId = UserController.GetCurrentUserId(HttpContext);
         if (currentUserId == null) return Unauthorized(Localizer.Format("UserMustBeLoggedInRead"));
-        
+
         Read? existingRead = await context.Reads
             .FirstOrDefaultAsync(r => r.User.Id == currentUserId && r.Chapter.Id == chapterId);
 

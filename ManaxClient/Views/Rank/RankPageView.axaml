@@ -16,31 +16,33 @@
                     <StackPanel
                         Orientation="Horizontal">
                         <TextBlock
-                            Text="{Binding Name}"/>
+                            Text="{Binding Name}" />
                         <TextBlock
-                            Text="{Binding Value}"/>
+                            Text="{Binding Value}" />
                         <Button
                             Command="{Binding $parent[UserControl].((login:RankPageViewModel)DataContext).UpdateRank}"
                             CommandParameter="{Binding .}"
-                            Content="Modify"/>
+                            Content="Modify" />
                         <Button
                             Command="{Binding $parent[UserControl].((login:RankPageViewModel)DataContext).DeleteRank}"
                             CommandParameter="{Binding .}"
-                            Content="Delete"/>
+                            Content="Delete" />
                     </StackPanel>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <StackPanel 
+                    <StackPanel
                         Orientation="Vertical"
-                        Spacing="5"></StackPanel>
+                        Spacing="5" />
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
         </ItemsControl>
         <Button
             VerticalAlignment="Top"
             HorizontalAlignment="Left"
-            Command="{Binding CreateRank}">+</Button>
+            Command="{Binding CreateRank}">
+            +
+        </Button>
     </StackPanel>
 </UserControl>
