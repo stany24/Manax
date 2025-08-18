@@ -249,7 +249,7 @@ public partial class SeriePageViewModel : PageViewModel
 
     public void MoveToChapterPage(ClientChapter chapter)
     {
-        ChapterPageViewModel chapterPageViewModel = new(chapter);
+        ChapterPageViewModel chapterPageViewModel = new(Chapters.ToList(),chapter);
         PageChangedRequested?.Invoke(this, chapterPageViewModel);
     }
 

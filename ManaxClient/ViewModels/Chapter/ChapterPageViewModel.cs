@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Media.Imaging;
@@ -10,7 +12,6 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using ManaxClient.Models;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
-using ManaxLibrary.DTO.Chapter;
 using ManaxLibrary.DTO.Read;
 using ManaxLibrary.Logging;
 
@@ -21,13 +22,16 @@ public partial class ChapterPageViewModel : PageViewModel
     [ObservableProperty] private bool _controlBordersVisible;
     [ObservableProperty] private ClientChapter _chapter = new();
     [ObservableProperty] private Vector _scrollOffset = new(0, 0);
+    private readonly List<ClientChapter> _chapters;
     private int _currentPage;
+    private CancellationTokenSource? _loadPagesCts;
 
-    public ChapterPageViewModel(ClientChapter chapter)
+    public ChapterPageViewModel(List<ClientChapter> chapters,ClientChapter chapter)
     {
+        _chapters = chapters;
         ControlBarVisible = false;
         Chapter = chapter;
-        Task.Run(() => LoadPages(chapter.Info.Pages, chapter.Info.Id));
+        LoadPages(chapter.Info.Pages, chapter.Info.Id);
         PropertyChanged += HandleOffsetChanged;
     }
 
@@ -38,12 +42,22 @@ public partial class ChapterPageViewModel : PageViewModel
 
     public void PreviousChapter()
     {
-        
+        int index = _chapters.FindIndex(c => c.Info.Id == Chapter.Info.Id);
+        if(index == 0){return;}
+        Chapter.Pages.Clear();
+        Chapter =  _chapters[index - 1];
+        LoadPages(Chapter.Info.Pages, Chapter.Info.Id);
+        ScrollOffset = new Vector(0, 0);
     }
 
     public void NextChapter()
     {
-        
+        int index = _chapters.FindIndex(c => c.Info.Id == Chapter.Info.Id);
+        if(index+1 == _chapters.Count){return;}
+        Chapter.Pages.Clear();
+        Chapter =  _chapters[index + 1];
+        LoadPages(Chapter.Info.Pages, Chapter.Info.Id);
+        ScrollOffset = new Vector(0, 0);
     }
     
     private void HandleOffsetChanged(object? sender, PropertyChangedEventArgs e)
@@ -61,53 +75,42 @@ public partial class ChapterPageViewModel : PageViewModel
         }
     }
 
-    public ChapterPageViewModel(long chapterId)
+    private void LoadPages(int pageCount, long chapterId)
     {
-        ControlBarVisible = false;
+        _loadPagesCts?.Cancel();
+        _loadPagesCts = new CancellationTokenSource();
+        CancellationToken token = _loadPagesCts.Token;
         Task.Run(async () =>
         {
-            Optional<ChapterDto> chapterResponse = await ManaxApiChapterClient.GetChapterAsync(chapterId);
-            if (chapterResponse.Failed)
+            Chapter.Pages = new ObservableCollection<Bitmap>(new Bitmap[pageCount]);
+            for (int i = 0; i < pageCount; i++)
             {
-                InfoEmitted?.Invoke(this, chapterResponse.Error);
-                return;
-            }
+                if (token.IsCancellationRequested) return;
+                int index = i;
+                Optional<byte[]> chapterPageResponse = await ManaxApiChapterClient.GetChapterPageAsync(chapterId, i);
+                if (chapterPageResponse.Failed)
+                {
+                    InfoEmitted?.Invoke(this, chapterPageResponse.Error);
+                    continue;
+                }
 
-            ChapterDto chapter = chapterResponse.GetValue();
-            Dispatcher.UIThread.Post(() =>
-            {
-                Chapter.Info = chapter;
-                Chapter.Pages = new ObservableCollection<Bitmap>(new Bitmap[chapter.Pages]);
-            });
-            LoadPages(chapter.Pages, chapter.Id);
-        });
-    }
-
-    private async void LoadPages(int pageCount,long chapterId)
-    {
-        Chapter.Pages = new ObservableCollection<Bitmap>(new Bitmap[pageCount]);
-        for (int i = 0; i < pageCount; i++)
-        {
-            int index = i;
-            Optional<byte[]> chapterPageResponse = await ManaxApiChapterClient.GetChapterPageAsync(chapterId, i);
-            if (chapterPageResponse.Failed)
-            {
-                InfoEmitted?.Invoke(this, chapterPageResponse.Error);
-                continue;
+                try
+                {
+                    Bitmap page = new(new MemoryStream(chapterPageResponse.GetValue()));
+                    Dispatcher.UIThread.Post(() =>
+                    {
+                        if (token.IsCancellationRequested) return;
+                        Chapter.Pages[index] = page;
+                    });
+                }
+                catch (Exception e)
+                {
+                    InfoEmitted?.Invoke(this, "Error loading page " + index);
+                    Logger.LogError("Failed to load page " + index + " for chapter " + chapterId, e,
+                        Environment.StackTrace);
+                }
             }
-
-            try
-            {
-                Bitmap page = new(new MemoryStream(chapterPageResponse.GetValue()));
-
-                Dispatcher.UIThread.Post(() => { Chapter.Pages[index] = page; });
-            }
-            catch (Exception e)
-            {
-                InfoEmitted?.Invoke(this, "Error loading page " + index);
-                Logger.LogError("Failed to load page " + index + " for chapter " + chapterId, e, Environment.StackTrace);
-            }
-        }
+        }, token);
     }
 
     public override void OnPageClosed()
