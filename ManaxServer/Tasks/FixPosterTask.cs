@@ -14,18 +14,18 @@ public class FixPosterTask(IFixService fixService, long serieId) : ITask
 
     public string GetName()
     {
-        return Localizer.GetString("TaskPosterCheck");
+        return Localizer.GetString("TaskPosterFix");
     }
 
     public TaskPriority GetPriority()
     {
-        return TaskPriority.PosterCheck;
+        return TaskPriority.PosterFix;
     }
 
     public override bool Equals(object? obj)
     {
-        if (obj is not FixPosterTask serieCheckTask) return false;
-        return serieCheckTask._serieId == _serieId;
+        if (obj is not FixPosterTask fixPosterTask) return false;
+        return fixPosterTask._serieId == _serieId;
     }
 
     public override int GetHashCode()

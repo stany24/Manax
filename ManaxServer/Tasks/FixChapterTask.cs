@@ -14,18 +14,18 @@ public class FixChapterTask(IFixService fixService, long chapterId) : ITask
 
     public string GetName()
     {
-        return Localizer.GetString("TaskChapterCheck");
+        return Localizer.GetString("TaskChapterFix");
     }
 
     public TaskPriority GetPriority()
     {
-        return TaskPriority.ChapterCheck;
+        return TaskPriority.ChapterFix;
     }
 
     public override bool Equals(object? obj)
     {
-        if (obj is not FixChapterTask chapterCheckTask) return false;
-        return chapterCheckTask._chapterId == _chapterId;
+        if (obj is not FixChapterTask fixChapterTask) return false;
+        return fixChapterTask._chapterId == _chapterId;
     }
 
     public override int GetHashCode()

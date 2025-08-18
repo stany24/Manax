@@ -65,13 +65,13 @@
     <data name="TaskPosterRenaming" xml:space="preserve">
         <value>Renommage des posters</value>
     </data>
-    <data name="TaskChapterCheck" xml:space="preserve">
+    <data name="TaskChapterFix" xml:space="preserve">
         <value>Vérification du chapitre</value>
     </data>
-    <data name="TaskPosterCheck" xml:space="preserve">
+    <data name="TaskPosterFix" xml:space="preserve">
         <value>Vérification du poster</value>
     </data>
-    <data name="TaskSerieCheck" xml:space="preserve">
+    <data name="TaskSerieFix" xml:space="preserve">
         <value>Vérification de la série</value>
     </data>
     <data name="HubMessageErrorAdmins" xml:space="preserve">

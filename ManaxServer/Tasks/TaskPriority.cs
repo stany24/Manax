@@ -2,10 +2,10 @@ namespace ManaxServer.Tasks;
 
 public enum TaskPriority
 {
-    SerieCheck = 15,
+    SerieFix = 15,
 
-    ChapterCheck = 10,
+    ChapterFix = 10,
 
     PosterRenaming = 6,
-    PosterCheck = 5
+    PosterFix = 5
 }

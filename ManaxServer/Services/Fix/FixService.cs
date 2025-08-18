@@ -22,7 +22,7 @@ public partial class FixService(IServiceScopeFactory scopeFactory, IIssueService
         manaxContext.SaveChanges();
 
         CheckMissingChapters(serie);
-        FixDescription(serie);
+        CheckDescription(serie);
     }
 
     public void FixPoster(long serieId)
@@ -71,7 +71,7 @@ public partial class FixService(IServiceScopeFactory scopeFactory, IIssueService
     [GeneratedRegex("\\d{1,4}")]
     private partial Regex RegexNumber();
 
-    private void FixDescription(Serie serie)
+    private void CheckDescription(Serie serie)
     {
         uint max = SettingsManager.Data.MaxDescriptionLength;
         uint min = SettingsManager.Data.MinDescriptionLength;
@@ -114,7 +114,7 @@ public partial class FixService(IServiceScopeFactory scopeFactory, IIssueService
         string[] files = Directory.GetFiles(copyName);
         Array.Sort(files);
         MagickImage?[] images = LoadImages(chapter.Id, files);
-        bool modified = CheckWidthOfChapter(chapter.Id, images);
+        bool modified = FixWidthOfChapter(chapter.Id, images);
         modified = modified || FixChapterFilesFormat(images);
         modified = modified || FixPagesNaming(images);
         if (modified)
@@ -168,7 +168,7 @@ public partial class FixService(IServiceScopeFactory scopeFactory, IIssueService
         return modified;
     }
 
-    private bool CheckWidthOfChapter(long id, MagickImage?[] images)
+    private bool FixWidthOfChapter(long id, MagickImage?[] images)
     {
         bool modified = false;
         foreach (MagickImage? image in images)

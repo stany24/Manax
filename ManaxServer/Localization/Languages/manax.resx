@@ -155,14 +155,14 @@
     <data name="TaskPosterRenaming" xml:space="preserve">
         <value>Poster renaming</value>
     </data>
-    <data name="TaskChapterCheck" xml:space="preserve">
-        <value>Chapter check</value>
+    <data name="TaskChapterFix" xml:space="preserve">
+        <value>Chapter fix</value>
     </data>
-    <data name="TaskPosterCheck" xml:space="preserve">
-        <value>Poster check</value>
+    <data name="TaskPosterFix" xml:space="preserve">
+        <value>Poster fix</value>
     </data>
-    <data name="TaskSerieCheck" xml:space="preserve">
-        <value>Serie check</value>
+    <data name="TaskSerieFix" xml:space="preserve">
+        <value>Serie fix</value>
     </data>
     <data name="HubMessageErrorAdmins" xml:space="preserve">
         <value>Erreur while sending notification to admins {0}</value>
