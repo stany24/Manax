@@ -5,7 +5,6 @@ using ManaxLibrary.DTO.Issue.Automatic;
 using ManaxLibrary.DTO.Setting;
 using ManaxServer.Models;
 using ManaxServer.Models.Chapter;
-using ManaxServer.Models.Serie;
 using ManaxServer.Services.Issue;
 using ManaxServer.Settings;
 
@@ -13,49 +12,22 @@ namespace ManaxServer.Services.Fix;
 
 public partial class FixService(IServiceScopeFactory scopeFactory, IIssueService issueService) : Service, IFixService
 {
-    public void FixSerie(long serieId)
-    {
-        using IServiceScope scope = scopeFactory.CreateScope();
-        ManaxContext manaxContext = scope.ServiceProvider.GetRequiredService<ManaxContext>();
-        Serie? serie = manaxContext.Series.Find(serieId);
-        if (serie == null) return;
-        manaxContext.SaveChanges();
-
-        CheckMissingChapters(serie);
-        CheckDescription(serie);
-    }
-
-    public void FixPoster(long serieId)
-    {
-        using IServiceScope scope = scopeFactory.CreateScope();
-        ManaxContext manaxContext = scope.ServiceProvider.GetRequiredService<ManaxContext>();
-        Serie? serie = manaxContext.Series.Find(serieId);
-        if (serie == null) return;
-
-        string directory = serie.Path;
-        string fileName = SettingsManager.Data.PosterName + "." + SettingsManager.Data.ImageFormat.ToString().ToLower();
-        string posterPath = Path.Combine(directory, fileName);
-        issueService.ManageSerieIssue(serie.Id, AutomaticIssueSerieType.PosterMissing, !File.Exists(posterPath));
-        if (!File.Exists(posterPath)) return;
-
-        uint min = SettingsManager.Data.MinPosterWidth;
-        uint max = SettingsManager.Data.MaxPosterWidth;
-        try
-        {
-            using MagickImage poster = new(posterPath);
-            issueService.RemoveSerieIssue(serieId, AutomaticIssueSerieType.PosterCouldNotOpen);
-            issueService.ManageSerieIssue(serieId, AutomaticIssueSerieType.PosterTooSmall, poster.Width < min);
-
-            if (poster.Width <= max) return;
-            poster.Resize(max, poster.Height * max / poster.Width);
-            poster.Write(posterPath);
-        }
-        catch (Exception)
-        {
-            issueService.CreateSerieIssue(serieId, AutomaticIssueSerieType.PosterCouldNotOpen);
-        }
-    }
-
+    [GeneratedRegex("\\d{1,4}")]
+    private partial Regex RegexNumber();
+    
+    private readonly string[] _chapterNumberPatterns =
+    [
+        "CH\\d{1,4}",
+        "(?i)chapter[-_ ]\\d{1,4}",
+        "(?i)episode[-_ ][-_ ]\\d{1,4}",
+        "(?i)episode[-_ ]\\d{1,4}",
+        "(?i)chap[-_ ]\\d{1,4}",
+        "(?i)ch.[-_ ]*\\d{1,4}",
+        "(?i)ep.[-_ ]*\\d{1,4}",
+        "(?i)Flight[-_ ]\\d{1,4}",
+        "\\d{1,4}"
+    ];
+    
     public void FixChapter(long chapterId)
     {
         using IServiceScope scope = scopeFactory.CreateScope();
@@ -66,34 +38,7 @@ public partial class FixService(IServiceScopeFactory scopeFactory, IIssueService
         chapter.Pages = ZipFile.OpenRead(chapter.Path).Entries.Count;
 
         FixChapterDeep(chapter);
-    }
-
-    [GeneratedRegex("\\d{1,4}")]
-    private partial Regex RegexNumber();
-
-    private void CheckDescription(Serie serie)
-    {
-        uint max = SettingsManager.Data.MaxDescriptionLength;
-        uint min = SettingsManager.Data.MinDescriptionLength;
-        issueService.ManageSerieIssue(serie.Id, AutomaticIssueSerieType.DescriptionTooLong,
-            serie.Description.Length > max);
-        issueService.ManageSerieIssue(serie.Id, AutomaticIssueSerieType.DescriptionTooShort,
-            serie.Description.Length < min);
-    }
-
-    private void CheckMissingChapters(Serie serie)
-    {
-        string[] chapters = Directory.GetFiles(serie.Path);
-        issueService.ManageSerieIssue(serie.Id, AutomaticIssueSerieType.MissingChapter, chapters.Length == 0);
-        if (chapters.Length == 0) return;
-
-        Array.Sort(chapters);
-        Regex regex = RegexNumber();
-        string last = Path.GetFileName(chapters[^1]);
-        Match match = regex.Match(last);
-        if (!match.Success) return;
-        issueService.ManageSerieIssue(serie.Id, AutomaticIssueSerieType.MissingChapter,
-            chapters.Length != Convert.ToInt32(match.Value));
+        manaxContext.SaveChangesAsync();
     }
 
     private void FixChapterDeep(Chapter chapter)
@@ -103,6 +48,15 @@ public partial class FixService(IServiceScopeFactory scopeFactory, IIssueService
         try
         {
             ZipFile.ExtractToDirectory(chapter.Path, copyName);
+            List<string> list = Directory.GetFiles(copyName, "*.*", SearchOption.AllDirectories).ToList();
+            foreach (string file in list)
+            {
+                File.Move(file, Path.Combine(copyName, Path.GetFileName(file)));
+            }
+            foreach (string directory in Directory.GetDirectories(copyName))
+            {
+                Directory.Delete(directory);
+            }
         }
         catch
         {
@@ -114,16 +68,56 @@ public partial class FixService(IServiceScopeFactory scopeFactory, IIssueService
         string[] files = Directory.GetFiles(copyName);
         Array.Sort(files);
         MagickImage?[] images = LoadImages(chapter.Id, files);
-        bool modified = FixWidthOfChapter(chapter.Id, images);
-        modified = modified || FixChapterFilesFormat(images);
-        modified = modified || FixPagesNaming(images);
-        if (modified)
+        bool modified1 = FixWidthOfChapter(chapter.Id, images);
+        bool modified2 = FixChapterFilesFormat(images);
+        bool modified3 = FixPagesNaming(images);
+        bool modified4 = FixChapterName(chapter);
+        if (modified1 || modified2 || modified3 || modified4)
         {
             File.Delete(chapter.Path);
             ZipFile.CreateFromDirectory(copyName, chapter.Path);
         }
 
         Directory.Delete(copyName, true);
+    }
+
+    private bool FixChapterName(Chapter chapter)
+    {
+        int? chapterNumber = GetChapterNumber(chapter.FileName);
+        if (chapterNumber != null) return ChangeChapterName(chapter, (int)chapterNumber);
+        issueService.CreateChapterIssue(chapter.Id, AutomaticIssueChapterType.ChapterNumberMissing);
+        return false;
+    }
+    
+    private static bool ChangeChapterName(Chapter chapter, int number)
+    {
+        string newName = Path.GetDirectoryName(chapter.Path) + Path.DirectorySeparatorChar +
+                         $"CH{number:0000}."+SettingsManager.Data.ArchiveFormat.ToString().ToLower();
+        if (newName == chapter.Path) {return false;}
+        Directory.Move(chapter.Path, newName);
+        chapter.Path = newName;
+        chapter.FileName = Path.GetFileName(newName);
+        return true;
+    }
+    
+    private int? GetChapterNumber(string fullChapterPath)
+    {
+        string folderName = Path.GetFileName(fullChapterPath);
+        foreach (string pattern in _chapterNumberPatterns)
+        {
+            Regex regex = new(pattern);
+            Match match = regex.Match(folderName);
+            if (match.Success) return GetNumber(match.Value);
+        }
+
+        return null;
+    }
+    
+    private int GetNumber(string chapterName)
+    {
+        Regex regex = RegexNumber();
+        Match match = regex.Match(chapterName);
+        return Convert.ToInt32(match.Value);
     }
 
     private MagickImage?[] LoadImages(long chapterId, string[] files)
@@ -143,7 +137,7 @@ public partial class FixService(IServiceScopeFactory scopeFactory, IIssueService
         return images;
     }
 
-    private bool FixPagesNaming(MagickImage?[] images)
+    private static bool FixPagesNaming(MagickImage?[] images)
     {
         bool modified = false;
         string? directory = null;
@@ -192,7 +186,7 @@ public partial class FixService(IServiceScopeFactory scopeFactory, IIssueService
         return modified;
     }
 
-    private bool FixChapterFilesFormat(MagickImage?[] images)
+    private static bool FixChapterFilesFormat(MagickImage?[] images)
     {
         bool modified = false;
         MagickFormat format = GetMagickFormat(SettingsManager.Data.ImageFormat);
@@ -211,7 +205,7 @@ public partial class FixService(IServiceScopeFactory scopeFactory, IIssueService
         return modified;
     }
 
-    private MagickFormat GetMagickFormat(ImageFormat format)
+    private static MagickFormat GetMagickFormat(ImageFormat format)
     {
         return format switch
         {
