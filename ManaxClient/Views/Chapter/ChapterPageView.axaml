@@ -7,17 +7,16 @@
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Chapter.ChapterPageView"
     x:DataType="login:ChapterPageViewModel">
-    <DockPanel>
-        <StackPanel
-            DockPanel.Dock="Top"
-            Orientation="Vertical">
-            <Label
-                Content="{Binding Chapter.Info.FileName}" />
-        </StackPanel>
+    <Panel>
         <ScrollViewer
             Offset="{Binding ScrollOffset,Mode=TwoWay}"
             VerticalScrollBarVisibility="Auto"
             HorizontalScrollBarVisibility="Disabled">
+            <Interaction.Behaviors>
+                <EventTriggerBehavior EventName="Tapped">
+                    <InvokeCommandAction Command="{Binding ChangeBordersVisibility}"/>
+                </EventTriggerBehavior>
+            </Interaction.Behaviors>
             <ItemsControl
                 ItemsSource="{Binding Chapter.Pages}">
                 <ItemsControl.ItemTemplate>
@@ -35,5 +34,36 @@
                 </ItemsControl.ItemsPanel>
             </ItemsControl>
         </ScrollViewer>
-    </DockPanel>
+        
+        <DockPanel>
+            <StackPanel
+                DockPanel.Dock="Left"
+                IsVisible="{Binding ControlBordersVisible}"
+                Orientation="Horizontal"
+                VerticalAlignment="Top">
+                <Button
+                    Command="{Binding Previous}">Back</Button>
+            </StackPanel>
+        
+            <StackPanel
+                Background="White"
+                DockPanel.Dock="Bottom"
+                IsVisible="{Binding ControlBordersVisible}"
+                Orientation="Horizontal"
+                HorizontalAlignment="Center">
+                <Button
+                    Margin="3"
+                    Width="150"
+                    HorizontalContentAlignment="Center"
+                    Command="{Binding PreviousChapter}">Previous</Button>
+                <Button
+                    Margin="3"
+                    Width="150"
+                    HorizontalContentAlignment="Center"
+                    Command="{Binding NextChapter}">Next</Button>
+            </StackPanel>
+            
+            <Panel></Panel> 
+        </DockPanel>
+    </Panel>
 </UserControl>

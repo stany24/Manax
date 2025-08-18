@@ -21,7 +21,7 @@ public partial class UserStatsPageViewModel : PageViewModel
     [ObservableProperty] private IEnumerable<ISeries>? _chaptersSeries;
     [ObservableProperty] private IEnumerable<ISeries>? _ranksSeries;
     [ObservableProperty] private IEnumerable<ISeries>? _seriesSeries;
-    [ObservableProperty] private UserStats _userStats = null!;
+    [ObservableProperty] private UserStats? _userStats;
     [ObservableProperty] private List<Axis>? _xAxes;
 
     public UserStatsPageViewModel()
@@ -56,6 +56,7 @@ public partial class UserStatsPageViewModel : PageViewModel
 
     private void UpdateChartData()
     {
+        if(UserStats == null){return;}
         SeriesSeries = GaugeGenerator.BuildSolidGauge(
             new GaugeItem(
                 UserStats.SeriesRead,

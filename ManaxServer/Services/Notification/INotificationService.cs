@@ -1,5 +1,3 @@
-// filepath: /media/Pgm3/Git/Manax/ManaxServer/Services/INotificationService.cs
-
 using ManaxLibrary.DTO.Chapter;
 using ManaxLibrary.DTO.Library;
 using ManaxLibrary.DTO.Rank;

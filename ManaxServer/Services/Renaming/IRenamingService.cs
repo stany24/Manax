@@ -1,5 +1,3 @@
-// filepath: /media/Pgm3/Git/Manax/ManaxServer/Services/IRenamingService.cs
-
 using ManaxLibrary.DTO.Setting;
 
 namespace ManaxServer.Services.Renaming;

@@ -1,5 +1,3 @@
-// filepath: /media/Pgm3/Git/Manax/ManaxServer/Services/IIssueService.cs
-
 using ManaxLibrary.DTO.Issue.Automatic;
 
 namespace ManaxServer.Services.Issue;

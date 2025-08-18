@@ -18,6 +18,7 @@ namespace ManaxClient.ViewModels.Chapter;
 
 public partial class ChapterPageViewModel : PageViewModel
 {
+    [ObservableProperty] private bool _controlBordersVisible;
     [ObservableProperty] private ClientChapter _chapter = new();
     [ObservableProperty] private Vector _scrollOffset = new(0, 0);
     private int _currentPage;
@@ -30,6 +31,21 @@ public partial class ChapterPageViewModel : PageViewModel
         PropertyChanged += HandleOffsetChanged;
     }
 
+    public void ChangeBordersVisibility()
+    {
+        ControlBordersVisible = !ControlBordersVisible;
+    }
+
+    public void PreviousChapter()
+    {
+        
+    }
+
+    public void NextChapter()
+    {
+        
+    }
+    
     private void HandleOffsetChanged(object? sender, PropertyChangedEventArgs e)
     {
         if(e.PropertyName != nameof(ScrollOffset)){return;}
@@ -102,7 +118,7 @@ public partial class ChapterPageViewModel : PageViewModel
             ChapterId = Chapter.Info.Id,
             Page = _currentPage
         };
-        Task.Run(async void () =>
+        Task.Run(async () =>
         {
             Optional<bool> response = await ManaxApiReadClient.MarkAsRead(readCreateDto);
             if (response.Failed) { InfoEmitted?.Invoke(this, response.Error); }
