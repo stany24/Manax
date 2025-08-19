@@ -2,6 +2,7 @@ using ManaxLibrary.DTO.Library;
 using ManaxServer.Localization;
 using ManaxServer.Models;
 using ManaxServer.Models.Library;
+using ManaxServer.Models.Serie;
 using ManaxServer.Services.Mapper;
 using ManaxServer.Services.Notification;
 using Microsoft.AspNetCore.Authorization;
@@ -53,7 +54,8 @@ public class LibraryController(ManaxContext context, IMapper mapper, INotificati
 
         if (library == null) return NotFound(Localizer.Format("LibraryNotFound", id));
 
-        // Check if name is unique (except for the current library)
+        if(string.IsNullOrWhiteSpace(libraryUpdate.Name))
+            return BadRequest(Localizer.Format("LibraryNameRequired"));
         if (await context.Libraries.AnyAsync(l => l.Name == libraryUpdate.Name && l.Id != id))
             return Conflict(Localizer.Format("LibraryNameExists", libraryUpdate.Name));
 
@@ -84,7 +86,8 @@ public class LibraryController(ManaxContext context, IMapper mapper, INotificati
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<ActionResult<long>> PostLibrary(LibraryCreateDto libraryCreate)
     {
-        // Check if name is unique
+        if(string.IsNullOrWhiteSpace(libraryCreate.Name))
+            return BadRequest(Localizer.Format("LibraryNameRequired"));
         if (await context.Libraries.AnyAsync(l => l.Name == libraryCreate.Name))
             return Conflict(Localizer.Format("LibraryNameExists", libraryCreate.Name));
 
@@ -115,6 +118,15 @@ public class LibraryController(ManaxContext context, IMapper mapper, INotificati
     {
         Library? library = await context.Libraries.FindAsync(id);
         if (library == null) return NotFound(Localizer.Format("LibraryNotFound", id));
+
+        List<Serie> seriesToUpdate = await context.Series
+            .Where(s => s.LibraryId == id)
+            .ToListAsync();
+
+        foreach (Serie serie in seriesToUpdate)
+        {
+            serie.LibraryId = null;
+        }
 
         context.Libraries.Remove(library);
         await context.SaveChangesAsync();

@@ -1,6 +1,7 @@
 using ManaxLibrary.DTO.Serie;
 using ManaxServer.Models;
 using ManaxServer.Models.Chapter;
+using ManaxServer.Models.Library;
 using ManaxServer.Models.SavePoint;
 using ManaxServer.Models.Serie;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +17,23 @@ public static class InMemoryTestDbContextFactory
         DbContextOptions<ManaxContext> options = new DbContextOptionsBuilder<ManaxContext>()
             .UseInMemoryDatabase(dbName)
             .Options;
+
+        List<Library> libraries =
+        [
+            new()
+            {
+                Id = 1,
+                Name = "Library 1",
+                Creation = DateTime.Now
+            },
+
+            new()
+            {
+                Id = 2,
+                Name = "Library 2",
+                Creation = DateTime.Now
+            }
+        ];
 
         List<Serie> series =
         [
@@ -100,6 +118,7 @@ public static class InMemoryTestDbContextFactory
         context.Database.EnsureDeleted();
         context.Database.EnsureCreated();
 
+        context.Libraries.AddRange(libraries);
         context.Series.AddRange(series);
         context.Chapters.AddRange(chapters);
 
