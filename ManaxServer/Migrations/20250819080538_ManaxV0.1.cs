@@ -18,7 +18,6 @@ namespace ManaxServer.Migrations
                     Id = table.Column<long>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(type: "TEXT", nullable: false),
-                    Path = table.Column<string>(type: "TEXT", nullable: false),
                     Creation = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
@@ -84,6 +83,20 @@ namespace ManaxServer.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "SavePoints",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Path = table.Column<string>(type: "TEXT", nullable: false),
+                    Creation = table.Column<DateTime>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SavePoints", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
@@ -106,11 +119,11 @@ namespace ManaxServer.Migrations
                 {
                     Id = table.Column<long>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    LibraryId = table.Column<long>(type: "INTEGER", nullable: false),
+                    LibraryId = table.Column<long>(type: "INTEGER", nullable: true),
+                    SavePointId = table.Column<long>(type: "INTEGER", nullable: false),
                     FolderName = table.Column<string>(type: "TEXT", nullable: false),
                     Title = table.Column<string>(type: "TEXT", nullable: false),
                     Description = table.Column<string>(type: "TEXT", nullable: false),
-                    Path = table.Column<string>(type: "TEXT", nullable: false),
                     Status = table.Column<int>(type: "INTEGER", nullable: false),
                     Creation = table.Column<DateTime>(type: "TEXT", nullable: false),
                     LastModification = table.Column<DateTime>(type: "TEXT", nullable: false)
@@ -122,6 +135,11 @@ namespace ManaxServer.Migrations
                         name: "FK_Series_Libraries_LibraryId",
                         column: x => x.LibraryId,
                         principalTable: "Libraries",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Series_SavePoints_SavePointId",
+                        column: x => x.SavePointId,
+                        principalTable: "SavePoints",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -324,12 +342,6 @@ namespace ManaxServer.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Libraries_Path",
-                table: "Libraries",
-                column: "Path",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Ranks_Name",
                 table: "Ranks",
                 column: "Name",
@@ -377,9 +389,20 @@ namespace ManaxServer.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_SavePoints_Path",
+                table: "SavePoints",
+                column: "Path",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Series_LibraryId",
                 table: "Series",
                 column: "LibraryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Series_SavePointId",
+                table: "Series",
+                column: "SavePointId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserRanks_RankId",
@@ -442,6 +465,9 @@ namespace ManaxServer.Migrations
 
             migrationBuilder.DropTable(
                 name: "Libraries");
+
+            migrationBuilder.DropTable(
+                name: "SavePoints");
         }
     }
 }

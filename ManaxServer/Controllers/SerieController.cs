@@ -4,7 +4,7 @@ using ManaxLibrary.DTO.Search;
 using ManaxLibrary.DTO.Serie;
 using ManaxServer.Localization;
 using ManaxServer.Models;
-using ManaxServer.Models.Library;
+using ManaxServer.Models.SavePoint;
 using ManaxServer.Models.Serie;
 using ManaxServer.Services.Mapper;
 using ManaxServer.Services.Notification;
@@ -87,11 +87,13 @@ public class SerieController(ManaxContext context, IMapper mapper, INotification
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetPoster(long id)
     {
-        Serie? serie = await context.Series.FindAsync(id);
+        Serie? serie = context.Series
+            .Include(s => s.SavePoint)
+            .FirstOrDefault(s => s.Id == id);
         if (serie == null) return NotFound();
         string posterName = SettingsManager.Data.PosterName + "." +
                             SettingsManager.Data.ImageFormat.ToString().ToLower();
-        string posterPath = Path.Combine(serie.Path, posterName);
+        string posterPath = Path.Combine(serie.SavePath, posterName);
         if (!System.IO.File.Exists(posterPath)) return NotFound(Localizer.Format("PosterNotFound", id));
         byte[] readAllBytes = await System.IO.File.ReadAllBytesAsync(posterPath);
         return File(readAllBytes, "image/webp", posterName);
@@ -132,21 +134,21 @@ public class SerieController(ManaxContext context, IMapper mapper, INotification
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<long>> PostSerie(SerieCreateDto serieCreate)
     {
-        Library? library = context.Libraries.FirstOrDefault(l => l.Id == serieCreate.LibraryId);
-        if (library == null)
-            return BadRequest(Localizer.Format("LibraryNotFound", serieCreate.LibraryId));
-
+        SavePoint? savePoint = SelectSavePoint();
+        if (savePoint == null)
+        {
+            return BadRequest(Localizer.GetString("NoSavePoint"));
+        }
         try
         {
-            string folderPath = library.Path + serieCreate.Title;
+            string folderPath = savePoint.Path + Path.DirectorySeparatorChar + serieCreate.Title;
             if (System.IO.File.Exists(folderPath)) return BadRequest(Localizer.Format("SerieAlreadyExists"));
             Directory.CreateDirectory(folderPath);
             Serie serie = new()
             {
+                SavePointId = savePoint.Id,
                 Title = serieCreate.Title,
                 FolderName = serieCreate.Title,
-                LibraryId = serieCreate.LibraryId,
-                Path = folderPath,
                 Description = "",
                 Status = Status.Ongoing,
                 Creation = DateTime.UtcNow,
@@ -159,8 +161,40 @@ public class SerieController(ManaxContext context, IMapper mapper, INotification
         }
         catch (Exception)
         {
-            return BadRequest(Localizer.Format("InvalidZipFile"));
+            return BadRequest(Localizer.GetString("SerieCreationFailed"));
         }
+    }
+
+    private SavePoint? SelectSavePoint()
+    {
+        List<SavePoint> savePoints = context.SavePoints.ToList();
+        if (savePoints.Count == 0) return null;
+        long min = long.MaxValue;
+        SavePoint? selectedSavePoint = null;
+        foreach (SavePoint savePoint in savePoints)
+        {
+            if (!Directory.Exists(savePoint.Path))
+            { continue; }
+            DirectoryInfo dirInfo = new(savePoint.Path);
+            long size = GetDirectorySize(dirInfo);
+            size = Math.Max(size, 1);
+            DriveInfo driveInfo = new(savePoint.Path);
+            long freeSpace = driveInfo.AvailableFreeSpace;
+            if (freeSpace / size >= min) continue;
+            min = freeSpace / size;
+            selectedSavePoint = savePoint;
+        }
+
+        return selectedSavePoint;
+    }
+    
+    private static long GetDirectorySize(DirectoryInfo d)
+    {
+        FileInfo[] fis = d.GetFiles();
+        long size = fis.Sum(fi => fi.Length);
+        DirectoryInfo[] dis = d.GetDirectories();
+        size += dis.Sum(GetDirectorySize);
+        return size;
     }
 
     // DELETE: api/Serie/5
@@ -193,11 +227,13 @@ public class SerieController(ManaxContext context, IMapper mapper, INotification
             .ToDictionary(x => x.SerieId, x => x.ChapterCount);
 
         List<Serie> series = context.Series
-            .Where(s => search.IncludedLibraries.Contains(s.LibraryId))
-            .Where(s => !search.ExcludedLibraries.Contains(s.LibraryId))
+            .Where(s => search.IncludedLibraries.Contains(s.LibraryId ?? -1))
+            .Where(s => !search.ExcludedLibraries.Contains(s.LibraryId ?? -1))
             .Where(s => search.IncludedStatuses.Contains(s.Status))
             .Where(s => !search.ExcludedStatuses.Contains(s.Status))
             .ToList();
+        
+        series.AddRange(context.Series.Where(s => s.LibraryId == null));
 
         return series
             .Where(s => regex.Match(s.Title).Success || regex.Match(s.Description).Success)

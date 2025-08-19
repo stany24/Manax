@@ -15,7 +15,7 @@ public class RenamingService(IServiceScopeFactory scopeFactory) : Service, IRena
         using IServiceScope scope = scopeFactory.CreateScope();
         ManaxContext manaxContext = scope.ServiceProvider.GetRequiredService<ManaxContext>();
         manaxContext.Series
-            .Select(serie => serie.Path)
+            .Select(serie => serie.SavePath)
             .ToList()
             .ForEach(path =>
             {

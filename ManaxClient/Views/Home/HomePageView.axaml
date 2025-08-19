@@ -4,8 +4,31 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:login="clr-namespace:ManaxClient.ViewModels.Home"
+    xmlns:previews="clr-namespace:ManaxClient.Controls.Previews"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Home.HomePageView"
     x:DataType="login:HomePageViewModel">
-    <Label>Home</Label>
+    <StackPanel
+        Orientation="Vertical">
+        <Button
+            Command="{Binding UploadSerie}">
+            Upload
+        </Button>
+        <ItemsControl
+            ItemsSource="{Binding Series}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <previews:SeriePreview
+                        Serie="{Binding .}"
+                        Command="{Binding $parent[UserControl].((login:HomePageViewModel)DataContext).MoveToSeriePage}"
+                        CommandParameter="{Binding .}" />
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel ItemSpacing="5" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+        </ItemsControl>
+    </StackPanel>
 </UserControl>

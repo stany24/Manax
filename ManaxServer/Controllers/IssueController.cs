@@ -57,7 +57,7 @@ public class IssueController(ManaxContext context, IMapper mapper) : ControllerB
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult> CreateChapterIssue(ReportedIssueChapterCreateDto reportedIssueChapterCreate)
     {
-        ReportedIssueChapter? issue = mapper.Map<ReportedIssueChapter>(reportedIssueChapterCreate);
+        ReportedIssueChapter issue = mapper.Map<ReportedIssueChapter>(reportedIssueChapterCreate);
 
         context.ReportedIssuesChapter.Add(issue);
         await context.SaveChangesAsync();
@@ -71,7 +71,7 @@ public class IssueController(ManaxContext context, IMapper mapper) : ControllerB
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult> CreateSerieIssue(ReportedIssueSerieCreateDto reportedIssueSerieCreate)
     {
-        ReportedIssueSerie? issue = mapper.Map<ReportedIssueSerie>(reportedIssueSerieCreate);
+        ReportedIssueSerie issue = mapper.Map<ReportedIssueSerie>(reportedIssueSerieCreate);
 
         context.ReportedIssuesSerie.Add(issue);
         await context.SaveChangesAsync();

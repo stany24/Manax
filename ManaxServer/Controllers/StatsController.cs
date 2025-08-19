@@ -2,7 +2,7 @@ using ManaxLibrary.DTO.Rank;
 using ManaxLibrary.DTO.Stats;
 using ManaxServer.Localization;
 using ManaxServer.Models;
-using ManaxServer.Models.Library;
+using ManaxServer.Models.SavePoint;
 using ManaxServer.Models.User;
 using ManaxServer.Services.Mapper;
 using Microsoft.AspNetCore.Authorization;
@@ -59,11 +59,11 @@ public class StatsController(ManaxContext context, IMapper mapper) : ControllerB
     public async Task<ActionResult<ServerStats>> GetServerStats()
     {
         long diskSize = 0;
-        await foreach (Library library in context.Libraries)
+        await foreach (SavePoint savePoint in context.SavePoints)
         {
-            if (!Directory.Exists(library.Path)) continue;
+            if (!Directory.Exists(savePoint.Path)) continue;
 
-            DirectoryInfo dirInfo = new(library.Path);
+            DirectoryInfo dirInfo = new(savePoint.Path);
             diskSize += GetDirectorySize(dirInfo);
         }
 

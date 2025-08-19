@@ -4,14 +4,9 @@
 // ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
 // ReSharper disable MemberCanBePrivate.Global
 
-using Microsoft.EntityFrameworkCore;
+namespace ManaxLibrary.DTO.SavePoint;
 
-namespace ManaxServer.Models.Library;
-
-[Index(nameof(Name), IsUnique = true)]
-public class Library
+public class SavePointCreateDto
 {
-    public long Id { get; set; }
-    public string Name { get; set; } = string.Empty;
-    public DateTime Creation { get; set; }
+    public string Path { get; set; } = string.Empty;
 }

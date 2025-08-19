@@ -10,5 +10,4 @@ namespace ManaxLibrary.DTO.Serie;
 public class SerieCreateDto
 {
     [Required] public string Title { get; set; }
-    [Required] public long LibraryId { get; set; }
 }

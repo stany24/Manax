@@ -5,12 +5,11 @@ namespace ManaxLibrary.ApiCaller;
 
 public static class UploadApiUploadClient
 {
-    public static async Task<Optional<bool>> UploadSerieAsync(string directory, long libraryId)
+    public static async Task<Optional<bool>> UploadSerieAsync(string directory)
     {
         SerieCreateDto serieCreate = new()
         {
-            Title = Path.GetFileName(directory[..directory.LastIndexOf(Path.DirectorySeparatorChar)]),
-            LibraryId = libraryId
+            Title = Path.GetFileName(directory[..directory.LastIndexOf(Path.DirectorySeparatorChar)])
         };
 
         Optional<long> serieCreateResponse = await ManaxApiSerieClient.PostSerieAsync(serieCreate);

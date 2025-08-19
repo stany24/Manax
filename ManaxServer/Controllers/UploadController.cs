@@ -15,6 +15,7 @@ using ManaxServer.Settings;
 using ManaxServer.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace ManaxServer.Controllers;
 
@@ -72,14 +73,16 @@ public partial class UploadController(
 
     private async Task<IActionResult> CreateOrReplaceChapter(IFormFile file, [FromForm] long serieId, bool removeOld)
     {
-        Serie? serie = context.Series.FirstOrDefault(s => s.Id == serieId);
+        Serie? serie = context.Series
+            .Include(s => s.SavePoint)
+            .FirstOrDefault(s => s.Id == serieId);
         if (serie == null)
             return BadRequest(Localizer.GetString("SerieNotFound"));
 
         if (!TryGetPagesCountFromCbz(file, out int pagesCount))
             return BadRequest(Localizer.GetString("InvalidZipFile"));
 
-        string filePath = Path.Combine(serie.Path, file.FileName);
+        string filePath = Path.Combine(serie.SavePath, file.FileName);
         bool replacing = false;
         if (Directory.Exists(filePath) || System.IO.File.Exists(filePath))
         {
@@ -158,12 +161,14 @@ public partial class UploadController(
 
     private async Task<IActionResult> CreateOrReplacePoster(IFormFile file, [FromForm] long serieId, bool replace)
     {
-        Serie? serie = context.Series.FirstOrDefault(s => s.Id == serieId);
+        Serie? serie = context.Series
+            .Include(s => s.SavePoint)
+            .FirstOrDefault(s => s.Id == serieId);
         if (serie == null)
             return BadRequest(Localizer.GetString("SerieNotFound"));
 
         ImageFormat format = SettingsManager.Data.PosterFormat;
-        string path = Path.Combine(serie.Path, SettingsManager.Data.PosterName + "." + format.ToString().ToLower());
+        string path = Path.Combine(serie.SavePath, SettingsManager.Data.PosterName + "." + format.ToString().ToLower());
         if (System.IO.File.Exists(path) && !replace) return BadRequest(Localizer.GetString("PosterAlreadyExists"));
         try
         {

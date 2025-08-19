@@ -15,10 +15,6 @@
             <Label
                 Content="{Binding Library.Name}" />
             <Button
-                Command="{Binding UploadSerie}">
-                Upload
-            </Button>
-            <Button
                 Command="{Binding DeleteLibrary}">
                 Delete
             </Button>

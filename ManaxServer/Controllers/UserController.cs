@@ -83,7 +83,7 @@ public class UserController(
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<long>> PostUser(UserCreateDto userCreate)
     {
-        User? user = mapper.Map<User>(userCreate);
+        User user = mapper.Map<User>(userCreate);
         user.Creation = DateTime.UtcNow;
         user.PasswordHash = hashService.HashPassword(userCreate.Password);
 

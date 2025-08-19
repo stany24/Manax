@@ -8,6 +8,7 @@ namespace ManaxServer.Models;
 
 public class ManaxContext(DbContextOptions<ManaxContext> options) : DbContext(options)
 {
+    public virtual DbSet<SavePoint.SavePoint> SavePoints { get; set; } = null!;
     public virtual DbSet<Library.Library> Libraries { get; set; } = null!;
     public virtual DbSet<Serie.Serie> Series { get; set; } = null!;
     public virtual DbSet<Chapter.Chapter> Chapters { get; set; } = null!;

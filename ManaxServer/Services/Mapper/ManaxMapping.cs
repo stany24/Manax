@@ -4,6 +4,7 @@ using ManaxLibrary.DTO.Issue.Reported;
 using ManaxLibrary.DTO.Library;
 using ManaxLibrary.DTO.Rank;
 using ManaxLibrary.DTO.Read;
+using ManaxLibrary.DTO.SavePoint;
 using ManaxLibrary.DTO.Serie;
 using ManaxLibrary.DTO.User;
 using ManaxServer.Models.Chapter;
@@ -12,6 +13,7 @@ using ManaxServer.Models.Issue.Reported;
 using ManaxServer.Models.Library;
 using ManaxServer.Models.Rank;
 using ManaxServer.Models.Read;
+using ManaxServer.Models.SavePoint;
 using ManaxServer.Models.Serie;
 using ManaxServer.Models.User;
 
@@ -48,5 +50,7 @@ public class ManaxMapping : Mapping
         CreateMap<Rank, RankDto>();
         CreateMap<RankCreateDto, Rank>();
         CreateMap<UserRank, UserRankDto>();
+        
+        CreateMap<SavePointCreateDto,SavePoint>();
     }
 }

@@ -186,16 +186,9 @@ namespace ManaxServer.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Path")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
                     b.HasKey("Id");
 
                     b.HasIndex("Name")
-                        .IsUnique();
-
-                    b.HasIndex("Path")
                         .IsUnique();
 
                     b.ToTable("Libraries");
@@ -267,6 +260,27 @@ namespace ManaxServer.Migrations
                     b.ToTable("Reads");
                 });
 
+            modelBuilder.Entity("ManaxServer.Models.SavePoint.SavePoint", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("Creation")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Path")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Path")
+                        .IsUnique();
+
+                    b.ToTable("SavePoints");
+                });
+
             modelBuilder.Entity("ManaxServer.Models.Serie.Serie", b =>
                 {
                     b.Property<long>("Id")
@@ -287,12 +301,11 @@ namespace ManaxServer.Migrations
                     b.Property<DateTime>("LastModification")
                         .HasColumnType("TEXT");
 
-                    b.Property<long>("LibraryId")
+                    b.Property<long?>("LibraryId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Path")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                    b.Property<long>("SavePointId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("Status")
                         .HasColumnType("INTEGER");
@@ -304,6 +317,8 @@ namespace ManaxServer.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("LibraryId");
+
+                    b.HasIndex("SavePointId");
 
                     b.ToTable("Series");
                 });
@@ -510,11 +525,17 @@ namespace ManaxServer.Migrations
                 {
                     b.HasOne("ManaxServer.Models.Library.Library", "Library")
                         .WithMany()
-                        .HasForeignKey("LibraryId")
+                        .HasForeignKey("LibraryId");
+
+                    b.HasOne("ManaxServer.Models.SavePoint.SavePoint", "SavePoint")
+                        .WithMany()
+                        .HasForeignKey("SavePointId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Library");
+
+                    b.Navigation("SavePoint");
                 });
 #pragma warning restore 612, 618
         }

@@ -53,16 +53,9 @@ public class LibraryController(ManaxContext context, IMapper mapper, INotificati
 
         if (library == null) return NotFound(Localizer.Format("LibraryNotFound", id));
 
-        if (!Directory.Exists(libraryUpdate.Path))
-            return BadRequest(Localizer.Format("LibraryPathNotExist", libraryUpdate.Path));
-
         // Check if name is unique (except for the current library)
         if (await context.Libraries.AnyAsync(l => l.Name == libraryUpdate.Name && l.Id != id))
             return Conflict(Localizer.Format("LibraryNameExists", libraryUpdate.Name));
-
-        // Check if path is unique (except for the current library)
-        if (await context.Libraries.AnyAsync(l => l.Path == libraryUpdate.Path && l.Id != id))
-            return Conflict(Localizer.Format("LibraryPathExists", libraryUpdate.Path));
 
         mapper.Map(libraryUpdate, library);
 
@@ -91,20 +84,11 @@ public class LibraryController(ManaxContext context, IMapper mapper, INotificati
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<ActionResult<long>> PostLibrary(LibraryCreateDto libraryCreate)
     {
-        if (!libraryCreate.Path.EndsWith(Path.DirectorySeparatorChar.ToString()))
-            libraryCreate.Path += Path.DirectorySeparatorChar;
-        if (!Directory.Exists(libraryCreate.Path))
-            return BadRequest(Localizer.Format("LibraryPathNotExist", libraryCreate.Path));
-
         // Check if name is unique
         if (await context.Libraries.AnyAsync(l => l.Name == libraryCreate.Name))
             return Conflict(Localizer.Format("LibraryNameExists", libraryCreate.Name));
 
-        // Check if path is unique
-        if (await context.Libraries.AnyAsync(l => l.Path == libraryCreate.Path))
-            return Conflict(Localizer.Format("LibraryPathExists", libraryCreate.Path));
-
-        Library? library = mapper.Map<Library>(libraryCreate);
+        Library library = mapper.Map<Library>(libraryCreate);
         library.Creation = DateTime.UtcNow;
 
         context.Libraries.Add(library);
@@ -115,7 +99,7 @@ public class LibraryController(ManaxContext context, IMapper mapper, INotificati
         }
         catch (DbUpdateException ex) when (ex.InnerException?.Message.Contains("constraint") ?? false)
         {
-            return Conflict(Localizer.Format("LibraryNameOrPathNotUnique"));
+            return Conflict(Localizer.Format("LibraryNameExists"));
         }
 
         notificationService.NotifyLibraryCreatedAsync(mapper.Map<LibraryDto>(library));

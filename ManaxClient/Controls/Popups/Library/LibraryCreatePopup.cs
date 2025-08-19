@@ -10,7 +10,6 @@ namespace ManaxClient.Controls.Popups.Library;
 public class LibraryCreatePopup : ConfirmCancelPopup
 {
     private TextBox _nameBox = null!;
-    private TextBox _pathBox = null!;
     private LibraryCreateDto? _result;
 
     protected override Grid GetFormGrid()
@@ -19,7 +18,7 @@ public class LibraryCreatePopup : ConfirmCancelPopup
         {
             Margin = new Thickness(10),
             RowSpacing = 5,
-            RowDefinitions = new RowDefinitions("Auto,Auto,Auto"),
+            RowDefinitions = new RowDefinitions("Auto,Auto"),
             ColumnDefinitions = new ColumnDefinitions("Auto,10,*")
         };
 
@@ -37,29 +36,14 @@ public class LibraryCreatePopup : ConfirmCancelPopup
         Grid.SetColumn(_nameBox, 2);
         grid.Children.Add(_nameBox);
 
-        TextBlock pathLabel = new()
-        {
-            Text = "Path:",
-            VerticalAlignment = VerticalAlignment.Center
-        };
-        Grid.SetRow(pathLabel, 1);
-        Grid.SetColumn(pathLabel, 0);
-        grid.Children.Add(pathLabel);
-
-        _pathBox = new TextBox();
-        Grid.SetRow(_pathBox, 1);
-        Grid.SetColumn(_pathBox, 2);
-        grid.Children.Add(_pathBox);
-
         return grid;
     }
 
     protected override void OkButton_Click(object? sender, RoutedEventArgs e)
     {
         string? name = _nameBox.Text?.Trim();
-        string? path = _pathBox.Text?.Trim();
-        if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(path)) return;
-        _result = new LibraryCreateDto { Name = name, Path = path };
+        if (string.IsNullOrEmpty(name)) return;
+        _result = new LibraryCreateDto { Name = name};
         CloseRequested?.Invoke(this, EventArgs.Empty);
     }
 

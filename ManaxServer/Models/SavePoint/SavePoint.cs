@@ -6,12 +6,12 @@
 
 using Microsoft.EntityFrameworkCore;
 
-namespace ManaxServer.Models.Library;
+namespace ManaxServer.Models.SavePoint;
 
-[Index(nameof(Name), IsUnique = true)]
-public class Library
+[Index(nameof(Path), IsUnique = true)]
+public class SavePoint
 {
     public long Id { get; set; }
-    public string Name { get; set; } = string.Empty;
+    public string Path { get; set; } = string.Empty;
     public DateTime Creation { get; set; }
 }

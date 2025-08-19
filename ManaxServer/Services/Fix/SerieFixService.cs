@@ -3,6 +3,7 @@ using ManaxLibrary.DTO.Issue.Automatic;
 using ManaxServer.Models;
 using ManaxServer.Models.Serie;
 using ManaxServer.Settings;
+using Microsoft.EntityFrameworkCore;
 
 namespace ManaxServer.Services.Fix;
 
@@ -12,7 +13,9 @@ public partial class FixService
     {
         using IServiceScope scope = scopeFactory.CreateScope();
         ManaxContext manaxContext = scope.ServiceProvider.GetRequiredService<ManaxContext>();
-        Serie? serie = manaxContext.Series.Find(serieId);
+        Serie? serie = manaxContext.Series
+            .Include(s => s.SavePoint)
+            .FirstOrDefault(s => s.Id == serieId);
         if (serie == null) return;
         manaxContext.SaveChanges();
 
@@ -32,7 +35,7 @@ public partial class FixService
 
     private void CheckMissingChapters(Serie serie)
     {
-        string[] chapters = Directory.GetFiles(serie.Path);
+        string[] chapters = Directory.GetFiles(serie.SavePath);
         issueService.ManageSerieIssue(serie.Id, AutomaticIssueSerieType.MissingChapter, chapters.Length == 0);
         if (chapters.Length == 0) return;
 

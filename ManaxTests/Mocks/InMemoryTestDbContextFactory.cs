@@ -1,6 +1,7 @@
 using ManaxLibrary.DTO.Serie;
 using ManaxServer.Models;
 using ManaxServer.Models.Chapter;
+using ManaxServer.Models.SavePoint;
 using ManaxServer.Models.Serie;
 using Microsoft.EntityFrameworkCore;
 
@@ -25,7 +26,7 @@ public static class InMemoryTestDbContextFactory
                 FolderName = "serie1",
                 Title = "Serie 1",
                 Description = "Description for Serie 1",
-                Path = "/test_path/serie1",
+                SavePointId = 1,
                 Status = Status.Ongoing,
                 Creation = DateTime.Now,
                 LastModification = DateTime.Now
@@ -38,7 +39,7 @@ public static class InMemoryTestDbContextFactory
                 FolderName = "serie2",
                 Title = "Serie 2",
                 Description = "Description for Serie 2",
-                Path = "/test_path/serie2",
+                SavePointId = 1,
                 Status = Status.Completed,
                 Creation = DateTime.Now,
                 LastModification = DateTime.Now
@@ -81,6 +82,16 @@ public static class InMemoryTestDbContextFactory
                 Path = "/test_path/serie2/chapter1.cbz",
                 Creation = DateTime.Now,
                 LastModification = DateTime.Now
+            }
+        ];
+        
+        List<SavePoint> savePoints =
+        [
+            new()
+            {
+                Id = 1,
+                Path = "/test_path/",
+                Creation = DateTime.Now
             }
         ];
 

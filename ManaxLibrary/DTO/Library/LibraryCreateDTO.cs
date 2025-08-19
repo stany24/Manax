@@ -12,5 +12,4 @@ namespace ManaxLibrary.DTO.Library;
 public class LibraryCreateDto
 {
     [Required] public string Name { get; set; }
-    [Required] public string Path { get; set; }
 }

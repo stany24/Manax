@@ -3,6 +3,7 @@ using ManaxLibrary.DTO.Issue.Automatic;
 using ManaxServer.Models;
 using ManaxServer.Models.Serie;
 using ManaxServer.Settings;
+using Microsoft.EntityFrameworkCore;
 
 namespace ManaxServer.Services.Fix;
 
@@ -12,10 +13,12 @@ public partial class FixService
     {
         using IServiceScope scope = scopeFactory.CreateScope();
         ManaxContext manaxContext = scope.ServiceProvider.GetRequiredService<ManaxContext>();
-        Serie? serie = manaxContext.Series.Find(serieId);
+        Serie? serie = manaxContext.Series
+            .Include(s => s.SavePoint)
+            .FirstOrDefault(s => s.Id == serieId);
         if (serie == null) return;
 
-        string directory = serie.Path;
+        string directory = serie.SavePath;
         string fileName = SettingsManager.Data.PosterName + "." + SettingsManager.Data.ImageFormat.ToString().ToLower();
         string posterPath = Path.Combine(directory, fileName);
         issueService.ManageSerieIssue(serie.Id, AutomaticIssueSerieType.PosterMissing, !File.Exists(posterPath));
