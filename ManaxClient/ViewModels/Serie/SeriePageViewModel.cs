@@ -4,7 +4,11 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Media.Imaging;
+using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using ManaxClient.Controls.Popups.Serie;
@@ -29,6 +33,7 @@ public partial class SeriePageViewModel : PageViewModel
     [ObservableProperty] private ObservableCollection<RankDto> _ranks = [];
     [ObservableProperty] private RankDto? _selectedRank;
     [ObservableProperty] private SerieDto? _serie;
+    [ObservableProperty] private bool _isFilePickerOpen;
 
     public SeriePageViewModel(long serieId)
     {
@@ -262,8 +267,8 @@ public partial class SeriePageViewModel : PageViewModel
             try
             {
                 popup.Close();
-                SerieUpdateDto? serie = popup.GetResult();
-                if (serie == null) return;
+                if(popup.Canceled){return;}
+                SerieUpdateDto serie = popup.GetResult();
                 Optional<bool> serieResponse = await ManaxApiSerieClient.PutSerieAsync(Serie.Id, serie);
                 if (serieResponse.Failed) InfoEmitted?.Invoke(this, serieResponse.Error);
             }
@@ -274,5 +279,58 @@ public partial class SeriePageViewModel : PageViewModel
             }
         };
         PopupRequested?.Invoke(this, popup);
+    }
+
+    public async void ReplacePoster()
+    {
+        try
+        {
+            if (Serie == null || IsFilePickerOpen) return;
+            IsFilePickerOpen = true;
+
+            Window? window = Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop
+                ? desktop.MainWindow
+                : null;
+            if (window?.StorageProvider == null) return;
+
+            IReadOnlyList<IStorageFile> files = await window.StorageProvider.OpenFilePickerAsync(
+                new FilePickerOpenOptions
+                {
+                    Title = "Sélectionnez une image pour le poster",
+                    AllowMultiple = false,
+                    FileTypeFilter =
+                    [
+                        new FilePickerFileType("Images")
+                        {
+                            Patterns = ["*.jpg", "*.jpeg", "*.png", "*.bmp", "*.gif"]
+                        }
+                    ]
+                });
+            IsFilePickerOpen = false;
+
+            if (files.Count == 0) return;
+            string filePath = files[0].Path.LocalPath;
+            if (string.IsNullOrEmpty(filePath)) return;
+
+            Optional<bool> replacePosterResponse = await UploadApiUploadClient.ReplacePosterAsync(
+                filePath, 
+                files[0].Name, 
+                Serie.Id);
+            
+            if (replacePosterResponse.Failed)
+            {
+                InfoEmitted?.Invoke(this, replacePosterResponse.Error);
+            }
+            else
+            {
+                InfoEmitted?.Invoke(this, "Poster replaced successfully");
+                Logger.LogInfo("Poster replaced successfully for serie ID: " + Serie.Id);
+            }
+        }
+        catch (Exception e)
+        {
+            InfoEmitted?.Invoke(this, "Error replacing poster");
+            Logger.LogError("Error replacing poster for serie ID: " + Serie?.Id, e, Environment.StackTrace);
+        }
     }
 }

@@ -19,6 +19,7 @@ namespace ManaxClient.Controls.Popups.Serie;
 
 public class SerieUpdatePopup : ConfirmCancelPopup, INotifyPropertyChanged
 {
+    public bool Canceled { get; private set; }
     private readonly SerieDto _serie;
     private SerieUpdateDto _updateDto;
     private LibraryDto? _selectedLibrary;
@@ -149,7 +150,6 @@ public class SerieUpdatePopup : ConfirmCancelPopup, INotifyPropertyChanged
         Grid.SetColumn(libraryComboBox, 2);
         grid.Children.Add(libraryComboBox);
 
-        // Status field
         TextBlock statusLabel = new()
         {
             Text = "Status:",
@@ -171,10 +171,17 @@ public class SerieUpdatePopup : ConfirmCancelPopup, INotifyPropertyChanged
 
     protected override void OkButton_Click(object? sender, RoutedEventArgs e)
     {
+        Canceled = false;
         if (string.IsNullOrEmpty(UpdateDto.Title.Trim()) || 
             string.IsNullOrEmpty(UpdateDto.Description.Trim()))
             return;
 
+        CloseRequested?.Invoke(this, EventArgs.Empty);
+    }
+    
+    protected override void CancelButton_Click(object? sender, RoutedEventArgs e)
+    {
+        Canceled = true;
         CloseRequested?.Invoke(this, EventArgs.Empty);
     }
 

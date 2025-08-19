@@ -16,6 +16,12 @@
                 Source="{Binding Poster}"
                 Width="120"
                 Height="194" />
+            <Button
+                IsVisible="{Binding Admin}"
+                Command="{Binding ReplacePoster}"
+                IsEnabled="{Binding !IsFilePickerOpen}">
+                Replace Poster
+            </Button>
             <Label Content="{Binding Serie.Title}" />
             <Label Content="{Binding Serie.Description}" />
             <Label Content="{Binding Serie.Status}" />
@@ -29,6 +35,7 @@
                 </ComboBox.ItemTemplate>
             </ComboBox>
             <Button
+                IsVisible="{Binding Admin}"
                 Command="{Binding UpdateSerie}">
                 Update serie infos
             </Button>
