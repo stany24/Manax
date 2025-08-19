@@ -46,7 +46,7 @@ public class StatsController(ManaxContext context, IMapper mapper) : ControllerB
             SeriesTotal = await context.Series.CountAsync(),
             ChaptersTotal = await context.Chapters.CountAsync(),
             ChaptersRead = chaptersRead.Count,
-            SeriesRead = await context.Series.Where(s => chaptersRead.Contains(s.Id)).CountAsync(),
+            SeriesCompleted = await context.Series.Where(s => chaptersRead.Contains(s.Id)).CountAsync(),
             Ranks = ranks
         };
 

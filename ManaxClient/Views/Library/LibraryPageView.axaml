@@ -8,32 +8,154 @@
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Library.LibraryPageView"
     x:DataType="login:LibraryPageViewModel">
-    <DockPanel>
-        <StackPanel
-            DockPanel.Dock="Top"
-            Orientation="Vertical">
-            <Label
-                Content="{Binding Library.Name}" />
-            <Button
-                Command="{Binding DeleteLibrary}">
-                Delete
-            </Button>
+    
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Orientation="Vertical" Spacing="24">
+            
+            <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto">
+                <StackPanel Grid.Column="0" Grid.Row="0" Orientation="Vertical">
+                    <TextBlock Classes="title" Text="{Binding Library.Name}"/>
+                    <TextBlock Text="{Binding Series.Count, StringFormat='📚 {0} série(s) dans cette bibliothèque'}"
+                              Foreground="{StaticResource SecondaryBrush}"
+                              FontSize="14"/>
+                </StackPanel>
+                
+                <Button Grid.Column="1" Grid.Row="0"
+                        Classes="danger"
+                        Command="{Binding DeleteLibrary}"
+                        VerticalAlignment="Top"
+                        Padding="12,8">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <TextBlock Text="🗑️" FontSize="14"/>
+                        <TextBlock Text="Supprimer" FontWeight="Medium"/>
+                    </StackPanel>
+                </Button>
+            </Grid>
+            
+            <Border Classes="card" IsVisible="{Binding !Series.Count}">
+                <StackPanel Orientation="Vertical" 
+                           Spacing="16" 
+                           HorizontalAlignment="Center">
+                    <TextBlock Text="📚" FontSize="48" HorizontalAlignment="Center"/>
+                    <TextBlock Text="Bibliothèque vide" 
+                              FontSize="18" 
+                              FontWeight="Medium"
+                              HorizontalAlignment="Center"/>
+                    <TextBlock Text="Cette bibliothèque ne contient aucune série pour le moment."
+                              TextAlignment="Center"
+                              TextWrapping="Wrap"
+                              Foreground="{StaticResource SecondaryBrush}"
+                              MaxWidth="400"/>
+                </StackPanel>
+            </Border>
+            
+            <Border Classes="card" IsVisible="{Binding Series.Count}">
+                <StackPanel Orientation="Vertical" Spacing="20">
+                    <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="12">
+                        <TextBlock Grid.Column="0" 
+                                  Classes="subtitle" 
+                                  Text="Séries de la bibliothèque"
+                                  Margin="0"
+                                  VerticalAlignment="Center"/>
+                        
+                        <ComboBox Grid.Column="1"
+                                 MinWidth="150"
+                                 VerticalAlignment="Center">
+                            <ComboBoxItem Content="Trier par nom"/>
+                            <ComboBoxItem Content="Trier par date" IsSelected="True"/>
+                            <ComboBoxItem Content="Trier par popularité"/>
+                        </ComboBox>
+                        
+                        <TextBox Grid.Column="2"
+                                Watermark="Rechercher une série..."
+                                MinWidth="200"
+                                VerticalAlignment="Center"/>
+                    </Grid>
+                    
+                    <ItemsControl ItemsSource="{Binding Series}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Background="Transparent"
+                                       Padding="12"
+                                       CornerRadius="12"
+                                       Margin="8">
+                                    <Border.Styles>
+                                        <Style Selector="Border:pointerover">
+                                            <Setter Property="Background" Value="#F8F9FA"/>
+                                            <Setter Property="BoxShadow" Value="0 4 12 rgba(0,0,0,0.1)"/>
+                                        </Style>
+                                    </Border.Styles>
+                                    <Border.Transitions>
+                                        <Transitions>
+                                            <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.2"/>
+                                            <BrushTransition Property="Background" Duration="0:0:0.2"/>
+                                        </Transitions>
+                                    </Border.Transitions>
+                                    <previews:SeriePreview
+                                        Serie="{Binding .}"
+                                        Command="{Binding $parent[UserControl].((login:LibraryPageViewModel)DataContext).MoveToSeriePage}"
+                                        CommandParameter="{Binding .}" />
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel ItemSpacing="12" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ItemsControl>
+                </StackPanel>
+            </Border>
+            
+            <Border Classes="card">
+                <StackPanel Orientation="Vertical" Spacing="16">
+                    <TextBlock Classes="subtitle" Text="Actions de la bibliothèque"/>
+                    
+                    <Grid ColumnDefinitions="*,*,*" ColumnSpacing="16">
+                        <Button Grid.Column="0"
+                                Classes="secondary"
+                                HorizontalAlignment="Stretch"
+                                Padding="16">
+                            <StackPanel Orientation="Vertical" Spacing="8">
+                                <TextBlock Text="📤" FontSize="20" HorizontalAlignment="Center"/>
+                                <TextBlock Text="Importer" HorizontalAlignment="Center" FontWeight="Medium"/>
+                                <TextBlock Text="Ajouter des séries" 
+                                          HorizontalAlignment="Center" 
+                                          FontSize="12"
+                                          Foreground="{StaticResource SecondaryBrush}"/>
+                            </StackPanel>
+                        </Button>
+                        
+                        <Button Grid.Column="1"
+                                Classes="secondary"
+                                HorizontalAlignment="Stretch"
+                                Padding="16">
+                            <StackPanel Orientation="Vertical" Spacing="8">
+                                <TextBlock Text="🔄" FontSize="20" HorizontalAlignment="Center"/>
+                                <TextBlock Text="Synchroniser" HorizontalAlignment="Center" FontWeight="Medium"/>
+                                <TextBlock Text="Mettre à jour" 
+                                          HorizontalAlignment="Center" 
+                                          FontSize="12"
+                                          Foreground="{StaticResource SecondaryBrush}"/>
+                            </StackPanel>
+                        </Button>
+                        
+                        <Button Grid.Column="2"
+                                Classes="secondary"
+                                HorizontalAlignment="Stretch"
+                                Padding="16">
+                            <StackPanel Orientation="Vertical" Spacing="8">
+                                <TextBlock Text="⚙️" FontSize="20" HorizontalAlignment="Center"/>
+                                <TextBlock Text="Paramètres" HorizontalAlignment="Center" FontWeight="Medium"/>
+                                <TextBlock Text="Configurer" 
+                                          HorizontalAlignment="Center" 
+                                          FontSize="12"
+                                          Foreground="{StaticResource SecondaryBrush}"/>
+                            </StackPanel>
+                        </Button>
+                    </Grid>
+                </StackPanel>
+            </Border>
         </StackPanel>
-        <ItemsControl
-            ItemsSource="{Binding Series}">
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <previews:SeriePreview
-                        Serie="{Binding .}"
-                        Command="{Binding $parent[UserControl].((login:LibraryPageViewModel)DataContext).MoveToSeriePage}"
-                        CommandParameter="{Binding .}" />
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <WrapPanel ItemSpacing="5" />
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-        </ItemsControl>
-    </DockPanel>
+    </ScrollViewer>
 </UserControl>

@@ -6,83 +6,97 @@
     xmlns:login="clr-namespace:ManaxClient.ViewModels.Login"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Login.LoginPageView"
-    x:DataType="login:LoginPageViewModel">
-    <Grid
-        HorizontalAlignment="Center"
-        VerticalAlignment="Center"
-        RowDefinitions="Auto,10,Auto,10,Auto,10,Auto,10,Auto,10,Auto"
-        ColumnDefinitions="Auto,10,*">
-        <Label
-            Grid.Column="0"
-            Grid.Row="0">
-            Username:
-        </Label>
-
-        <TextBox
-            Grid.Column="2"
-            Grid.Row="0"
-            Text="{Binding Username}" />
-
-        <Label
-            Grid.Column="0"
-            Grid.Row="2">
-            Password:
-        </Label>
-
-        <TextBox
-            Grid.Column="2"
-            Grid.Row="2"
-            PasswordChar="*"
-            Text="{Binding Password}" />
-
-        <Label
-            Grid.Column="0"
-            Grid.Row="4">
-            Host:
-        </Label>
-
-        <TextBox
-            Grid.Column="2"
-            Grid.Row="4"
-            Text="{Binding Host}" />
-
-        <Label
-            Grid.Column="0"
-            Grid.Row="6">
-            Port:
-        </Label>
-
-        <NumericUpDown
-            Grid.Column="2"
-            Grid.Row="6"
-            Value="{Binding Port}" />
-
-        <Grid
-            Grid.Column="0"
-            Grid.ColumnSpan="3"
-            Grid.Row="8"
-            ColumnDefinitions="*,10,*">
-            <Button
-                Grid.Column="0"
-                HorizontalAlignment="Stretch"
-                HorizontalContentAlignment="Center"
-                HotKey="Enter"
-                Command="{Binding Login}">
-                Login
-            </Button>
-            <Button
-                Grid.Column="2"
-                HorizontalAlignment="Stretch"
-                HorizontalContentAlignment="Center"
-                Command="{Binding Claim}">
-                Claim
-            </Button>
-        </Grid>
-
-        <Label
-            Grid.Column="0"
-            Grid.ColumnSpan="3"
-            Grid.Row="10"
-            Content="{Binding LoginError}" />
+    x:DataType="login:LoginPageViewModel"
+    Background="{StaticResource LightBrush}">
+    
+    <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+        <Border Classes="card" MaxWidth="400" MinWidth="350">
+            <StackPanel Spacing="24">
+                
+                <StackPanel Spacing="8" HorizontalAlignment="Center">
+                    <TextBlock Text="📺" FontSize="48" HorizontalAlignment="Center"/>
+                    <TextBlock Classes="title" Text="Manax" HorizontalAlignment="Center"/>
+                    <TextBlock Text="Connectez-vous à votre compte" 
+                              HorizontalAlignment="Center"
+                              Foreground="{StaticResource SecondaryBrush}"/>
+                </StackPanel>
+                
+                <StackPanel Spacing="16">
+                    <StackPanel Spacing="6">
+                        <TextBlock Text="Nom d'utilisateur" 
+                                  FontWeight="Medium" 
+                                  Foreground="{StaticResource DarkBrush}"/>
+                        <TextBox Text="{Binding Username}"
+                                Watermark="Entrez votre nom d'utilisateur"
+                                Padding="12"
+                                CornerRadius="8"
+                                BorderThickness="1"
+                                BorderBrush="#DEE2E6"/>
+                    </StackPanel>
+                    
+                    <StackPanel Spacing="6">
+                        <TextBlock Text="Mot de passe" 
+                                  FontWeight="Medium" 
+                                  Foreground="{StaticResource DarkBrush}"/>
+                        <TextBox Text="{Binding Password}"
+                                PasswordChar="•"
+                                Watermark="Entrez votre mot de passe"
+                                Padding="12"
+                                CornerRadius="8"
+                                BorderThickness="1"
+                                BorderBrush="#DEE2E6"/>
+                    </StackPanel>
+                    
+                    <StackPanel Spacing="6">
+                        <TextBlock Text="Serveur" 
+                                  FontWeight="Medium" 
+                                  Foreground="{StaticResource DarkBrush}"/>
+                        <TextBox Text="{Binding Host}"
+                                Watermark="https://votre-serveur.com"
+                                Padding="12"
+                                CornerRadius="8"
+                                BorderThickness="1"
+                                BorderBrush="#DEE2E6"/>
+                    </StackPanel>
+                    
+                    <StackPanel Spacing="6">
+                        <TextBlock Text="Port" 
+                                  FontWeight="Medium" 
+                                  Foreground="{StaticResource DarkBrush}"/>
+                        <TextBox Text="{Binding Port}"
+                                Watermark="8080"
+                                Padding="12"
+                                CornerRadius="8"
+                                BorderThickness="1"
+                                BorderBrush="#DEE2E6"/>
+                    </StackPanel>
+                </StackPanel>
+                
+                <Button Classes="primary"
+                        Command="{Binding Login}"
+                        HorizontalAlignment="Stretch"
+                        Padding="16"
+                        FontSize="16">
+                    <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center">
+                        <TextBlock Text="🔑"/>
+                        <TextBlock Text="Se connecter" FontWeight="Medium"/>
+                    </StackPanel>
+                </Button>
+                
+                <Border Background="#E3F2FD"
+                       CornerRadius="8"
+                       Padding="12">
+                    <StackPanel Spacing="8">
+                        <TextBlock Text="💡 Astuce" 
+                                  FontWeight="Bold" 
+                                  Foreground="{StaticResource InfoBrush}"/>
+                        <TextBlock Text="Assurez-vous que votre serveur Manax est démarré et accessible depuis ce réseau."
+                                  TextWrapping="Wrap"
+                                  FontSize="12"
+                                  Foreground="{StaticResource SecondaryBrush}"/>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </Border>
     </Grid>
 </UserControl>

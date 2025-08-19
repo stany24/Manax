@@ -59,12 +59,12 @@ public partial class UserStatsPageViewModel : PageViewModel
         if(UserStats == null){return;}
         SeriesSeries = GaugeGenerator.BuildSolidGauge(
             new GaugeItem(
-                UserStats.SeriesRead,
+                UserStats.SeriesCompleted,
                 series =>
                 {
                     series.MaxRadialColumnWidth = 50;
                     series.DataLabelsSize = 50;
-                    series.Name = $"Séries lues: {UserStats.SeriesRead} / {UserStats.SeriesTotal}";
+                    series.Name = $"Séries lues: {UserStats.SeriesCompleted} / {UserStats.SeriesTotal}";
                 }));
 
         ChaptersSeries = GaugeGenerator.BuildSolidGauge(
