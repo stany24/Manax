@@ -60,7 +60,7 @@ public class TestSerieController
         SerieDto? returnedSerie = result.Value;
         Assert.IsNotNull(returnedSerie);
         Assert.AreEqual(serie.Id, returnedSerie.Id);
-        Assert.AreEqual(serie.Id, returnedSerie.LibraryId);
+        Assert.AreEqual(serie.LibraryId, returnedSerie.LibraryId);
         Assert.AreEqual(serie.Title, returnedSerie.Title);
         Assert.AreEqual(serie.Description, returnedSerie.Description);
         Assert.AreEqual(serie.Status, returnedSerie.Status);
@@ -137,5 +137,170 @@ public class TestSerieController
         IActionResult result = await _controller.PutSerie(999999, updateDto);
 
         Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
+    }
+
+    [TestMethod]
+    public async Task PutSerie_WithEmptyTitle_ReturnsBadRequest()
+    {
+        Serie serie = _context.Series.First();
+        SerieUpdateDto updateDto = new()
+        {
+            Title = "",
+            Description = "Updated Description",
+            Status = Status.Completed
+        };
+
+        IActionResult result = await _controller.PutSerie(serie.Id, updateDto);
+
+        Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
+    }
+
+    [TestMethod]
+    public async Task DeleteSerie_WithValidId_RemovesSerie()
+    {
+        Serie serie = _context.Series.First();
+        IActionResult result = await _controller.DeleteSerie(serie.Id);
+
+        Assert.IsInstanceOfType(result, typeof(OkResult));
+
+        Serie? deletedSerie = await _context.Series.FindAsync(serie.Id);
+        Assert.IsNull(deletedSerie);
+    }
+
+    [TestMethod]
+    public async Task DeleteSerie_WithInvalidId_ReturnsNotFound()
+    {
+        IActionResult result = await _controller.DeleteSerie(999999);
+
+        Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
+    }
+
+    [TestMethod]
+    public async Task DeleteSerie_WithAssociatedChapters_RemovesSerieAndChapters()
+    {
+        Serie serie = _context.Series.First();
+        List<Chapter> associatedChapters = _context.Chapters.Where(c => c.SerieId == serie.Id).ToList();
+        List<long> chapterIds = associatedChapters.Select(c => c.Id).ToList();
+        
+        IActionResult result = await _controller.DeleteSerie(serie.Id);
+
+        Assert.IsInstanceOfType(result, typeof(OkResult));
+
+        Serie? deletedSerie = await _context.Series.FindAsync(serie.Id);
+        Assert.IsNull(deletedSerie);
+        
+        int remainingChaptersCount = _context.Chapters.Count(c => chapterIds.Contains(c.Id));
+        Assert.AreEqual(0, remainingChaptersCount);
+    }
+
+    [TestMethod]
+    public async Task PostSerie_WithValidData_CreatesSerie()
+    {
+        SerieCreateDto createDto = new()
+        {
+            Title = "New Serie"
+        };
+
+        ActionResult<long> result = await _controller.PostSerie(createDto);
+
+        OkObjectResult? okResult = result.Result as OkObjectResult;
+        Assert.IsNull(okResult);
+
+        long? serieId = result.Value;
+        Assert.IsNotNull(serieId);
+
+        Serie? createdSerie = await _context.Series.FindAsync(serieId);
+        Assert.IsNotNull(createdSerie);
+        Assert.AreEqual(createDto.Title, createdSerie.Title);
+    }
+
+    [TestMethod]
+    public async Task PostSerie_WithEmptyTitle_ReturnsBadRequest()
+    {
+        SerieCreateDto createDto = new()
+        {
+            Title = ""
+        };
+
+        ActionResult<long> result = await _controller.PostSerie(createDto);
+
+        Assert.IsInstanceOfType(result.Result, typeof(BadRequestObjectResult));
+    }
+
+    [TestMethod]
+    public async Task PostSerie_CreationDateSetCorrectly()
+    {
+        SerieCreateDto createDto = new()
+        {
+            Title = "New Serie with Date"
+        };
+
+        DateTime beforeCreation = DateTime.UtcNow;
+        ActionResult<long> result = await _controller.PostSerie(createDto);
+        DateTime afterCreation = DateTime.UtcNow;
+
+        long? serieId = result.Value;
+        Assert.IsNotNull(serieId);
+
+        Serie? createdSerie = await _context.Series.FindAsync(serieId);
+        Assert.IsNotNull(createdSerie);
+        Assert.IsTrue(createdSerie.Creation >= beforeCreation);
+        Assert.IsTrue(createdSerie.Creation <= afterCreation);
+    }
+
+    [TestMethod]
+    public async Task GetSerie_VerifyAllPropertiesMapping()
+    {
+        Serie serie = _context.Series.First();
+        ActionResult<SerieDto> result = await _controller.GetSerie(serie.Id);
+
+        SerieDto? returnedSerie = result.Value;
+        Assert.IsNotNull(returnedSerie);
+        Assert.AreEqual(serie.Id, returnedSerie.Id);
+        Assert.AreEqual(serie.LibraryId, returnedSerie.LibraryId);
+        Assert.AreEqual(serie.Title, returnedSerie.Title);
+        Assert.AreEqual(serie.Description, returnedSerie.Description);
+        Assert.AreEqual(serie.Status, returnedSerie.Status);
+        Assert.AreEqual(serie.Creation, returnedSerie.Creation);
+        Assert.AreEqual(serie.LastModification, returnedSerie.LastModification);
+    }
+
+    [TestMethod]
+    public async Task PutSerie_VerifyLastModificationUpdated()
+    {
+        Serie serie = _context.Series.First();
+        DateTime originalLastModification = serie.LastModification;
+        
+        SerieUpdateDto updateDto = new()
+        {
+            Title = "Updated Title with Time Check",
+            Description = "Updated Description",
+            Status = Status.Completed
+        };
+
+        await Task.Delay(10);
+        
+        IActionResult result = await _controller.PutSerie(serie.Id, updateDto);
+
+        Assert.IsInstanceOfType(result, typeof(OkResult));
+
+        Serie? updatedSerie = await _context.Series.FindAsync(serie.Id);
+        Assert.IsNotNull(updatedSerie);
+        Assert.IsTrue(updatedSerie.LastModification < DateTime.UtcNow);
+        Assert.IsTrue(updatedSerie.LastModification > originalLastModification);
+    }
+
+    [TestMethod]
+    public async Task DeleteSerie_VerifySerieCountDecreases()
+    {
+        int initialCount = _context.Series.Count();
+        Serie serie = _context.Series.First();
+        
+        IActionResult result = await _controller.DeleteSerie(serie.Id);
+
+        Assert.IsInstanceOfType(result, typeof(OkResult));
+        
+        int finalCount = _context.Series.Count();
+        Assert.AreEqual(initialCount - 1, finalCount);
     }
 }

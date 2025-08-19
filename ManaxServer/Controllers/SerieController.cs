@@ -111,6 +111,9 @@ public class SerieController(ManaxContext context, IMapper mapper, INotification
 
         if (serie == null) return NotFound(Localizer.Format("SerieNotFound", id));
 
+        if(string.IsNullOrWhiteSpace(serieUpdate.Title))
+            return BadRequest(Localizer.Format("SerieTitleRequired"));
+        
         mapper.Map(serieUpdate, serie);
         serie.LastModification = DateTime.UtcNow;
 
@@ -134,6 +137,9 @@ public class SerieController(ManaxContext context, IMapper mapper, INotification
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<long>> PostSerie(SerieCreateDto serieCreate)
     {
+        if (string.IsNullOrWhiteSpace(serieCreate.Title))
+            return BadRequest(Localizer.GetString("SerieTitleRequired"));
+        
         SavePoint? savePoint = SelectSavePoint();
         if (savePoint == null)
         {

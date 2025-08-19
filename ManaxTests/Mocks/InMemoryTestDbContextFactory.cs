@@ -24,14 +24,14 @@ public static class InMemoryTestDbContextFactory
             {
                 Id = 1,
                 Name = "Library 1",
-                Creation = DateTime.Now
+                Creation = DateTime.UtcNow
             },
 
             new()
             {
                 Id = 2,
                 Name = "Library 2",
-                Creation = DateTime.Now
+                Creation = DateTime.UtcNow
             }
         ];
 
@@ -46,8 +46,8 @@ public static class InMemoryTestDbContextFactory
                 Description = "Description for Serie 1",
                 SavePointId = 1,
                 Status = Status.Ongoing,
-                Creation = DateTime.Now,
-                LastModification = DateTime.Now
+                Creation = DateTime.UtcNow,
+                LastModification = DateTime.UtcNow
             },
 
             new()
@@ -59,8 +59,8 @@ public static class InMemoryTestDbContextFactory
                 Description = "Description for Serie 2",
                 SavePointId = 1,
                 Status = Status.Completed,
-                Creation = DateTime.Now,
-                LastModification = DateTime.Now
+                Creation = DateTime.UtcNow,
+                LastModification = DateTime.UtcNow
             }
         ];
 
@@ -74,8 +74,8 @@ public static class InMemoryTestDbContextFactory
                 Number = 1,
                 Pages = 24,
                 Path = "/test_path/serie1/chapter1.cbz",
-                Creation = DateTime.Now,
-                LastModification = DateTime.Now
+                Creation = DateTime.UtcNow,
+                LastModification = DateTime.UtcNow
             },
 
             new()
@@ -86,8 +86,8 @@ public static class InMemoryTestDbContextFactory
                 Number = 2,
                 Pages = 30,
                 Path = "/test_path/serie1/chapter2.cbz",
-                Creation = DateTime.Now,
-                LastModification = DateTime.Now
+                Creation = DateTime.UtcNow,
+                LastModification = DateTime.UtcNow
             },
 
             new()
@@ -98,18 +98,21 @@ public static class InMemoryTestDbContextFactory
                 Number = 1,
                 Pages = 25,
                 Path = "/test_path/serie2/chapter1.cbz",
-                Creation = DateTime.Now,
-                LastModification = DateTime.Now
+                Creation = DateTime.UtcNow,
+                LastModification = DateTime.UtcNow
             }
         ];
-        
+
+        string savePointPath = Path.Combine(Directory.GetCurrentDirectory(), "savepoint");
+        if (Directory.Exists(savePointPath)) { Directory.Delete(savePointPath, true); }
+        Directory.CreateDirectory(savePointPath);
         List<SavePoint> savePoints =
         [
             new()
             {
                 Id = 1,
-                Path = "/test_path/",
-                Creation = DateTime.Now
+                Path = savePointPath,
+                Creation = DateTime.UtcNow
             }
         ];
 
@@ -121,6 +124,7 @@ public static class InMemoryTestDbContextFactory
         context.Libraries.AddRange(libraries);
         context.Series.AddRange(series);
         context.Chapters.AddRange(chapters);
+        context.SavePoints.AddRange(savePoints);
 
         context.SaveChanges();
 
