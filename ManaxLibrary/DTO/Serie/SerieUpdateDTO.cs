@@ -13,5 +13,6 @@ public class SerieUpdateDto
 {
     [Required] public string Title { get; set; }
     [Required] public string Description { get; set; }
-    public Status Status { get; set; }
+    public long? LibraryId { get; set; }
+    [Required]public Status Status { get; set; }
 }
