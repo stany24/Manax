@@ -122,53 +122,6 @@
                     </ItemsControl>
                 </StackPanel>
             </Border>
-            
-            <Border Classes="card">
-                <StackPanel Spacing="16">
-                    <TextBlock Classes="subtitle" Text="Configuration des rangs"/>
-                    
-                    <Grid RowDefinitions="Auto,Auto" RowSpacing="16">
-                        <Border Grid.Row="0"
-                               Background="#FFF3CD"
-                               BorderBrush="#FFEAA7"
-                               BorderThickness="1"
-                               CornerRadius="8"
-                               Padding="12">
-                            <StackPanel Spacing="8">
-                                <StackPanel Orientation="Horizontal" Spacing="8">
-                                    <TextBlock Text="💡" FontSize="16"/>
-                                    <TextBlock Text="À propos des rangs" FontWeight="Bold"/>
-                                </StackPanel>
-                                <TextBlock Text="Les rangs permettent de classer les utilisateurs selon leur niveau ou leur rôle. Plus la valeur est élevée, plus le rang est important."
-                                          TextWrapping="Wrap"
-                                          FontSize="12"/>
-                            </StackPanel>
-                        </Border>
-                        
-                        <Grid Grid.Row="1" ColumnDefinitions="*,*" ColumnSpacing="16">
-                            <Button Grid.Column="0"
-                                    Classes="secondary"
-                                    HorizontalAlignment="Stretch"
-                                    Padding="16">
-                                <StackPanel Orientation="Vertical" Spacing="8">
-                                    <TextBlock Text="📊" FontSize="20" HorizontalAlignment="Center"/>
-                                    <TextBlock Text="Statistiques" HorizontalAlignment="Center" FontWeight="Medium"/>
-                                </StackPanel>
-                            </Button>
-                            
-                            <Button Grid.Column="1"
-                                    Classes="secondary"
-                                    HorizontalAlignment="Stretch"
-                                    Padding="16">
-                                <StackPanel Orientation="Vertical" Spacing="8">
-                                    <TextBlock Text="🔄" FontSize="20" HorizontalAlignment="Center"/>
-                                    <TextBlock Text="Réorganiser" HorizontalAlignment="Center" FontWeight="Medium"/>
-                                </StackPanel>
-                            </Button>
-                        </Grid>
-                    </Grid>
-                </StackPanel>
-            </Border>
         </StackPanel>
     </ScrollViewer>
 </UserControl>

@@ -126,44 +126,6 @@
                     </ItemsControl>
                 </StackPanel>
             </Border>
-            
-            <Border Classes="card">
-                <StackPanel Spacing="16">
-                    <TextBlock Classes="subtitle" Text="Actions rapides"/>
-                    
-                    <Grid ColumnDefinitions="*,*,*" ColumnSpacing="16">
-                        <Button Grid.Column="0"
-                                Classes="secondary"
-                                HorizontalAlignment="Stretch"
-                                Padding="16">
-                            <StackPanel Orientation="Vertical" Spacing="8">
-                                <TextBlock Text="📊" FontSize="20" HorizontalAlignment="Center"/>
-                                <TextBlock Text="Statistiques" HorizontalAlignment="Center" FontWeight="Medium"/>
-                            </StackPanel>
-                        </Button>
-                        
-                        <Button Grid.Column="1"
-                                Classes="secondary"
-                                HorizontalAlignment="Stretch"
-                                Padding="16">
-                            <StackPanel Orientation="Vertical" Spacing="8">
-                                <TextBlock Text="📤" FontSize="20" HorizontalAlignment="Center"/>
-                                <TextBlock Text="Exporter" HorizontalAlignment="Center" FontWeight="Medium"/>
-                            </StackPanel>
-                        </Button>
-                        
-                        <Button Grid.Column="2"
-                                Classes="secondary"
-                                HorizontalAlignment="Stretch"
-                                Padding="16">
-                            <StackPanel Orientation="Vertical" Spacing="8">
-                                <TextBlock Text="🔄" FontSize="20" HorizontalAlignment="Center"/>
-                                <TextBlock Text="Synchroniser" HorizontalAlignment="Center" FontWeight="Medium"/>
-                            </StackPanel>
-                        </Button>
-                    </Grid>
-                </StackPanel>
-            </Border>
         </StackPanel>
     </ScrollViewer>
 </UserControl>

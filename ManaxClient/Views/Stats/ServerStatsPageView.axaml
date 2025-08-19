@@ -136,56 +136,6 @@
                     </Grid>
                 </StackPanel>
             </Border>
-            
-            <Border Classes="card">
-                <StackPanel Spacing="16">
-                    <TextBlock Classes="subtitle" Text="Actions rapides"/>
-                    
-                    <Grid ColumnDefinitions="*,*,*" ColumnSpacing="16">
-                        <Button Grid.Column="0"
-                                Classes="secondary"
-                                HorizontalAlignment="Stretch"
-                                Padding="16">
-                            <StackPanel Orientation="Vertical" Spacing="8">
-                                <TextBlock Text="🔍" FontSize="20" HorizontalAlignment="Center"/>
-                                <TextBlock Text="Analyser" HorizontalAlignment="Center" FontWeight="Medium"/>
-                                <TextBlock Text="Détails avancés" 
-                                          HorizontalAlignment="Center" 
-                                          FontSize="12"
-                                          Foreground="{StaticResource SecondaryBrush}"/>
-                            </StackPanel>
-                        </Button>
-                        
-                        <Button Grid.Column="1"
-                                Classes="secondary"
-                                HorizontalAlignment="Stretch"
-                                Padding="16">
-                            <StackPanel Orientation="Vertical" Spacing="8">
-                                <TextBlock Text="📋" FontSize="20" HorizontalAlignment="Center"/>
-                                <TextBlock Text="Rapport" HorizontalAlignment="Center" FontWeight="Medium"/>
-                                <TextBlock Text="Générer un rapport" 
-                                          HorizontalAlignment="Center" 
-                                          FontSize="12"
-                                          Foreground="{StaticResource SecondaryBrush}"/>
-                            </StackPanel>
-                        </Button>
-                        
-                        <Button Grid.Column="2"
-                                Classes="secondary"
-                                HorizontalAlignment="Stretch"
-                                Padding="16">
-                            <StackPanel Orientation="Vertical" Spacing="8">
-                                <TextBlock Text="⚙️" FontSize="20" HorizontalAlignment="Center"/>
-                                <TextBlock Text="Configurer" HorizontalAlignment="Center" FontWeight="Medium"/>
-                                <TextBlock Text="Paramètres stats" 
-                                          HorizontalAlignment="Center" 
-                                          FontSize="12"
-                                          Foreground="{StaticResource SecondaryBrush}"/>
-                            </StackPanel>
-                        </Button>
-                    </Grid>
-                </StackPanel>
-            </Border>
         </StackPanel>
     </ScrollViewer>
 </UserControl>
