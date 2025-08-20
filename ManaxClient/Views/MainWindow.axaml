@@ -8,17 +8,18 @@
     x:Class="ManaxClient.Views.MainWindow"
     x:DataType="vm:MainWindowViewModel"
     Icon="/Assets/avalonia-logo.ico"
-    Title="Manax - Gestionnaire de Séries"
-    MinWidth="1000"
-    MinHeight="700"
+    Title="Manax"
+    MinWidth="960"
+    MinHeight="500"
     WindowStartupLocation="CenterScreen">
 
     <Panel>
-        <Grid ColumnDefinitions="Auto,*">
+        <Grid
+            ColumnDefinitions="Auto,*">
             <StackPanel Grid.Column="0"
-                       Classes="sidebar"
-                       IsVisible="{Binding CurrentPageViewModel.ControlBarVisible}"
-                       Orientation="Vertical">
+                        Classes="sidebar"
+                        IsVisible="{Binding CurrentPageViewModel.ControlBarVisible}"
+                        Orientation="Vertical">
                 
                 <TextBlock Classes="title" 
                           Text="Manax"
@@ -186,8 +187,7 @@
             </StackPanel>
 
             <Border Grid.Column="1" 
-                   Background="White"
-                   CornerRadius="{Binding PageCornerRadius}">
+                   Background="White">
                 <ContentControl Content="{Binding CurrentPageViewModel}"
                               Margin="{Binding PageMargin}"/>
             </Border>

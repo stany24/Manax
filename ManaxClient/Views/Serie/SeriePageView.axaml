@@ -22,7 +22,8 @@
                                   Stretch="UniformToFill"/>
                         </Border>
                         
-                        <StackPanel>
+                        <StackPanel
+                            Orientation="Horizontal">
                             <Button Classes="secondary"
                                     IsVisible="{Binding Admin}"
                                     Command="{Binding ReplacePoster}"

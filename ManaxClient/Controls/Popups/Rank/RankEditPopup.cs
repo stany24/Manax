@@ -52,7 +52,7 @@ public class RankEditPopup(RankDto rank) : ConfirmCancelPopup("Modifier")
         
         TextBlock subtitle = new()
         {
-            Text = "Modifiez les informations de ce rang utilisateur",
+            Text = "Modifiez les informations de ce rang",
             FontSize = 12,
             Foreground = new SolidColorBrush(Color.Parse("#6C757D"))
         };
@@ -149,7 +149,7 @@ public class RankEditPopup(RankDto rank) : ConfirmCancelPopup("Modifier")
 
         TextBlock helpText = new()
         {
-            Text = "La valeur détermine la hiérarchie des rangs. Plus la valeur est élevée, plus le rang est important.",
+            Text = "La valeur détermine la hiérarchie des rangs. Plus la valeur est élevée, plus le rang est apprécié.",
             TextWrapping = TextWrapping.Wrap,
             FontSize = 12,
             Foreground = new SolidColorBrush(Color.Parse("#495057"))

@@ -19,6 +19,8 @@ public partial class LoginPageViewModel : PageViewModel
     [ObservableProperty] private string _password = string.Empty;
     [ObservableProperty] private int _port = 5246;
     [ObservableProperty] private string _username = string.Empty;
+    [ObservableProperty] private bool _canLogin = true;
+    [ObservableProperty] private string _emoji = "🔑";
 
     public LoginPageViewModel()
     {
@@ -30,11 +32,15 @@ public partial class LoginPageViewModel : PageViewModel
         LoginError = string.Empty;
         Task.Run(async () =>
         {
+            CanLogin = false;
+            Emoji = "⌛";
             ManaxApiConfig.SetHost(new Uri(Host + $":{Port}/"));
             Optional<UserLoginResultDto> loginResponse = await ManaxApiUserClient.LoginAsync(Username, Password);
             if (loginResponse.Failed)
             {
                 InfoEmitted?.Invoke(this, loginResponse.Error);
+                CanLogin = true;
+                Emoji = "🔑";
                 return;
             }
 

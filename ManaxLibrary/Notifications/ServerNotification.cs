@@ -1,6 +1,7 @@
 using ManaxLibrary.DTO.Chapter;
 using ManaxLibrary.DTO.Library;
 using ManaxLibrary.DTO.Rank;
+using ManaxLibrary.DTO.Read;
 using ManaxLibrary.DTO.Serie;
 using ManaxLibrary.DTO.User;
 using ManaxLibrary.Logging;
@@ -34,6 +35,8 @@ public static class ServerNotification
 
     public static event Action<UserDto>? OnUserCreated;
     public static event Action<long>? OnUserDeleted;
+    public static event Action<ReadDto>? OnReadCreated;
+    public static event Action<long>? OnReadDeleted;
 
     public static async Task InitializeAsync(Uri host, string token)
     {
@@ -63,7 +66,8 @@ public static class ServerNotification
         _hubConnection.On<SerieDto>(nameof(NotificationType.SerieUpdated),
             serieData => { OnSerieUpdated?.Invoke(serieData); });
 
-        _hubConnection.On<long>(nameof(NotificationType.SerieDeleted), serieId => { OnSerieDeleted?.Invoke(serieId); });
+        _hubConnection.On<long>(nameof(NotificationType.SerieDeleted),
+            serieId => { OnSerieDeleted?.Invoke(serieId); });
 
         _hubConnection.On<RankDto>(nameof(NotificationType.RankCreated),
             rankData => { OnRankCreated?.Invoke(rankData); });
@@ -71,7 +75,8 @@ public static class ServerNotification
         _hubConnection.On<RankDto>(nameof(NotificationType.RankUpdated),
             rankData => { OnRankUpdated?.Invoke(rankData); });
 
-        _hubConnection.On<long>(nameof(NotificationType.RankDeleted), rankId => { OnRankDeleted?.Invoke(rankId); });
+        _hubConnection.On<long>(nameof(NotificationType.RankDeleted),
+            rankId => { OnRankDeleted?.Invoke(rankId); });
 
         _hubConnection.On<ChapterDto>(nameof(NotificationType.ChapterAdded),
             chapterData => { OnChapterAdded?.Invoke(chapterData); });
@@ -82,13 +87,20 @@ public static class ServerNotification
         _hubConnection.On<UserDto>(nameof(NotificationType.UserCreated),
             userData => { OnUserCreated?.Invoke(userData); });
 
-        _hubConnection.On<long>(nameof(NotificationType.UserDeleted), userId => { OnUserDeleted?.Invoke(userId); });
+        _hubConnection.On<long>(nameof(NotificationType.UserDeleted),
+            userId => { OnUserDeleted?.Invoke(userId); });
 
         _hubConnection.On<Dictionary<string, int>>(nameof(NotificationType.RunningTasks),
             tasks => { OnRunningTasks?.Invoke(tasks); });
 
         _hubConnection.On<long>(nameof(NotificationType.PosterModified),
             serieId => { OnPosterModified?.Invoke(serieId); });
+        
+        _hubConnection.On<ReadDto>(nameof(NotificationType.ReadCreated),
+            readData => { OnReadCreated?.Invoke(readData); });
+
+        _hubConnection.On<long>(nameof(NotificationType.ReadDeleted),
+            readId => { OnReadDeleted?.Invoke(readId); });
 
         _hubConnection.On<string>(nameof(NotificationType.Connected),
             message => { Logger.LogInfo("SignalR Server: " + message); });

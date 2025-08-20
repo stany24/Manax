@@ -135,54 +135,6 @@
                 </StackPanel>
             </Border>
             
-            <Border Classes="card">
-                <StackPanel Spacing="16">
-                    <TextBlock Classes="subtitle" Text="État de la configuration"/>
-                    
-                    <Border Background="#DFF0D8" 
-                           BorderBrush="{StaticResource SuccessBrush}"
-                           BorderThickness="1"
-                           CornerRadius="8"
-                           Padding="12"
-                           IsVisible="{Binding Success, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
-                        <StackPanel Orientation="Horizontal" Spacing="8">
-                            <TextBlock Text="✅" FontSize="16"/>
-                            <TextBlock Text="{Binding Success}" 
-                                      Foreground="{StaticResource SuccessBrush}"
-                                      FontWeight="Medium"/>
-                        </StackPanel>
-                    </Border>
-                    
-                    <Border Background="#F2DEDE" 
-                           BorderBrush="{StaticResource DangerBrush}"
-                           BorderThickness="1"
-                           CornerRadius="8"
-                           Padding="12"
-                           IsVisible="{Binding Problem, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
-                        <StackPanel Orientation="Horizontal" Spacing="8">
-                            <TextBlock Text="❌" FontSize="16"/>
-                            <TextBlock Text="{Binding Problem}" 
-                                      Foreground="{StaticResource DangerBrush}"
-                                      FontWeight="Medium"/>
-                        </StackPanel>
-                    </Border>
-                    
-                    <Border Background="#FCF8E3" 
-                           BorderBrush="{StaticResource WarningBrush}"
-                           BorderThickness="1"
-                           CornerRadius="8"
-                           Padding="12"
-                           IsVisible="{Binding Settings.Issue, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
-                        <StackPanel Orientation="Horizontal" Spacing="8">
-                            <TextBlock Text="⚠️" FontSize="16"/>
-                            <TextBlock Text="{Binding Settings.Issue}" 
-                                      Foreground="{StaticResource WarningBrush}"
-                                      FontWeight="Medium"/>
-                        </StackPanel>
-                    </Border>
-                </StackPanel>
-            </Border>
-            
             <Grid ColumnDefinitions="*,Auto">
                 <Border Grid.Column="0"
                        Background="#E3F2FD"

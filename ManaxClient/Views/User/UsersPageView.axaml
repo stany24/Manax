@@ -11,20 +11,14 @@
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel Orientation="Vertical" Spacing="24">
             
-            <Grid ColumnDefinitions="*,Auto,Auto">
+            <Grid ColumnDefinitions="*,Auto">
                 <StackPanel Grid.Column="0" Orientation="Vertical">
                     <TextBlock Classes="title" Text="Gestion des utilisateurs"/>
                     <TextBlock Text="{Binding Users.Count, StringFormat='👥 {0} utilisateur(s) enregistré(s)'}"
                               Foreground="{StaticResource SecondaryBrush}"/>
                 </StackPanel>
                 
-                <TextBox Grid.Column="1"
-                        Watermark="Rechercher un utilisateur..."
-                        MinWidth="200"
-                        Margin="8,0"
-                        VerticalAlignment="Center"/>
-                
-                <Button Grid.Column="2"
+                <Button Grid.Column="1"
                         Classes="primary"
                         Command="{Binding CreateUser}"
                         VerticalAlignment="Center">

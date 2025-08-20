@@ -50,6 +50,8 @@ public partial class SeriePageViewModel : PageViewModel
         ServerNotification.OnPosterModified += LoadPoster;
         ServerNotification.OnChapterAdded += OnChapterAdded;
         ServerNotification.OnChapterDeleted += OnChapterDeleted;
+        ServerNotification.OnReadCreated += OnReadCreated;
+        ServerNotification.OnReadDeleted += OnReadDeleted;
     }
 
     ~SeriePageViewModel()
@@ -58,6 +60,24 @@ public partial class SeriePageViewModel : PageViewModel
         ServerNotification.OnPosterModified -= LoadPoster;
         ServerNotification.OnChapterAdded -= OnChapterAdded;
         ServerNotification.OnChapterDeleted -= OnChapterDeleted;
+        ServerNotification.OnReadCreated -= OnReadCreated;
+        ServerNotification.OnReadDeleted -= OnReadDeleted;
+    }
+    
+    private void OnReadDeleted(long obj)
+    {
+        if (Serie == null) return;
+        ClientChapter? chapter = Chapters.FirstOrDefault(c => c.Info.Id == obj);
+        if (chapter == null) return;
+        Dispatcher.UIThread.Post(() => { chapter.Read = null; });
+    }
+
+    private void OnReadCreated(ReadDto read)
+    {
+        if (Serie == null) return;
+        ClientChapter? chapter = Chapters.FirstOrDefault(c => c.Info.Id == read.ChapterId);
+        if (chapter == null) return;
+        Dispatcher.UIThread.Post(() => { chapter.Read = read; });
     }
 
     private void UpdateSerieInfo(SerieDto serie)

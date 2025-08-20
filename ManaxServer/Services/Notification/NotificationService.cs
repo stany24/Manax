@@ -2,11 +2,13 @@ using System.Security.Claims;
 using ManaxLibrary.DTO.Chapter;
 using ManaxLibrary.DTO.Library;
 using ManaxLibrary.DTO.Rank;
+using ManaxLibrary.DTO.Read;
 using ManaxLibrary.DTO.Serie;
 using ManaxLibrary.DTO.User;
 using ManaxLibrary.Logging;
 using ManaxLibrary.Notifications;
 using ManaxServer.Localization;
+using ManaxServer.Models.Read;
 using Microsoft.AspNetCore.SignalR;
 
 namespace ManaxServer.Services.Notification;
@@ -87,6 +89,16 @@ public class NotificationService(IHubContext<NotificationService> hubContext) : 
     {
         TrySendToAllClientsAsync(NotificationType.PosterModified, serieId);
     }
+    
+    public void NotifyReadCreated(ReadDto existingRead)
+    {
+        TrySendToSingleClientAsync(existingRead.UserId, NotificationType.ReadCreated, existingRead);
+    }
+    
+    public void NotifyReadRemoved(ReadDto existingRead)
+    {
+        TrySendToSingleClientAsync(existingRead.UserId, NotificationType.ReadCreated, existingRead.ChapterId);
+    }
 
     public override async System.Threading.Tasks.Task OnConnectedAsync()
     {
@@ -164,6 +176,20 @@ public class NotificationService(IHubContext<NotificationService> hubContext) : 
         try
         {
             hubContext.Clients.Group("Owner").SendAsync(methodName, arg);
+            Logger.LogInfo(Localizer.Format("HubMessageSentOwner", methodName));
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(Localizer.Format("HubMessageErrorOwner", methodName), ex, Environment.StackTrace);
+        }
+    }
+    
+    private void TrySendToSingleClientAsync(long id, NotificationType type, object? arg)
+    {
+        string methodName = type.ToString();
+        try
+        {
+            hubContext.Clients.User(id.ToString()).SendAsync(methodName, arg);
             Logger.LogInfo(Localizer.Format("HubMessageSentOwner", methodName));
         }
         catch (Exception ex)

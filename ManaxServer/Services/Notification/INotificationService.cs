@@ -1,8 +1,10 @@
 using ManaxLibrary.DTO.Chapter;
 using ManaxLibrary.DTO.Library;
 using ManaxLibrary.DTO.Rank;
+using ManaxLibrary.DTO.Read;
 using ManaxLibrary.DTO.Serie;
 using ManaxLibrary.DTO.User;
+using ManaxServer.Models.Read;
 
 namespace ManaxServer.Services.Notification;
 
@@ -29,4 +31,6 @@ public interface INotificationService
     void NotifyRankDeletedAsync(long rankId);
 
     void NotifyRunningTasksAsync(Dictionary<string, int> tasks);
+    void NotifyReadCreated(ReadDto existingRead);
+    void NotifyReadRemoved(ReadDto existingRead);
 }

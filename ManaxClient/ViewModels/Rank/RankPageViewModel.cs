@@ -88,7 +88,11 @@ public partial class RankPageViewModel : PageViewModel
         {
             try
             {
-                if (rankEditPopup.Canceled) { return; }
+                if (rankEditPopup.Canceled)
+                {
+                    rankEditPopup.Close();
+                    return;
+                }
                 RankDto result = rankEditPopup.GetResult();
                 Optional<bool> updateRankAsync = await ManaxApiRankClient.UpdateRankAsync(result);
                 if (updateRankAsync.Failed)
