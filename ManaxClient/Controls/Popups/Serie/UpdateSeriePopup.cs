@@ -11,6 +11,7 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Data;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
+using Avalonia.Media;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTO.Library;
 using ManaxLibrary.DTO.Serie;
@@ -19,7 +20,6 @@ namespace ManaxClient.Controls.Popups.Serie;
 
 public class SerieUpdatePopup : ConfirmCancelPopup, INotifyPropertyChanged
 {
-    public bool Canceled { get; private set; }
     private readonly SerieDto _serie;
     private SerieUpdateDto _updateDto;
     private LibraryDto? _selectedLibrary;
@@ -50,7 +50,7 @@ public class SerieUpdatePopup : ConfirmCancelPopup, INotifyPropertyChanged
         }
     }
 
-    public SerieUpdatePopup(SerieDto serie)
+    public SerieUpdatePopup(SerieDto serie) : base("Mettre à jour")
     {
         _serie = serie;
         
@@ -78,7 +78,7 @@ public class SerieUpdatePopup : ConfirmCancelPopup, INotifyPropertyChanged
 
         Libraries.Clear();
         
-        LibraryDto noLibrary = new() { Id = -1, Name = "No Library" };
+        LibraryDto noLibrary = new() { Id = -1, Name = "Aucune bibliothèque" };
         Libraries.Add(noLibrary);
         
         foreach (long id in libraryIdsResult.GetValue())
@@ -97,76 +97,247 @@ public class SerieUpdatePopup : ConfirmCancelPopup, INotifyPropertyChanged
     {
         Grid grid = new()
         {
-            Margin = new Thickness(10),
-            RowSpacing = 5,
-            RowDefinitions = new RowDefinitions("Auto,Auto,Auto,Auto"),
-            ColumnDefinitions = new ColumnDefinitions("Auto,10,*")
+            RowSpacing = 16,
+            RowDefinitions = new RowDefinitions("Auto,Auto,Auto,Auto,Auto,Auto"),
+            ColumnDefinitions = new ColumnDefinitions("*")
         };
 
-        TextBlock nameLabel = new()
+        StackPanel headerPanel = new()
         {
-            Text = "Name:",
+            Orientation = Orientation.Horizontal,
+            Spacing = 12,
+            Margin = new Thickness(0, 0, 0, 8)
+        };
+        
+        TextBlock icon = new()
+        {
+            Text = "📚",
+            FontSize = 24,
             VerticalAlignment = VerticalAlignment.Center
         };
-        Grid.SetRow(nameLabel, 0);
-        Grid.SetColumn(nameLabel, 0);
-        grid.Children.Add(nameLabel);
+        
+        StackPanel titleStack = new()
+        {
+            Orientation = Orientation.Vertical,
+            Spacing = 4
+        };
+        
+        TextBlock title = new()
+        {
+            Text = "Modifier la série",
+            FontSize = 18,
+            FontWeight = FontWeight.Bold,
+            Foreground = new SolidColorBrush(Color.Parse("#212529"))
+        };
+        
+        TextBlock subtitle = new()
+        {
+            Text = "Modifiez les informations de cette série",
+            FontSize = 12,
+            Foreground = new SolidColorBrush(Color.Parse("#6C757D"))
+        };
 
-        TextBox titleBox = new();
+        titleStack.Children.Add(title);
+        titleStack.Children.Add(subtitle);
+        headerPanel.Children.Add(icon);
+        headerPanel.Children.Add(titleStack);
+        
+        Grid.SetRow(headerPanel, 0);
+        grid.Children.Add(headerPanel);
+
+        StackPanel titlePanel = new()
+        {
+            Spacing = 8
+        };
+
+        TextBlock titleLabel = new()
+        {
+            Text = "Titre de la série",
+            FontWeight = FontWeight.Medium,
+            Foreground = new SolidColorBrush(Color.Parse("#495057"))
+        };
+
+        TextBox titleBox = new()
+        {
+            Watermark = "Entrez le titre de la série...",
+            Padding = new Thickness(12),
+            CornerRadius = new CornerRadius(8),
+            BorderThickness = new Thickness(1),
+            BorderBrush = new SolidColorBrush(Color.Parse("#DEE2E6")),
+            FontSize = 14
+        };
         titleBox.Bind(TextBox.TextProperty, new Binding($"{nameof(UpdateDto)}.{nameof(SerieUpdateDto.Title)}") { Mode = BindingMode.TwoWay });
-        Grid.SetRow(titleBox, 0);
-        Grid.SetColumn(titleBox, 2);
-        grid.Children.Add(titleBox);
+
+        titlePanel.Children.Add(titleLabel);
+        titlePanel.Children.Add(titleBox);
+        Grid.SetRow(titlePanel, 1);
+        grid.Children.Add(titlePanel);
+
+        StackPanel descriptionPanel = new()
+        {
+            Spacing = 8
+        };
 
         TextBlock descriptionLabel = new()
         {
-            Text = "Description:",
-            VerticalAlignment = VerticalAlignment.Center
+            Text = "Description",
+            FontWeight = FontWeight.Medium,
+            Foreground = new SolidColorBrush(Color.Parse("#495057"))
         };
-        Grid.SetRow(descriptionLabel, 1);
-        Grid.SetColumn(descriptionLabel, 0);
-        grid.Children.Add(descriptionLabel);
 
-        TextBox descriptionBox = new();
+        TextBox descriptionBox = new()
+        {
+            Watermark = "Entrez la description de la série...",
+            Padding = new Thickness(12),
+            CornerRadius = new CornerRadius(8),
+            BorderThickness = new Thickness(1),
+            BorderBrush = new SolidColorBrush(Color.Parse("#DEE2E6")),
+            FontSize = 14,
+            AcceptsReturn = true,
+            TextWrapping = TextWrapping.Wrap,
+            MinHeight = 80
+        };
         descriptionBox.Bind(TextBox.TextProperty, new Binding($"{nameof(UpdateDto)}.{nameof(SerieUpdateDto.Description)}") { Mode = BindingMode.TwoWay });
-        Grid.SetRow(descriptionBox, 1);
-        Grid.SetColumn(descriptionBox, 2);
-        grid.Children.Add(descriptionBox);
+
+        descriptionPanel.Children.Add(descriptionLabel);
+        descriptionPanel.Children.Add(descriptionBox);
+        Grid.SetRow(descriptionPanel, 2);
+        grid.Children.Add(descriptionPanel);
+
+        Grid optionsGrid = new()
+        {
+            ColumnDefinitions = new ColumnDefinitions("*,16,*"),
+            RowDefinitions = new RowDefinitions("Auto,Auto"),
+            RowSpacing = 8
+        };
 
         TextBlock libraryLabel = new()
         {
-            Text = "Library:",
-            VerticalAlignment = VerticalAlignment.Center
+            Text = "Bibliothèque",
+            FontWeight = FontWeight.Medium,
+            Foreground = new SolidColorBrush(Color.Parse("#495057"))
         };
-        Grid.SetRow(libraryLabel, 2);
         Grid.SetColumn(libraryLabel, 0);
-        grid.Children.Add(libraryLabel);
+        Grid.SetRow(libraryLabel, 0);
 
-        ComboBox libraryComboBox = new();
+        ComboBox libraryComboBox = new()
+        {
+            Padding = new Thickness(12),
+            CornerRadius = new CornerRadius(8),
+            BorderThickness = new Thickness(1),
+            BorderBrush = new SolidColorBrush(Color.Parse("#DEE2E6")),
+            FontSize = 14,
+            HorizontalAlignment = HorizontalAlignment.Stretch
+        };
         libraryComboBox.Bind(ItemsControl.ItemsSourceProperty, new Binding(nameof(Libraries)));
         libraryComboBox.Bind(SelectingItemsControl.SelectedItemProperty, new Binding(nameof(SelectedLibrary)) { Mode = BindingMode.TwoWay });
         libraryComboBox.DisplayMemberBinding = new Binding(nameof(LibraryDto.Name));
-        Grid.SetRow(libraryComboBox, 2);
-        Grid.SetColumn(libraryComboBox, 2);
-        grid.Children.Add(libraryComboBox);
+        Grid.SetColumn(libraryComboBox, 0);
+        Grid.SetRow(libraryComboBox, 1);
 
         TextBlock statusLabel = new()
         {
-            Text = "Status:",
-            VerticalAlignment = VerticalAlignment.Center
+            Text = "Statut",
+            FontWeight = FontWeight.Medium,
+            Foreground = new SolidColorBrush(Color.Parse("#495057"))
         };
-        Grid.SetRow(statusLabel, 3);
-        Grid.SetColumn(statusLabel, 0);
-        grid.Children.Add(statusLabel);
+        Grid.SetColumn(statusLabel, 2);
+        Grid.SetRow(statusLabel, 0);
 
-        ComboBox statusComboBox = new();
+        ComboBox statusComboBox = new()
+        {
+            Padding = new Thickness(12),
+            CornerRadius = new CornerRadius(8),
+            BorderThickness = new Thickness(1),
+            BorderBrush = new SolidColorBrush(Color.Parse("#DEE2E6")),
+            FontSize = 14,
+            HorizontalAlignment = HorizontalAlignment.Stretch
+        };
         statusComboBox.Bind(ItemsControl.ItemsSourceProperty, new Binding(nameof(StatusOptions)));
         statusComboBox.Bind(SelectingItemsControl.SelectedItemProperty, new Binding($"{nameof(UpdateDto)}.{nameof(SerieUpdateDto.Status)}") { Mode = BindingMode.TwoWay });
-        Grid.SetRow(statusComboBox, 3);
         Grid.SetColumn(statusComboBox, 2);
-        grid.Children.Add(statusComboBox);
+        Grid.SetRow(statusComboBox, 1);
+
+        optionsGrid.Children.Add(libraryLabel);
+        optionsGrid.Children.Add(libraryComboBox);
+        optionsGrid.Children.Add(statusLabel);
+        optionsGrid.Children.Add(statusComboBox);
+        Grid.SetRow(optionsGrid, 3);
+        grid.Children.Add(optionsGrid);
+
+        Border helpBorder = new()
+        {
+            Background = new SolidColorBrush(Color.Parse("#E3F2FD")),
+            BorderBrush = new SolidColorBrush(Color.Parse("#007ACC")),
+            BorderThickness = new Thickness(1),
+            CornerRadius = new CornerRadius(8),
+            Padding = new Thickness(12)
+        };
+
+        StackPanel helpPanel = new()
+        {
+            Orientation = Orientation.Horizontal,
+            Spacing = 8
+        };
+
+        TextBlock helpIcon = new()
+        {
+            Text = "💡",
+            FontSize = 14,
+            VerticalAlignment = VerticalAlignment.Top
+        };
+
+        TextBlock helpText = new()
+        {
+            Text = "Vous pouvez modifier le titre, la description, la bibliothèque et le statut de cette série. Les changements seront appliqués immédiatement.",
+            TextWrapping = TextWrapping.Wrap,
+            FontSize = 12,
+            Foreground = new SolidColorBrush(Color.Parse("#495057"))
+        };
+
+        helpPanel.Children.Add(helpIcon);
+        helpPanel.Children.Add(helpText);
+        helpBorder.Child = helpPanel;
+
+        Grid.SetRow(helpBorder, 4);
+        grid.Children.Add(helpBorder);
+
+        ApplyInputStyles(titleBox);
+        ApplyInputStyles(descriptionBox);
+        ApplyInputStyles(libraryComboBox);
+        ApplyInputStyles(statusComboBox);
 
         return grid;
+    }
+
+    private static void ApplyInputStyles(Control control)
+    {
+        control.PointerEntered += (s, _) =>
+        {
+            if (s is Control c) SetBorderBrush(c, new SolidColorBrush(Color.Parse("#007ACC")));
+        };
+        
+        control.PointerExited += (s, _) =>
+        {
+            if (s is Control { IsFocused: false } c) 
+                SetBorderBrush(c, new SolidColorBrush(Color.Parse("#DEE2E6")));
+        };
+
+        control.GotFocus += (s, _) =>
+        {
+            if (s is Control c) SetBorderBrush(c, new SolidColorBrush(Color.Parse("#007ACC")));
+        };
+
+        control.LostFocus += (s, _) =>
+        {
+            if (s is Control c) SetBorderBrush(c, new SolidColorBrush(Color.Parse("#DEE2E6")));
+        };
+    }
+
+    private static void SetBorderBrush(Control control, IBrush brush)
+    {
+        if (control is TextBox tb) tb.BorderBrush = brush;
+        else if (control is ComboBox cb) cb.BorderBrush = brush;
     }
 
     protected override void OkButton_Click(object? sender, RoutedEventArgs e)

@@ -1,5 +1,6 @@
 using System;
 using Avalonia;
+using Avalonia.Animation;
 using Avalonia.Controls;
 using Avalonia.Controls.Shapes;
 using Avalonia.Input;
@@ -18,7 +19,8 @@ public abstract class Popup : Panel
         HorizontalAlignment = HorizontalAlignment.Center,
         VerticalAlignment = VerticalAlignment.Center,
         Background = Brushes.White,
-        CornerRadius = new CornerRadius(5)
+        CornerRadius = new CornerRadius(12),
+        Margin = new Thickness(20)
     };
 
     public EventHandler? Closed;
@@ -27,7 +29,6 @@ public abstract class Popup : Panel
     protected Popup()
     {
         Background = Brushes.Transparent;
-
         HorizontalAlignment = HorizontalAlignment.Stretch;
         VerticalAlignment = VerticalAlignment.Stretch;
 
@@ -40,8 +41,8 @@ public abstract class Popup : Panel
 
         BackShadow = new Rectangle
         {
-            Fill = Brushes.Black,
-            Opacity = 0.7,
+            Fill = new SolidColorBrush(Color.Parse("#000000")),
+            Opacity = 0.5,
             HorizontalAlignment = HorizontalAlignment.Stretch,
             VerticalAlignment = VerticalAlignment.Stretch
         };
@@ -57,6 +58,43 @@ public abstract class Popup : Panel
         VisualChildren.Add(Form);
 
         AttachedToVisualTree += Popup_AttachedToVisualTree;
+
+        Form.Transitions =
+        [
+            new TransformOperationsTransition
+            {
+                Property = RenderTransformProperty,
+                Duration = TimeSpan.FromMilliseconds(200)
+            },
+
+            new DoubleTransition
+            {
+                Property = OpacityProperty,
+                Duration = TimeSpan.FromMilliseconds(200)
+            }
+        ];
+
+        Canvas.Transitions =
+        [
+            new DoubleTransition
+            {
+                Property = OpacityProperty,
+                Duration = TimeSpan.FromMilliseconds(150)
+            }
+        ];
+
+        Form.RenderTransform = new ScaleTransform(0.9, 0.9);
+        Form.Opacity = 0;
+        Canvas.Opacity = 0;
+
+        Loaded += OnLoaded;
+    }
+
+    private void OnLoaded(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        Canvas.Opacity = 1;
+        Form.Opacity = 1;
+        Form.RenderTransform = new ScaleTransform(1.0, 1.0);
     }
 
     private void Popup_AttachedToVisualTree(object? sender, VisualTreeAttachmentEventArgs e)
@@ -91,8 +129,13 @@ public abstract class Popup : Panel
         e.Handled = true;
     }
 
-    public void Close()
+    public async void Close()
     {
+        Form.Opacity = 0;
+        Form.RenderTransform = new ScaleTransform(0.9, 0.9);
+        Canvas.Opacity = 0;
+
+        await System.Threading.Tasks.Task.Delay(200);
         Closed?.Invoke(this, EventArgs.Empty);
     }
 }

@@ -82,7 +82,6 @@
                                     <Border.Styles>
                                         <Style Selector="Border:pointerover">
                                             <Setter Property="Background" Value="#F8F9FA"/>
-                                            <Setter Property="BoxShadow" Value="0 4 12 rgba(0,0,0,0.1)"/>
                                         </Style>
                                     </Border.Styles>
                                     <Border.Transitions>
