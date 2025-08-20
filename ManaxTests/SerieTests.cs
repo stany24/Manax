@@ -181,14 +181,14 @@ public class TestSerieController
         Serie serie = _context.Series.First();
         List<Chapter> associatedChapters = _context.Chapters.Where(c => c.SerieId == serie.Id).ToList();
         List<long> chapterIds = associatedChapters.Select(c => c.Id).ToList();
-        
+
         IActionResult result = await _controller.DeleteSerie(serie.Id);
 
         Assert.IsInstanceOfType(result, typeof(OkResult));
 
         Serie? deletedSerie = await _context.Series.FindAsync(serie.Id);
         Assert.IsNull(deletedSerie);
-        
+
         int remainingChaptersCount = _context.Chapters.Count(c => chapterIds.Contains(c.Id));
         Assert.AreEqual(0, remainingChaptersCount);
     }
@@ -270,7 +270,7 @@ public class TestSerieController
     {
         Serie serie = _context.Series.First();
         DateTime originalLastModification = serie.LastModification;
-        
+
         SerieUpdateDto updateDto = new()
         {
             Title = "Updated Title with Time Check",
@@ -279,7 +279,7 @@ public class TestSerieController
         };
 
         await Task.Delay(10);
-        
+
         IActionResult result = await _controller.PutSerie(serie.Id, updateDto);
 
         Assert.IsInstanceOfType(result, typeof(OkResult));
@@ -295,11 +295,11 @@ public class TestSerieController
     {
         int initialCount = _context.Series.Count();
         Serie serie = _context.Series.First();
-        
+
         IActionResult result = await _controller.DeleteSerie(serie.Id);
 
         Assert.IsInstanceOfType(result, typeof(OkResult));
-        
+
         int finalCount = _context.Series.Count();
         Assert.AreEqual(initialCount - 1, finalCount);
     }

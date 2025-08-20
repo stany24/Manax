@@ -19,14 +19,14 @@ namespace ManaxClient.ViewModels.Chapter;
 
 public partial class ChapterPageViewModel : PageViewModel
 {
-    [ObservableProperty] private bool _controlBordersVisible;
-    [ObservableProperty] private ClientChapter _chapter = new();
-    [ObservableProperty] private Vector _scrollOffset = new(0, 0);
     private readonly List<ClientChapter> _chapters;
+    [ObservableProperty] private ClientChapter _chapter = new();
+    [ObservableProperty] private bool _controlBordersVisible;
     private int _currentPage;
     private CancellationTokenSource? _loadPagesCts;
+    [ObservableProperty] private Vector _scrollOffset = new(0, 0);
 
-    public ChapterPageViewModel(List<ClientChapter> chapters,ClientChapter chapter)
+    public ChapterPageViewModel(List<ClientChapter> chapters, ClientChapter chapter)
     {
         _chapters = chapters;
         ControlBarVisible = false;
@@ -34,6 +34,11 @@ public partial class ChapterPageViewModel : PageViewModel
         Chapter = chapter;
         LoadPages(chapter.Info.Pages, chapter.Info.Id);
         PropertyChanged += HandleOffsetChanged;
+    }
+
+    ~ChapterPageViewModel()
+    {
+        _loadPagesCts?.Dispose();
     }
 
     public void ChangeBordersVisibility()
@@ -44,9 +49,9 @@ public partial class ChapterPageViewModel : PageViewModel
     public void PreviousChapter()
     {
         int index = _chapters.FindIndex(c => c.Info.Id == Chapter.Info.Id);
-        if(index == 0){return;}
+        if (index == 0) return;
         Chapter.Pages.Clear();
-        Chapter =  _chapters[index - 1];
+        Chapter = _chapters[index - 1];
         LoadPages(Chapter.Info.Pages, Chapter.Info.Id);
         ScrollOffset = new Vector(0, 0);
     }
@@ -54,16 +59,16 @@ public partial class ChapterPageViewModel : PageViewModel
     public void NextChapter()
     {
         int index = _chapters.FindIndex(c => c.Info.Id == Chapter.Info.Id);
-        if(index+1 == _chapters.Count){return;}
+        if (index + 1 == _chapters.Count) return;
         Chapter.Pages.Clear();
-        Chapter =  _chapters[index + 1];
+        Chapter = _chapters[index + 1];
         LoadPages(Chapter.Info.Pages, Chapter.Info.Id);
         ScrollOffset = new Vector(0, 0);
     }
-    
+
     private void HandleOffsetChanged(object? sender, PropertyChangedEventArgs e)
     {
-        if(e.PropertyName != nameof(ScrollOffset)){return;}
+        if (e.PropertyName != nameof(ScrollOffset)) return;
 
         double height = 0;
         for (int i = 0; i < Chapter.Pages.Count; i++)
@@ -116,7 +121,7 @@ public partial class ChapterPageViewModel : PageViewModel
 
     public override void OnPageClosed()
     {
-        if(_currentPage == 0){return;}
+        if (_currentPage == 0) return;
         ReadCreateDto readCreateDto = new()
         {
             ChapterId = Chapter.Info.Id,
@@ -125,7 +130,7 @@ public partial class ChapterPageViewModel : PageViewModel
         Task.Run(async () =>
         {
             Optional<bool> response = await ManaxApiReadClient.MarkAsRead(readCreateDto);
-            if (response.Failed) { InfoEmitted?.Invoke(this, response.Error); }
+            if (response.Failed) InfoEmitted?.Invoke(this, response.Error);
         });
     }
 }

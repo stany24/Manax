@@ -21,8 +21,26 @@ namespace ManaxClient.Controls.Popups.Serie;
 public class SerieUpdatePopup : ConfirmCancelPopup, INotifyPropertyChanged
 {
     private readonly SerieDto _serie;
-    private SerieUpdateDto _updateDto;
     private LibraryDto? _selectedLibrary;
+    private SerieUpdateDto _updateDto;
+
+    public SerieUpdatePopup(SerieDto serie) : base("Mettre à jour")
+    {
+        _serie = serie;
+
+        _updateDto = new SerieUpdateDto
+        {
+            Title = serie.Title,
+            Description = serie.Description,
+            Status = serie.Status,
+            LibraryId = serie.LibraryId
+        };
+
+        foreach (Status status in Enum.GetValues<Status>()) StatusOptions.Add(status);
+
+        DataContext = this;
+        _ = LoadLibrariesAsync();
+    }
 
     public ObservableCollection<LibraryDto> Libraries { get; } = [];
     public ObservableCollection<Status> StatusOptions { get; } = [];
@@ -50,26 +68,7 @@ public class SerieUpdatePopup : ConfirmCancelPopup, INotifyPropertyChanged
         }
     }
 
-    public SerieUpdatePopup(SerieDto serie) : base("Mettre à jour")
-    {
-        _serie = serie;
-        
-        _updateDto = new SerieUpdateDto
-        {
-            Title = serie.Title,
-            Description = serie.Description,
-            Status = serie.Status,
-            LibraryId = serie.LibraryId
-        };
-
-        foreach (Status status in Enum.GetValues<Status>())
-        {
-            StatusOptions.Add(status);
-        }
-
-        DataContext = this;
-        _ = LoadLibrariesAsync();
-    }
+    public new event PropertyChangedEventHandler? PropertyChanged;
 
     private async Task LoadLibrariesAsync()
     {
@@ -77,20 +76,18 @@ public class SerieUpdatePopup : ConfirmCancelPopup, INotifyPropertyChanged
         if (libraryIdsResult.Failed) return;
 
         Libraries.Clear();
-        
+
         LibraryDto noLibrary = new() { Id = -1, Name = "Aucune bibliothèque" };
         Libraries.Add(noLibrary);
-        
+
         foreach (long id in libraryIdsResult.GetValue())
         {
             ManaxLibrary.Optional<LibraryDto> libraryResult = await ManaxApiLibraryClient.GetLibraryAsync(id);
-            if (!libraryResult.Failed)
-            {
-                Libraries.Add(libraryResult.GetValue());
-            }
+            if (!libraryResult.Failed) Libraries.Add(libraryResult.GetValue());
         }
 
-        SelectedLibrary = Libraries.FirstOrDefault(l => l.Id == (_serie.LibraryId == 0 ? -1 : _serie.LibraryId)) ?? noLibrary;
+        SelectedLibrary = Libraries.FirstOrDefault(l => l.Id == (_serie.LibraryId == 0 ? -1 : _serie.LibraryId)) ??
+                          noLibrary;
     }
 
     protected override Grid GetFormGrid()
@@ -108,20 +105,20 @@ public class SerieUpdatePopup : ConfirmCancelPopup, INotifyPropertyChanged
             Spacing = 12,
             Margin = new Thickness(0, 0, 0, 8)
         };
-        
+
         TextBlock icon = new()
         {
             Text = "📚",
             FontSize = 24,
             VerticalAlignment = VerticalAlignment.Center
         };
-        
+
         StackPanel titleStack = new()
         {
             Orientation = Orientation.Vertical,
             Spacing = 4
         };
-        
+
         TextBlock title = new()
         {
             Text = "Modifier la série",
@@ -129,7 +126,7 @@ public class SerieUpdatePopup : ConfirmCancelPopup, INotifyPropertyChanged
             FontWeight = FontWeight.Bold,
             Foreground = new SolidColorBrush(Color.Parse("#212529"))
         };
-        
+
         TextBlock subtitle = new()
         {
             Text = "Modifiez les informations de cette série",
@@ -141,7 +138,7 @@ public class SerieUpdatePopup : ConfirmCancelPopup, INotifyPropertyChanged
         titleStack.Children.Add(subtitle);
         headerPanel.Children.Add(icon);
         headerPanel.Children.Add(titleStack);
-        
+
         Grid.SetRow(headerPanel, 0);
         grid.Children.Add(headerPanel);
 
@@ -166,7 +163,8 @@ public class SerieUpdatePopup : ConfirmCancelPopup, INotifyPropertyChanged
             BorderBrush = new SolidColorBrush(Color.Parse("#DEE2E6")),
             FontSize = 14
         };
-        titleBox.Bind(TextBox.TextProperty, new Binding($"{nameof(UpdateDto)}.{nameof(SerieUpdateDto.Title)}") { Mode = BindingMode.TwoWay });
+        titleBox.Bind(TextBox.TextProperty,
+            new Binding($"{nameof(UpdateDto)}.{nameof(SerieUpdateDto.Title)}") { Mode = BindingMode.TwoWay });
 
         titlePanel.Children.Add(titleLabel);
         titlePanel.Children.Add(titleBox);
@@ -197,7 +195,8 @@ public class SerieUpdatePopup : ConfirmCancelPopup, INotifyPropertyChanged
             TextWrapping = TextWrapping.Wrap,
             MinHeight = 80
         };
-        descriptionBox.Bind(TextBox.TextProperty, new Binding($"{nameof(UpdateDto)}.{nameof(SerieUpdateDto.Description)}") { Mode = BindingMode.TwoWay });
+        descriptionBox.Bind(TextBox.TextProperty,
+            new Binding($"{nameof(UpdateDto)}.{nameof(SerieUpdateDto.Description)}") { Mode = BindingMode.TwoWay });
 
         descriptionPanel.Children.Add(descriptionLabel);
         descriptionPanel.Children.Add(descriptionBox);
@@ -230,7 +229,8 @@ public class SerieUpdatePopup : ConfirmCancelPopup, INotifyPropertyChanged
             HorizontalAlignment = HorizontalAlignment.Stretch
         };
         libraryComboBox.Bind(ItemsControl.ItemsSourceProperty, new Binding(nameof(Libraries)));
-        libraryComboBox.Bind(SelectingItemsControl.SelectedItemProperty, new Binding(nameof(SelectedLibrary)) { Mode = BindingMode.TwoWay });
+        libraryComboBox.Bind(SelectingItemsControl.SelectedItemProperty,
+            new Binding(nameof(SelectedLibrary)) { Mode = BindingMode.TwoWay });
         libraryComboBox.DisplayMemberBinding = new Binding(nameof(LibraryDto.Name));
         Grid.SetColumn(libraryComboBox, 0);
         Grid.SetRow(libraryComboBox, 1);
@@ -254,7 +254,8 @@ public class SerieUpdatePopup : ConfirmCancelPopup, INotifyPropertyChanged
             HorizontalAlignment = HorizontalAlignment.Stretch
         };
         statusComboBox.Bind(ItemsControl.ItemsSourceProperty, new Binding(nameof(StatusOptions)));
-        statusComboBox.Bind(SelectingItemsControl.SelectedItemProperty, new Binding($"{nameof(UpdateDto)}.{nameof(SerieUpdateDto.Status)}") { Mode = BindingMode.TwoWay });
+        statusComboBox.Bind(SelectingItemsControl.SelectedItemProperty,
+            new Binding($"{nameof(UpdateDto)}.{nameof(SerieUpdateDto.Status)}") { Mode = BindingMode.TwoWay });
         Grid.SetColumn(statusComboBox, 2);
         Grid.SetRow(statusComboBox, 1);
 
@@ -289,7 +290,8 @@ public class SerieUpdatePopup : ConfirmCancelPopup, INotifyPropertyChanged
 
         TextBlock helpText = new()
         {
-            Text = "Vous pouvez modifier le titre, la description, la bibliothèque et le statut de cette série. Les changements seront appliqués immédiatement.",
+            Text =
+                "Vous pouvez modifier le titre, la description, la bibliothèque et le statut de cette série. Les changements seront appliqués immédiatement.",
             TextWrapping = TextWrapping.Wrap,
             FontSize = 12,
             Foreground = new SolidColorBrush(Color.Parse("#495057"))
@@ -316,10 +318,10 @@ public class SerieUpdatePopup : ConfirmCancelPopup, INotifyPropertyChanged
         {
             if (s is Control c) SetBorderBrush(c, new SolidColorBrush(Color.Parse("#007ACC")));
         };
-        
+
         control.PointerExited += (s, _) =>
         {
-            if (s is Control { IsFocused: false } c) 
+            if (s is Control { IsFocused: false } c)
                 SetBorderBrush(c, new SolidColorBrush(Color.Parse("#DEE2E6")));
         };
 
@@ -336,11 +338,18 @@ public class SerieUpdatePopup : ConfirmCancelPopup, INotifyPropertyChanged
 
     private static void SetBorderBrush(Control control, IBrush brush)
     {
-        if (control is TextBox tb) tb.BorderBrush = brush;
-        else if (control is ComboBox cb) cb.BorderBrush = brush;
+        switch (control)
+        {
+            case TextBox tb:
+                tb.BorderBrush = brush;
+                break;
+            case ComboBox cb:
+                cb.BorderBrush = brush;
+                break;
+        }
     }
 
-    protected override void OkButton_Click(object? sender, RoutedEventArgs e)
+    protected override void OkButtonClicked(object? sender, RoutedEventArgs e)
     {
         Canceled = false;
         if (string.IsNullOrEmpty(UpdateDto.Title.Trim()))
@@ -348,8 +357,8 @@ public class SerieUpdatePopup : ConfirmCancelPopup, INotifyPropertyChanged
 
         CloseRequested?.Invoke(this, EventArgs.Empty);
     }
-    
-    protected override void CancelButton_Click(object? sender, RoutedEventArgs e)
+
+    protected override void CancelButtonClicked(object? sender, RoutedEventArgs e)
     {
         Canceled = true;
         CloseRequested?.Invoke(this, EventArgs.Empty);
@@ -359,8 +368,6 @@ public class SerieUpdatePopup : ConfirmCancelPopup, INotifyPropertyChanged
     {
         return UpdateDto;
     }
-
-    public new event PropertyChangedEventHandler? PropertyChanged;
 
     protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
     {

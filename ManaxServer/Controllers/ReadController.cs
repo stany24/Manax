@@ -14,7 +14,7 @@ namespace ManaxServer.Controllers;
 
 [Route("api/read")]
 [ApiController]
-public class ReadController(ManaxContext context, IMapper mapper,INotificationService notification) : ControllerBase
+public class ReadController(ManaxContext context, IMapper mapper, INotificationService notification) : ControllerBase
 {
     [HttpPut("read")]
     [Authorize(Roles = "User,Admin,Owner")]
@@ -52,8 +52,8 @@ public class ReadController(ManaxContext context, IMapper mapper,INotificationSe
             await context.SaveChangesAsync();
             notification.NotifyReadCreated(mapper.Map<ReadDto>(read));
         }
-        
-        
+
+
         return Ok();
     }
 

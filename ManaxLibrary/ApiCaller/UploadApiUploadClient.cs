@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Net.Http.Headers;
 using ManaxLibrary.DTO.Serie;
 
@@ -46,7 +47,7 @@ public static class UploadApiUploadClient
         using MultipartFormDataContent content = new();
         file.Headers.ContentType = MediaTypeHeaderValue.Parse("application/zip");
         content.Add(file, "file", fileName);
-        content.Add(new StringContent(serieId.ToString()), "serieId");
+        content.Add(new StringContent(serieId.ToString(CultureInfo.InvariantCulture)), "serieId");
         HttpResponseMessage response = await ManaxApiClient.Client.PostAsync("api/upload/chapter", content);
         return new Optional<bool>(response.IsSuccessStatusCode);
     }
@@ -57,7 +58,7 @@ public static class UploadApiUploadClient
         using MultipartFormDataContent content = new();
         file.Headers.ContentType = MediaTypeHeaderValue.Parse("application/zip");
         content.Add(file, "file", fileName);
-        content.Add(new StringContent(serieId.ToString()), "serieId");
+        content.Add(new StringContent(serieId.ToString(CultureInfo.InvariantCulture)), "serieId");
         HttpResponseMessage response = await ManaxApiClient.Client.PostAsync("api/upload/chapter/replace", content);
         return new Optional<bool>(response.IsSuccessStatusCode);
     }
@@ -68,7 +69,7 @@ public static class UploadApiUploadClient
         ByteArrayContent img = new(await File.ReadAllBytesAsync(file));
         img.Headers.ContentType = MediaTypeHeaderValue.Parse("application/zip");
         content.Add(img, "file", fileName);
-        content.Add(new StringContent(serieId.ToString()), "serieId");
+        content.Add(new StringContent(serieId.ToString(CultureInfo.InvariantCulture)), "serieId");
         HttpResponseMessage response = await ManaxApiClient.Client.PostAsync("api/upload/poster", content);
         return new Optional<bool>(response.IsSuccessStatusCode);
     }
@@ -79,7 +80,7 @@ public static class UploadApiUploadClient
         ByteArrayContent img = new(await File.ReadAllBytesAsync(file));
         img.Headers.ContentType = MediaTypeHeaderValue.Parse("application/zip");
         content.Add(img, "file", fileName);
-        content.Add(new StringContent(serieId.ToString()), "serieId");
+        content.Add(new StringContent(serieId.ToString(CultureInfo.InvariantCulture)), "serieId");
         HttpResponseMessage response = await ManaxApiClient.Client.PostAsync("api/upload/poster/replace", content);
         return new Optional<bool>(response.IsSuccessStatusCode);
     }

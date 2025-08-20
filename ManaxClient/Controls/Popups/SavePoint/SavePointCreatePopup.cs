@@ -28,20 +28,20 @@ public class SavePointCreatePopup() : ConfirmCancelPopup("Créer")
             Spacing = 12,
             Margin = new Thickness(0, 0, 0, 8)
         };
-        
+
         TextBlock icon = new()
         {
             Text = "💾",
             FontSize = 24,
             VerticalAlignment = VerticalAlignment.Center
         };
-        
+
         StackPanel titleStack = new()
         {
             Orientation = Orientation.Vertical,
             Spacing = 4
         };
-        
+
         TextBlock title = new()
         {
             Text = "Nouveau point de sauvegarde",
@@ -49,7 +49,7 @@ public class SavePointCreatePopup() : ConfirmCancelPopup("Créer")
             FontWeight = FontWeight.Bold,
             Foreground = new SolidColorBrush(Color.Parse("#212529"))
         };
-        
+
         TextBlock subtitle = new()
         {
             Text = "Définissez un répertoire de sauvegarde pour vos données",
@@ -61,7 +61,7 @@ public class SavePointCreatePopup() : ConfirmCancelPopup("Créer")
         titleStack.Children.Add(subtitle);
         headerPanel.Children.Add(icon);
         headerPanel.Children.Add(titleStack);
-        
+
         Grid.SetRow(headerPanel, 0);
         grid.Children.Add(headerPanel);
 
@@ -146,7 +146,8 @@ public class SavePointCreatePopup() : ConfirmCancelPopup("Créer")
 
         TextBlock helpText = new()
         {
-            Text = "Sélectionnez un répertoire accessible où vos données seront sauvegardées automatiquement. Assurez-vous d'avoir les permissions d'écriture.",
+            Text =
+                "Sélectionnez un répertoire accessible où vos données seront sauvegardées automatiquement. Assurez-vous d'avoir les permissions d'écriture.",
             TextWrapping = TextWrapping.Wrap,
             FontSize = 12,
             Foreground = new SolidColorBrush(Color.Parse("#495057"))
@@ -160,7 +161,7 @@ public class SavePointCreatePopup() : ConfirmCancelPopup("Créer")
         grid.Children.Add(helpBorder);
 
         ApplyInputStyles(_pathBox);
-        
+
         browseButton.PointerEntered += (s, _) =>
         {
             if (s is Button btn) btn.Background = new SolidColorBrush(Color.Parse("#DEE2E6"));
@@ -179,10 +180,10 @@ public class SavePointCreatePopup() : ConfirmCancelPopup("Créer")
         {
             if (s is Control c) SetBorderBrush(c, new SolidColorBrush(Color.Parse("#007ACC")));
         };
-        
+
         control.PointerExited += (s, _) =>
         {
-            if (s is Control { IsFocused: false } c) 
+            if (s is Control { IsFocused: false } c)
                 SetBorderBrush(c, new SolidColorBrush(Color.Parse("#DEE2E6")));
         };
 
@@ -202,7 +203,7 @@ public class SavePointCreatePopup() : ConfirmCancelPopup("Créer")
         if (control is TextBox tb) tb.BorderBrush = brush;
     }
 
-    protected override void OkButton_Click(object? sender, RoutedEventArgs e)
+    protected override void OkButtonClicked(object? sender, RoutedEventArgs e)
     {
         string? path = _pathBox.Text?.Trim();
         if (string.IsNullOrEmpty(path)) return;

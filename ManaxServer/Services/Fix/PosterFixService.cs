@@ -1,3 +1,4 @@
+using System.Globalization;
 using ImageMagick;
 using ManaxLibrary.DTO.Issue.Automatic;
 using ManaxServer.Models;
@@ -19,7 +20,8 @@ public partial class FixService
         if (serie == null) return;
 
         string directory = serie.SavePath;
-        string fileName = SettingsManager.Data.PosterName + "." + SettingsManager.Data.ImageFormat.ToString().ToLower();
+        string fileName = SettingsManager.Data.PosterName + "." +
+                          SettingsManager.Data.ImageFormat.ToString().ToLower(CultureInfo.InvariantCulture);
         string posterPath = Path.Combine(directory, fileName);
         issueService.ManageSerieIssue(serie.Id, AutomaticIssueSerieType.PosterMissing, !File.Exists(posterPath));
         if (!File.Exists(posterPath)) return;

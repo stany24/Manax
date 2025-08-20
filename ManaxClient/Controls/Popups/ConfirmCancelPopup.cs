@@ -10,7 +10,6 @@ namespace ManaxClient.Controls.Popups;
 
 public abstract class ConfirmCancelPopup : Popup
 {
-    public bool Canceled { get; internal set; }
     private readonly Button _cancelButton;
     private readonly Button _okButton;
 
@@ -30,7 +29,7 @@ public abstract class ConfirmCancelPopup : Popup
             FontWeight = FontWeight.Medium,
             MinWidth = 100
         };
-        _okButton.Click += OkButton_Click;
+        _okButton.Click += OkButtonClicked;
 
         _cancelButton = new Button
         {
@@ -45,7 +44,7 @@ public abstract class ConfirmCancelPopup : Popup
             FontWeight = FontWeight.Medium,
             MinWidth = 100
         };
-        _cancelButton.Click += CancelButton_Click;
+        _cancelButton.Click += CancelButtonClicked;
 
         _okButton.PointerEntered += (s, _) =>
         {
@@ -88,6 +87,8 @@ public abstract class ConfirmCancelPopup : Popup
         Form.MinWidth = 400;
     }
 
+    public bool Canceled { get; internal set; }
+
     protected abstract Grid GetFormGrid();
 
     private Grid CreateButtonGrid(int row, int columnSpan = 3)
@@ -111,9 +112,9 @@ public abstract class ConfirmCancelPopup : Popup
         return buttonGrid;
     }
 
-    protected abstract void OkButton_Click(object? sender, RoutedEventArgs e);
+    protected abstract void OkButtonClicked(object? sender, RoutedEventArgs e);
 
-    protected virtual void CancelButton_Click(object? sender, RoutedEventArgs e)
+    protected virtual void CancelButtonClicked(object? sender, RoutedEventArgs e)
     {
         Canceled = true;
         CloseRequested?.Invoke(this, EventArgs.Empty);

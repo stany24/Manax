@@ -1,9 +1,11 @@
+using System;
 using System.IO;
 using Avalonia;
 using Avalonia.Animation;
 using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Data.Converters;
+using Avalonia.Input;
 using Avalonia.Layout;
 using Avalonia.Media;
 using ManaxClient.Models;
@@ -16,11 +18,12 @@ public class ChapterPreview : Button
     public static readonly AttachedProperty<ClientChapter> ChapterProperty =
         AvaloniaProperty.RegisterAttached<ChapterPreview, Grid, ClientChapter>(
             "Chapter", new ClientChapter(), false, BindingMode.OneTime);
-    
-    private readonly IBrush _readTextColor = new SolidColorBrush(Color.Parse("#6C757D"));
-    private readonly IBrush _unreadTextColor = new SolidColorBrush(Color.Parse("#212529"));
+
     private readonly IBrush _backgroundColor = Brushes.White;
     private readonly IBrush _hoverColor = new SolidColorBrush(Color.Parse("#F8F9FA"));
+
+    private readonly IBrush _readTextColor = new SolidColorBrush(Color.Parse("#6C757D"));
+    private readonly IBrush _unreadTextColor = new SolidColorBrush(Color.Parse("#212529"));
 
     public ChapterPreview()
     {
@@ -38,7 +41,7 @@ public class ChapterPreview : Button
             CornerRadius = new CornerRadius(8),
             Padding = new Thickness(16, 12)
         };
-        
+
         Grid mainGrid = new()
         {
             ColumnDefinitions = new ColumnDefinitions("Auto,*,Auto,Auto"),
@@ -53,7 +56,7 @@ public class ChapterPreview : Button
             VerticalAlignment = VerticalAlignment.Center
         };
         statusIndicator.SetValue(Grid.ColumnProperty, 0);
-        
+
         statusIndicator.Bind(Border.BackgroundProperty, new Binding("Chapter.Read")
         {
             Source = this,
@@ -61,7 +64,7 @@ public class ChapterPreview : Button
             Converter = new FuncValueConverter<ReadDto?, IBrush>(read =>
             {
                 if (read == null) return new SolidColorBrush(Color.Parse("#6C757D"));
-                return read.Page + 1 == Chapter.Info.Pages 
+                return read.Page + 1 == Chapter.Info.Pages
                     ? new SolidColorBrush(Color.Parse("#28A745"))
                     : new SolidColorBrush(Color.Parse("#007ACC"));
             })
@@ -81,13 +84,13 @@ public class ChapterPreview : Button
             FontSize = 14,
             TextTrimming = TextTrimming.CharacterEllipsis
         };
-        
+
         TextBlock chapterDetails = new()
         {
             FontSize = 12,
             Foreground = new SolidColorBrush(Color.Parse("#6C757D"))
         };
-        
+
         chapterName.Bind(TextBlock.TextProperty, new Binding("Chapter.Info.FileName")
         {
             Source = this,
@@ -95,7 +98,7 @@ public class ChapterPreview : Button
             Converter = new FuncValueConverter<string, string>(fileName =>
                 Path.GetFileNameWithoutExtension(fileName) ?? fileName ?? string.Empty)
         });
-        
+
         chapterName.Bind(ForegroundProperty, new Binding("Chapter.Read")
         {
             Source = this,
@@ -106,7 +109,7 @@ public class ChapterPreview : Button
                 return read.Page + 1 == Chapter.Info.Pages ? _readTextColor : _unreadTextColor;
             })
         });
-        
+
         chapterDetails.Bind(TextBlock.TextProperty, new Binding("Chapter.Info.Pages")
         {
             Source = this,
@@ -122,14 +125,14 @@ public class ChapterPreview : Button
             VerticalAlignment = VerticalAlignment.Center
         };
         progressBadge.SetValue(Grid.ColumnProperty, 2);
-        
+
         TextBlock progressText = new()
         {
             FontSize = 11,
             FontWeight = FontWeight.Medium,
             Foreground = new SolidColorBrush(Color.Parse("#495057"))
         };
-        
+
         progressText.Bind(TextBlock.TextProperty, new Binding("Chapter.Read")
         {
             Source = this,
@@ -142,9 +145,9 @@ public class ChapterPreview : Button
                 return currentPage == totalPages ? "Terminé" : $"{currentPage}/{totalPages}";
             })
         });
-        
+
         progressBadge.Child = progressText;
-        
+
         progressBadge.Bind(Border.BackgroundProperty, new Binding("Chapter.Read")
         {
             Source = this,
@@ -152,7 +155,7 @@ public class ChapterPreview : Button
             Converter = new FuncValueConverter<ReadDto?, IBrush>(read =>
             {
                 if (read == null) return new SolidColorBrush(Color.Parse("#E9ECEF"));
-                return read.Page + 1 == Chapter.Info.Pages 
+                return read.Page + 1 == Chapter.Info.Pages
                     ? new SolidColorBrush(Color.Parse("#D4EDDA"))
                     : new SolidColorBrush(Color.Parse("#CCE5FF"));
             })
@@ -169,12 +172,12 @@ public class ChapterPreview : Button
 
         infoStack.Children.Add(chapterName);
         infoStack.Children.Add(chapterDetails);
-        
+
         mainGrid.Children.Add(statusIndicator);
         mainGrid.Children.Add(infoStack);
         mainGrid.Children.Add(progressBadge);
         mainGrid.Children.Add(chevron);
-        
+
         border.Child = mainGrid;
         Content = border;
 
@@ -183,33 +186,27 @@ public class ChapterPreview : Button
             new BrushTransition
             {
                 Property = BackgroundProperty,
-                Duration = System.TimeSpan.FromMilliseconds(150)
+                Duration = TimeSpan.FromMilliseconds(150)
             }
         ];
-    }
-
-    protected override void OnPointerEntered(Avalonia.Input.PointerEventArgs e)
-    {
-        base.OnPointerEntered(e);
-        if (Content is Border border)
-        {
-            border.Background = _hoverColor;
-        }
-    }
-
-    protected override void OnPointerExited(Avalonia.Input.PointerEventArgs e)
-    {
-        base.OnPointerExited(e);
-        if (Content is Border border)
-        {
-            border.Background = _backgroundColor;
-        }
     }
 
     public ClientChapter Chapter
     {
         get => GetChapter(this);
         set => SetChapter(this, value);
+    }
+
+    protected override void OnPointerEntered(PointerEventArgs e)
+    {
+        base.OnPointerEntered(e);
+        if (Content is Border border) border.Background = _hoverColor;
+    }
+
+    protected override void OnPointerExited(PointerEventArgs e)
+    {
+        base.OnPointerExited(e);
+        if (Content is Border border) border.Background = _backgroundColor;
     }
 
     public static void SetChapter(AvaloniaObject element, ClientChapter serieValue)

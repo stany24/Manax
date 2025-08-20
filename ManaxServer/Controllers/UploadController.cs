@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.IO.Compression;
 using System.Text.RegularExpressions;
 using ImageMagick;
@@ -168,7 +169,8 @@ public partial class UploadController(
             return BadRequest(Localizer.GetString("SerieNotFound"));
 
         ImageFormat format = SettingsManager.Data.PosterFormat;
-        string path = Path.Combine(serie.SavePath, SettingsManager.Data.PosterName + "." + format.ToString().ToLower());
+        string path = Path.Combine(serie.SavePath,
+            SettingsManager.Data.PosterName + "." + format.ToString().ToLower(CultureInfo.InvariantCulture));
         if (System.IO.File.Exists(path) && !replace) return BadRequest(Localizer.GetString("PosterAlreadyExists"));
         try
         {

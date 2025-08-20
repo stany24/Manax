@@ -9,7 +9,6 @@ using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using ManaxClient.Controls.Popups;
 using ManaxClient.Controls.Popups.Library;
-using ManaxClient.Controls.Popups.SavePoint;
 using ManaxClient.Models;
 using ManaxClient.Models.History;
 using ManaxClient.ViewModels.Home;
@@ -23,7 +22,6 @@ using ManaxClient.ViewModels.User;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTO.Library;
-using ManaxLibrary.DTO.SavePoint;
 using ManaxLibrary.Logging;
 using ManaxLibrary.Notifications;
 
@@ -36,9 +34,9 @@ public partial class MainWindowViewModel : ObservableObject
     [ObservableProperty] private bool _isAdmin;
     [ObservableProperty] private bool _isOwner;
     [ObservableProperty] private ObservableCollection<LibraryDto> _libraries = [];
+    [ObservableProperty] private Thickness _pageMargin = new(0, 0, 0, 0);
     [ObservableProperty] private Popup? _popup;
     [ObservableProperty] private ObservableCollection<TaskItem> _runningTasks = [];
-    [ObservableProperty] private Thickness _pageMargin = new(0, 0, 0, 0);
 
     public MainWindowViewModel()
     {

@@ -9,6 +9,6 @@ namespace ManaxClient.Models;
 public partial class ClientChapter : ObservableObject
 {
     [ObservableProperty] private ChapterDto _info = null!;
-    [ObservableProperty] private ReadDto? _read;
     [ObservableProperty] private ObservableCollection<Bitmap> _pages = [];
+    [ObservableProperty] private ReadDto? _read;
 }

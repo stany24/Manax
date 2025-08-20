@@ -61,12 +61,12 @@ public class IssueService(IServiceScopeFactory scopeFactory) : Service, IIssueSe
         context.SaveChanges();
     }
 
-    public void ManageChapterIssue(long serieId, AutomaticIssueChapterType problem, bool create)
+    public void ManageChapterIssue(long chapterId, AutomaticIssueChapterType problem, bool create)
     {
         if (create)
-            CreateChapterIssue(serieId, problem);
+            CreateChapterIssue(chapterId, problem);
         else
-            RemoveChapterIssue(serieId, problem);
+            RemoveChapterIssue(chapterId, problem);
     }
 
     public void RemoveChapterIssue(long serieId, AutomaticIssueChapterType problem)

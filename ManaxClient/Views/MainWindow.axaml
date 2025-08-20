@@ -17,32 +17,32 @@
         <Grid
             ColumnDefinitions="Auto,*">
             <ScrollViewer Grid.Column="0"
-                HorizontalScrollBarVisibility="Disabled"
-                VerticalScrollBarVisibility="Hidden">
+                          HorizontalScrollBarVisibility="Disabled"
+                          VerticalScrollBarVisibility="Hidden">
                 <StackPanel Classes="sidebar"
                             IsVisible="{Binding CurrentPageViewModel.ControlBarVisible}"
                             Orientation="Vertical">
-                    
-                    <TextBlock Classes="title" 
-                              Text="Manax"
-                              HorizontalAlignment="Center"
-                              Margin="0,0,0,24"/>
-                    
+
+                    <TextBlock Classes="title"
+                               Text="Manax"
+                               HorizontalAlignment="Center"
+                               Margin="0,0,0,24" />
+
                     <Button Classes="sidebar primary"
                             Command="{Binding ChangePageHome}">
                         <StackPanel Orientation="Horizontal" Spacing="12">
-                            <TextBlock Text="🏠" FontSize="16"/>
-                            <TextBlock Text="Accueil"/>
+                            <TextBlock Text="🏠" FontSize="16" />
+                            <TextBlock Text="Accueil" />
                         </StackPanel>
                     </Button>
-                    
-                    <Separator Margin="8,16" Background="#E9ECEF"/>
-                    
+
+                    <Separator Margin="8,16" Background="#E9ECEF" />
+
                     <Grid ColumnDefinitions="*,Auto" Margin="16,8,16,8">
-                        <TextBlock Grid.Column="0" 
-                                  Classes="subtitle"
-                                  Text="Bibliothèques"
-                                  Margin="0"/>
+                        <TextBlock Grid.Column="0"
+                                   Classes="subtitle"
+                                   Text="Bibliothèques"
+                                   Margin="0" />
                         <Button Grid.Column="1"
                                 Classes="primary"
                                 IsVisible="{Binding IsAdmin}"
@@ -54,14 +54,14 @@
                                 VerticalContentAlignment="Center"
                                 Command="{Binding CreateLibrary}"
                                 ToolTip.Tip="Créer une nouvelle bibliothèque">
-                            <TextBlock Text="+" 
-                                       FontSize="16" 
+                            <TextBlock Text="+"
+                                       FontSize="16"
                                        FontWeight="Bold"
                                        HorizontalAlignment="Center"
-                                       VerticalAlignment="Center"/>
+                                       VerticalAlignment="Center" />
                         </Button>
                     </Grid>
-                    
+
                     <ScrollViewer MaxHeight="300" VerticalScrollBarVisibility="Auto">
                         <ItemsControl ItemsSource="{Binding Libraries}">
                             <ItemsControl.ItemTemplate>
@@ -70,51 +70,51 @@
                                             Command="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).ShowLibrary}"
                                             CommandParameter="{Binding Id}">
                                         <StackPanel Orientation="Horizontal" Spacing="12">
-                                            <TextBlock Text="📚" FontSize="14"/>
-                                            <TextBlock Text="{Binding Name}" TextTrimming="CharacterEllipsis"/>
+                                            <TextBlock Text="📚" FontSize="14" />
+                                            <TextBlock Text="{Binding Name}" TextTrimming="CharacterEllipsis" />
                                         </StackPanel>
                                     </Button>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                             <ItemsControl.ItemsPanel>
                                 <ItemsPanelTemplate>
-                                    <StackPanel Spacing="2"/>
+                                    <StackPanel Spacing="2" />
                                 </ItemsPanelTemplate>
                             </ItemsControl.ItemsPanel>
                         </ItemsControl>
                     </ScrollViewer>
-                    
-                    <Separator Margin="8,16" Background="#E9ECEF" IsVisible="{Binding IsAdmin}"/>
-                    
-                    <TextBlock Classes="subtitle" 
-                              Text="Administration"
-                              Margin="16,8"
-                              IsVisible="{Binding IsAdmin}"/>
-                    
+
+                    <Separator Margin="8,16" Background="#E9ECEF" IsVisible="{Binding IsAdmin}" />
+
+                    <TextBlock Classes="subtitle"
+                               Text="Administration"
+                               Margin="16,8"
+                               IsVisible="{Binding IsAdmin}" />
+
                     <Button Classes="sidebar"
                             IsVisible="{Binding IsAdmin}"
                             Command="{Binding ChangePageAutomaticIssues}">
                         <StackPanel Orientation="Horizontal" Spacing="12">
-                            <TextBlock Text="⚙️" FontSize="14"/>
-                            <TextBlock Text="Problèmes automatiques"/>
+                            <TextBlock Text="⚙️" FontSize="14" />
+                            <TextBlock Text="Problèmes automatiques" />
                         </StackPanel>
                     </Button>
-                    
+
                     <Button Classes="sidebar"
                             IsVisible="{Binding IsAdmin}"
                             Command="{Binding ChangePageUserIssues}">
                         <StackPanel Orientation="Horizontal" Spacing="12">
-                            <TextBlock Text="🐛" FontSize="14"/>
-                            <TextBlock Text="Problèmes utilisateurs"/>
+                            <TextBlock Text="🐛" FontSize="14" />
+                            <TextBlock Text="Problèmes utilisateurs" />
                         </StackPanel>
                     </Button>
-                    
+
                     <Button Classes="sidebar"
                             IsVisible="{Binding IsAdmin}"
                             Command="{Binding ChangePageUsers}">
                         <StackPanel Orientation="Horizontal" Spacing="12">
-                            <TextBlock Text="👥" FontSize="14"/>
-                            <TextBlock Text="Utilisateurs"/>
+                            <TextBlock Text="👥" FontSize="14" />
+                            <TextBlock Text="Utilisateurs" />
                         </StackPanel>
                     </Button>
 
@@ -122,48 +122,48 @@
                             IsVisible="{Binding IsAdmin}"
                             Command="{Binding ChangePageRanks}">
                         <StackPanel Orientation="Horizontal" Spacing="12">
-                            <TextBlock Text="🏆" FontSize="14"/>
-                            <TextBlock Text="Rangs"/>
+                            <TextBlock Text="🏆" FontSize="14" />
+                            <TextBlock Text="Rangs" />
                         </StackPanel>
                     </Button>
-                    
+
                     <Button Classes="sidebar"
                             IsVisible="{Binding IsOwner}"
                             Command="{Binding ChangePageSettings}">
                         <StackPanel Orientation="Horizontal" Spacing="12">
-                            <TextBlock Text="⚙️" FontSize="14"/>
-                            <TextBlock Text="Paramètres"/>
+                            <TextBlock Text="⚙️" FontSize="14" />
+                            <TextBlock Text="Paramètres" />
                         </StackPanel>
                     </Button>
-                    
-                    <Separator Margin="8,16" Background="#E9ECEF"/>
-                    
+
+                    <Separator Margin="8,16" Background="#E9ECEF" />
+
                     <Button Classes="sidebar"
                             Command="{Binding ChangePageUserStats}">
                         <StackPanel Orientation="Horizontal" Spacing="12">
-                            <TextBlock Text="📊" FontSize="14"/>
-                            <TextBlock Text="Mes statistiques"/>
+                            <TextBlock Text="📊" FontSize="14" />
+                            <TextBlock Text="Mes statistiques" />
                         </StackPanel>
                     </Button>
-                    
+
                     <Button Classes="sidebar"
                             IsVisible="{Binding IsAdmin}"
                             Command="{Binding ChangePageServerStats}">
                         <StackPanel Orientation="Horizontal" Spacing="12">
-                            <TextBlock Text="🖥️" FontSize="14"/>
-                            <TextBlock Text="Stats serveur"/>
+                            <TextBlock Text="🖥️" FontSize="14" />
+                            <TextBlock Text="Stats serveur" />
                         </StackPanel>
                     </Button>
-                    
-                    <Border Classes="card" 
-                           Margin="8,16,8,8"
-                           IsVisible="{Binding RunningTasks.Count}">
+
+                    <Border Classes="card"
+                            Margin="8,16,8,8"
+                            IsVisible="{Binding RunningTasks.Count}">
                         <StackPanel>
                             <TextBlock Classes="subtitle"
-                                      Text="Tâches en cours"
-                                      HorizontalAlignment="Center"
-                                      Margin="0,0,0,12"/>
-                            
+                                       Text="Tâches en cours"
+                                       HorizontalAlignment="Center"
+                                       Margin="0,0,0,12" />
+
                             <ScrollViewer MaxHeight="200" VerticalScrollBarVisibility="Auto">
                                 <ItemsControl ItemsSource="{Binding RunningTasks}">
                                     <ItemsControl.ItemTemplate>
@@ -171,18 +171,18 @@
                                             <Border Classes="task-item">
                                                 <Grid ColumnDefinitions="*,Auto">
                                                     <TextBlock Grid.Column="0"
-                                                              Text="{Binding TaskName}"
-                                                              TextWrapping="Wrap"
-                                                              VerticalAlignment="Center"/>
+                                                               Text="{Binding TaskName}"
+                                                               TextWrapping="Wrap"
+                                                               VerticalAlignment="Center" />
                                                     <Border Grid.Column="1"
-                                                           Background="{StaticResource InfoBrush}"
-                                                           CornerRadius="12"
-                                                           Padding="8,4"
-                                                           Margin="8,0,0,0">
+                                                            Background="{StaticResource InfoBrush}"
+                                                            CornerRadius="12"
+                                                            Padding="8,4"
+                                                            Margin="8,0,0,0">
                                                         <TextBlock Text="{Binding Number}"
-                                                                  Foreground="White"
-                                                                  FontSize="12"
-                                                                  FontWeight="Bold"/>
+                                                                   Foreground="White"
+                                                                   FontSize="12"
+                                                                   FontWeight="Bold" />
                                                     </Border>
                                                 </Grid>
                                             </Border>
@@ -195,31 +195,31 @@
                 </StackPanel>
             </ScrollViewer>
 
-            <Border Grid.Column="1" 
-                   Background="White">
+            <Border Grid.Column="1"
+                    Background="White">
                 <ContentControl Content="{Binding CurrentPageViewModel}"
-                              Margin="{Binding PageMargin}"/>
+                                Margin="{Binding PageMargin}" />
             </Border>
         </Grid>
 
         <ContentControl HorizontalAlignment="Stretch"
-                       VerticalAlignment="Stretch"
-                       VerticalContentAlignment="Center"
-                       HorizontalContentAlignment="Center"
-                       Content="{Binding Popup}"/>
+                        VerticalAlignment="Stretch"
+                        VerticalContentAlignment="Center"
+                        HorizontalContentAlignment="Center"
+                        Content="{Binding Popup}" />
 
         <StackPanel Orientation="Vertical"
-                   Spacing="8"
-                   Margin="24"
-                   HorizontalAlignment="Right"
-                   VerticalAlignment="Bottom">
+                    Spacing="8"
+                    Margin="24"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Bottom">
             <ItemsControl ItemsSource="{Binding Infos}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Border Classes="notification">
                             <TextBlock Text="{Binding .}"
-                                      Foreground="{StaticResource PrimaryBrush}"
-                                      FontWeight="Medium"/>
+                                       Foreground="{StaticResource PrimaryBrush}"
+                                       FontWeight="Medium" />
                         </Border>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>

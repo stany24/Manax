@@ -1,9 +1,11 @@
 using System;
+using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Animation;
 using Avalonia.Controls;
 using Avalonia.Controls.Shapes;
 using Avalonia.Input;
+using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
 
@@ -11,8 +13,8 @@ namespace ManaxClient.Controls.Popups;
 
 public abstract class Popup : Panel
 {
-    protected readonly Rectangle BackShadow;
-    protected readonly Canvas Canvas;
+    private readonly Rectangle _backShadow;
+    private readonly Canvas _canvas;
 
     private protected readonly UserControl Form = new()
     {
@@ -32,14 +34,14 @@ public abstract class Popup : Panel
         HorizontalAlignment = HorizontalAlignment.Stretch;
         VerticalAlignment = VerticalAlignment.Stretch;
 
-        Canvas = new Canvas
+        _canvas = new Canvas
         {
             Background = Brushes.Transparent,
             HorizontalAlignment = HorizontalAlignment.Stretch,
             VerticalAlignment = VerticalAlignment.Stretch
         };
 
-        BackShadow = new Rectangle
+        _backShadow = new Rectangle
         {
             Fill = new SolidColorBrush(Color.Parse("#000000")),
             Opacity = 0.5,
@@ -47,12 +49,12 @@ public abstract class Popup : Panel
             VerticalAlignment = VerticalAlignment.Stretch
         };
 
-        BackShadow.PointerPressed += BackShadowPointerPressed;
-        BackShadow.Tapped += BackShadowTapped;
+        _backShadow.PointerPressed += BackShadowPointerPressed;
+        _backShadow.Tapped += BackShadowTapped;
 
-        Canvas.Children.Add(BackShadow);
-        LogicalChildren.Add(Canvas);
-        VisualChildren.Add(Canvas);
+        _canvas.Children.Add(_backShadow);
+        LogicalChildren.Add(_canvas);
+        VisualChildren.Add(_canvas);
 
         LogicalChildren.Add(Form);
         VisualChildren.Add(Form);
@@ -74,7 +76,7 @@ public abstract class Popup : Panel
             }
         ];
 
-        Canvas.Transitions =
+        _canvas.Transitions =
         [
             new DoubleTransition
             {
@@ -85,14 +87,14 @@ public abstract class Popup : Panel
 
         Form.RenderTransform = new ScaleTransform(0.9, 0.9);
         Form.Opacity = 0;
-        Canvas.Opacity = 0;
+        _canvas.Opacity = 0;
 
         Loaded += OnLoaded;
     }
 
-    private void OnLoaded(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    private void OnLoaded(object? sender, RoutedEventArgs e)
     {
-        Canvas.Opacity = 1;
+        _canvas.Opacity = 1;
         Form.Opacity = 1;
         Form.RenderTransform = new ScaleTransform(1.0, 1.0);
     }
@@ -111,10 +113,10 @@ public abstract class Popup : Panel
     private void UpdateBackgroundSize(double width, double height)
     {
         if (width <= 0 || height <= 0) return;
-        BackShadow.Width = width;
-        BackShadow.Height = height;
-        Canvas.Width = width;
-        Canvas.Height = height;
+        _backShadow.Width = width;
+        _backShadow.Height = height;
+        _canvas.Width = width;
+        _canvas.Height = height;
     }
 
     private void BackShadowPointerPressed(object? sender, PointerPressedEventArgs e)
@@ -133,9 +135,9 @@ public abstract class Popup : Panel
     {
         Form.Opacity = 0;
         Form.RenderTransform = new ScaleTransform(0.9, 0.9);
-        Canvas.Opacity = 0;
+        _canvas.Opacity = 0;
 
-        await System.Threading.Tasks.Task.Delay(200);
+        await Task.Delay(200);
         Closed?.Invoke(this, EventArgs.Empty);
     }
 }

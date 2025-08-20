@@ -90,12 +90,14 @@ public abstract partial class BaseSeriesViewModel : PageViewModel
             }
             catch (Exception e)
             {
-                Logger.LogError("Failed to load the new poster for serie with ID: " + serieId, e, Environment.StackTrace);
+                Logger.LogError("Failed to load the new poster for serie with ID: " + serieId, e,
+                    Environment.StackTrace);
             }
         }
         catch (Exception e)
         {
-            Logger.LogError("Failed to receive the new poster for serie with ID: " + serieId, e, Environment.StackTrace);
+            Logger.LogError("Failed to receive the new poster for serie with ID: " + serieId, e,
+                Environment.StackTrace);
         }
     }
 

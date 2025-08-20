@@ -28,20 +28,20 @@ public class LibraryCreatePopup() : ConfirmCancelPopup("Créer")
             Spacing = 12,
             Margin = new Thickness(0, 0, 0, 8)
         };
-        
+
         TextBlock icon = new()
         {
             Text = "📚",
             FontSize = 24,
             VerticalAlignment = VerticalAlignment.Center
         };
-        
+
         StackPanel titleStack = new()
         {
             Orientation = Orientation.Vertical,
             Spacing = 4
         };
-        
+
         TextBlock title = new()
         {
             Text = "Nouvelle bibliothèque",
@@ -49,7 +49,7 @@ public class LibraryCreatePopup() : ConfirmCancelPopup("Créer")
             FontWeight = FontWeight.Bold,
             Foreground = new SolidColorBrush(Color.Parse("#212529"))
         };
-        
+
         TextBlock subtitle = new()
         {
             Text = "Créez une nouvelle bibliothèque pour organiser vos séries",
@@ -61,7 +61,7 @@ public class LibraryCreatePopup() : ConfirmCancelPopup("Créer")
         titleStack.Children.Add(subtitle);
         headerPanel.Children.Add(icon);
         headerPanel.Children.Add(titleStack);
-        
+
         Grid.SetRow(headerPanel, 0);
         grid.Children.Add(headerPanel);
 
@@ -91,10 +91,10 @@ public class LibraryCreatePopup() : ConfirmCancelPopup("Créer")
         {
             if (s is TextBox tb) tb.BorderBrush = new SolidColorBrush(Color.Parse("#007ACC"));
         };
-        
+
         _nameBox.PointerExited += (s, _) =>
         {
-            if (s is TextBox { IsFocused: false } tb) 
+            if (s is TextBox { IsFocused: false } tb)
                 tb.BorderBrush = new SolidColorBrush(Color.Parse("#DEE2E6"));
         };
 
@@ -138,7 +138,8 @@ public class LibraryCreatePopup() : ConfirmCancelPopup("Créer")
 
         TextBlock helpText = new()
         {
-            Text = "Choisissez un nom descriptif pour votre bibliothèque. Vous pourrez l'organiser et la gérer facilement par la suite.",
+            Text =
+                "Choisissez un nom descriptif pour votre bibliothèque. Vous pourrez l'organiser et la gérer facilement par la suite.",
             TextWrapping = TextWrapping.Wrap,
             FontSize = 12,
             Foreground = new SolidColorBrush(Color.Parse("#495057"))
@@ -154,7 +155,7 @@ public class LibraryCreatePopup() : ConfirmCancelPopup("Créer")
         return grid;
     }
 
-    protected override void OkButton_Click(object? sender, RoutedEventArgs e)
+    protected override void OkButtonClicked(object? sender, RoutedEventArgs e)
     {
         string? name = _nameBox.Text?.Trim();
         if (string.IsNullOrEmpty(name)) return;

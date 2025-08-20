@@ -30,20 +30,20 @@ public class UserCreatePopup(bool owner) : ConfirmCancelPopup("Créer")
             Spacing = 12,
             Margin = new Thickness(0, 0, 0, 8)
         };
-        
+
         TextBlock icon = new()
         {
             Text = "👤",
             FontSize = 24,
             VerticalAlignment = VerticalAlignment.Center
         };
-        
+
         StackPanel titleStack = new()
         {
             Orientation = Orientation.Vertical,
             Spacing = 4
         };
-        
+
         TextBlock title = new()
         {
             Text = "Nouvel utilisateur",
@@ -51,7 +51,7 @@ public class UserCreatePopup(bool owner) : ConfirmCancelPopup("Créer")
             FontWeight = FontWeight.Bold,
             Foreground = new SolidColorBrush(Color.Parse("#212529"))
         };
-        
+
         TextBlock subtitle = new()
         {
             Text = "Créez un nouveau compte utilisateur pour accéder à Manax",
@@ -63,7 +63,7 @@ public class UserCreatePopup(bool owner) : ConfirmCancelPopup("Créer")
         titleStack.Children.Add(subtitle);
         headerPanel.Children.Add(icon);
         headerPanel.Children.Add(titleStack);
-        
+
         Grid.SetRow(headerPanel, 0);
         grid.Children.Add(headerPanel);
 
@@ -143,13 +143,13 @@ public class UserCreatePopup(bool owner) : ConfirmCancelPopup("Créer")
             BorderBrush = new SolidColorBrush(Color.Parse("#DEE2E6"))
         };
 
-        _roleComboBox.Items.Add(new ComboBoxItem 
-        { 
-            Content = new StackPanel 
-            { 
-                Orientation = Orientation.Horizontal, 
+        _roleComboBox.Items.Add(new ComboBoxItem
+        {
+            Content = new StackPanel
+            {
+                Orientation = Orientation.Horizontal,
                 Spacing = 8,
-                Children = 
+                Children =
                 {
                     new TextBlock { Text = "👤", FontSize = 14 },
                     new TextBlock { Text = "Utilisateur standard", FontWeight = FontWeight.Medium }
@@ -157,16 +157,15 @@ public class UserCreatePopup(bool owner) : ConfirmCancelPopup("Créer")
             },
             Tag = UserRole.User
         });
-        
+
         if (owner)
-        {
-            _roleComboBox.Items.Add(new ComboBoxItem 
-            { 
-                Content = new StackPanel 
-                { 
-                    Orientation = Orientation.Horizontal, 
+            _roleComboBox.Items.Add(new ComboBoxItem
+            {
+                Content = new StackPanel
+                {
+                    Orientation = Orientation.Horizontal,
                     Spacing = 8,
-                    Children = 
+                    Children =
                     {
                         new TextBlock { Text = "👑", FontSize = 14 },
                         new TextBlock { Text = "Administrateur", FontWeight = FontWeight.Medium }
@@ -174,7 +173,6 @@ public class UserCreatePopup(bool owner) : ConfirmCancelPopup("Créer")
                 },
                 Tag = UserRole.Admin
             });
-        }
 
         _roleComboBox.SelectedIndex = 0;
 
@@ -207,7 +205,8 @@ public class UserCreatePopup(bool owner) : ConfirmCancelPopup("Créer")
 
         TextBlock helpText = new()
         {
-            Text = "Les administrateurs ont accès à toutes les fonctionnalités de gestion. Choisissez ce rôle avec précaution.",
+            Text =
+                "Les administrateurs ont accès à toutes les fonctionnalités de gestion. Choisissez ce rôle avec précaution.",
             TextWrapping = TextWrapping.Wrap,
             FontSize = 12,
             Foreground = new SolidColorBrush(Color.Parse("#495057"))
@@ -233,10 +232,10 @@ public class UserCreatePopup(bool owner) : ConfirmCancelPopup("Créer")
         {
             if (s is Control c) SetBorderBrush(c, new SolidColorBrush(Color.Parse("#007ACC")));
         };
-        
+
         control.PointerExited += (s, _) =>
         {
-            if (s is Control { IsFocused: false } c) 
+            if (s is Control { IsFocused: false } c)
                 SetBorderBrush(c, new SolidColorBrush(Color.Parse("#DEE2E6")));
         };
 
@@ -264,16 +263,16 @@ public class UserCreatePopup(bool owner) : ConfirmCancelPopup("Créer")
         }
     }
 
-    protected override void OkButton_Click(object? sender, RoutedEventArgs e)
+    protected override void OkButtonClicked(object? sender, RoutedEventArgs e)
     {
         string? username = _usernameBox.Text?.Trim();
         string? password = _passwordBox.Text?.Trim();
-        
-        if (string.IsNullOrEmpty(username) || 
+
+        if (string.IsNullOrEmpty(username) ||
             string.IsNullOrEmpty(password) ||
-            _roleComboBox.SelectedItem is not ComboBoxItem { Tag: UserRole role }) 
+            _roleComboBox.SelectedItem is not ComboBoxItem { Tag: UserRole role })
             return;
-            
+
         _result = new UserCreateDto { Username = username, Password = password, Role = role };
         CloseRequested?.Invoke(this, EventArgs.Empty);
     }

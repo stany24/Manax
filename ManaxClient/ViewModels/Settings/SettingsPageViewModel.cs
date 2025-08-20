@@ -67,7 +67,7 @@ public partial class SettingsPageViewModel : PageViewModel
             Logger.LogError("Error when fetching settings", e, Environment.StackTrace);
         }
     }
-    
+
     public void CreateLibrary()
     {
         SavePointCreatePopup popup = new();
@@ -79,7 +79,7 @@ public partial class SettingsPageViewModel : PageViewModel
                 SavePointCreateDto? savePoint = popup.GetResult();
                 if (savePoint == null) return;
                 Optional<long> postLibraryResponse = await ManaxApiSavePointClient.PostSavePointAsync(savePoint);
-                if (postLibraryResponse.Failed) InfoEmitted?.Invoke(this,postLibraryResponse.Error);
+                if (postLibraryResponse.Failed) InfoEmitted?.Invoke(this, postLibraryResponse.Error);
             }
             catch (Exception e)
             {

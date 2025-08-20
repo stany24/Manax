@@ -36,7 +36,7 @@ public static class ManaxApiSerieClient
             ? new Optional<List<long>>("Failed to read chapter IDs from response.")
             : new Optional<List<long>>(ids);
     }
-    
+
     public static async Task<Optional<List<ReadDto>>> GetSerieChaptersReadAsync(long id)
     {
         HttpResponseMessage response = await ManaxApiClient.Client.GetAsync($"api/series/{id}/reads");

@@ -28,7 +28,7 @@ public partial class LibraryPageViewModel : BaseSeriesViewModel
     {
         if (Library == null || Library.Id != libraryId) return;
         PageChangedRequested?.Invoke(this, new HomePageViewModel());
-        InfoEmitted?.Invoke(this, "Library \'" + Library.Name+ "\' was deleted");
+        InfoEmitted?.Invoke(this, "Library \'" + Library.Name + "\' was deleted");
     }
 
     protected override void OnSerieCreated(SerieDto serie)

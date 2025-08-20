@@ -41,6 +41,12 @@ public class TaskService : Service, ITaskService
         _cancellationTokenSource.Cancel();
     }
 
+    ~TaskService()
+    {
+        _cancellationTokenSource.Dispose();
+        _taskSemaphore.Dispose();
+    }
+
     private async System.Threading.Tasks.Task RemoveTaskAsync(System.Threading.Tasks.Task runningTask,
         CancellationToken cancellationToken)
     {
@@ -143,7 +149,6 @@ public class TaskPriorityComparer : IComparer<ITask>
         if (x is null) return -1;
         if (y is null) return 1;
         int cmp = x.GetPriority().CompareTo(y.GetPriority());
-        if (cmp != 0) return cmp;
-        return x.GetHashCode().CompareTo(y.GetHashCode());
+        return cmp != 0 ? cmp : x.GetHashCode().CompareTo(y.GetHashCode());
     }
 }

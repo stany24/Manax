@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Text.RegularExpressions;
 using ManaxLibrary.DTO.Read;
 using ManaxLibrary.DTO.Search;
@@ -60,7 +61,7 @@ public class SerieController(ManaxContext context, IMapper mapper, INotification
 
         return chaptersIds;
     }
-    
+
     // GET: api/series/{id}/chapters
     [HttpGet("/api/series/{id:long}/reads")]
     [Authorize(Roles = "User,Admin,Owner")]
@@ -92,7 +93,7 @@ public class SerieController(ManaxContext context, IMapper mapper, INotification
             .FirstOrDefault(s => s.Id == id);
         if (serie == null) return NotFound();
         string posterName = SettingsManager.Data.PosterName + "." +
-                            SettingsManager.Data.ImageFormat.ToString().ToLower();
+                            SettingsManager.Data.ImageFormat.ToString().ToLower(CultureInfo.InvariantCulture);
         string posterPath = Path.Combine(serie.SavePath, posterName);
         if (!System.IO.File.Exists(posterPath)) return NotFound(Localizer.Format("PosterNotFound", id));
         byte[] readAllBytes = await System.IO.File.ReadAllBytesAsync(posterPath);
@@ -111,9 +112,9 @@ public class SerieController(ManaxContext context, IMapper mapper, INotification
 
         if (serie == null) return NotFound(Localizer.Format("SerieNotFound", id));
 
-        if(string.IsNullOrWhiteSpace(serieUpdate.Title))
+        if (string.IsNullOrWhiteSpace(serieUpdate.Title))
             return BadRequest(Localizer.Format("SerieTitleRequired"));
-        
+
         mapper.Map(serieUpdate, serie);
         serie.LastModification = DateTime.UtcNow;
 
@@ -139,12 +140,9 @@ public class SerieController(ManaxContext context, IMapper mapper, INotification
     {
         if (string.IsNullOrWhiteSpace(serieCreate.Title))
             return BadRequest(Localizer.GetString("SerieTitleRequired"));
-        
+
         SavePoint? savePoint = SelectSavePoint();
-        if (savePoint == null)
-        {
-            return BadRequest(Localizer.GetString("NoSavePoint"));
-        }
+        if (savePoint == null) return BadRequest(Localizer.GetString("NoSavePoint"));
         try
         {
             string folderPath = savePoint.Path + Path.DirectorySeparatorChar + serieCreate.Title;
@@ -179,8 +177,7 @@ public class SerieController(ManaxContext context, IMapper mapper, INotification
         SavePoint? selectedSavePoint = null;
         foreach (SavePoint savePoint in savePoints)
         {
-            if (!Directory.Exists(savePoint.Path))
-            { continue; }
+            if (!Directory.Exists(savePoint.Path)) continue;
             DirectoryInfo dirInfo = new(savePoint.Path);
             long size = GetDirectorySize(dirInfo);
             size = Math.Max(size, 1);
@@ -193,7 +190,7 @@ public class SerieController(ManaxContext context, IMapper mapper, INotification
 
         return selectedSavePoint;
     }
-    
+
     private static long GetDirectorySize(DirectoryInfo d)
     {
         FileInfo[] fis = d.GetFiles();
@@ -235,15 +232,11 @@ public class SerieController(ManaxContext context, IMapper mapper, INotification
         List<Serie> series = context.Series.ToList();
 
         if (search.IncludedLibraries.Count > 0)
-        {
             series = series.Where(s => search.IncludedLibraries.Contains(s.LibraryId ?? -1)).ToList();
-        }
         series = series.Where(s => !search.ExcludedLibraries.Contains(s.LibraryId ?? -1)).ToList();
 
         if (search.IncludedStatuses.Count > 0)
-        {
-            series = series.Where(s=> search.IncludedStatuses.Contains(s.Status)).ToList();
-        }
+            series = series.Where(s => search.IncludedStatuses.Contains(s.Status)).ToList();
         series = series.Where(s => !search.ExcludedStatuses.Contains(s.Status)).ToList();
 
         return series

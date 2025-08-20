@@ -36,7 +36,7 @@ public static class Localizer
     public static string Format(string key, params object[] args)
     {
         string template = GetString(key);
-        return string.Format(template, args);
+        return string.Format(CultureInfo.InvariantCulture, template, args);
     }
 
     public static void SetLanguage(string language)
@@ -45,12 +45,12 @@ public static class Localizer
         _current = LoadCurrentLanguage();
     }
 
-    public static string getCurrentLanguage()
+    public static string GetCurrentLanguage()
     {
         return _language;
     }
 
-    public static List<string> getAvailableLanguages()
+    public static List<string> GetAvailableLanguages()
     {
         return Languages;
     }
@@ -78,7 +78,7 @@ public static class Localizer
         foreach (string file in Directory.GetFiles(basePath, "manax.*.resx"))
         {
             string filename = Path.GetFileNameWithoutExtension(file);
-            if (!filename.StartsWith(resourcePrefix)) continue;
+            if (!filename.StartsWith(resourcePrefix, StringComparison.InvariantCulture)) continue;
             string lang = filename[resourcePrefix.Length..];
             if (!string.IsNullOrEmpty(lang)) languages.Add(lang);
         }

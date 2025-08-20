@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Text.RegularExpressions;
 using ManaxLibrary.DTO.Issue.Automatic;
 using ManaxServer.Models;
@@ -45,6 +46,6 @@ public partial class FixService
         Match match = regex.Match(last);
         if (!match.Success) return;
         issueService.ManageSerieIssue(serie.Id, AutomaticIssueSerieType.MissingChapter,
-            chapters.Length != Convert.ToInt32(match.Value));
+            chapters.Length != Convert.ToInt32(match.Value, CultureInfo.InvariantCulture));
     }
 }

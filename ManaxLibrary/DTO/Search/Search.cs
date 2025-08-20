@@ -15,6 +15,6 @@ public class Search
 
     public List<Status> ExcludedStatuses { get; set; } = [];
     public string RegexSearch { get; set; } = @"[\s\S]*";
-    public int MinChapters { get; set; } = 0;
+    public int MinChapters { get; set; }
     public int MaxChapters { get; set; } = int.MaxValue;
 }

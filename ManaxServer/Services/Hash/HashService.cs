@@ -40,7 +40,7 @@ public class HashService : Service, IHashService
         }
     }
 
-    private byte[] GenerateSalt()
+    private static byte[] GenerateSalt()
     {
         byte[] salt = new byte[SaltSize];
         using RandomNumberGenerator rng = RandomNumberGenerator.Create();
@@ -48,7 +48,7 @@ public class HashService : Service, IHashService
         return salt;
     }
 
-    private byte[] HashPasswordWithSalt(string password, byte[] salt)
+    private static byte[] HashPasswordWithSalt(string password, byte[] salt)
     {
         byte[] passwordBytes = Encoding.UTF8.GetBytes(password);
 

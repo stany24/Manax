@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.IO.Compression;
 using System.Text.RegularExpressions;
 using ImageMagick;
@@ -12,9 +13,6 @@ namespace ManaxServer.Services.Fix;
 
 public partial class FixService(IServiceScopeFactory scopeFactory, IIssueService issueService) : Service, IFixService
 {
-    [GeneratedRegex("\\d{1,4}")]
-    private partial Regex RegexNumber();
-    
     private readonly string[] _chapterNumberPatterns =
     [
         "CH\\d{1,4}",
@@ -27,7 +25,7 @@ public partial class FixService(IServiceScopeFactory scopeFactory, IIssueService
         "(?i)Flight[-_ ]\\d{1,4}",
         "\\d{1,4}"
     ];
-    
+
     public void FixChapter(long chapterId)
     {
         using IServiceScope scope = scopeFactory.CreateScope();
@@ -41,6 +39,9 @@ public partial class FixService(IServiceScopeFactory scopeFactory, IIssueService
         manaxContext.SaveChangesAsync();
     }
 
+    [GeneratedRegex("\\d{1,4}")]
+    private partial Regex RegexNumber();
+
     private void FixChapterDeep(Chapter chapter)
     {
         string copyName = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
@@ -49,14 +50,8 @@ public partial class FixService(IServiceScopeFactory scopeFactory, IIssueService
         {
             ZipFile.ExtractToDirectory(chapter.Path, copyName);
             List<string> list = Directory.GetFiles(copyName, "*.*", SearchOption.AllDirectories).ToList();
-            foreach (string file in list)
-            {
-                File.Move(file, Path.Combine(copyName, Path.GetFileName(file)));
-            }
-            foreach (string directory in Directory.GetDirectories(copyName))
-            {
-                Directory.Delete(directory);
-            }
+            foreach (string file in list) File.Move(file, Path.Combine(copyName, Path.GetFileName(file)));
+            foreach (string directory in Directory.GetDirectories(copyName)) Directory.Delete(directory);
         }
         catch
         {
@@ -88,18 +83,19 @@ public partial class FixService(IServiceScopeFactory scopeFactory, IIssueService
         issueService.CreateChapterIssue(chapter.Id, AutomaticIssueChapterType.ChapterNumberMissing);
         return false;
     }
-    
+
     private static bool ChangeChapterName(Chapter chapter, int number)
     {
         string newName = Path.GetDirectoryName(chapter.Path) + Path.DirectorySeparatorChar +
-                         $"CH{number:0000}."+SettingsManager.Data.ArchiveFormat.ToString().ToLower();
-        if (newName == chapter.Path) {return false;}
+                         $"CH{number:0000}." + SettingsManager.Data.ArchiveFormat.ToString()
+                             .ToLower(CultureInfo.InvariantCulture);
+        if (newName == chapter.Path) return false;
         Directory.Move(chapter.Path, newName);
         chapter.Path = newName;
         chapter.FileName = Path.GetFileName(newName);
         return true;
     }
-    
+
     private int? GetChapterNumber(string fullChapterPath)
     {
         string folderName = Path.GetFileName(fullChapterPath);
@@ -112,12 +108,12 @@ public partial class FixService(IServiceScopeFactory scopeFactory, IIssueService
 
         return null;
     }
-    
+
     private int GetNumber(string chapterName)
     {
         Regex regex = RegexNumber();
         Match match = regex.Match(chapterName);
-        return Convert.ToInt32(match.Value);
+        return Convert.ToInt32(match.Value, CultureInfo.InvariantCulture);
     }
 
     private MagickImage?[] LoadImages(long chapterId, string[] files)
@@ -196,7 +192,7 @@ public partial class FixService(IServiceScopeFactory scopeFactory, IIssueService
             if (image.Format == format) continue;
             image.Format = format;
             string newPath = Path.Combine(Path.GetDirectoryName(image.FileName) ?? string.Empty,
-                $"{Path.GetFileNameWithoutExtension(image.FileName)}.{format.ToString().ToLower()}");
+                $"{Path.GetFileNameWithoutExtension(image.FileName)}.{format.ToString().ToLower(CultureInfo.InvariantCulture)}");
             File.Delete(image.FileName!);
             image.Write(newPath);
             modified = true;

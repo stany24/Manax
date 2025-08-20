@@ -11,124 +11,124 @@
 
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel Orientation="Vertical" Spacing="24">
-            
+
             <StackPanel Orientation="Vertical">
-                <TextBlock Classes="title" Text="Statistiques du serveur"/>
+                <TextBlock Classes="title" Text="Statistiques du serveur" />
                 <TextBlock Text="📊 Vue d'ensemble des données et de l'activité du serveur"
-                          Foreground="{StaticResource SecondaryBrush}"/>
+                           Foreground="{StaticResource SecondaryBrush}" />
             </StackPanel>
-            
+
             <Grid ColumnDefinitions="*,*,*,*" ColumnSpacing="16">
                 <Border Grid.Column="0" Classes="card">
                     <StackPanel Spacing="12" HorizontalAlignment="Center">
-                        <TextBlock Text="👥" FontSize="32" HorizontalAlignment="Center"/>
-                        <TextBlock Text="{Binding ServerStats.Users}" 
-                                  FontSize="24" 
-                                  FontWeight="Bold" 
-                                  HorizontalAlignment="Center"
-                                  Foreground="{StaticResource PrimaryBrush}"/>
-                        <TextBlock Text="Utilisateurs" 
-                                  FontWeight="Medium" 
-                                  HorizontalAlignment="Center"/>
+                        <TextBlock Text="👥" FontSize="32" HorizontalAlignment="Center" />
+                        <TextBlock Text="{Binding ServerStats.Users}"
+                                   FontSize="24"
+                                   FontWeight="Bold"
+                                   HorizontalAlignment="Center"
+                                   Foreground="{StaticResource PrimaryBrush}" />
+                        <TextBlock Text="Utilisateurs"
+                                   FontWeight="Medium"
+                                   HorizontalAlignment="Center" />
                     </StackPanel>
                 </Border>
-                
+
                 <Border Grid.Column="1" Classes="card">
                     <StackPanel Spacing="12" HorizontalAlignment="Center">
-                        <TextBlock Text="📚" FontSize="32" HorizontalAlignment="Center"/>
-                        <TextBlock Text="{Binding ServerStats.Series}" 
-                                  FontSize="24" 
-                                  FontWeight="Bold" 
-                                  HorizontalAlignment="Center"
-                                  Foreground="{StaticResource SuccessBrush}"/>
-                        <TextBlock Text="Séries" 
-                                  FontWeight="Medium" 
-                                  HorizontalAlignment="Center"/>
+                        <TextBlock Text="📚" FontSize="32" HorizontalAlignment="Center" />
+                        <TextBlock Text="{Binding ServerStats.Series}"
+                                   FontSize="24"
+                                   FontWeight="Bold"
+                                   HorizontalAlignment="Center"
+                                   Foreground="{StaticResource SuccessBrush}" />
+                        <TextBlock Text="Séries"
+                                   FontWeight="Medium"
+                                   HorizontalAlignment="Center" />
                     </StackPanel>
                 </Border>
-                
+
                 <Border Grid.Column="2" Classes="card">
                     <StackPanel Spacing="12" HorizontalAlignment="Center">
-                        <TextBlock Text="📖" FontSize="32" HorizontalAlignment="Center"/>
-                        <TextBlock Text="{Binding ServerStats.Chapters}" 
-                                  FontSize="24" 
-                                  FontWeight="Bold" 
-                                  HorizontalAlignment="Center"
-                                  Foreground="{StaticResource InfoBrush}"/>
-                        <TextBlock Text="Chapitres" 
-                                  FontWeight="Medium" 
-                                  HorizontalAlignment="Center"/>
+                        <TextBlock Text="📖" FontSize="32" HorizontalAlignment="Center" />
+                        <TextBlock Text="{Binding ServerStats.Chapters}"
+                                   FontSize="24"
+                                   FontWeight="Bold"
+                                   HorizontalAlignment="Center"
+                                   Foreground="{StaticResource InfoBrush}" />
+                        <TextBlock Text="Chapitres"
+                                   FontWeight="Medium"
+                                   HorizontalAlignment="Center" />
                     </StackPanel>
                 </Border>
-                
+
                 <Border Grid.Column="3" Classes="card">
                     <StackPanel Spacing="12" HorizontalAlignment="Center">
-                        <TextBlock Text="📁" FontSize="32" HorizontalAlignment="Center"/>
-                        <TextBlock Text="{Binding ServerStats.Libraries}" 
-                                  FontSize="24" 
-                                  FontWeight="Bold" 
-                                  HorizontalAlignment="Center"
-                                  Foreground="{StaticResource WarningBrush}"/>
-                        <TextBlock Text="Bibliothèques" 
-                                  FontWeight="Medium" 
-                                  HorizontalAlignment="Center"/>
+                        <TextBlock Text="📁" FontSize="32" HorizontalAlignment="Center" />
+                        <TextBlock Text="{Binding ServerStats.Libraries}"
+                                   FontSize="24"
+                                   FontWeight="Bold"
+                                   HorizontalAlignment="Center"
+                                   Foreground="{StaticResource WarningBrush}" />
+                        <TextBlock Text="Bibliothèques"
+                                   FontWeight="Medium"
+                                   HorizontalAlignment="Center" />
                     </StackPanel>
                 </Border>
             </Grid>
-            
+
             <Border Classes="card">
                 <StackPanel Spacing="20">
                     <StackPanel Orientation="Horizontal" Spacing="12">
-                        <TextBlock Text="📈" FontSize="20"/>
-                        <TextBlock Classes="subtitle" Text="Répartition des utilisateurs" Margin="0"/>
+                        <TextBlock Text="📈" FontSize="20" />
+                        <TextBlock Classes="subtitle" Text="Répartition des utilisateurs" Margin="0" />
                     </StackPanel>
-                    
+
                     <Grid ColumnDefinitions="Auto,*" ColumnSpacing="24">
                         <avalonia:PieChart Grid.Column="0"
-                                          Series="{Binding UserSeries}"
-                                          InitialRotation="-90"
-                                          MinValue="0"
-                                          MaxValue="{Binding ServerStats.Users}"
-                                          Width="250"
-                                          Height="250"/>
-                        
-                        <StackPanel Grid.Column="1" 
-                                   Spacing="16" 
-                                   VerticalAlignment="Center">
-                            <TextBlock Text="Analyse des données" 
-                                      FontSize="16" 
-                                      FontWeight="Bold"/>
-                            
-                            <Border Background="#E3F2FD" 
-                                   CornerRadius="8" 
-                                   Padding="12">
+                                           Series="{Binding UserSeries}"
+                                           InitialRotation="-90"
+                                           MinValue="0"
+                                           MaxValue="{Binding ServerStats.Users}"
+                                           Width="250"
+                                           Height="250" />
+
+                        <StackPanel Grid.Column="1"
+                                    Spacing="16"
+                                    VerticalAlignment="Center">
+                            <TextBlock Text="Analyse des données"
+                                       FontSize="16"
+                                       FontWeight="Bold" />
+
+                            <Border Background="#E3F2FD"
+                                    CornerRadius="8"
+                                    Padding="12">
                                 <StackPanel Spacing="8">
-                                    <TextBlock Text="📊 Métriques clés :" FontWeight="Bold"/>
+                                    <TextBlock Text="📊 Métriques clés :" FontWeight="Bold" />
                                     <TextBlock Text="• Nombre total d'utilisateurs actifs"
-                                              FontSize="12"/>
+                                               FontSize="12" />
                                     <TextBlock Text="• Répartition par type d'utilisateur"
-                                              FontSize="12"/>
+                                               FontSize="12" />
                                     <TextBlock Text="• Données en temps réel"
-                                              FontSize="12"/>
+                                               FontSize="12" />
                                 </StackPanel>
                             </Border>
-                            
+
                             <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
-                                <Button Grid.Column="0" 
+                                <Button Grid.Column="0"
                                         Classes="secondary"
                                         HorizontalAlignment="Stretch">
                                     <StackPanel Orientation="Horizontal" Spacing="8">
-                                        <TextBlock Text="🔄"/>
-                                        <TextBlock Text="Actualiser"/>
+                                        <TextBlock Text="🔄" />
+                                        <TextBlock Text="Actualiser" />
                                     </StackPanel>
                                 </Button>
-                                
-                                <Button Grid.Column="1" 
+
+                                <Button Grid.Column="1"
                                         Classes="secondary"
                                         HorizontalAlignment="Stretch">
                                     <StackPanel Orientation="Horizontal" Spacing="8">
-                                        <TextBlock Text="📤"/>
-                                        <TextBlock Text="Exporter"/>
+                                        <TextBlock Text="📤" />
+                                        <TextBlock Text="Exporter" />
                                     </StackPanel>
                                 </Button>
                             </Grid>

@@ -95,7 +95,7 @@ public static class ServerNotification
 
         _hubConnection.On<long>(nameof(NotificationType.PosterModified),
             serieId => { OnPosterModified?.Invoke(serieId); });
-        
+
         _hubConnection.On<ReadDto>(nameof(NotificationType.ReadCreated),
             readData => { OnReadCreated?.Invoke(readData); });
 

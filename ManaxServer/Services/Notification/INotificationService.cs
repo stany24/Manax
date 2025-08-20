@@ -4,7 +4,6 @@ using ManaxLibrary.DTO.Rank;
 using ManaxLibrary.DTO.Read;
 using ManaxLibrary.DTO.Serie;
 using ManaxLibrary.DTO.User;
-using ManaxServer.Models.Read;
 
 namespace ManaxServer.Services.Notification;
 

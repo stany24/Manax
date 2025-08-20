@@ -158,7 +158,7 @@ public class TestLibraryController
     {
         Library firstLibrary = _context.Libraries.First();
         Library secondLibrary = _context.Libraries.Skip(1).First();
-        
+
         LibraryUpdateDto updateDto = new()
         {
             Name = secondLibrary.Name
@@ -210,21 +210,18 @@ public class TestLibraryController
         List<Serie> associatedSeries = _context.Series.Where(s => s.LibraryId == library.Id).ToList();
         int initialSeriesCount = associatedSeries.Count;
         List<long> seriesIds = associatedSeries.Select(s => s.Id).ToList();
-        
+
         IActionResult result = await _controller.DeleteLibrary(library.Id);
 
         Assert.IsInstanceOfType(result, typeof(OkResult));
 
         Library? deletedLibrary = await _context.Libraries.FindAsync(library.Id);
         Assert.IsNull(deletedLibrary);
-        
+
         List<Serie> updatedSeries = _context.Series.Where(s => seriesIds.Contains(s.Id)).ToList();
         Assert.AreEqual(initialSeriesCount, updatedSeries.Count);
-        
-        foreach (Serie serie in updatedSeries)
-        {
-            Assert.IsNull(serie.LibraryId);
-        }
+
+        foreach (Serie serie in updatedSeries) Assert.IsNull(serie.LibraryId);
     }
 
     [TestMethod]

@@ -56,7 +56,7 @@ public partial class UserStatsPageViewModel : PageViewModel
 
     private void UpdateChartData()
     {
-        if(UserStats == null){return;}
+        if (UserStats == null) return;
         SeriesSeries = GaugeGenerator.BuildSolidGauge(
             new GaugeItem(
                 UserStats.SeriesCompleted,

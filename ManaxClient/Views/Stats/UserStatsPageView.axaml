@@ -11,123 +11,123 @@
 
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel Orientation="Vertical" Spacing="24">
-            
+
             <StackPanel Orientation="Vertical">
-                <TextBlock Classes="title" Text="Mes statistiques"/>
+                <TextBlock Classes="title" Text="Mes statistiques" />
                 <TextBlock Text="📊 Votre activité et progression dans Manax"
-                          Foreground="{StaticResource SecondaryBrush}"/>
+                           Foreground="{StaticResource SecondaryBrush}" />
             </StackPanel>
-            
+
             <Grid ColumnDefinitions="*,*,*" ColumnSpacing="16">
                 <Border Grid.Column="0" Classes="card">
                     <StackPanel Spacing="12" HorizontalAlignment="Center">
-                        <TextBlock Text="📚" FontSize="32" HorizontalAlignment="Center"/>
-                        <TextBlock Text="{Binding UserStats.SeriesTotal}" 
-                                  FontSize="24" 
-                                  FontWeight="Bold" 
-                                  HorizontalAlignment="Center"
-                                  Foreground="{StaticResource PrimaryBrush}"/>
-                        <TextBlock Text="Séries" 
-                                  FontWeight="Medium" 
-                                  HorizontalAlignment="Center"/>
+                        <TextBlock Text="📚" FontSize="32" HorizontalAlignment="Center" />
+                        <TextBlock Text="{Binding UserStats.SeriesTotal}"
+                                   FontSize="24"
+                                   FontWeight="Bold"
+                                   HorizontalAlignment="Center"
+                                   Foreground="{StaticResource PrimaryBrush}" />
+                        <TextBlock Text="Séries"
+                                   FontWeight="Medium"
+                                   HorizontalAlignment="Center" />
                     </StackPanel>
                 </Border>
-                
+
                 <Border Grid.Column="1" Classes="card">
                     <StackPanel Spacing="12" HorizontalAlignment="Center">
-                        <TextBlock Text="📖" FontSize="32" HorizontalAlignment="Center"/>
-                        <TextBlock Text="{Binding UserStats.ChaptersTotal}" 
-                                  FontSize="24" 
-                                  FontWeight="Bold" 
-                                  HorizontalAlignment="Center"
-                                  Foreground="{StaticResource SuccessBrush}"/>
-                        <TextBlock Text="Chapitres" 
-                                  FontWeight="Medium" 
-                                  HorizontalAlignment="Center"/>
+                        <TextBlock Text="📖" FontSize="32" HorizontalAlignment="Center" />
+                        <TextBlock Text="{Binding UserStats.ChaptersTotal}"
+                                   FontSize="24"
+                                   FontWeight="Bold"
+                                   HorizontalAlignment="Center"
+                                   Foreground="{StaticResource SuccessBrush}" />
+                        <TextBlock Text="Chapitres"
+                                   FontWeight="Medium"
+                                   HorizontalAlignment="Center" />
                     </StackPanel>
                 </Border>
-                
+
                 <Border Grid.Column="2" Classes="card">
                     <StackPanel Spacing="12" HorizontalAlignment="Center">
-                        <TextBlock Text="⏱️" FontSize="32" HorizontalAlignment="Center"/>
-                        <TextBlock Text="{Binding UserStats.ReadingTime}" 
-                                  FontSize="24" 
-                                  FontWeight="Bold" 
-                                  HorizontalAlignment="Center"
-                                  Foreground="{StaticResource InfoBrush}"/>
-                        <TextBlock Text="Temps de lecture" 
-                                  FontWeight="Medium" 
-                                  HorizontalAlignment="Center"/>
+                        <TextBlock Text="⏱️" FontSize="32" HorizontalAlignment="Center" />
+                        <TextBlock Text="{Binding UserStats.ReadingTime}"
+                                   FontSize="24"
+                                   FontWeight="Bold"
+                                   HorizontalAlignment="Center"
+                                   Foreground="{StaticResource InfoBrush}" />
+                        <TextBlock Text="Temps de lecture"
+                                   FontWeight="Medium"
+                                   HorizontalAlignment="Center" />
                     </StackPanel>
                 </Border>
             </Grid>
-            
+
             <Grid ColumnDefinitions="*,*" ColumnSpacing="24">
                 <Border Grid.Column="0" Classes="card">
                     <StackPanel Spacing="20">
                         <StackPanel Orientation="Horizontal" Spacing="12">
-                            <TextBlock Text="📚" FontSize="20"/>
-                            <TextBlock Classes="subtitle" Text="Progression des séries" Margin="0"/>
+                            <TextBlock Text="📚" FontSize="20" />
+                            <TextBlock Classes="subtitle" Text="Progression des séries" Margin="0" />
                         </StackPanel>
-                        
+
                         <avalonia:PieChart Series="{Binding SeriesSeries}"
-                                          InitialRotation="-90"
-                                          MinValue="0"
-                                          MaxValue="{Binding UserStats.SeriesTotal}"
-                                          Width="250"
-                                          Height="250"
-                                          HorizontalAlignment="Center"/>
-                        
+                                           InitialRotation="-90"
+                                           MinValue="0"
+                                           MaxValue="{Binding UserStats.SeriesTotal}"
+                                           Width="250"
+                                           Height="250"
+                                           HorizontalAlignment="Center" />
+
                         <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
                             <StackPanel Grid.Column="0" Spacing="4">
-                                <TextBlock Text="✅ Terminées" FontSize="12" FontWeight="Medium"/>
-                                <TextBlock Text="{Binding UserStats.SeriesCompleted}" 
-                                          FontSize="16" 
-                                          FontWeight="Bold"
-                                          Foreground="{StaticResource SuccessBrush}"/>
+                                <TextBlock Text="✅ Terminées" FontSize="12" FontWeight="Medium" />
+                                <TextBlock Text="{Binding UserStats.SeriesCompleted}"
+                                           FontSize="16"
+                                           FontWeight="Bold"
+                                           Foreground="{StaticResource SuccessBrush}" />
                             </StackPanel>
-                            
+
                             <StackPanel Grid.Column="1" Spacing="4">
-                                <TextBlock Text="📖 En cours" FontSize="12" FontWeight="Medium"/>
-                                <TextBlock Text="{Binding UserStats.SeriesInProgress}" 
-                                          FontSize="16" 
-                                          FontWeight="Bold"
-                                          Foreground="{StaticResource InfoBrush}"/>
+                                <TextBlock Text="📖 En cours" FontSize="12" FontWeight="Medium" />
+                                <TextBlock Text="{Binding UserStats.SeriesInProgress}"
+                                           FontSize="16"
+                                           FontWeight="Bold"
+                                           Foreground="{StaticResource InfoBrush}" />
                             </StackPanel>
                         </Grid>
                     </StackPanel>
                 </Border>
-                
+
                 <Border Grid.Column="1" Classes="card">
                     <StackPanel Spacing="20">
                         <StackPanel Orientation="Horizontal" Spacing="12">
-                            <TextBlock Text="📖" FontSize="20"/>
-                            <TextBlock Classes="subtitle" Text="Progression des chapitres" Margin="0"/>
+                            <TextBlock Text="📖" FontSize="20" />
+                            <TextBlock Classes="subtitle" Text="Progression des chapitres" Margin="0" />
                         </StackPanel>
-                        
+
                         <avalonia:PieChart Series="{Binding ChaptersSeries}"
-                                          InitialRotation="-90"
-                                          MinValue="0"
-                                          MaxValue="{Binding UserStats.ChaptersTotal}"
-                                          Width="250"
-                                          Height="250"
-                                          HorizontalAlignment="Center"/>
-                        
+                                           InitialRotation="-90"
+                                           MinValue="0"
+                                           MaxValue="{Binding UserStats.ChaptersTotal}"
+                                           Width="250"
+                                           Height="250"
+                                           HorizontalAlignment="Center" />
+
                         <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
                             <StackPanel Grid.Column="0" Spacing="4">
-                                <TextBlock Text="✅ Lus" FontSize="12" FontWeight="Medium"/>
-                                <TextBlock Text="{Binding UserStats.ChaptersRead}" 
-                                          FontSize="16" 
-                                          FontWeight="Bold"
-                                          Foreground="{StaticResource SuccessBrush}"/>
+                                <TextBlock Text="✅ Lus" FontSize="12" FontWeight="Medium" />
+                                <TextBlock Text="{Binding UserStats.ChaptersRead}"
+                                           FontSize="16"
+                                           FontWeight="Bold"
+                                           Foreground="{StaticResource SuccessBrush}" />
                             </StackPanel>
-                            
+
                             <StackPanel Grid.Column="1" Spacing="4">
-                                <TextBlock Text="⏳ Restants" FontSize="12" FontWeight="Medium"/>
-                                <TextBlock Text="{Binding UserStats.ChaptersRemaining}" 
-                                          FontSize="16" 
-                                          FontWeight="Bold"
-                                          Foreground="{StaticResource WarningBrush}"/>
+                                <TextBlock Text="⏳ Restants" FontSize="12" FontWeight="Medium" />
+                                <TextBlock Text="{Binding UserStats.ChaptersRemaining}"
+                                           FontSize="16"
+                                           FontWeight="Bold"
+                                           Foreground="{StaticResource WarningBrush}" />
                             </StackPanel>
                         </Grid>
                     </StackPanel>

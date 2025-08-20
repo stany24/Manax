@@ -7,111 +7,111 @@
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.User.UsersPageView"
     x:DataType="login:UsersPageViewModel">
-    
+
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel Orientation="Vertical" Spacing="24">
-            
+
             <Grid ColumnDefinitions="*,Auto">
                 <StackPanel Grid.Column="0" Orientation="Vertical">
-                    <TextBlock Classes="title" Text="Gestion des utilisateurs"/>
+                    <TextBlock Classes="title" Text="Gestion des utilisateurs" />
                     <TextBlock Text="{Binding Users.Count, StringFormat='👥 {0} utilisateur(s) enregistré(s)'}"
-                              Foreground="{StaticResource SecondaryBrush}"/>
+                               Foreground="{StaticResource SecondaryBrush}" />
                 </StackPanel>
-                
+
                 <Button Grid.Column="1"
                         Classes="primary"
                         Command="{Binding CreateUser}"
                         VerticalAlignment="Center">
                     <StackPanel Orientation="Horizontal" Spacing="8">
-                        <TextBlock Text="➕"/>
-                        <TextBlock Text="Ajouter"/>
+                        <TextBlock Text="➕" />
+                        <TextBlock Text="Ajouter" />
                     </StackPanel>
                 </Button>
             </Grid>
-            
+
             <Border Classes="card" IsVisible="{Binding !Users.Count}">
-                <StackPanel Orientation="Vertical" 
-                           Spacing="16" 
-                           HorizontalAlignment="Center">
-                    <TextBlock Text="👥" FontSize="48" HorizontalAlignment="Center"/>
-                    <TextBlock Text="Aucun utilisateur" 
-                              FontSize="18" 
-                              FontWeight="Medium"
-                              HorizontalAlignment="Center"/>
+                <StackPanel Orientation="Vertical"
+                            Spacing="16"
+                            HorizontalAlignment="Center">
+                    <TextBlock Text="👥" FontSize="48" HorizontalAlignment="Center" />
+                    <TextBlock Text="Aucun utilisateur"
+                               FontSize="18"
+                               FontWeight="Medium"
+                               HorizontalAlignment="Center" />
                     <TextBlock Text="Commencez par créer votre premier utilisateur."
-                              TextAlignment="Center"
-                              Foreground="{StaticResource SecondaryBrush}"/>
+                               TextAlignment="Center"
+                               Foreground="{StaticResource SecondaryBrush}" />
                     <Button Classes="primary"
                             Command="{Binding CreateUser}"
                             HorizontalAlignment="Center">
                         <StackPanel Orientation="Horizontal" Spacing="8">
-                            <TextBlock Text="➕"/>
-                            <TextBlock Text="Créer un utilisateur"/>
+                            <TextBlock Text="➕" />
+                            <TextBlock Text="Créer un utilisateur" />
                         </StackPanel>
                     </Button>
                 </StackPanel>
             </Border>
-            
+
             <Border Classes="card" IsVisible="{Binding Users.Count}">
                 <StackPanel Spacing="16">
-                    <TextBlock Classes="subtitle" Text="Liste des utilisateurs"/>
-                    
+                    <TextBlock Classes="subtitle" Text="Liste des utilisateurs" />
+
                     <ItemsControl ItemsSource="{Binding Users}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <Border Background="White"
-                                       BorderBrush="#E9ECEF"
-                                       BorderThickness="1"
-                                       CornerRadius="8"
-                                       Padding="16"
-                                       Margin="0,4">
+                                        BorderBrush="#E9ECEF"
+                                        BorderThickness="1"
+                                        CornerRadius="8"
+                                        Padding="16"
+                                        Margin="0,4">
                                     <Grid ColumnDefinitions="Auto,*,Auto,Auto,Auto" ColumnSpacing="16">
-                                        
+
                                         <Border Grid.Column="0"
-                                               Background="{StaticResource PrimaryBrush}"
-                                               CornerRadius="20"
-                                               Width="40"
-                                               Height="40">
+                                                Background="{StaticResource PrimaryBrush}"
+                                                CornerRadius="20"
+                                                Width="40"
+                                                Height="40">
                                             <TextBlock Text="👤"
-                                                      FontSize="18"
-                                                      HorizontalAlignment="Center"
-                                                      VerticalAlignment="Center"/>
+                                                       FontSize="18"
+                                                       HorizontalAlignment="Center"
+                                                       VerticalAlignment="Center" />
                                         </Border>
-                                        
+
                                         <StackPanel Grid.Column="1" Orientation="Vertical" VerticalAlignment="Center">
                                             <TextBlock Text="{Binding Username}"
-                                                      FontWeight="Bold"
-                                                      FontSize="16"/>
+                                                       FontWeight="Bold"
+                                                       FontSize="16" />
                                             <TextBlock Text="{Binding Id, StringFormat='ID: {0}'}"
-                                                      Foreground="{StaticResource SecondaryBrush}"
-                                                      FontSize="12"/>
+                                                       Foreground="{StaticResource SecondaryBrush}"
+                                                       FontSize="12" />
                                         </StackPanel>
-                                        
+
                                         <Border Grid.Column="2"
-                                               Background="{StaticResource InfoBrush}"
-                                               CornerRadius="12"
-                                               Padding="8,4"
-                                               VerticalAlignment="Center">
+                                                Background="{StaticResource InfoBrush}"
+                                                CornerRadius="12"
+                                                Padding="8,4"
+                                                VerticalAlignment="Center">
                                             <TextBlock Text="{Binding Role}"
-                                                      Foreground="White"
-                                                      FontSize="12"
-                                                      FontWeight="Medium"/>
+                                                       Foreground="White"
+                                                       FontSize="12"
+                                                       FontWeight="Medium" />
                                         </Border>
-                                        
+
                                         <Button Grid.Column="3"
-                                               Classes="secondary"
-                                               Padding="8"
-                                               VerticalAlignment="Center">
-                                            <TextBlock Text="✏️"/>
+                                                Classes="secondary"
+                                                Padding="8"
+                                                VerticalAlignment="Center">
+                                            <TextBlock Text="✏️" />
                                         </Button>
-                                        
+
                                         <Button Grid.Column="4"
-                                               Classes="danger"
-                                               Command="{Binding $parent[UserControl].((login:UsersPageViewModel)DataContext).DeleteUser}"
-                                               CommandParameter="{Binding .}"
-                                               Padding="8"
-                                               VerticalAlignment="Center">
-                                            <TextBlock Text="🗑️"/>
+                                                Classes="danger"
+                                                Command="{Binding $parent[UserControl].((login:UsersPageViewModel)DataContext).DeleteUser}"
+                                                CommandParameter="{Binding .}"
+                                                Padding="8"
+                                                VerticalAlignment="Center">
+                                            <TextBlock Text="🗑️" />
                                         </Button>
                                     </Grid>
                                 </Border>

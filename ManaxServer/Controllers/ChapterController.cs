@@ -68,7 +68,8 @@ public class ChapterController(ManaxContext context, IMapper mapper, INotificati
         if (chapter == null) return NotFound(Localizer.Format("ChapterNotFound", id));
 
         string filePath = chapter.Path;
-        if (string.IsNullOrEmpty(filePath) || !System.IO.File.Exists(filePath) || !filePath.EndsWith(".cbz"))
+        if (string.IsNullOrEmpty(filePath) || !System.IO.File.Exists(filePath) ||
+            !filePath.EndsWith(".cbz", StringComparison.OrdinalIgnoreCase))
             return NotFound("Chapter file does not exist or is not a valid CBZ file.");
         using ZipArchive archive = ZipFile.OpenRead(filePath);
         if (number < 0 || number >= archive.Entries.Count)

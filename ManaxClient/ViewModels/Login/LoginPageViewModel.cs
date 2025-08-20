@@ -12,6 +12,8 @@ namespace ManaxClient.ViewModels.Login;
 
 public partial class LoginPageViewModel : PageViewModel
 {
+    [ObservableProperty] private bool _canLogin = true;
+    [ObservableProperty] private string _emoji = "🔑";
     [ObservableProperty] private string _host = "http://127.0.0.1";
     private bool _isAdmin;
     private bool _isOwner;
@@ -19,8 +21,6 @@ public partial class LoginPageViewModel : PageViewModel
     [ObservableProperty] private string _password = string.Empty;
     [ObservableProperty] private int _port = 5246;
     [ObservableProperty] private string _username = string.Empty;
-    [ObservableProperty] private bool _canLogin = true;
-    [ObservableProperty] private string _emoji = "🔑";
 
     public LoginPageViewModel()
     {

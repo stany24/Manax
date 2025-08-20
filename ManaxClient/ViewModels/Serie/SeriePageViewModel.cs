@@ -29,11 +29,11 @@ namespace ManaxClient.ViewModels.Serie;
 public partial class SeriePageViewModel : PageViewModel
 {
     [ObservableProperty] private SortedObservableCollection<ClientChapter> _chapters;
+    [ObservableProperty] private bool _isFilePickerOpen;
     [ObservableProperty] private Bitmap? _poster;
     [ObservableProperty] private ObservableCollection<RankDto> _ranks = [];
     [ObservableProperty] private RankDto? _selectedRank;
     [ObservableProperty] private SerieDto? _serie;
-    [ObservableProperty] private bool _isFilePickerOpen;
 
     public SeriePageViewModel(long serieId)
     {
@@ -63,7 +63,7 @@ public partial class SeriePageViewModel : PageViewModel
         ServerNotification.OnReadCreated -= OnReadCreated;
         ServerNotification.OnReadDeleted -= OnReadDeleted;
     }
-    
+
     private void OnReadDeleted(long obj)
     {
         if (Serie == null) return;
@@ -89,7 +89,7 @@ public partial class SeriePageViewModel : PageViewModel
     private void OnChapterAdded(ChapterDto chapter)
     {
         if (chapter.SerieId != Serie?.Id) return;
-        Dispatcher.UIThread.Post(() => Chapters.Add(new ClientChapter {Info = chapter}));
+        Dispatcher.UIThread.Post(() => Chapters.Add(new ClientChapter { Info = chapter }));
     }
 
     private void OnChapterDeleted(long chapterId)
@@ -231,7 +231,7 @@ public partial class SeriePageViewModel : PageViewModel
 
             Dispatcher.UIThread.Invoke(() =>
             {
-                foreach (ChapterDto chapter in chapters) Chapters.Add(new ClientChapter {Info = chapter});
+                foreach (ChapterDto chapter in chapters) Chapters.Add(new ClientChapter { Info = chapter });
             });
             LoadReads(serieId);
         }
@@ -241,7 +241,7 @@ public partial class SeriePageViewModel : PageViewModel
             Logger.LogError("Failed to load chapters for serie with ID: " + serieId, e, Environment.StackTrace);
         }
     }
-    
+
     private async void LoadReads(long serieId)
     {
         try
@@ -252,7 +252,7 @@ public partial class SeriePageViewModel : PageViewModel
                 InfoEmitted?.Invoke(this, response.Error);
                 return;
             }
-            
+
             List<ReadDto> reads = response.GetValue();
 
             Dispatcher.UIThread.Post(() =>
@@ -274,7 +274,7 @@ public partial class SeriePageViewModel : PageViewModel
 
     public void MoveToChapterPage(ClientChapter chapter)
     {
-        ChapterPageViewModel chapterPageViewModel = new(Chapters.ToList(),chapter);
+        ChapterPageViewModel chapterPageViewModel = new(Chapters.ToList(), chapter);
         PageChangedRequested?.Invoke(this, chapterPageViewModel);
     }
 
@@ -287,7 +287,7 @@ public partial class SeriePageViewModel : PageViewModel
             try
             {
                 popup.Close();
-                if(popup.Canceled){return;}
+                if (popup.Canceled) return;
                 SerieUpdateDto serie = popup.GetResult();
                 Optional<bool> serieResponse = await ManaxApiSerieClient.PutSerieAsync(Serie.Id, serie);
                 if (serieResponse.Failed) InfoEmitted?.Invoke(this, serieResponse.Error);
@@ -333,10 +333,10 @@ public partial class SeriePageViewModel : PageViewModel
             if (string.IsNullOrEmpty(filePath)) return;
 
             Optional<bool> replacePosterResponse = await UploadApiUploadClient.ReplacePosterAsync(
-                filePath, 
-                files[0].Name, 
+                filePath,
+                files[0].Name,
                 Serie.Id);
-            
+
             if (replacePosterResponse.Failed)
             {
                 InfoEmitted?.Invoke(this, replacePosterResponse.Error);

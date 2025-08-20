@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
@@ -28,20 +29,20 @@ public class RankEditPopup(RankDto rank) : ConfirmCancelPopup("Modifier")
             Spacing = 12,
             Margin = new Thickness(0, 0, 0, 8)
         };
-        
+
         TextBlock icon = new()
         {
             Text = "🏆",
             FontSize = 24,
             VerticalAlignment = VerticalAlignment.Center
         };
-        
+
         StackPanel titleStack = new()
         {
             Orientation = Orientation.Vertical,
             Spacing = 4
         };
-        
+
         TextBlock title = new()
         {
             Text = "Modifier le rang",
@@ -49,7 +50,7 @@ public class RankEditPopup(RankDto rank) : ConfirmCancelPopup("Modifier")
             FontWeight = FontWeight.Bold,
             Foreground = new SolidColorBrush(Color.Parse("#212529"))
         };
-        
+
         TextBlock subtitle = new()
         {
             Text = "Modifiez les informations de ce rang",
@@ -61,7 +62,7 @@ public class RankEditPopup(RankDto rank) : ConfirmCancelPopup("Modifier")
         titleStack.Children.Add(subtitle);
         headerPanel.Children.Add(icon);
         headerPanel.Children.Add(titleStack);
-        
+
         Grid.SetRow(headerPanel, 0);
         grid.Children.Add(headerPanel);
 
@@ -174,10 +175,10 @@ public class RankEditPopup(RankDto rank) : ConfirmCancelPopup("Modifier")
         {
             if (s is Control c) SetBorderBrush(c, new SolidColorBrush(Color.Parse("#007ACC")));
         };
-        
+
         control.PointerExited += (s, _) =>
         {
-            if (s is Control { IsFocused: false } c) 
+            if (s is Control { IsFocused: false } c)
                 SetBorderBrush(c, new SolidColorBrush(Color.Parse("#DEE2E6")));
         };
 
@@ -205,10 +206,10 @@ public class RankEditPopup(RankDto rank) : ConfirmCancelPopup("Modifier")
         }
     }
 
-    protected override void OkButton_Click(object? sender, RoutedEventArgs e)
+    protected override void OkButtonClicked(object? sender, RoutedEventArgs e)
     {
         string? name = _nameBox.Text?.Trim();
-        int value = Convert.ToInt32(_valueBox.Value);
+        int value = Convert.ToInt32(_valueBox.Value, CultureInfo.InvariantCulture);
         if (string.IsNullOrEmpty(name)) return;
         rank.Value = value;
         rank.Name = name;

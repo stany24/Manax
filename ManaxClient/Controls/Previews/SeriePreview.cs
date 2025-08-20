@@ -1,6 +1,7 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
+using Avalonia.Input;
 using Avalonia.Media;
 using ManaxClient.Models;
 
@@ -85,22 +86,22 @@ public class SeriePreview : Button
         Content = outerBorder;
     }
 
-    protected override void OnPointerEntered(Avalonia.Input.PointerEventArgs e)
+    public ClientSerie Serie
+    {
+        get => GetSerie(this);
+        set => SetSerie(this, value);
+    }
+
+    protected override void OnPointerEntered(PointerEventArgs e)
     {
         base.OnPointerEntered(e);
         RenderTransform = new ScaleTransform(1.05, 1.05);
     }
 
-    protected override void OnPointerExited(Avalonia.Input.PointerEventArgs e)
+    protected override void OnPointerExited(PointerEventArgs e)
     {
         base.OnPointerExited(e);
         RenderTransform = new ScaleTransform(1.0, 1.0);
-    }
-
-    public ClientSerie Serie
-    {
-        get => GetSerie(this);
-        set => SetSerie(this, value);
     }
 
     public static void SetSerie(AvaloniaObject element, ClientSerie serieValue)

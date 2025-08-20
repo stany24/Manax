@@ -14,7 +14,7 @@ public class Serie
     public long Id { get; set; }
     public long? LibraryId { get; set; }
 
-    [ForeignKey(nameof(LibraryId))] public Library.Library? Library { get; set; } = null!;
+    [ForeignKey(nameof(LibraryId))] public Library.Library? Library { get; set; }
     public long SavePointId { get; set; }
     [ForeignKey(nameof(SavePointId))] public SavePoint.SavePoint SavePoint { get; set; } = null!;
 
@@ -25,6 +25,6 @@ public class Serie
 
     public DateTime Creation { get; set; }
     public DateTime LastModification { get; set; }
-    
+
     public string SavePath => SavePoint.Path + Path.DirectorySeparatorChar + FolderName;
 }

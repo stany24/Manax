@@ -132,11 +132,11 @@ public class TestChapterController
     {
         int initialCount = _context.Chapters.Count();
         Chapter chapter = _context.Chapters.First();
-        
+
         IActionResult result = await _controller.DeleteChapter(chapter.Id);
 
         Assert.IsInstanceOfType(result, typeof(OkResult));
-        
+
         int finalCount = _context.Chapters.Count();
         Assert.AreEqual(initialCount - 1, finalCount);
     }
@@ -176,20 +176,20 @@ public class TestChapterController
         Assert.IsNotNull(returnedIds);
         Assert.HasCount(3, returnedIds);
     }
-    
+
     [TestMethod]
     public async Task DeleteChapter_FromSpecificSerie_OnlyRemovesThatChapter()
     {
         Chapter chapter = _context.Chapters.First(c => c.SerieId == 1);
         int initialSerieChaptersCount = _context.Chapters.Count(c => c.SerieId == 1);
-        
+
         IActionResult result = await _controller.DeleteChapter(chapter.Id);
 
         Assert.IsInstanceOfType(result, typeof(OkResult));
-        
+
         int finalSerieChaptersCount = _context.Chapters.Count(c => c.SerieId == 1);
         Assert.AreEqual(initialSerieChaptersCount - 1, finalSerieChaptersCount);
-        
+
         int otherSeriesChaptersCount = _context.Chapters.Count(c => c.SerieId != 1);
         Assert.IsGreaterThan(0, otherSeriesChaptersCount);
     }

@@ -104,7 +104,7 @@ public static class InMemoryTestDbContextFactory
         ];
 
         string savePointPath = Path.Combine(Directory.GetCurrentDirectory(), "savepoint");
-        if (Directory.Exists(savePointPath)) { Directory.Delete(savePointPath, true); }
+        if (Directory.Exists(savePointPath)) Directory.Delete(savePointPath, true);
         Directory.CreateDirectory(savePointPath);
         List<SavePoint> savePoints =
         [

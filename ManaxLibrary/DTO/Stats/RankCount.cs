@@ -1,3 +1,5 @@
+// ReSharper disable PropertyCanBeMadeInitOnly.Global
+
 using ManaxLibrary.DTO.Rank;
 
 namespace ManaxLibrary.DTO.Stats;

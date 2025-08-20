@@ -1,3 +1,5 @@
+// ReSharper disable PropertyCanBeMadeInitOnly.Global
+
 namespace ManaxLibrary.DTO.Stats;
 
 public class ServerStats

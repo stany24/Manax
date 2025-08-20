@@ -1,3 +1,4 @@
+using System.Globalization;
 using ImageMagick;
 using ManaxLibrary.DTO.Setting;
 using ManaxServer.Models;
@@ -19,8 +20,10 @@ public class RenamingService(IServiceScopeFactory scopeFactory) : Service, IRena
             .ToList()
             .ForEach(path =>
             {
-                string oldPoster = Path.Combine(path, $"{oldName}.{oldFormat.ToString().ToLower()}");
-                string newPoster = Path.Combine(path, $"{newName}.{newFormat.ToString().ToLower()}");
+                string oldPoster = Path.Combine(path,
+                    $"{oldName}.{oldFormat.ToString().ToLower(CultureInfo.InvariantCulture)}");
+                string newPoster = Path.Combine(path,
+                    $"{newName}.{newFormat.ToString().ToLower(CultureInfo.InvariantCulture)}");
 
                 if (!File.Exists(oldPoster)) return;
 

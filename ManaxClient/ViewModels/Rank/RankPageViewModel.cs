@@ -93,6 +93,7 @@ public partial class RankPageViewModel : PageViewModel
                     rankEditPopup.Close();
                     return;
                 }
+
                 RankDto result = rankEditPopup.GetResult();
                 Optional<bool> updateRankAsync = await ManaxApiRankClient.UpdateRankAsync(result);
                 if (updateRankAsync.Failed)
@@ -133,7 +134,7 @@ public partial class RankPageViewModel : PageViewModel
         {
             try
             {
-                if (rankCreatePopup.Canceled) { return; }
+                if (rankCreatePopup.Canceled) return;
                 RankDto result = rankCreatePopup.GetResult();
                 Optional<bool> rankResponse = await ManaxApiRankClient.CreateRankAsync(new RankCreateDto
                     { Name = result.Name, Value = result.Value });

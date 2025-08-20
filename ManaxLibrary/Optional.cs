@@ -49,8 +49,6 @@ public class Optional<T>
     /// <exception cref="InvalidOperationException"></exception>
     public T GetValue()
     {
-        if (Failed)
-            throw new InvalidOperationException("Cannot get value from an Optional that failed.");
-        return _value!;
+        return Failed ? throw new InvalidOperationException("Cannot get value from an Optional that failed.") : _value!;
     }
 }

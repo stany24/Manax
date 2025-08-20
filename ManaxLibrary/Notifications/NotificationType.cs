@@ -24,7 +24,7 @@ public enum NotificationType
     RunningTasks,
 
     Connected,
-    
+
     ReadCreated,
     ReadDeleted
 }
