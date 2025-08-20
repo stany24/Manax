@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Avalonia;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using ManaxClient.Controls.Popups;
@@ -30,14 +31,15 @@ namespace ManaxClient.ViewModels;
 public partial class MainWindowViewModel : ObservableObject
 {
     private readonly PageHistoryManager _history = new();
-    [ObservableProperty] private double _height;
     [ObservableProperty] private ObservableCollection<string> _infos = [];
     [ObservableProperty] private bool _isAdmin;
     [ObservableProperty] private bool _isOwner;
     [ObservableProperty] private ObservableCollection<LibraryDto> _libraries = [];
     [ObservableProperty] private Popup? _popup;
     [ObservableProperty] private ObservableCollection<TaskItem> _runningTasks = [];
-    [ObservableProperty] private double _width;
+    
+    [ObservableProperty] private CornerRadius _pageCornerRadius = new(0, 0, 0, 0);
+    [ObservableProperty] private Thickness _pageMargin = new(0, 0, 0, 0);
 
     public MainWindowViewModel()
     {
@@ -51,6 +53,16 @@ public partial class MainWindowViewModel : ObservableObject
             CurrentPageViewModel.InfoEmitted += (_, e) => { ShowInfo(e); };
             CurrentPageViewModel.PreviousRequested += (_, _) => GoBack();
             CurrentPageViewModel.NextRequested += (_, _) => GoForward();
+            if (CurrentPageViewModel.HasMargin)
+            {
+                PageCornerRadius = new CornerRadius(12, 0, 0, 12);
+                PageMargin = new Thickness(24);
+            }
+            else
+            {
+                PageCornerRadius = new CornerRadius(0);
+                PageMargin = new Thickness(0);
+            }
         };
 
         _history.OnPageChanging += _ =>

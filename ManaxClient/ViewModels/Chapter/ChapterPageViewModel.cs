@@ -30,6 +30,7 @@ public partial class ChapterPageViewModel : PageViewModel
     {
         _chapters = chapters;
         ControlBarVisible = false;
+        HasMargin = false;
         Chapter = chapter;
         LoadPages(chapter.Info.Pages, chapter.Info.Id);
         PropertyChanged += HandleOffsetChanged;

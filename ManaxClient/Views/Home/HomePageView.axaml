@@ -9,7 +9,7 @@
     x:Class="ManaxClient.Views.Home.HomePageView"
     x:DataType="login:HomePageViewModel">
     
-    <ScrollViewer VerticalScrollBarVisibility="Auto">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="24">
         <StackPanel Orientation="Vertical" Spacing="24">
             
             <Grid ColumnDefinitions="*,Auto">

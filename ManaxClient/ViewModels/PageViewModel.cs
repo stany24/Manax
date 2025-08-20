@@ -8,6 +8,7 @@ public abstract partial class PageViewModel : ObservableObject
 {
     [ObservableProperty] private bool _admin;
     [ObservableProperty] private bool _controlBarVisible = true;
+    [ObservableProperty] private bool _hasMargin = true;
     [ObservableProperty] private bool _owner;
     public EventHandler<string>? InfoEmitted;
     public EventHandler? NextRequested;
