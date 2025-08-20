@@ -9,6 +9,7 @@ using ManaxLibrary.DTO.Library;
 using ManaxLibrary.DTO.Search;
 using ManaxLibrary.DTO.Serie;
 using ManaxLibrary.Logging;
+using ManaxLibrary.Notifications;
 
 namespace ManaxClient.ViewModels.Library;
 
@@ -20,6 +21,14 @@ public partial class LibraryPageViewModel : BaseSeriesViewModel
     {
         Task.Run(() => { LoadLibrary(libraryId); });
         Task.Run(() => { LoadSeries(new Search { IncludedLibraries = [libraryId] }); });
+        ServerNotification.OnLibraryDeleted += OnLibraryDeleted;
+    }
+
+    private void OnLibraryDeleted(long libraryId)
+    {
+        if (Library == null || Library.Id != libraryId) return;
+        PageChangedRequested?.Invoke(this, new HomePageViewModel());
+        InfoEmitted?.Invoke(this, "Library \'" + Library.Name+ "\' was deleted");
     }
 
     protected override void OnSerieCreated(SerieDto serie)

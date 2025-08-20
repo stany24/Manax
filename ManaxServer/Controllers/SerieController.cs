@@ -232,14 +232,19 @@ public class SerieController(ManaxContext context, IMapper mapper, INotification
             .Select(g => new { SerieId = g.Key, ChapterCount = g.Count() })
             .ToDictionary(x => x.SerieId, x => x.ChapterCount);
 
-        List<Serie> series = context.Series
-            .Where(s => search.IncludedLibraries.Contains(s.LibraryId ?? -1))
-            .Where(s => !search.ExcludedLibraries.Contains(s.LibraryId ?? -1))
-            .Where(s => search.IncludedStatuses.Contains(s.Status))
-            .Where(s => !search.ExcludedStatuses.Contains(s.Status))
-            .ToList();
-        
-        series.AddRange(context.Series.Where(s => s.LibraryId == null));
+        List<Serie> series = context.Series.ToList();
+
+        if (search.IncludedLibraries.Count > 0)
+        {
+            series = series.Where(s => search.IncludedLibraries.Contains(s.LibraryId ?? -1)).ToList();
+        }
+        series = series.Where(s => !search.ExcludedLibraries.Contains(s.LibraryId ?? -1)).ToList();
+
+        if (search.IncludedStatuses.Count > 0)
+        {
+            series = series.Where(s=> search.IncludedStatuses.Contains(s.Status)).ToList();
+        }
+        series = series.Where(s => !search.ExcludedStatuses.Contains(s.Status)).ToList();
 
         return series
             .Where(s => regex.Match(s.Title).Success || regex.Match(s.Description).Success)

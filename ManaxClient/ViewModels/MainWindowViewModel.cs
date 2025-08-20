@@ -8,6 +8,7 @@ using Avalonia;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using ManaxClient.Controls.Popups;
+using ManaxClient.Controls.Popups.Library;
 using ManaxClient.Controls.Popups.SavePoint;
 using ManaxClient.Models;
 using ManaxClient.Models.History;
@@ -189,15 +190,15 @@ public partial class MainWindowViewModel : ObservableObject
 
     public void CreateLibrary()
     {
-        SavePointCreatePopup popup = new();
+        LibraryCreatePopup popup = new();
         popup.CloseRequested += async void (_, _) =>
         {
             try
             {
                 popup.Close();
-                SavePointCreateDto? savePoint = popup.GetResult();
+                LibraryCreateDto? savePoint = popup.GetResult();
                 if (savePoint == null) return;
-                Optional<long> postLibraryResponse = await ManaxApiSavePointClient.PostSavePointAsync(savePoint);
+                Optional<long> postLibraryResponse = await ManaxApiLibraryClient.PostLibraryAsync(savePoint);
                 if (postLibraryResponse.Failed) ShowInfo(postLibraryResponse.Error);
             }
             catch (Exception e)

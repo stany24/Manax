@@ -343,8 +343,7 @@ public class SerieUpdatePopup : ConfirmCancelPopup, INotifyPropertyChanged
     protected override void OkButton_Click(object? sender, RoutedEventArgs e)
     {
         Canceled = false;
-        if (string.IsNullOrEmpty(UpdateDto.Title.Trim()) || 
-            string.IsNullOrEmpty(UpdateDto.Description.Trim()))
+        if (string.IsNullOrEmpty(UpdateDto.Title.Trim()))
             return;
 
         CloseRequested?.Invoke(this, EventArgs.Empty);

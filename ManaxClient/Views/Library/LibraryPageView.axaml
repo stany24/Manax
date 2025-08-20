@@ -51,26 +51,10 @@
             
             <Border Classes="card" IsVisible="{Binding Series.Count}">
                 <StackPanel Orientation="Vertical" Spacing="20">
-                    <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="12">
-                        <TextBlock Grid.Column="0" 
-                                  Classes="subtitle" 
-                                  Text="Séries de la bibliothèque"
-                                  Margin="0"
-                                  VerticalAlignment="Center"/>
-                        
-                        <ComboBox Grid.Column="1"
-                                 MinWidth="150"
-                                 VerticalAlignment="Center">
-                            <ComboBoxItem Content="Trier par nom"/>
-                            <ComboBoxItem Content="Trier par date" IsSelected="True"/>
-                            <ComboBoxItem Content="Trier par popularité"/>
-                        </ComboBox>
-                        
-                        <TextBox Grid.Column="2"
-                                Watermark="Rechercher une série..."
-                                MinWidth="200"
-                                VerticalAlignment="Center"/>
-                    </Grid>
+                    <TextBlock Classes="subtitle" 
+                               Text="Séries de la bibliothèque"
+                               Margin="0"
+                               VerticalAlignment="Center"/>
                     
                     <ItemsControl ItemsSource="{Binding Series}">
                         <ItemsControl.ItemTemplate>
@@ -103,56 +87,6 @@
                             </ItemsPanelTemplate>
                         </ItemsControl.ItemsPanel>
                     </ItemsControl>
-                </StackPanel>
-            </Border>
-            
-            <Border Classes="card">
-                <StackPanel Orientation="Vertical" Spacing="16">
-                    <TextBlock Classes="subtitle" Text="Actions de la bibliothèque"/>
-                    
-                    <Grid ColumnDefinitions="*,*,*" ColumnSpacing="16">
-                        <Button Grid.Column="0"
-                                Classes="secondary"
-                                HorizontalAlignment="Stretch"
-                                Padding="16">
-                            <StackPanel Orientation="Vertical" Spacing="8">
-                                <TextBlock Text="📤" FontSize="20" HorizontalAlignment="Center"/>
-                                <TextBlock Text="Importer" HorizontalAlignment="Center" FontWeight="Medium"/>
-                                <TextBlock Text="Ajouter des séries" 
-                                          HorizontalAlignment="Center" 
-                                          FontSize="12"
-                                          Foreground="{StaticResource SecondaryBrush}"/>
-                            </StackPanel>
-                        </Button>
-                        
-                        <Button Grid.Column="1"
-                                Classes="secondary"
-                                HorizontalAlignment="Stretch"
-                                Padding="16">
-                            <StackPanel Orientation="Vertical" Spacing="8">
-                                <TextBlock Text="🔄" FontSize="20" HorizontalAlignment="Center"/>
-                                <TextBlock Text="Synchroniser" HorizontalAlignment="Center" FontWeight="Medium"/>
-                                <TextBlock Text="Mettre à jour" 
-                                          HorizontalAlignment="Center" 
-                                          FontSize="12"
-                                          Foreground="{StaticResource SecondaryBrush}"/>
-                            </StackPanel>
-                        </Button>
-                        
-                        <Button Grid.Column="2"
-                                Classes="secondary"
-                                HorizontalAlignment="Stretch"
-                                Padding="16">
-                            <StackPanel Orientation="Vertical" Spacing="8">
-                                <TextBlock Text="⚙️" FontSize="20" HorizontalAlignment="Center"/>
-                                <TextBlock Text="Paramètres" HorizontalAlignment="Center" FontWeight="Medium"/>
-                                <TextBlock Text="Configurer" 
-                                          HorizontalAlignment="Center" 
-                                          FontSize="12"
-                                          Foreground="{StaticResource SecondaryBrush}"/>
-                            </StackPanel>
-                        </Button>
-                    </Grid>
                 </StackPanel>
             </Border>
         </StackPanel>

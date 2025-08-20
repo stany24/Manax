@@ -12,7 +12,7 @@ namespace ManaxLibrary.DTO.Serie;
 public class SerieUpdateDto
 {
     [Required] public string Title { get; set; }
-    [Required] public string Description { get; set; }
+    public string Description { get; set; }
     public long? LibraryId { get; set; }
-    [Required]public Status Status { get; set; }
+    [Required] public Status Status { get; set; }
 }

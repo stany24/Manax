@@ -28,7 +28,7 @@ public partial class HomePageViewModel : BaseSeriesViewModel
                 InfoEmitted?.Invoke(this, libraryIdsAsync.Error);
                 return;
             }
-            LoadSeries(new Search { IncludedLibraries = libraryIdsAsync.GetValue() });
+            LoadSeries(new Search());
         });
     }
 
