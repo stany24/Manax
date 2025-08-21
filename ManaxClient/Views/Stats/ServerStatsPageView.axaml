@@ -99,7 +99,7 @@
                                        FontSize="16"
                                        FontWeight="Bold" />
 
-                            <Border Background="#E3F2FD"
+                            <Border Background="{DynamicResource Background2}"
                                     CornerRadius="8"
                                     Padding="12">
                                 <StackPanel Spacing="8">

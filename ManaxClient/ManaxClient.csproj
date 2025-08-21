@@ -104,7 +104,7 @@
             <DependentUpon>LoginPageView.axaml</DependentUpon>
             <SubType>Code</SubType>
         </Compile>
-        <Compile Update="Views\Settings\SettingsPageView.axaml.cs">
+        <Compile Update="Views\Settings\SettingsServerPageView.axaml.cs">
             <DependentUpon>SettingsPageView.axaml</DependentUpon>
             <SubType>Code</SubType>
         </Compile>

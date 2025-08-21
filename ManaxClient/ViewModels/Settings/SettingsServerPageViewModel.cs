@@ -12,7 +12,7 @@ using ManaxLibrary.Logging;
 
 namespace ManaxClient.ViewModels.Settings;
 
-public partial class SettingsPageViewModel : PageViewModel
+public partial class SettingsServerPageViewModel : PageViewModel
 {
     [ObservableProperty] private List<ArchiveFormat> _allArchiveFormats;
     [ObservableProperty] private List<ImageFormat> _allImageFormats;
@@ -20,7 +20,7 @@ public partial class SettingsPageViewModel : PageViewModel
     [ObservableProperty] private SettingsData _settings = null!;
     [ObservableProperty] private string _success = string.Empty;
 
-    public SettingsPageViewModel()
+    public SettingsServerPageViewModel()
     {
         AllImageFormats = new List<ImageFormat>(Enum.GetValues(typeof(ImageFormat)).Cast<ImageFormat>());
         AllArchiveFormats = new List<ArchiveFormat>(Enum.GetValues(typeof(ArchiveFormat)).Cast<ArchiveFormat>());

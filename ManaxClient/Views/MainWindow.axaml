@@ -36,7 +36,7 @@
                         </StackPanel>
                     </Button>
 
-                    <Separator Margin="8,16" Background="#E9ECEF" />
+                    <Separator Margin="8,16" Background="{DynamicResource Background2}" />
 
                     <Grid ColumnDefinitions="*,Auto" Margin="16,8,16,8">
                         <TextBlock Grid.Column="0"
@@ -84,7 +84,7 @@
                         </ItemsControl>
                     </ScrollViewer>
 
-                    <Separator Margin="8,16" Background="#E9ECEF" IsVisible="{Binding IsAdmin}" />
+                    <Separator Margin="8,16" Background="{DynamicResource Background2}" IsVisible="{Binding IsAdmin}" />
 
                     <TextBlock Classes="subtitle"
                                Text="Administration"
@@ -136,7 +136,15 @@
                         </StackPanel>
                     </Button>
 
-                    <Separator Margin="8,16" Background="#E9ECEF" />
+                    <Button Classes="sidebar"
+                            Command="{Binding ChangePageAppSettings}">
+                        <StackPanel Orientation="Horizontal" Spacing="12">
+                            <TextBlock Text="🎨" FontSize="14" />
+                            <TextBlock Text="Apparence" />
+                        </StackPanel>
+                    </Button>
+
+                    <Separator Margin="8,16" Background="{DynamicResource Background2}" />
 
                     <Button Classes="sidebar"
                             Command="{Binding ChangePageUserStats}">
@@ -180,7 +188,7 @@
                                                             Padding="8,4"
                                                             Margin="8,0,0,0">
                                                         <TextBlock Text="{Binding Number}"
-                                                                   Foreground="White"
+                                                                   Foreground="{StaticResource TextColor1}"
                                                                    FontSize="12"
                                                                    FontWeight="Bold" />
                                                     </Border>
@@ -196,7 +204,7 @@
             </ScrollViewer>
 
             <Border Grid.Column="1"
-                    Background="White">
+                    Background="{DynamicResource Background1}">
                 <ContentControl Content="{Binding CurrentPageViewModel}"
                                 Margin="{Binding PageMargin}" />
             </Border>

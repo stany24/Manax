@@ -61,7 +61,7 @@
                                         Padding="8,4"
                                         HorizontalAlignment="Left">
                                     <TextBlock Text="{Binding Serie.Status}"
-                                               Foreground="White"
+                                               Foreground="{DynamicResource TextColor1}"
                                                FontSize="12"
                                                FontWeight="Medium" />
                                 </Border>
@@ -80,14 +80,14 @@
                     <Border Classes="card">
                         <TextBlock Text="{Binding Serie.Description}"
                                    TextWrapping="Wrap"
-                                   Foreground="{StaticResource DarkBrush}" />
+                                   Foreground="{DynamicResource TextColor1}" />
                     </Border>
 
                     <Border Classes="card">
                         <StackPanel Spacing="16">
                             <TextBlock Classes="subtitle" Text="Chapitres" Margin="0" />
 
-                            <Border Background="{StaticResource LightBrush}"
+                            <Border Background="{DynamicResource Background2}"
                                     CornerRadius="8"
                                     Padding="12"
                                     IsVisible="{Binding !Chapters.Count}">
@@ -96,8 +96,8 @@
                                     <TextBlock Text="Aucun chapitre disponible"
                                                FontWeight="Medium" />
                                     <TextBlock Text="Cette série ne contient pas encore de chapitres."
-                                               FontSize="12"
-                                               Foreground="{StaticResource SecondaryBrush}" />
+                                           FontSize="12"
+                                           Foreground="{StaticResource SecondaryBrush}" />
                                 </StackPanel>
                             </Border>
 
@@ -110,7 +110,7 @@
                                                 Margin="0,2">
                                             <Border.Styles>
                                                 <Style Selector="Border:pointerover">
-                                                    <Setter Property="Background" Value="#F8F9FA" />
+                                                    <Setter Property="Background" Value="{DynamicResource Background1}" />
                                                 </Style>
                                             </Border.Styles>
                                             <previews:ChapterPreview

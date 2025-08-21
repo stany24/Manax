@@ -240,7 +240,12 @@ public partial class MainWindowViewModel : ObservableObject
 
     public void ChangePageSettings()
     {
-        SetPage(new SettingsPageViewModel());
+        SetPage(new SettingsServerPageViewModel());
+    }
+
+    public void ChangePageAppSettings()
+    {
+        SetPage(new SettingsAppViewModel());
     }
 
     public void ChangePageUserStats()

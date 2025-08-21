@@ -59,8 +59,8 @@
                     <ItemsControl ItemsSource="{Binding Ranks}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <Border Background="White"
-                                        BorderBrush="#E9ECEF"
+                                <Border Background="{DynamicResource Background1}"
+                                        BorderBrush="{DynamicResource Background2}"
                                         BorderThickness="1"
                                         CornerRadius="8"
                                         Padding="16"
@@ -93,7 +93,7 @@
                                                 Padding="8,4"
                                                 VerticalAlignment="Center">
                                             <TextBlock Text="{Binding Value}"
-                                                       Foreground="White"
+                                                       Foreground="{DynamicResource TextColor1}"
                                                        FontSize="12"
                                                        FontWeight="Bold" />
                                         </Border>

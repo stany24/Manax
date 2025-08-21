@@ -5,8 +5,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:login="clr-namespace:ManaxClient.ViewModels.Settings"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-    x:Class="ManaxClient.Views.Settings.SettingsPageView"
-    x:DataType="login:SettingsPageViewModel">
+    x:Class="ManaxClient.Views.Settings.SettingsServerPageView"
+    x:DataType="login:SettingsServerPageViewModel">
 
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel Orientation="Vertical" Spacing="24">
@@ -137,7 +137,7 @@
 
             <Grid ColumnDefinitions="*,Auto">
                 <Border Grid.Column="0"
-                        Background="#E3F2FD"
+                        Background="{DynamicResource Background2}"
                         CornerRadius="8"
                         Padding="12">
                     <StackPanel Spacing="8">

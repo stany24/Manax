@@ -7,7 +7,7 @@
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Login.LoginPageView"
     x:DataType="login:LoginPageViewModel"
-    Background="{StaticResource LightBrush}">
+    Background="{DynamicResource Background1}">
 
     <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
         <Border Classes="card" MaxWidth="400" MinWidth="350">
@@ -21,39 +21,39 @@
                         <TextBlock Classes="title" Text="Manax" HorizontalAlignment="Center" />
                         <TextBlock Text="Connectez-vous à votre compte"
                                    HorizontalAlignment="Center"
-                                   Foreground="{StaticResource SecondaryBrush}" />
+                                   Foreground="{DynamicResource SecondaryBrush}" />
                     </StackPanel>
 
                     <StackPanel Spacing="16">
                         <StackPanel Spacing="6">
                             <TextBlock Text="Nom d'utilisateur"
                                        FontWeight="Medium"
-                                       Foreground="{StaticResource DarkBrush}" />
+                                       Foreground="{DynamicResource SecondaryBrush}" />
                             <TextBox Text="{Binding Username}"
                                      Watermark="Entrez votre nom d'utilisateur"
                                      Padding="12"
                                      CornerRadius="8"
                                      BorderThickness="1"
-                                     BorderBrush="#DEE2E6" />
+                                     BorderBrush="{DynamicResource Background3}" />
                         </StackPanel>
 
                         <StackPanel Spacing="6">
                             <TextBlock Text="Mot de passe"
                                        FontWeight="Medium"
-                                       Foreground="{StaticResource DarkBrush}" />
+                                       Foreground="{DynamicResource SecondaryBrush}" />
                             <TextBox Text="{Binding Password}"
                                      PasswordChar="•"
                                      Watermark="Entrez votre mot de passe"
                                      Padding="12"
                                      CornerRadius="8"
                                      BorderThickness="1"
-                                     BorderBrush="#DEE2E6" />
+                                     BorderBrush="{DynamicResource Background3}" />
                         </StackPanel>
 
                         <StackPanel Spacing="6">
                             <TextBlock Text="Serveur"
                                        FontWeight="Medium"
-                                       Foreground="{StaticResource DarkBrush}" />
+                                       Foreground="{DynamicResource SecondaryBrush}" />
                             <Grid
                                 ColumnDefinitions="*,Auto,Auto">
                                 <TextBox Text="{Binding Host}"
@@ -62,7 +62,7 @@
                                          Padding="12"
                                          CornerRadius="8"
                                          BorderThickness="1"
-                                         BorderBrush="#DEE2E6" />
+                                         BorderBrush="{DynamicResource Background3}" />
                                 <Label Content=":"
                                        Grid.Column="1"
                                        VerticalAlignment="Center" />
@@ -72,7 +72,7 @@
                                          Padding="12"
                                          CornerRadius="8"
                                          BorderThickness="1"
-                                         BorderBrush="#DEE2E6" />
+                                         BorderBrush="{DynamicResource Background3}" />
                             </Grid>
                         </StackPanel>
                     </StackPanel>
@@ -91,18 +91,18 @@
                         </StackPanel>
                     </Button>
 
-                    <Border Background="#E3F2FD"
+                    <Border Background="{DynamicResource Background2}"
                             CornerRadius="8"
                             Padding="12">
                         <StackPanel Spacing="8">
                             <TextBlock Text="💡 Astuce"
                                        FontWeight="Bold"
-                                       Foreground="{StaticResource InfoBrush}" />
+                                       Foreground="{DynamicResource InfoBrush}" />
                             <TextBlock
                                 Text="Assurez-vous que votre serveur Manax est démarré et accessible depuis ce réseau."
                                 TextWrapping="Wrap"
                                 FontSize="12"
-                                Foreground="{StaticResource SecondaryBrush}" />
+                                Foreground="{DynamicResource SecondaryBrush}" />
                         </StackPanel>
                     </Border>
                 </StackPanel>
