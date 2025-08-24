@@ -132,6 +132,10 @@ public class UserController(
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult<UserLoginResultDto>> Login(UserLoginDto loginDto)
     {
+        if (!context.Users.Any())
+        {
+            return Claim(new ClaimRequest{ Username = loginDto.Username, Password = loginDto.Password });
+        }
         LoginAttempt loginAttempt = new()
         {
             Origin = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "Unknown",
