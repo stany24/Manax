@@ -22,7 +22,7 @@ public class TestSerieController
     [TestInitialize]
     public void Setup()
     {
-        _context = InMemoryTestDbContextFactory.CreateTestContext();
+        _context = SqliteTestDbContextFactory.CreateTestContext();
 
         _mapper = new ManaxMapper(new ManaxMapping());
         _mockNotificationService = new Mock<INotificationService>();
@@ -33,7 +33,7 @@ public class TestSerieController
     [TestCleanup]
     public void Cleanup()
     {
-        _context.Dispose();
+        SqliteTestDbContextFactory.CleanupTestDatabase(_context);
     }
 
     [TestMethod]

@@ -1,21 +1,25 @@
 using ManaxLibrary.DTO.Serie;
+using ManaxLibrary.DTO.User;
 using ManaxServer.Models;
 using ManaxServer.Models.Chapter;
 using ManaxServer.Models.Library;
 using ManaxServer.Models.SavePoint;
 using ManaxServer.Models.Serie;
+using ManaxServer.Models.Rank;
+using ManaxServer.Models.User;
 using Microsoft.EntityFrameworkCore;
 
 namespace ManaxTests.Mocks;
 
-public static class InMemoryTestDbContextFactory
+public static class SqliteTestDbContextFactory
 {
     public static ManaxContext CreateTestContext(string? dbName = null)
     {
         dbName ??= Guid.NewGuid().ToString();
+        string dbPath = Path.Combine(Path.GetTempPath(), $"test_{dbName}.db");
 
         DbContextOptions<ManaxContext> options = new DbContextOptionsBuilder<ManaxContext>()
-            .UseInMemoryDatabase(dbName)
+            .UseSqlite($"Data Source={dbPath}")
             .Options;
 
         List<Library> libraries =
@@ -57,6 +61,19 @@ public static class InMemoryTestDbContextFactory
                 FolderName = "serie2",
                 Title = "Serie 2",
                 Description = "Description for Serie 2",
+                SavePointId = 1,
+                Status = Status.Completed,
+                Creation = DateTime.UtcNow,
+                LastModification = DateTime.UtcNow
+            },
+            
+            new()
+            {
+                Id = 3,
+                LibraryId = 1,
+                FolderName = "serie3",
+                Title = "Serie 3",
+                Description = "Description for Serie 3",
                 SavePointId = 1,
                 Status = Status.Completed,
                 Creation = DateTime.UtcNow,
@@ -116,18 +133,106 @@ public static class InMemoryTestDbContextFactory
             }
         ];
 
+        List<User> users =
+        [
+            new()
+            {
+                Id = 1,
+                Username = "TestUser1",
+                Role = UserRole.User,
+                Creation = DateTime.UtcNow
+            },
+            new()
+            {
+                Id = 2,
+                Username = "TestAdmin",
+                Role = UserRole.Admin,
+                Creation = DateTime.UtcNow
+            }
+        ];
+
+        List<Rank> ranks =
+        [
+            new()
+            {
+                Id = 1,
+                Value = 1,
+                Name = "Terrible"
+            },
+            new()
+            {
+                Id = 2,
+                Value = 5,
+                Name = "Average"
+            },
+            new()
+            {
+                Id = 3,
+                Value = 10,
+                Name = "Excellent"
+            }
+        ];
+
+        List<UserRank> userRanks =
+        [
+            new()
+            {
+                UserId = 1,
+                SerieId = 1,
+                RankId = 2
+            },
+            new()
+            {
+                UserId = 1,
+                SerieId = 2,
+                RankId = 3
+            }
+        ];
+
         ManaxContext context = new(options);
 
-        context.Database.EnsureDeleted();
-        context.Database.EnsureCreated();
+        if (File.Exists(dbPath))
+        {
+            File.Delete(dbPath);
+        }
+
+        context.Database.Migrate();
 
         context.Libraries.AddRange(libraries);
         context.Series.AddRange(series);
         context.Chapters.AddRange(chapters);
         context.SavePoints.AddRange(savePoints);
+        context.Users.AddRange(users);
+        context.Ranks.AddRange(ranks);
+        context.UserRanks.AddRange(userRanks);
 
         context.SaveChanges();
 
         return context;
+    }
+
+    public static void CleanupTestDatabase(ManaxContext context)
+    {
+        if (context.Database.GetDbConnection().ConnectionString.Contains("test_"))
+        {
+            string? connectionString = context.Database.GetDbConnection().ConnectionString;
+            context.Dispose();
+            
+            if (connectionString != null)
+            {
+                string dbPath = connectionString.Replace("Data Source=", "");
+                if (File.Exists(dbPath))
+                {
+                    try
+                    {
+                        File.Delete(dbPath);
+                    }
+                    catch
+                    {
+                        // Ignore cleanup errors
+                    }
+                }
+            }
+        }
     }
 }

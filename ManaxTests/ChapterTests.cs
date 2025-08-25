@@ -21,7 +21,7 @@ public class TestChapterController
     [TestInitialize]
     public void Setup()
     {
-        _context = InMemoryTestDbContextFactory.CreateTestContext();
+        _context = SqliteTestDbContextFactory.CreateTestContext();
 
         _mapper = new ManaxMapper(new ManaxMapping());
         _mockNotificationService = new Mock<INotificationService>();
@@ -32,7 +32,7 @@ public class TestChapterController
     [TestCleanup]
     public void Cleanup()
     {
-        _context.Dispose();
+        SqliteTestDbContextFactory.CleanupTestDatabase(_context);
     }
 
     [TestMethod]
