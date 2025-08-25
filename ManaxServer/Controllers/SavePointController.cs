@@ -11,7 +11,7 @@ namespace ManaxServer.Controllers;
 
 [Route("api/save-point")]
 [ApiController]
-public class SavePathController(ManaxContext context, IMapper mapper) : ControllerBase
+public class SavePointController(ManaxContext context, IMapper mapper) : ControllerBase
 {
     // POST: api/SavePoint
     [HttpPost("create")]
@@ -24,6 +24,11 @@ public class SavePathController(ManaxContext context, IMapper mapper) : Controll
         if (await context.SavePoints.AnyAsync(l => l.Path == savePointCreate.Path))
             return Conflict(Localizer.Format("SavePointNameExists", savePointCreate.Path));
 
+        if (!Directory.Exists(savePointCreate.Path))
+        {
+            return Conflict(Localizer.Format("SavePointPathNotExists", savePointCreate.Path));
+        }
+        
         SavePoint library = mapper.Map<SavePoint>(savePointCreate);
         library.Creation = DateTime.UtcNow;
 
