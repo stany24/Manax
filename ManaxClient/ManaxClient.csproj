@@ -70,7 +70,7 @@
             <DependentUpon>LoginPageView.axaml</DependentUpon>
         </Compile>
         <Compile Update="Views\Home\HomePageView.axaml.cs">
-            <DependentUpon>LoginPageView.axaml</DependentUpon>
+            <DependentUpon>HomePageView.axaml</DependentUpon>
             <SubType>Code</SubType>
         </Compile>
         <Compile Update="Views\Issue\AutomaticIssuesPageView.axaml.cs">
@@ -105,11 +105,11 @@
             <SubType>Code</SubType>
         </Compile>
         <Compile Update="Views\Settings\SettingsServerPageView.axaml.cs">
-            <DependentUpon>SettingsPageView.axaml</DependentUpon>
+            <DependentUpon>SettingsServerPageView.axaml</DependentUpon>
             <SubType>Code</SubType>
         </Compile>
-        <Compile Update="Views\Settings\SettingsPageView.axaml.cs">
-            <DependentUpon>HomePageView.axaml</DependentUpon>
+        <Compile Update="Views\Settings\SettingsAppPageView.axaml.cs">
+            <DependentUpon>SettingsAppPageView.axaml</DependentUpon>
             <SubType>Code</SubType>
         </Compile>
         <Compile Update="Views\Stats\UserStatsPageView.axaml.cs">
@@ -127,9 +127,5 @@
 
     <ItemGroup>
         <ProjectReference Include="..\ManaxLibrary\ManaxLibrary.csproj"/>
-    </ItemGroup>
-
-    <ItemGroup>
-        <AdditionalFiles Include="Views\Settings\SettingsPageView.axaml"/>
     </ItemGroup>
 </Project>

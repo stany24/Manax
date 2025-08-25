@@ -3,4 +3,4 @@
     image: manaxapi
     build:
       context: .
-      dockerfile: ManaxApi/Dockerfile
+      dockerfile: ManaxServer/Dockerfile
