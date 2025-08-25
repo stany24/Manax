@@ -20,7 +20,7 @@ public static class ThemePresets
     {
         return
         [
-            new()
+            new Theme
             {
                 Name = "Bleu par défaut",
                 PrimaryColor = SolidColorBrush.Parse("#007ACC"),
@@ -28,7 +28,7 @@ public static class ThemePresets
                 TertiaryColor = SolidColorBrush.Parse("#28A745")
             },
 
-            new()
+            new Theme
             {
                 Name = "Violet",
                 PrimaryColor = SolidColorBrush.Parse("#6F42C1"),
@@ -36,7 +36,7 @@ public static class ThemePresets
                 TertiaryColor = SolidColorBrush.Parse("#FD7E14")
             },
 
-            new()
+            new Theme
             {
                 Name = "Rouge",
                 PrimaryColor = SolidColorBrush.Parse("#DC3545"),
@@ -44,7 +44,7 @@ public static class ThemePresets
                 TertiaryColor = SolidColorBrush.Parse("#20C997")
             },
 
-            new()
+            new Theme
             {
                 Name = "Vert",
                 PrimaryColor = SolidColorBrush.Parse("#28A745"),
@@ -52,7 +52,7 @@ public static class ThemePresets
                 TertiaryColor = SolidColorBrush.Parse("#FFC107")
             },
 
-            new()
+            new Theme
             {
                 Name = "Sombre Bleu",
                 PrimaryColor = SolidColorBrush.Parse("#0D6EFD"),
@@ -60,7 +60,7 @@ public static class ThemePresets
                 TertiaryColor = SolidColorBrush.Parse("#198754")
             },
 
-            new()
+            new Theme
             {
                 Name = "Sombre Violet",
                 PrimaryColor = SolidColorBrush.Parse("#8B5CF6"),
