@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
 using ManaxClient.Models;
 
 namespace ManaxClient.ViewModels.Settings;

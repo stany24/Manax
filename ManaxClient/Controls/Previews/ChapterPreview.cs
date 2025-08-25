@@ -6,9 +6,13 @@ using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Data.Converters;
 using Avalonia.Input;
+using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
+using Avalonia.VisualTree;
 using ManaxClient.Models;
+using ManaxClient.Controls.Popups;
+using ManaxClient.ViewModels;
 using ManaxLibrary.DTO.Read;
 
 namespace ManaxClient.Controls.Previews;
@@ -44,7 +48,7 @@ public class ChapterPreview : Button
 
         Grid mainGrid = new()
         {
-            ColumnDefinitions = new ColumnDefinitions("Auto,*,Auto,Auto"),
+            ColumnDefinitions = new ColumnDefinitions("Auto,*,Auto,Auto,Auto"),
             ColumnSpacing = 12
         };
 
@@ -160,6 +164,19 @@ public class ChapterPreview : Button
                     : new SolidColorBrush(Color.Parse("#CCE5FF"));
             })
         });
+        
+        Button actionButton = new()
+        {
+            Content = "...",
+            Background = Brushes.Transparent,
+            BorderThickness = new Thickness(0),
+            Padding = new Thickness(4),
+            HorizontalAlignment = HorizontalAlignment.Right,
+            VerticalAlignment = VerticalAlignment.Center,
+            Cursor = new Cursor(StandardCursorType.Hand)
+        };
+        actionButton.SetValue(Grid.ColumnProperty, 4);
+        actionButton.Click += ShowChoices;
 
         TextBlock chevron = new()
         {
@@ -176,6 +193,7 @@ public class ChapterPreview : Button
         mainGrid.Children.Add(statusIndicator);
         mainGrid.Children.Add(infoStack);
         mainGrid.Children.Add(progressBadge);
+        mainGrid.Children.Add(actionButton);
         mainGrid.Children.Add(chevron);
 
         border.Child = mainGrid;
@@ -189,6 +207,39 @@ public class ChapterPreview : Button
                 Duration = TimeSpan.FromMilliseconds(150)
             }
         ];
+    }
+
+    private void ShowChoices(object? sender, RoutedEventArgs e)
+    {
+        ChooseActionPopup popup = new(["Signaler un problème"]);
+        popup.CloseRequested += (_, _) => 
+        {
+            string actionName = popup.GetResult();
+            switch (actionName)
+            {
+                case "Signaler un problème":
+                    ReportIssue();
+                    break;
+            }
+            popup.Close();
+        };
+        
+        Control? parent = this.FindAncestorOfType<Control>();
+        while (parent != null)
+        {
+            if (parent.DataContext is PageViewModel pageViewModel)
+            {
+                pageViewModel.PopupRequested?.Invoke(pageViewModel, popup);
+                break;
+            }
+            parent = parent.FindAncestorOfType<Control>();
+        }
+        
+        e.Handled = true;
+    }
+
+    private void ReportIssue()
+    {
     }
 
     public ClientChapter Chapter
