@@ -1,4 +1,5 @@
 using ManaxLibrary.DTO.Rank;
+using ManaxLibrary.DTO.Read;
 using ManaxLibrary.DTO.Stats;
 using ManaxServer.Localization;
 using ManaxServer.Models;
@@ -40,14 +41,27 @@ public class StatsController(ManaxContext context, IMapper mapper) : ControllerB
             .Select(rankPair => new RankCount { Rank = mapper.Map<RankDto>(rankPair.Key), Count = rankPair.Count() })
             .ToList();
 
+        List<ReadDto> reads = context.Reads
+            .Where(r => r.UserId == currentUserId.Value)
+            .Select(r => mapper.Map<ReadDto>(r))
+            .ToList();
+
+        int seriesCompleted = await context.Series
+            .Where(s => context.Chapters.Any(c => c.SerieId == s.Id))
+            .Where(s => context.Chapters
+                .Where(c => c.SerieId == s.Id)
+                .All(c => chaptersRead.Contains(c.Id)))
+            .CountAsync();
 
         UserStats stats = new()
         {
             SeriesTotal = await context.Series.CountAsync(),
             ChaptersTotal = await context.Chapters.CountAsync(),
             ChaptersRead = chaptersRead.Count,
-            SeriesCompleted = await context.Series.Where(s => chaptersRead.Contains(s.Id)).CountAsync(),
-            Ranks = ranks
+            SeriesInProgress = await context.Series.Where(s => chaptersRead.Contains(s.Id)).CountAsync() - seriesCompleted,
+            SeriesCompleted = seriesCompleted,
+            Ranks = ranks,
+            Reads = reads
         };
 
         return stats;

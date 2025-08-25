@@ -6,7 +6,6 @@ using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using LiveChartsCore;
 using LiveChartsCore.SkiaSharpView;
-using LiveChartsCore.SkiaSharpView.Extensions;
 using LiveChartsCore.SkiaSharpView.Painting;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
@@ -21,8 +20,10 @@ public partial class UserStatsPageViewModel : PageViewModel
     [ObservableProperty] private IEnumerable<ISeries>? _chaptersSeries;
     [ObservableProperty] private IEnumerable<ISeries>? _ranksSeries;
     [ObservableProperty] private IEnumerable<ISeries>? _seriesSeries;
+    [ObservableProperty] private IEnumerable<ISeries>? _readsPerDaySeries;
     [ObservableProperty] private UserStats? _userStats;
     [ObservableProperty] private List<Axis>? _xAxes;
+    [ObservableProperty] private List<Axis>? _readsXAxes;
 
     public UserStatsPageViewModel()
     {
@@ -57,56 +58,126 @@ public partial class UserStatsPageViewModel : PageViewModel
     private void UpdateChartData()
     {
         if (UserStats == null) return;
-        SeriesSeries = GaugeGenerator.BuildSolidGauge(
-            new GaugeItem(
-                UserStats.SeriesCompleted,
-                series =>
-                {
-                    series.MaxRadialColumnWidth = 50;
-                    series.DataLabelsSize = 50;
-                    series.Name = $"Séries lues: {UserStats.SeriesCompleted} / {UserStats.SeriesTotal}";
-                }));
 
-        ChaptersSeries = GaugeGenerator.BuildSolidGauge(
-            new GaugeItem(
-                UserStats.ChaptersRead,
-                series =>
-                {
-                    series.MaxRadialColumnWidth = 50;
-                    series.DataLabelsSize = 50;
-                    series.Name = $"Chapitres lus: {UserStats.ChaptersRead} / {UserStats.ChaptersTotal}";
-                }));
+        SeriesSeries =
+        [
+            new PieSeries<long>
+            {
+                Values = [UserStats.SeriesCompleted],
+                Name = "Terminées",
+                Fill = new SolidColorPaint(SKColors.Green),
+                DataLabelsPaint = new SolidColorPaint(SKColors.White),
+                DataLabelsSize = 12,
+                DataLabelsPosition = LiveChartsCore.Measure.PolarLabelsPosition.Middle
+            },
+            new PieSeries<long>
+            {
+                Values = [UserStats.SeriesInProgress],
+                Name = "En cours",
+                Fill = new SolidColorPaint(SKColors.Orange),
+                DataLabelsPaint = new SolidColorPaint(SKColors.White),
+                DataLabelsSize = 12,
+                DataLabelsPosition = LiveChartsCore.Measure.PolarLabelsPosition.Middle
+            },
+            new PieSeries<long>
+            {
+                Values = [UserStats.SeriesRemaining],
+                Name = "Restantes",
+                Fill = new SolidColorPaint(SKColors.Gray),
+                DataLabelsPaint = new SolidColorPaint(SKColors.White),
+                DataLabelsSize = 12,
+                DataLabelsPosition = LiveChartsCore.Measure.PolarLabelsPosition.Middle
+            }
+        ];
 
-        if (UserStats.Ranks.Count == 0) return;
+        ChaptersSeries =
+        [
+            new PieSeries<long>
+            {
+                Values = [UserStats.ChaptersRead],
+                Name = "Lus",
+                Fill = new SolidColorPaint(SKColors.Green),
+                DataLabelsPaint = new SolidColorPaint(SKColors.White),
+                DataLabelsSize = 12,
+                DataLabelsPosition = LiveChartsCore.Measure.PolarLabelsPosition.Middle
+            },
+            new PieSeries<long>
+            {
+                Values = [UserStats.ChaptersRemaining],
+                Name = "Restants",
+                Fill = new SolidColorPaint(SKColors.Gray),
+                DataLabelsPaint = new SolidColorPaint(SKColors.White),
+                DataLabelsSize = 12,
+                DataLabelsPosition = LiveChartsCore.Measure.PolarLabelsPosition.Middle
+            }
+        ];
 
-        List<RankCount> sortedRanks = UserStats.Ranks.OrderBy(r => r.Rank.Value).ToList();
-        List<double> values = [];
-        List<string> labels = [];
-
-        foreach (RankCount rankCount in sortedRanks)
+        if (UserStats.Ranks.Count > 0)
         {
-            values.Add(rankCount.Count);
-            labels.Add(rankCount.Rank.Name);
+            List<RankCount> sortedRanks = UserStats.Ranks.OrderBy(r => r.Rank.Value).ToList();
+            List<double> values = [];
+            List<string> labels = [];
+
+            foreach (RankCount rankCount in sortedRanks)
+            {
+                values.Add(rankCount.Count);
+                labels.Add(rankCount.Rank.Name);
+            }
+
+            RanksSeries =
+            [
+                new ColumnSeries<double>
+                {
+                    Values = values,
+                    Name = "Nombre de séries",
+                    Fill = new SolidColorPaint(SKColors.DodgerBlue)
+                }
+            ];
+
+            XAxes =
+            [
+                new Axis
+                {
+                    Labels = labels,
+                    LabelsRotation = -15,
+                    TextSize = 14
+                }
+            ];
         }
 
-        RanksSeries =
-        [
-            new ColumnSeries<double>
-            {
-                Values = values,
-                Name = "Nombre de séries",
-                Fill = new SolidColorPaint(SKColors.DodgerBlue)
-            }
-        ];
+        if (UserStats.Reads.Count > 0)
+        {
+            var readsPerDay = UserStats.Reads
+                .GroupBy(r => r.Date.Date)
+                .Select(g => new { Date = g.Key, Count = g.Count() })
+                .OrderBy(x => x.Date)
+                .ToList();
 
-        XAxes =
-        [
-            new Axis
-            {
-                Labels = labels,
-                LabelsRotation = -15,
-                TextSize = 14
-            }
-        ];
+            List<double> readCounts = readsPerDay.Select(x => (double)x.Count).ToList();
+            List<string> dateLabels = readsPerDay.Select(x => x.Date.ToString("dd/MM")).ToList();
+
+            ReadsPerDaySeries =
+            [
+                new LineSeries<double>
+                {
+                    Values = readCounts,
+                    Name = "Lectures par jour",
+                    Fill = null,
+                    Stroke = new SolidColorPaint(SKColors.Purple) { StrokeThickness = 3 },
+                    GeometryFill = new SolidColorPaint(SKColors.Purple),
+                    GeometryStroke = new SolidColorPaint(SKColors.White) { StrokeThickness = 2 }
+                }
+            ];
+
+            ReadsXAxes =
+            [
+                new Axis
+                {
+                    Labels = dateLabels,
+                    LabelsRotation = -45,
+                    TextSize = 12
+                }
+            ];
+        }
     }
 }
