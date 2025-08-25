@@ -72,6 +72,11 @@ public partial class FixService(IServiceScopeFactory scopeFactory, IIssueService
             File.Delete(chapter.Path);
             ZipFile.CreateFromDirectory(copyName, chapter.Path);
         }
+        
+        foreach (MagickImage? image in images)
+        {
+            image?.Dispose();
+        }
 
         Directory.Delete(copyName, true);
     }
@@ -151,6 +156,7 @@ public partial class FixService(IServiceScopeFactory scopeFactory, IIssueService
                              Path.GetExtension(images[i]!.FileName);
             if (newPath == images[i]!.FileName) continue;
             File.Move(images[i]!.FileName!, newPath);
+            images[i]?.Dispose();
             images[i] = new MagickImage(newPath);
             modified = true;
         }

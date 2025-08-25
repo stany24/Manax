@@ -4,3 +4,7 @@
     build:
       context: .
       dockerfile: ManaxServer/Dockerfile
+    ports:
+      - "5246:5246"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
