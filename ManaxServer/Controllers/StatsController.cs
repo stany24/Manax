@@ -1,10 +1,10 @@
 using ManaxLibrary.DTO.Rank;
 using ManaxLibrary.DTO.Read;
+using ManaxLibrary.DTO.Serie;
 using ManaxLibrary.DTO.Stats;
 using ManaxServer.Localization;
 using ManaxServer.Models;
 using ManaxServer.Models.SavePoint;
-using ManaxServer.Models.User;
 using ManaxServer.Services.Mapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -26,10 +26,7 @@ public class StatsController(ManaxContext context, IMapper mapper) : ControllerB
     {
         long? currentUserId = UserController.GetCurrentUserId(HttpContext);
         if (currentUserId == null) return Unauthorized(Localizer.Format("Unauthorized"));
-
-        User? user = await context.Users.FirstOrDefaultAsync(u => u.Id == currentUserId.Value);
-        if (user == null) return NotFound(Localizer.Format("UserNotFound", currentUserId.Value));
-
+        
         List<long> chaptersRead = context.Reads
             .Where(r => r.UserId == currentUserId.Value)
             .Select(r => r.ChapterId)
@@ -73,19 +70,35 @@ public class StatsController(ManaxContext context, IMapper mapper) : ControllerB
     public async Task<ActionResult<ServerStats>> GetServerStats()
     {
         long diskSize = 0;
+        long availableDiskSize = 0;
         await foreach (SavePoint savePoint in context.SavePoints)
         {
             if (!Directory.Exists(savePoint.Path)) continue;
 
             DirectoryInfo dirInfo = new(savePoint.Path);
             diskSize += GetDirectorySize(dirInfo);
+            availableDiskSize += new DriveInfo(Path.GetPathRoot(savePoint.Path) ?? "/").AvailableFreeSpace;
         }
 
         DateTime recently = DateTime.UtcNow.AddDays(-7);
 
+        Dictionary<string, int> seriesInLibraries = await context.Series
+            .GroupBy(s => s.Library != null ? s.Library.Name : "No library")
+            .ToDictionaryAsync(g => g.Key, g => g.Count());
+
+        List<SerieDto> neverReadSeries = await context.Series
+            .Where(s => !context.Reads.Any(r => context.Chapters.Any(c => c.SerieId == s.Id && c.Id == r.ChapterId)))
+            .Select(s => mapper.Map<SerieDto>(s))
+            .ToListAsync();
+        
         ServerStats stats = new()
         {
+            SeriesInLibraries = seriesInLibraries,
             DiskSize = diskSize,
+            AvailableDiskSize = availableDiskSize,
+            NeverReadSeries = neverReadSeries,
+            Series = await context.Series.CountAsync(),
+            Chapters = await context.Chapters.CountAsync(),
             Users = await context.Users.CountAsync(),
             ActiveUsers = await context.Users.Where(u => u.LastLogin > recently).CountAsync()
         };
