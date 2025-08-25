@@ -68,7 +68,7 @@ public partial class SettingsServerPageViewModel : PageViewModel
         }
     }
 
-    public void CreateLibrary()
+    public void CreateSavePoint()
     {
         SavePointCreatePopup popup = new();
         popup.CloseRequested += async void (_, _) =>

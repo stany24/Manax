@@ -1,3 +1,4 @@
+
 using System;
 using System.IO;
 using Avalonia;
@@ -10,9 +11,12 @@ using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.VisualTree;
-using ManaxClient.Models;
 using ManaxClient.Controls.Popups;
+using ManaxClient.Controls.Popups.Issue;
+using ManaxClient.Models;
 using ManaxClient.ViewModels;
+using ManaxLibrary.ApiCaller;
+using ManaxLibrary.DTO.Issue.Reported;
 using ManaxLibrary.DTO.Read;
 
 namespace ManaxClient.Controls.Previews;
@@ -221,25 +225,45 @@ public class ChapterPreview : Button
                     ReportIssue();
                     break;
             }
-            popup.Close();
         };
         
-        Control? parent = this.FindAncestorOfType<Control>();
-        while (parent != null)
-        {
-            if (parent.DataContext is PageViewModel pageViewModel)
-            {
-                pageViewModel.PopupRequested?.Invoke(pageViewModel, popup);
-                break;
-            }
-            parent = parent.FindAncestorOfType<Control>();
-        }
+        GetPageViewModelParent().PopupRequested?.Invoke(this, popup);
         
         e.Handled = true;
     }
 
     private void ReportIssue()
     {
+        CreateChapterIssuePopup createChapterIssuePopup = new(Chapter.Info.Id);
+        createChapterIssuePopup.CloseRequested += async void (_, _) =>
+        {
+            if (!createChapterIssuePopup.Canceled)
+            {
+                ReportedIssueChapterCreateDto issue = createChapterIssuePopup.GetResult();
+                ManaxLibrary.Optional<bool> chapterIssueAsync = await ManaxApiIssueClient.CreateChapterIssueAsync(issue);
+                if (chapterIssueAsync.Failed)
+                {
+                    GetPageViewModelParent().InfoEmitted?.Invoke(this, chapterIssueAsync.Error);
+                }
+            }
+            createChapterIssuePopup.Close();
+        };
+        GetPageViewModelParent().PopupRequested?.Invoke(this, createChapterIssuePopup);
+    }
+
+    private PageViewModel GetPageViewModelParent()
+    {
+        Control? parent = this.FindAncestorOfType<Control>();
+        while (parent != null)
+        {
+            if (parent.DataContext is PageViewModel pageViewModel)
+            {
+                return pageViewModel;
+            }
+            parent = parent.FindAncestorOfType<Control>();
+        }
+
+        return null;
     }
 
     public ClientChapter Chapter

@@ -131,13 +131,16 @@ public abstract class Popup : Panel
         e.Handled = true;
     }
 
-    public async void Close()
+    public async void Close(bool delay = true)
     {
         Form.Opacity = 0;
         Form.RenderTransform = new ScaleTransform(0.9, 0.9);
         _canvas.Opacity = 0;
 
-        await Task.Delay(200);
+        if (delay)
+        {
+            await Task.Delay(200);
+        }
         Closed?.Invoke(this, EventArgs.Empty);
     }
 }

@@ -118,6 +118,15 @@ public class Program
             manaxContext.SaveChanges();
         }
 
+        if (!manaxContext.ReportedIssueChapterTypes.Any())
+        {
+            manaxContext.ReportedIssueChapterTypes.AddRange(
+                new ReportedIssueChapterType { Name = "Missing pages" },
+                new ReportedIssueChapterType { Name = "Wrong order" },
+                new ReportedIssueChapterType { Name = "Bad quality" });
+            manaxContext.SaveChanges();
+        }
+
         if (!manaxContext.ReportedIssueSerieTypes.Any())
         {
             IEnumerable<AutomaticIssueSerieType> values =

@@ -2,6 +2,7 @@ using ManaxLibrary.DTO.Issue.Automatic;
 using ManaxLibrary.DTO.Issue.Reported;
 using ManaxServer.Localization;
 using ManaxServer.Models;
+using ManaxServer.Models.Chapter;
 using ManaxServer.Models.Issue.Automatic;
 using ManaxServer.Models.Issue.Reported;
 using ManaxServer.Services.Mapper;
@@ -41,6 +42,14 @@ public class IssueController(ManaxContext context, IMapper mapper) : ControllerB
         List<ReportedIssueChapter> issues = await context.ReportedIssuesChapter.ToListAsync();
         return mapper.Map<List<ReportedIssueChapterDto>>(issues);
     }
+    
+    [HttpGet("chapter/reported/types")]
+    [Authorize(Roles = "Admin,Owner")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<List<ReportedIssueChapterTypeDto>> GetAllReportedChapterIssuesTypes()
+    {
+        return  await context.ReportedIssueChapterTypes.Select(i => mapper.Map<ReportedIssueChapterTypeDto>(i)).ToListAsync();
+    }
 
     [HttpGet("serie/reported")]
     [Authorize(Roles = "Admin,Owner")]
@@ -50,6 +59,15 @@ public class IssueController(ManaxContext context, IMapper mapper) : ControllerB
         List<ReportedIssueSerie> issues = await context.ReportedIssuesSerie.ToListAsync();
         return mapper.Map<List<ReportedIssueSerieDto>>(issues);
     }
+    
+    [HttpGet("serie/reported/types")]
+    [Authorize(Roles = "Admin,Owner")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<ActionResult<IEnumerable<ReportedIssueSerieType>>> GetAllReportedSerieIssuesTypes()
+    {
+        List<ReportedIssueSerieType> issues = await context.ReportedIssueSerieTypes.ToListAsync();
+        return mapper.Map<List<ReportedIssueSerieType>>(issues);
+    }
 
     [HttpPost("chapter")]
     [Authorize(Roles = "User,Admin,Owner")]
@@ -57,9 +75,12 @@ public class IssueController(ManaxContext context, IMapper mapper) : ControllerB
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult> CreateChapterIssue(ReportedIssueChapterCreateDto reportedIssueChapterCreate)
     {
-        ReportedIssueChapter issue = mapper.Map<ReportedIssueChapter>(reportedIssueChapterCreate);
+        long? currentUserId = UserController.GetCurrentUserId(HttpContext);
+        if (currentUserId == null) return Unauthorized();
 
-        context.ReportedIssuesChapter.Add(issue);
+        ReportedIssueChapter reportedIssueChapter = mapper.Map<ReportedIssueChapter>(reportedIssueChapterCreate);
+        reportedIssueChapter.UserId = (long)currentUserId;
+        context.ReportedIssuesChapter.Add(reportedIssueChapter);
         await context.SaveChangesAsync();
 
         return Created();
