@@ -37,30 +37,10 @@
                     </Button>
 
                     <Separator Margin="8,16" Background="{DynamicResource Background2}" />
-
-                    <Grid ColumnDefinitions="*,Auto" Margin="16,8,16,8">
-                        <TextBlock Grid.Column="0"
-                                   Classes="subtitle"
-                                   Text="Bibliothèques"
-                                   Margin="0" />
-                        <Button Grid.Column="1"
-                                Classes="primary"
-                                IsVisible="{Binding IsAdmin}"
-                                Width="32"
-                                Height="32"
-                                Padding="6"
-                                CornerRadius="16"
-                                HorizontalContentAlignment="Center"
-                                VerticalContentAlignment="Center"
-                                Command="{Binding CreateLibrary}"
-                                ToolTip.Tip="Créer une nouvelle bibliothèque">
-                            <TextBlock Text="+"
-                                       FontSize="16"
-                                       FontWeight="Bold"
-                                       HorizontalAlignment="Center"
-                                       VerticalAlignment="Center" />
-                        </Button>
-                    </Grid>
+                    
+                    <TextBlock Classes="subtitle"
+                               Text="Bibliothèques"
+                               Margin="16,8"/>
 
                     <ScrollViewer MaxHeight="300" VerticalScrollBarVisibility="Auto">
                         <ItemsControl ItemsSource="{Binding Libraries}">
@@ -126,6 +106,10 @@
                             <TextBlock Text="Rangs" />
                         </StackPanel>
                     </Button>
+                    
+                    <TextBlock Classes="subtitle"
+                               Text="Paramètres"
+                               Margin="16,8"/>
 
                     <Button Classes="sidebar"
                             IsVisible="{Binding IsOwner}"
@@ -145,6 +129,10 @@
                     </Button>
 
                     <Separator Margin="8,16" Background="{DynamicResource Background2}" />
+                    
+                    <TextBlock Classes="subtitle"
+                               Text="Statistiques"
+                               Margin="16,8"/>
 
                     <Button Classes="sidebar"
                             Command="{Binding ChangePageUserStats}">

@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
+using ManaxClient.Controls.Popups.Library;
 using ManaxClient.Controls.Popups.SavePoint;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
+using ManaxLibrary.DTO.Library;
 using ManaxLibrary.DTO.SavePoint;
 using ManaxLibrary.DTO.Setting;
 using ManaxLibrary.Logging;
@@ -79,6 +81,28 @@ public partial class SettingsServerPageViewModel : PageViewModel
                 SavePointCreateDto? savePoint = popup.GetResult();
                 if (savePoint == null) return;
                 Optional<long> postLibraryResponse = await ManaxApiSavePointClient.PostSavePointAsync(savePoint);
+                if (postLibraryResponse.Failed) InfoEmitted?.Invoke(this, postLibraryResponse.Error);
+            }
+            catch (Exception e)
+            {
+                Logger.LogError("Error creating library", e, Environment.StackTrace);
+                InfoEmitted?.Invoke(this, "Error creating library");
+            }
+        };
+        PopupRequested?.Invoke(this, popup);
+    }
+    
+    public void CreateLibrary()
+    {
+        LibraryCreatePopup popup = new();
+        popup.CloseRequested += async void (_, _) =>
+        {
+            try
+            {
+                popup.Close();
+                LibraryCreateDto? savePoint = popup.GetResult();
+                if (savePoint == null) return;
+                Optional<long> postLibraryResponse = await ManaxApiLibraryClient.PostLibraryAsync(savePoint);
                 if (postLibraryResponse.Failed) InfoEmitted?.Invoke(this, postLibraryResponse.Error);
             }
             catch (Exception e)

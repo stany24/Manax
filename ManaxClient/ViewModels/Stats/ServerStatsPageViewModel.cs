@@ -112,29 +112,26 @@ public partial class ServerStatsPageViewModel : PageViewModel
             }
         ];
 
-        if (ServerStats.SeriesInLibraries.Count > 0)
+        List<ISeries> librarySeries = [];
+        SKColor[] colors = [SKColors.Purple, SKColors.Orange, SKColors.Teal, SKColors.Pink, SKColors.Brown, SKColors.Navy
+        ];
+        int colorIndex = 0;
+
+        foreach (KeyValuePair<string, int> library in ServerStats.SeriesInLibraries)
         {
-            List<ISeries> librarySeries = [];
-            SKColor[] colors = [SKColors.Purple, SKColors.Orange, SKColors.Teal, SKColors.Pink, SKColors.Brown, SKColors.Navy
-            ];
-            int colorIndex = 0;
-
-            foreach (KeyValuePair<string, int> library in ServerStats.SeriesInLibraries)
+            librarySeries.Add(new PieSeries<int>
             {
-                librarySeries.Add(new PieSeries<int>
-                {
-                    Values = [library.Value],
-                    Name = library.Key,
-                    Fill = new SolidColorPaint(colors[colorIndex % colors.Length]),
-                    DataLabelsPaint = new SolidColorPaint(SKColors.White),
-                    DataLabelsSize = 12,
-                    DataLabelsPosition = LiveChartsCore.Measure.PolarLabelsPosition.Middle
-                });
-                colorIndex++;
-            }
-
-            LibraryDistributionSeries = librarySeries;
+                Values = [library.Value],
+                Name = library.Key,
+                Fill = new SolidColorPaint(colors[colorIndex % colors.Length]),
+                DataLabelsPaint = new SolidColorPaint(SKColors.White),
+                DataLabelsSize = 12,
+                DataLabelsPosition = LiveChartsCore.Measure.PolarLabelsPosition.Middle
+            });
+            colorIndex++;
         }
+
+        LibraryDistributionSeries = librarySeries;
 
         NeverReadSeries = ServerStats.NeverReadSeries.ConvertAll(s => new ClientSerie()
         {

@@ -16,6 +16,32 @@
                 <TextBlock Text="⚙️ Configurez les paramètres globaux de votre serveur Manax"
                            Foreground="{StaticResource SecondaryBrush}" />
             </StackPanel>
+            
+            <Border Classes="card">
+                <StackPanel Orientation="Horizontal" Spacing="12">
+                    <Button Classes="primary"
+                            Command="{Binding CreateSavePoint}"
+                            Padding="24,12"
+                            Margin="16,0,0,0"
+                            VerticalAlignment="Center">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <TextBlock Text="💾" />
+                            <TextBlock Text="Ajouter un point de sauvegarde" FontWeight="Medium" />
+                        </StackPanel>
+                    </Button>
+                
+                    <Button Classes="primary"
+                            Command="{Binding CreateLibrary}"
+                            Padding="24,12"
+                            Margin="16,0,0,0"
+                            VerticalAlignment="Center">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <TextBlock Text="💾" />
+                            <TextBlock Text="Ajouter une bibliothèque" FontWeight="Medium" />
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </Border>
 
             <Border Classes="card">
                 <StackPanel Spacing="20">
@@ -153,18 +179,6 @@
                             Foreground="{StaticResource SecondaryBrush}" />
                     </StackPanel>
                 </Border>
-
-                <Button Grid.Column="1"
-                        Classes="primary"
-                        Command="{Binding CreateSavePoint}"
-                        Padding="24,12"
-                        Margin="16,0,0,0"
-                        VerticalAlignment="Center">
-                    <StackPanel Orientation="Horizontal" Spacing="8">
-                        <TextBlock Text="💾" />
-                        <TextBlock Text="Ajouter un point de sauvegarde" FontWeight="Medium" />
-                    </StackPanel>
-                </Button>
 
                 <Button Grid.Column="2"
                         Classes="primary"

@@ -186,28 +186,6 @@ public partial class MainWindowViewModel : ObservableObject
         OnPropertyChanged(nameof(CurrentPageViewModel));
     }
 
-    public void CreateLibrary()
-    {
-        LibraryCreatePopup popup = new();
-        popup.CloseRequested += async void (_, _) =>
-        {
-            try
-            {
-                popup.Close();
-                LibraryCreateDto? savePoint = popup.GetResult();
-                if (savePoint == null) return;
-                Optional<long> postLibraryResponse = await ManaxApiLibraryClient.PostLibraryAsync(savePoint);
-                if (postLibraryResponse.Failed) ShowInfo(postLibraryResponse.Error);
-            }
-            catch (Exception e)
-            {
-                Logger.LogError("Error creating library", e, Environment.StackTrace);
-                Infos.Add("Error creating library");
-            }
-        };
-        SetPopup(popup);
-    }
-
     public void ShowLibrary(long libraryId)
     {
         SetPage(new LibraryPageViewModel(libraryId));
