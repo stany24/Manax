@@ -37,7 +37,7 @@ public static class ManaxApiIssueClient
             ? new Optional<List<ReportedIssueChapterDto>>("Failed to read reported chapter issues from response.")
             : new Optional<List<ReportedIssueChapterDto>>(issues);
     }
-    
+
     public static async Task<Optional<List<ReportedIssueChapterTypeDto>>> GetAllReportedChapterIssueTypesAsync()
     {
         HttpResponseMessage response = await ManaxApiClient.Client.GetAsync("/api/issue/chapter/reported/types");
@@ -45,7 +45,8 @@ public static class ManaxApiIssueClient
         List<ReportedIssueChapterTypeDto>? issues =
             await response.Content.ReadFromJsonAsync<List<ReportedIssueChapterTypeDto>>();
         return issues == null
-            ? new Optional<List<ReportedIssueChapterTypeDto>>("Failed to read reported chapter issue type from response.")
+            ? new Optional<List<ReportedIssueChapterTypeDto>>(
+                "Failed to read reported chapter issue type from response.")
             : new Optional<List<ReportedIssueChapterTypeDto>>(issues);
     }
 
@@ -58,7 +59,7 @@ public static class ManaxApiIssueClient
             ? new Optional<List<ReportedIssueSerieDto>>("Failed to read reported serie issues from response.")
             : new Optional<List<ReportedIssueSerieDto>>(issues);
     }
-    
+
     public static async Task<Optional<List<ReportedIssueSerieTypeDto>>> GetAllReportedSerieIssueTypesAsync()
     {
         HttpResponseMessage response = await ManaxApiClient.Client.GetAsync("/api/issue/chapter/reported/types");

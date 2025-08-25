@@ -137,10 +137,7 @@ public abstract class Popup : Panel
         Form.RenderTransform = new ScaleTransform(0.9, 0.9);
         _canvas.Opacity = 0;
 
-        if (delay)
-        {
-            await Task.Delay(200);
-        }
+        if (delay) await Task.Delay(200);
         Closed?.Invoke(this, EventArgs.Empty);
     }
 }

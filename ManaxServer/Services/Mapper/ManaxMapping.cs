@@ -43,7 +43,7 @@ public class ManaxMapping : Mapping
         CreateMap<AutomaticIssueChapter, AutomaticIssueChapterDto>();
         CreateMap<ReportedIssueChapterType, ReportedIssueChapterTypeDto>();
         CreateMap<ReportedIssueSerieType, ReportedIssueSerieTypeDto>();
-        CreateMap<ReportedIssueChapterDto,ReportedIssueChapter>();
+        CreateMap<ReportedIssueChapterDto, ReportedIssueChapter>();
 
         CreateMap<Chapter, ChapterDto>();
 

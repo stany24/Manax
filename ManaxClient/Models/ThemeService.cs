@@ -23,7 +23,7 @@ public class ThemeService
         app.Resources["Background3"] = isDark
             ? new SolidColorBrush(Color.Parse("#495057"))
             : new SolidColorBrush(Color.Parse("#F8F9FA"));
-        
+
         app.Resources["TextColor1"] = !isDark
             ? new SolidColorBrush(Color.Parse("#212529"))
             : new SolidColorBrush(Color.Parse("#F8F9FA"));

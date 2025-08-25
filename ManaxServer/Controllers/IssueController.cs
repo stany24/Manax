@@ -2,7 +2,6 @@ using ManaxLibrary.DTO.Issue.Automatic;
 using ManaxLibrary.DTO.Issue.Reported;
 using ManaxServer.Localization;
 using ManaxServer.Models;
-using ManaxServer.Models.Chapter;
 using ManaxServer.Models.Issue.Automatic;
 using ManaxServer.Models.Issue.Reported;
 using ManaxServer.Services.Mapper;
@@ -42,13 +41,14 @@ public class IssueController(ManaxContext context, IMapper mapper) : ControllerB
         List<ReportedIssueChapter> issues = await context.ReportedIssuesChapter.ToListAsync();
         return mapper.Map<List<ReportedIssueChapterDto>>(issues);
     }
-    
+
     [HttpGet("chapter/reported/types")]
     [Authorize(Roles = "Admin,Owner")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<List<ReportedIssueChapterTypeDto>> GetAllReportedChapterIssuesTypes()
     {
-        return  await context.ReportedIssueChapterTypes.Select(i => mapper.Map<ReportedIssueChapterTypeDto>(i)).ToListAsync();
+        return await context.ReportedIssueChapterTypes.Select(i => mapper.Map<ReportedIssueChapterTypeDto>(i))
+            .ToListAsync();
     }
 
     [HttpGet("serie/reported")]
@@ -59,7 +59,7 @@ public class IssueController(ManaxContext context, IMapper mapper) : ControllerB
         List<ReportedIssueSerie> issues = await context.ReportedIssuesSerie.ToListAsync();
         return mapper.Map<List<ReportedIssueSerieDto>>(issues);
     }
-    
+
     [HttpGet("serie/reported/types")]
     [Authorize(Roles = "Admin,Owner")]
     [ProducesResponseType(StatusCodes.Status200OK)]

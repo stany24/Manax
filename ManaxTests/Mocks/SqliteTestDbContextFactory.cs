@@ -3,9 +3,9 @@ using ManaxLibrary.DTO.User;
 using ManaxServer.Models;
 using ManaxServer.Models.Chapter;
 using ManaxServer.Models.Library;
+using ManaxServer.Models.Rank;
 using ManaxServer.Models.SavePoint;
 using ManaxServer.Models.Serie;
-using ManaxServer.Models.Rank;
 using ManaxServer.Models.User;
 using Microsoft.EntityFrameworkCore;
 
@@ -66,7 +66,7 @@ public static class SqliteTestDbContextFactory
                 Creation = DateTime.UtcNow,
                 LastModification = DateTime.UtcNow
             },
-            
+
             new()
             {
                 Id = 3,
@@ -191,10 +191,7 @@ public static class SqliteTestDbContextFactory
 
         ManaxContext context = new(options);
 
-        if (File.Exists(dbPath))
-        {
-            File.Delete(dbPath);
-        }
+        if (File.Exists(dbPath)) File.Delete(dbPath);
 
         context.Database.Migrate();
 
@@ -213,26 +210,19 @@ public static class SqliteTestDbContextFactory
 
     public static void CleanupTestDatabase(ManaxContext context)
     {
-        if (context.Database.GetDbConnection().ConnectionString.Contains("test_"))
+        if (!context.Database.GetDbConnection().ConnectionString.Contains("test_")) return;
+        string connectionString = context.Database.GetDbConnection().ConnectionString;
+        context.Dispose();
+
+        string dbPath = connectionString.Replace("Data Source=", "");
+        if (!File.Exists(dbPath)) return;
+        try
         {
-            string? connectionString = context.Database.GetDbConnection().ConnectionString;
-            context.Dispose();
-            
-            if (connectionString != null)
-            {
-                string dbPath = connectionString.Replace("Data Source=", "");
-                if (File.Exists(dbPath))
-                {
-                    try
-                    {
-                        File.Delete(dbPath);
-                    }
-                    catch
-                    {
-                        // Ignore cleanup errors
-                    }
-                }
-            }
+            File.Delete(dbPath);
+        }
+        catch
+        {
+            /* Ignore cleanup errors*/
         }
     }
 }

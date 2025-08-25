@@ -132,16 +132,16 @@
         <SolidColorBrush x:Key="PrimaryBrush" Color="#007ACC" />
         <SolidColorBrush x:Key="SecondaryBrush" Color="#6C757D" />
         <SolidColorBrush x:Key="TertiaryBrush" Color="#6C757D" />
-        
+
         <SolidColorBrush x:Key="SuccessBrush" Color="#28A745" />
         <SolidColorBrush x:Key="DangerBrush" Color="#DC3545" />
         <SolidColorBrush x:Key="WarningBrush" Color="#FFC107" />
         <SolidColorBrush x:Key="InfoBrush" Color="#17A2B8" />
-        
+
         <SolidColorBrush x:Key="Background1" Color="#F8F9FA" />
         <SolidColorBrush x:Key="Background2" Color="#E9ECEF" />
         <SolidColorBrush x:Key="Background3" Color="#DEE2E6" />
-        
+
         <SolidColorBrush x:Key="TextColor1" Color="#000000" />
         <SolidColorBrush x:Key="TextColor2" Color="#000000" />
         <SolidColorBrush x:Key="TextColor3" Color="#000000" />

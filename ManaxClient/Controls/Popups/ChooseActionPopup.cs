@@ -10,6 +10,7 @@ namespace ManaxClient.Controls.Popups;
 public class ChooseActionPopup : Popup
 {
     private string _result = string.Empty;
+
     public ChooseActionPopup(List<string> options)
     {
         Form.Content = CreateContent(options);
@@ -45,23 +46,17 @@ public class ChooseActionPopup : Popup
                 BorderThickness = new Thickness(0),
                 Padding = new Thickness(12, 8)
             };
-            
+
             action.Click += (_, _) =>
             {
                 _result = option;
                 CloseRequested?.Invoke(this, EventArgs.Empty);
             };
 
-            action.PointerEntered += (_, _) =>
-            {
-                action.Background = new SolidColorBrush(Color.Parse("#F8F9FA"));
-            };
+            action.PointerEntered += (_, _) => { action.Background = new SolidColorBrush(Color.Parse("#F8F9FA")); };
 
-            action.PointerExited += (_, _) =>
-            {
-                action.Background = Brushes.Transparent;
-            };
-        
+            action.PointerExited += (_, _) => { action.Background = Brushes.Transparent; };
+
             mainPanel.Children.Add(action);
         }
 

@@ -96,8 +96,8 @@
                                     <TextBlock Text="Aucun chapitre disponible"
                                                FontWeight="Medium" />
                                     <TextBlock Text="Cette série ne contient pas encore de chapitres."
-                                           FontSize="12"
-                                           Foreground="{StaticResource SecondaryBrush}" />
+                                               FontSize="12"
+                                               Foreground="{StaticResource SecondaryBrush}" />
                                 </StackPanel>
                             </Border>
 

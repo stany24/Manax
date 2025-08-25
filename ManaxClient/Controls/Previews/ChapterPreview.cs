@@ -1,4 +1,3 @@
-
 using System;
 using System.IO;
 using Avalonia;
@@ -168,7 +167,7 @@ public class ChapterPreview : Button
                     : new SolidColorBrush(Color.Parse("#CCE5FF"));
             })
         });
-        
+
         Button actionButton = new()
         {
             Content = "...",
@@ -213,10 +212,16 @@ public class ChapterPreview : Button
         ];
     }
 
+    public ClientChapter Chapter
+    {
+        get => GetChapter(this);
+        set => SetChapter(this, value);
+    }
+
     private void ShowChoices(object? sender, RoutedEventArgs e)
     {
         ChooseActionPopup popup = new(["Signaler un problème"]);
-        popup.CloseRequested += (_, _) => 
+        popup.CloseRequested += (_, _) =>
         {
             string actionName = popup.GetResult();
             switch (actionName)
@@ -226,9 +231,9 @@ public class ChapterPreview : Button
                     break;
             }
         };
-        
+
         GetPageViewModelParent().PopupRequested?.Invoke(this, popup);
-        
+
         e.Handled = true;
     }
 
@@ -240,12 +245,12 @@ public class ChapterPreview : Button
             if (!createChapterIssuePopup.Canceled)
             {
                 ReportedIssueChapterCreateDto issue = createChapterIssuePopup.GetResult();
-                ManaxLibrary.Optional<bool> chapterIssueAsync = await ManaxApiIssueClient.CreateChapterIssueAsync(issue);
+                ManaxLibrary.Optional<bool> chapterIssueAsync =
+                    await ManaxApiIssueClient.CreateChapterIssueAsync(issue);
                 if (chapterIssueAsync.Failed)
-                {
                     GetPageViewModelParent().InfoEmitted?.Invoke(this, chapterIssueAsync.Error);
-                }
             }
+
             createChapterIssuePopup.Close();
         };
         GetPageViewModelParent().PopupRequested?.Invoke(this, createChapterIssuePopup);
@@ -256,20 +261,11 @@ public class ChapterPreview : Button
         Control? parent = this.FindAncestorOfType<Control>();
         while (parent != null)
         {
-            if (parent.DataContext is PageViewModel pageViewModel)
-            {
-                return pageViewModel;
-            }
+            if (parent.DataContext is PageViewModel pageViewModel) return pageViewModel;
             parent = parent.FindAncestorOfType<Control>();
         }
 
         return null;
-    }
-
-    public ClientChapter Chapter
-    {
-        get => GetChapter(this);
-        set => SetChapter(this, value);
     }
 
     protected override void OnPointerEntered(PointerEventArgs e)

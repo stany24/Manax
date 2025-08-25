@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using ManaxLibrary.DTO.Rank;
 using ManaxServer.Controllers;
 using ManaxServer.Models;
@@ -7,9 +8,8 @@ using ManaxServer.Services.Notification;
 using ManaxTests.Mocks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Moq;
-using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
+using Moq;
 
 namespace ManaxTests;
 
@@ -30,7 +30,7 @@ public class TestRankController
         _mockNotificationService = new Mock<INotificationService>();
 
         _controller = new RankController(_context, _mapper, _mockNotificationService.Object);
-        
+
         ClaimsPrincipal user = new(new ClaimsIdentity([
             new Claim(ClaimTypes.NameIdentifier, "1"),
             new Claim(ClaimTypes.Name, "TestUser1")
@@ -103,7 +103,7 @@ public class TestRankController
             Value = existingRank.Value,
             Name = "Duplicate Value"
         };
-        
+
         await Assert.ThrowsExactlyAsync<DbUpdateException>(() => _controller.CreateRank(createDto));
     }
 
@@ -116,7 +116,7 @@ public class TestRankController
             Value = 99,
             Name = existingRank.Name
         };
-        
+
         await Assert.ThrowsExactlyAsync<DbUpdateException>(() => _controller.CreateRank(createDto));
     }
 
@@ -219,7 +219,8 @@ public class TestRankController
 
         Assert.IsInstanceOfType(result, typeof(OkResult));
 
-        UserRank? userRank = _context.UserRanks.FirstOrDefault(ur => ur.SerieId == createDto.SerieId && ur.RankId == createDto.RankId);
+        UserRank? userRank =
+            _context.UserRanks.FirstOrDefault(ur => ur.SerieId == createDto.SerieId && ur.RankId == createDto.RankId);
         Assert.IsNotNull(userRank);
         Assert.AreEqual(createDto.SerieId, userRank.SerieId);
         Assert.AreEqual(createDto.RankId, userRank.RankId);
@@ -259,7 +260,7 @@ public class TestRankController
 
         foreach (UserRank expectedRank in expectedUserRanks)
         {
-            UserRankDto? returnedRank = returnedRanks.FirstOrDefault(r => 
+            UserRankDto? returnedRank = returnedRanks.FirstOrDefault(r =>
                 r.SerieId == expectedRank.SerieId && r.RankId == expectedRank.RankId);
             Assert.IsNotNull(returnedRank);
             Assert.AreEqual(expectedRank.UserId, returnedRank.UserId);
