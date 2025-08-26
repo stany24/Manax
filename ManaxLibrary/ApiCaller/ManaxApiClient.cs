@@ -5,7 +5,11 @@ namespace ManaxLibrary.ApiCaller;
 
 internal static class ManaxApiClient
 {
-    internal static HttpClient Client = new() { BaseAddress = new Uri("http://127.0.0.1:5246/") };
+    internal static HttpClient Client = new() 
+    { 
+        BaseAddress = new Uri("http://127.0.0.1:5246/"),
+        Timeout = TimeSpan.FromSeconds(5)
+    };
 
     public static void SetHost(Uri host)
     {
@@ -13,7 +17,7 @@ internal static class ManaxApiClient
         Client = new HttpClient(handler)
         {
             BaseAddress = host,
-            Timeout = TimeSpan.FromMinutes(30)
+            Timeout = TimeSpan.FromSeconds(5)
         };
     }
 

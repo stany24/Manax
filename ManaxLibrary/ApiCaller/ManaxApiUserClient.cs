@@ -7,13 +7,24 @@ public static class ManaxApiUserClient
 {
     public static async Task<Optional<UserLoginResultDto>> LoginAsync(string username, string password)
     {
-        HttpResponseMessage response =
-            await ManaxApiClient.Client.PostAsJsonAsync("/api/login", new { username, password });
-        if (!response.IsSuccessStatusCode) return new Optional<UserLoginResultDto>(response);
-        UserLoginResultDto? user = await response.Content.ReadFromJsonAsync<UserLoginResultDto>();
-        return user == null
-            ? new Optional<UserLoginResultDto>("Failed to read response content")
-            : new Optional<UserLoginResultDto>(user);
+        try
+        {
+            HttpResponseMessage response =
+                await ManaxApiClient.Client.PostAsJsonAsync("/api/login", new { username, password });
+            if (!response.IsSuccessStatusCode) return new Optional<UserLoginResultDto>(response);
+            UserLoginResultDto? user = await response.Content.ReadFromJsonAsync<UserLoginResultDto>();
+            return user == null
+                ? new Optional<UserLoginResultDto>("Failed to read response content")
+                : new Optional<UserLoginResultDto>(user);
+        }
+        catch (TaskCanceledException)
+        {
+            return new Optional<UserLoginResultDto>("Timeout");
+        }
+        catch (Exception e)
+        {
+            return new Optional<UserLoginResultDto>("Exception: " + e.Message);
+        }
     }
 
     public static async Task<Optional<List<long>>> GetUsersIdsAsync()
