@@ -41,6 +41,6 @@ public partial class SettingsAppViewModel : PageViewModel
 
     private void UpdateTheme()
     {
-        _themeService.UpdateTheme(SelectedTheme, IsDarkMode);
+        ThemeService.UpdateTheme(SelectedTheme, IsDarkMode);
     }
 }

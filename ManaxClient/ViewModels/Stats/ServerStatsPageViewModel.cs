@@ -6,6 +6,7 @@ using Avalonia.Media.Imaging;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using LiveChartsCore;
+using LiveChartsCore.Measure;
 using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Painting;
 using ManaxClient.Models;
@@ -19,13 +20,13 @@ namespace ManaxClient.ViewModels.Stats;
 
 public partial class ServerStatsPageViewModel : PageViewModel
 {
-    [ObservableProperty] private ServerStats? _serverStats;
+    [ObservableProperty] private double _availableDiskSizeInGb;
+    [ObservableProperty] private double _diskSizeInGb;
     [ObservableProperty] private IEnumerable<ISeries>? _diskUsageSeries;
-    [ObservableProperty] private IEnumerable<ISeries>? _userActivitySeries;
     [ObservableProperty] private IEnumerable<ISeries>? _libraryDistributionSeries;
     [ObservableProperty] private List<ClientSerie> _neverReadSeries = [];
-    [ObservableProperty] private double _diskSizeInGb;
-    [ObservableProperty] private double _availableDiskSizeInGb;
+    [ObservableProperty] private ServerStats? _serverStats;
+    [ObservableProperty] private IEnumerable<ISeries>? _userActivitySeries;
 
     public ServerStatsPageViewModel()
     {
@@ -73,7 +74,7 @@ public partial class ServerStatsPageViewModel : PageViewModel
                 Fill = new SolidColorPaint(SKColors.OrangeRed),
                 DataLabelsPaint = new SolidColorPaint(SKColors.White),
                 DataLabelsSize = 12,
-                DataLabelsPosition = LiveChartsCore.Measure.PolarLabelsPosition.Middle,
+                DataLabelsPosition = PolarLabelsPosition.Middle,
                 DataLabelsFormatter = point => $"{point.Coordinate.PrimaryValue:F2} GB",
                 ToolTipLabelFormatter = point => $"{point.Coordinate.PrimaryValue:F2} GB"
             },
@@ -84,7 +85,7 @@ public partial class ServerStatsPageViewModel : PageViewModel
                 Fill = new SolidColorPaint(SKColors.Green),
                 DataLabelsPaint = new SolidColorPaint(SKColors.White),
                 DataLabelsSize = 12,
-                DataLabelsPosition = LiveChartsCore.Measure.PolarLabelsPosition.Middle,
+                DataLabelsPosition = PolarLabelsPosition.Middle,
                 DataLabelsFormatter = point => $"{point.Coordinate.PrimaryValue:F2} GB",
                 ToolTipLabelFormatter = point => $"{point.Coordinate.PrimaryValue:F2} GB"
             }
@@ -99,7 +100,7 @@ public partial class ServerStatsPageViewModel : PageViewModel
                 Fill = new SolidColorPaint(SKColors.DodgerBlue),
                 DataLabelsPaint = new SolidColorPaint(SKColors.White),
                 DataLabelsSize = 12,
-                DataLabelsPosition = LiveChartsCore.Measure.PolarLabelsPosition.Middle
+                DataLabelsPosition = PolarLabelsPosition.Middle
             },
             new PieSeries<int>
             {
@@ -108,12 +109,14 @@ public partial class ServerStatsPageViewModel : PageViewModel
                 Fill = new SolidColorPaint(SKColors.Gray),
                 DataLabelsPaint = new SolidColorPaint(SKColors.White),
                 DataLabelsSize = 12,
-                DataLabelsPosition = LiveChartsCore.Measure.PolarLabelsPosition.Middle
+                DataLabelsPosition = PolarLabelsPosition.Middle
             }
         ];
 
         List<ISeries> librarySeries = [];
-        SKColor[] colors = [SKColors.Purple, SKColors.Orange, SKColors.Teal, SKColors.Pink, SKColors.Brown, SKColors.Navy
+        SKColor[] colors =
+        [
+            SKColors.Purple, SKColors.Orange, SKColors.Teal, SKColors.Pink, SKColors.Brown, SKColors.Navy
         ];
         int colorIndex = 0;
 
@@ -126,14 +129,14 @@ public partial class ServerStatsPageViewModel : PageViewModel
                 Fill = new SolidColorPaint(colors[colorIndex % colors.Length]),
                 DataLabelsPaint = new SolidColorPaint(SKColors.White),
                 DataLabelsSize = 12,
-                DataLabelsPosition = LiveChartsCore.Measure.PolarLabelsPosition.Middle
+                DataLabelsPosition = PolarLabelsPosition.Middle
             });
             colorIndex++;
         }
 
         LibraryDistributionSeries = librarySeries;
 
-        NeverReadSeries = ServerStats.NeverReadSeries.ConvertAll(s => new ClientSerie()
+        NeverReadSeries = ServerStats.NeverReadSeries.ConvertAll(s => new ClientSerie
         {
             Info = s
         });
@@ -148,6 +151,7 @@ public partial class ServerStatsPageViewModel : PageViewModel
                     InfoEmitted?.Invoke(this, seriePosterAsync.Error);
                     continue;
                 }
+
                 try
                 {
                     await Dispatcher.UIThread.InvokeAsync(() =>

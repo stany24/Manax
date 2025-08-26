@@ -76,7 +76,7 @@ public class AutomaticChapterIssuePreview : Button
         {
             Source = this,
             Mode = BindingMode.OneWay,
-            Converter = new FuncValueConverter<AutomaticIssueChapterType, string>(problem => 
+            Converter = new FuncValueConverter<AutomaticIssueChapterType, string>(problem =>
                 problem switch
                 {
                     AutomaticIssueChapterType.ImageTooSmall => "Image trop petite",

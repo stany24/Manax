@@ -52,9 +52,7 @@ public static class ManaxApiUserClient
             HttpResponseMessage response = await ManaxApiClient.Client.PostAsJsonAsync("api/user/create", user);
             if (!response.IsSuccessStatusCode) return new Optional<long>(response);
             long? id = await response.Content.ReadFromJsonAsync<long>();
-            return id == null
-                ? new Optional<long>("Failed to read created user ID from response.")
-                : new Optional<long>(id.Value);
+            return new Optional<long>(id.Value);
         });
     }
 

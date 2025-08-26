@@ -59,11 +59,9 @@ public class CreateChapterIssuePopup(long chapterId) : ConfirmCancelPopup
 
     protected override void OkButtonClicked(object? sender, RoutedEventArgs e)
     {
-        if (_issueTypeComboBox.SelectedItem is ReportedIssueChapterTypeDto)
-        {
-            Canceled = false;
-            CloseRequested?.Invoke(this, EventArgs.Empty);
-        }
+        if (_issueTypeComboBox.SelectedItem is not ReportedIssueChapterTypeDto) return;
+        Canceled = false;
+        CloseRequested?.Invoke(this, EventArgs.Empty);
     }
 
     public ReportedIssueChapterCreateDto GetResult()

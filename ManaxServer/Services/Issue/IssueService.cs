@@ -69,12 +69,12 @@ public class IssueService(IServiceScopeFactory scopeFactory) : Service, IIssueSe
             RemoveChapterIssue(chapterId, problem);
     }
 
-    public void RemoveChapterIssue(long serieId, AutomaticIssueChapterType problem)
+    public void RemoveChapterIssue(long chapterId, AutomaticIssueChapterType problem)
     {
         using IServiceScope scope = scopeFactory.CreateScope();
         ManaxContext context = scope.ServiceProvider.GetRequiredService<ManaxContext>();
         AutomaticIssueChapter? issue = context.AutomaticIssuesChapter
-            .FirstOrDefault(i => i.Problem == problem && i.ChapterId == serieId);
+            .FirstOrDefault(i => i.Problem == problem && i.ChapterId == chapterId);
         if (issue == null) return;
         context.AutomaticIssuesChapter.Remove(issue);
         context.SaveChanges();

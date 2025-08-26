@@ -16,7 +16,7 @@
                 <TextBlock Text="⚙️ Configurez les paramètres globaux de votre serveur Manax"
                            Foreground="{StaticResource SecondaryBrush}" />
             </StackPanel>
-            
+
             <Border Classes="card">
                 <StackPanel Orientation="Horizontal" Spacing="12">
                     <Button Classes="primary"
@@ -29,7 +29,7 @@
                             <TextBlock Text="Ajouter un point de sauvegarde" FontWeight="Medium" />
                         </StackPanel>
                     </Button>
-                
+
                     <Button Classes="primary"
                             Command="{Binding CreateLibrary}"
                             Padding="24,12"

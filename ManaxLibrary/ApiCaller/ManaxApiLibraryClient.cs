@@ -38,9 +38,7 @@ public static class ManaxApiLibraryClient
             HttpResponseMessage response = await ManaxApiClient.Client.PostAsJsonAsync("api/library/create", library);
             if (!response.IsSuccessStatusCode) return new Optional<long>(response);
             long? id = await response.Content.ReadFromJsonAsync<long>();
-            return id == null
-                ? new Optional<long>("Failed to read created library ID from response.")
-                : new Optional<long>(id.Value);
+            return new Optional<long>(id.Value);
         });
     }
 

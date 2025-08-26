@@ -37,10 +37,10 @@
                     </Button>
 
                     <Separator Margin="8,16" Background="{DynamicResource Background2}" />
-                    
+
                     <TextBlock Classes="subtitle"
                                Text="Bibliothèques"
-                               Margin="16,8"/>
+                               Margin="16,8" />
 
                     <ScrollViewer MaxHeight="300" VerticalScrollBarVisibility="Auto">
                         <ItemsControl ItemsSource="{Binding Libraries}">
@@ -97,10 +97,10 @@
                             <TextBlock Text="Rangs" />
                         </StackPanel>
                     </Button>
-                    
+
                     <TextBlock Classes="subtitle"
                                Text="Paramètres"
-                               Margin="16,8"/>
+                               Margin="16,8" />
 
                     <Button Classes="sidebar"
                             IsVisible="{Binding IsOwner}"
@@ -120,10 +120,10 @@
                     </Button>
 
                     <Separator Margin="8,16" Background="{DynamicResource Background2}" />
-                    
+
                     <TextBlock Classes="subtitle"
                                Text="Statistiques"
-                               Margin="16,8"/>
+                               Margin="16,8" />
 
                     <Button Classes="sidebar"
                             Command="{Binding ChangePageUserStats}">

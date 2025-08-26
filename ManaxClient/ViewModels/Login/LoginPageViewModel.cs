@@ -48,23 +48,6 @@ public partial class LoginPageViewModel : PageViewModel
         });
     }
 
-    public void Claim()
-    {
-        LoginError = string.Empty;
-        Task.Run(async () =>
-        {
-            ManaxApiConfig.SetHost(new Uri(Host + $":{Port}/"));
-            Optional<UserLoginResultDto> claimResponse = await ManaxApiUserClient.ClaimAsync(Username, Password);
-            if (claimResponse.Failed)
-            {
-                InfoEmitted?.Invoke(this, claimResponse.Error);
-                return;
-            }
-
-            CheckToken(claimResponse.GetValue());
-        });
-    }
-
     private void CheckToken(UserLoginResultDto result)
     {
         try

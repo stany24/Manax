@@ -26,7 +26,8 @@ public static class ManaxApiIssueClient
         {
             HttpResponseMessage response = await ManaxApiClient.Client.GetAsync("/api/issue/serie/automatic");
             if (!response.IsSuccessStatusCode) return new Optional<List<AutomaticIssueSerieDto>>(response);
-            List<AutomaticIssueSerieDto>? issues = await response.Content.ReadFromJsonAsync<List<AutomaticIssueSerieDto>>();
+            List<AutomaticIssueSerieDto>? issues =
+                await response.Content.ReadFromJsonAsync<List<AutomaticIssueSerieDto>>();
             return issues == null
                 ? new Optional<List<AutomaticIssueSerieDto>>("Failed to read automatic serie issues from response.")
                 : new Optional<List<AutomaticIssueSerieDto>>(issues);
@@ -68,7 +69,8 @@ public static class ManaxApiIssueClient
         {
             HttpResponseMessage response = await ManaxApiClient.Client.GetAsync("/api/issue/serie/reported");
             if (!response.IsSuccessStatusCode) return new Optional<List<ReportedIssueSerieDto>>(response);
-            List<ReportedIssueSerieDto>? issues = await response.Content.ReadFromJsonAsync<List<ReportedIssueSerieDto>>();
+            List<ReportedIssueSerieDto>? issues =
+                await response.Content.ReadFromJsonAsync<List<ReportedIssueSerieDto>>();
             return issues == null
                 ? new Optional<List<ReportedIssueSerieDto>>("Failed to read reported serie issues from response.")
                 : new Optional<List<ReportedIssueSerieDto>>(issues);
@@ -84,7 +86,8 @@ public static class ManaxApiIssueClient
             List<ReportedIssueSerieTypeDto>? issues =
                 await response.Content.ReadFromJsonAsync<List<ReportedIssueSerieTypeDto>>();
             return issues == null
-                ? new Optional<List<ReportedIssueSerieTypeDto>>("Failed to read reported chapter issue type from response.")
+                ? new Optional<List<ReportedIssueSerieTypeDto>>(
+                    "Failed to read reported chapter issue type from response.")
                 : new Optional<List<ReportedIssueSerieTypeDto>>(issues);
         });
     }

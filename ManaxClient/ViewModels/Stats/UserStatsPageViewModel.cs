@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using LiveChartsCore;
+using LiveChartsCore.Measure;
 using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Painting;
 using ManaxLibrary;
@@ -19,11 +21,11 @@ public partial class UserStatsPageViewModel : PageViewModel
 {
     [ObservableProperty] private IEnumerable<ISeries>? _chaptersSeries;
     [ObservableProperty] private IEnumerable<ISeries>? _ranksSeries;
-    [ObservableProperty] private IEnumerable<ISeries>? _seriesSeries;
     [ObservableProperty] private IEnumerable<ISeries>? _readsPerDaySeries;
+    [ObservableProperty] private List<Axis>? _readsXAxes;
+    [ObservableProperty] private IEnumerable<ISeries>? _seriesSeries;
     [ObservableProperty] private UserStats? _userStats;
     [ObservableProperty] private List<Axis>? _xAxes;
-    [ObservableProperty] private List<Axis>? _readsXAxes;
 
     public UserStatsPageViewModel()
     {
@@ -68,7 +70,7 @@ public partial class UserStatsPageViewModel : PageViewModel
                 Fill = new SolidColorPaint(SKColors.Green),
                 DataLabelsPaint = new SolidColorPaint(SKColors.White),
                 DataLabelsSize = 12,
-                DataLabelsPosition = LiveChartsCore.Measure.PolarLabelsPosition.Middle
+                DataLabelsPosition = PolarLabelsPosition.Middle
             },
             new PieSeries<long>
             {
@@ -77,7 +79,7 @@ public partial class UserStatsPageViewModel : PageViewModel
                 Fill = new SolidColorPaint(SKColors.Orange),
                 DataLabelsPaint = new SolidColorPaint(SKColors.White),
                 DataLabelsSize = 12,
-                DataLabelsPosition = LiveChartsCore.Measure.PolarLabelsPosition.Middle
+                DataLabelsPosition = PolarLabelsPosition.Middle
             },
             new PieSeries<long>
             {
@@ -86,7 +88,7 @@ public partial class UserStatsPageViewModel : PageViewModel
                 Fill = new SolidColorPaint(SKColors.Gray),
                 DataLabelsPaint = new SolidColorPaint(SKColors.White),
                 DataLabelsSize = 12,
-                DataLabelsPosition = LiveChartsCore.Measure.PolarLabelsPosition.Middle
+                DataLabelsPosition = PolarLabelsPosition.Middle
             }
         ];
 
@@ -99,7 +101,7 @@ public partial class UserStatsPageViewModel : PageViewModel
                 Fill = new SolidColorPaint(SKColors.Green),
                 DataLabelsPaint = new SolidColorPaint(SKColors.White),
                 DataLabelsSize = 12,
-                DataLabelsPosition = LiveChartsCore.Measure.PolarLabelsPosition.Middle
+                DataLabelsPosition = PolarLabelsPosition.Middle
             },
             new PieSeries<long>
             {
@@ -108,7 +110,7 @@ public partial class UserStatsPageViewModel : PageViewModel
                 Fill = new SolidColorPaint(SKColors.Gray),
                 DataLabelsPaint = new SolidColorPaint(SKColors.White),
                 DataLabelsSize = 12,
-                DataLabelsPosition = LiveChartsCore.Measure.PolarLabelsPosition.Middle
+                DataLabelsPosition = PolarLabelsPosition.Middle
             }
         ];
 
@@ -154,7 +156,7 @@ public partial class UserStatsPageViewModel : PageViewModel
                 .ToList();
 
             List<double> readCounts = readsPerDay.Select(x => (double)x.Count).ToList();
-            List<string> dateLabels = readsPerDay.Select(x => x.Date.ToString("dd/MM")).ToList();
+            List<string> dateLabels = readsPerDay.Select(x => x.Date.ToString("dd/MM",CultureInfo.InvariantCulture)).ToList();
 
             ReadsPerDaySeries =
             [

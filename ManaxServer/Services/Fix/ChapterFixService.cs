@@ -72,11 +72,8 @@ public partial class FixService(IServiceScopeFactory scopeFactory, IIssueService
             File.Delete(chapter.Path);
             ZipFile.CreateFromDirectory(copyName, chapter.Path);
         }
-        
-        foreach (MagickImage? image in images)
-        {
-            image?.Dispose();
-        }
+
+        foreach (MagickImage? image in images) image?.Dispose();
 
         Directory.Delete(copyName, true);
     }

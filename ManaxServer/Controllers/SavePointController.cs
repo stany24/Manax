@@ -25,10 +25,8 @@ public class SavePointController(ManaxContext context, IMapper mapper) : Control
             return Conflict(Localizer.Format("SavePointNameExists", savePointCreate.Path));
 
         if (!Directory.Exists(savePointCreate.Path))
-        {
             return Conflict(Localizer.Format("SavePointPathNotExists", savePointCreate.Path));
-        }
-        
+
         SavePoint library = mapper.Map<SavePoint>(savePointCreate);
         library.Creation = DateTime.UtcNow;
 

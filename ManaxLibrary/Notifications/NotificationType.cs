@@ -27,9 +27,9 @@ public enum NotificationType
 
     ReadCreated,
     ReadDeleted,
-    
+
     ReportedChapterIssueCreated,
     ReportedChapterIssueDeleted,
     ReportedSerieIssueCreated,
-    ReportedSerieIssueDeleted,
+    ReportedSerieIssueDeleted
 }

@@ -133,11 +133,18 @@ public abstract class Popup : Panel
 
     public async void Close(bool delay = true)
     {
-        Form.Opacity = 0;
-        Form.RenderTransform = new ScaleTransform(0.9, 0.9);
-        _canvas.Opacity = 0;
+        try
+        {
+            Form.Opacity = 0;
+            Form.RenderTransform = new ScaleTransform(0.9, 0.9);
+            _canvas.Opacity = 0;
 
-        if (delay) await Task.Delay(200);
-        Closed?.Invoke(this, EventArgs.Empty);
+            if (delay) await Task.Delay(200);
+            Closed?.Invoke(this, EventArgs.Empty);
+        }
+        catch (Exception)
+        {
+            // Ignored will be removed anyway
+        }
     }
 }

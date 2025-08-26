@@ -26,7 +26,7 @@ public class StatsController(ManaxContext context, IMapper mapper) : ControllerB
     {
         long? currentUserId = UserController.GetCurrentUserId(HttpContext);
         if (currentUserId == null) return Unauthorized(Localizer.Format("Unauthorized"));
-        
+
         List<long> chaptersRead = context.Reads
             .Where(r => r.UserId == currentUserId.Value)
             .Select(r => r.ChapterId)
@@ -55,7 +55,8 @@ public class StatsController(ManaxContext context, IMapper mapper) : ControllerB
             SeriesTotal = await context.Series.CountAsync(),
             ChaptersTotal = await context.Chapters.CountAsync(),
             ChaptersRead = chaptersRead.Count,
-            SeriesInProgress = await context.Series.Where(s => chaptersRead.Contains(s.Id)).CountAsync() - seriesCompleted,
+            SeriesInProgress = await context.Series.Where(s => chaptersRead.Contains(s.Id)).CountAsync() -
+                               seriesCompleted,
             SeriesCompleted = seriesCompleted,
             Ranks = ranks,
             Reads = reads
@@ -90,7 +91,7 @@ public class StatsController(ManaxContext context, IMapper mapper) : ControllerB
             .Where(s => !context.Reads.Any(r => context.Chapters.Any(c => c.SerieId == s.Id && c.Id == r.ChapterId)))
             .Select(s => mapper.Map<SerieDto>(s))
             .ToListAsync();
-        
+
         ServerStats stats = new()
         {
             SeriesInLibraries = seriesInLibraries,

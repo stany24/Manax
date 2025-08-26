@@ -21,7 +21,12 @@ namespace ManaxServer.Controllers;
 
 [Route("api/serie")]
 [ApiController]
-public class SerieController(ManaxContext context, IMapper mapper, INotificationService notificationService, IFixService fixService, ITaskService taskService)
+public class SerieController(
+    ManaxContext context,
+    IMapper mapper,
+    INotificationService notificationService,
+    IFixService fixService,
+    ITaskService taskService)
     : ControllerBase
 {
     // GET: api/Serie

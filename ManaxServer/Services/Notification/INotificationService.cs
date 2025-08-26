@@ -33,7 +33,7 @@ public interface INotificationService
     void NotifyRunningTasksAsync(Dictionary<string, int> tasks);
     void NotifyReadCreated(ReadDto existingRead);
     void NotifyReadRemoved(ReadDto existingRead);
-    
+
     void NotifySerieIssueCreatedAsync(ReportedIssueSerieDto issue);
     void NotifyChapterIssueCreatedAsync(ReportedIssueChapterDto issue);
     void NotifyChapterIssueDeletedAsync(long issueId);

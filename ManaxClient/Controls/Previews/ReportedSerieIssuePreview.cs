@@ -6,7 +6,6 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
-using ManaxClient.ViewModels.Issue;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTO.Issue.Reported;
 
@@ -81,7 +80,9 @@ public class ReportedSerieIssuePreview : Button
             Source = this,
             Mode = BindingMode.OneWay,
             Converter = new FuncValueConverter<ReportedIssueSerieDto, string>(issue =>
-                issue != null ? $"Série ID: {issue.SerieId} • Utilisateur ID: {issue.UserId} • {issue.CreatedAt:dd/MM/yyyy HH:mm}" : string.Empty)
+                issue != null
+                    ? $"Série ID: {issue.SerieId} • Utilisateur ID: {issue.UserId} • {issue.CreatedAt:dd/MM/yyyy HH:mm}"
+                    : string.Empty)
         });
 
         Border typeBadge = new()

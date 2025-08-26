@@ -19,8 +19,8 @@ public class TestSerieController
     private ManaxContext _context = null!;
     private SerieController _controller = null!;
     private ManaxMapper _mapper = null!;
-    private Mock<INotificationService> _mockNotificationService = null!;
     private Mock<IFixService> _mockFixService = null!;
+    private Mock<INotificationService> _mockNotificationService = null!;
     private Mock<ITaskService> _mockTaskService = null!;
 
     [TestInitialize]
@@ -32,8 +32,9 @@ public class TestSerieController
         _mockNotificationService = new Mock<INotificationService>();
         _mockFixService = new Mock<IFixService>();
         _mockTaskService = new Mock<ITaskService>();
-        
-        _controller = new SerieController(_context, _mapper, _mockNotificationService.Object, _mockFixService.Object,_mockTaskService.Object);
+
+        _controller = new SerieController(_context, _mapper, _mockNotificationService.Object, _mockFixService.Object,
+            _mockTaskService.Object);
     }
 
     [TestCleanup]

@@ -76,7 +76,7 @@ public class AutomaticSerieIssuePreview : Button
         {
             Source = this,
             Mode = BindingMode.OneWay,
-            Converter = new FuncValueConverter<AutomaticIssueSerieType, string>(problem => 
+            Converter = new FuncValueConverter<AutomaticIssueSerieType, string>(problem =>
                 problem switch
                 {
                     AutomaticIssueSerieType.PosterCouldNotOpen => "Impossible d'ouvrir l'affiche",

@@ -5,7 +5,7 @@ namespace ManaxClient.Models;
 
 public class ThemeService
 {
-    public void UpdateTheme(Theme theme, bool isDark)
+    public static void UpdateTheme(Theme theme, bool isDark)
     {
         Application? app = Application.Current;
         if (app == null) return;

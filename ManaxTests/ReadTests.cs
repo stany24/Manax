@@ -407,7 +407,7 @@ public class TestReadController
             User = otherUser
         };
 
-        _context.Reads.AddRange([userRead, otherUserRead]);
+        _context.Reads.AddRange(userRead, otherUserRead);
         await _context.SaveChangesAsync();
 
         IActionResult result = await _controller.Unread((int)chapter.Id);

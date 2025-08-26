@@ -2,7 +2,6 @@ using ManaxLibrary.DTO.Issue.Automatic;
 using ManaxLibrary.DTO.Issue.Reported;
 using ManaxServer.Localization;
 using ManaxServer.Models;
-using ManaxServer.Models.Issue.Automatic;
 using ManaxServer.Models.Issue.Reported;
 using ManaxServer.Services.Mapper;
 using ManaxServer.Services.Notification;
@@ -14,7 +13,8 @@ namespace ManaxServer.Controllers;
 
 [Route("api/issue")]
 [ApiController]
-public class IssueController(ManaxContext context, IMapper mapper, INotificationService notificationService) : ControllerBase
+public class IssueController(ManaxContext context, IMapper mapper, INotificationService notificationService)
+    : ControllerBase
 {
     [HttpGet("chapter/automatic")]
     [Authorize(Roles = "Admin,Owner")]
@@ -86,7 +86,7 @@ public class IssueController(ManaxContext context, IMapper mapper, INotification
         ReportedIssueChapter issue = mapper.Map<ReportedIssueChapter>(reportedIssueChapterCreate);
         issue.UserId = (long)currentUserId;
         issue.CreatedAt = DateTime.UtcNow;
-        
+
         context.ReportedIssuesChapter.Add(issue);
         await context.SaveChangesAsync();
         notificationService.NotifyChapterIssueCreatedAsync(mapper.Map<ReportedIssueChapterDto>(issue));

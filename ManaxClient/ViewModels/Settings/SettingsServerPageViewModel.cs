@@ -91,7 +91,7 @@ public partial class SettingsServerPageViewModel : PageViewModel
         };
         PopupRequested?.Invoke(this, popup);
     }
-    
+
     public void CreateLibrary()
     {
         LibraryCreatePopup popup = new();

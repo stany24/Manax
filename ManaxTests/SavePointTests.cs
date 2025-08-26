@@ -22,7 +22,7 @@ public class TestSavePointController
         _context = SqliteTestDbContextFactory.CreateTestContext();
         _mapper = new ManaxMapper(new ManaxMapping());
         _controller = new SavePointController(_context, _mapper);
-        
+
         _testDirectory = Path.Combine(Path.GetTempPath(), "SavePointTests", Guid.NewGuid().ToString());
         Directory.CreateDirectory(_testDirectory);
     }
@@ -135,7 +135,7 @@ public class TestSavePointController
     {
         string specialDirectory = Path.Combine(_testDirectory, "spécial-chars_123");
         Directory.CreateDirectory(specialDirectory);
-        
+
         SavePointCreateDto createDto = new()
         {
             Path = specialDirectory
@@ -164,14 +164,14 @@ public class TestSavePointController
         {
             string fullPath = Path.Combine(_testDirectory, dir);
             Directory.CreateDirectory(fullPath);
-            
+
             SavePointCreateDto createDto = new()
             {
                 Path = fullPath
             };
 
             ActionResult<long> result = await _controller.PostSavePoint(createDto);
-            
+
             long? savePointId = result.Value;
             Assert.IsNotNull(savePointId);
             createdIds.Add(savePointId.Value);
@@ -205,7 +205,7 @@ public class TestSavePointController
     {
         string lowerDir = Path.Combine(_testDirectory, "test");
         string upperDir = Path.Combine(_testDirectory, "TEST");
-        
+
         Directory.CreateDirectory(lowerDir);
         Directory.CreateDirectory(upperDir);
 
@@ -237,7 +237,7 @@ public class TestSavePointController
         Assert.AreEqual(lowerDir, savePoint1.Path);
         Assert.AreEqual(upperDir, savePoint2.Path);
     }
-    
+
     [TestMethod]
     public async Task PostSavePoint_WithEmptyPath_ReturnsConflict()
     {
