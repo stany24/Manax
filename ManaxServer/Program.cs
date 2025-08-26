@@ -54,8 +54,6 @@ public class Program
                 provider.GetRequiredService<IIssueService>()));
         builder.Services.AddScoped<IIssueService>(provider =>
             new IssueService(provider.GetRequiredService<IServiceScopeFactory>()));
-        builder.Services.AddScoped<IRenamingService>(provider =>
-            new RenamingService(provider.GetRequiredService<IServiceScopeFactory>()));
         builder.Services.AddScoped<IMapper>(_ => new ManaxMapper(new ManaxMapping()));
 
 

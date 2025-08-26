@@ -2,27 +2,26 @@ using System.Globalization;
 using ImageMagick;
 using ManaxLibrary.DTO.Setting;
 using ManaxServer.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace ManaxServer.Services.Renaming;
 
-public class RenamingService(IServiceScopeFactory scopeFactory) : Service, IRenamingService
+public class RenamingService : Service
 {
     public void RenameChapters()
     {
     }
 
-    public void RenamePosters(string oldName, string newName, ImageFormat oldFormat, ImageFormat newFormat)
+    public static void RenamePosters(ManaxContext manaxContext,string oldName, string newName, ImageFormat oldFormat, ImageFormat newFormat)
     {
-        using IServiceScope scope = scopeFactory.CreateScope();
-        ManaxContext manaxContext = scope.ServiceProvider.GetRequiredService<ManaxContext>();
         manaxContext.Series
-            .Select(serie => serie.SavePath)
+            .Include(s => s.SavePoint)
             .ToList()
-            .ForEach(path =>
+            .ForEach(serie =>
             {
-                string oldPoster = Path.Combine(path,
+                string oldPoster = Path.Combine(serie.SavePath,
                     $"{oldName}.{oldFormat.ToString().ToLower(CultureInfo.InvariantCulture)}");
-                string newPoster = Path.Combine(path,
+                string newPoster = Path.Combine(serie.SavePath,
                     $"{newName}.{newFormat.ToString().ToLower(CultureInfo.InvariantCulture)}");
 
                 if (!File.Exists(oldPoster)) return;

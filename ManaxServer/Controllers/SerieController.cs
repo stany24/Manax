@@ -101,7 +101,7 @@ public class SerieController(
             .FirstOrDefault(s => s.Id == id);
         if (serie == null) return NotFound();
         string posterName = SettingsManager.Data.PosterName + "." +
-                            SettingsManager.Data.ImageFormat.ToString().ToLower(CultureInfo.InvariantCulture);
+                            SettingsManager.Data.PosterFormat.ToString().ToLower(CultureInfo.InvariantCulture);
         string posterPath = Path.Combine(serie.SavePath, posterName);
         if (!System.IO.File.Exists(posterPath)) return NotFound(Localizer.Format("PosterNotFound", id));
         byte[] readAllBytes = await System.IO.File.ReadAllBytesAsync(posterPath);

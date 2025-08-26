@@ -21,7 +21,7 @@ public partial class FixService
 
         string directory = serie.SavePath;
         string fileName = SettingsManager.Data.PosterName + "." +
-                          SettingsManager.Data.ImageFormat.ToString().ToLower(CultureInfo.InvariantCulture);
+                          SettingsManager.Data.PosterFormat.ToString().ToLower(CultureInfo.InvariantCulture);
         string posterPath = Path.Combine(directory, fileName);
         issueService.ManageSerieIssue(serie.Id, AutomaticIssueSerieType.PosterMissing, !File.Exists(posterPath));
         if (!File.Exists(posterPath)) return;
