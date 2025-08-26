@@ -5,6 +5,7 @@ using ManaxServer.Models;
 using ManaxServer.Models.Issue.Automatic;
 using ManaxServer.Models.Issue.Reported;
 using ManaxServer.Services.Mapper;
+using ManaxServer.Services.Notification;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -13,7 +14,7 @@ namespace ManaxServer.Controllers;
 
 [Route("api/issue")]
 [ApiController]
-public class IssueController(ManaxContext context, IMapper mapper) : ControllerBase
+public class IssueController(ManaxContext context, IMapper mapper, INotificationService notificationService) : ControllerBase
 {
     [HttpGet("chapter/automatic")]
     [Authorize(Roles = "Admin,Owner")]
@@ -82,11 +83,13 @@ public class IssueController(ManaxContext context, IMapper mapper) : ControllerB
         long? currentUserId = UserController.GetCurrentUserId(HttpContext);
         if (currentUserId == null) return Unauthorized();
 
-        ReportedIssueChapter reportedIssueChapter = mapper.Map<ReportedIssueChapter>(reportedIssueChapterCreate);
-        reportedIssueChapter.UserId = (long)currentUserId;
-        reportedIssueChapter.CreatedAt = DateTime.UtcNow;
-        context.ReportedIssuesChapter.Add(reportedIssueChapter);
+        ReportedIssueChapter issue = mapper.Map<ReportedIssueChapter>(reportedIssueChapterCreate);
+        issue.UserId = (long)currentUserId;
+        issue.CreatedAt = DateTime.UtcNow;
+        
+        context.ReportedIssuesChapter.Add(issue);
         await context.SaveChangesAsync();
+        notificationService.NotifyChapterIssueCreatedAsync(mapper.Map<ReportedIssueChapterDto>(issue));
 
         return Created();
     }
@@ -102,6 +105,7 @@ public class IssueController(ManaxContext context, IMapper mapper) : ControllerB
 
         context.ReportedIssuesSerie.Add(issue);
         await context.SaveChangesAsync();
+        notificationService.NotifySerieIssueCreatedAsync(mapper.Map<ReportedIssueSerieDto>(issue));
 
         return Created();
     }
@@ -118,6 +122,7 @@ public class IssueController(ManaxContext context, IMapper mapper) : ControllerB
 
         context.ReportedIssuesChapter.Remove(issue);
         await context.SaveChangesAsync();
+        notificationService.NotifyChapterIssueDeletedAsync(issue.Id);
 
         return Ok();
     }
@@ -134,6 +139,7 @@ public class IssueController(ManaxContext context, IMapper mapper) : ControllerB
 
         context.ReportedIssuesSerie.Remove(issue);
         await context.SaveChangesAsync();
+        notificationService.NotifySerieIssueDeletedAsync(issue.Id);
 
         return Ok();
     }

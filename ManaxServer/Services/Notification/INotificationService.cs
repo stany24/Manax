@@ -1,4 +1,5 @@
 using ManaxLibrary.DTO.Chapter;
+using ManaxLibrary.DTO.Issue.Reported;
 using ManaxLibrary.DTO.Library;
 using ManaxLibrary.DTO.Rank;
 using ManaxLibrary.DTO.Read;
@@ -32,4 +33,9 @@ public interface INotificationService
     void NotifyRunningTasksAsync(Dictionary<string, int> tasks);
     void NotifyReadCreated(ReadDto existingRead);
     void NotifyReadRemoved(ReadDto existingRead);
+    
+    void NotifySerieIssueCreatedAsync(ReportedIssueSerieDto issue);
+    void NotifyChapterIssueCreatedAsync(ReportedIssueChapterDto issue);
+    void NotifyChapterIssueDeletedAsync(long issueId);
+    void NotifySerieIssueDeletedAsync(long issueId);
 }

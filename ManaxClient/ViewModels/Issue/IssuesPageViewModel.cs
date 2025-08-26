@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -6,22 +7,51 @@ using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTO.Issue.Automatic;
 using ManaxLibrary.DTO.Issue.Reported;
+using ManaxLibrary.Notifications;
 
 namespace ManaxClient.ViewModels.Issue;
 
 public partial class IssuesPageViewModel : PageViewModel
 {
-    [ObservableProperty] private List<AutomaticIssueChapterDto> _allInternalChapterIssues = [];
-    [ObservableProperty] private List<AutomaticIssueSerieDto> _allInternalSerieIssues = [];
-    [ObservableProperty] private List<ReportedIssueChapterDto> _allReportedChapterIssues = [];
-    [ObservableProperty] private List<ReportedIssueSerieDto> _allReportedSerieIssues = [];
+    [ObservableProperty] private ObservableCollection<AutomaticIssueChapterDto> _allAutomaticChapterIssues = [];
+    [ObservableProperty] private ObservableCollection<AutomaticIssueSerieDto> _allAutomaticSerieIssues = [];
+    [ObservableProperty] private ObservableCollection<ReportedIssueChapterDto> _allReportedChapterIssues = [];
+    [ObservableProperty] private ObservableCollection<ReportedIssueSerieDto> _allReportedSerieIssues = [];
     
     [ObservableProperty] private bool _showAutomaticIssues = true;
     [ObservableProperty] private bool _showChapterIssues = true;
 
     public IssuesPageViewModel()
     {
+        ServerNotification.OnReportedChapterIssueCreated += OnReportedChapterIssueCreated;
+        ServerNotification.OnReportedChapterIssueDeleted += OnReportedChapterIssueDeleted;
+        ServerNotification.OnReportedSerieIssueCreated += OnReportedSerieIssueCreated;
+        ServerNotification.OnReportedSerieIssueDeleted += OnReportedSerieIssueDeleted;
         LoadData();
+    }
+
+    private void OnReportedChapterIssueCreated(ReportedIssueChapterDto issue)
+    {
+        AllReportedChapterIssues.Add(issue);
+    }
+
+    private void OnReportedChapterIssueDeleted(long issueId)
+    {
+        ReportedIssueChapterDto? issue = AllReportedChapterIssues.FirstOrDefault(i => i.Id == issueId);
+        if (issue == null){return;}
+        AllReportedChapterIssues.Remove(issue);
+    }
+
+    private void OnReportedSerieIssueCreated(ReportedIssueSerieDto issue)
+    {
+        AllReportedSerieIssues.Add(issue);
+    }
+
+    private void OnReportedSerieIssueDeleted(long issueId)
+    {
+        ReportedIssueSerieDto? issue = AllReportedSerieIssues.FirstOrDefault(i => i.Id == issueId);
+        if (issue == null){return;}
+        AllReportedSerieIssues.Remove(issue);
     }
 
     private void LoadData()
@@ -33,46 +63,28 @@ public partial class IssuesPageViewModel : PageViewModel
             if (allAutomaticSerieIssuesResponse.Failed)
                 InfoEmitted?.Invoke(this, allAutomaticSerieIssuesResponse.Error);
             else
-                AllInternalSerieIssues = allAutomaticSerieIssuesResponse.GetValue();
+                AllAutomaticSerieIssues = new ObservableCollection<AutomaticIssueSerieDto>(allAutomaticSerieIssuesResponse.GetValue());
 
             Optional<List<AutomaticIssueChapterDto>> allAutomaticChapterIssuesResponse =
                 await ManaxApiIssueClient.GetAllAutomaticChapterIssuesAsync();
             if (allAutomaticChapterIssuesResponse.Failed)
                 InfoEmitted?.Invoke(this, allAutomaticChapterIssuesResponse.Error);
             else
-                AllInternalChapterIssues = allAutomaticChapterIssuesResponse.GetValue();
+                AllAutomaticChapterIssues = new ObservableCollection<AutomaticIssueChapterDto>(allAutomaticChapterIssuesResponse.GetValue());
 
             Optional<List<ReportedIssueChapterDto>> allReportedChapterIssuesResponse =
                 await ManaxApiIssueClient.GetAllReportedChapterIssuesAsync();
             if (allReportedChapterIssuesResponse.Failed)
                 InfoEmitted?.Invoke(this, allReportedChapterIssuesResponse.Error);
             else
-                AllReportedChapterIssues = allReportedChapterIssuesResponse.GetValue();
+                AllReportedChapterIssues = new ObservableCollection<ReportedIssueChapterDto>(allReportedChapterIssuesResponse.GetValue());
 
             Optional<List<ReportedIssueSerieDto>> allReportedSerieIssuesResponse =
                 await ManaxApiIssueClient.GetAllReportedSerieIssuesAsync();
             if (allReportedSerieIssuesResponse.Failed)
                 InfoEmitted?.Invoke(this, allReportedSerieIssuesResponse.Error);
             else
-                AllReportedSerieIssues = allReportedSerieIssuesResponse.GetValue();
+                AllReportedSerieIssues = new ObservableCollection<ReportedIssueSerieDto>(allReportedSerieIssuesResponse.GetValue());
         });
-    }
-
-    public async Task CloseReportedChapterIssueAsync(ReportedIssueChapterDto issue)
-    {
-        Optional<bool> result = await ManaxApiIssueClient.CloseChapterIssueAsync(issue.Id);
-        if (result.Failed)
-            InfoEmitted?.Invoke(this, result.Error);
-        else
-            AllReportedChapterIssues = AllReportedChapterIssues.Where(i => i.Id != issue.Id).ToList();
-    }
-
-    public async Task CloseReportedSerieIssueAsync(ReportedIssueSerieDto issue)
-    {
-        Optional<bool> result = await ManaxApiIssueClient.CloseSerieIssueAsync(issue.Id);
-        if (result.Failed)
-            InfoEmitted?.Invoke(this, result.Error);
-        else
-            AllReportedSerieIssues = AllReportedSerieIssues.Where(i => i.Id != issue.Id).ToList();
     }
 }

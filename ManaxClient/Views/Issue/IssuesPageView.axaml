@@ -64,7 +64,7 @@
                                   FontWeight="SemiBold" 
                                   Foreground="#495057"/>
                         
-                        <ItemsControl ItemsSource="{Binding AllInternalChapterIssues}">
+                        <ItemsControl ItemsSource="{Binding AllAutomaticChapterIssues}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
                                     <previews:AutomaticChapterIssuePreview Issue="{Binding}" 
@@ -76,7 +76,7 @@
                         <TextBlock Text="Aucun problème automatique de chapitre trouvé" 
                                   FontStyle="Italic" 
                                   Foreground="#6C757D"
-                                  IsVisible="{Binding AllInternalChapterIssues.Count, Converter={x:Static StringConverters.IsNullOrEmpty}}"/>
+                                  IsVisible="{Binding AllAutomaticChapterIssues.Count, Converter={x:Static StringConverters.IsNullOrEmpty}}"/>
                     </StackPanel>
 
                     <StackPanel IsVisible="{Binding !ShowChapterIssues}" Spacing="12">
@@ -85,7 +85,7 @@
                                   FontWeight="SemiBold" 
                                   Foreground="#495057"/>
                         
-                        <ItemsControl ItemsSource="{Binding AllInternalSerieIssues}">
+                        <ItemsControl ItemsSource="{Binding AllAutomaticSerieIssues}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
                                     <previews:AutomaticSerieIssuePreview Issue="{Binding}" 
@@ -97,7 +97,7 @@
                         <TextBlock Text="Aucun problème automatique de série trouvé" 
                                   FontStyle="Italic" 
                                   Foreground="#6C757D"
-                                  IsVisible="{Binding AllInternalSerieIssues.Count, Converter={x:Static StringConverters.IsNullOrEmpty}}"/>
+                                  IsVisible="{Binding AllAutomaticSerieIssues.Count, Converter={x:Static StringConverters.IsNullOrEmpty}}"/>
                     </StackPanel>
                 </StackPanel>
 

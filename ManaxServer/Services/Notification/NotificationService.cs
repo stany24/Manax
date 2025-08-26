@@ -1,6 +1,7 @@
 using System.Globalization;
 using System.Security.Claims;
 using ManaxLibrary.DTO.Chapter;
+using ManaxLibrary.DTO.Issue.Reported;
 using ManaxLibrary.DTO.Library;
 using ManaxLibrary.DTO.Rank;
 using ManaxLibrary.DTO.Read;
@@ -98,6 +99,26 @@ public class NotificationService(IHubContext<NotificationService> hubContext) : 
     public void NotifyReadRemoved(ReadDto existingRead)
     {
         TrySendToSingleClientAsync(existingRead.UserId, NotificationType.ReadCreated, existingRead.ChapterId);
+    }
+
+    public void NotifySerieIssueCreatedAsync(ReportedIssueSerieDto issue)
+    {
+        TrySendToAdminsAsync(NotificationType.ReportedSerieIssueCreated, issue);
+    }
+
+    public void NotifyChapterIssueCreatedAsync(ReportedIssueChapterDto issue)
+    {
+        TrySendToAdminsAsync(NotificationType.ReportedChapterIssueCreated, issue);
+    }
+
+    public void NotifyChapterIssueDeletedAsync(long issueId)
+    {
+        TrySendToAdminsAsync(NotificationType.ReportedChapterIssueDeleted, issueId);
+    }
+
+    public void NotifySerieIssueDeletedAsync(long issueId)
+    {
+        TrySendToAdminsAsync(NotificationType.ReportedSerieIssueDeleted, issueId);
     }
 
     public override async System.Threading.Tasks.Task OnConnectedAsync()

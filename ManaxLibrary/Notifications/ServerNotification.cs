@@ -1,4 +1,5 @@
 using ManaxLibrary.DTO.Chapter;
+using ManaxLibrary.DTO.Issue.Reported;
 using ManaxLibrary.DTO.Library;
 using ManaxLibrary.DTO.Rank;
 using ManaxLibrary.DTO.Read;
@@ -37,6 +38,11 @@ public static class ServerNotification
     public static event Action<long>? OnUserDeleted;
     public static event Action<ReadDto>? OnReadCreated;
     public static event Action<long>? OnReadDeleted;
+    
+    public static event Action<ReportedIssueChapterDto>? OnReportedChapterIssueCreated;
+    public static event Action<long>? OnReportedChapterIssueDeleted;
+    public static event Action<ReportedIssueSerieDto>? OnReportedSerieIssueCreated;
+    public static event Action<long>? OnReportedSerieIssueDeleted;
 
     public static async Task InitializeAsync(Uri host, string token)
     {
@@ -101,6 +107,18 @@ public static class ServerNotification
 
         _hubConnection.On<long>(nameof(NotificationType.ReadDeleted),
             readId => { OnReadDeleted?.Invoke(readId); });
+        
+        _hubConnection.On<ReportedIssueChapterDto>(nameof(NotificationType.ReportedChapterIssueCreated),
+            issueData => { OnReportedChapterIssueCreated?.Invoke(issueData); });
+        
+        _hubConnection.On<long>(nameof(NotificationType.ReportedChapterIssueDeleted),
+            issueId => { OnReportedChapterIssueDeleted?.Invoke(issueId); });
+        
+        _hubConnection.On<ReportedIssueSerieDto>(nameof(NotificationType.ReportedSerieIssueCreated),
+            issueData => { OnReportedSerieIssueCreated?.Invoke(issueData); });
+        
+        _hubConnection.On<long>(nameof(NotificationType.ReportedSerieIssueDeleted),
+            issueId => { OnReportedSerieIssueDeleted?.Invoke(issueId); });
 
         _hubConnection.On<string>(nameof(NotificationType.Connected),
             message => { Logger.LogInfo("SignalR Server: " + message); });

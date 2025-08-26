@@ -7,6 +7,7 @@ using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
 using ManaxClient.ViewModels.Issue;
+using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTO.Issue.Reported;
 
 namespace ManaxClient.Controls.Previews;
@@ -138,10 +139,7 @@ public class ReportedSerieIssuePreview : Button
 
     private async void CloseIssue(object? sender, RoutedEventArgs e)
     {
-        if (DataContext is IssuesPageViewModel viewModel)
-        {
-            await viewModel.CloseReportedSerieIssueAsync(Issue);
-        }
+        _ = await ManaxApiIssueClient.CloseSerieIssueAsync(Issue.Id);
         e.Handled = true;
     }
 
