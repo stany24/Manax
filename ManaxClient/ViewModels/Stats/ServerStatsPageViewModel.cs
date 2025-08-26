@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Threading.Tasks;
 using Avalonia.Media.Imaging;
@@ -22,11 +23,11 @@ public partial class ServerStatsPageViewModel : PageViewModel
 {
     [ObservableProperty] private double _availableDiskSizeInGb;
     [ObservableProperty] private double _diskSizeInGb;
-    [ObservableProperty] private IEnumerable<ISeries>? _diskUsageSeries;
-    [ObservableProperty] private IEnumerable<ISeries>? _libraryDistributionSeries;
-    [ObservableProperty] private List<ClientSerie> _neverReadSeries = [];
     [ObservableProperty] private ServerStats? _serverStats;
-    [ObservableProperty] private IEnumerable<ISeries>? _userActivitySeries;
+    public ObservableCollection<ClientSerie> NeverReadSeries { get; set; } = new([]);
+    public ObservableCollection<ISeries> UserActivitySeries { get; set; } = new([]);
+    public ObservableCollection<ISeries> LibraryDistributionSeries { get; set; } = new([]);
+    public ObservableCollection<ISeries> DiskUsageSeries { get; set; } = new([]);
 
     public ServerStatsPageViewModel()
     {
@@ -65,55 +66,48 @@ public partial class ServerStatsPageViewModel : PageViewModel
         DiskSizeInGb = ServerStats.DiskSize / 1024.0 / 1024.0 / 1024.0;
         AvailableDiskSizeInGb = ServerStats.AvailableDiskSize / 1024.0 / 1024.0 / 1024.0;
 
-        DiskUsageSeries =
-        [
-            new PieSeries<double>
-            {
-                Values = [DiskSizeInGb],
-                Name = "Utilisé",
-                Fill = new SolidColorPaint(SKColors.OrangeRed),
-                DataLabelsPaint = new SolidColorPaint(SKColors.White),
-                DataLabelsSize = 12,
-                DataLabelsPosition = PolarLabelsPosition.Middle,
-                DataLabelsFormatter = point => $"{point.Coordinate.PrimaryValue:F2} GB",
-                ToolTipLabelFormatter = point => $"{point.Coordinate.PrimaryValue:F2} GB"
-            },
-            new PieSeries<double>
-            {
-                Values = [AvailableDiskSizeInGb],
-                Name = "Disponible",
-                Fill = new SolidColorPaint(SKColors.Green),
-                DataLabelsPaint = new SolidColorPaint(SKColors.White),
-                DataLabelsSize = 12,
-                DataLabelsPosition = PolarLabelsPosition.Middle,
-                DataLabelsFormatter = point => $"{point.Coordinate.PrimaryValue:F2} GB",
-                ToolTipLabelFormatter = point => $"{point.Coordinate.PrimaryValue:F2} GB"
-            }
-        ];
+        DiskUsageSeries.Add(new PieSeries<double>
+        {
+            Values = [DiskSizeInGb],
+            Name = "Utilisé",
+            Fill = new SolidColorPaint(SKColors.OrangeRed),
+            DataLabelsPaint = new SolidColorPaint(SKColors.White),
+            DataLabelsSize = 12,
+            DataLabelsPosition = PolarLabelsPosition.Middle,
+            DataLabelsFormatter = point => $"{point.Coordinate.PrimaryValue:F2} GB",
+            ToolTipLabelFormatter = point => $"{point.Coordinate.PrimaryValue:F2} GB"
+        });
+        DiskUsageSeries.Add(new PieSeries<double>
+        {
+            Values = [AvailableDiskSizeInGb],
+            Name = "Disponible",
+            Fill = new SolidColorPaint(SKColors.Green),
+            DataLabelsPaint = new SolidColorPaint(SKColors.White),
+            DataLabelsSize = 12,
+            DataLabelsPosition = PolarLabelsPosition.Middle,
+            DataLabelsFormatter = point => $"{point.Coordinate.PrimaryValue:F2} GB",
+            ToolTipLabelFormatter = point => $"{point.Coordinate.PrimaryValue:F2} GB"
+        });
 
-        UserActivitySeries =
-        [
-            new PieSeries<int>
-            {
-                Values = [ServerStats.ActiveUsers],
-                Name = "Actifs",
-                Fill = new SolidColorPaint(SKColors.DodgerBlue),
-                DataLabelsPaint = new SolidColorPaint(SKColors.White),
-                DataLabelsSize = 12,
-                DataLabelsPosition = PolarLabelsPosition.Middle
-            },
-            new PieSeries<int>
-            {
-                Values = [ServerStats.Users - ServerStats.ActiveUsers],
-                Name = "Inactifs",
-                Fill = new SolidColorPaint(SKColors.Gray),
-                DataLabelsPaint = new SolidColorPaint(SKColors.White),
-                DataLabelsSize = 12,
-                DataLabelsPosition = PolarLabelsPosition.Middle
-            }
-        ];
+        UserActivitySeries.Add(new PieSeries<int>
+        {
+            Values = [ServerStats.ActiveUsers],
+            Name = "Actifs",
+            Fill = new SolidColorPaint(SKColors.DodgerBlue),
+            DataLabelsPaint = new SolidColorPaint(SKColors.White),
+            DataLabelsSize = 12,
+            DataLabelsPosition = PolarLabelsPosition.Middle
+        });
+        UserActivitySeries.Add(new PieSeries<int>
+        {
+            Values = [ServerStats.Users - ServerStats.ActiveUsers],
+            Name = "Inactifs",
+            Fill = new SolidColorPaint(SKColors.Gray),
+            DataLabelsPaint = new SolidColorPaint(SKColors.White),
+            DataLabelsSize = 12,
+            DataLabelsPosition = PolarLabelsPosition.Middle
+        });
 
-        List<ISeries> librarySeries = [];
         SKColor[] colors =
         [
             SKColors.Purple, SKColors.Orange, SKColors.Teal, SKColors.Pink, SKColors.Brown, SKColors.Navy
@@ -122,7 +116,7 @@ public partial class ServerStatsPageViewModel : PageViewModel
 
         foreach (KeyValuePair<string, int> library in ServerStats.SeriesInLibraries)
         {
-            librarySeries.Add(new PieSeries<int>
+            LibraryDistributionSeries.Add(new PieSeries<int>
             {
                 Values = [library.Value],
                 Name = library.Key,
@@ -134,12 +128,10 @@ public partial class ServerStatsPageViewModel : PageViewModel
             colorIndex++;
         }
 
-        LibraryDistributionSeries = librarySeries;
-
-        NeverReadSeries = ServerStats.NeverReadSeries.ConvertAll(s => new ClientSerie
+        foreach (ClientSerie serie in ServerStats.NeverReadSeries.ConvertAll(s => new ClientSerie { Info = s }))
         {
-            Info = s
-        });
+            NeverReadSeries.Add(serie);
+        }
 
         Task.Run(async () =>
         {
