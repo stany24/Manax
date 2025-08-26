@@ -8,3 +8,7 @@
       - "5246:5246"
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
+    # volumes:
+    #  - type: bind
+    #    source: /path/to/your/save-point
+    #    target: /media/save-point
