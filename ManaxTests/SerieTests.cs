@@ -3,8 +3,10 @@ using ManaxServer.Controllers;
 using ManaxServer.Models;
 using ManaxServer.Models.Chapter;
 using ManaxServer.Models.Serie;
+using ManaxServer.Services.Fix;
 using ManaxServer.Services.Mapper;
 using ManaxServer.Services.Notification;
+using ManaxServer.Services.Task;
 using ManaxTests.Mocks;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
@@ -18,6 +20,8 @@ public class TestSerieController
     private SerieController _controller = null!;
     private ManaxMapper _mapper = null!;
     private Mock<INotificationService> _mockNotificationService = null!;
+    private Mock<IFixService> _mockFixService = null!;
+    private Mock<ITaskService> _mockTaskService = null!;
 
     [TestInitialize]
     public void Setup()
@@ -26,8 +30,10 @@ public class TestSerieController
 
         _mapper = new ManaxMapper(new ManaxMapping());
         _mockNotificationService = new Mock<INotificationService>();
-
-        _controller = new SerieController(_context, _mapper, _mockNotificationService.Object);
+        _mockFixService = new Mock<IFixService>();
+        _mockTaskService = new Mock<ITaskService>();
+        
+        _controller = new SerieController(_context, _mapper, _mockNotificationService.Object, _mockFixService.Object,_mockTaskService.Object);
     }
 
     [TestCleanup]
