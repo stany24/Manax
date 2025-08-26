@@ -3,9 +3,9 @@ using Avalonia.Controls;
 namespace ManaxClient.Views.Issue;
 
 // ReSharper disable once UnusedType.Global
-public partial class UserIssuesPageView : UserControl
+public partial class IssuesPageView : UserControl
 {
-    public UserIssuesPageView()
+    public IssuesPageView()
     {
         InitializeComponent();
     }

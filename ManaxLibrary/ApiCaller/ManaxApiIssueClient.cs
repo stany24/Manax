@@ -8,7 +8,7 @@ public static class ManaxApiIssueClient
 {
     public static async Task<Optional<List<AutomaticIssueChapterDto>>> GetAllAutomaticChapterIssuesAsync()
     {
-        HttpResponseMessage response = await ManaxApiClient.Client.GetAsync("/api/issue/chapter/internal");
+        HttpResponseMessage response = await ManaxApiClient.Client.GetAsync("/api/issue/chapter/automatic");
         if (!response.IsSuccessStatusCode) return new Optional<List<AutomaticIssueChapterDto>>(response);
         List<AutomaticIssueChapterDto>? issues =
             await response.Content.ReadFromJsonAsync<List<AutomaticIssueChapterDto>>();
@@ -19,7 +19,7 @@ public static class ManaxApiIssueClient
 
     public static async Task<Optional<List<AutomaticIssueSerieDto>>> GetAllAutomaticSerieIssuesAsync()
     {
-        HttpResponseMessage response = await ManaxApiClient.Client.GetAsync("/api/issue/serie/internal");
+        HttpResponseMessage response = await ManaxApiClient.Client.GetAsync("/api/issue/serie/automatic");
         if (!response.IsSuccessStatusCode) return new Optional<List<AutomaticIssueSerieDto>>(response);
         List<AutomaticIssueSerieDto>? issues = await response.Content.ReadFromJsonAsync<List<AutomaticIssueSerieDto>>();
         return issues == null

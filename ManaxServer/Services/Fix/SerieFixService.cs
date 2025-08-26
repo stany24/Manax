@@ -36,7 +36,8 @@ public partial class FixService
 
     private void CheckMissingChapters(Serie serie)
     {
-        string[] chapters = Directory.GetFiles(serie.SavePath);
+        string[] chapters = Directory.GetFiles(serie.SavePath, "*."+SettingsManager.Data.ArchiveFormat.ToString().ToLower(),
+            SearchOption.TopDirectoryOnly);
         issueService.ManageSerieIssue(serie.Id, AutomaticIssueSerieType.MissingChapter, chapters.Length == 0);
         if (chapters.Length == 0) return;
 

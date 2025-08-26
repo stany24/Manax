@@ -73,19 +73,10 @@
 
                     <Button Classes="sidebar"
                             IsVisible="{Binding IsAdmin}"
-                            Command="{Binding ChangePageAutomaticIssues}">
+                            Command="{Binding ChangePageIssues}">
                         <StackPanel Orientation="Horizontal" Spacing="12">
                             <TextBlock Text="⚙️" FontSize="14" />
-                            <TextBlock Text="Problèmes automatiques" />
-                        </StackPanel>
-                    </Button>
-
-                    <Button Classes="sidebar"
-                            IsVisible="{Binding IsAdmin}"
-                            Command="{Binding ChangePageUserIssues}">
-                        <StackPanel Orientation="Horizontal" Spacing="12">
-                            <TextBlock Text="🐛" FontSize="14" />
-                            <TextBlock Text="Problèmes utilisateurs" />
+                            <TextBlock Text="Problèmes" />
                         </StackPanel>
                     </Button>
 

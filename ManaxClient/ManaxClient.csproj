@@ -73,7 +73,7 @@
             <DependentUpon>HomePageView.axaml</DependentUpon>
             <SubType>Code</SubType>
         </Compile>
-        <Compile Update="Views\Issue\AutomaticIssuesPageView.axaml.cs">
+        <Compile Update="Views\Issue\IssuesPageView.axaml.cs">
             <DependentUpon>AutomaticIssuesPageView.axaml</DependentUpon>
             <SubType>Code</SubType>
         </Compile>
@@ -95,10 +95,6 @@
         <Compile Update="Views\Chapter\ChapterPageView.axaml.cs">
             <SubType>Code</SubType>
             <DependentUpon>LibraryPageView.axaml</DependentUpon>
-        </Compile>
-        <Compile Update="Views\Issue\UserIssuesPageView.axaml.cs">
-            <DependentUpon>UserIssuesPageView.axaml</DependentUpon>
-            <SubType>Code</SubType>
         </Compile>
         <Compile Update="Views\Rank\RankPageView.axaml.cs">
             <DependentUpon>LoginPageView.axaml</DependentUpon>

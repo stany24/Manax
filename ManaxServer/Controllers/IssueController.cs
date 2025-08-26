@@ -20,8 +20,9 @@ public class IssueController(ManaxContext context, IMapper mapper) : ControllerB
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<AutomaticIssueChapterDto>>> GetAllAutomaticChapterIssues()
     {
-        List<AutomaticIssueChapter> issues = await context.AutomaticIssuesChapter.ToListAsync();
-        return mapper.Map<List<AutomaticIssueChapterDto>>(issues);
+        return await context.AutomaticIssuesChapter
+            .Select(i => mapper.Map<AutomaticIssueChapterDto>(i))
+            .ToListAsync();
     }
 
     [HttpGet("serie/automatic")]
@@ -29,8 +30,9 @@ public class IssueController(ManaxContext context, IMapper mapper) : ControllerB
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<AutomaticIssueSerieDto>>> GetAllAutomaticSerieIssues()
     {
-        List<AutomaticIssueSerie> issues = await context.AutomaticIssuesSerie.ToListAsync();
-        return mapper.Map<List<AutomaticIssueSerieDto>>(issues);
+        return await context.AutomaticIssuesSerie
+            .Select(i => mapper.Map<AutomaticIssueSerieDto>(i))
+            .ToListAsync();
     }
 
     [HttpGet("chapter/reported")]
@@ -38,8 +40,9 @@ public class IssueController(ManaxContext context, IMapper mapper) : ControllerB
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<ReportedIssueChapterDto>>> GetAllReportedChapterIssues()
     {
-        List<ReportedIssueChapter> issues = await context.ReportedIssuesChapter.ToListAsync();
-        return mapper.Map<List<ReportedIssueChapterDto>>(issues);
+        return await context.ReportedIssuesChapter
+            .Select(i => mapper.Map<ReportedIssueChapterDto>(i))
+            .ToListAsync();
     }
 
     [HttpGet("chapter/reported/types")]
@@ -56,8 +59,9 @@ public class IssueController(ManaxContext context, IMapper mapper) : ControllerB
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<ReportedIssueSerieDto>>> GetAllReportedSerieIssues()
     {
-        List<ReportedIssueSerie> issues = await context.ReportedIssuesSerie.ToListAsync();
-        return mapper.Map<List<ReportedIssueSerieDto>>(issues);
+        return await context.ReportedIssuesSerie
+            .Select(i => mapper.Map<ReportedIssueSerieDto>(i))
+            .ToListAsync();
     }
 
     [HttpGet("serie/reported/types")]
@@ -80,6 +84,7 @@ public class IssueController(ManaxContext context, IMapper mapper) : ControllerB
 
         ReportedIssueChapter reportedIssueChapter = mapper.Map<ReportedIssueChapter>(reportedIssueChapterCreate);
         reportedIssueChapter.UserId = (long)currentUserId;
+        reportedIssueChapter.CreatedAt = DateTime.UtcNow;
         context.ReportedIssuesChapter.Add(reportedIssueChapter);
         await context.SaveChangesAsync();
 
@@ -93,6 +98,7 @@ public class IssueController(ManaxContext context, IMapper mapper) : ControllerB
     public async Task<ActionResult> CreateSerieIssue(ReportedIssueSerieCreateDto reportedIssueSerieCreate)
     {
         ReportedIssueSerie issue = mapper.Map<ReportedIssueSerie>(reportedIssueSerieCreate);
+        issue.CreatedAt = DateTime.UtcNow;
 
         context.ReportedIssuesSerie.Add(issue);
         await context.SaveChangesAsync();

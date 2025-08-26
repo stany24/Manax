@@ -7,9 +7,12 @@ using ManaxServer.Localization;
 using ManaxServer.Models;
 using ManaxServer.Models.SavePoint;
 using ManaxServer.Models.Serie;
+using ManaxServer.Services.Fix;
 using ManaxServer.Services.Mapper;
 using ManaxServer.Services.Notification;
+using ManaxServer.Services.Task;
 using ManaxServer.Settings;
+using ManaxServer.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -18,7 +21,7 @@ namespace ManaxServer.Controllers;
 
 [Route("api/serie")]
 [ApiController]
-public class SerieController(ManaxContext context, IMapper mapper, INotificationService notificationService)
+public class SerieController(ManaxContext context, IMapper mapper, INotificationService notificationService, IFixService fixService, ITaskService taskService)
     : ControllerBase
 {
     // GET: api/Serie
@@ -121,6 +124,7 @@ public class SerieController(ManaxContext context, IMapper mapper, INotification
         try
         {
             await context.SaveChangesAsync();
+            _ = taskService.AddTaskAsync(new FixSerieTask(fixService, serie.Id));
             notificationService.NotifySerieUpdatedAsync(mapper.Map<SerieDto>(serie));
         }
         catch (DbUpdateConcurrencyException)
@@ -161,6 +165,7 @@ public class SerieController(ManaxContext context, IMapper mapper, INotification
             context.Series.Add(serie);
             await context.SaveChangesAsync();
             notificationService.NotifySerieCreatedAsync(mapper.Map<SerieDto>(serie));
+            _ = taskService.AddTaskAsync(new FixSerieTask(fixService, serie.Id));
             return serie.Id;
         }
         catch (Exception)

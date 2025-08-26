@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
@@ -8,7 +7,6 @@ using Avalonia;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using ManaxClient.Controls.Popups;
-using ManaxClient.Controls.Popups.Library;
 using ManaxClient.Models;
 using ManaxClient.Models.History;
 using ManaxClient.ViewModels.Home;
@@ -22,7 +20,6 @@ using ManaxClient.ViewModels.User;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTO.Library;
-using ManaxLibrary.Logging;
 using ManaxLibrary.Notifications;
 
 namespace ManaxClient.ViewModels;
@@ -196,14 +193,9 @@ public partial class MainWindowViewModel : ObservableObject
         SetPage(new HomePageViewModel());
     }
 
-    public void ChangePageUserIssues()
+    public void ChangePageIssues()
     {
-        SetPage(new UserIssuesPageViewModel());
-    }
-
-    public void ChangePageAutomaticIssues()
-    {
-        SetPage(new AutomaticIssuesPageViewModel());
+        SetPage(new IssuesPageViewModel());
     }
 
     public void ChangePageUsers()
