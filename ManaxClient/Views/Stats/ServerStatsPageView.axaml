@@ -146,7 +146,9 @@
                             </ItemsControl.ItemsPanel>
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <previews:SeriePreview Serie="{Binding}" />
+                                    <previews:SeriePreview Serie="{Binding}"
+                                                           TextColor="{DynamicResource TextColor1}"
+                                                           BackGroundColor="{DynamicResource Background1}"/>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>

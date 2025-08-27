@@ -87,6 +87,8 @@
                                         </Border.Styles>
                                         <previews:SeriePreview
                                             Serie="{Binding .}"
+                                            TextColor="{DynamicResource TextColor1}"
+                                            BackGroundColor="{DynamicResource Background1}"
                                             Command="{Binding $parent[UserControl].((login:HomePageViewModel)DataContext).MoveToSeriePage}"
                                             CommandParameter="{Binding .}" />
                                     </Border>

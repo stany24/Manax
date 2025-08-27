@@ -1,7 +1,9 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
+using Avalonia.Data.Converters;
 using Avalonia.Input;
+using Avalonia.Layout;
 using Avalonia.Media;
 using ManaxClient.Models;
 
@@ -12,6 +14,14 @@ public class SeriePreview : Button
     public static readonly AttachedProperty<ClientSerie?> SerieProperty =
         AvaloniaProperty.RegisterAttached<SeriePreview, Grid, ClientSerie?>(
             "Serie", null, false, BindingMode.OneTime);
+    
+    public static readonly AttachedProperty<SolidColorBrush> TextColorProperty =
+        AvaloniaProperty.RegisterAttached<SeriePreview, Grid, SolidColorBrush>(
+            "TextColor", new SolidColorBrush(), false, BindingMode.OneTime);
+    
+    public static readonly AttachedProperty<SolidColorBrush> BackGroundColorProperty =
+        AvaloniaProperty.RegisterAttached<SeriePreview, Grid, SolidColorBrush>(
+            "BackGroundColor", new SolidColorBrush(), false, BindingMode.OneTime);
 
     public SeriePreview()
     {
@@ -40,22 +50,37 @@ public class SeriePreview : Button
             CornerRadius = new CornerRadius(12, 12, 0, 0),
             ClipToBounds = true
         };
-        imageBorder.SetValue(Grid.RowProperty, 0);
 
         Border titleContainer = new()
         {
-            Background = Brushes.White,
+            Background = Brushes.Transparent,
             Padding = new Thickness(12, 8),
-            CornerRadius = new CornerRadius(0, 0, 12, 12)
+            CornerRadius = new CornerRadius(0, 0, 12, 12),
+            VerticalAlignment = VerticalAlignment.Bottom
         };
+        
+        titleContainer.Bind(Border.BackgroundProperty, new Binding("BackGroundColor")
+        {
+            Source = this,
+            Mode = BindingMode.OneWay,
+            Converter = new FuncValueConverter<SolidColorBrush, LinearGradientBrush>(brush => new LinearGradientBrush
+            {
+                StartPoint = new RelativePoint(0, 1, RelativeUnit.Relative),
+                EndPoint = new RelativePoint(0, 0, RelativeUnit.Relative),
+                GradientStops =
+                [
+                    new GradientStop(brush?.Color ?? Colors.White, 0),
+                    new GradientStop(Colors.Transparent, 1)
+                ]
+            })
+        });
 
         TextBlock textBlock = new()
         {
             TextWrapping = TextWrapping.Wrap,
-            FontSize = 13,
+            FontSize = 14,
             FontWeight = FontWeight.Medium,
-            Foreground = new SolidColorBrush(Color.Parse("#212529")),
-            TextAlignment = TextAlignment.Center,
+            TextAlignment = TextAlignment.Left,
             MaxLines = 2,
             TextTrimming = TextTrimming.CharacterEllipsis
         };
@@ -64,13 +89,16 @@ public class SeriePreview : Button
             Source = this,
             Mode = BindingMode.OneWay
         });
+        textBlock.Bind(TextBlock.ForegroundProperty, new Binding("TextColor")
+        {
+            Source = this,
+            Mode = BindingMode.OneWay
+        });
 
         titleContainer.Child = textBlock;
-        titleContainer.SetValue(Grid.RowProperty, 1);
 
-        Grid grid = new()
+        Panel grid = new()
         {
-            RowDefinitions = new RowDefinitions("*, Auto"),
             ClipToBounds = true
         };
         grid.Children.Add(imageBorder);
@@ -91,6 +119,18 @@ public class SeriePreview : Button
         get => GetSerie(this);
         set => SetSerie(this, value);
     }
+    
+    public SolidColorBrush TextColor
+    {
+        get => GetTextColor(this);
+        set => SetTextColor(this, value);
+    }
+    
+    public SolidColorBrush BackGroundColor
+    {
+        get => GetBackGroundColor(this);
+        set => SetBackGroundColor(this, value);
+    }
 
     protected override void OnPointerEntered(PointerEventArgs e)
     {
@@ -104,13 +144,33 @@ public class SeriePreview : Button
         RenderTransform = new ScaleTransform(1.0, 1.0);
     }
 
-    public static void SetSerie(AvaloniaObject element, ClientSerie serieValue)
+    private static void SetSerie(AvaloniaObject element, ClientSerie serieValue)
     {
         element.SetValue(SerieProperty, serieValue);
     }
 
-    public static ClientSerie GetSerie(AvaloniaObject element)
+    private static ClientSerie GetSerie(AvaloniaObject element)
     {
         return element.GetValue(SerieProperty);
+    }
+
+    private static void SetTextColor(AvaloniaObject element, SolidColorBrush textColorValue)
+    {
+        element.SetValue(TextColorProperty, textColorValue);
+    }
+
+    private static SolidColorBrush GetTextColor(AvaloniaObject element)
+    {
+        return element.GetValue(TextColorProperty);
+    }
+
+    private static void SetBackGroundColor(AvaloniaObject element, SolidColorBrush backGroundColorValue)
+    {
+        element.SetValue(BackGroundColorProperty, backGroundColorValue);
+    }
+
+    private static SolidColorBrush GetBackGroundColor(AvaloniaObject element)
+    {
+        return element.GetValue(BackGroundColorProperty);
     }
 }
