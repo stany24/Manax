@@ -9,52 +9,14 @@ using ManaxLibrary.DTO.User;
 
 namespace ManaxClient.Models.Issue;
 
-public class ClientReportedIssueSerie: ObservableObject
+public class ClientReportedIssueSerie : ObservableObject
 {
     private ReportedIssueSerieDto _issue;
 
-    public ReportedIssueSerieDto Issue
-    {
-        get => _issue;
-        set
-        {
-            _issue = value;
-            OnPropertyChanged();
-        }
-    }
-    
     private ReportedIssueSerieTypeDto? _problem;
-
-    public ReportedIssueSerieTypeDto? Problem
-    {
-        get => _problem;
-        set
-        {
-            _problem = value;
-            OnPropertyChanged();
-        }
-    }
+    private SerieDto? _serie;
 
     private UserDto? _user;
-    public UserDto? User
-    {
-        get => _user;
-        set
-        {
-            _user = value;
-            OnPropertyChanged();
-        }
-    }
-    private SerieDto? _serie;
-    public SerieDto? Serie
-    {
-        get => _serie;
-        set
-        {
-            _serie = value;
-            OnPropertyChanged();
-        }
-    }
 
     public ClientReportedIssueSerie(ReportedIssueSerieDto issue)
     {
@@ -70,12 +32,49 @@ public class ClientReportedIssueSerie: ObservableObject
             if (!problem.Failed) Problem = problem.GetValue().Find(p => p.Id == issue.Id);
         });
     }
-    
+
+    public ReportedIssueSerieDto Issue
+    {
+        get => _issue;
+        set
+        {
+            _issue = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public ReportedIssueSerieTypeDto? Problem
+    {
+        get => _problem;
+        set
+        {
+            _problem = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public UserDto? User
+    {
+        get => _user;
+        set
+        {
+            _user = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public SerieDto? Serie
+    {
+        get => _serie;
+        set
+        {
+            _serie = value;
+            OnPropertyChanged();
+        }
+    }
+
     public void Close()
     {
-        Task.Run(async () =>
-        {
-            await ManaxApiIssueClient.CloseSerieIssueAsync(Issue.Id);
-        });
+        Task.Run(async () => { await ManaxApiIssueClient.CloseSerieIssueAsync(Issue.Id); });
     }
 }

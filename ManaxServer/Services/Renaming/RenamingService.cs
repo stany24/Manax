@@ -12,7 +12,8 @@ public class RenamingService : Service
     {
     }
 
-    public static void RenamePosters(ManaxContext manaxContext,string oldName, string newName, ImageFormat oldFormat, ImageFormat newFormat)
+    public static void RenamePosters(ManaxContext manaxContext, string oldName, string newName, ImageFormat oldFormat,
+        ImageFormat newFormat)
     {
         manaxContext.Series
             .Include(s => s.SavePoint)

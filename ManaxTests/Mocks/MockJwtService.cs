@@ -15,4 +15,3 @@ public class MockJwtService : IJwtService
         return $"{user.Id}-jwt-token";
     }
 }
-

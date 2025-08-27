@@ -1,3 +1,4 @@
+using System.Net;
 using System.Security.Claims;
 using ManaxLibrary.DTO.User;
 using ManaxServer.Controllers;
@@ -33,7 +34,8 @@ public class TestUserController
         _mockJwtService = new MockJwtService();
         _mockNotificationService = new Mock<INotificationService>();
 
-        _controller = new UserController(_context, _mapper, _mockHashService, _mockJwtService, _mockNotificationService.Object);
+        _controller = new UserController(_context, _mapper, _mockHashService, _mockJwtService,
+            _mockNotificationService.Object);
 
         ClaimsPrincipal adminUser = new(new ClaimsIdentity([
             new Claim(ClaimTypes.NameIdentifier, "2"),
@@ -301,7 +303,7 @@ public class TestUserController
         User user = _context.Users.First();
         user.PasswordHash = "correctPasswordhashed";
         await _context.SaveChangesAsync();
-        
+
         UserLoginDto loginDto = new()
         {
             Username = user.Username,
@@ -365,7 +367,7 @@ public class TestUserController
         User user = _context.Users.First();
         user.PasswordHash = "correctPasswordhashed";
         await _context.SaveChangesAsync();
-        
+
         DateTime originalLastLogin = user.LastLogin;
         UserLoginDto loginDto = new()
         {
@@ -391,7 +393,7 @@ public class TestUserController
         User user = _context.Users.First();
         user.PasswordHash = "correctPasswordhashed";
         await _context.SaveChangesAsync();
-        
+
         UserLoginDto loginDto = new()
         {
             Username = user.Username,
@@ -428,7 +430,7 @@ public class TestUserController
 
         UserLoginResultDto? claimResult = result.Value;
         Assert.IsNotNull(claimResult);
-        
+
         User? createdUser = _context.Users.FirstOrDefault(u => u.Username == "FirstOwner");
         Assert.IsNotNull(createdUser);
         Assert.AreEqual($"{createdUser.Id}-jwt-token", claimResult.Token);
@@ -577,7 +579,7 @@ public class TestUserController
 
         UserLoginResultDto? loginResult = result.Value;
         Assert.IsNotNull(loginResult);
-        
+
         User? createdUser = _context.Users.FirstOrDefault(u => u.Username == "testuser");
         Assert.IsNotNull(createdUser);
         Assert.AreEqual($"{createdUser.Id}-jwt-token", loginResult.Token);
@@ -633,14 +635,14 @@ public class TestUserController
         User user = _context.Users.First();
         user.PasswordHash = "correctPasswordhashed";
         await _context.SaveChangesAsync();
-        
+
         UserLoginDto loginDto = new()
         {
             Username = user.Username,
             Password = "correctPassword"
         };
 
-        _controller.ControllerContext.HttpContext.Connection.RemoteIpAddress = System.Net.IPAddress.Parse("127.0.0.1");
+        _controller.ControllerContext.HttpContext.Connection.RemoteIpAddress = IPAddress.Parse("127.0.0.1");
 
         ActionResult<UserLoginResultDto> result = await _controller.Login(loginDto);
 

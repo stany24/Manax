@@ -65,7 +65,8 @@ public partial class IssuesPageViewModel : PageViewModel
                 InfoEmitted?.Invoke(this, allAutomaticSerieIssuesResponse.Error);
             else
                 AllAutomaticSerieIssues =
-                    new ObservableCollection<ClientAutomaticIssueSerie>(allAutomaticSerieIssuesResponse.GetValue().Select(s => new ClientAutomaticIssueSerie(s)));
+                    new ObservableCollection<ClientAutomaticIssueSerie>(allAutomaticSerieIssuesResponse.GetValue()
+                        .Select(s => new ClientAutomaticIssueSerie(s)));
 
             Optional<List<AutomaticIssueChapterDto>> allAutomaticChapterIssuesResponse =
                 await ManaxApiIssueClient.GetAllAutomaticChapterIssuesAsync();
@@ -73,7 +74,8 @@ public partial class IssuesPageViewModel : PageViewModel
                 InfoEmitted?.Invoke(this, allAutomaticChapterIssuesResponse.Error);
             else
                 AllAutomaticChapterIssues =
-                    new ObservableCollection<ClientAutomaticIssueChapter>(allAutomaticChapterIssuesResponse.GetValue().Select(c => new ClientAutomaticIssueChapter(c)));
+                    new ObservableCollection<ClientAutomaticIssueChapter>(allAutomaticChapterIssuesResponse.GetValue()
+                        .Select(c => new ClientAutomaticIssueChapter(c)));
 
             Optional<List<ReportedIssueChapterDto>> allReportedChapterIssuesResponse =
                 await ManaxApiIssueClient.GetAllReportedChapterIssuesAsync();
@@ -81,16 +83,18 @@ public partial class IssuesPageViewModel : PageViewModel
                 InfoEmitted?.Invoke(this, allReportedChapterIssuesResponse.Error);
             else
                 AllReportedChapterIssues =
-                    new ObservableCollection<ClientReportedIssueChapter>(allReportedChapterIssuesResponse.GetValue().Select(c => new ClientReportedIssueChapter(c)));
+                    new ObservableCollection<ClientReportedIssueChapter>(allReportedChapterIssuesResponse.GetValue()
+                        .Select(c => new ClientReportedIssueChapter(c)));
 
             Optional<List<ReportedIssueSerieDto>> allReportedSerieIssuesResponse =
                 await ManaxApiIssueClient.GetAllReportedSerieIssuesAsync();
             if (allReportedSerieIssuesResponse.Failed)
                 InfoEmitted?.Invoke(this, allReportedSerieIssuesResponse.Error);
             else
-                
+
                 AllReportedSerieIssues =
-                    new ObservableCollection<ClientReportedIssueSerie>(allReportedSerieIssuesResponse.GetValue().Select(s => new ClientReportedIssueSerie(s)));
+                    new ObservableCollection<ClientReportedIssueSerie>(allReportedSerieIssuesResponse.GetValue()
+                        .Select(s => new ClientReportedIssueSerie(s)));
         });
     }
 }

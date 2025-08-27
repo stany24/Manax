@@ -21,17 +21,18 @@ namespace ManaxClient.ViewModels.Stats;
 public partial class UserStatsPageViewModel : PageViewModel
 {
     [ObservableProperty] private UserStats? _userStats;
+
+    public UserStatsPageViewModel()
+    {
+        Task.Run(LoadUserStats);
+    }
+
     public ObservableCollection<Axis> ReadsXAxes { get; set; } = new([new Axis()]);
     public ObservableCollection<Axis> XAxes { get; set; } = new([new Axis()]);
     public ObservableCollection<ISeries> ChaptersSeries { get; set; } = new([]);
     public ObservableCollection<ISeries> RanksSeries { get; set; } = new([]);
     public ObservableCollection<ISeries> ReadsPerDaySeries { get; set; } = new([]);
     public ObservableCollection<ISeries> SeriesSeries { get; set; } = new([]);
-
-    public UserStatsPageViewModel()
-    {
-        Task.Run(LoadUserStats);
-    }
 
     private async void LoadUserStats()
     {
@@ -145,7 +146,8 @@ public partial class UserStatsPageViewModel : PageViewModel
                 .ToList();
 
             List<double> readCounts = readsPerDay.Select(x => (double)x.Count).ToList();
-            List<string> dateLabels = readsPerDay.Select(x => x.Date.ToString("dd/MM",CultureInfo.InvariantCulture)).ToList();
+            List<string> dateLabels = readsPerDay.Select(x => x.Date.ToString("dd/MM", CultureInfo.InvariantCulture))
+                .ToList();
 
             ReadsPerDaySeries.Add(new LineSeries<double>
             {
@@ -156,7 +158,7 @@ public partial class UserStatsPageViewModel : PageViewModel
                 GeometryFill = new SolidColorPaint(SKColors.Purple),
                 GeometryStroke = new SolidColorPaint(SKColors.White) { StrokeThickness = 2 }
             });
-            
+
             ReadsXAxes.Clear();
             ReadsXAxes.Add(new Axis
             {

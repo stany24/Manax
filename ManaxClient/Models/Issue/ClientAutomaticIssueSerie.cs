@@ -11,6 +11,18 @@ public class ClientAutomaticIssueSerie : ObservableObject
 {
     private AutomaticIssueSerieDto _issue;
 
+    private SerieDto? _serie;
+
+    public ClientAutomaticIssueSerie(AutomaticIssueSerieDto issue)
+    {
+        _issue = issue;
+        Task.Run(async () =>
+        {
+            Optional<SerieDto> serieInfo = await ManaxApiSerieClient.GetSerieInfoAsync(issue.SerieId);
+            if (!serieInfo.Failed) Serie = serieInfo.GetValue();
+        });
+    }
+
     public AutomaticIssueSerieDto Issue
     {
         get => _issue;
@@ -21,7 +33,6 @@ public class ClientAutomaticIssueSerie : ObservableObject
         }
     }
 
-    private SerieDto? _serie;
     public SerieDto? Serie
     {
         get => _serie;
@@ -30,15 +41,5 @@ public class ClientAutomaticIssueSerie : ObservableObject
             _serie = value;
             OnPropertyChanged();
         }
-    }
-
-    public ClientAutomaticIssueSerie(AutomaticIssueSerieDto issue)
-    {
-        _issue = issue;
-        Task.Run(async () =>
-        {
-            Optional<SerieDto> serieInfo = await ManaxApiSerieClient.GetSerieInfoAsync(issue.SerieId);
-            if (!serieInfo.Failed) Serie = serieInfo.GetValue();
-        });
     }
 }

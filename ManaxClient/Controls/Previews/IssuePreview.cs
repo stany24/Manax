@@ -13,27 +13,40 @@ public class IssuePreview : Button
 {
     public static readonly StyledProperty<string> ProblemProperty =
         AvaloniaProperty.Register<IssuePreview, string>(nameof(Problem), string.Empty);
-    
+
     public static readonly StyledProperty<string> InfoProperty =
         AvaloniaProperty.Register<IssuePreview, string>(nameof(Info), string.Empty);
-    
+
     public static readonly StyledProperty<bool> ClosableProperty =
         AvaloniaProperty.Register<IssuePreview, bool>(nameof(Closable));
-    
+
     public static readonly StyledProperty<ICommand?> CloseCommandProperty =
         AvaloniaProperty.Register<IssuePreview, ICommand?>(nameof(CloseCommand));
-    
+
     public static readonly StyledProperty<IBrush> IssueColorProperty =
-        AvaloniaProperty.Register<IssuePreview, IBrush>(nameof(IssueColor), new SolidColorBrush(Color.Parse("#DC3545")));
-    
+        AvaloniaProperty.Register<IssuePreview, IBrush>(nameof(IssueColor),
+            new SolidColorBrush(Color.Parse("#DC3545")));
+
     public static readonly StyledProperty<string> BadgeTextProperty =
         AvaloniaProperty.Register<IssuePreview, string>(nameof(BadgeText), "Issue");
 
     private readonly IBrush _backgroundColor = Brushes.White;
     private readonly IBrush _hoverColor = new SolidColorBrush(Color.Parse("#F8F9FA"));
-    private TextBlock _problemText;
-    private TextBlock _infoText;
     private Button _closeButton;
+    private TextBlock _infoText;
+    private TextBlock _problemText;
+
+    public IssuePreview()
+    {
+        Background = Brushes.Transparent;
+        BorderThickness = new Thickness(0);
+        Padding = new Thickness(0);
+        HorizontalAlignment = HorizontalAlignment.Stretch;
+        HorizontalContentAlignment = HorizontalAlignment.Stretch;
+
+        InitializeComponent();
+        BindProperties();
+    }
 
     public string Problem
     {
@@ -69,18 +82,6 @@ public class IssuePreview : Button
     {
         get => GetValue(BadgeTextProperty);
         set => SetValue(BadgeTextProperty, value);
-    }
-
-    public IssuePreview()
-    {
-        Background = Brushes.Transparent;
-        BorderThickness = new Thickness(0);
-        Padding = new Thickness(0);
-        HorizontalAlignment = HorizontalAlignment.Stretch;
-        HorizontalContentAlignment = HorizontalAlignment.Stretch;
-
-        InitializeComponent();
-        BindProperties();
     }
 
     private void InitializeComponent()

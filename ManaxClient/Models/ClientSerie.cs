@@ -14,7 +14,6 @@ public partial class ClientSerie : ObservableObject
 {
     [ObservableProperty] private SerieDto _info;
     [ObservableProperty] private Bitmap? _poster;
-    public event EventHandler<string>? InfoEmitted;
 
     public ClientSerie(SerieDto info)
     {
@@ -37,4 +36,6 @@ public partial class ClientSerie : ObservableObject
                 }
         });
     }
+
+    public event EventHandler<string>? InfoEmitted;
 }

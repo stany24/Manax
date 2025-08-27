@@ -151,7 +151,7 @@ public partial class UploadController(
     {
         Regex regex = RegexNumber();
         Match match = regex.Match(fileName);
-        return match.Success ? Convert.ToInt32(match.Value,CultureInfo.InvariantCulture) : 0;
+        return match.Success ? Convert.ToInt32(match.Value, CultureInfo.InvariantCulture) : 0;
     }
 
     private DateTime GetChapterCreationDate(string filePath)

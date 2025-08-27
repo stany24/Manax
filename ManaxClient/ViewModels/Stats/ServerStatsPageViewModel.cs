@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.IO;
 using System.Threading.Tasks;
-using Avalonia.Media.Imaging;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using LiveChartsCore;
@@ -24,15 +22,16 @@ public partial class ServerStatsPageViewModel : PageViewModel
     [ObservableProperty] private double _availableDiskSizeInGb;
     [ObservableProperty] private double _diskSizeInGb;
     [ObservableProperty] private ServerStats? _serverStats;
-    public ObservableCollection<ClientSerie> NeverReadSeries { get; set; } = new([]);
-    public ObservableCollection<ISeries> UserActivitySeries { get; set; } = new([]);
-    public ObservableCollection<ISeries> LibraryDistributionSeries { get; set; } = new([]);
-    public ObservableCollection<ISeries> DiskUsageSeries { get; set; } = new([]);
 
     public ServerStatsPageViewModel()
     {
         Task.Run(LoadServerStats);
     }
+
+    public ObservableCollection<ClientSerie> NeverReadSeries { get; set; } = new([]);
+    public ObservableCollection<ISeries> UserActivitySeries { get; set; } = new([]);
+    public ObservableCollection<ISeries> LibraryDistributionSeries { get; set; } = new([]);
+    public ObservableCollection<ISeries> DiskUsageSeries { get; set; } = new([]);
 
     private async void LoadServerStats()
     {
@@ -129,8 +128,6 @@ public partial class ServerStatsPageViewModel : PageViewModel
         }
 
         foreach (ClientSerie serie in ServerStats.NeverReadSeries.ConvertAll(s => new ClientSerie(s)))
-        {
             NeverReadSeries.Add(serie);
-        }
     }
 }
