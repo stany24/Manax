@@ -48,7 +48,7 @@ public abstract partial class BaseSeriesViewModel : PageViewModel
             {
                 ClientSerie? existingSerie = Series.FirstOrDefault(s => s.Info.Id == serie.Id);
                 if (existingSerie != null) return;
-                Series.Add(new ClientSerie { Info = serie, Poster = null });
+                Series.Add(new ClientSerie(serie));
             }
         });
     }
@@ -126,22 +126,8 @@ public abstract partial class BaseSeriesViewModel : PageViewModel
                     continue;
                 }
 
-                ClientSerie serie = new() { Info = serieInfoAsync.GetValue() };
-
-                Optional<byte[]> seriePosterAsync = await ManaxApiSerieClient.GetSeriePosterAsync(serieId);
-                if (seriePosterAsync.Failed)
-                    InfoEmitted?.Invoke(this, seriePosterAsync.Error);
-                else
-                    try
-                    {
-                        serie.Poster = new Bitmap(new MemoryStream(seriePosterAsync.GetValue()));
-                    }
-                    catch (Exception e)
-                    {
-                        Logger.LogError("Failed to convert byte[] to image", e, Environment.StackTrace);
-                        InfoEmitted?.Invoke(this, "Invalid image received for serie " + serieId);
-                        serie.Poster = null;
-                    }
+                ClientSerie serie = new(serieInfoAsync.GetValue());
+                serie.InfoEmitted += (_, info) => { InfoEmitted?.Invoke(this, info); };
 
                 Dispatcher.UIThread.Post(() =>
                 {

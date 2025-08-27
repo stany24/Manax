@@ -9,9 +9,9 @@ namespace ManaxClient.Controls.Previews;
 
 public class SeriePreview : Button
 {
-    public static readonly AttachedProperty<ClientSerie> SerieProperty =
-        AvaloniaProperty.RegisterAttached<SeriePreview, Grid, ClientSerie>(
-            "Serie", new ClientSerie(), false, BindingMode.OneTime);
+    public static readonly AttachedProperty<ClientSerie?> SerieProperty =
+        AvaloniaProperty.RegisterAttached<SeriePreview, Grid, ClientSerie?>(
+            "Serie", null, false, BindingMode.OneTime);
 
     public SeriePreview()
     {

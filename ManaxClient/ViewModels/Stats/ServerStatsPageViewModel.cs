@@ -128,36 +128,9 @@ public partial class ServerStatsPageViewModel : PageViewModel
             colorIndex++;
         }
 
-        foreach (ClientSerie serie in ServerStats.NeverReadSeries.ConvertAll(s => new ClientSerie { Info = s }))
+        foreach (ClientSerie serie in ServerStats.NeverReadSeries.ConvertAll(s => new ClientSerie(s)))
         {
             NeverReadSeries.Add(serie);
         }
-
-        Task.Run(async () =>
-        {
-            foreach (ClientSerie serie in NeverReadSeries)
-            {
-                Optional<byte[]> seriePosterAsync = await ManaxApiSerieClient.GetSeriePosterAsync(serie.Info.Id);
-                if (seriePosterAsync.Failed)
-                {
-                    InfoEmitted?.Invoke(this, seriePosterAsync.Error);
-                    continue;
-                }
-
-                try
-                {
-                    await Dispatcher.UIThread.InvokeAsync(() =>
-                    {
-                        serie.Poster = new Bitmap(new MemoryStream(seriePosterAsync.GetValue()));
-                    });
-                }
-                catch (Exception e)
-                {
-                    Logger.LogError("Failed to convert byte[] to image", e, Environment.StackTrace);
-                    InfoEmitted?.Invoke(this, "Invalid image received for serie " + serie.Info.Id);
-                    serie.Poster = null;
-                }
-            }
-        });
     }
 }
