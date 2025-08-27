@@ -41,7 +41,7 @@
                             </Button>
                         </StackPanel>
 
-                        <StackPanel Spacing="8" IsVisible="{Binding Admin}">
+                        <StackPanel Spacing="8">
                             <TextBlock Text="Note de la série" FontWeight="Medium" />
                             <ComboBox ItemsSource="{Binding Ranks}"
                                       SelectedItem="{Binding SelectedRank}"

@@ -2,6 +2,5 @@ namespace ManaxLibrary.DTO.Setting;
 
 public enum ArchiveFormat
 {
-    Cbz = 0,
-    Cbr = 1
+    Cbz = 0
 }

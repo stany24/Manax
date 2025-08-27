@@ -1,4 +1,5 @@
 using Avalonia.Controls;
+using Avalonia.Interactivity;
 
 namespace ManaxClient.Views.Login;
 
@@ -8,5 +9,10 @@ public partial class LoginPageView : UserControl
     public LoginPageView()
     {
         InitializeComponent();
+    }
+
+    private void TbxUsername_OnLoaded(object? sender, RoutedEventArgs e)
+    {
+        TbxUsername.Focus();
     }
 }

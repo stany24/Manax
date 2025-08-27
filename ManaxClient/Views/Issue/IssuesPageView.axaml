@@ -5,9 +5,84 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:issue="clr-namespace:ManaxClient.ViewModels.Issue"
     xmlns:previews="clr-namespace:ManaxClient.Controls.Previews"
+    xmlns:issue1="clr-namespace:ManaxClient.Models.Issue"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Issue.IssuesPageView"
     x:DataType="issue:IssuesPageViewModel">
+
+    <UserControl.Resources>
+        <DataTemplate x:Key="AutomaticChapterIssueTemplate" DataType="issue1:ClientAutomaticIssueChapter">
+            <previews:IssuePreview IssueColor="#DC3545"
+                                   BadgeText="Automatique"
+                                   Closable="False"
+                                   Margin="0,0,0,8">
+                <previews:IssuePreview.Problem>
+                    <MultiBinding StringFormat="{}{0}">
+                        <Binding Path="Issue.Problem" />
+                    </MultiBinding>
+                </previews:IssuePreview.Problem>
+                <previews:IssuePreview.Info>
+                    <MultiBinding StringFormat="Chapitre: {0} • {1:dd/MM/yyyy HH:mm}">
+                        <Binding Path="Chapter.FileName" />
+                        <Binding Path="Issue.CreatedAt" />
+                    </MultiBinding>
+                </previews:IssuePreview.Info>
+            </previews:IssuePreview>
+        </DataTemplate>
+
+        <DataTemplate x:Key="AutomaticSerieIssueTemplate" DataType="issue1:ClientAutomaticIssueSerie">
+            <previews:IssuePreview IssueColor="#DC3545"
+                                   BadgeText="Automatique"
+                                   Closable="False"
+                                   Margin="0,0,0,8">
+                <previews:IssuePreview.Problem>
+                    <MultiBinding StringFormat="{}{0}">
+                        <Binding Path="Issue.Problem" />
+                    </MultiBinding>
+                </previews:IssuePreview.Problem>
+                <previews:IssuePreview.Info>
+                    <MultiBinding StringFormat="Série: {0} • {1:dd/MM/yyyy HH:mm}">
+                        <Binding Path="Serie.Title" />
+                        <Binding Path="Issue.CreatedAt" />
+                    </MultiBinding>
+                </previews:IssuePreview.Info>
+            </previews:IssuePreview>
+        </DataTemplate>
+
+        <DataTemplate x:Key="ReportedChapterIssueTemplate" DataType="issue1:ClientReportedIssueChapter">
+            <previews:IssuePreview IssueColor="#FD7E14"
+                                   BadgeText="Signalé"
+                                   Closable="True"
+                                   Problem="{Binding Problem.Name}"
+                                   Margin="0,0,0,8"
+                                   CloseCommand="{Binding Close}">
+                <previews:IssuePreview.Info>
+                    <MultiBinding StringFormat="Chapitre: {0} • Utilisateur: {1} • {2:dd/MM/yyyy HH:mm}">
+                        <Binding Path="Chapter.FileName" />
+                        <Binding Path="User.Username" />
+                        <Binding Path="Issue.CreatedAt" />
+                    </MultiBinding>
+                </previews:IssuePreview.Info>
+            </previews:IssuePreview>
+        </DataTemplate>
+
+        <DataTemplate x:Key="ReportedSerieIssueTemplate" DataType="issue1:ClientReportedIssueSerie">
+            <previews:IssuePreview IssueColor="#FD7E14"
+                                   BadgeText="Signalé"
+                                   Closable="True"
+                                   Problem="{Binding Problem.Name}"
+                                   Margin="0,0,0,8"
+                                   CloseCommand="{Binding Close}">
+                <previews:IssuePreview.Info>
+                    <MultiBinding StringFormat="Série: {0} • Utilisateur: {1} • {2:dd/MM/yyyy HH:mm}">
+                        <Binding Path="Serie.Title" />
+                        <Binding Path="User.Username" />
+                        <Binding Path="Issue.CreatedAt" />
+                    </MultiBinding>
+                </previews:IssuePreview.Info>
+            </previews:IssuePreview>
+        </DataTemplate>
+    </UserControl.Resources>
 
     <ScrollViewer>
         <StackPanel Margin="24" Spacing="24">
@@ -64,14 +139,8 @@
                                    FontWeight="SemiBold"
                                    Foreground="#495057" />
 
-                        <ItemsControl ItemsSource="{Binding AllAutomaticChapterIssues}">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <previews:AutomaticChapterIssuePreview Issue="{Binding}"
-                                                                           Margin="0,0,0,8" />
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
+                        <ItemsControl ItemsSource="{Binding AllAutomaticChapterIssues}"
+                                      ItemTemplate="{StaticResource AutomaticChapterIssueTemplate}" />
 
                         <TextBlock Text="Aucun problème automatique de chapitre trouvé"
                                    FontStyle="Italic"
@@ -85,14 +154,8 @@
                                    FontWeight="SemiBold"
                                    Foreground="#495057" />
 
-                        <ItemsControl ItemsSource="{Binding AllAutomaticSerieIssues}">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <previews:AutomaticSerieIssuePreview Issue="{Binding}"
-                                                                         Margin="0,0,0,8" />
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
+                        <ItemsControl ItemsSource="{Binding AllAutomaticSerieIssues}"
+                                      ItemTemplate="{StaticResource AutomaticSerieIssueTemplate}" />
 
                         <TextBlock Text="Aucun problème automatique de série trouvé"
                                    FontStyle="Italic"
@@ -108,14 +171,8 @@
                                    FontWeight="SemiBold"
                                    Foreground="#495057" />
 
-                        <ItemsControl ItemsSource="{Binding AllReportedChapterIssues}">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <previews:ReportedChapterIssuePreview Issue="{Binding}"
-                                                                          Margin="0,0,0,8" />
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
+                        <ItemsControl ItemsSource="{Binding AllReportedChapterIssues}"
+                                      ItemTemplate="{StaticResource ReportedChapterIssueTemplate}" />
 
                         <TextBlock Text="Aucun problème signalé de chapitre trouvé"
                                    FontStyle="Italic"
@@ -129,14 +186,8 @@
                                    FontWeight="SemiBold"
                                    Foreground="#495057" />
 
-                        <ItemsControl ItemsSource="{Binding AllReportedSerieIssues}">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <previews:ReportedSerieIssuePreview Issue="{Binding}"
-                                                                        Margin="0,0,0,8" />
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
+                        <ItemsControl ItemsSource="{Binding AllReportedSerieIssues}"
+                                      ItemTemplate="{StaticResource ReportedSerieIssueTemplate}" />
 
                         <TextBlock Text="Aucun problème signalé de série trouvé"
                                    FontStyle="Italic"

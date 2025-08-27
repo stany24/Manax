@@ -29,7 +29,9 @@
                             <TextBlock Text="Nom d'utilisateur"
                                        FontWeight="Medium"
                                        Foreground="{DynamicResource SecondaryBrush}" />
-                            <TextBox Text="{Binding Username}"
+                            <TextBox Name="TbxUsername"
+                                     Loaded="TbxUsername_OnLoaded"
+                                     Text="{Binding Username}"
                                      Watermark="Entrez votre nom d'utilisateur"
                                      Padding="12"
                                      CornerRadius="8"

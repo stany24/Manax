@@ -10,7 +10,6 @@ using ManaxServer.Services.Issue;
 using ManaxServer.Services.Jwt;
 using ManaxServer.Services.Mapper;
 using ManaxServer.Services.Notification;
-using ManaxServer.Services.Renaming;
 using ManaxServer.Services.Task;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http.Features;

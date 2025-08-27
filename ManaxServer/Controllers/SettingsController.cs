@@ -64,8 +64,8 @@ public class SettingsController(
             newData.MaxChapterWidth != oldData.MaxChapterWidth ||
             newData.MinChapterWidth != oldData.MinChapterWidth)
         {
-            foreach (long serieId in manaxContext.Chapters.Select(serie => serie.Id))
-                _ = taskService.AddTaskAsync(new FixChapterTask(fixService, serieId));
+            foreach (long chapterId in manaxContext.Chapters.Select(chapter => chapter.Id))
+                _ = taskService.AddTaskAsync(new FixChapterTask(fixService, chapterId));
         }
     }
 
