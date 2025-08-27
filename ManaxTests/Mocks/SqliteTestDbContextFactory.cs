@@ -7,6 +7,9 @@ using ManaxServer.Models.Rank;
 using ManaxServer.Models.SavePoint;
 using ManaxServer.Models.Serie;
 using ManaxServer.Models.User;
+using ManaxServer.Models.Issue.Automatic;
+using ManaxServer.Models.Issue.Reported;
+using ManaxLibrary.DTO.Issue.Automatic;
 using Microsoft.EntityFrameworkCore;
 
 namespace ManaxTests.Mocks;
@@ -189,6 +192,116 @@ public static class SqliteTestDbContextFactory
             }
         ];
 
+        List<AutomaticIssueChapter> automaticIssuesChapter =
+        [
+            new()
+            {
+                ChapterId = 1,
+                Problem = AutomaticIssueChapterType.ImageTooSmall,
+                CreatedAt = DateTime.UtcNow
+            },
+            new()
+            {
+                ChapterId = 2,
+                Problem = AutomaticIssueChapterType.CouldNotOpen,
+                CreatedAt = DateTime.UtcNow
+            }
+        ];
+
+        List<AutomaticIssueSerie> automaticIssuesSerie =
+        [
+            new()
+            {
+                SerieId = 1,
+                Problem = AutomaticIssueSerieType.PosterMissing,
+                CreatedAt = DateTime.UtcNow
+            },
+            new()
+            {
+                SerieId = 2,
+                Problem = AutomaticIssueSerieType.DescriptionTooShort,
+                CreatedAt = DateTime.UtcNow
+            }
+        ];
+
+        List<ReportedIssueChapterType> reportedIssueChapterTypes =
+        [
+            new()
+            {
+                Id = 1,
+                Name = "Missing Pages"
+            },
+            new()
+            {
+                Id = 2,
+                Name = "Wrong Order"
+            },
+            new()
+            {
+                Id = 3,
+                Name = "Corrupted File"
+            }
+        ];
+
+        List<ReportedIssueSerieType> reportedIssueSerieTypes =
+        [
+            new()
+            {
+                Id = 1,
+                Name = "Wrong Title"
+            },
+            new()
+            {
+                Id = 2,
+                Name = "Incorrect Description"
+            },
+            new()
+            {
+                Id = 3,
+                Name = "Missing Cover"
+            }
+        ];
+
+        List<ReportedIssueChapter> reportedIssuesChapter =
+        [
+            new()
+            {
+                Id = 1,
+                ChapterId = 1,
+                UserId = 1,
+                ProblemId = 1,
+                CreatedAt = DateTime.UtcNow
+            },
+            new()
+            {
+                Id = 2,
+                ChapterId = 2,
+                UserId = 1,
+                ProblemId = 1,
+                CreatedAt = DateTime.UtcNow
+            }
+        ];
+
+        List<ReportedIssueSerie> reportedIssuesSerie =
+        [
+            new()
+            {
+                Id = 1,
+                SerieId = 1,
+                UserId = 1,
+                ProblemId = 1,
+                CreatedAt = DateTime.UtcNow
+            },
+            new()
+            {
+                Id = 2,
+                SerieId = 2,
+                UserId = 1,
+                ProblemId = 1,
+                CreatedAt = DateTime.UtcNow
+            }
+        ];
+
         ManaxContext context = new(options);
 
         if (File.Exists(dbPath)) File.Delete(dbPath);
@@ -202,7 +315,12 @@ public static class SqliteTestDbContextFactory
         context.Users.AddRange(users);
         context.Ranks.AddRange(ranks);
         context.UserRanks.AddRange(userRanks);
-
+        context.AutomaticIssuesChapter.AddRange(automaticIssuesChapter);
+        context.AutomaticIssuesSerie.AddRange(automaticIssuesSerie);
+        context.ReportedIssueChapterTypes.AddRange(reportedIssueChapterTypes);
+        context.ReportedIssueSerieTypes.AddRange(reportedIssueSerieTypes);
+        context.ReportedIssuesChapter.AddRange(reportedIssuesChapter);
+        context.ReportedIssuesSerie.AddRange(reportedIssuesSerie);
         context.SaveChanges();
 
         return context;
@@ -210,19 +328,12 @@ public static class SqliteTestDbContextFactory
 
     public static void CleanupTestDatabase(ManaxContext context)
     {
-        if (!context.Database.GetDbConnection().ConnectionString.Contains("test_")) return;
-        string connectionString = context.Database.GetDbConnection().ConnectionString;
+        string? dbPath = context.Database.GetConnectionString()?.Split('=')[1];
         context.Dispose();
-
-        string dbPath = connectionString.Replace("Data Source=", "");
-        if (!File.Exists(dbPath)) return;
-        try
+        
+        if (!string.IsNullOrEmpty(dbPath) && File.Exists(dbPath))
         {
             File.Delete(dbPath);
-        }
-        catch
-        {
-            /* Ignore cleanup errors*/
         }
     }
 }

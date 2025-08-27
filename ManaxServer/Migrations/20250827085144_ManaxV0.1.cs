@@ -62,7 +62,7 @@ namespace ManaxServer.Migrations
                 {
                     Id = table.Column<long>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", nullable: false)
+                    Name = table.Column<string>(type: "TEXT", maxLength: 128, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -75,7 +75,7 @@ namespace ManaxServer.Migrations
                 {
                     Id = table.Column<long>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", nullable: false)
+                    Name = table.Column<string>(type: "TEXT", maxLength: 128, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -369,9 +369,10 @@ namespace ManaxServer.Migrations
                 column: "ProblemId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ReportedIssuesChapter_UserId",
+                name: "IX_ReportedIssuesChapter_UserId_ChapterId_ProblemId",
                 table: "ReportedIssuesChapter",
-                column: "UserId");
+                columns: new[] { "UserId", "ChapterId", "ProblemId" },
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_ReportedIssuesSerie_ProblemId",
@@ -384,9 +385,10 @@ namespace ManaxServer.Migrations
                 column: "SerieId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ReportedIssuesSerie_UserId",
+                name: "IX_ReportedIssuesSerie_UserId_SerieId_ProblemId",
                 table: "ReportedIssuesSerie",
-                column: "UserId");
+                columns: new[] { "UserId", "SerieId", "ProblemId" },
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_SavePoints_Path",

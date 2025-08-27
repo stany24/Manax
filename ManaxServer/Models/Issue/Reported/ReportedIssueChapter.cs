@@ -2,11 +2,13 @@
 // ReSharper disable UnusedMember.Global
 
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
 
 namespace ManaxServer.Models.Issue.Reported;
 
+[Index(nameof(UserId), nameof(ChapterId), nameof(ProblemId), IsUnique = true)]
 public class ReportedIssueChapter
 {
     public long Id { get; set; }

@@ -109,7 +109,8 @@ namespace ManaxServer.Migrations
 
                     b.HasIndex("ProblemId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId", "ChapterId", "ProblemId")
+                        .IsUnique();
 
                     b.ToTable("ReportedIssuesChapter");
                 });
@@ -122,6 +123,7 @@ namespace ManaxServer.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasMaxLength(128)
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -153,7 +155,8 @@ namespace ManaxServer.Migrations
 
                     b.HasIndex("SerieId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId", "SerieId", "ProblemId")
+                        .IsUnique();
 
                     b.ToTable("ReportedIssuesSerie");
                 });
@@ -166,6 +169,7 @@ namespace ManaxServer.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasMaxLength(128)
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");

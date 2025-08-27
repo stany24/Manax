@@ -70,18 +70,28 @@ public class IssueController(ManaxContext context, IMapper mapper, INotification
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<ReportedIssueSerieType>>> GetAllReportedSerieIssuesTypes()
     {
-        List<ReportedIssueSerieType> issues = await context.ReportedIssueSerieTypes.ToListAsync();
-        return mapper.Map<List<ReportedIssueSerieType>>(issues);
+        return await context.ReportedIssueSerieTypes.ToListAsync();
     }
 
     [HttpPost("chapter")]
     [Authorize(Roles = "User,Admin,Owner")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<ActionResult> CreateChapterIssue(ReportedIssueChapterCreateDto reportedIssueChapterCreate)
     {
         long? currentUserId = UserController.GetCurrentUserId(HttpContext);
         if (currentUserId == null) return Unauthorized();
+
+        bool issueExists = await context.ReportedIssuesChapter
+            .AnyAsync(i => i.UserId == currentUserId && 
+                          i.ChapterId == reportedIssueChapterCreate.ChapterId && 
+                          i.ProblemId == reportedIssueChapterCreate.ProblemId);
+
+        if (issueExists)
+        {
+            return Conflict("Issue already reported for this chapter and problem type.");
+        }
 
         ReportedIssueChapter issue = mapper.Map<ReportedIssueChapter>(reportedIssueChapterCreate);
         issue.UserId = (long)currentUserId;
@@ -98,9 +108,24 @@ public class IssueController(ManaxContext context, IMapper mapper, INotification
     [Authorize(Roles = "User,Admin,Owner")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<ActionResult> CreateSerieIssue(ReportedIssueSerieCreateDto reportedIssueSerieCreate)
     {
+        long? currentUserId = UserController.GetCurrentUserId(HttpContext);
+        if (currentUserId == null) return Unauthorized();
+
+        bool issueExists = await context.ReportedIssuesSerie
+            .AnyAsync(i => i.UserId == currentUserId && 
+                          i.SerieId == reportedIssueSerieCreate.SerieId && 
+                          i.ProblemId == reportedIssueSerieCreate.ProblemId);
+
+        if (issueExists)
+        {
+            return Conflict("Issue already reported for this series and problem type.");
+        }
+
         ReportedIssueSerie issue = mapper.Map<ReportedIssueSerie>(reportedIssueSerieCreate);
+        issue.UserId = (long)currentUserId;
         issue.CreatedAt = DateTime.UtcNow;
 
         context.ReportedIssuesSerie.Add(issue);
