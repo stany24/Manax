@@ -2,18 +2,18 @@
 
 ## Installation
 
-### Executable
+### Executable Linux/Windows
 
 1. Install [.NET Runtime 8.0](https://dotnet.microsoft.com/en-us/download/dotnet/8.0) on your system
 2. Verify the installation
-3. Download the latest release from: [releases](https://github.com/stany24/Manax/releases)
+3. Download the latest release for your system: [releases](https://github.com/stany24/Manax/releases)
 4. Run the ManaxServer executable in a console
 
-### systemd
+### systemd Linux only
 
 1. Install [.NET Runtime 8.0](https://dotnet.microsoft.com/en-us/download/dotnet/8.0) on your system
 2. Verify the installation
-3. Download the latest release from: [releases](https://github.com/stany24/Manax/releases)
+3. Download the latest release for Linux: [releases](https://github.com/stany24/Manax/releases)
 4. Place this file in /etc/systemd/system/
 
    [Unit]
@@ -27,11 +27,11 @@
 6. `sudo systemctl start manax` to start it now
 7. You can see the logs with `journalctl -u manax`
 
-### Docker
+### Docker Linux/Windows
 
 1. Install [Docker](https://docs.docker.com/engine/install/) and Docker Compose on your system
 2. Verify the installation
-3. Download the latest release from: [releases](https://github.com/stany24/Manax/releases)
+3. Download the latest release for your system: [releases](https://github.com/stany24/Manax/releases)
 4. Modify the `compose.yaml` file according to your needs (you really should add at least one volume)
 5. Run `docker compose up`
 
