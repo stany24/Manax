@@ -21,6 +21,7 @@
                 </StackPanel>
 
                 <Button Grid.Column="1"
+                        IsVisible="{Binding Admin}"
                         Classes="primary"
                         Command="{Binding UploadSerie}"
                         Padding="16,12">
