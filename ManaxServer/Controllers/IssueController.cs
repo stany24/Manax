@@ -47,7 +47,7 @@ public class IssueController(ManaxContext context, IMapper mapper, INotification
     }
 
     [HttpGet("chapter/reported/types")]
-    [Authorize(Roles = "Admin,Owner")]
+    [Authorize(Roles = "User,Admin,Owner")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<List<ReportedIssueChapterTypeDto>> GetAllReportedChapterIssuesTypes()
     {
@@ -66,7 +66,7 @@ public class IssueController(ManaxContext context, IMapper mapper, INotification
     }
 
     [HttpGet("serie/reported/types")]
-    [Authorize(Roles = "Admin,Owner")]
+    [Authorize(Roles = "User,Admin,Owner")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<ReportedIssueSerieType>>> GetAllReportedSerieIssuesTypes()
     {
