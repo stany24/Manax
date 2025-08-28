@@ -39,7 +39,48 @@ public partial class UploadController(
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> UploadChapter(IFormFile file, [FromForm] long serieId)
     {
-        return await CreateOrReplaceChapter(file, serieId, false);
+        Serie? serie = context.Series
+            .Include(s => s.SavePoint)
+            .FirstOrDefault(s => s.Id == serieId);
+        if (serie == null)
+            return BadRequest(Localizer.GetString("SerieNotFound"));
+
+        if (!TryGetPagesCountFromCbz(file, out int pagesCount))
+            return BadRequest(Localizer.GetString("InvalidZipFile"));
+
+        string filePath = Path.Combine(serie.SavePath, file.FileName);
+        if (Directory.Exists(filePath) || System.IO.File.Exists(filePath))
+        {
+            return BadRequest(Localizer.GetString("ChapterAlreadyExists"));
+        }
+
+        await SaveFileAsync(file, filePath);
+
+        int number = ExtractChapterNumber(file.FileName);
+        
+        DateTime creation = GetChapterCreationDate(filePath);
+
+        Chapter chapter = new()
+        {
+            SerieId = serieId,
+            Path = filePath,
+            FileName = file.FileName,
+            Number = number,
+            Pages = pagesCount,
+            Creation = creation,
+            LastModification = DateTime.UtcNow
+        };
+
+        context.Chapters.Add(chapter);
+        serie.LastModification = DateTime.UtcNow;
+        await context.SaveChangesAsync();
+
+        notificationService.NotifyChapterAddedAsync(mapper.Map<ChapterDto>(chapter));
+
+        _ = taskService.AddTaskAsync(new FixChapterTask(fixService, chapter.Id));
+        _ = taskService.AddTaskAsync(new FixSerieTask(fixService, chapter.SerieId));
+
+        return Ok();
     }
 
     // POST: api/upload/chapter/replace
@@ -49,7 +90,39 @@ public partial class UploadController(
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> ReplaceChapter(IFormFile file, [FromForm] long serieId)
     {
-        return await CreateOrReplaceChapter(file, serieId, true);
+        Serie? serie = context.Series
+            .Include(s => s.SavePoint)
+            .FirstOrDefault(s => s.Id == serieId);
+        if (serie == null)
+            return BadRequest(Localizer.GetString("SerieNotFound"));
+
+        if (!TryGetPagesCountFromCbz(file, out int pagesCount))
+            return BadRequest(Localizer.GetString("InvalidZipFile"));
+
+        string filePath = Path.Combine(serie.SavePath, file.FileName);
+        if (!Directory.Exists(filePath) && !System.IO.File.Exists(filePath))
+        {
+            return BadRequest(Localizer.GetString("ChapterDoesNotExist"));
+        }
+        
+        int number = ExtractChapterNumber(file.FileName);
+        Chapter? chapter = context.Chapters.FirstOrDefault(c => c.Number == number);
+        if (chapter == null)
+            return BadRequest(Localizer.GetString("ChapterDoesNotExist"));
+        chapter.LastModification = DateTime.UtcNow;
+        chapter.Pages = pagesCount;
+
+        serie.LastModification = DateTime.UtcNow;
+
+        await SaveFileAsync(file, filePath);
+        await context.SaveChangesAsync();
+        
+        notificationService.NotifyChapterModifiedAsync(mapper.Map<ChapterDto>(chapter));
+
+        _ = taskService.AddTaskAsync(new FixChapterTask(fixService, chapter.Id));
+        _ = taskService.AddTaskAsync(new FixSerieTask(fixService, chapter.SerieId));
+
+        return Ok();
     }
 
     // POST: api/upload/poster
@@ -70,59 +143,6 @@ public partial class UploadController(
     public async Task<IActionResult> ReplacePoster(IFormFile file, [FromForm] long serieId)
     {
         return await CreateOrReplacePoster(file, serieId, true);
-    }
-
-    private async Task<IActionResult> CreateOrReplaceChapter(IFormFile file, [FromForm] long serieId, bool removeOld)
-    {
-        Serie? serie = context.Series
-            .Include(s => s.SavePoint)
-            .FirstOrDefault(s => s.Id == serieId);
-        if (serie == null)
-            return BadRequest(Localizer.GetString("SerieNotFound"));
-
-        if (!TryGetPagesCountFromCbz(file, out int pagesCount))
-            return BadRequest(Localizer.GetString("InvalidZipFile"));
-
-        string filePath = Path.Combine(serie.SavePath, file.FileName);
-        bool replacing = false;
-        if (Directory.Exists(filePath) || System.IO.File.Exists(filePath))
-        {
-            if (removeOld)
-            {
-                replacing = true;
-                System.IO.File.Delete(filePath);
-            }
-            else
-            {
-                return BadRequest(Localizer.GetString("ChapterAlreadyExists"));
-            }
-        }
-
-        await SaveFileAsync(file, filePath);
-
-        int number = ExtractChapterNumber(file.FileName);
-        DateTime creation = GetChapterCreationDate(filePath);
-
-        Chapter chapter = new()
-        {
-            SerieId = serieId,
-            Path = filePath,
-            FileName = file.FileName,
-            Number = number,
-            Pages = pagesCount,
-            Creation = creation,
-            LastModification = DateTime.UtcNow
-        };
-
-        context.Chapters.Add(chapter);
-        serie.LastModification = DateTime.UtcNow;
-        await context.SaveChangesAsync();
-        if (!replacing) notificationService.NotifyChapterAddedAsync(mapper.Map<ChapterDto>(chapter));
-
-        _ = taskService.AddTaskAsync(new FixChapterTask(fixService, chapter.Id));
-        _ = taskService.AddTaskAsync(new FixSerieTask(fixService, chapter.SerieId));
-
-        return Ok();
     }
 
     private static bool TryGetPagesCountFromCbz(IFormFile file, out int pagesCount)

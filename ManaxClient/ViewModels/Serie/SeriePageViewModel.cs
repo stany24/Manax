@@ -49,6 +49,7 @@ public partial class SeriePageViewModel : PageViewModel
         ServerNotification.OnSerieUpdated += UpdateSerieInfo;
         ServerNotification.OnPosterModified += LoadPoster;
         ServerNotification.OnChapterAdded += OnChapterAdded;
+        ServerNotification.OnChapterModified += OnChapterModified;
         ServerNotification.OnChapterDeleted += OnChapterDeleted;
         ServerNotification.OnReadCreated += OnReadCreated;
         ServerNotification.OnReadDeleted += OnReadDeleted;
@@ -90,6 +91,23 @@ public partial class SeriePageViewModel : PageViewModel
     {
         if (chapter.SerieId != Serie?.Id) return;
         Dispatcher.UIThread.Post(() => Chapters.Add(new ClientChapter { Info = chapter }));
+    }
+    
+    private void OnChapterModified(ChapterDto chapter)
+    {
+        if (chapter.SerieId != Serie?.Id) return;
+        Dispatcher.UIThread.Post(() =>
+        {
+            ClientChapter? firstOrDefault = Chapters.FirstOrDefault(c => c.Info.Id == chapter.Id);
+            if (firstOrDefault == null)
+            {
+                Chapters.Add(new ClientChapter { Info = chapter });
+            }
+            else
+            {
+                firstOrDefault.Info = chapter;
+            }
+        });
     }
 
     private void OnChapterDeleted(long chapterId)
@@ -332,7 +350,7 @@ public partial class SeriePageViewModel : PageViewModel
             string filePath = files[0].Path.LocalPath;
             if (string.IsNullOrEmpty(filePath)) return;
 
-            Optional<bool> replacePosterResponse = await UploadApiUploadClient.ReplacePosterAsync(
+            Optional<bool> replacePosterResponse = await ManaxApiUploadClient.ReplacePosterAsync(
                 filePath,
                 files[0].Name,
                 Serie.Id);

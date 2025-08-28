@@ -62,7 +62,7 @@ public partial class HomePageViewModel : BaseSeriesViewModel
             string folderPath = folders[0].Path.LocalPath;
             if (string.IsNullOrEmpty(folderPath)) return;
 
-            Optional<bool> uploadSerieResponse = await UploadApiUploadClient.UploadSerieAsync(folderPath);
+            Optional<bool> uploadSerieResponse = await ManaxApiUploadClient.UploadSerieAsync(folderPath);
             if (uploadSerieResponse.Failed)
             {
                 InfoEmitted?.Invoke(this, uploadSerieResponse.Error);

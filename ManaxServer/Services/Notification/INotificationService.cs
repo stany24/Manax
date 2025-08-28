@@ -24,6 +24,7 @@ public interface INotificationService
     void NotifyLibraryDeletedAsync(long libraryId);
 
     void NotifyChapterAddedAsync(ChapterDto chapter);
+    void NotifyChapterModifiedAsync(ChapterDto chapter);
     void NotifyChapterRemovedAsync(long chapterId);
 
     void NotifyRankCreatedAsync(RankDto rank);

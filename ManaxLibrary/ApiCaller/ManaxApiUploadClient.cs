@@ -4,7 +4,7 @@ using ManaxLibrary.DTO.Serie;
 
 namespace ManaxLibrary.ApiCaller;
 
-public static class UploadApiUploadClient
+public static class ManaxApiUploadClient
 {
     public static async Task<Optional<bool>> UploadSerieAsync(string directory)
     {

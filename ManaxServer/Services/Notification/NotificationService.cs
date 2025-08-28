@@ -65,6 +65,11 @@ public class NotificationService(IHubContext<NotificationService> hubContext) : 
     {
         TrySendToAllClientsAsync(NotificationType.ChapterAdded, chapter);
     }
+    
+    public void NotifyChapterModifiedAsync(ChapterDto chapter)
+    {
+        TrySendToAllClientsAsync(NotificationType.ChapterModified, chapter);
+    }
 
     public void NotifyChapterRemovedAsync(long chapterId)
     {

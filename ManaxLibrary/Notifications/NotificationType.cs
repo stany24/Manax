@@ -16,6 +16,7 @@ public enum NotificationType
     RankDeleted,
 
     ChapterAdded,
+    ChapterModified,
     ChapterRemoved,
 
     UserCreated,
