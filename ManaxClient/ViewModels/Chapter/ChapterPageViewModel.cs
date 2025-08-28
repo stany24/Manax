@@ -48,6 +48,7 @@ public partial class ChapterPageViewModel : PageViewModel
 
     public void PreviousChapter()
     {
+        MarkAsRead();
         int index = _chapters.FindIndex(c => c.Info.Id == Chapter.Info.Id);
         if (index == 0) return;
         Chapter.Pages.Clear();
@@ -58,6 +59,7 @@ public partial class ChapterPageViewModel : PageViewModel
 
     public void NextChapter()
     {
+        MarkAsRead();
         int index = _chapters.FindIndex(c => c.Info.Id == Chapter.Info.Id);
         if (index + 1 == _chapters.Count) return;
         Chapter.Pages.Clear();
@@ -122,6 +124,11 @@ public partial class ChapterPageViewModel : PageViewModel
     public override void OnPageClosed()
     {
         if (_currentPage == 0) return;
+        MarkAsRead();
+    }
+
+    private void MarkAsRead()
+    {
         ReadCreateDto readCreateDto = new()
         {
             ChapterId = Chapter.Info.Id,
