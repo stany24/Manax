@@ -15,7 +15,9 @@
             <previews:IssuePreview IssueColor="#DC3545"
                                    BadgeText="Automatique"
                                    Closable="False"
-                                   Margin="0,0,0,8">
+                                   Margin="0,0,0,8"
+                                   Command="{Binding $parent[UserControl].((issue:IssuesPageViewModel)DataContext).OnChapterIssueClicked}"
+                                   CommandParameter="{Binding Chapter}">
                 <previews:IssuePreview.Problem>
                     <MultiBinding StringFormat="{}{0}">
                         <Binding Path="Issue.Problem" />
@@ -34,7 +36,9 @@
             <previews:IssuePreview IssueColor="#DC3545"
                                    BadgeText="Automatique"
                                    Closable="False"
-                                   Margin="0,0,0,8">
+                                   Margin="0,0,0,8"
+                                   Command="{Binding $parent[UserControl].((issue:IssuesPageViewModel)DataContext).OpenSeriePage}"
+                                   CommandParameter="{Binding Serie.Id}">
                 <previews:IssuePreview.Problem>
                     <MultiBinding StringFormat="{}{0}">
                         <Binding Path="Issue.Problem" />
@@ -55,7 +59,9 @@
                                    Closable="True"
                                    Problem="{Binding Problem.Name}"
                                    Margin="0,0,0,8"
-                                   CloseCommand="{Binding Close}">
+                                   CloseCommand="{Binding Close}"
+                                   Command="{Binding $parent[UserControl].((issue:IssuesPageViewModel)DataContext).OnChapterIssueClicked}"
+                                   CommandParameter="{Binding Chapter}">
                 <previews:IssuePreview.Info>
                     <MultiBinding StringFormat="Chapitre: {0} • Utilisateur: {1} • {2:dd/MM/yyyy HH:mm}">
                         <Binding Path="Chapter.FileName" />
@@ -72,7 +78,9 @@
                                    Closable="True"
                                    Problem="{Binding Problem.Name}"
                                    Margin="0,0,0,8"
-                                   CloseCommand="{Binding Close}">
+                                   CloseCommand="{Binding Close}"
+                                   Command="{Binding $parent[UserControl].((issue:IssuesPageViewModel)DataContext).OpenSeriePage}"
+                                   CommandParameter="{Binding Serie.Id}">>
                 <previews:IssuePreview.Info>
                     <MultiBinding StringFormat="Série: {0} • Utilisateur: {1} • {2:dd/MM/yyyy HH:mm}">
                         <Binding Path="Serie.Title" />

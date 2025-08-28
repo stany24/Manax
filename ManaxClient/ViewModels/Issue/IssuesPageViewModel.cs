@@ -1,11 +1,16 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
+using ManaxClient.Controls.Popups.Issue;
 using ManaxClient.Models.Issue;
+using ManaxClient.ViewModels.Serie;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
+using ManaxLibrary.DTO.Chapter;
 using ManaxLibrary.DTO.Issue.Automatic;
 using ManaxLibrary.DTO.Issue.Reported;
 using ManaxLibrary.Notifications;
@@ -53,6 +58,34 @@ public partial class IssuesPageViewModel : PageViewModel
         ClientReportedIssueSerie? issue = AllReportedSerieIssues.FirstOrDefault(i => i.Issue.Id == issueId);
         if (issue == null) return;
         AllReportedSerieIssues.Remove(issue);
+    }
+
+    public void OpenSeriePage(long id)
+    {
+        PageChangedRequested?.Invoke(this, new SeriePageViewModel(id));
+    }
+
+    public async void OnChapterIssueClicked(ChapterDto chapter)
+    {
+        ReplaceChapterPopup popup = new(chapter);
+        PopupRequested?.Invoke(this, popup);
+        popup.CloseRequested += (_, _) =>
+        {
+            popup.Close();
+        };
+        
+        Optional<byte[]> chapterPagesAsync = await ManaxApiChapterClient.GetChapterPagesAsync(chapter.Id);
+        if (chapterPagesAsync.Failed)
+        {
+            InfoEmitted?.Invoke(this, chapterPagesAsync.Error);
+            return;
+        }
+        string saveFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Manax",chapter.SerieId.ToString());
+        if (!Directory.Exists(saveFolder)) { Directory.CreateDirectory(saveFolder);}
+
+        string saveFile = Path.Combine(saveFolder, chapter.FileName);
+        FileStream fileStream = File.Create(saveFile);
+        await fileStream.WriteAsync(chapterPagesAsync.GetValue());
     }
 
     private void LoadData()
