@@ -28,9 +28,7 @@ style: |
 # Manax
 ## Gestionnaire de Manga/Comics/BD Open Source
 
-*Une solution complète pour l'organisation et la gestion de votre collection*
-
-**Présentation Technique**
+- Par Gouvernon Stan et D'Ostuni Gabriel
 
 ---
 
@@ -44,6 +42,7 @@ style: |
 - Points intéressants (corrections automatiques)
 - Déploiement et Configuration
 - Tests et robustesse
+- Démonstration
 - Améliorations futures
 
 ---
@@ -59,11 +58,6 @@ style: |
 - Gestionnaire de collection de manga/comics/BD
 - Solution open source complète
 - Interface moderne et intuitive
-
-**📈 Philosophie**
-- Séparation organisation/stockage
-- Performance et robustesse
-- Expérience utilisateur optimale
 
 </div>
 <div>
@@ -81,8 +75,6 @@ style: |
 ---
 
 ## Fonctionnalités
-
-### Gestion de collection
 
 <div class="columns">
 <div>
@@ -183,7 +175,7 @@ public partial class MyPageViewModel : PageViewModel
 
 **Avantages d'Avalonia**
 - **Cross-platform** (Windows, Linux, macOS)
-- **Performance native**
+- **Performance presque native**
 - **Architecture MVVM**
 
 </div>
@@ -237,7 +229,7 @@ var result = request.GetValue();
 1. **Client** demande un changement
 2. **Serveur** valide ou rejette la demande
 3. **Si validé** → notification broadcast
-4. **Tous les clients** mettent à jour
+4. **Les clients concerné** mettent à jour
 
 </div>
 <div>
@@ -308,7 +300,6 @@ var result = request.GetValue();
 **🐳 Docker**
 - Parfait pour **NAS** (Synology, QNAP)
 - **Serveur dédié**
-- **Homelab**
 
 </div>
 <div>
@@ -356,6 +347,10 @@ services:
 
 ---
 
+## Démonstration
+
+---
+
 ## Améliorations futures
 
 ### Roadmap technique
@@ -385,11 +380,10 @@ services:
 
 ## Conclusion
 
-
 <div class="columns">
 
 **Première utilisation de ASP.NET**
-**Expériences avec des outils similaires**
+**Objectifs réussits**
 
 </div>
 

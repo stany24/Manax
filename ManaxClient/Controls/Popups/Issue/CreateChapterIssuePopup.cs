@@ -5,6 +5,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Interactivity;
+using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Threading;
 using ManaxLibrary.ApiCaller;
@@ -22,7 +23,8 @@ public class CreateChapterIssuePopup(long chapterId) : ConfirmCancelPopup
         _ = LoadProblems();
         Grid grid = new()
         {
-            ColumnDefinitions = new ColumnDefinitions("*,*")
+            ColumnDefinitions = new ColumnDefinitions("Auto,*"),
+            RowDefinitions = new RowDefinitions("Auto")
         };
 
         Label titleLabel = new()
@@ -36,6 +38,7 @@ public class CreateChapterIssuePopup(long chapterId) : ConfirmCancelPopup
 
         _issueTypeComboBox = new ComboBox
         {
+            HorizontalAlignment = HorizontalAlignment.Stretch,
             DisplayMemberBinding = new Binding(nameof(ReportedIssueChapterTypeDto.Name))
         };
         Grid.SetColumn(_issueTypeComboBox, 1);

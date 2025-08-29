@@ -22,6 +22,7 @@
                 </StackPanel>
 
                 <Button Grid.Column="1" Grid.Row="0"
+                        IsVisible="{Binding Admin}"
                         Classes="danger"
                         Command="{Binding DeleteLibrary}"
                         VerticalAlignment="Top"
