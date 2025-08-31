@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Windows.Input;
 using Avalonia;
 using Avalonia.Animation;
 using Avalonia.Controls;
@@ -17,6 +18,7 @@ using ManaxClient.ViewModels;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTO.Issue.Reported;
 using ManaxLibrary.DTO.Read;
+using ManaxLibrary.Logging;
 
 namespace ManaxClient.Controls.Previews;
 
@@ -26,11 +28,29 @@ public class ChapterPreview : Button
         AvaloniaProperty.RegisterAttached<ChapterPreview, Grid, ClientChapter>(
             "Chapter", new ClientChapter(), false, BindingMode.OneTime);
 
+    public static readonly StyledProperty<ICommand?> InfoEmittedCommandProperty =
+        AvaloniaProperty.Register<ChapterPreview, ICommand?>(nameof(InfoEmittedCommand));
+
+    public static readonly StyledProperty<ICommand?> PopupRequestedCommandProperty =
+        AvaloniaProperty.Register<ChapterPreview, ICommand?>(nameof(PopupRequestedCommand));
+
     private readonly IBrush _backgroundColor = Brushes.White;
     private readonly IBrush _hoverColor = new SolidColorBrush(Color.Parse("#F8F9FA"));
 
     private readonly IBrush _readTextColor = new SolidColorBrush(Color.Parse("#6C757D"));
     private readonly IBrush _unreadTextColor = new SolidColorBrush(Color.Parse("#212529"));
+
+    public ICommand? InfoEmittedCommand
+    {
+        get => GetValue(InfoEmittedCommandProperty);
+        set => SetValue(InfoEmittedCommandProperty, value);
+    }
+
+    public ICommand? PopupRequestedCommand
+    {
+        get => GetValue(PopupRequestedCommandProperty);
+        set => SetValue(PopupRequestedCommandProperty, value);
+    }
 
     public ChapterPreview()
     {
@@ -196,8 +216,8 @@ public class ChapterPreview : Button
         mainGrid.Children.Add(statusIndicator);
         mainGrid.Children.Add(infoStack);
         mainGrid.Children.Add(progressBadge);
-        mainGrid.Children.Add(actionButton);
         mainGrid.Children.Add(chevron);
+        mainGrid.Children.Add(actionButton);
 
         border.Child = mainGrid;
         Content = border;
@@ -232,8 +252,7 @@ public class ChapterPreview : Button
             }
         };
 
-        GetPageViewModelParent().PopupRequested?.Invoke(this, popup);
-
+        PopupRequestedCommand?.Execute(popup);
         e.Handled = true;
     }
 
@@ -242,30 +261,26 @@ public class ChapterPreview : Button
         CreateChapterIssuePopup createChapterIssuePopup = new(Chapter.Info.Id);
         createChapterIssuePopup.CloseRequested += async void (_, _) =>
         {
-            if (!createChapterIssuePopup.Canceled)
+            try
             {
-                ReportedIssueChapterCreateDto issue = createChapterIssuePopup.GetResult();
-                ManaxLibrary.Optional<bool> chapterIssueAsync =
-                    await ManaxApiIssueClient.CreateChapterIssueAsync(issue);
-                if (chapterIssueAsync.Failed)
-                    GetPageViewModelParent().InfoEmitted?.Invoke(this, chapterIssueAsync.Error);
+                if (!createChapterIssuePopup.Canceled)
+                {
+                    ReportedIssueChapterCreateDto issue = createChapterIssuePopup.GetResult();
+                    ManaxLibrary.Optional<bool> chapterIssueAsync =
+                        await ManaxApiIssueClient.CreateChapterIssueAsync(issue);
+                    if (chapterIssueAsync.Failed)
+                        InfoEmittedCommand?.Execute(chapterIssueAsync.Error);
+                }
+
+                createChapterIssuePopup.Close();
             }
-
-            createChapterIssuePopup.Close();
+            catch (Exception e)
+            {
+                InfoEmittedCommand?.Execute(" Une erreur est survenue lors de la création du problème.");
+                Logger.LogError("Erreur lors de la création d'un problème de chapitre", e, Environment.StackTrace);
+            }
         };
-        GetPageViewModelParent().PopupRequested?.Invoke(this, createChapterIssuePopup);
-    }
-
-    private PageViewModel GetPageViewModelParent()
-    {
-        Control? parent = this.FindAncestorOfType<Control>();
-        while (parent != null)
-        {
-            if (parent.DataContext is PageViewModel pageViewModel) return pageViewModel;
-            parent = parent.FindAncestorOfType<Control>();
-        }
-
-        return null;
+        PopupRequestedCommand?.Execute(createChapterIssuePopup);
     }
 
     protected override void OnPointerEntered(PointerEventArgs e)

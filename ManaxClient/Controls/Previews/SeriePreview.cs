@@ -114,7 +114,7 @@ public class SeriePreview : Button
         Content = outerBorder;
     }
 
-    public ClientSerie Serie
+    public ClientSerie? Serie
     {
         get => GetSerie(this);
         set => SetSerie(this, value);
@@ -144,12 +144,12 @@ public class SeriePreview : Button
         RenderTransform = new ScaleTransform(1.0, 1.0);
     }
 
-    private static void SetSerie(AvaloniaObject element, ClientSerie serieValue)
+    private static void SetSerie(AvaloniaObject element, ClientSerie? serieValue)
     {
         element.SetValue(SerieProperty, serieValue);
     }
 
-    private static ClientSerie GetSerie(AvaloniaObject element)
+    private static ClientSerie? GetSerie(AvaloniaObject element)
     {
         return element.GetValue(SerieProperty);
     }

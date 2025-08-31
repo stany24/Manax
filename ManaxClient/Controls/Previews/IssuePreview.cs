@@ -32,9 +32,9 @@ public class IssuePreview : Button
 
     private readonly IBrush _backgroundColor = Brushes.White;
     private readonly IBrush _hoverColor = new SolidColorBrush(Color.Parse("#F8F9FA"));
-    private Button _closeButton;
-    private TextBlock _infoText;
-    private TextBlock _problemText;
+    private Button _closeButton = null!;
+    private TextBlock _infoText = null!;
+    private TextBlock _problemText = null!;
 
     public IssuePreview()
     {

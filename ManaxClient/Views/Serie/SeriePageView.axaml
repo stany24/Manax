@@ -116,7 +116,9 @@
                                             <previews:ChapterPreview
                                                 Command="{Binding $parent[UserControl].((login:SeriePageViewModel)DataContext).MoveToChapterPage}"
                                                 CommandParameter="{Binding .}"
-                                                Chapter="{Binding .}" />
+                                                Chapter="{Binding .}"
+                                                InfoEmittedCommand="{Binding $parent[UserControl].((login:SeriePageViewModel)DataContext).InfoEmittedCommand}"
+                                                PopupRequestedCommand="{Binding $parent[UserControl].((login:SeriePageViewModel)DataContext).PopupRequestedCommand}" />
                                         </Border>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
