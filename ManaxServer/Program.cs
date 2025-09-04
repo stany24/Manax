@@ -4,13 +4,13 @@ using ManaxServer.Middleware;
 using ManaxServer.Models;
 using ManaxServer.Models.Issue.Reported;
 using ManaxServer.Models.Rank;
+using ManaxServer.Services.BackgroundTask;
 using ManaxServer.Services.Fix;
 using ManaxServer.Services.Hash;
 using ManaxServer.Services.Issue;
 using ManaxServer.Services.Jwt;
 using ManaxServer.Services.Mapper;
 using ManaxServer.Services.Notification;
-using ManaxServer.Services.Task;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
@@ -46,13 +46,14 @@ public class Program
         builder.Services.AddSingleton<INotificationService>(provider =>
             new NotificationService(provider.GetRequiredService<IHubContext<NotificationService>>()));
         builder.Services.AddSingleton<IHashService>(_ => new HashService());
-        builder.Services.AddSingleton<ITaskService>(provider =>
-            new TaskService(provider.GetRequiredService<INotificationService>()));
-        builder.Services.AddScoped<IFixService>(provider =>
+        builder.Services.AddSingleton<IBackgroundTaskService>(provider =>
+            new BackgroundTaskService(provider.GetRequiredService<INotificationService>()));
+        builder.Services.AddSingleton<IIssueService>(provider =>
+            new IssueService(provider.GetRequiredService<IServiceScopeFactory>()));
+        builder.Services.AddSingleton<IFixService>(provider =>
             new FixService(provider.GetRequiredService<IServiceScopeFactory>(),
                 provider.GetRequiredService<IIssueService>()));
-        builder.Services.AddScoped<IIssueService>(provider =>
-            new IssueService(provider.GetRequiredService<IServiceScopeFactory>()));
+        
         builder.Services.AddScoped<IMapper>(_ => new ManaxMapper(new ManaxMapping()));
 
 

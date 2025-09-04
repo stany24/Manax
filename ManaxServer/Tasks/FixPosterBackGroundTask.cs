@@ -3,7 +3,7 @@ using ManaxServer.Services.Fix;
 
 namespace ManaxServer.Tasks;
 
-public class FixPosterTask(IFixService fixService, long serieId) : ITask
+public class FixPosterBackGroundTask(IFixService fixService, long serieId) : IBackGroundTask
 {
     private readonly long _serieId = serieId;
 
@@ -24,7 +24,7 @@ public class FixPosterTask(IFixService fixService, long serieId) : ITask
 
     public override bool Equals(object? obj)
     {
-        if (obj is not FixPosterTask fixPosterTask) return false;
+        if (obj is not FixPosterBackGroundTask fixPosterTask) return false;
         return fixPosterTask._serieId == _serieId;
     }
 

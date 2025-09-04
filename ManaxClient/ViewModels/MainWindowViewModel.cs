@@ -8,6 +8,7 @@ using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using ManaxClient.Controls.Popups;
 using ManaxClient.Models;
+using ManaxClient.Models.Collections;
 using ManaxClient.Models.History;
 using ManaxClient.ViewModels.Home;
 using ManaxClient.ViewModels.Issue;
@@ -33,10 +34,11 @@ public partial class MainWindowViewModel : ObservableObject
     [ObservableProperty] private ObservableCollection<LibraryDto> _libraries = [];
     [ObservableProperty] private Thickness _pageMargin = new(0, 0, 0, 0);
     [ObservableProperty] private Popup? _popup;
-    [ObservableProperty] private ObservableCollection<TaskItem> _runningTasks = [];
+    [ObservableProperty] private SortedObservableCollection<TaskItem> _runningTasks = new([]);
 
     public MainWindowViewModel()
     {
+        RunningTasks.SortingSelector = t => t.TaskName;
         _history.OnPageChanged += _ =>
         {
             if (CurrentPageViewModel == null) return;
@@ -53,16 +55,13 @@ public partial class MainWindowViewModel : ObservableObject
         _history.OnPageChanging += _ =>
         {
             if (CurrentPageViewModel is not LoginPageViewModel login) return;
-            Dispatcher.UIThread.Post(() =>
-            {
-                IsAdmin = login.IsAdmin();
-                IsOwner = login.IsOwner();
-                ServerNotification.OnRunningTasks += OnRunningTasksHandler;
-                ServerNotification.OnLibraryCreated += OnLibraryCreatedHandler;
-                ServerNotification.OnLibraryUpdated += OnLibraryUpdatedHandler;
-                ServerNotification.OnLibraryDeleted += OnLibraryDeletedHandler;
-                LoadLibraries();
-            });
+            IsAdmin = login.IsAdmin();
+            IsOwner = login.IsOwner();
+            ServerNotification.OnRunningTasks += OnRunningTasksHandler;
+            ServerNotification.OnLibraryCreated += OnLibraryCreatedHandler;
+            ServerNotification.OnLibraryUpdated += OnLibraryUpdatedHandler;
+            ServerNotification.OnLibraryDeleted += OnLibraryDeletedHandler;
+            Dispatcher.UIThread.Post(LoadLibraries);
         };
 
         SetPage(new LoginPageViewModel());

@@ -1,9 +1,9 @@
 using ManaxLibrary.DTO.Setting;
 using ManaxServer.Localization;
 using ManaxServer.Models;
+using ManaxServer.Services.BackgroundTask;
 using ManaxServer.Services.Fix;
 using ManaxServer.Services.Renaming;
-using ManaxServer.Services.Task;
 using ManaxServer.Settings;
 using ManaxServer.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -15,7 +15,7 @@ namespace ManaxServer.Controllers;
 [ApiController]
 public class SettingsController(
     IServiceProvider serviceProvider,
-    ITaskService taskService,
+    IBackgroundTaskService backgroundTaskService,
     IFixService fixService) : ControllerBase
 {
     private readonly object _lock = new();
@@ -64,7 +64,7 @@ public class SettingsController(
             newData.MaxChapterWidth != oldData.MaxChapterWidth ||
             newData.MinChapterWidth != oldData.MinChapterWidth)
             foreach (long chapterId in manaxContext.Chapters.Select(chapter => chapter.Id))
-                _ = taskService.AddTaskAsync(new FixChapterTask(fixService, chapterId));
+                _ = backgroundTaskService.AddTaskAsync(new FixChapterBackGroundTask(fixService, chapterId));
     }
 
     private void HandlePosterModifications(SettingsData newData, SettingsData oldData, ManaxContext context)
@@ -76,6 +76,6 @@ public class SettingsController(
         if (newData.MaxPosterWidth != oldData.MaxPosterWidth || newData.MinPosterWidth != oldData.MinPosterWidth ||
             newData.PosterQuality != oldData.PosterQuality)
             foreach (long serieId in context.Series.Select(serie => serie.Id))
-                _ = taskService.AddTaskAsync(new FixPosterTask(fixService, serieId));
+                _ = backgroundTaskService.AddTaskAsync(new FixPosterBackGroundTask(fixService, serieId));
     }
 }

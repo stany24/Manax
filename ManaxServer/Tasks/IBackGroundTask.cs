@@ -1,6 +1,6 @@
 namespace ManaxServer.Tasks;
 
-public interface ITask
+public interface IBackGroundTask
 {
     public void Execute();
     public string GetName();

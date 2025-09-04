@@ -8,10 +8,10 @@ using ManaxServer.Localization;
 using ManaxServer.Models;
 using ManaxServer.Models.Chapter;
 using ManaxServer.Models.Serie;
+using ManaxServer.Services.BackgroundTask;
 using ManaxServer.Services.Fix;
 using ManaxServer.Services.Mapper;
 using ManaxServer.Services.Notification;
-using ManaxServer.Services.Task;
 using ManaxServer.Settings;
 using ManaxServer.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -26,7 +26,7 @@ public partial class UploadController(
     ManaxContext context,
     IMapper mapper,
     INotificationService notificationService,
-    ITaskService taskService,
+    IBackgroundTaskService backgroundTaskService,
     IFixService fixService) : ControllerBase
 {
     [GeneratedRegex("\\d{1,4}")]
@@ -77,8 +77,8 @@ public partial class UploadController(
 
         notificationService.NotifyChapterAddedAsync(mapper.Map<ChapterDto>(chapter));
 
-        _ = taskService.AddTaskAsync(new FixChapterTask(fixService, chapter.Id));
-        _ = taskService.AddTaskAsync(new FixSerieTask(fixService, chapter.SerieId));
+        _ = backgroundTaskService.AddTaskAsync(new FixChapterBackGroundTask(fixService, chapter.Id));
+        _ = backgroundTaskService.AddTaskAsync(new FixSerieBackGroundTask(fixService, chapter.SerieId));
 
         return Ok();
     }
@@ -119,8 +119,8 @@ public partial class UploadController(
         
         notificationService.NotifyChapterModifiedAsync(mapper.Map<ChapterDto>(chapter));
 
-        _ = taskService.AddTaskAsync(new FixChapterTask(fixService, chapter.Id));
-        _ = taskService.AddTaskAsync(new FixSerieTask(fixService, chapter.SerieId));
+        _ = backgroundTaskService.AddTaskAsync(new FixChapterBackGroundTask(fixService, chapter.Id));
+        _ = backgroundTaskService.AddTaskAsync(new FixSerieBackGroundTask(fixService, chapter.SerieId));
 
         return Ok();
     }
@@ -197,7 +197,7 @@ public partial class UploadController(
             MagickImage image = new(file.OpenReadStream());
             image.Quality = SettingsManager.Data.PosterQuality;
             await image.WriteAsync(path, GetMagickFormat(format));
-            _ = taskService.AddTaskAsync(new FixPosterTask(fixService, serie.Id));
+            _ = backgroundTaskService.AddTaskAsync(new FixPosterBackGroundTask(fixService, serie.Id));
             notificationService.NotifyPosterModifiedAsync(serie.Id);
         }
         catch (Exception e)

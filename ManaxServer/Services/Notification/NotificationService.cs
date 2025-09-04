@@ -126,7 +126,7 @@ public class NotificationService(IHubContext<NotificationService> hubContext) : 
         TrySendToAdminsAsync(NotificationType.ReportedSerieIssueDeleted, issueId);
     }
 
-    public override async System.Threading.Tasks.Task OnConnectedAsync()
+    public override async Task OnConnectedAsync()
     {
         try
         {
@@ -150,7 +150,7 @@ public class NotificationService(IHubContext<NotificationService> hubContext) : 
         }
     }
 
-    public override async System.Threading.Tasks.Task OnDisconnectedAsync(Exception? exception)
+    public override async Task OnDisconnectedAsync(Exception? exception)
     {
         try
         {

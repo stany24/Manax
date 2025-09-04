@@ -7,10 +7,10 @@ using ManaxServer.Localization;
 using ManaxServer.Models;
 using ManaxServer.Models.SavePoint;
 using ManaxServer.Models.Serie;
+using ManaxServer.Services.BackgroundTask;
 using ManaxServer.Services.Fix;
 using ManaxServer.Services.Mapper;
 using ManaxServer.Services.Notification;
-using ManaxServer.Services.Task;
 using ManaxServer.Settings;
 using ManaxServer.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -26,7 +26,7 @@ public class SerieController(
     IMapper mapper,
     INotificationService notificationService,
     IFixService fixService,
-    ITaskService taskService)
+    IBackgroundTaskService backgroundTaskService)
     : ControllerBase
 {
     // GET: api/Serie
@@ -129,7 +129,7 @@ public class SerieController(
         try
         {
             await context.SaveChangesAsync();
-            _ = taskService.AddTaskAsync(new FixSerieTask(fixService, serie.Id));
+            _ = backgroundTaskService.AddTaskAsync(new FixSerieBackGroundTask(fixService, serie.Id));
             notificationService.NotifySerieUpdatedAsync(mapper.Map<SerieDto>(serie));
         }
         catch (DbUpdateConcurrencyException)
@@ -170,7 +170,7 @@ public class SerieController(
             context.Series.Add(serie);
             await context.SaveChangesAsync();
             notificationService.NotifySerieCreatedAsync(mapper.Map<SerieDto>(serie));
-            _ = taskService.AddTaskAsync(new FixSerieTask(fixService, serie.Id));
+            _ = backgroundTaskService.AddTaskAsync(new FixSerieBackGroundTask(fixService, serie.Id));
             return serie.Id;
         }
         catch (Exception)
