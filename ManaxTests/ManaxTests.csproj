@@ -25,8 +25,4 @@
         <ProjectReference Include="..\ManaxServer\ManaxServer.csproj"/>
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="SavePointTests\" />
-    </ItemGroup>
-
 </Project>

@@ -1,57 +1,21 @@
 using ManaxLibrary.DTO.SavePoint;
-using ManaxServer.Controllers;
-using ManaxServer.Models;
 using ManaxServer.Models.SavePoint;
-using ManaxServer.Services.Mapper;
-using ManaxTests.Mocks;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ManaxTests;
+namespace ManaxTests.SavePointTests;
 
 [TestClass]
-public class TestSavePointController
+public class PostSavePointTests: SavePointTestsSetup
 {
-    private ManaxContext _context = null!;
-    private SavePointController _controller = null!;
-    private ManaxMapper _mapper = null!;
-    private string _testDirectory = null!;
-
-    [TestInitialize]
-    public void Setup()
-    {
-        _context = SqliteTestDbContextFactory.CreateTestContext();
-        _mapper = new ManaxMapper(new ManaxMapping());
-        _controller = new SavePointController(_context, _mapper);
-
-        _testDirectory = Path.Combine(Path.GetTempPath(), "SavePointTests", Guid.NewGuid().ToString());
-        Directory.CreateDirectory(_testDirectory);
-    }
-
-    [TestCleanup]
-    public void Cleanup()
-    {
-        SqliteTestDbContextFactory.CleanupTestDatabase(_context);
-
-        if (!Directory.Exists(_testDirectory)) return;
-        try
-        {
-            Directory.Delete(_testDirectory, true);
-        }
-        catch
-        {
-            // Ignore cleanup errors
-        }
-    }
-
     [TestMethod]
     public async Task PostSavePoint_WithValidData_CreatesSavePoint()
     {
         SavePointCreateDto createDto = new()
         {
-            Path = _testDirectory
+            Path = TestDirectory
         };
 
-        ActionResult<long> result = await _controller.PostSavePoint(createDto);
+        ActionResult<long> result = await Controller.PostSavePoint(createDto);
 
         OkObjectResult? okResult = result.Result as OkObjectResult;
         Assert.IsNull(okResult);
@@ -59,7 +23,7 @@ public class TestSavePointController
         long? savePointId = result.Value;
         Assert.IsNotNull(savePointId);
 
-        SavePoint? createdSavePoint = await _context.SavePoints.FindAsync(savePointId);
+        SavePoint? createdSavePoint = await Context.SavePoints.FindAsync(savePointId);
         Assert.IsNotNull(createdSavePoint);
         Assert.AreEqual(createDto.Path, createdSavePoint.Path);
     }
@@ -67,13 +31,13 @@ public class TestSavePointController
     [TestMethod]
     public async Task PostSavePoint_WithDuplicatePath_ReturnsConflict()
     {
-        SavePoint existingSavePoint = _context.SavePoints.First();
+        SavePoint existingSavePoint = Context.SavePoints.First();
         SavePointCreateDto createDto = new()
         {
             Path = existingSavePoint.Path
         };
 
-        ActionResult<long> result = await _controller.PostSavePoint(createDto);
+        ActionResult<long> result = await Controller.PostSavePoint(createDto);
 
         Assert.IsInstanceOfType(result.Result, typeof(ConflictObjectResult));
     }
@@ -86,7 +50,7 @@ public class TestSavePointController
             Path = "/non/existent/path"
         };
 
-        ActionResult<long> result = await _controller.PostSavePoint(createDto);
+        ActionResult<long> result = await Controller.PostSavePoint(createDto);
 
         Assert.IsInstanceOfType(result.Result, typeof(ConflictObjectResult));
     }
@@ -96,17 +60,17 @@ public class TestSavePointController
     {
         SavePointCreateDto createDto = new()
         {
-            Path = _testDirectory
+            Path = TestDirectory
         };
 
         DateTime beforeCreation = DateTime.UtcNow;
-        ActionResult<long> result = await _controller.PostSavePoint(createDto);
+        ActionResult<long> result = await Controller.PostSavePoint(createDto);
         DateTime afterCreation = DateTime.UtcNow;
 
         long? savePointId = result.Value;
         Assert.IsNotNull(savePointId);
 
-        SavePoint? createdSavePoint = await _context.SavePoints.FindAsync(savePointId);
+        SavePoint? createdSavePoint = await Context.SavePoints.FindAsync(savePointId);
         Assert.IsNotNull(createdSavePoint);
         Assert.IsTrue(createdSavePoint.Creation >= beforeCreation);
         Assert.IsTrue(createdSavePoint.Creation <= afterCreation);
@@ -115,25 +79,25 @@ public class TestSavePointController
     [TestMethod]
     public async Task PostSavePoint_VerifySavePointCountIncreases()
     {
-        int initialCount = _context.SavePoints.Count();
+        int initialCount = Context.SavePoints.Count();
         SavePointCreateDto createDto = new()
         {
-            Path = _testDirectory
+            Path = TestDirectory
         };
 
-        ActionResult<long> result = await _controller.PostSavePoint(createDto);
+        ActionResult<long> result = await Controller.PostSavePoint(createDto);
 
         long? savePointId = result.Value;
         Assert.IsNotNull(savePointId);
 
-        int finalCount = _context.SavePoints.Count();
+        int finalCount = Context.SavePoints.Count();
         Assert.AreEqual(initialCount + 1, finalCount);
     }
 
     [TestMethod]
     public async Task PostSavePoint_WithSpecialCharactersInPath_CreatesSavePoint()
     {
-        string specialDirectory = Path.Combine(_testDirectory, "spécial-chars_123");
+        string specialDirectory = Path.Combine(TestDirectory, "spécial-chars_123");
         Directory.CreateDirectory(specialDirectory);
 
         SavePointCreateDto createDto = new()
@@ -141,7 +105,7 @@ public class TestSavePointController
             Path = specialDirectory
         };
 
-        ActionResult<long> result = await _controller.PostSavePoint(createDto);
+        ActionResult<long> result = await Controller.PostSavePoint(createDto);
 
         OkObjectResult? okResult = result.Result as OkObjectResult;
         Assert.IsNull(okResult);
@@ -149,7 +113,7 @@ public class TestSavePointController
         long? savePointId = result.Value;
         Assert.IsNotNull(savePointId);
 
-        SavePoint? createdSavePoint = await _context.SavePoints.FindAsync(savePointId);
+        SavePoint? createdSavePoint = await Context.SavePoints.FindAsync(savePointId);
         Assert.IsNotNull(createdSavePoint);
         Assert.AreEqual(createDto.Path, createdSavePoint.Path);
     }
@@ -162,7 +126,7 @@ public class TestSavePointController
 
         foreach (string dir in directories)
         {
-            string fullPath = Path.Combine(_testDirectory, dir);
+            string fullPath = Path.Combine(TestDirectory, dir);
             Directory.CreateDirectory(fullPath);
 
             SavePointCreateDto createDto = new()
@@ -170,7 +134,7 @@ public class TestSavePointController
                 Path = fullPath
             };
 
-            ActionResult<long> result = await _controller.PostSavePoint(createDto);
+            ActionResult<long> result = await Controller.PostSavePoint(createDto);
 
             long? savePointId = result.Value;
             Assert.IsNotNull(savePointId);
@@ -182,7 +146,7 @@ public class TestSavePointController
 
         foreach (long id in createdIds)
         {
-            SavePoint? savePoint = await _context.SavePoints.FindAsync(id);
+            SavePoint? savePoint = await Context.SavePoints.FindAsync(id);
             Assert.IsNotNull(savePoint);
         }
     }
@@ -195,7 +159,7 @@ public class TestSavePointController
             Path = "./relative/path/to/savepoint"
         };
 
-        ActionResult<long> result = await _controller.PostSavePoint(createDto);
+        ActionResult<long> result = await Controller.PostSavePoint(createDto);
 
         Assert.IsInstanceOfType(result.Result, typeof(ConflictObjectResult));
     }
@@ -203,8 +167,8 @@ public class TestSavePointController
     [TestMethod]
     public async Task PostSavePoint_PathCaseSensitivity_CreatesDistinctSavePoints()
     {
-        string lowerDir = Path.Combine(_testDirectory, "test");
-        string upperDir = Path.Combine(_testDirectory, "TEST");
+        string lowerDir = Path.Combine(TestDirectory, "test");
+        string upperDir = Path.Combine(TestDirectory, "TEST");
 
         Directory.CreateDirectory(lowerDir);
         Directory.CreateDirectory(upperDir);
@@ -219,8 +183,8 @@ public class TestSavePointController
             Path = upperDir
         };
 
-        ActionResult<long> result1 = await _controller.PostSavePoint(createDto1);
-        ActionResult<long> result2 = await _controller.PostSavePoint(createDto2);
+        ActionResult<long> result1 = await Controller.PostSavePoint(createDto1);
+        ActionResult<long> result2 = await Controller.PostSavePoint(createDto2);
 
         long? savePointId1 = result1.Value;
         long? savePointId2 = result2.Value;
@@ -229,8 +193,8 @@ public class TestSavePointController
         Assert.IsNotNull(savePointId2);
         Assert.AreNotEqual(savePointId1, savePointId2);
 
-        SavePoint? savePoint1 = await _context.SavePoints.FindAsync(savePointId1);
-        SavePoint? savePoint2 = await _context.SavePoints.FindAsync(savePointId2);
+        SavePoint? savePoint1 = await Context.SavePoints.FindAsync(savePointId1);
+        SavePoint? savePoint2 = await Context.SavePoints.FindAsync(savePointId2);
 
         Assert.IsNotNull(savePoint1);
         Assert.IsNotNull(savePoint2);
@@ -246,7 +210,7 @@ public class TestSavePointController
             Path = ""
         };
 
-        ActionResult<long> result = await _controller.PostSavePoint(createDto);
+        ActionResult<long> result = await Controller.PostSavePoint(createDto);
 
         Assert.IsInstanceOfType(result.Result, typeof(ConflictObjectResult));
     }
