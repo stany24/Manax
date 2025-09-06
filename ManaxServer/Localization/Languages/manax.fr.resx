@@ -78,4 +78,70 @@
     <data name="HubMessageErrorAdmins" xml:space="preserve">
         <value>Erreur lors de l'envoi de la notification pendant l'envoi de {0} aux administrateurs</value>
     </data>
+    <data name="ChapterAlreadyExists" xml:space="preserve">
+        <value>Le chapitre existe déjà.</value>
+    </data>
+    <data name="ChapterFileNotExistOrInvalid" xml:space="preserve">
+        <value>Le chapitre n'existe pas ou n'est pas un fichier CBZ valide.</value>
+    </data>
+    <data name="InvalidImageFile" xml:space="preserve">
+        <value>Image invalide: {0}</value>
+    </data>
+    <data name="InvalidZipFile" xml:space="preserve">
+        <value>Fichier zip invalide.</value>
+    </data>
+    <data name="IssueNotFound" xml:space="preserve">
+        <value>Le problème avec l'id {0} n'existe pas</value>
+    </data>
+    <data name="LibraryAlreadyCreated" xml:space="preserve">
+        <value>La librairie est déjà crée.</value>
+    </data>
+    <data name="LibraryNameExists" xml:space="preserve">
+        <value>Une librairie avec le nom '{0}' existe déjà.</value>
+    </data>
+    <data name="LibraryNameOrPathNotUnique" xml:space="preserve">
+        <value>Le nom ou le chemin n'est pas unique.</value>
+    </data>
+    <data name="LibraryNotFound" xml:space="preserve">
+        <value>La librairie avec l'id {0} n'existe pas.</value>
+    </data>
+    <data name="LibraryPathExists" xml:space="preserve">
+        <value>Une librairie avec le chemin '{0}' existe déjà.</value>
+    </data>
+    <data name="LibraryPathNotExist" xml:space="preserve">
+        <value>Le chemin spécifié '{0}' n'existe pas</value>
+    </data>
+    <data name="PageNumberTooBig" xml:space="preserve">
+        <value>Le numéro de page {0} est trop grand pour un chapitre avec {1} pages.</value>
+    </data>
+    <data name="PosterAlreadyExists" xml:space="preserve">
+        <value>Le poster existe déjà.</value>
+    </data>
+    <data name="PosterNotFound" xml:space="preserve">
+        <value>Le poster pour la série {0} n'a pas été trouvé.</value>
+    </data>
+    <data name="RankNotFound" xml:space="preserve">
+        <value>Le rank avec l'id {0} n'existe pas.</value>
+    </data>
+    <data name="SerieAlreadyExists" xml:space="preserve">
+        <value>La série existe déjà.</value>
+    </data>
+    <data name="SerieDoesNotExist" xml:space="preserve">
+        <value>La série n'existe pas.</value>
+    </data>
+    <data name="SerieNotFound" xml:space="preserve">
+        <value>La série avec l'id {0} n'existe pas.</value>
+    </data>
+    <data name="UserCannotDeleteAdminOrOwner" xml:space="preserve">
+        <value>Vous ne pouvez pas supprimer un autre admin ou </value>
+    </data>
+    <data name="UserInvalidLogin" xml:space="preserve">
+        <value>Nom d'utilisateur ou mot de passe invalide.</value>
+    </data>
+    <data name="UserNotFound" xml:space="preserve">
+        <value>L'utilisateur avec l'id {0} n'existe pas</value>
+    </data>
+    <data name="UserOrChapterNotFound" xml:space="preserve">
+        <value>L'utilisateur ou le chapitre non trouvé.</value>
+    </data>
 </root>

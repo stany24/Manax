@@ -37,17 +37,16 @@ public class RankController(ManaxContext context, IMapper mapper, INotificationS
         return rank.Id;
     }
 
-    // PUT: api/rank/5
-    [HttpPut("{id:long}")]
+    // PUT: api/rank
+    [HttpPut]
     [Authorize(Roles = "Admin,Owner")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> UpdateRank(long id, Rank rank)
+    public async Task<IActionResult> UpdateRank(Rank rank)
     {
-        if (id != rank.Id) return BadRequest(Localizer.Format("RankIdMismatch"));
         Rank? found = context.Ranks.FirstOrDefault(r => r.Id == rank.Id);
-        if (found == null) return NotFound(Localizer.Format("RankNotFound", id));
+        if (found == null) return NotFound(Localizer.Format("RankNotFound", rank.Id));
         found.Name = rank.Name;
         found.Value = rank.Value;
         try
