@@ -11,6 +11,7 @@ using ManaxServer.Services.Issue;
 using ManaxServer.Services.Jwt;
 using ManaxServer.Services.Mapper;
 using ManaxServer.Services.Notification;
+using ManaxServer.Services.Renaming;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
@@ -46,6 +47,8 @@ public class Program
         builder.Services.AddSingleton<INotificationService>(provider =>
             new NotificationService(provider.GetRequiredService<IHubContext<NotificationService>>()));
         builder.Services.AddSingleton<IHashService>(_ => new HashService());
+        builder.Services.AddSingleton<IRenamingService>(provider =>
+            new RenamingService(provider.GetRequiredService<IServiceScopeFactory>()));
         builder.Services.AddSingleton<IBackgroundTaskService>(provider =>
             new BackgroundTaskService(provider.GetRequiredService<INotificationService>()));
         builder.Services.AddSingleton<IIssueService>(provider =>

@@ -7,7 +7,6 @@ using Moq;
 
 namespace ManaxTests.ChapterTests;
 
-[TestClass]
 public abstract class ChapterTestsSetup
 {
     protected ManaxContext Context = null!;

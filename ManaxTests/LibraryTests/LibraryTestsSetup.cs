@@ -7,7 +7,6 @@ using Moq;
 
 namespace ManaxTests.LibraryTests;
 
-[TestClass]
 public abstract class LibraryTestsSetup
 {
     protected ManaxContext Context = null!;

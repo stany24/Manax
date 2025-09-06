@@ -177,6 +177,6 @@ public class GetIssueTests:IssueTestsSetup
 
         List<ReportedIssueSerieType>? returnedTypes = result.Value as List<ReportedIssueSerieType>;
         Assert.IsNotNull(returnedTypes);
-        Assert.AreEqual(3, returnedTypes.Count);
+        Assert.HasCount(3, returnedTypes);
     }
 }

@@ -10,7 +10,6 @@ using Moq;
 
 namespace ManaxTests.IssueTests;
 
-[TestClass]
 public abstract class IssueTestsSetup
 {
     protected ManaxContext Context = null!;

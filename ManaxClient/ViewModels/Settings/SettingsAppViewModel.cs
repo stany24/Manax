@@ -6,8 +6,6 @@ namespace ManaxClient.ViewModels.Settings;
 
 public partial class SettingsAppViewModel : PageViewModel
 {
-    private readonly ThemeService _themeService;
-
     [ObservableProperty] private List<Theme> _availableThemes;
 
     private bool _isDarkMode;
@@ -15,7 +13,6 @@ public partial class SettingsAppViewModel : PageViewModel
 
     public SettingsAppViewModel()
     {
-        _themeService = new ThemeService();
         _availableThemes = ThemePresets.GetPresets();
         _selectedTheme = _availableThemes[0];
         _isDarkMode = false;

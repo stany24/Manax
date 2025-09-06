@@ -6,16 +6,17 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ManaxServer.Services.Renaming;
 
-public class RenamingService : Service
+public class RenamingService(IServiceScopeFactory scopeFactory) : Service, IRenamingService
 {
     public void RenameChapters()
     {
     }
 
-    public static void RenamePosters(ManaxContext manaxContext, string oldName, string newName, ImageFormat oldFormat,
-        ImageFormat newFormat)
+    public void RenamePosters(string oldName, string newName, ImageFormat oldFormat, ImageFormat newFormat)
     {
-        manaxContext.Series
+        using IServiceScope scope = scopeFactory.CreateScope();
+        ManaxContext context = scope.ServiceProvider.GetRequiredService<ManaxContext>();
+        context.Series
             .Include(s => s.SavePoint)
             .ToList()
             .ForEach(serie =>

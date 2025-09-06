@@ -13,7 +13,6 @@ public class BackgroundTaskService(INotificationService notificationService) : S
     private readonly List<(IBackGroundTask Task, Task RunningTask)> _runningTasks = [];
     private readonly SortedSet<IBackGroundTask> _waitingTasks = new(TaskPriorityComparer.Instance);
     
-    
     ~BackgroundTaskService()
     {
         _taskSemaphore.Dispose();
