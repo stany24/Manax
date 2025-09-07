@@ -10,7 +10,7 @@ public class PutUserTests : UserTestsSetup
     [TestMethod]
     public async Task PutUser_WithValidId_UpdatesUser()
     {
-        User user = _context.Users.First();
+        User user = Context.Users.First();
         UserUpdateDto updateDto = new()
         {
             Username = "UpdatedUsername",
@@ -18,15 +18,15 @@ public class PutUserTests : UserTestsSetup
             Password = "newPassword"
         };
 
-        IActionResult result = await _controller.PutUser(user.Id, updateDto);
+        IActionResult result = await Controller.PutUser(user.Id, updateDto);
 
         Assert.IsInstanceOfType(result, typeof(OkResult));
 
-        User? updatedUser = await _context.Users.FindAsync(user.Id);
+        User? updatedUser = await Context.Users.FindAsync(user.Id);
         Assert.IsNotNull(updatedUser);
         Assert.AreEqual(updateDto.Username, updatedUser.Username);
         Assert.AreEqual(updateDto.Role, updatedUser.Role);
-        _mockHashService.VerifyHashPasswordCalled("newPassword");
+        MockHashService.VerifyHashPasswordCalled("newPassword");
     }
 
     [TestMethod]
@@ -39,7 +39,7 @@ public class PutUserTests : UserTestsSetup
             Password = "newPassword"
         };
 
-        IActionResult result = await _controller.PutUser(999999, updateDto);
+        IActionResult result = await Controller.PutUser(999999, updateDto);
 
         Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
     }
@@ -47,7 +47,7 @@ public class PutUserTests : UserTestsSetup
     [TestMethod]
     public async Task PutUser_WithoutPassword_DoesNotUpdatePassword()
     {
-        User user = _context.Users.First();
+        User user = Context.Users.First();
         string originalPasswordHash = user.PasswordHash;
         UserUpdateDto updateDto = new()
         {
@@ -56,20 +56,20 @@ public class PutUserTests : UserTestsSetup
             Password = ""
         };
 
-        IActionResult result = await _controller.PutUser(user.Id, updateDto);
+        IActionResult result = await Controller.PutUser(user.Id, updateDto);
 
         Assert.IsInstanceOfType(result, typeof(OkResult));
 
-        User? updatedUser = await _context.Users.FindAsync(user.Id);
+        User? updatedUser = await Context.Users.FindAsync(user.Id);
         Assert.IsNotNull(updatedUser);
         Assert.AreEqual(originalPasswordHash, updatedUser.PasswordHash);
-        _mockHashService.VerifyHashPasswordNotCalled();
+        MockHashService.VerifyHashPasswordNotCalled();
     }
 
     [TestMethod]
     public async Task PutUser_WithEmptyPassword_DoesNotCallHashService()
     {
-        User user = _context.Users.First();
+        User user = Context.Users.First();
         UserUpdateDto updateDto = new()
         {
             Username = "UpdatedUser",
@@ -77,16 +77,16 @@ public class PutUserTests : UserTestsSetup
             Password = ""
         };
 
-        IActionResult result = await _controller.PutUser(user.Id, updateDto);
+        IActionResult result = await Controller.PutUser(user.Id, updateDto);
 
         Assert.IsInstanceOfType(result, typeof(OkResult));
-        _mockHashService.VerifyHashPasswordNotCalled();
+        MockHashService.VerifyHashPasswordNotCalled();
     }
 
     [TestMethod]
     public async Task PutUser_WithNullPassword_DoesNotCallHashService()
     {
-        User user = _context.Users.First();
+        User user = Context.Users.First();
         UserUpdateDto updateDto = new()
         {
             Username = "UpdatedUser",
@@ -94,9 +94,9 @@ public class PutUserTests : UserTestsSetup
             Password = null!
         };
 
-        IActionResult result = await _controller.PutUser(user.Id, updateDto);
+        IActionResult result = await Controller.PutUser(user.Id, updateDto);
 
         Assert.IsInstanceOfType(result, typeof(OkResult));
-        _mockHashService.VerifyHashPasswordNotCalled();
+        MockHashService.VerifyHashPasswordNotCalled();
     }
 }

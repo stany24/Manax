@@ -11,8 +11,8 @@ public class ClaimUserTests: UserTestsSetup
     [TestMethod]
     public async Task Claim_WithNoExistingUsers_CreatesOwnerUser()
     {
-        _context.Users.RemoveRange(_context.Users);
-        await _context.SaveChangesAsync();
+        Context.Users.RemoveRange(Context.Users);
+        await Context.SaveChangesAsync();
 
         ClaimRequest claimRequest = new()
         {
@@ -20,7 +20,7 @@ public class ClaimUserTests: UserTestsSetup
             Password = "ownerPassword"
         };
 
-        ActionResult<UserLoginResultDto> result = _controller.Claim(claimRequest);
+        ActionResult<UserLoginResultDto> result = Controller.Claim(claimRequest);
 
         OkObjectResult? okResult = result.Result as OkObjectResult;
         Assert.IsNull(okResult);
@@ -28,7 +28,7 @@ public class ClaimUserTests: UserTestsSetup
         UserLoginResultDto? claimResult = result.Value;
         Assert.IsNotNull(claimResult);
 
-        User? createdUser = _context.Users.FirstOrDefault(u => u.Username == "FirstOwner");
+        User? createdUser = Context.Users.FirstOrDefault(u => u.Username == "FirstOwner");
         Assert.IsNotNull(createdUser);
         Assert.AreEqual($"{createdUser.Id}-jwt-token", claimResult.Token);
         Assert.IsNotNull(claimResult.User);
@@ -45,11 +45,11 @@ public class ClaimUserTests: UserTestsSetup
             Password = "password"
         };
 
-        ActionResult<UserLoginResultDto> result = _controller.Claim(claimRequest);
+        ActionResult<UserLoginResultDto> result = Controller.Claim(claimRequest);
 
         Assert.IsInstanceOfType(result.Result, typeof(UnauthorizedObjectResult));
 
-        LoginAttempt? claimAttempt = _context.LoginAttempts.FirstOrDefault(la => la.Type == "Claim");
+        LoginAttempt? claimAttempt = Context.LoginAttempts.FirstOrDefault(la => la.Type == "Claim");
         Assert.IsNotNull(claimAttempt);
         Assert.IsFalse(claimAttempt.Success);
         return Task.CompletedTask;
@@ -58,8 +58,8 @@ public class ClaimUserTests: UserTestsSetup
     [TestMethod]
     public async Task Claim_CreatesClaimLoginAttempt()
     {
-        _context.Users.RemoveRange(_context.Users);
-        await _context.SaveChangesAsync();
+        Context.Users.RemoveRange(Context.Users);
+        await Context.SaveChangesAsync();
 
         ClaimRequest claimRequest = new()
         {
@@ -67,12 +67,12 @@ public class ClaimUserTests: UserTestsSetup
             Password = "ownerPassword"
         };
 
-        ActionResult<UserLoginResultDto> result = _controller.Claim(claimRequest);
+        ActionResult<UserLoginResultDto> result = Controller.Claim(claimRequest);
 
         UserLoginResultDto? claimResult = result.Value;
         Assert.IsNotNull(claimResult);
 
-        LoginAttempt? claimAttempt = _context.LoginAttempts.FirstOrDefault(la => la.Type == "Claim");
+        LoginAttempt? claimAttempt = Context.LoginAttempts.FirstOrDefault(la => la.Type == "Claim");
         Assert.IsNotNull(claimAttempt);
         Assert.IsTrue(claimAttempt.Success);
         Assert.AreEqual("FirstOwner", claimAttempt.Username);
@@ -81,8 +81,8 @@ public class ClaimUserTests: UserTestsSetup
     [TestMethod]
     public async Task Claim_VerifyPasswordIsHashed()
     {
-        _context.Users.RemoveRange(_context.Users);
-        await _context.SaveChangesAsync();
+        Context.Users.RemoveRange(Context.Users);
+        await Context.SaveChangesAsync();
 
         ClaimRequest claimRequest = new()
         {
@@ -90,14 +90,14 @@ public class ClaimUserTests: UserTestsSetup
             Password = "plainTextPassword"
         };
 
-        ActionResult<UserLoginResultDto> result = _controller.Claim(claimRequest);
+        ActionResult<UserLoginResultDto> result = Controller.Claim(claimRequest);
 
         UserLoginResultDto? claimResult = result.Value;
         Assert.IsNotNull(claimResult);
 
-        _mockHashService.VerifyHashPasswordCalled("plainTextPassword");
+        MockHashService.VerifyHashPasswordCalled("plainTextPassword");
 
-        User? createdUser = _context.Users.FirstOrDefault(u => u.Username == "HashedPasswordTest");
+        User? createdUser = Context.Users.FirstOrDefault(u => u.Username == "HashedPasswordTest");
         Assert.IsNotNull(createdUser);
         Assert.AreEqual("plainTextPasswordhashed", createdUser.PasswordHash);
     }

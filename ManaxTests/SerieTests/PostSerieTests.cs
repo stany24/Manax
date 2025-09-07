@@ -15,7 +15,7 @@ public class PostSerieTests : SerieTestsSetup
             Title = "New Serie"
         };
 
-        ActionResult<long> result = await _controller.PostSerie(createDto);
+        ActionResult<long> result = await Controller.PostSerie(createDto);
 
         OkObjectResult? okResult = result.Result as OkObjectResult;
         Assert.IsNull(okResult);
@@ -23,7 +23,7 @@ public class PostSerieTests : SerieTestsSetup
         long? serieId = result.Value;
         Assert.IsNotNull(serieId);
 
-        Serie? createdSerie = await _context.Series.FindAsync(serieId);
+        Serie? createdSerie = await Context.Series.FindAsync(serieId);
         Assert.IsNotNull(createdSerie);
         Assert.AreEqual(createDto.Title, createdSerie.Title);
     }
@@ -36,7 +36,7 @@ public class PostSerieTests : SerieTestsSetup
             Title = ""
         };
 
-        ActionResult<long> result = await _controller.PostSerie(createDto);
+        ActionResult<long> result = await Controller.PostSerie(createDto);
 
         Assert.IsInstanceOfType(result.Result, typeof(BadRequestObjectResult));
     }
@@ -50,13 +50,13 @@ public class PostSerieTests : SerieTestsSetup
         };
 
         DateTime beforeCreation = DateTime.UtcNow;
-        ActionResult<long> result = await _controller.PostSerie(createDto);
+        ActionResult<long> result = await Controller.PostSerie(createDto);
         DateTime afterCreation = DateTime.UtcNow;
 
         long? serieId = result.Value;
         Assert.IsNotNull(serieId);
 
-        Serie? createdSerie = await _context.Series.FindAsync(serieId);
+        Serie? createdSerie = await Context.Series.FindAsync(serieId);
         Assert.IsNotNull(createdSerie);
         Assert.IsTrue(createdSerie.Creation >= beforeCreation);
         Assert.IsTrue(createdSerie.Creation <= afterCreation);

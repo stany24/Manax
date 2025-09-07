@@ -13,20 +13,20 @@ public class DeleteUserTests : UserTestsSetup
     [TestMethod]
     public async Task DeleteUser_WithValidId_RemovesUser()
     {
-        User user = _context.Users.First();
-        IActionResult result = await _controller.DeleteUser(user.Id);
+        User user = Context.Users.First();
+        IActionResult result = await Controller.DeleteUser(user.Id);
 
         Assert.IsInstanceOfType(result, typeof(OkResult));
 
-        User? deletedUser = await _context.Users.FindAsync(user.Id);
+        User? deletedUser = await Context.Users.FindAsync(user.Id);
         Assert.IsNull(deletedUser);
-        _mockNotificationService.Verify(x => x.NotifyUserDeletedAsync(user.Id), Times.Once);
+        MockNotificationService.Verify(x => x.NotifyUserDeletedAsync(user.Id), Times.Once);
     }
 
     [TestMethod]
     public async Task DeleteUser_WithInvalidId_ReturnsNotFound()
     {
-        IActionResult result = await _controller.DeleteUser(999999);
+        IActionResult result = await Controller.DeleteUser(999999);
 
         Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
     }
@@ -40,7 +40,7 @@ public class DeleteUserTests : UserTestsSetup
             new Claim(ClaimTypes.Role, "User")
         ], "test"));
 
-        _controller.ControllerContext = new ControllerContext
+        Controller.ControllerContext = new ControllerContext
         {
             HttpContext = new DefaultHttpContext
             {
@@ -48,7 +48,7 @@ public class DeleteUserTests : UserTestsSetup
             }
         };
 
-        IActionResult result = await _controller.DeleteUser(1);
+        IActionResult result = await Controller.DeleteUser(1);
 
         Assert.IsInstanceOfType(result, typeof(ForbidResult));
     }
@@ -63,10 +63,10 @@ public class DeleteUserTests : UserTestsSetup
             Role = UserRole.Owner,
             Creation = DateTime.UtcNow
         };
-        _context.Users.Add(ownerUser);
-        await _context.SaveChangesAsync();
+        Context.Users.Add(ownerUser);
+        await Context.SaveChangesAsync();
 
-        IActionResult result = await _controller.DeleteUser(100);
+        IActionResult result = await Controller.DeleteUser(100);
 
         Assert.IsInstanceOfType(result, typeof(ForbidResult));
     }
@@ -81,10 +81,10 @@ public class DeleteUserTests : UserTestsSetup
             Role = UserRole.Admin,
             Creation = DateTime.UtcNow
         };
-        _context.Users.Add(anotherAdmin);
-        await _context.SaveChangesAsync();
+        Context.Users.Add(anotherAdmin);
+        await Context.SaveChangesAsync();
 
-        IActionResult result = await _controller.DeleteUser(101);
+        IActionResult result = await Controller.DeleteUser(101);
 
         Assert.IsInstanceOfType(result, typeof(ForbidResult));
     }
@@ -92,12 +92,12 @@ public class DeleteUserTests : UserTestsSetup
     [TestMethod]
     public async Task DeleteUser_WithoutAuthentication_ReturnsUnauthorized()
     {
-        _controller.ControllerContext = new ControllerContext
+        Controller.ControllerContext = new ControllerContext
         {
             HttpContext = new DefaultHttpContext()
         };
 
-        IActionResult result = await _controller.DeleteUser(1);
+        IActionResult result = await Controller.DeleteUser(1);
 
         Assert.IsInstanceOfType(result, typeof(UnauthorizedObjectResult));
     }
@@ -105,14 +105,14 @@ public class DeleteUserTests : UserTestsSetup
     [TestMethod]
     public async Task DeleteUser_VerifyUserCountDecreases()
     {
-        int initialCount = _context.Users.Count();
-        User user = _context.Users.First();
+        int initialCount = Context.Users.Count();
+        User user = Context.Users.First();
 
-        IActionResult result = await _controller.DeleteUser(user.Id);
+        IActionResult result = await Controller.DeleteUser(user.Id);
 
         Assert.IsInstanceOfType(result, typeof(OkResult));
 
-        int finalCount = _context.Users.Count();
+        int finalCount = Context.Users.Count();
         Assert.AreEqual(initialCount - 1, finalCount);
     }
     
@@ -125,7 +125,7 @@ public class DeleteUserTests : UserTestsSetup
             new Claim(ClaimTypes.Role, "Admin")
         ], "test"));
 
-        _controller.ControllerContext = new ControllerContext
+        Controller.ControllerContext = new ControllerContext
         {
             HttpContext = new DefaultHttpContext
             {
@@ -133,7 +133,7 @@ public class DeleteUserTests : UserTestsSetup
             }
         };
 
-        IActionResult result = await _controller.DeleteUser(1);
+        IActionResult result = await Controller.DeleteUser(1);
 
         Assert.IsInstanceOfType(result, typeof(UnauthorizedObjectResult));
     }
@@ -154,10 +154,10 @@ public class DeleteUserTests : UserTestsSetup
             Role = UserRole.Owner,
             Creation = DateTime.UtcNow
         };
-        _context.Users.Add(ownerUserEntity);
-        await _context.SaveChangesAsync();
+        Context.Users.Add(ownerUserEntity);
+        await Context.SaveChangesAsync();
 
-        _controller.ControllerContext = new ControllerContext
+        Controller.ControllerContext = new ControllerContext
         {
             HttpContext = new DefaultHttpContext
             {
@@ -165,8 +165,8 @@ public class DeleteUserTests : UserTestsSetup
             }
         };
 
-        User adminUser = _context.Users.First(u => u.Role == UserRole.Admin);
-        IActionResult result = await _controller.DeleteUser(adminUser.Id);
+        User adminUser = Context.Users.First(u => u.Role == UserRole.Admin);
+        IActionResult result = await Controller.DeleteUser(adminUser.Id);
 
         Assert.IsInstanceOfType(result, typeof(OkResult));
     }

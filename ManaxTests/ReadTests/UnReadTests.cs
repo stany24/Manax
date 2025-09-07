@@ -15,8 +15,8 @@ public class UnReadTests: ReadTestsSetup
     [TestMethod]
     public async Task Unread_WithExistingRead_RemovesRead()
     {
-        Chapter chapter = _context.Chapters.First();
-        User user = _context.Users.First();
+        Chapter chapter = Context.Chapters.First();
+        User user = Context.Users.First();
 
         Read existingRead = new()
         {
@@ -27,14 +27,14 @@ public class UnReadTests: ReadTestsSetup
             Chapter = chapter,
             User = user
         };
-        _context.Reads.Add(existingRead);
-        await _context.SaveChangesAsync();
+        Context.Reads.Add(existingRead);
+        await Context.SaveChangesAsync();
 
-        IActionResult result = await _controller.Unread((int)chapter.Id);
+        IActionResult result = await Controller.Unread((int)chapter.Id);
 
         Assert.IsInstanceOfType(result, typeof(OkResult));
 
-        Read? deletedRead = await _context.Reads
+        Read? deletedRead = await Context.Reads
             .FirstOrDefaultAsync(r => r.ChapterId == chapter.Id && r.UserId == 1);
         Assert.IsNull(deletedRead);
     }
@@ -42,9 +42,9 @@ public class UnReadTests: ReadTestsSetup
     [TestMethod]
     public async Task Unread_WithNonExistingRead_ReturnsOk()
     {
-        Chapter chapter = _context.Chapters.First();
+        Chapter chapter = Context.Chapters.First();
 
-        IActionResult result = await _controller.Unread((int)chapter.Id);
+        IActionResult result = await Controller.Unread((int)chapter.Id);
 
         Assert.IsInstanceOfType(result, typeof(OkResult));
     }
@@ -52,7 +52,7 @@ public class UnReadTests: ReadTestsSetup
     [TestMethod]
     public async Task Unread_WithInvalidChapterId_ReturnsOk()
     {
-        IActionResult result = await _controller.Unread(999999);
+        IActionResult result = await Controller.Unread(999999);
 
         Assert.IsInstanceOfType(result, typeof(OkResult));
     }
@@ -60,12 +60,12 @@ public class UnReadTests: ReadTestsSetup
     [TestMethod]
     public async Task Unread_WithoutAuthentication_ReturnsUnauthorized()
     {
-        _controller.ControllerContext = new ControllerContext
+        Controller.ControllerContext = new ControllerContext
         {
             HttpContext = new DefaultHttpContext()
         };
 
-        IActionResult result = await _controller.Unread(1);
+        IActionResult result = await Controller.Unread(1);
 
         Assert.IsInstanceOfType(result, typeof(UnauthorizedObjectResult));
     }
@@ -73,8 +73,8 @@ public class UnReadTests: ReadTestsSetup
     [TestMethod]
     public async Task Unread_VerifyReadCountDecreases()
     {
-        Chapter chapter = _context.Chapters.First();
-        User user = _context.Users.First();
+        Chapter chapter = Context.Chapters.First();
+        User user = Context.Users.First();
 
         Read existingRead = new()
         {
@@ -85,25 +85,25 @@ public class UnReadTests: ReadTestsSetup
             Chapter = chapter,
             User = user
         };
-        _context.Reads.Add(existingRead);
-        await _context.SaveChangesAsync();
+        Context.Reads.Add(existingRead);
+        await Context.SaveChangesAsync();
 
-        int initialCount = _context.Reads.Count();
+        int initialCount = Context.Reads.Count();
 
-        IActionResult result = await _controller.Unread((int)chapter.Id);
+        IActionResult result = await Controller.Unread((int)chapter.Id);
 
         Assert.IsInstanceOfType(result, typeof(OkResult));
 
-        int finalCount = _context.Reads.Count();
+        int finalCount = Context.Reads.Count();
         Assert.AreEqual(initialCount - 1, finalCount);
     }
 
     [TestMethod]
     public async Task Unread_WithDifferentUser_DoesNotAffectOtherUserReads()
     {
-        Chapter chapter = _context.Chapters.First();
-        User user = _context.Users.First();
-        User otherUser = _context.Users.Skip(1).First();
+        Chapter chapter = Context.Chapters.First();
+        User user = Context.Users.First();
+        User otherUser = Context.Users.Skip(1).First();
 
         Read userRead = new()
         {
@@ -125,18 +125,18 @@ public class UnReadTests: ReadTestsSetup
             User = otherUser
         };
 
-        _context.Reads.AddRange(userRead, otherUserRead);
-        await _context.SaveChangesAsync();
+        Context.Reads.AddRange(userRead, otherUserRead);
+        await Context.SaveChangesAsync();
 
-        IActionResult result = await _controller.Unread((int)chapter.Id);
+        IActionResult result = await Controller.Unread((int)chapter.Id);
 
         Assert.IsInstanceOfType(result, typeof(OkResult));
 
-        Read? deletedUserRead = await _context.Reads
+        Read? deletedUserRead = await Context.Reads
             .FirstOrDefaultAsync(r => r.ChapterId == chapter.Id && r.UserId == user.Id);
         Assert.IsNull(deletedUserRead);
 
-        Read? remainingOtherUserRead = await _context.Reads
+        Read? remainingOtherUserRead = await Context.Reads
             .FirstOrDefaultAsync(r => r.ChapterId == chapter.Id && r.UserId == otherUser.Id);
         Assert.IsNotNull(remainingOtherUserRead);
         Assert.AreEqual(10, remainingOtherUserRead.Page);

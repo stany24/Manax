@@ -10,22 +10,22 @@ public class GetUserTests : UserTestsSetup
     [TestMethod]
     public async Task GetUsers_ReturnsAllUserIds()
     {
-        ActionResult<IEnumerable<long>> result = await _controller.GetUsers();
+        ActionResult<IEnumerable<long>> result = await Controller.GetUsers();
 
         OkObjectResult? okResult = result.Result as OkObjectResult;
         Assert.IsNull(okResult);
 
         List<long>? returnedIds = result.Value as List<long>;
         Assert.IsNotNull(returnedIds);
-        Assert.AreEqual(_context.Users.Count(), returnedIds.Count);
-        foreach (User user in _context.Users) Assert.Contains(user.Id, returnedIds);
+        Assert.AreEqual(Context.Users.Count(), returnedIds.Count);
+        foreach (User user in Context.Users) Assert.Contains(user.Id, returnedIds);
     }
 
     [TestMethod]
     public async Task GetUser_WithValidId_ReturnsUser()
     {
-        User user = _context.Users.First();
-        ActionResult<UserDto> result = await _controller.GetUser(user.Id);
+        User user = Context.Users.First();
+        ActionResult<UserDto> result = await Controller.GetUser(user.Id);
 
         OkObjectResult? okResult = result.Result as OkObjectResult;
         Assert.IsNull(okResult);
@@ -40,7 +40,7 @@ public class GetUserTests : UserTestsSetup
     [TestMethod]
     public async Task GetUser_WithInvalidId_ReturnsNotFound()
     {
-        ActionResult<UserDto> result = await _controller.GetUser(999999);
+        ActionResult<UserDto> result = await Controller.GetUser(999999);
 
         Assert.IsInstanceOfType(result.Result, typeof(NotFoundObjectResult));
     }
@@ -48,8 +48,8 @@ public class GetUserTests : UserTestsSetup
     [TestMethod]
     public async Task GetUser_VerifyAllPropertiesMapping()
     {
-        User user = _context.Users.First();
-        ActionResult<UserDto> result = await _controller.GetUser(user.Id);
+        User user = Context.Users.First();
+        ActionResult<UserDto> result = await Controller.GetUser(user.Id);
 
         UserDto? returnedUser = result.Value;
         Assert.IsNotNull(returnedUser);

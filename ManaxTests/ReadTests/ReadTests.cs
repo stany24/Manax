@@ -15,18 +15,18 @@ public class TestReadController: ReadTestsSetup
     [TestMethod]
     public async Task Read_WithValidChapter_CreatesNewRead()
     {
-        Chapter chapter = _context.Chapters.First();
+        Chapter chapter = Context.Chapters.First();
         ReadCreateDto readCreateDto = new()
         {
             ChapterId = chapter.Id,
             Page = 10
         };
 
-        IActionResult result = await _controller.Read(readCreateDto);
+        IActionResult result = await Controller.Read(readCreateDto);
 
         Assert.IsInstanceOfType(result, typeof(OkResult));
 
-        Read? createdRead = await _context.Reads
+        Read? createdRead = await Context.Reads
             .FirstOrDefaultAsync(r => r.ChapterId == chapter.Id && r.UserId == 1);
         Assert.IsNotNull(createdRead);
         Assert.AreEqual(readCreateDto.Page, createdRead.Page);
@@ -37,8 +37,8 @@ public class TestReadController: ReadTestsSetup
     [TestMethod]
     public async Task Read_WithExistingRead_UpdatesExistingRead()
     {
-        Chapter chapter = _context.Chapters.First();
-        User user = _context.Users.First();
+        Chapter chapter = Context.Chapters.First();
+        User user = Context.Users.First();
 
         DateTime start = DateTime.UtcNow.AddDays(-1);
         Read existingRead = new()
@@ -50,8 +50,8 @@ public class TestReadController: ReadTestsSetup
             Chapter = chapter,
             User = user
         };
-        _context.Reads.Add(existingRead);
-        await _context.SaveChangesAsync();
+        Context.Reads.Add(existingRead);
+        await Context.SaveChangesAsync();
 
         ReadCreateDto readCreateDto = new()
         {
@@ -59,11 +59,11 @@ public class TestReadController: ReadTestsSetup
             Page = 15
         };
 
-        IActionResult result = await _controller.Read(readCreateDto);
+        IActionResult result = await Controller.Read(readCreateDto);
 
         Assert.IsInstanceOfType(result, typeof(OkResult));
 
-        Read? updatedRead = await _context.Reads
+        Read? updatedRead = await Context.Reads
             .FirstOrDefaultAsync(r => r.ChapterId == chapter.Id && r.UserId == user.Id);
         Assert.IsNotNull(updatedRead);
         Assert.AreEqual(15, updatedRead.Page);
@@ -79,7 +79,7 @@ public class TestReadController: ReadTestsSetup
             Page = 10
         };
 
-        IActionResult result = await _controller.Read(readCreateDto);
+        IActionResult result = await Controller.Read(readCreateDto);
 
         Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
     }
@@ -87,7 +87,7 @@ public class TestReadController: ReadTestsSetup
     [TestMethod]
     public async Task Read_WithoutAuthentication_ReturnsUnauthorized()
     {
-        _controller.ControllerContext = new ControllerContext
+        Controller.ControllerContext = new ControllerContext
         {
             HttpContext = new DefaultHttpContext()
         };
@@ -98,7 +98,7 @@ public class TestReadController: ReadTestsSetup
             Page = 10
         };
 
-        IActionResult result = await _controller.Read(readCreateDto);
+        IActionResult result = await Controller.Read(readCreateDto);
 
         Assert.IsInstanceOfType(result, typeof(UnauthorizedObjectResult));
     }
@@ -106,7 +106,7 @@ public class TestReadController: ReadTestsSetup
     [TestMethod]
     public async Task Read_VerifyDateIsSetToUtcNow()
     {
-        Chapter chapter = _context.Chapters.First();
+        Chapter chapter = Context.Chapters.First();
         ReadCreateDto readCreateDto = new()
         {
             ChapterId = chapter.Id,
@@ -114,12 +114,12 @@ public class TestReadController: ReadTestsSetup
         };
 
         DateTime beforeRead = DateTime.UtcNow;
-        IActionResult result = await _controller.Read(readCreateDto);
+        IActionResult result = await Controller.Read(readCreateDto);
         DateTime afterRead = DateTime.UtcNow;
 
         Assert.IsInstanceOfType(result, typeof(OkResult));
 
-        Read? createdRead = await _context.Reads
+        Read? createdRead = await Context.Reads
             .FirstOrDefaultAsync(r => r.ChapterId == chapter.Id && r.UserId == 1);
         Assert.IsNotNull(createdRead);
         Assert.IsTrue(createdRead.Date >= beforeRead);
@@ -129,34 +129,34 @@ public class TestReadController: ReadTestsSetup
     [TestMethod]
     public async Task Read_VerifyNotificationIsSent()
     {
-        Chapter chapter = _context.Chapters.First();
+        Chapter chapter = Context.Chapters.First();
         ReadCreateDto readCreateDto = new()
         {
             ChapterId = chapter.Id,
             Page = 10
         };
 
-        IActionResult result = await _controller.Read(readCreateDto);
+        IActionResult result = await Controller.Read(readCreateDto);
 
         Assert.IsInstanceOfType(result, typeof(OkResult));
-        _mockNotificationService.Verify(x => x.NotifyReadCreated(It.IsAny<ReadDto>()), Times.Once);
+        MockNotificationService.Verify(x => x.NotifyReadCreated(It.IsAny<ReadDto>()), Times.Once);
     }
 
     [TestMethod]
     public async Task Read_WithZeroPage_CreatesRead()
     {
-        Chapter chapter = _context.Chapters.First();
+        Chapter chapter = Context.Chapters.First();
         ReadCreateDto readCreateDto = new()
         {
             ChapterId = chapter.Id,
             Page = 0
         };
 
-        IActionResult result = await _controller.Read(readCreateDto);
+        IActionResult result = await Controller.Read(readCreateDto);
 
         Assert.IsInstanceOfType(result, typeof(OkResult));
 
-        Read? createdRead = await _context.Reads
+        Read? createdRead = await Context.Reads
             .FirstOrDefaultAsync(r => r.ChapterId == chapter.Id && r.UserId == 1);
         Assert.IsNotNull(createdRead);
         Assert.AreEqual(0, createdRead.Page);
@@ -165,18 +165,18 @@ public class TestReadController: ReadTestsSetup
     [TestMethod]
     public async Task Read_WithNegativePage_CreatesRead()
     {
-        Chapter chapter = _context.Chapters.First();
+        Chapter chapter = Context.Chapters.First();
         ReadCreateDto readCreateDto = new()
         {
             ChapterId = chapter.Id,
             Page = -1
         };
 
-        IActionResult result = await _controller.Read(readCreateDto);
+        IActionResult result = await Controller.Read(readCreateDto);
 
         Assert.IsInstanceOfType(result, typeof(OkResult));
 
-        Read? createdRead = await _context.Reads
+        Read? createdRead = await Context.Reads
             .FirstOrDefaultAsync(r => r.ChapterId == chapter.Id && r.UserId == 1);
         Assert.IsNotNull(createdRead);
         Assert.AreEqual(-1, createdRead.Page);
@@ -185,8 +185,8 @@ public class TestReadController: ReadTestsSetup
     [TestMethod]
     public async Task Read_UpdateExistingRead_VerifyOnlyOneReadExists()
     {
-        Chapter chapter = _context.Chapters.First();
-        User user = _context.Users.First();
+        Chapter chapter = Context.Chapters.First();
+        User user = Context.Users.First();
 
         Read existingRead = new()
         {
@@ -197,8 +197,8 @@ public class TestReadController: ReadTestsSetup
             Chapter = chapter,
             User = user
         };
-        _context.Reads.Add(existingRead);
-        await _context.SaveChangesAsync();
+        Context.Reads.Add(existingRead);
+        await Context.SaveChangesAsync();
 
         ReadCreateDto readCreateDto = new()
         {
@@ -206,19 +206,19 @@ public class TestReadController: ReadTestsSetup
             Page = 15
         };
 
-        IActionResult result = await _controller.Read(readCreateDto);
+        IActionResult result = await Controller.Read(readCreateDto);
 
         Assert.IsInstanceOfType(result, typeof(OkResult));
 
-        int readCount = _context.Reads.Count(r => r.ChapterId == chapter.Id && r.UserId == 1);
+        int readCount = Context.Reads.Count(r => r.ChapterId == chapter.Id && r.UserId == 1);
         Assert.AreEqual(1, readCount);
     }
 
     [TestMethod]
     public async Task Read_WithDifferentUser_DoesNotAffectOtherUserReads()
     {
-        Chapter chapter = _context.Chapters.First();
-        User otherUser = _context.Users.Skip(1).First();
+        Chapter chapter = Context.Chapters.First();
+        User otherUser = Context.Users.Skip(1).First();
 
         Read otherUserRead = new()
         {
@@ -229,8 +229,8 @@ public class TestReadController: ReadTestsSetup
             Chapter = chapter,
             User = otherUser
         };
-        _context.Reads.Add(otherUserRead);
-        await _context.SaveChangesAsync();
+        Context.Reads.Add(otherUserRead);
+        await Context.SaveChangesAsync();
 
         ReadCreateDto readCreateDto = new()
         {
@@ -238,16 +238,16 @@ public class TestReadController: ReadTestsSetup
             Page = 10
         };
 
-        IActionResult result = await _controller.Read(readCreateDto);
+        IActionResult result = await Controller.Read(readCreateDto);
 
         Assert.IsInstanceOfType(result, typeof(OkResult));
 
-        Read? otherUserReadAfter = await _context.Reads
+        Read? otherUserReadAfter = await Context.Reads
             .FirstOrDefaultAsync(r => r.ChapterId == chapter.Id && r.UserId == otherUser.Id);
         Assert.IsNotNull(otherUserReadAfter);
         Assert.AreEqual(5, otherUserReadAfter.Page);
 
-        Read? currentUserRead = await _context.Reads
+        Read? currentUserRead = await Context.Reads
             .FirstOrDefaultAsync(r => r.ChapterId == chapter.Id && r.UserId == 1);
         Assert.IsNotNull(currentUserRead);
         Assert.AreEqual(10, currentUserRead.Page);
@@ -256,18 +256,18 @@ public class TestReadController: ReadTestsSetup
     [TestMethod]
     public async Task Read_VerifyNotificationCalledWithCorrectData()
     {
-        Chapter chapter = _context.Chapters.First();
+        Chapter chapter = Context.Chapters.First();
         ReadCreateDto readCreateDto = new()
         {
             ChapterId = chapter.Id,
             Page = 10
         };
 
-        IActionResult result = await _controller.Read(readCreateDto);
+        IActionResult result = await Controller.Read(readCreateDto);
 
         Assert.IsInstanceOfType(result, typeof(OkResult));
 
-        _mockNotificationService.Verify(x => x.NotifyReadCreated(It.Is<ReadDto>(dto =>
+        MockNotificationService.Verify(x => x.NotifyReadCreated(It.Is<ReadDto>(dto =>
             dto.ChapterId == chapter.Id &&
             dto.Page == 10 &&
             dto.UserId == 1
@@ -277,18 +277,18 @@ public class TestReadController: ReadTestsSetup
     [TestMethod]
     public async Task Read_WithLargePage_CreatesRead()
     {
-        Chapter chapter = _context.Chapters.First();
+        Chapter chapter = Context.Chapters.First();
         ReadCreateDto readCreateDto = new()
         {
             ChapterId = chapter.Id,
             Page = 999999
         };
 
-        IActionResult result = await _controller.Read(readCreateDto);
+        IActionResult result = await Controller.Read(readCreateDto);
 
         Assert.IsInstanceOfType(result, typeof(OkResult));
 
-        Read? createdRead = await _context.Reads
+        Read? createdRead = await Context.Reads
             .FirstOrDefaultAsync(r => r.ChapterId == chapter.Id && r.UserId == 1);
         Assert.IsNotNull(createdRead);
         Assert.AreEqual(999999, createdRead.Page);
@@ -297,7 +297,7 @@ public class TestReadController: ReadTestsSetup
     [TestMethod]
     public async Task Read_MultipleReadsForDifferentChapters_CreatesMultipleReads()
     {
-        List<Chapter> chapters = _context.Chapters.Take(2).ToList();
+        List<Chapter> chapters = Context.Chapters.Take(2).ToList();
 
         foreach (Chapter chapter in chapters)
         {
@@ -307,16 +307,16 @@ public class TestReadController: ReadTestsSetup
                 Page = 10
             };
 
-            IActionResult result = await _controller.Read(readCreateDto);
+            IActionResult result = await Controller.Read(readCreateDto);
             Assert.IsInstanceOfType(result, typeof(OkResult));
         }
 
-        int totalReads = _context.Reads.Count(r => r.UserId == 1);
+        int totalReads = Context.Reads.Count(r => r.UserId == 1);
         Assert.AreEqual(2, totalReads);
 
         foreach (Chapter chapter in chapters)
         {
-            Read? read = await _context.Reads
+            Read? read = await Context.Reads
                 .FirstOrDefaultAsync(r => r.ChapterId == chapter.Id && r.UserId == 1);
             Assert.IsNotNull(read);
             Assert.AreEqual(10, read.Page);

@@ -11,7 +11,7 @@ public class GetSerieTests : SerieTestsSetup
     [TestMethod]
     public async Task GetSeries_ReturnsAllSerieIds()
     {
-        ActionResult<IEnumerable<long>> result = await _controller.GetSeries();
+        ActionResult<IEnumerable<long>> result = await Controller.GetSeries();
 
         OkObjectResult? okResult = result.Result as OkObjectResult;
         Assert.IsNull(okResult);
@@ -19,15 +19,15 @@ public class GetSerieTests : SerieTestsSetup
         List<long>? returnedIds = result.Value as List<long>;
         Assert.IsNotNull(returnedIds);
 
-        Assert.AreEqual(_context.Series.Count(), returnedIds.Count);
-        foreach (Serie serie in _context.Series) Assert.Contains(serie.Id, returnedIds);
+        Assert.AreEqual(Context.Series.Count(), returnedIds.Count);
+        foreach (Serie serie in Context.Series) Assert.Contains(serie.Id, returnedIds);
     }
 
     [TestMethod]
     public async Task GetSerie_WithValidId_ReturnsSerie()
     {
-        Serie serie = _context.Series.First();
-        ActionResult<SerieDto> result = await _controller.GetSerie(serie.Id);
+        Serie serie = Context.Series.First();
+        ActionResult<SerieDto> result = await Controller.GetSerie(serie.Id);
 
         SerieDto? returnedSerie = result.Value;
         Assert.IsNotNull(returnedSerie);
@@ -41,7 +41,7 @@ public class GetSerieTests : SerieTestsSetup
     [TestMethod]
     public async Task GetSerie_WithInvalidId_ReturnsNotFound()
     {
-        ActionResult<SerieDto> result = await _controller.GetSerie(999999);
+        ActionResult<SerieDto> result = await Controller.GetSerie(999999);
 
         Assert.IsInstanceOfType(result.Result, typeof(NotFoundObjectResult));
     }
@@ -49,10 +49,10 @@ public class GetSerieTests : SerieTestsSetup
     [TestMethod]
     public void GetSerieChapters_WithValidId_ReturnsChapterIds()
     {
-        Serie serie = _context.Series.First();
-        List<Chapter> chaptersOfSerie = _context.Chapters.Where(c => c.SerieId == serie.Id).ToList();
+        Serie serie = Context.Series.First();
+        List<Chapter> chaptersOfSerie = Context.Chapters.Where(c => c.SerieId == serie.Id).ToList();
 
-        ActionResult<List<long>> result = _controller.GetSerieChapters(serie.Id);
+        ActionResult<List<long>> result = Controller.GetSerieChapters(serie.Id);
 
         Assert.IsNull(result.Result);
 
@@ -66,7 +66,7 @@ public class GetSerieTests : SerieTestsSetup
     [TestMethod]
     public void GetSerieChapters_WithInvalidId_ReturnsNotFound()
     {
-        ActionResult<List<long>> result = _controller.GetSerieChapters(999999);
+        ActionResult<List<long>> result = Controller.GetSerieChapters(999999);
 
         NotFoundResult? notFoundResult = result.Result as NotFoundResult;
         Assert.IsNotNull(notFoundResult);
@@ -77,8 +77,8 @@ public class GetSerieTests : SerieTestsSetup
     [TestMethod]
     public async Task GetSerie_VerifyAllPropertiesMapping()
     {
-        Serie serie = _context.Series.First();
-        ActionResult<SerieDto> result = await _controller.GetSerie(serie.Id);
+        Serie serie = Context.Series.First();
+        ActionResult<SerieDto> result = await Controller.GetSerie(serie.Id);
 
         SerieDto? returnedSerie = result.Value;
         Assert.IsNotNull(returnedSerie);

@@ -10,7 +10,7 @@ public class PutSerieTests: SerieTestsSetup
     [TestMethod]
     public async Task PutSerie_WithValidId_UpdatesSerie()
     {
-        Serie serie = _context.Series.First();
+        Serie serie = Context.Series.First();
         SerieUpdateDto updateDto = new()
         {
             Title = "Updated Title",
@@ -18,11 +18,11 @@ public class PutSerieTests: SerieTestsSetup
             Status = Status.Completed
         };
 
-        IActionResult result = await _controller.PutSerie(serie.Id, updateDto);
+        IActionResult result = await Controller.PutSerie(serie.Id, updateDto);
 
         Assert.IsInstanceOfType(result, typeof(OkResult));
 
-        Serie? updatedSerie = await _context.Series.FindAsync(serie.Id);
+        Serie? updatedSerie = await Context.Series.FindAsync(serie.Id);
         Assert.IsNotNull(updatedSerie);
         Assert.AreEqual(updateDto.Title, updatedSerie.Title);
         Assert.AreEqual(updateDto.Description, updatedSerie.Description);
@@ -39,7 +39,7 @@ public class PutSerieTests: SerieTestsSetup
             Status = Status.Completed
         };
 
-        IActionResult result = await _controller.PutSerie(999999, updateDto);
+        IActionResult result = await Controller.PutSerie(999999, updateDto);
 
         Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
     }
@@ -47,7 +47,7 @@ public class PutSerieTests: SerieTestsSetup
     [TestMethod]
     public async Task PutSerie_WithEmptyTitle_ReturnsBadRequest()
     {
-        Serie serie = _context.Series.First();
+        Serie serie = Context.Series.First();
         SerieUpdateDto updateDto = new()
         {
             Title = "",
@@ -55,7 +55,7 @@ public class PutSerieTests: SerieTestsSetup
             Status = Status.Completed
         };
 
-        IActionResult result = await _controller.PutSerie(serie.Id, updateDto);
+        IActionResult result = await Controller.PutSerie(serie.Id, updateDto);
 
         Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
     }
@@ -63,7 +63,7 @@ public class PutSerieTests: SerieTestsSetup
     [TestMethod]
     public async Task PutSerie_VerifyLastModificationUpdated()
     {
-        Serie serie = _context.Series.First();
+        Serie serie = Context.Series.First();
         DateTime originalLastModification = serie.LastModification;
 
         SerieUpdateDto updateDto = new()
@@ -75,11 +75,11 @@ public class PutSerieTests: SerieTestsSetup
 
         await Task.Delay(10);
 
-        IActionResult result = await _controller.PutSerie(serie.Id, updateDto);
+        IActionResult result = await Controller.PutSerie(serie.Id, updateDto);
 
         Assert.IsInstanceOfType(result, typeof(OkResult));
 
-        Serie? updatedSerie = await _context.Series.FindAsync(serie.Id);
+        Serie? updatedSerie = await Context.Series.FindAsync(serie.Id);
         Assert.IsNotNull(updatedSerie);
         Assert.IsTrue(updatedSerie.LastModification < DateTime.UtcNow);
         Assert.IsTrue(updatedSerie.LastModification > originalLastModification);

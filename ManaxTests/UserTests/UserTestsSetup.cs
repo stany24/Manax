@@ -12,25 +12,25 @@ namespace ManaxTests.UserTests;
 
 public abstract class UserTestsSetup
 {
-    protected ManaxContext _context = null!;
-    protected UserController _controller = null!;
+    protected ManaxContext Context = null!;
+    protected UserController Controller = null!;
     private ManaxMapper _mapper = null!;
-    protected MockHashService _mockHashService = null!;
+    protected MockHashService MockHashService = null!;
     private MockJwtService _mockJwtService = null!;
-    protected Mock<INotificationService> _mockNotificationService = null!;
+    protected Mock<INotificationService> MockNotificationService = null!;
 
     [TestInitialize]
     public void Setup()
     {
-        _context = SqliteTestDbContextFactory.CreateTestContext();
+        Context = SqliteTestDbContextFactory.CreateTestContext();
 
         _mapper = new ManaxMapper(new ManaxMapping());
-        _mockHashService = new MockHashService();
+        MockHashService = new MockHashService();
         _mockJwtService = new MockJwtService();
-        _mockNotificationService = new Mock<INotificationService>();
+        MockNotificationService = new Mock<INotificationService>();
 
-        _controller = new UserController(_context, _mapper, _mockHashService, _mockJwtService,
-            _mockNotificationService.Object);
+        Controller = new UserController(Context, _mapper, MockHashService, _mockJwtService,
+            MockNotificationService.Object);
 
         ClaimsPrincipal adminUser = new(new ClaimsIdentity([
             new Claim(ClaimTypes.NameIdentifier, "2"),
@@ -38,7 +38,7 @@ public abstract class UserTestsSetup
             new Claim(ClaimTypes.Role, "Admin")
         ], "test"));
 
-        _controller.ControllerContext = new ControllerContext
+        Controller.ControllerContext = new ControllerContext
         {
             HttpContext = new DefaultHttpContext
             {
@@ -50,7 +50,7 @@ public abstract class UserTestsSetup
     [TestCleanup]
     public void Cleanup()
     {
-        SqliteTestDbContextFactory.CleanupTestDatabase(_context);
-        _mockHashService.Reset();
+        SqliteTestDbContextFactory.CleanupTestDatabase(Context);
+        MockHashService.Reset();
     }
 }

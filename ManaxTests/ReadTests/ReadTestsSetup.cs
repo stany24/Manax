@@ -12,27 +12,27 @@ namespace ManaxTests.ReadTests;
 
 public abstract class ReadTestsSetup
 {
-    protected ManaxContext _context = null!;
-    protected ReadController _controller = null!;
+    protected ManaxContext Context = null!;
+    protected ReadController Controller = null!;
     private ManaxMapper _mapper = null!;
-    protected Mock<INotificationService> _mockNotificationService = null!;
+    protected Mock<INotificationService> MockNotificationService = null!;
 
     [TestInitialize]
     public void Setup()
     {
-        _context = SqliteTestDbContextFactory.CreateTestContext();
+        Context = SqliteTestDbContextFactory.CreateTestContext();
 
         _mapper = new ManaxMapper(new ManaxMapping());
-        _mockNotificationService = new Mock<INotificationService>();
+        MockNotificationService = new Mock<INotificationService>();
 
-        _controller = new ReadController(_context, _mapper, _mockNotificationService.Object);
+        Controller = new ReadController(Context, _mapper, MockNotificationService.Object);
 
         ClaimsPrincipal user = new(new ClaimsIdentity([
             new Claim(ClaimTypes.NameIdentifier, "1"),
             new Claim(ClaimTypes.Name, "TestUser1")
         ], "test"));
 
-        _controller.ControllerContext = new ControllerContext
+        Controller.ControllerContext = new ControllerContext
         {
             HttpContext = new DefaultHttpContext
             {
@@ -44,6 +44,6 @@ public abstract class ReadTestsSetup
     [TestCleanup]
     public void Cleanup()
     {
-        SqliteTestDbContextFactory.CleanupTestDatabase(_context);
+        SqliteTestDbContextFactory.CleanupTestDatabase(Context);
     }
 }
