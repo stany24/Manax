@@ -16,7 +16,7 @@ public abstract class UserTestsSetup
     protected UserController Controller = null!;
     private ManaxMapper _mapper = null!;
     protected MockHashService MockHashService = null!;
-    private MockJwtService _mockJwtService = null!;
+    private MockTokenService _mockTokenService = null!;
     protected Mock<INotificationService> MockNotificationService = null!;
 
     [TestInitialize]
@@ -26,10 +26,10 @@ public abstract class UserTestsSetup
 
         _mapper = new ManaxMapper(new ManaxMapping());
         MockHashService = new MockHashService();
-        _mockJwtService = new MockJwtService();
+        _mockTokenService = new MockTokenService();
         MockNotificationService = new Mock<INotificationService>();
 
-        Controller = new UserController(Context, _mapper, MockHashService, _mockJwtService,
+        Controller = new UserController(Context, _mapper, MockHashService, _mockTokenService,
             MockNotificationService.Object);
 
         ClaimsPrincipal adminUser = new(new ClaimsIdentity([

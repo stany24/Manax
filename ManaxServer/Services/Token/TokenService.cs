@@ -5,31 +5,28 @@ using System.Security.Cryptography;
 using ManaxServer.Models.User;
 using Microsoft.IdentityModel.Tokens;
 
-namespace ManaxServer.Services.Jwt;
+namespace ManaxServer.Services.Token;
 
-public class JwtService : Service, IJwtService
+public class TokenService : Service, ITokenService
 {
     private const string Issuer = "ManaxServer";
     private const string Audience = "ManaxClient";
-    private string? _secretKey;
+    private readonly string _secretKey;
+    private static readonly TimeSpan TokenLifetime = TimeSpan.FromHours(1);
+    private readonly List<string> _revokedTokens = [];
 
-    public string GetSecretKey()
+    public TokenService()
     {
-        if (!string.IsNullOrEmpty(_secretKey))
-            return _secretKey;
-
         RandomNumberGenerator rng = RandomNumberGenerator.Create();
         byte[] bytes = new byte[48];
         rng.GetBytes(bytes);
         _secretKey = Convert.ToBase64String(bytes);
-        return _secretKey;
     }
 
     public string GenerateToken(User user)
     {
-        string secret = GetSecretKey();
         JwtSecurityTokenHandler tokenHandler = new();
-        byte[] key = Convert.FromBase64String(secret);
+        byte[] key = Convert.FromBase64String(_secretKey);
         SecurityTokenDescriptor tokenDescriptor = new()
         {
             Subject = new ClaimsIdentity([
@@ -37,7 +34,7 @@ public class JwtService : Service, IJwtService
                 new Claim(ClaimTypes.Name, user.Username),
                 new Claim(ClaimTypes.Role, user.Role.ToString())
             ]),
-            Expires = DateTime.UtcNow.AddHours(12),
+            Expires = DateTime.UtcNow.Add(TokenLifetime),
             SigningCredentials =
                 new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
             Issuer = Issuer,
@@ -45,5 +42,16 @@ public class JwtService : Service, IJwtService
         };
         SecurityToken? token = tokenHandler.CreateToken(tokenDescriptor);
         return tokenHandler.WriteToken(token);
+    }
+
+    public void RevokeToken(string? token)
+    {
+        if(token == null) return;
+        _revokedTokens.Add(token);
+    }
+
+    public bool IsTokenRevoked(string token)
+    {
+        return _revokedTokens.Contains(token);
     }
 }

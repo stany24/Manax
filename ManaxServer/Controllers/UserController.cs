@@ -6,12 +6,13 @@ using ManaxServer.Models;
 using ManaxServer.Models.Claim;
 using ManaxServer.Models.User;
 using ManaxServer.Services.Hash;
-using ManaxServer.Services.Jwt;
 using ManaxServer.Services.Mapper;
 using ManaxServer.Services.Notification;
+using ManaxServer.Services.Token;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Primitives;
 
 namespace ManaxServer.Controllers;
 
@@ -21,7 +22,7 @@ public class UserController(
     ManaxContext context,
     IMapper mapper,
     IHashService hashService,
-    IJwtService jwtService,
+    ITokenService tokenService,
     INotificationService notificationService) : ControllerBase
 {
     private readonly object _claimLock = new();
@@ -119,10 +120,16 @@ public class UserController(
         if (self.Role == UserRole.Admin && userToDelete.Role is UserRole.Admin or UserRole.Owner)
             return Forbid(Localizer.Format("UserCannotDeleteAdminOrOwner"));
 
+        StringValues auths = Request.Headers.Authorization;
+        foreach (string? token in auths)
+        {
+            tokenService.RevokeToken(token);
+        }
+        
         context.Users.Remove(userToDelete);
         await context.SaveChangesAsync();
         notificationService.NotifyUserDeletedAsync(userToDelete.Id);
-
+        
         return Ok();
     }
 
@@ -158,7 +165,7 @@ public class UserController(
         context.LoginAttempts.Add(loginAttempt);
         await context.SaveChangesAsync();
 
-        string token = jwtService.GenerateToken(user);
+        string token = tokenService.GenerateToken(user);
         UserDto userDto = mapper.Map<UserDto>(user);
         UserLoginResultDto loginResult = new()
         {
@@ -203,7 +210,7 @@ public class UserController(
             context.Users.Add(user);
             context.SaveChanges();
 
-            string token = jwtService.GenerateToken(user);
+            string token = tokenService.GenerateToken(user);
             UserDto userDto = mapper.Map<UserDto>(user);
             UserLoginResultDto loginResult = new()
             {
@@ -212,6 +219,43 @@ public class UserController(
             };
             return loginResult;
         }
+    }
+
+    // POST: api/User/logout
+    [HttpPost("/api/logout")]
+    [Authorize]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<IActionResult> Logout()
+    {
+        long? userId = GetCurrentUserId(HttpContext);
+        if (userId == null)
+            return Unauthorized(Localizer.Format("UserMustBeLoggedIn"));
+
+        User? user = await context.Users.FindAsync(userId);
+        if (user == null)
+            return Unauthorized(Localizer.Format("UserNotFound", userId));
+        
+        StringValues auths = Request.Headers.Authorization;
+        foreach (string? token in auths)
+        {
+            tokenService.RevokeToken(token);
+        }
+        
+        LoginAttempt logoutAttempt = new()
+        {
+            Origin = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "Unknown",
+            Username = user.Username,
+            Timestamp = DateTime.UtcNow,
+            Type = "Logout",
+            Success = true
+        };
+
+        Logger.LogInfo("User " + user.Username + " logged out from " + logoutAttempt.Origin);
+        context.LoginAttempts.Add(logoutAttempt);
+        await context.SaveChangesAsync();
+
+        return Ok();
     }
 
     internal static long? GetCurrentUserId(HttpContext httpContext)

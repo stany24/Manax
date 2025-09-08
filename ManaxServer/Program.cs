@@ -1,5 +1,4 @@
 using ManaxLibrary.DTO.Issue.Automatic;
-using ManaxLibrary.Logging;
 using ManaxServer.Middleware;
 using ManaxServer.Models;
 using ManaxServer.Models.Issue.Reported;
@@ -8,18 +7,14 @@ using ManaxServer.Services.BackgroundTask;
 using ManaxServer.Services.Fix;
 using ManaxServer.Services.Hash;
 using ManaxServer.Services.Issue;
-using ManaxServer.Services.Jwt;
 using ManaxServer.Services.Mapper;
 using ManaxServer.Services.Notification;
 using ManaxServer.Services.Renaming;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using ManaxServer.Services.Token;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Primitives;
-using Microsoft.IdentityModel.Tokens;
-using FixService = ManaxServer.Services.Fix.FixService;
 
 namespace ManaxServer;
 
@@ -79,6 +74,7 @@ public class Program
         Migrate(app);
 
         app.UseMiddleware<GlobalExceptionMiddleware>();
+        app.UseMiddleware<TokenMiddleware>();
 
         if (app.Environment.IsDevelopment())
         {
@@ -149,53 +145,13 @@ public class Program
 
     private static void AddAuthentication(WebApplicationBuilder builder)
     {
-        JwtService jwtService = new();
-        string secretKey = jwtService.GetSecretKey();
-        builder.Services.AddSingleton<IJwtService>(jwtService);
+        TokenService tokenService = new();
+        builder.Services.AddSingleton<ITokenService>(tokenService);
 
-        builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer(options =>
+        builder.Services.AddAuthentication()
+            .AddBearerToken(options =>
             {
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidateLifetime = true,
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Convert.FromBase64String(secretKey))
-                };
-
-                // Special configuration for SignalR
-                options.Events = new JwtBearerEvents
-                {
-                    OnMessageReceived = context =>
-                    {
-                        StringValues accessToken = context.Request.Query["access_token"];
-                        PathString path = context.HttpContext.Request.Path;
-
-                        if (string.IsNullOrEmpty(accessToken) || !path.StartsWithSegments("/notificationHub"))
-                            return Task.CompletedTask;
-                        context.Token = accessToken;
-
-                        context.Options.TokenValidationParameters = new TokenValidationParameters
-                        {
-                            ValidateIssuer = false,
-                            ValidateAudience = false,
-                            ValidateLifetime = true,
-                            ValidateIssuerSigningKey = true,
-                            IssuerSigningKey = new SymmetricSecurityKey(Convert.FromBase64String(secretKey))
-                        };
-
-                        Logger.LogInfo("Token extrait de la requête SignalR: " + path + " - Validation adaptée");
-
-                        return Task.CompletedTask;
-                    },
-                    OnAuthenticationFailed = context =>
-                    {
-                        Logger.LogError("Échec d'authentification SignalR", context.Exception, Environment.StackTrace);
-                        return Task.CompletedTask;
-                    }
-                };
+                options.BearerTokenExpiration = TimeSpan.FromHours(12);
             });
     }
 }

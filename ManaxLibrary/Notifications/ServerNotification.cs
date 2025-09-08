@@ -54,7 +54,10 @@ public static class ServerNotification
         string baseUrl = _serverUrl.EndsWith('/') ? _serverUrl : _serverUrl + "/";
 
         _hubConnection = new HubConnectionBuilder()
-            .WithUrl($"{baseUrl}notificationHub?access_token={_token}")
+            .WithUrl($"{baseUrl}notificationHub", options =>
+            {
+                options.AccessTokenProvider = () => Task.FromResult(_token);
+            })
             .WithAutomaticReconnect()
             .Build();
 
