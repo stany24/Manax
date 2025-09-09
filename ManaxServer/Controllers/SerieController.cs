@@ -48,7 +48,7 @@ public class SerieController(
         Serie? serie = await context.Series
             .FirstOrDefaultAsync(l => l.Id == id);
 
-        if (serie == null) return NotFound(Localizer.Format("SerieNotFound", id));
+        if (serie == null) return NotFound(Localizer.SerieNotFound(id));
 
         return mapper.Map<SerieDto>(serie);
     }
@@ -61,7 +61,7 @@ public class SerieController(
     public ActionResult<List<long>> GetSerieChapters(long id)
     {
         Serie? serie = context.Series.FirstOrDefault(s => s.Id == id);
-        if (serie == null) return NotFound();
+        if (serie == null) return NotFound(Localizer.SerieNotFound(id));
         List<long> chaptersIds = context.Chapters
             .Where(c => c.SerieId == id)
             .OrderBy(c => c.FileName)
@@ -78,7 +78,7 @@ public class SerieController(
     public ActionResult<List<ReadDto>> GetSerieReads(long id)
     {
         Serie? serie = context.Series.FirstOrDefault(s => s.Id == id);
-        if (serie == null) return NotFound();
+        if (serie == null) return NotFound(Localizer.SerieNotFound(id));
         List<ReadDto> reads = context.Reads
             .Where(r => r.Chapter.SerieId == id)
             .Where(r => r.UserId == UserController.GetCurrentUserId(HttpContext))
@@ -99,11 +99,11 @@ public class SerieController(
         Serie? serie = context.Series
             .Include(s => s.SavePoint)
             .FirstOrDefault(s => s.Id == id);
-        if (serie == null) return NotFound();
+        if (serie == null) return NotFound(Localizer.SerieNotFound(id));
         string posterName = SettingsManager.Data.PosterName + "." +
                             SettingsManager.Data.PosterFormat.ToString().ToLower(CultureInfo.InvariantCulture);
         string posterPath = Path.Combine(serie.SavePath, posterName);
-        if (!System.IO.File.Exists(posterPath)) return NotFound(Localizer.Format("PosterNotFound", id));
+        if (!System.IO.File.Exists(posterPath)) return NotFound(Localizer.PosterNotFound(id));
         byte[] readAllBytes = await System.IO.File.ReadAllBytesAsync(posterPath);
         return File(readAllBytes, "image/webp", posterName);
     }
@@ -118,10 +118,10 @@ public class SerieController(
     {
         Serie? serie = await context.Series.FindAsync(id);
 
-        if (serie == null) return NotFound(Localizer.Format("SerieNotFound", id));
+        if (serie == null) return NotFound(Localizer.SerieNotFound(id));
 
         if (string.IsNullOrWhiteSpace(serieUpdate.Title))
-            return BadRequest(Localizer.Format("SerieTitleRequired"));
+            return BadRequest(Localizer.SerieTitleRequired());
 
         mapper.Map(serieUpdate, serie);
         serie.LastModification = DateTime.UtcNow;
@@ -148,14 +148,14 @@ public class SerieController(
     public async Task<ActionResult<long>> PostSerie(SerieCreateDto serieCreate)
     {
         if (string.IsNullOrWhiteSpace(serieCreate.Title))
-            return BadRequest(Localizer.GetString("SerieTitleRequired"));
+            return BadRequest(Localizer.SerieTitleRequired());
 
         SavePoint? savePoint = SelectSavePoint();
-        if (savePoint == null) return BadRequest(Localizer.GetString("NoSavePoint"));
+        if (savePoint == null) return BadRequest(Localizer.NoSavePoint());
         try
         {
             string folderPath = savePoint.Path + Path.DirectorySeparatorChar + serieCreate.Title;
-            if (System.IO.File.Exists(folderPath)) return BadRequest(Localizer.Format("SerieAlreadyExists"));
+            if (System.IO.File.Exists(folderPath)) return BadRequest(Localizer.SerieAlreadyExists());
             Directory.CreateDirectory(folderPath);
             Serie serie = new()
             {
@@ -175,7 +175,7 @@ public class SerieController(
         }
         catch (Exception)
         {
-            return BadRequest(Localizer.GetString("SerieCreationFailed"));
+            return BadRequest(Localizer.SerieCreationFailed());
         }
     }
 
@@ -218,7 +218,7 @@ public class SerieController(
     public async Task<IActionResult> DeleteSerie(long id)
     {
         Serie? serie = await context.Series.FindAsync(id);
-        if (serie == null) return NotFound(Localizer.Format("SerieNotFound", id));
+        if (serie == null) return NotFound(Localizer.SerieNotFound(id));
 
         context.Series.Remove(serie);
         await context.SaveChangesAsync();

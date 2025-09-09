@@ -24,12 +24,12 @@ public class ReadController(ManaxContext context, IMapper mapper, INotificationS
     public async Task<IActionResult> Read(ReadCreateDto readCreate)
     {
         long? userId = UserController.GetCurrentUserId(HttpContext);
-        if (userId == null) return Unauthorized(Localizer.Format("UserMustBeLoggedInRead"));
+        if (userId == null) return Unauthorized(Localizer.UserMustBeLoggedInRead());
 
         User? user = await context.Users.FindAsync(userId);
         Chapter? chapter = await context.Chapters.FindAsync(readCreate.ChapterId);
 
-        if (user == null || chapter == null) return NotFound(Localizer.Format("UserOrChapterNotFound"));
+        if (user == null || chapter == null) return NotFound(Localizer.UserOrChapterNotFound());
 
         Read? existingRead = await context.Reads
             .FirstOrDefaultAsync(r => r.User.Id == userId && r.Chapter.Id == readCreate.ChapterId);
@@ -65,7 +65,7 @@ public class ReadController(ManaxContext context, IMapper mapper, INotificationS
     public async Task<IActionResult> Unread(int chapterId)
     {
         long? currentUserId = UserController.GetCurrentUserId(HttpContext);
-        if (currentUserId == null) return Unauthorized(Localizer.Format("UserMustBeLoggedInRead"));
+        if (currentUserId == null) return Unauthorized(Localizer.UserMustBeLoggedInRead());
 
         Read? existingRead = await context.Reads
             .FirstOrDefaultAsync(r => r.User.Id == currentUserId && r.Chapter.Id == chapterId);

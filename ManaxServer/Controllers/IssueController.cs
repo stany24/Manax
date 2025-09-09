@@ -143,7 +143,7 @@ public class IssueController(ManaxContext context, IMapper mapper, INotification
     {
         ReportedIssueChapter? issue = await context.ReportedIssuesChapter.FindAsync(id);
 
-        if (issue == null) return NotFound(Localizer.Format("IssueNotFound", id));
+        if (issue == null) return NotFound(Localizer.IssueNotFound(id));
 
         context.ReportedIssuesChapter.Remove(issue);
         await context.SaveChangesAsync();
@@ -160,7 +160,7 @@ public class IssueController(ManaxContext context, IMapper mapper, INotification
     {
         ReportedIssueSerie? issue = await context.ReportedIssuesSerie.FindAsync(id);
 
-        if (issue == null) return NotFound(Localizer.Format("IssueNotFound", id));
+        if (issue == null) return NotFound(Localizer.IssueNotFound(id));
 
         context.ReportedIssuesSerie.Remove(issue);
         await context.SaveChangesAsync();

@@ -43,15 +43,15 @@ public partial class UploadController(
             .Include(s => s.SavePoint)
             .FirstOrDefault(s => s.Id == serieId);
         if (serie == null)
-            return BadRequest(Localizer.GetString("SerieNotFound"));
+            return BadRequest(Localizer.SerieNotFound(serieId));
 
         if (!TryGetPagesCountFromCbz(file, out int pagesCount))
-            return BadRequest(Localizer.GetString("InvalidZipFile"));
+            return BadRequest(Localizer.InvalidZipFile());
 
         string filePath = Path.Combine(serie.SavePath, file.FileName);
         if (Directory.Exists(filePath) || System.IO.File.Exists(filePath))
         {
-            return BadRequest(Localizer.GetString("ChapterAlreadyExists"));
+            return BadRequest(Localizer.ChapterAlreadyExists());
         }
 
         await SaveFileAsync(file, filePath);
@@ -94,21 +94,21 @@ public partial class UploadController(
             .Include(s => s.SavePoint)
             .FirstOrDefault(s => s.Id == serieId);
         if (serie == null)
-            return BadRequest(Localizer.GetString("SerieNotFound"));
+            return BadRequest(Localizer.SerieNotFound(serieId));
 
         if (!TryGetPagesCountFromCbz(file, out int pagesCount))
-            return BadRequest(Localizer.GetString("InvalidZipFile"));
+            return BadRequest(Localizer.InvalidZipFile());
 
         string filePath = Path.Combine(serie.SavePath, file.FileName);
         if (!Directory.Exists(filePath) && !System.IO.File.Exists(filePath))
         {
-            return BadRequest(Localizer.GetString("ChapterDoesNotExist"));
+            return BadRequest(Localizer.ChapterDoesNotExist());
         }
         
         int number = ExtractChapterNumber(file.FileName);
         Chapter? chapter = context.Chapters.FirstOrDefault(c => c.Number == number);
         if (chapter == null)
-            return BadRequest(Localizer.GetString("ChapterDoesNotExist"));
+            return BadRequest(Localizer.ChapterDoesNotExist());
         chapter.LastModification = DateTime.UtcNow;
         chapter.Pages = pagesCount;
 
@@ -186,12 +186,12 @@ public partial class UploadController(
             .Include(s => s.SavePoint)
             .FirstOrDefault(s => s.Id == serieId);
         if (serie == null)
-            return BadRequest(Localizer.GetString("SerieNotFound"));
+            return BadRequest(Localizer.SerieNotFound(serieId));
 
         ImageFormat format = SettingsManager.Data.PosterFormat;
         string path = Path.Combine(serie.SavePath,
             SettingsManager.Data.PosterName + "." + format.ToString().ToLower(CultureInfo.InvariantCulture));
-        if (System.IO.File.Exists(path) && !replace) return BadRequest(Localizer.GetString("PosterAlreadyExists"));
+        if (System.IO.File.Exists(path) && !replace) return BadRequest(Localizer.PosterAlreadyExists());
         try
         {
             MagickImage image = new(file.OpenReadStream());
@@ -202,7 +202,7 @@ public partial class UploadController(
         }
         catch (Exception e)
         {
-            return BadRequest(Localizer.Format("InvalidImageFile", e.Message));
+            return BadRequest(Localizer.InvalidImageFile(e.Message));
         }
 
         return Ok();

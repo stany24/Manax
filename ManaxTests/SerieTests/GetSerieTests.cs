@@ -68,7 +68,7 @@ public class GetSerieTests : SerieTestsSetup
     {
         ActionResult<List<long>> result = Controller.GetSerieChapters(999999);
 
-        NotFoundResult? notFoundResult = result.Result as NotFoundResult;
+        NotFoundObjectResult? notFoundResult = result.Result as NotFoundObjectResult;
         Assert.IsNotNull(notFoundResult);
 
         Assert.IsNull(result.Value);

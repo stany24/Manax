@@ -14,7 +14,7 @@ public class FixChapterBackGroundTask(IFixService fixService, long chapterId) : 
 
     public string GetName()
     {
-        return Localizer.GetString("TaskChapterFix");
+        return Localizer.TaskChapterFix();
     }
 
     public TaskPriority GetPriority()

@@ -38,7 +38,7 @@ public class SettingsController(
         lock (_lock)
         {
             SettingsData oldData = SettingsManager.Data;
-            if (!data.IsValid) return BadRequest(Localizer.GetString("SettingsUpdateNotForced"));
+            if (!data.IsValid) return BadRequest(Localizer.SettingsUpdateNotForced());
             SettingsManager.OverwriteSettings(data);
             IServiceScope scope = serviceProvider.CreateScope();
             Task.Run(() => CheckModifications(data, oldData, scope));

@@ -36,7 +36,7 @@ public class LibraryController(ManaxContext context, IMapper mapper, INotificati
             .AsNoTracking()
             .FirstOrDefaultAsync(l => l.Id == id);
 
-        if (library == null) return NotFound(Localizer.Format("LibraryNotFound", id));
+        if (library == null) return NotFound(Localizer.LibraryNotFound(id));
 
         return mapper.Map<LibraryDto>(library);
     }
@@ -52,12 +52,12 @@ public class LibraryController(ManaxContext context, IMapper mapper, INotificati
     {
         Library? library = await context.Libraries.FindAsync(id);
 
-        if (library == null) return NotFound(Localizer.Format("LibraryNotFound", id));
+        if (library == null) return NotFound(Localizer.LibraryNotFound(id));
 
         if (string.IsNullOrWhiteSpace(libraryUpdate.Name))
-            return BadRequest(Localizer.Format("LibraryNameRequired"));
+            return BadRequest(Localizer.LibraryNameRequired());
         if (await context.Libraries.AnyAsync(l => l.Name == libraryUpdate.Name && l.Id != id))
-            return Conflict(Localizer.Format("LibraryNameExists", libraryUpdate.Name));
+            return Conflict(Localizer.LibraryNameExists(libraryUpdate.Name));
 
         mapper.Map(libraryUpdate, library);
 
@@ -67,12 +67,12 @@ public class LibraryController(ManaxContext context, IMapper mapper, INotificati
         }
         catch (DbUpdateConcurrencyException)
         {
-            if (!context.Libraries.Any(e => e.Id == id)) return NotFound(Localizer.Format("LibraryAlreadyCreated"));
+            if (!context.Libraries.Any(e => e.Id == id)) return NotFound(Localizer.LibraryAlreadyCreated());
             throw;
         }
         catch (DbUpdateException ex) when (ex.InnerException?.Message.Contains("constraint") ?? false)
         {
-            return Conflict(Localizer.Format("LibraryNameOrPathNotUnique"));
+            return Conflict(Localizer.LibraryNameOrPathNotUnique());
         }
 
         notificationService.NotifyLibraryUpdatedAsync(mapper.Map<LibraryDto>(library));
@@ -87,9 +87,9 @@ public class LibraryController(ManaxContext context, IMapper mapper, INotificati
     public async Task<ActionResult<long>> PostLibrary(LibraryCreateDto libraryCreate)
     {
         if (string.IsNullOrWhiteSpace(libraryCreate.Name))
-            return BadRequest(Localizer.Format("LibraryNameRequired"));
+            return BadRequest(Localizer.LibraryNameRequired());
         if (await context.Libraries.AnyAsync(l => l.Name == libraryCreate.Name))
-            return Conflict(Localizer.Format("LibraryNameExists", libraryCreate.Name));
+            return Conflict(Localizer.LibraryNameExists(libraryCreate.Name));
 
         Library library = mapper.Map<Library>(libraryCreate);
         library.Creation = DateTime.UtcNow;
@@ -102,7 +102,7 @@ public class LibraryController(ManaxContext context, IMapper mapper, INotificati
         }
         catch (DbUpdateException ex) when (ex.InnerException?.Message.Contains("constraint") ?? false)
         {
-            return Conflict(Localizer.Format("LibraryNameExists"));
+            return Conflict(Localizer.LibraryNameExists(libraryCreate.Name));
         }
 
         notificationService.NotifyLibraryCreatedAsync(mapper.Map<LibraryDto>(library));
@@ -117,7 +117,7 @@ public class LibraryController(ManaxContext context, IMapper mapper, INotificati
     public async Task<IActionResult> DeleteLibrary(long id)
     {
         Library? library = await context.Libraries.FindAsync(id);
-        if (library == null) return NotFound(Localizer.Format("LibraryNotFound", id));
+        if (library == null) return NotFound(Localizer.LibraryNotFound(id));
 
         List<Serie> seriesToUpdate = await context.Series
             .Where(s => s.LibraryId == id)

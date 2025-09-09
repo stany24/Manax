@@ -45,7 +45,7 @@ public class UserController(
     {
         User? user = await context.Users.FindAsync(id);
 
-        if (user == null) return NotFound(Localizer.Format("UserNotFound", id));
+        if (user == null) return NotFound(Localizer.UserNotFound(id));
 
         return mapper.Map<UserDto>(user);
     }
@@ -59,7 +59,7 @@ public class UserController(
     {
         User? user = await context.Users.FindAsync(id);
 
-        if (user == null) return NotFound(Localizer.Format("UserNotFound", id));
+        if (user == null) return NotFound(Localizer.UserNotFound(id));
 
         mapper.Map(userUpdate, user);
 
@@ -105,20 +105,20 @@ public class UserController(
     public async Task<IActionResult> DeleteUser(long id)
     {
         User? userToDelete = await context.Users.FindAsync(id);
-        if (userToDelete == null) return NotFound(Localizer.Format("UserNotFound", id));
+        if (userToDelete == null) return NotFound(Localizer.UserNotFound(id));
 
         long? selfId = GetCurrentUserId(HttpContext);
         if (selfId == null)
-            return Unauthorized(Localizer.Format("UserMustBeLoggedInDelete"));
+            return Unauthorized(Localizer.UserMustBeLoggedInDelete());
         if (selfId == id)
-            return Forbid(Localizer.Format("UserCannotDeleteSelf"));
+            return Forbid(Localizer.UserCannotDeleteSelf());
 
         User? self = context.Users.FirstOrDefault(u => u.Id == selfId);
         if (self == null)
-            return Unauthorized(Localizer.Format("UserMustBeLoggedInDelete"));
+            return Unauthorized(Localizer.UserMustBeLoggedInDelete());
 
         if (self.Role == UserRole.Admin && userToDelete.Role is UserRole.Admin or UserRole.Owner)
-            return Forbid(Localizer.Format("UserCannotDeleteAdminOrOwner"));
+            return Forbid(Localizer.UserCannotDeleteAdminOrOwner());
 
         StringValues auths = Request.Headers.Authorization;
         foreach (string? token in auths)
@@ -156,7 +156,7 @@ public class UserController(
                 Environment.StackTrace);
             context.LoginAttempts.Add(loginAttempt);
             await context.SaveChangesAsync();
-            return Unauthorized(Localizer.Format("UserInvalidLogin"));
+            return Unauthorized(Localizer.UserInvalidLogin());
         }
 
         user.LastLogin = DateTime.UtcNow;
@@ -195,7 +195,7 @@ public class UserController(
             {
                 context.LoginAttempts.Add(loginAttempt);
                 context.SaveChanges();
-                return Unauthorized(Localizer.Format("UserClaimNotAllowed"));
+                return Unauthorized(Localizer.UserClaimNotAllowed());
             }
 
             User user = new()
@@ -230,11 +230,11 @@ public class UserController(
     {
         long? userId = GetCurrentUserId(HttpContext);
         if (userId == null)
-            return Unauthorized(Localizer.Format("UserMustBeLoggedIn"));
+            return Unauthorized(Localizer.Unauthorized());
 
         User? user = await context.Users.FindAsync(userId);
         if (user == null)
-            return Unauthorized(Localizer.Format("UserNotFound", userId));
+            return Unauthorized(Localizer.UserNotFound((long)userId));
         
         StringValues auths = Request.Headers.Authorization;
         foreach (string? token in auths)

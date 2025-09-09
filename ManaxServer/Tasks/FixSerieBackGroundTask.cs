@@ -14,7 +14,7 @@ public class FixSerieBackGroundTask(IFixService fixService, long serieId) : IBac
 
     public string GetName()
     {
-        return Localizer.GetString("TaskSerieFix");
+        return Localizer.TaskSerieFix();
     }
 
     public TaskPriority GetPriority()

@@ -20,12 +20,11 @@ public class SavePointController(ManaxContext context, IMapper mapper) : Control
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<ActionResult<long>> PostSavePoint(SavePointCreateDto savePointCreate)
     {
-        // Check if name is unique
         if (await context.SavePoints.AnyAsync(l => l.Path == savePointCreate.Path))
-            return Conflict(Localizer.Format("SavePointNameExists", savePointCreate.Path));
+            return Conflict(Localizer.SavePointNameExists(savePointCreate.Path));
 
         if (!Directory.Exists(savePointCreate.Path))
-            return Conflict(Localizer.Format("SavePointPathNotExists", savePointCreate.Path));
+            return Conflict(Localizer.SavePointPathNotExists(savePointCreate.Path));
 
         SavePoint library = mapper.Map<SavePoint>(savePointCreate);
         library.Creation = DateTime.UtcNow;
@@ -38,7 +37,7 @@ public class SavePointController(ManaxContext context, IMapper mapper) : Control
         }
         catch (DbUpdateException ex) when (ex.InnerException?.Message.Contains("constraint") ?? false)
         {
-            return Conflict(Localizer.Format("SavePointNameExists"));
+            return Conflict(Localizer.SavePointNameExists(savePointCreate.Path));
         }
 
         return library.Id;

@@ -1,4 +1,5 @@
 using ManaxLibrary.DTO.Issue.Automatic;
+using ManaxServer.Localization;
 using ManaxServer.Middleware;
 using ManaxServer.Models;
 using ManaxServer.Models.Issue.Reported;
@@ -78,6 +79,7 @@ public class Program
 
         if (app.Environment.IsDevelopment())
         {
+            Localizer.VerifyLocalizations();
             app.UseSwagger();
             app.UseSwaggerUI();
         }

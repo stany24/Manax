@@ -1,113 +1,49 @@
-using System.Collections;
-using System.Globalization;
-using System.Reflection;
-using System.Resources;
-using ManaxLibrary.Logging;
+using ManaxServer.Localization.Languages;
 
 namespace ManaxServer.Localization;
 
-public static class Localizer
+public static partial class Localizer
 {
-    private static string _language = "en";
-    private static readonly List<string> Languages;
-    private static readonly Dictionary<string, string> Fallback;
-    private static Dictionary<string, string> _current;
+    private static Language _language = Language.English;
+    private static Dictionary<LocalizationKey,string> _currentLocalization = null!;
 
     static Localizer()
     {
-        Fallback = LoadFallback();
-        Languages = LoadAvailableLanguages();
-        _current = Fallback;
+        LoadLanguage(_language);
     }
 
-    public static string GetString(string key)
+    public static void VerifyLocalizations()
     {
-        _current.TryGetValue(key, out string? value);
-        if (value != null) return value;
-        Logger.LogWarning($"The key '{key}' was not found in the current language '{_language}'. Using fallback.",
-            Environment.StackTrace);
-        Fallback.TryGetValue(key, out value);
-        if (value == null)
-            Logger.LogError($"The key '{key}' was not found in the fallback language. Returning the key itself.",
-                new NotImplementedException(), Environment.StackTrace);
-        return value ?? key;
+        new FrenchLocalization().VerifyLocalizationKeys();
+        new EnglishLocalization().VerifyLocalizationKeys();
     }
 
-    public static string Format(string key, params object[] args)
+    private static void LoadLanguage(Language language)
     {
-        string template = GetString(key);
-        return string.Format(CultureInfo.InvariantCulture, template, args);
+        _currentLocalization = language switch
+        {
+            Language.Français => new FrenchLocalization().GetLocalization(),
+            Language.English => new EnglishLocalization().GetLocalization(),
+            _ => throw new ArgumentOutOfRangeException(language.ToString())
+        };
     }
 
-    public static void SetLanguage(string language)
+    public static void SetLanguage(Language language)
     {
-        _language = language;
-        _current = LoadCurrentLanguage();
+        List<Language> languages = Enum.GetValues(typeof(Language)).Cast<Language>().ToList();
+        if (languages.Contains(language))
+        {
+            _language = language;
+            LoadLanguage(_language);
+        }
     }
-
-    public static string GetCurrentLanguage()
+    public static Language GetCurrentLanguage()
     {
         return _language;
     }
 
-    public static List<string> GetAvailableLanguages()
+    public static List<Language> GetAvailableLanguages()
     {
-        return Languages;
-    }
-
-    private static Dictionary<string, string> LoadFallback()
-    {
-        return LoadResourceFile("manax");
-    }
-
-    private static Dictionary<string, string> LoadCurrentLanguage()
-    {
-        return LoadResourceFile($"manax.{_language}");
-    }
-
-    private static List<string> LoadAvailableLanguages()
-    {
-        List<string> languages = [];
-        const string resourcePrefix = "manax.";
-
-        string? origin = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-        if (origin == null) return languages;
-
-        string basePath = Path.Combine(origin, "Localization", "Languages");
-        if (!Directory.Exists(basePath)) return languages;
-        foreach (string file in Directory.GetFiles(basePath, "manax.*.resx"))
-        {
-            string filename = Path.GetFileNameWithoutExtension(file);
-            if (!filename.StartsWith(resourcePrefix, StringComparison.InvariantCulture)) continue;
-            string lang = filename[resourcePrefix.Length..];
-            if (!string.IsNullOrEmpty(lang)) languages.Add(lang);
-        }
-
-        return languages;
-    }
-
-    private static Dictionary<string, string> LoadResourceFile(string baseName)
-    {
-        Dictionary<string, string> resources = new();
-
-        try
-        {
-            ResourceManager resourceManager = new($"ManaxServer.Localization.Languages.{baseName}",
-                Assembly.GetExecutingAssembly());
-
-            ResourceSet? resourceSet = resourceManager.GetResourceSet(CultureInfo.InvariantCulture, true, true);
-
-            if (resourceSet != null)
-                foreach (DictionaryEntry entry in resourceSet)
-                    if (entry is { Key: string key, Value: string value })
-                        resources[key] = value;
-        }
-        catch (Exception e)
-        {
-            Logger.LogError("Failed to load resource File", e, Environment.StackTrace);
-            return resources;
-        }
-
-        return resources;
+        return Enum.GetValues(typeof(Language)).Cast<Language>().ToList();
     }
 }

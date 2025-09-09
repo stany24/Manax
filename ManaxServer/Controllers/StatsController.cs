@@ -25,7 +25,7 @@ public class StatsController(ManaxContext context, IMapper mapper) : ControllerB
     public async Task<ActionResult<UserStats>> GetStats()
     {
         long? currentUserId = UserController.GetCurrentUserId(HttpContext);
-        if (currentUserId == null) return Unauthorized(Localizer.Format("Unauthorized"));
+        if (currentUserId == null) return Unauthorized(Localizer.Unauthorized());
 
         List<long> chaptersRead = context.Reads
             .Where(r => r.UserId == currentUserId.Value)

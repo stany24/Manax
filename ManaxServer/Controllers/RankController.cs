@@ -46,7 +46,7 @@ public class RankController(ManaxContext context, IMapper mapper, INotificationS
     public async Task<IActionResult> UpdateRank(Rank rank)
     {
         Rank? found = context.Ranks.FirstOrDefault(r => r.Id == rank.Id);
-        if (found == null) return NotFound(Localizer.Format("RankNotFound", rank.Id));
+        if (found == null) return NotFound(Localizer.RankNotFound(rank.Id));
         found.Name = rank.Name;
         found.Value = rank.Value;
         try
@@ -70,7 +70,7 @@ public class RankController(ManaxContext context, IMapper mapper, INotificationS
     public async Task<IActionResult> DeleteRank(long id)
     {
         Rank? rank = await context.Ranks.FindAsync(id);
-        if (rank == null) return NotFound(Localizer.Format("RankNotFound", id));
+        if (rank == null) return NotFound(Localizer.RankNotFound(id));
         context.Ranks.Remove(rank);
         await context.SaveChangesAsync();
         notificationService.NotifyRankDeletedAsync(id);
@@ -84,7 +84,7 @@ public class RankController(ManaxContext context, IMapper mapper, INotificationS
     public async Task<IActionResult> SetUserRank(UserRankCreateDto rank)
     {
         long? userId = UserController.GetCurrentUserId(HttpContext);
-        if (userId == null) return Unauthorized(Localizer.Format("MustBeLoggedInSetRank"));
+        if (userId == null) return Unauthorized(Localizer.MustBeLoggedInSetRank());
 
         UserRank? existing =
             await context.UserRanks.FirstOrDefaultAsync(ur => ur.UserId == userId.Value && ur.SerieId == rank.SerieId);
@@ -115,7 +115,7 @@ public class RankController(ManaxContext context, IMapper mapper, INotificationS
     public async Task<ActionResult<IEnumerable<UserRankDto>>> GetRanking()
     {
         long? currentUserId = UserController.GetCurrentUserId(HttpContext);
-        if (currentUserId == null) return Unauthorized(Localizer.Format("MustBeLoggedInGetRanking"));
+        if (currentUserId == null) return Unauthorized(Localizer.MustBeLoggedInGetRanking());
         return await context.UserRanks
             .Where(r => r.UserId == currentUserId)
             .Select(r => mapper.Map<UserRankDto>(r)).ToListAsync();

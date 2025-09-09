@@ -14,7 +14,7 @@ public class FixPosterBackGroundTask(IFixService fixService, long serieId) : IBa
 
     public string GetName()
     {
-        return Localizer.GetString("TaskPosterFix");
+        return Localizer.TaskPosterFix();
     }
 
     public TaskPriority GetPriority()

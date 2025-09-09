@@ -7,6 +7,6 @@ public abstract class Service
 {
     protected Service()
     {
-        Logger.LogInfo(Localizer.Format("ServiceInitialized", GetType().Name));
+        Logger.LogInfo(Localizer.ServiceInitialized(GetType().Name));
     }
 }

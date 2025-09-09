@@ -65,7 +65,7 @@ public class BackgroundTaskService(INotificationService notificationService) : S
                     }
                     catch (Exception e)
                     {
-                        Logger.LogError(Localizer.Format("TaskError", backGroundTask.GetName()), e, Environment.StackTrace);
+                        Logger.LogError(Localizer.TaskError(backGroundTask.GetName()), e, Environment.StackTrace);
                     }
                 });
                 
