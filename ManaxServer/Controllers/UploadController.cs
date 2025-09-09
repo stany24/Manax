@@ -4,6 +4,8 @@ using System.Text.RegularExpressions;
 using ImageMagick;
 using ManaxLibrary.DTO.Chapter;
 using ManaxLibrary.DTO.Setting;
+using ManaxLibrary.DTO.User;
+using ManaxServer.Attributes;
 using ManaxServer.Localization;
 using ManaxServer.Models;
 using ManaxServer.Models.Chapter;
@@ -14,7 +16,6 @@ using ManaxServer.Services.Mapper;
 using ManaxServer.Services.Notification;
 using ManaxServer.Settings;
 using ManaxServer.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -34,7 +35,7 @@ public partial class UploadController(
 
     // POST: api/upload/chapter
     [HttpPost("chapter")]
-    [Authorize(Roles = "Admin,Owner")]
+    [RequirePermission(Permission.UploadChapter)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> UploadChapter(IFormFile file, [FromForm] long serieId)
@@ -85,7 +86,7 @@ public partial class UploadController(
 
     // POST: api/upload/chapter/replace
     [HttpPost("chapter/replace")]
-    [Authorize(Roles = "Admin,Owner")]
+    [RequirePermission(Permission.UploadChapter)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> ReplaceChapter(IFormFile file, [FromForm] long serieId)
@@ -127,7 +128,7 @@ public partial class UploadController(
 
     // POST: api/upload/poster
     [HttpPost("poster")]
-    [Authorize(Roles = "Admin,Owner")]
+    [RequirePermission(Permission.UploadChapter)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> UploadPoster(IFormFile file, [FromForm] long serieId)
@@ -137,7 +138,7 @@ public partial class UploadController(
 
     // POST: api/upload/poster/replace
     [HttpPost("poster/replace")]
-    [Authorize(Roles = "Admin,Owner")]
+    [RequirePermission(Permission.UploadChapter)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> ReplacePoster(IFormFile file, [FromForm] long serieId)

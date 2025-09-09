@@ -10,6 +10,7 @@ using ManaxServer.Services.Hash;
 using ManaxServer.Services.Issue;
 using ManaxServer.Services.Mapper;
 using ManaxServer.Services.Notification;
+using ManaxServer.Services.Permission;
 using ManaxServer.Services.Renaming;
 using ManaxServer.Services.Token;
 using Microsoft.AspNetCore.Http.Features;
@@ -31,14 +32,14 @@ public class Program
         builder.Services.AddSwaggerGen();
         builder.Services.AddHttpContextAccessor();
 
-        // SignalR configuration 
+        // SignalR configuration
         builder.Services.AddSignalR();
-
-        AddAuthentication(builder);
 
         builder.Services.AddDbContext<ManaxContext>(opt =>
             opt.UseSqlite($"Data Source={Path.Combine(AppContext.BaseDirectory, "database.db")}"));
 
+        AddAuthentication(builder);
+        
         // Services
         builder.Services.AddSingleton<INotificationService>(provider =>
             new NotificationService(provider.GetRequiredService<IHubContext<NotificationService>>()));
@@ -54,7 +55,6 @@ public class Program
                 provider.GetRequiredService<IIssueService>()));
         
         builder.Services.AddScoped<IMapper>(_ => new ManaxMapper(new ManaxMapping()));
-
 
         builder.Services.Configure<KestrelServerOptions>(options =>
         {
@@ -75,7 +75,7 @@ public class Program
         Migrate(app);
 
         app.UseMiddleware<GlobalExceptionMiddleware>();
-        app.UseMiddleware<TokenMiddleware>();
+        app.UseMiddleware<BearerAuthenticationMiddleware>();
 
         if (app.Environment.IsDevelopment())
         {
@@ -147,7 +147,11 @@ public class Program
 
     private static void AddAuthentication(WebApplicationBuilder builder)
     {
-        TokenService tokenService = new();
+        builder.Services.AddSingleton<IPermissionService>(provider =>
+            new PermissionService(provider.GetRequiredService<IServiceScopeFactory>()));
+
+        IPermissionService permissionService = builder.Services.BuildServiceProvider().GetRequiredService<IPermissionService>();
+        TokenService tokenService = new(permissionService);
         builder.Services.AddSingleton<ITokenService>(tokenService);
 
         builder.Services.AddAuthentication()

@@ -1,11 +1,12 @@
 using ManaxLibrary.DTO.Library;
+using ManaxLibrary.DTO.User;
+using ManaxServer.Attributes;
 using ManaxServer.Localization;
 using ManaxServer.Models;
 using ManaxServer.Models.Library;
 using ManaxServer.Models.Serie;
 using ManaxServer.Services.Mapper;
 using ManaxServer.Services.Notification;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,7 +19,7 @@ public class LibraryController(ManaxContext context, IMapper mapper, INotificati
 {
     // GET: api/Library
     [HttpGet("/api/Libraries")]
-    [Authorize(Roles = "User,Admin,Owner")]
+    [RequirePermission(Permission.ReadLibrary)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<long>>> GetLibraries()
     {
@@ -27,7 +28,7 @@ public class LibraryController(ManaxContext context, IMapper mapper, INotificati
 
     // GET: api/library/{id}
     [HttpGet("{id:long}")]
-    [Authorize(Roles = "User,Admin,Owner")]
+    [RequirePermission(Permission.ReadLibrary)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<LibraryDto>> GetLibrary(long id)
@@ -43,7 +44,7 @@ public class LibraryController(ManaxContext context, IMapper mapper, INotificati
 
     // PUT: api/Library/5
     [HttpPut("{id:long}")]
-    [Authorize(Roles = "Admin,Owner")]
+    [RequirePermission(Permission.WriteLibrary)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -81,7 +82,7 @@ public class LibraryController(ManaxContext context, IMapper mapper, INotificati
 
     // POST: api/Library
     [HttpPost("create")]
-    [Authorize(Roles = "Admin,Owner")]
+    [RequirePermission(Permission.WriteLibrary)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<ActionResult<long>> PostLibrary(LibraryCreateDto libraryCreate)
@@ -111,7 +112,7 @@ public class LibraryController(ManaxContext context, IMapper mapper, INotificati
 
     // DELETE: api/Library/5
     [HttpDelete("{id:long}")]
-    [Authorize(Roles = "Admin,Owner")]
+    [RequirePermission(Permission.DeleteLibrary)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteLibrary(long id)

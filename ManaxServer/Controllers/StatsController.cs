@@ -2,11 +2,12 @@ using ManaxLibrary.DTO.Rank;
 using ManaxLibrary.DTO.Read;
 using ManaxLibrary.DTO.Serie;
 using ManaxLibrary.DTO.Stats;
+using ManaxLibrary.DTO.User;
+using ManaxServer.Attributes;
 using ManaxServer.Localization;
 using ManaxServer.Models;
 using ManaxServer.Models.SavePoint;
 using ManaxServer.Services.Mapper;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,7 +19,7 @@ public class StatsController(ManaxContext context, IMapper mapper) : ControllerB
 {
     // GET: api/Chapter
     [HttpGet("/api/stats")]
-    [Authorize(Roles = "User,Admin,Owner")]
+    [RequirePermission(Permission.ReadSelfStats)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -66,7 +67,7 @@ public class StatsController(ManaxContext context, IMapper mapper) : ControllerB
     }
 
     [HttpGet("/api/server-stats")]
-    [Authorize(Roles = "Admin,Owner")]
+    [RequirePermission(Permission.ReadServerStats)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<ServerStats>> GetServerStats()
     {

@@ -21,6 +21,7 @@ public class ManaxContext(DbContextOptions<ManaxContext> options) : DbContext(op
     public virtual DbSet<ReportedIssueSerieType> ReportedIssueSerieTypes { get; set; } = null!;
 
     public virtual DbSet<User.User> Users { get; set; } = null!;
+    public virtual DbSet<UserPermission> UserPermissions { get; set; } = null!;
     public virtual DbSet<Read.Read> Reads { get; set; } = null!;
     public virtual DbSet<LoginAttempt> LoginAttempts { get; set; } = null!;
     public virtual DbSet<Rank.Rank> Ranks { get; set; } = null!;

@@ -1,11 +1,12 @@
 using ManaxLibrary.DTO.Issue.Automatic;
 using ManaxLibrary.DTO.Issue.Reported;
+using ManaxLibrary.DTO.User;
+using ManaxServer.Attributes;
 using ManaxServer.Localization;
 using ManaxServer.Models;
 using ManaxServer.Models.Issue.Reported;
 using ManaxServer.Services.Mapper;
 using ManaxServer.Services.Notification;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,7 +18,7 @@ public class IssueController(ManaxContext context, IMapper mapper, INotification
     : ControllerBase
 {
     [HttpGet("chapter/automatic")]
-    [Authorize(Roles = "Admin,Owner")]
+    [RequirePermission(Permission.ReadAllIssues)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<AutomaticIssueChapterDto>>> GetAllAutomaticChapterIssues()
     {
@@ -27,7 +28,7 @@ public class IssueController(ManaxContext context, IMapper mapper, INotification
     }
 
     [HttpGet("serie/automatic")]
-    [Authorize(Roles = "Admin,Owner")]
+    [RequirePermission(Permission.ReadAllIssues)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<AutomaticIssueSerieDto>>> GetAllAutomaticSerieIssues()
     {
@@ -37,7 +38,7 @@ public class IssueController(ManaxContext context, IMapper mapper, INotification
     }
 
     [HttpGet("chapter/reported")]
-    [Authorize(Roles = "Admin,Owner")]
+    [RequirePermission(Permission.ReadAllIssues)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<ReportedIssueChapterDto>>> GetAllReportedChapterIssues()
     {
@@ -47,7 +48,7 @@ public class IssueController(ManaxContext context, IMapper mapper, INotification
     }
 
     [HttpGet("chapter/reported/types")]
-    [Authorize(Roles = "User,Admin,Owner")]
+    [RequirePermission(Permission.ReadAllIssues)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<List<ReportedIssueChapterTypeDto>> GetAllReportedChapterIssuesTypes()
     {
@@ -56,7 +57,7 @@ public class IssueController(ManaxContext context, IMapper mapper, INotification
     }
 
     [HttpGet("serie/reported")]
-    [Authorize(Roles = "Admin,Owner")]
+    [RequirePermission(Permission.ReadAllIssues)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<ReportedIssueSerieDto>>> GetAllReportedSerieIssues()
     {
@@ -66,7 +67,7 @@ public class IssueController(ManaxContext context, IMapper mapper, INotification
     }
 
     [HttpGet("serie/reported/types")]
-    [Authorize(Roles = "User,Admin,Owner")]
+    [RequirePermission(Permission.ReadAllIssues)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<ReportedIssueSerieType>>> GetAllReportedSerieIssuesTypes()
     {
@@ -74,7 +75,7 @@ public class IssueController(ManaxContext context, IMapper mapper, INotification
     }
 
     [HttpPost("chapter")]
-    [Authorize(Roles = "User,Admin,Owner")]
+    [RequirePermission(Permission.WriteIssues)]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
@@ -105,7 +106,7 @@ public class IssueController(ManaxContext context, IMapper mapper, INotification
     }
 
     [HttpPost("serie")]
-    [Authorize(Roles = "User,Admin,Owner")]
+    [RequirePermission(Permission.WriteIssues)]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
@@ -136,7 +137,7 @@ public class IssueController(ManaxContext context, IMapper mapper, INotification
     }
 
     [HttpPut("chapter/{id:long}/close")]
-    [Authorize(Roles = "Admin,Owner")]
+    [RequirePermission(Permission.DeleteIssues)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> CloseChapterIssue(long id)
@@ -153,7 +154,7 @@ public class IssueController(ManaxContext context, IMapper mapper, INotification
     }
 
     [HttpPut("serie/{id:long}/close")]
-    [Authorize(Roles = "Admin,Owner")]
+    [RequirePermission(Permission.DeleteIssues)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> CloseSerieIssue(long id)

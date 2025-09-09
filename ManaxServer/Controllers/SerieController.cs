@@ -3,6 +3,8 @@ using System.Text.RegularExpressions;
 using ManaxLibrary.DTO.Read;
 using ManaxLibrary.DTO.Search;
 using ManaxLibrary.DTO.Serie;
+using ManaxLibrary.DTO.User;
+using ManaxServer.Attributes;
 using ManaxServer.Localization;
 using ManaxServer.Models;
 using ManaxServer.Models.SavePoint;
@@ -13,7 +15,6 @@ using ManaxServer.Services.Mapper;
 using ManaxServer.Services.Notification;
 using ManaxServer.Settings;
 using ManaxServer.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -31,7 +32,7 @@ public class SerieController(
 {
     // GET: api/Serie
     [HttpGet("/api/series")]
-    [Authorize(Roles = "User,Admin,Owner")]
+    [RequirePermission(Permission.ReadSeries)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<long>>> GetSeries()
     {
@@ -40,7 +41,7 @@ public class SerieController(
 
     // GET: api/serie/{id}
     [HttpGet("{id:long}")]
-    [Authorize(Roles = "User,Admin,Owner")]
+    [RequirePermission(Permission.ReadSeries)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<SerieDto>> GetSerie(long id)
@@ -55,7 +56,7 @@ public class SerieController(
 
     // GET: api/series/{id}/chapters
     [HttpGet("/api/series/{id:long}/chapters")]
-    [Authorize(Roles = "User,Admin,Owner")]
+    [RequirePermission(Permission.ReadChapters)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public ActionResult<List<long>> GetSerieChapters(long id)
@@ -72,7 +73,7 @@ public class SerieController(
 
     // GET: api/series/{id}/chapters
     [HttpGet("/api/series/{id:long}/reads")]
-    [Authorize(Roles = "User,Admin,Owner")]
+    [RequirePermission(Permission.ReadSavePoints)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public ActionResult<List<ReadDto>> GetSerieReads(long id)
@@ -90,7 +91,7 @@ public class SerieController(
 
     // GET: api/serie/{id}/poster
     [HttpGet("{id:long}/poster")]
-    [Authorize(Roles = "User,Admin,Owner")]
+    [RequirePermission(Permission.ReadSeries)]
     [Produces("image/webp")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -110,7 +111,7 @@ public class SerieController(
 
     // PUT: api/Serie/5
     [HttpPut("{id:long}")]
-    [Authorize(Roles = "Admin,Owner")]
+    [RequirePermission(Permission.WriteSeries)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -142,7 +143,7 @@ public class SerieController(
 
     // POST: api/Serie
     [HttpPost]
-    [Authorize(Roles = "Admin,Owner")]
+    [RequirePermission(Permission.WriteSeries)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<long>> PostSerie(SerieCreateDto serieCreate)
@@ -212,7 +213,7 @@ public class SerieController(
 
     // DELETE: api/Serie/5
     [HttpDelete("{id:long}")]
-    [Authorize(Roles = "Admin,Owner")]
+    [RequirePermission(Permission.DeleteSeries)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteSerie(long id)
@@ -228,7 +229,7 @@ public class SerieController(
     }
 
     [HttpPost("search")]
-    [Authorize(Roles = "User,Admin,Owner")]
+    [RequirePermission(Permission.ReadSeries)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public List<long> Search(Search search)
     {

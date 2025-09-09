@@ -1,11 +1,12 @@
 using System.IO.Compression;
 using ManaxLibrary.DTO.Chapter;
+using ManaxLibrary.DTO.User;
+using ManaxServer.Attributes;
 using ManaxServer.Localization;
 using ManaxServer.Models;
 using ManaxServer.Models.Chapter;
 using ManaxServer.Services.Mapper;
 using ManaxServer.Services.Notification;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,7 +19,7 @@ public class ChapterController(ManaxContext context, IMapper mapper, INotificati
 {
     // GET: api/Chapter
     [HttpGet("/api/chapters")]
-    [Authorize(Roles = "User,Admin,Owner")]
+    [RequirePermission(Permission.ReadChapters)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<long>>> GetChapters()
     {
@@ -27,7 +28,7 @@ public class ChapterController(ManaxContext context, IMapper mapper, INotificati
 
     // GET: api/Chapter/5
     [HttpGet("{id:long}")]
-    [Authorize(Roles = "User,Admin,Owner")]
+    [RequirePermission(Permission.ReadChapters)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<ChapterDto>> GetChapter(long id)
@@ -41,7 +42,7 @@ public class ChapterController(ManaxContext context, IMapper mapper, INotificati
 
     // DELETE: api/Chapter/5
     [HttpDelete("{id:long}")]
-    [Authorize(Roles = "Admin,Owner")]
+    [RequirePermission(Permission.DeleteChapters)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteChapter(long id)
@@ -58,7 +59,7 @@ public class ChapterController(ManaxContext context, IMapper mapper, INotificati
 
     // GET: api/Chapter/{id}/page/{number}
     [HttpGet("{id:long}/page/{number:int}")]
-    [Authorize(Roles = "User,Admin,Owner")]
+    [RequirePermission(Permission.ReadChapters)]
     [Produces("image/webp")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -84,7 +85,7 @@ public class ChapterController(ManaxContext context, IMapper mapper, INotificati
 
     // GET: api/Chapter/{id}/pages
     [HttpGet("{id:long}/pages")]
-    [Authorize(Roles = "User,Admin,Owner")]
+    [RequirePermission(Permission.ReadChapters)]
     [Produces("application/x-cbz")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]

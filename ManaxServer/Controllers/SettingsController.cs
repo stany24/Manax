@@ -1,4 +1,6 @@
 using ManaxLibrary.DTO.Setting;
+using ManaxLibrary.DTO.User;
+using ManaxServer.Attributes;
 using ManaxServer.Localization;
 using ManaxServer.Models;
 using ManaxServer.Services.BackgroundTask;
@@ -6,7 +8,6 @@ using ManaxServer.Services.Fix;
 using ManaxServer.Services.Renaming;
 using ManaxServer.Settings;
 using ManaxServer.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ManaxServer.Controllers;
@@ -22,7 +23,7 @@ public class SettingsController(
     private readonly object _lock = new();
 
     [HttpGet]
-    [Authorize(Roles = "Owner")]
+    [RequirePermission(Permission.ReadServerSettings)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public SettingsData GetSettings()
     {
@@ -30,7 +31,7 @@ public class SettingsController(
     }
 
     [HttpPut]
-    [Authorize(Roles = "Owner")]
+    [RequirePermission(Permission.WriteServerSettings)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public IActionResult ChangeSettings(SettingsData data)

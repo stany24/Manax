@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ManaxServer.Migrations
 {
     [DbContext(typeof(ManaxContext))]
-    [Migration("20250827085144_ManaxV0.1")]
+    [Migration("20250909134349_ManaxV0.1")]
     partial class ManaxV01
     {
         /// <inheritdoc />
@@ -395,6 +395,25 @@ namespace ManaxServer.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("ManaxServer.Models.User.UserPermission", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Permission")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<long>("UserId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserPermissions");
+                });
+
             modelBuilder.Entity("ManaxServer.Models.Chapter.Chapter", b =>
                 {
                     b.HasOne("ManaxServer.Models.Serie.Serie", "Serie")
@@ -543,6 +562,22 @@ namespace ManaxServer.Migrations
                     b.Navigation("Library");
 
                     b.Navigation("SavePoint");
+                });
+
+            modelBuilder.Entity("ManaxServer.Models.User.UserPermission", b =>
+                {
+                    b.HasOne("ManaxServer.Models.User.User", "User")
+                        .WithMany("UserPermissions")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ManaxServer.Models.User.User", b =>
+                {
+                    b.Navigation("UserPermissions");
                 });
 #pragma warning restore 612, 618
         }

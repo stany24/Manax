@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using ManaxLibrary.DTO.User;
 using ManaxLibrary.Logging;
+using ManaxServer.Attributes;
 using ManaxServer.Localization;
 using ManaxServer.Models;
 using ManaxServer.Models.Claim;
@@ -8,8 +9,8 @@ using ManaxServer.Models.User;
 using ManaxServer.Services.Hash;
 using ManaxServer.Services.Mapper;
 using ManaxServer.Services.Notification;
+using ManaxServer.Services.Permission;
 using ManaxServer.Services.Token;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Primitives;
@@ -23,13 +24,14 @@ public class UserController(
     IMapper mapper,
     IHashService hashService,
     ITokenService tokenService,
-    INotificationService notificationService) : ControllerBase
+    INotificationService notificationService,
+    IPermissionService permissionService) : ControllerBase
 {
     private readonly object _claimLock = new();
 
     // GET: api/Users
     [HttpGet("/api/Users")]
-    [Authorize(Roles = "Admin,Owner")]
+    [RequirePermission(Permission.ReadUsers)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<long>>> GetUsers()
     {
@@ -38,7 +40,7 @@ public class UserController(
 
     // GET: api/User/5
     [HttpGet("{id:long}")]
-    [Authorize(Roles = "Admin,Owner")]
+    [RequirePermission(Permission.ReadUsers)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<UserDto>> GetUser(long id)
@@ -52,7 +54,7 @@ public class UserController(
 
     // PUT: api/User/5
     [HttpPut("{id:long}")]
-    [Authorize(Roles = "Admin,Owner")]
+    [RequirePermission(Permission.WriteUsers)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> PutUser(long id, UserUpdateDto userUpdate)
@@ -80,7 +82,7 @@ public class UserController(
 
     // POST: api/User
     [HttpPost("create")]
-    [Authorize(Roles = "Admin,Owner")]
+    [RequirePermission(Permission.WriteUsers)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<long>> PostUser(UserCreateDto userCreate)
     {
@@ -90,6 +92,9 @@ public class UserController(
 
         context.Users.Add(user);
         await context.SaveChangesAsync();
+
+        await permissionService.SetUserPermissionsAsync(user.Id,PermissionController.GetDefaultPermissionsForRole(user.Role));
+
         notificationService.NotifyUserCreatedAsync(mapper.Map<UserDto>(user));
 
         return user.Id;
@@ -97,7 +102,7 @@ public class UserController(
 
     // DELETE: api/User/5
     [HttpDelete("{id:long}")]
-    [Authorize(Roles = "Admin,Owner")]
+    [RequirePermission(Permission.DeleteUsers)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -125,11 +130,11 @@ public class UserController(
         {
             tokenService.RevokeToken(token);
         }
-        
+
         context.Users.Remove(userToDelete);
         await context.SaveChangesAsync();
         notificationService.NotifyUserDeletedAsync(userToDelete.Id);
-        
+
         return Ok();
     }
 
@@ -209,6 +214,8 @@ public class UserController(
             context.LoginAttempts.Add(loginAttempt);
             context.Users.Add(user);
             context.SaveChanges();
+            
+            permissionService.SetUserPermissions(user.Id,PermissionController.GetDefaultPermissionsForRole(user.Role));
 
             string token = tokenService.GenerateToken(user);
             UserDto userDto = mapper.Map<UserDto>(user);
@@ -223,7 +230,6 @@ public class UserController(
 
     // POST: api/User/logout
     [HttpPost("/api/logout")]
-    [Authorize]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> Logout()

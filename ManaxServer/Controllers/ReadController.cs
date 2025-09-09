@@ -1,4 +1,6 @@
 using ManaxLibrary.DTO.Read;
+using ManaxLibrary.DTO.User;
+using ManaxServer.Attributes;
 using ManaxServer.Localization;
 using ManaxServer.Models;
 using ManaxServer.Models.Chapter;
@@ -6,7 +8,6 @@ using ManaxServer.Models.Read;
 using ManaxServer.Models.User;
 using ManaxServer.Services.Mapper;
 using ManaxServer.Services.Notification;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,7 +18,7 @@ namespace ManaxServer.Controllers;
 public class ReadController(ManaxContext context, IMapper mapper, INotificationService notification) : ControllerBase
 {
     [HttpPut("read")]
-    [Authorize(Roles = "User,Admin,Owner")]
+    [RequirePermission(Permission.MarkChapterAsRead)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -58,7 +59,7 @@ public class ReadController(ManaxContext context, IMapper mapper, INotificationS
     }
 
     [HttpPut("unread")]
-    [Authorize(Roles = "User,Admin,Owner")]
+    [RequirePermission(Permission.MarkChapterAsRead)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]

@@ -1,9 +1,10 @@
 using ManaxLibrary.DTO.SavePoint;
+using ManaxLibrary.DTO.User;
+using ManaxServer.Attributes;
 using ManaxServer.Localization;
 using ManaxServer.Models;
 using ManaxServer.Models.SavePoint;
 using ManaxServer.Services.Mapper;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,7 +16,7 @@ public class SavePointController(ManaxContext context, IMapper mapper) : Control
 {
     // POST: api/SavePoint
     [HttpPost("create")]
-    [Authorize(Roles = "Admin,Owner")]
+    [RequirePermission(Permission.WriteSavePoints)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<ActionResult<long>> PostSavePoint(SavePointCreateDto savePointCreate)
