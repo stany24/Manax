@@ -58,7 +58,12 @@ public class EnglishLocalization: Localization
             { LocalizationKey.SerieCreationFailed, "Serie creation failed." },
             { LocalizationKey.Unauthorized, "Unauthorized access." },
             { LocalizationKey.HubMessageErrorOwner, "Error while sending notification to owner {0}" },
-            { LocalizationKey.HubMessageErrorSingle, "Error while sending notification to {0}: {1}" }
+            { LocalizationKey.HubMessageErrorSingle, "Error while sending notification to {0}: {1}" },
+            { LocalizationKey.PasswordEmpty, "Password is required."},
+            { LocalizationKey.PasswordTooShort, "Password must be at least 14 characters long."},
+            { LocalizationKey.PasswordNoLowercase, "Password must contain at least one lowercase letter."},
+            { LocalizationKey.PasswordNoUppercase, "Password must contain at least one uppercase letter."},
+            { LocalizationKey.PasswordNoSpecialCharacterOrDigit, "Password must contain at least one special character or digit."}
         };
     }
 }

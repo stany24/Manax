@@ -68,5 +68,11 @@ public enum LocalizationKey
     UserMustBeLoggedInDelete,
     UserMustBeLoggedInRead,
     UserNotFound,
-    UserOrChapterNotFound
+    UserOrChapterNotFound,
+    
+    PasswordEmpty,
+    PasswordTooShort,
+    PasswordNoLowercase,
+    PasswordNoUppercase,
+    PasswordNoSpecialCharacterOrDigit,
 }

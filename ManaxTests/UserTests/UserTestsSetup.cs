@@ -3,6 +3,7 @@ using ManaxServer.Controllers;
 using ManaxServer.Models;
 using ManaxServer.Services.Mapper;
 using ManaxServer.Services.Notification;
+using ManaxServer.Services.Validation;
 using ManaxTests.Mocks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -15,6 +16,7 @@ public abstract class UserTestsSetup
     private MockTokenService _mockTokenService = null!;
     private MockPermissionService _mockPermissionService = null!;
     private INotificationService _mockNotificationService = null!;
+    private IPasswordValidationService _mockPasswordValidationService = null!;
     protected ManaxContext Context = null!;
     protected UserController Controller = null!;
     protected MockHashService MockHashService = null!;
@@ -29,9 +31,10 @@ public abstract class UserTestsSetup
         _mockTokenService = new MockTokenService();
         _mockNotificationService = new MockNotificationService();
         _mockPermissionService = new MockPermissionService();
+        _mockPasswordValidationService = new MockPasswordValidationService();
 
         Controller = new UserController(Context, _mapper, MockHashService, _mockTokenService,
-            _mockNotificationService, _mockPermissionService);
+            _mockNotificationService, _mockPermissionService, _mockPasswordValidationService);
 
         ClaimsPrincipal adminUser = new(new ClaimsIdentity([
             new Claim(ClaimTypes.NameIdentifier, "2"),

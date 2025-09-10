@@ -23,9 +23,9 @@ public class GlobalExceptionMiddleware(
 
     private async Task HandleExceptionAsync(HttpContext context, Exception exception)
     {
-        Logger.LogError("An unhandled error occurred: ", exception, Environment.StackTrace);
-
         string traceId = Guid.NewGuid().ToString();
+        
+        Logger.LogError("An unhandled error occurred "+traceId+": ", exception, Environment.StackTrace);
 
         ApiError error = new()
         {
@@ -35,18 +35,6 @@ public class GlobalExceptionMiddleware(
                 ? exception.Message
                 : "An internal server error occurred. Please contact the administrator with the provided trace ID."
         };
-
-        switch (exception)
-        {
-            case UnauthorizedAccessException:
-                error.Status = (int)HttpStatusCode.Unauthorized;
-                error.Message = "You are not authorized to perform this operation.";
-                break;
-            case KeyNotFoundException:
-                error.Status = (int)HttpStatusCode.NotFound;
-                error.Message = "The requested resource was not found.";
-                break;
-        }
 
         context.Response.ContentType = "application/json";
         context.Response.StatusCode = error.Status;

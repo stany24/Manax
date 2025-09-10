@@ -11,6 +11,7 @@ using ManaxServer.Services.Mapper;
 using ManaxServer.Services.Notification;
 using ManaxServer.Services.Permission;
 using ManaxServer.Services.Token;
+using ManaxServer.Services.Validation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Primitives;
@@ -25,7 +26,8 @@ public class UserController(
     IHashService hashService,
     ITokenService tokenService,
     INotificationService notificationService,
-    IPermissionService permissionService) : ControllerBase
+    IPermissionService permissionService,
+    IPasswordValidationService passwordValidationService) : ControllerBase
 {
     private readonly object _claimLock = new();
 
@@ -59,6 +61,10 @@ public class UserController(
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> PutUser(long id, UserUpdateDto userUpdate)
     {
+        if (!passwordValidationService.IsPasswordValid(userUpdate.Password, out string? errorMessage))
+        {
+            return BadRequest(errorMessage);
+        }
         User? user = await context.Users.FindAsync(id);
 
         if (user == null) return NotFound(Localizer.UserNotFound(id));
@@ -86,6 +92,10 @@ public class UserController(
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<long>> PostUser(UserCreateDto userCreate)
     {
+        if (!passwordValidationService.IsPasswordValid(userCreate.Password, out string? errorMessage))
+        {
+            return BadRequest(errorMessage);
+        }
         User user = mapper.Map<User>(userCreate);
         user.Creation = DateTime.UtcNow;
         user.PasswordHash = hashService.HashPassword(userCreate.Password);
@@ -185,6 +195,10 @@ public class UserController(
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public ActionResult<UserLoginResultDto> Claim(ClaimRequest request)
     {
+        if (!passwordValidationService.IsPasswordValid(request.Password, out string? errorMessage))
+        {
+            return BadRequest(errorMessage);
+        }
         LoginAttempt loginAttempt = new()
         {
             Origin = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "Unknown",

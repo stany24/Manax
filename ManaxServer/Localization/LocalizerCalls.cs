@@ -268,4 +268,29 @@ public static partial class Localizer
     {
         return string.Format(_currentLocalization[LocalizationKey.HubMessageErrorSingle],user, methodName);
     }
+    
+    public static string PasswordEmpty()
+    {
+        return _currentLocalization[LocalizationKey.PasswordEmpty];
+    }
+    
+    public static string PasswordTooShort()
+    {
+        return _currentLocalization[LocalizationKey.PasswordTooShort];
+    }
+    
+    public static string PasswordNoLowercase()
+    {
+        return _currentLocalization[LocalizationKey.PasswordNoLowercase];
+    }
+    
+    public static string PasswordNoUppercase()
+    {
+        return _currentLocalization[LocalizationKey.PasswordNoUppercase];
+    }
+    
+    public static string PasswordNoSpecialCharacterOrDigit()
+    {
+        return _currentLocalization[LocalizationKey.PasswordNoSpecialCharacterOrDigit];
+    }
 }

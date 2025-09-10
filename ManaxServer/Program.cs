@@ -13,6 +13,7 @@ using ManaxServer.Services.Notification;
 using ManaxServer.Services.Permission;
 using ManaxServer.Services.Renaming;
 using ManaxServer.Services.Token;
+using ManaxServer.Services.Validation;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.AspNetCore.SignalR;
@@ -53,6 +54,8 @@ public class Program
         builder.Services.AddSingleton<IFixService>(provider =>
             new FixService(provider.GetRequiredService<IServiceScopeFactory>(),
                 provider.GetRequiredService<IIssueService>()));
+        builder.Services.AddSingleton<IPasswordValidationService>(_ =>
+            new PasswordValidationService(builder.Environment.IsProduction()));
         
         builder.Services.AddScoped<IMapper>(_ => new ManaxMapper(new ManaxMapping()));
 

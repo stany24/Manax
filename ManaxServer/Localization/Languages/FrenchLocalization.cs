@@ -58,7 +58,12 @@ public class FrenchLocalization: Localization
             { LocalizationKey.SerieCreationFailed, "La création de la série a échoué." },
             { LocalizationKey.Unauthorized, "Accès non autorisé." },
             { LocalizationKey.HubMessageErrorOwner, "Erreur lors de l'envoi de la notification au propriétaire {0}" },
-            { LocalizationKey.HubMessageErrorSingle, "Erreur lors de l'envoi de la notification a {0} : {1}" }
+            { LocalizationKey.HubMessageErrorSingle, "Erreur lors de l'envoi de la notification a {0} : {1}" },
+            { LocalizationKey.PasswordEmpty, "Le mot de passe est requis."},
+            { LocalizationKey.PasswordTooShort, "Le mot de passe doit contenir au moins 14 caractères."},
+            { LocalizationKey.PasswordNoLowercase, "Le mot de passe doit contenir au moins une lettre minuscule."},
+            { LocalizationKey.PasswordNoUppercase, "Le mot de passe doit contenir au moins une lettre majuscule."},
+            { LocalizationKey.PasswordNoSpecialCharacterOrDigit, "Le mot de passe doit contenir au moins un caractère spécial ou un chiffre."}
         };
     }
 }
