@@ -6,18 +6,18 @@ using ManaxServer.Services.Notification;
 using ManaxTests.Mocks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Moq;
 
 namespace ManaxTests.UserTests;
 
 public abstract class UserTestsSetup
 {
+    private ManaxMapper _mapper = null!;
+    private MockTokenService _mockTokenService = null!;
+    private MockPermissionService _mockPermissionService = null!;
+    private INotificationService _mockNotificationService = null!;
     protected ManaxContext Context = null!;
     protected UserController Controller = null!;
-    private ManaxMapper _mapper = null!;
     protected MockHashService MockHashService = null!;
-    private MockTokenService _mockTokenService = null!;
-    protected Mock<INotificationService> MockNotificationService = null!;
 
     [TestInitialize]
     public void Setup()
@@ -27,10 +27,11 @@ public abstract class UserTestsSetup
         _mapper = new ManaxMapper(new ManaxMapping());
         MockHashService = new MockHashService();
         _mockTokenService = new MockTokenService();
-        MockNotificationService = new Mock<INotificationService>();
+        _mockNotificationService = new MockNotificationService();
+        _mockPermissionService = new MockPermissionService();
 
         Controller = new UserController(Context, _mapper, MockHashService, _mockTokenService,
-            MockNotificationService.Object);
+            _mockNotificationService, _mockPermissionService);
 
         ClaimsPrincipal adminUser = new(new ClaimsIdentity([
             new Claim(ClaimTypes.NameIdentifier, "2"),

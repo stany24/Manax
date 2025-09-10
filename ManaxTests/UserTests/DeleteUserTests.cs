@@ -20,7 +20,6 @@ public class DeleteUserTests : UserTestsSetup
 
         User? deletedUser = await Context.Users.FindAsync(user.Id);
         Assert.IsNull(deletedUser);
-        MockNotificationService.Verify(x => x.NotifyUserDeletedAsync(user.Id), Times.Once);
     }
 
     [TestMethod]

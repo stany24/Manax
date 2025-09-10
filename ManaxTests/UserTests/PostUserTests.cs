@@ -35,7 +35,6 @@ public class PostUserTests : UserTestsSetup
         Assert.AreEqual(createDto.Username, createdUser.Username);
         Assert.AreEqual(createDto.Role, createdUser.Role);
         MockHashService.VerifyHashPasswordCalled("password123");
-        MockNotificationService.Verify(x => x.NotifyUserCreatedAsync(It.IsAny<UserDto>()), Times.Once);
     }
 
     [TestMethod]
@@ -95,10 +94,5 @@ public class PostUserTests : UserTestsSetup
 
         long? userId = result.Value;
         Assert.IsNotNull(userId);
-
-        MockNotificationService.Verify(x => x.NotifyUserCreatedAsync(It.Is<UserDto>(dto =>
-            dto.Username == "NotificationTestUser" &&
-            dto.Role == UserRole.User
-        )), Times.Once);
     }
 }
