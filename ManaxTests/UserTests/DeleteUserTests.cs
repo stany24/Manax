@@ -3,7 +3,6 @@ using ManaxLibrary.DTO.User;
 using ManaxServer.Models.User;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Moq;
 
 namespace ManaxTests.UserTests;
 

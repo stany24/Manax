@@ -1,11 +1,9 @@
-using ManaxLibrary.DTO.Read;
 using ManaxServer.Models.Chapter;
 using ManaxServer.Models.Read;
 using ManaxServer.Models.User;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Moq;
 
 namespace ManaxTests.ReadTests;
 

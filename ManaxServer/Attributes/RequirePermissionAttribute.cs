@@ -2,10 +2,10 @@ using ManaxLibrary.DTO.User;
 using ManaxServer.Services.Token;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using System.Security.Claims;
 
 namespace ManaxServer.Attributes;
 
+[AttributeUsage(AttributeTargets.Method)]
 public class RequirePermissionAttribute(params Permission[] permissions) : Attribute, IAuthorizationFilter
 {
     public void OnAuthorization(AuthorizationFilterContext context)

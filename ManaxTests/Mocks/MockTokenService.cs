@@ -1,4 +1,3 @@
-using ManaxLibrary.DTO.User;
 using ManaxServer.Models.User;
 using ManaxServer.Services.Token;
 
@@ -78,5 +77,10 @@ public class MockTokenService : ITokenService
         }
         
         return tokenInfo;
+    }
+
+    public void AddToken(string token, TokenInfo tokenInfo)
+    {
+        _activeBearerTokens[token] = tokenInfo;
     }
 }

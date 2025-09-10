@@ -1,11 +1,6 @@
-using System.Net;
-using System.Security.Claims;
 using ManaxLibrary.DTO.User;
-using ManaxServer.Models.Claim;
 using ManaxServer.Models.User;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Moq;
 
 namespace ManaxTests.UserTests;
 
