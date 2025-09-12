@@ -1,0 +1,126 @@
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:confirmCancel="clr-namespace:ManaxClient.ViewModels.Popup.ConfirmCancel"
+    mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="500"
+    x:Class="ManaxClient.Views.Popup.ConfirmCancel.SerieUpdateView"
+    x:DataType="confirmCancel:SerieUpdateViewModel">
+    <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" RowSpacing="16" Margin="16">
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="12" Margin="0,0,0,8">
+            <TextBlock Text="📖" FontSize="24" VerticalAlignment="Center"/>
+            <StackPanel Spacing="4">
+                <TextBlock
+                    Text="Mettre à jour la série"
+                    FontSize="18"
+                    FontWeight="Bold"
+                    Foreground="#212529"/>
+                <TextBlock
+                    Text="Modifiez les informations de la série"
+                    FontSize="12"
+                    Foreground="#6C757D"/>
+            </StackPanel>
+        </StackPanel>
+
+        <StackPanel Grid.Row="1" Spacing="8">
+            <TextBlock
+                Text="Titre"
+                FontWeight="Medium"
+                Foreground="#495057"/>
+            <TextBox
+                Text="{Binding Title}"
+                Watermark="Entrez le titre de la série..."
+                Padding="12"
+                CornerRadius="8"
+                BorderThickness="1"
+                BorderBrush="#DEE2E6"
+                FontSize="14">
+                <TextBox.Styles>
+                    <Style Selector="TextBox:pointerover">
+                        <Setter Property="BorderBrush" Value="#007ACC"/>
+                    </Style>
+                    <Style Selector="TextBox:focus">
+                        <Setter Property="BorderBrush" Value="#007ACC"/>
+                    </Style>
+                </TextBox.Styles>
+            </TextBox>
+        </StackPanel>
+
+        <StackPanel Grid.Row="2" Spacing="8">
+            <TextBlock
+                Text="Description"
+                FontWeight="Medium"
+                Foreground="#495057"/>
+            <TextBox
+                Text="{Binding Description}"
+                Watermark="Entrez la description de la série..."
+                AcceptsReturn="True"
+                TextWrapping="Wrap"
+                Height="80"
+                Padding="12"
+                CornerRadius="8"
+                BorderThickness="1"
+                BorderBrush="#DEE2E6"
+                FontSize="14">
+                <TextBox.Styles>
+                    <Style Selector="TextBox:pointerover">
+                        <Setter Property="BorderBrush" Value="#007ACC"/>
+                    </Style>
+                    <Style Selector="TextBox:focus">
+                        <Setter Property="BorderBrush" Value="#007ACC"/>
+                    </Style>
+                </TextBox.Styles>
+            </TextBox>
+        </StackPanel>
+
+        <StackPanel Grid.Row="3" Spacing="8">
+            <TextBlock
+                Text="Statut"
+                FontWeight="Medium"
+                Foreground="#495057"/>
+            <ComboBox
+                Items="{Binding StatusOptions}"
+                SelectedItem="{Binding SelectedStatus}"
+                HorizontalAlignment="Stretch"
+                Padding="12"
+                CornerRadius="8"
+                BorderThickness="1"
+                BorderBrush="#DEE2E6">
+                <ComboBox.Styles>
+                    <Style Selector="ComboBox:pointerover">
+                        <Setter Property="BorderBrush" Value="#007ACC"/>
+                    </Style>
+                    <Style Selector="ComboBox:focus">
+                        <Setter Property="BorderBrush" Value="#007ACC"/>
+                    </Style>
+                </ComboBox.Styles>
+            </ComboBox>
+        </StackPanel>
+
+        <StackPanel Grid.Row="4" Spacing="8">
+            <TextBlock
+                Text="Bibliothèque"
+                FontWeight="Medium"
+                Foreground="#495057"/>
+            <ComboBox
+                Items="{Binding Libraries}"
+                SelectedItem="{Binding SelectedLibrary}"
+                DisplayMemberBinding="Name"
+                HorizontalAlignment="Stretch"
+                Padding="12"
+                CornerRadius="8"
+                BorderThickness="1"
+                BorderBrush="#DEE2E6">
+                <ComboBox.Styles>
+                    <Style Selector="ComboBox:pointerover">
+                        <Setter Property="BorderBrush" Value="#007ACC"/>
+                    </Style>
+                    <Style Selector="ComboBox:focus">
+                        <Setter Property="BorderBrush" Value="#007ACC"/>
+                    </Style>
+                </ComboBox.Styles>
+            </ComboBox>
+        </StackPanel>
+    </Grid>
+</UserControl>

@@ -238,15 +238,20 @@ public class ChapterPreview : Button
 
     private void ShowChoices(object? sender, RoutedEventArgs e)
     {
-        ChooseActionPopup popup = new(["Signaler un problème"]);
-        popup.CloseRequested += (_, _) =>
+        ChooseActionViewModel content = new(["Signaler un problème"]);
+        ConfirmCancelViewModel viewmodel = new(content);
+        Popup popup = new(viewmodel);
+        popup.Closed += (_, _) =>
         {
-            string actionName = popup.GetResult();
-            switch (actionName)
+            if (!viewmodel.Canceled())
             {
-                case "Signaler un problème":
-                    ReportIssue();
-                    break;
+                string actionName = content.GetResult();
+                switch (actionName)
+                {
+                    case "Signaler un problème":
+                        ReportIssue();
+                        break;
+                }
             }
         };
 

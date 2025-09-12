@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
-using ManaxClient.Controls.Popups.User;
+using ManaxClient.ViewModels.Popup.ConfirmCancel;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTO.User;
@@ -77,15 +77,16 @@ public partial class UsersPageViewModel : PageViewModel
 
     public void CreateUser()
     {
-        UserCreatePopup popup = new(Owner);
+        UserCreateViewModel content = new();
+        ConfirmCancelViewModel context = new(content);
+        Controls.Popups.Popup popup = new(context);
         PopupRequested?.Invoke(this, popup);
-        popup.CloseRequested += async void (_, _) =>
+        popup.Closed += async void (_, _) =>
         {
             try
             {
-                popup.Close();
-                UserCreateDto? user = popup.GetResult();
-                if (user == null) return;
+                if (context.Canceled()) { return; }
+                UserCreateDto user = content.GetResult();
                 Optional<long> postUserResponse = await ManaxApiUserClient.PostUserAsync(user);
                 if (postUserResponse.Failed) InfoEmitted?.Invoke(this, postUserResponse.Error);
             }

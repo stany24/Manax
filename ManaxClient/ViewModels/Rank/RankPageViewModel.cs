@@ -4,8 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
-using ManaxClient.Controls.Popups.Rank;
 using ManaxClient.Models.Collections;
+using ManaxClient.ViewModels.Popup.ConfirmCancel;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTO.Rank;
@@ -83,23 +83,22 @@ public partial class RankPageViewModel : PageViewModel
 
     public void UpdateRank(RankDto rank)
     {
-        RankEditPopup rankEditPopup = new(rank);
-        rankEditPopup.CloseRequested += async void (_, _) =>
+        RankEditViewModel content = new(rank);
+        ConfirmCancelViewModel viewModel = new(content);
+        Controls.Popups.Popup popup = new(viewModel);
+        popup.Closed += async (_, _) =>
         {
             try
             {
-                if (rankEditPopup.Canceled)
+                if (viewModel.Canceled())
                 {
-                    rankEditPopup.Close();
                     return;
                 }
 
-                RankDto result = rankEditPopup.GetResult();
+                RankDto result = content.GetResult();
                 Optional<bool> updateRankAsync = await ManaxApiRankClient.UpdateRankAsync(result);
                 if (updateRankAsync.Failed)
                     InfoEmitted?.Invoke(this, updateRankAsync.Error);
-                else
-                    rankEditPopup.Close();
             }
             catch (Exception e)
             {
@@ -107,7 +106,7 @@ public partial class RankPageViewModel : PageViewModel
                 Logger.LogError("Failed to update rank on server", e, Environment.StackTrace);
             }
         };
-        PopupRequested?.Invoke(this, rankEditPopup);
+        PopupRequested?.Invoke(this, popup);
     }
 
     public void DeleteRank(RankDto rank)
@@ -129,20 +128,20 @@ public partial class RankPageViewModel : PageViewModel
 
     public void CreateRank()
     {
-        RankEditPopup rankCreatePopup = new(new RankDto { Name = "New Rank", Value = 10 });
-        rankCreatePopup.CloseRequested += async void (_, _) =>
+        RankEditViewModel content = new(new RankDto { Name = "New Rank", Value = 10 });
+        ConfirmCancelViewModel viewModel = new(content);
+        Controls.Popups.Popup popup = new(viewModel);
+        popup.Closed += async (_, _) =>
         {
             try
             {
-                if (rankCreatePopup.Canceled) return;
-                RankDto result = rankCreatePopup.GetResult();
+                if (viewModel.Canceled()) return;
+                RankDto result = content.GetResult();
                 Optional<bool> rankResponse = await ManaxApiRankClient.CreateRankAsync(new RankCreateDto
                     { Name = result.Name, Value = result.Value });
 
                 if (rankResponse.Failed)
                     InfoEmitted?.Invoke(this, rankResponse.Error);
-                else
-                    rankCreatePopup.Close();
             }
             catch (Exception e)
             {
@@ -150,6 +149,6 @@ public partial class RankPageViewModel : PageViewModel
                 Logger.LogError("Failed to create rank on server", e, Environment.StackTrace);
             }
         };
-        PopupRequested?.Invoke(this, rankCreatePopup);
+        PopupRequested?.Invoke(this, popup);
     }
 }

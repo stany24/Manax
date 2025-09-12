@@ -7,8 +7,8 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
-using ManaxClient.Controls.Popups.Issue;
 using ManaxClient.Models.Issue;
+using ManaxClient.ViewModels.Popup.ConfirmCancel;
 using ManaxClient.ViewModels.Serie;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
@@ -75,14 +75,16 @@ public partial class IssuesPageViewModel : PageViewModel
         string saveFile = Path.Combine(serieFolder, chapter.FileName);
         string saveFolder = Path.Combine(serieFolder, Path.GetFileNameWithoutExtension(chapter.FileName));
         
-        ReplaceChapterPopup popup = new(saveFolder);
-        popup.CloseRequested += void (_, _) => { PopupClosed(popup,saveFile, saveFolder, chapter); };
+        ReplaceChapterViewModel content = new(saveFolder);
+        ConfirmCancelViewModel viewModel = new(content);
+        Controls.Popups.Popup popup = new(viewModel);
+        popup.Closed += (_, _) => { PopupClosed(viewModel, saveFile, saveFolder, chapter); };
         PopupRequested?.Invoke(this, popup);
         
-        DownloadChapter(saveFile, saveFolder, chapter, popup);
+        DownloadChapter(saveFile, saveFolder, chapter, content);
     }
 
-    private async void DownloadChapter(string saveFile, string saveFolder, ChapterDto chapter, ReplaceChapterPopup popup)
+    private async void DownloadChapter(string saveFile, string saveFolder, ChapterDto chapter, ReplaceChapterViewModel content)
     {
         try
         {
@@ -99,7 +101,7 @@ public partial class IssuesPageViewModel : PageViewModel
             fileStream.Close();
             ZipFile.ExtractToDirectory(saveFile,saveFolder );
             File.Delete(saveFile);
-            popup.CanConfirm = true;
+            content.CanConfirm = true;
         }
         catch (Exception e)
         {
@@ -108,18 +110,15 @@ public partial class IssuesPageViewModel : PageViewModel
         }
     }
 
-
-    private async void PopupClosed(ReplaceChapterPopup popup,string saveFile, string saveFolder, ChapterDto chapter)
+    private async void PopupClosed(ConfirmCancelViewModel viewModel, string saveFile, string saveFolder, ChapterDto chapter)
     {
         try
         {
-            if (popup.Canceled)
+            if (viewModel.Canceled())
             {
-                popup.Close();
                 return;
             }
 
-            popup.Close();
             if (File.Exists(saveFile)) { File.Delete(saveFile); }
             ZipFile.CreateFromDirectory(saveFolder, saveFile);
             byte[] data = await File.ReadAllBytesAsync(saveFile);

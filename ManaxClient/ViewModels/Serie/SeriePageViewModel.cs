@@ -11,10 +11,10 @@ using Avalonia.Media.Imaging;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
-using ManaxClient.Controls.Popups.Serie;
 using ManaxClient.Models;
 using ManaxClient.Models.Collections;
 using ManaxClient.ViewModels.Chapter;
+using ManaxClient.ViewModels.Popup.ConfirmCancel;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTO.Chapter;
@@ -299,14 +299,15 @@ public partial class SeriePageViewModel : PageViewModel
     public void UpdateSerie()
     {
         if (Serie == null) return;
-        SerieUpdatePopup popup = new(Serie);
-        popup.CloseRequested += async void (_, _) =>
+        SerieUpdateViewModel content = new(Serie);
+        ConfirmCancelViewModel viewModel = new(content);
+        Controls.Popups.Popup popup = new(viewModel);
+        popup.Closed += async (_, _) =>
         {
             try
             {
-                popup.Close();
-                if (popup.Canceled) return;
-                SerieUpdateDto serie = popup.GetResult();
+                if (viewModel.Canceled()) return;
+                SerieUpdateDto serie = content.GetResult();
                 Optional<bool> serieResponse = await ManaxApiSerieClient.PutSerieAsync(Serie.Id, serie);
                 if (serieResponse.Failed) InfoEmitted?.Invoke(this, serieResponse.Error);
             }

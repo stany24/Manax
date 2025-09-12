@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using ManaxClient.Controls.Popups.Tag;
+using ManaxClient.ViewModels.Popup.ConfirmCancel;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTO.Tag;
 using ManaxLibrary.Notifications;
@@ -61,15 +61,16 @@ public class TagPageViewModel: PageViewModel
 
     public void CreateTag()
     {
-        TagEditPopup popup = new(null);
-        popup.CloseRequested += async (_, _) =>
+        TagEditViewModel content = new(new TagDto { Name = "Nouveau Tag", Color = System.Drawing.Color.Blue });
+        ConfirmCancelViewModel viewModel = new(content);
+        Controls.Popups.Popup popup = new(viewModel);
+        popup.Closed += async (_, _) =>
         {
-            if (popup.Canceled)
+            if (viewModel.Canceled())
             {
-                popup.Close();
                 return;
             }
-            TagDto result = popup.GetResult();
+            TagDto result = content.GetResult();
             try
             {
                 TagCreateDto tagCreate = new()
@@ -91,16 +92,17 @@ public class TagPageViewModel: PageViewModel
 
     public void UpdateTag(TagDto tag)
     {
-        TagEditPopup popup = new(tag);
+        TagEditViewModel content = new(tag);
+        ConfirmCancelViewModel viewModel = new(content);
+        Controls.Popups.Popup popup = new(viewModel);
         
-        popup.CloseRequested += async (_, _) =>
+        popup.Closed += async (_, _) =>
         {
-            if (popup.Canceled)
+            if (viewModel.Canceled())
             {
-                popup.Close();
                 return;
-            };
-            TagDto result = popup.GetResult();
+            }
+            TagDto result = content.GetResult();
             try
             {
                 await ManaxApiTagClient.UpdateTagAsync(result);

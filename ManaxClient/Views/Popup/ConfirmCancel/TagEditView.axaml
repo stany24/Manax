@@ -1,0 +1,63 @@
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:confirmCancel="clr-namespace:ManaxClient.ViewModels.Popup.ConfirmCancel"
+    mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="250"
+    x:Class="ManaxClient.Views.Popup.ConfirmCancel.TagEditView"
+    x:DataType="confirmCancel:TagEditViewModel">
+    <Grid RowDefinitions="Auto,Auto,Auto" RowSpacing="16" Margin="16">
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="12" Margin="0,0,0,8">
+            <TextBlock Text="🏷️" FontSize="24" VerticalAlignment="Center"/>
+            <StackPanel Spacing="4">
+                <TextBlock
+                    Text="Modifier le tag"
+                    FontSize="18"
+                    FontWeight="Bold"
+                    Foreground="#212529"/>
+                <TextBlock
+                    Text="Modifiez les propriétés du tag"
+                    FontSize="12"
+                    Foreground="#6C757D"/>
+            </StackPanel>
+        </StackPanel>
+
+        <StackPanel Grid.Row="1" Spacing="8">
+            <TextBlock
+                Text="Nom du tag"
+                FontWeight="Medium"
+                Foreground="#495057"/>
+            <TextBox
+                Text="{Binding Name}"
+                Watermark="Entrez le nom du tag..."
+                Padding="12"
+                CornerRadius="8"
+                BorderThickness="1"
+                BorderBrush="#DEE2E6"
+                FontSize="14">
+                <TextBox.Styles>
+                    <Style Selector="TextBox:pointerover">
+                        <Setter Property="BorderBrush" Value="#007ACC"/>
+                    </Style>
+                    <Style Selector="TextBox:focus">
+                        <Setter Property="BorderBrush" Value="#007ACC"/>
+                    </Style>
+                </TextBox.Styles>
+            </TextBox>
+        </StackPanel>
+
+        <StackPanel Grid.Row="2" Spacing="8">
+            <TextBlock
+                Text="Couleur"
+                FontWeight="Medium"
+                Foreground="#495057"/>
+            <Rectangle
+                Width="40"
+                Height="20"
+                Fill="{Binding Color}"
+                HorizontalAlignment="Left"
+                CornerRadius="4"/>
+        </StackPanel>
+    </Grid>
+</UserControl>

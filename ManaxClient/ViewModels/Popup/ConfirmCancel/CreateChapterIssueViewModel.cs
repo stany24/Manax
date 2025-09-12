@@ -11,7 +11,7 @@ namespace ManaxClient.ViewModels.Popup.ConfirmCancel;
 public partial class CreateChapterIssueViewModel: ConfirmCancelContentViewModel
 {
     public ObservableCollection<ReportedIssueChapterTypeDto> Issues { get; } = [];
-    [ObservableProperty] private ReportedIssueChapterTypeDto _selectedIssue;
+    [ObservableProperty] private ReportedIssueChapterTypeDto? _selectedIssue;
     private readonly long _chapterId;
     
     public CreateChapterIssueViewModel(long chapterId)
@@ -42,7 +42,7 @@ public partial class CreateChapterIssueViewModel: ConfirmCancelContentViewModel
         return new ReportedIssueChapterCreateDto
         {
             ChapterId = _chapterId,
-            ProblemId = SelectedIssue.Id
+            ProblemId = SelectedIssue?.Id ?? 0
         };
     }
 }

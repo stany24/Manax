@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
-using ManaxClient.Controls.Popups.Library;
-using ManaxClient.Controls.Popups.SavePoint;
+using ManaxClient.ViewModels.Popup.ConfirmCancel;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTO.Library;
@@ -72,21 +71,22 @@ public partial class SettingsServerPageViewModel : PageViewModel
 
     public void CreateSavePoint()
     {
-        SavePointCreatePopup popup = new();
-        popup.CloseRequested += async void (_, _) =>
+        SavePointCreateViewModel content = new();
+        ConfirmCancelViewModel viewModel = new(content);
+        Controls.Popups.Popup popup = new(viewModel);
+        popup.Closed += async (_, _) =>
         {
             try
             {
-                popup.Close();
-                SavePointCreateDto? savePoint = popup.GetResult();
-                if (savePoint == null) return;
+                if (viewModel.Canceled()) return;
+                SavePointCreateDto savePoint = content.GetResult();
                 Optional<long> postLibraryResponse = await ManaxApiSavePointClient.PostSavePointAsync(savePoint);
                 if (postLibraryResponse.Failed) InfoEmitted?.Invoke(this, postLibraryResponse.Error);
             }
             catch (Exception e)
             {
-                Logger.LogError("Error creating library", e, Environment.StackTrace);
-                InfoEmitted?.Invoke(this, "Error creating library");
+                Logger.LogError("Error creating save point", e, Environment.StackTrace);
+                InfoEmitted?.Invoke(this, "Error creating save point");
             }
         };
         PopupRequested?.Invoke(this, popup);
@@ -94,15 +94,16 @@ public partial class SettingsServerPageViewModel : PageViewModel
 
     public void CreateLibrary()
     {
-        LibraryCreatePopup popup = new();
-        popup.CloseRequested += async void (_, _) =>
+        LibraryCreateViewModel content = new();
+        ConfirmCancelViewModel viewModel = new(content);
+        Controls.Popups.Popup popup = new(viewModel);
+        popup.Closed += async (_, _) =>
         {
             try
             {
-                popup.Close();
-                LibraryCreateDto? savePoint = popup.GetResult();
-                if (savePoint == null) return;
-                Optional<long> postLibraryResponse = await ManaxApiLibraryClient.PostLibraryAsync(savePoint);
+                if (viewModel.Canceled()) return;
+                LibraryCreateDto library = content.GetResult();
+                Optional<long> postLibraryResponse = await ManaxApiLibraryClient.PostLibraryAsync(library);
                 if (postLibraryResponse.Failed) InfoEmitted?.Invoke(this, postLibraryResponse.Error);
             }
             catch (Exception e)
