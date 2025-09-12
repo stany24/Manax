@@ -1,5 +1,4 @@
 using ManaxLibrary.DTO.User;
-using ManaxServer.Models;
 using ManaxServer.Services.Permission;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
-using ManaxClient.Controls.Popups;
 using ManaxClient.Models;
 using ManaxClient.Models.Collections;
 using ManaxClient.Models.History;
@@ -34,7 +33,7 @@ public partial class MainWindowViewModel : ObservableObject
     [ObservableProperty] private bool _isOwner;
     [ObservableProperty] private ObservableCollection<LibraryDto> _libraries = [];
     [ObservableProperty] private Thickness _pageMargin = new(0, 0, 0, 0);
-    [ObservableProperty] private Popup? _popup;
+    [ObservableProperty] private Controls.Popups.Popup? _popup;
     [ObservableProperty] private SortedObservableCollection<TaskItem> _runningTasks = new([]);
 
     public MainWindowViewModel()
@@ -149,7 +148,7 @@ public partial class MainWindowViewModel : ObservableObject
         });
     }
 
-    private void SetPopup(Popup? popup)
+    private void SetPopup(Controls.Popups.Popup? popup)
     {
         Popup = popup;
         if (Popup is not null) Popup.Closed += (_, _) => Popup = null;

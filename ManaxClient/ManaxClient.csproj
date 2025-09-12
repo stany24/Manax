@@ -120,6 +120,14 @@
         <Compile Update="Views\Stats\ServerStatsPageView.axaml.cs">
             <DependentUpon>ServerStatsPageView.axaml</DependentUpon>
         </Compile>
+        <Compile Update="Views\Popup\ConfirmCancel\ConfirmCancelView.axaml.cs">
+          <DependentUpon>LoginPageView.axaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\Popup\ConfirmCancel\CreateChapterIssueView.axaml.cs">
+          <DependentUpon>CreateChapterIssueView.axaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
     </ItemGroup>
 
     <ItemGroup>

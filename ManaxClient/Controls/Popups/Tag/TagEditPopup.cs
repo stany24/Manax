@@ -1,11 +1,6 @@
 using System;
-using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Data;
-using Avalonia.Data.Converters;
 using Avalonia.Interactivity;
-using Avalonia.Layout;
-using Avalonia.Media;
 using ManaxLibrary.DTO.Tag;
 
 namespace ManaxClient.Controls.Popups.Tag;

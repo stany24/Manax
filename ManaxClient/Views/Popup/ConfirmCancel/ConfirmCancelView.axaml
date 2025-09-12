@@ -1,0 +1,79 @@
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:confirmCancel="clr-namespace:ManaxClient.ViewModels.Popup.ConfirmCancel"
+    mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+    x:Class="ManaxClient.Views.Popup.ConfirmCancel.ConfirmCancelView"
+    x:DataType="confirmCancel:ConfirmCancelViewModel">
+    <Grid 
+        HorizontalAlignment="Center" 
+        VerticalAlignment="Center"
+        RowDefinitions="Auto,10,Auto"
+        ColumnDefinitions="Auto,Auto,Auto">
+        
+        <ContentControl
+            Grid.Row="0"
+            Grid.Column="0"
+            Grid.ColumnSpan="3"
+            Content="{Binding Content}"></ContentControl>
+
+        <Border 
+            Grid.Column="0" 
+            Grid.Row="1" 
+            Grid.ColumnSpan="3" 
+            Height="1" 
+            Background="#E9ECEF" 
+            Margin="0,16,0,16"/>
+
+        <Grid 
+            Grid.Row="2" 
+            Grid.Column="0" 
+            Grid.ColumnSpan="3" 
+            ColumnDefinitions="*,16,*">
+            <Button
+                x:Name="CancelButton"
+                Content="Cancel"
+                HorizontalAlignment="Stretch"
+                HorizontalContentAlignment="Center"
+                Background="#E9ECEF"
+                Foreground="#495057"
+                BorderThickness="0"
+                CornerRadius="8"
+                Padding="16,12"
+                FontWeight="Medium"
+                MinWidth="100"
+                IsEnabled="{Binding Content.CanCancel}"
+                Command="{Binding Cancel}">
+                <Button.Styles>
+                    <Style Selector="Button:pointerover">
+                        <Setter Property="Background" Value="#DEE2E6"/>
+                    </Style>
+                </Button.Styles>
+            </Button>
+            <Button
+                Grid.Column="0"
+                x:Name="OkButton"
+                Content="Confirm"
+                HorizontalAlignment="Stretch"
+                HorizontalContentAlignment="Center"
+                Background="#007ACC"
+                Foreground="White"
+                BorderThickness="0"
+                CornerRadius="8"
+                Padding="16,12"
+                FontWeight="Medium"
+                MinWidth="100"
+                IsEnabled="{Binding Content.CanConfirm}"
+                Command="{Binding Confirm}"
+                HotKey="Enter">
+                <Button.Styles>
+                    <Style Selector="Button:pointerover">
+                        <Setter Property="Background" Value="#005A9E"/>
+                    </Style>
+                </Button.Styles>
+            </Button>
+        </Grid>
+    </Grid>
+</UserControl>

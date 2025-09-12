@@ -11,8 +11,8 @@ using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
 using ManaxClient.Controls.Popups;
-using ManaxClient.Controls.Popups.Issue;
 using ManaxClient.Models;
+using ManaxClient.ViewModels.Popup.ConfirmCancel;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTO.Issue.Reported;
 using ManaxLibrary.DTO.Read;
@@ -256,21 +256,23 @@ public class ChapterPreview : Button
 
     private void ReportIssue()
     {
-        CreateChapterIssuePopup createChapterIssuePopup = new(Chapter.Info.Id);
-        createChapterIssuePopup.CloseRequested += async void (_, _) =>
+        CreateChapterIssueViewModel content = new(Chapter.Info.Id);
+        ConfirmCancelViewModel viewmodel = new(content);
+        Popup popup = new(viewmodel);
+        popup.Closed += async void (_, _) =>
         {
             try
             {
-                if (!createChapterIssuePopup.Canceled)
+                if (viewmodel.Canceled())
                 {
-                    ReportedIssueChapterCreateDto issue = createChapterIssuePopup.GetResult();
+                    ReportedIssueChapterCreateDto issue = content.GetResult();
                     ManaxLibrary.Optional<bool> chapterIssueAsync =
                         await ManaxApiIssueClient.CreateChapterIssueAsync(issue);
                     if (chapterIssueAsync.Failed)
                         InfoEmittedCommand?.Execute(chapterIssueAsync.Error);
                 }
 
-                createChapterIssuePopup.Close();
+                popup.Close();
             }
             catch (Exception e)
             {
@@ -278,7 +280,7 @@ public class ChapterPreview : Button
                 Logger.LogError("Erreur lors de la création d'un problème de chapitre", e, Environment.StackTrace);
             }
         };
-        PopupRequestedCommand?.Execute(createChapterIssuePopup);
+        PopupRequestedCommand?.Execute(popup);
     }
 
     protected override void OnPointerEntered(PointerEventArgs e)

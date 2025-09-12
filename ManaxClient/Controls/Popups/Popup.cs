@@ -8,15 +8,17 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
+using ManaxClient.ViewModels.Popup;
 
 namespace ManaxClient.Controls.Popups;
 
-public abstract class Popup : Panel
+public class Popup : Panel
 {
     private readonly Rectangle _backShadow;
     private readonly Canvas _canvas;
+    private readonly PopupViewModel _viewModel;
 
-    private protected readonly UserControl Form = new()
+    private readonly UserControl _form = new()
     {
         HorizontalAlignment = HorizontalAlignment.Center,
         VerticalAlignment = VerticalAlignment.Center,
@@ -26,10 +28,12 @@ public abstract class Popup : Panel
     };
 
     public EventHandler? Closed;
-    public EventHandler? CloseRequested;
 
-    protected Popup()
+    public Popup(PopupViewModel viewModel)
     {
+        DataContext = viewModel;
+        _viewModel = viewModel;
+        viewModel.CloseRequested += (_, _) => Close();
         Background = Brushes.Transparent;
         HorizontalAlignment = HorizontalAlignment.Stretch;
         VerticalAlignment = VerticalAlignment.Stretch;
@@ -56,12 +60,12 @@ public abstract class Popup : Panel
         LogicalChildren.Add(_canvas);
         VisualChildren.Add(_canvas);
 
-        LogicalChildren.Add(Form);
-        VisualChildren.Add(Form);
+        LogicalChildren.Add(_form);
+        VisualChildren.Add(_form);
 
         AttachedToVisualTree += Popup_AttachedToVisualTree;
 
-        Form.Transitions =
+        _form.Transitions =
         [
             new TransformOperationsTransition
             {
@@ -85,8 +89,9 @@ public abstract class Popup : Panel
             }
         ];
 
-        Form.RenderTransform = new ScaleTransform(0.9, 0.9);
-        Form.Opacity = 0;
+        _form.Content = new ViewLocator().Build(viewModel);
+        _form.RenderTransform = new ScaleTransform(0.9, 0.9);
+        _form.Opacity = 0;
         _canvas.Opacity = 0;
 
         Loaded += OnLoaded;
@@ -95,8 +100,8 @@ public abstract class Popup : Panel
     private void OnLoaded(object? sender, RoutedEventArgs e)
     {
         _canvas.Opacity = 1;
-        Form.Opacity = 1;
-        Form.RenderTransform = new ScaleTransform(1.0, 1.0);
+        _form.Opacity = 1;
+        _form.RenderTransform = new ScaleTransform(1.0, 1.0);
     }
 
     private void Popup_AttachedToVisualTree(object? sender, VisualTreeAttachmentEventArgs e)
@@ -121,22 +126,26 @@ public abstract class Popup : Panel
 
     private void BackShadowPointerPressed(object? sender, PointerPressedEventArgs e)
     {
-        CloseRequested?.Invoke(this, EventArgs.Empty);
-        e.Handled = true;
+        if (_viewModel.CloseAccepted())
+        {
+            Close();
+        }
     }
 
     private void BackShadowTapped(object? sender, TappedEventArgs e)
     {
-        CloseRequested?.Invoke(this, EventArgs.Empty);
-        e.Handled = true;
+        if (_viewModel.CloseAccepted())
+        {
+            Close();
+        }
     }
 
     public async void Close(bool delay = true)
     {
         try
         {
-            Form.Opacity = 0;
-            Form.RenderTransform = new ScaleTransform(0.9, 0.9);
+            _form.Opacity = 0;
+            _form.RenderTransform = new ScaleTransform(0.9, 0.9);
             _canvas.Opacity = 0;
 
             if (delay) await Task.Delay(200);

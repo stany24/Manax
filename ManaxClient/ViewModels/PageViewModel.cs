@@ -2,7 +2,6 @@ using System;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using ManaxClient.Controls.Popups;
 
 namespace ManaxClient.ViewModels;
 
@@ -16,7 +15,7 @@ public abstract partial class PageViewModel : ObservableObject
     public EventHandler<string>? InfoEmitted;
     public EventHandler? NextRequested;
     public EventHandler<PageViewModel>? PageChangedRequested;
-    public EventHandler<Popup>? PopupRequested;
+    public EventHandler<Controls.Popups.Popup>? PopupRequested;
     public EventHandler? PreviousRequested;
 
     public ICommand InfoEmittedCommand => new RelayCommand<string>(info =>
@@ -24,7 +23,7 @@ public abstract partial class PageViewModel : ObservableObject
         if (info != null) InfoEmitted?.Invoke(this, info);
     });
     
-    public ICommand PopupRequestedCommand => new RelayCommand<Popup>(popup =>
+    public ICommand PopupRequestedCommand => new RelayCommand<Controls.Popups.Popup>(popup =>
     {
         if (popup != null) PopupRequested?.Invoke(this, popup);
     });
