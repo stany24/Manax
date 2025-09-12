@@ -4,6 +4,7 @@ using ManaxLibrary.DTO.Library;
 using ManaxLibrary.DTO.Rank;
 using ManaxLibrary.DTO.Read;
 using ManaxLibrary.DTO.Serie;
+using ManaxLibrary.DTO.Tag;
 using ManaxLibrary.DTO.User;
 using ManaxLibrary.Logging;
 using Microsoft.AspNetCore.SignalR.Client;
@@ -44,6 +45,11 @@ public static class ServerNotification
     public static event Action<long>? OnReportedChapterIssueDeleted;
     public static event Action<ReportedIssueSerieDto>? OnReportedSerieIssueCreated;
     public static event Action<long>? OnReportedSerieIssueDeleted;
+    
+    public static event Action<TagDto>? OnTagCreated;
+    public static event Action<TagDto>? OnTagUpdated;
+    public static event Action<long>? OnTagDeleted;
+
 
     public static async Task InitializeAsync(Uri host, string token)
     {
@@ -126,6 +132,15 @@ public static class ServerNotification
 
         _hubConnection.On<long>(nameof(NotificationType.ReportedSerieIssueDeleted),
             issueId => { OnReportedSerieIssueDeleted?.Invoke(issueId); });
+        
+        _hubConnection.On<TagDto>(nameof(NotificationType.TagCreated),
+            tagData => { OnTagCreated?.Invoke(tagData); });
+
+        _hubConnection.On<TagDto>(nameof(NotificationType.TagUpdated),
+            tagData => { OnTagUpdated?.Invoke(tagData); });
+
+        _hubConnection.On<long>(nameof(NotificationType.TagDeleted),
+            tagId => { OnTagDeleted?.Invoke(tagId); });
 
         _hubConnection.On<string>(nameof(NotificationType.Connected),
             message => { Logger.LogInfo("SignalR Server: " + message); });

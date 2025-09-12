@@ -8,7 +8,7 @@ namespace ManaxServer.Controllers;
 
 [Route("api/permission")]
 [ApiController]
-public class PermissionController(ManaxContext context, IPermissionService permissionService) : ControllerBase
+public class PermissionController(IPermissionService permissionService) : ControllerBase
 {
     // POST: api/SavePoint
     [HttpPost("{userId}")]
@@ -30,6 +30,7 @@ public class PermissionController(ManaxContext context, IPermissionService permi
             Permission.ReadSelfStats,
             Permission.ReadLibrary,
             Permission.ReadRanks,
+            Permission.ReadTags,
             
             Permission.WriteIssues,
             Permission.SetMyRank,
@@ -44,6 +45,7 @@ public class PermissionController(ManaxContext context, IPermissionService permi
             Permission.UploadChapter,
             Permission.WriteIssues,
             Permission.WriteRanks,
+            Permission.SetSerieTags,
             
             Permission.DeleteIssues,
             Permission.DeleteRanks
@@ -57,7 +59,9 @@ public class PermissionController(ManaxContext context, IPermissionService permi
             Permission.WriteServerSettings,
             Permission.WriteSavePoints,
             Permission.WriteLibrary,
+            Permission.WriteTags,
             
+            Permission.DeleteTags,
             Permission.DeleteSeries,
             Permission.DeleteChapters,
             Permission.DeleteLibrary,

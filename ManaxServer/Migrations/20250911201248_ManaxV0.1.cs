@@ -97,6 +97,20 @@ namespace ManaxServer.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Tags",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", nullable: false),
+                    Color = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Tags", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
@@ -238,6 +252,30 @@ namespace ManaxServer.Migrations
                         name: "FK_ReportedIssuesSerie_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SerieTags",
+                columns: table => new
+                {
+                    TagId = table.Column<long>(type: "INTEGER", nullable: false),
+                    SerieId = table.Column<long>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SerieTags", x => new { x.TagId, x.SerieId });
+                    table.ForeignKey(
+                        name: "FK_SerieTags_Series_SerieId",
+                        column: x => x.SerieId,
+                        principalTable: "Series",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_SerieTags_Tags_TagId",
+                        column: x => x.TagId,
+                        principalTable: "Tags",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -427,6 +465,17 @@ namespace ManaxServer.Migrations
                 column: "SavePointId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_SerieTags_SerieId",
+                table: "SerieTags",
+                column: "SerieId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tags_Name",
+                table: "Tags",
+                column: "Name",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_UserPermissions_UserId",
                 table: "UserPermissions",
                 column: "UserId");
@@ -470,6 +519,9 @@ namespace ManaxServer.Migrations
                 name: "ReportedIssuesSerie");
 
             migrationBuilder.DropTable(
+                name: "SerieTags");
+
+            migrationBuilder.DropTable(
                 name: "UserPermissions");
 
             migrationBuilder.DropTable(
@@ -483,6 +535,9 @@ namespace ManaxServer.Migrations
 
             migrationBuilder.DropTable(
                 name: "ReportedIssueSerieTypes");
+
+            migrationBuilder.DropTable(
+                name: "Tags");
 
             migrationBuilder.DropTable(
                 name: "Ranks");

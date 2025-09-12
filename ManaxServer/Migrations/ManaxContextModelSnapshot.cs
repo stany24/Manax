@@ -327,6 +327,42 @@ namespace ManaxServer.Migrations
                     b.ToTable("Series");
                 });
 
+            modelBuilder.Entity("ManaxServer.Models.Tag.SerieTag", b =>
+                {
+                    b.Property<long>("TagId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<long>("SerieId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("TagId", "SerieId");
+
+                    b.HasIndex("SerieId");
+
+                    b.ToTable("SerieTags");
+                });
+
+            modelBuilder.Entity("ManaxServer.Models.Tag.Tag", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Color")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("Tags");
+                });
+
             modelBuilder.Entity("ManaxServer.Models.User.LoginAttempt", b =>
                 {
                     b.Property<long>("Id")
@@ -559,6 +595,25 @@ namespace ManaxServer.Migrations
                     b.Navigation("Library");
 
                     b.Navigation("SavePoint");
+                });
+
+            modelBuilder.Entity("ManaxServer.Models.Tag.SerieTag", b =>
+                {
+                    b.HasOne("ManaxServer.Models.Serie.Serie", "Serie")
+                        .WithMany()
+                        .HasForeignKey("SerieId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ManaxServer.Models.Tag.Tag", "Tag")
+                        .WithMany()
+                        .HasForeignKey("TagId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Serie");
+
+                    b.Navigation("Tag");
                 });
 
             modelBuilder.Entity("ManaxServer.Models.User.UserPermission", b =>

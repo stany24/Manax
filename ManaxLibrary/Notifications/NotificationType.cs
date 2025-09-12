@@ -32,5 +32,9 @@ public enum NotificationType
     ReportedChapterIssueCreated,
     ReportedChapterIssueDeleted,
     ReportedSerieIssueCreated,
-    ReportedSerieIssueDeleted
+    ReportedSerieIssueDeleted,
+    
+    TagCreated,
+    TagUpdated,
+    TagDeleted,
 }

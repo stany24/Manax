@@ -293,4 +293,10 @@ public static partial class Localizer
     {
         return _currentLocalization[LocalizationKey.PasswordNoSpecialCharacterOrDigit];
     }
+
+    public static string TagNotFound(long tagId)
+    {
+        
+        return string.Format(_currentLocalization[LocalizationKey.TagNotFound],tagId);
+    }
 }

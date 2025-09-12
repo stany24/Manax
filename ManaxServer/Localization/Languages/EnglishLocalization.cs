@@ -63,7 +63,8 @@ public class EnglishLocalization: Localization
             { LocalizationKey.PasswordTooShort, "Password must be at least 14 characters long."},
             { LocalizationKey.PasswordNoLowercase, "Password must contain at least one lowercase letter."},
             { LocalizationKey.PasswordNoUppercase, "Password must contain at least one uppercase letter."},
-            { LocalizationKey.PasswordNoSpecialCharacterOrDigit, "Password must contain at least one special character or digit."}
+            { LocalizationKey.PasswordNoSpecialCharacterOrDigit, "Password must contain at least one special character or digit."},
+            { LocalizationKey.TagNotFound, "Tag with ID {0} does not exist."}
         };
     }
 }

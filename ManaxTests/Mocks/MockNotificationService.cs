@@ -4,6 +4,7 @@ using ManaxLibrary.DTO.Library;
 using ManaxLibrary.DTO.Rank;
 using ManaxLibrary.DTO.Read;
 using ManaxLibrary.DTO.Serie;
+using ManaxLibrary.DTO.Tag;
 using ManaxLibrary.DTO.User;
 using ManaxServer.Services.Notification;
 
@@ -96,6 +97,18 @@ public class MockNotificationService: INotificationService
     }
 
     public void NotifySerieIssueDeletedAsync(long issueId)
+    {
+    }
+
+    public void NotifyTagCreatedAsync(TagDto tag)
+    {
+    }
+
+    public void NotifyTagUpdatedAsync(TagDto tag)
+    {
+    }
+
+    public void NotifyTagDeletedAsync(long tagId)
     {
     }
 }

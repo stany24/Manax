@@ -97,6 +97,15 @@
                             <TextBlock Text="Rangs" />
                         </StackPanel>
                     </Button>
+                    
+                    <Button Classes="sidebar"
+                            IsVisible="{Binding IsAdmin}"
+                            Command="{Binding ChangePageTags}">
+                        <StackPanel Orientation="Horizontal" Spacing="12">
+                            <TextBlock Text="🏆" FontSize="14" />
+                            <TextBlock Text="Tags" />
+                        </StackPanel>
+                    </Button>
 
                     <TextBlock Classes="subtitle"
                                Text="Paramètres"

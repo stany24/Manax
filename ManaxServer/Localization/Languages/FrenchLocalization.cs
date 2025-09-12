@@ -63,7 +63,8 @@ public class FrenchLocalization: Localization
             { LocalizationKey.PasswordTooShort, "Le mot de passe doit contenir au moins 14 caractères."},
             { LocalizationKey.PasswordNoLowercase, "Le mot de passe doit contenir au moins une lettre minuscule."},
             { LocalizationKey.PasswordNoUppercase, "Le mot de passe doit contenir au moins une lettre majuscule."},
-            { LocalizationKey.PasswordNoSpecialCharacterOrDigit, "Le mot de passe doit contenir au moins un caractère spécial ou un chiffre."}
+            { LocalizationKey.PasswordNoSpecialCharacterOrDigit, "Le mot de passe doit contenir au moins un caractère spécial ou un chiffre."},
+            { LocalizationKey.TagNotFound, "Le tag avec l'ID {0} n'existe pas."}
         };
     }
 }

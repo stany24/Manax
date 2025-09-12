@@ -36,5 +36,10 @@ public enum Permission
     WriteLibrary = 92,
     DeleteLibrary = 93,
     
-    MarkChapterAsRead = 101
+    MarkChapterAsRead = 101,
+    
+    ReadTags = 111,
+    WriteTags = 112,
+    DeleteTags = 113,
+    SetSerieTags = 114,
 }

@@ -4,6 +4,7 @@ using ManaxLibrary.DTO.Library;
 using ManaxLibrary.DTO.Rank;
 using ManaxLibrary.DTO.Read;
 using ManaxLibrary.DTO.Serie;
+using ManaxLibrary.DTO.Tag;
 using ManaxLibrary.DTO.User;
 
 namespace ManaxServer.Services.Notification;
@@ -39,4 +40,8 @@ public interface INotificationService
     void NotifyChapterIssueCreatedAsync(ReportedIssueChapterDto issue);
     void NotifyChapterIssueDeletedAsync(long issueId);
     void NotifySerieIssueDeletedAsync(long issueId);
+    
+    void NotifyTagCreatedAsync(TagDto tag);
+    void NotifyTagUpdatedAsync(TagDto tag);
+    void NotifyTagDeletedAsync(long tagId);
 }

@@ -6,6 +6,7 @@ using ManaxLibrary.DTO.Library;
 using ManaxLibrary.DTO.Rank;
 using ManaxLibrary.DTO.Read;
 using ManaxLibrary.DTO.Serie;
+using ManaxLibrary.DTO.Tag;
 using ManaxLibrary.DTO.User;
 using ManaxLibrary.Logging;
 using ManaxLibrary.Notifications;
@@ -124,6 +125,21 @@ public class NotificationService(IHubContext<NotificationService> hubContext) : 
     public void NotifySerieIssueDeletedAsync(long issueId)
     {
         TrySendToAdminsAsync(NotificationType.ReportedSerieIssueDeleted, issueId);
+    }
+    
+    public void NotifyTagCreatedAsync(TagDto tag)
+    {
+        TrySendToAdminsAsync(NotificationType.TagCreated, tag);
+    }
+
+    public void NotifyTagUpdatedAsync(TagDto tag)
+    {
+        TrySendToAdminsAsync(NotificationType.TagUpdated, tag);
+    }
+
+    public void NotifyTagDeletedAsync(long tagId)
+    {
+        TrySendToAllClientsAsync(NotificationType.TagDeleted, tagId);
     }
 
     public override async Task OnConnectedAsync()

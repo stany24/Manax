@@ -17,6 +17,7 @@ using ManaxClient.ViewModels.Login;
 using ManaxClient.ViewModels.Rank;
 using ManaxClient.ViewModels.Settings;
 using ManaxClient.ViewModels.Stats;
+using ManaxClient.ViewModels.Tag;
 using ManaxClient.ViewModels.User;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
@@ -205,6 +206,11 @@ public partial class MainWindowViewModel : ObservableObject
     public void ChangePageRanks()
     {
         SetPage(new RankPageViewModel());
+    }
+    
+    public void ChangePageTags()
+    {
+        SetPage(new TagPageViewModel());
     }
 
     public void ChangePageSettings()
