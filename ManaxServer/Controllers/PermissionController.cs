@@ -37,6 +37,7 @@ public class PermissionController(IPermissionService permissionService) : Contro
         ];
         
         Permission[] admin = user.Concat([
+            Permission.ReadAllIssues,
             Permission.ReadUsers,
             Permission.ReadServerStats,
             

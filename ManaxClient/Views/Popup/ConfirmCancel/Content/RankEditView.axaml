@@ -55,9 +55,9 @@
             <NumericUpDown
                 Value="{Binding Value}"
                 Minimum="0"
-                Maximum="10"
-                Increment="0.1"
-                FormatString="F1"
+                Maximum="100"
+                Increment="1"
+                FormatString="1"
                 Padding="12"
                 CornerRadius="8"
                 BorderThickness="1"

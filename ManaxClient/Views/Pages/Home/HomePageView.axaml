@@ -7,7 +7,7 @@
     xmlns:page="clr-namespace:ManaxClient.ViewModels.Pages.Home"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Pages.Home.HomePageView"
-    x:DataType="page:HomePage">
+    x:DataType="page:HomePageViewModel">
 
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel Orientation="Vertical" Spacing="24">
@@ -90,7 +90,7 @@
                                             Serie="{Binding .}"
                                             TextColor="{DynamicResource TextColor1}"
                                             BackGroundColor="{DynamicResource Background1}"
-                                            Command="{Binding $parent[UserControl].((page:HomePage)DataContext).MoveToSeriePage}"
+                                            Command="{Binding $parent[UserControl].((page:HomePageViewModel)DataContext).MoveToSeriePage}"
                                             CommandParameter="{Binding .}" />
                                     </Border>
                                 </DataTemplate>

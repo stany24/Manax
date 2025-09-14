@@ -3,10 +3,10 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:content="clr-namespace:ManaxClient.ViewModels.Popup.ConfirmCancel.Content"
+    xmlns:selectChoice="clr-namespace:ManaxClient.ViewModels.Popup.SelectChoice"
     mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="300"
-    x:Class="ManaxClient.Views.Popup.ConfirmCancel.Content.ChooseActionView"
-    x:DataType="content:ChooseActionViewModel">
+    x:Class="ManaxClient.Views.Popup.SelectChoice.ChooseActionView"
+    x:DataType="selectChoice:ChooseActionViewModel">
     <StackPanel Spacing="16" Margin="16">
         <TextBlock
             Text="Actions"
@@ -24,7 +24,7 @@
                         Background="Transparent"
                         BorderThickness="0"
                         Padding="12,8"
-                        Command="{Binding $parent[UserControl].DataContext.SelectAction}"
+                        Command="{Binding $parent[UserControl].((selectChoice:ChooseActionViewModel)DataContext).SelectAction}"
                         CommandParameter="{Binding}">
                         <Button.Styles>
                             <Style Selector="Button:pointerover">

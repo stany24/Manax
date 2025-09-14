@@ -151,8 +151,11 @@ public partial class MainWindowViewModel : ObservableObject
 
     private void SetPopup(Controls.Popups.Popup? popup)
     {
-        Popup = popup;
-        if (Popup is not null) Popup.Closed += (_, _) => Popup = null;
+        Dispatcher.UIThread.Invoke(() =>
+        {
+            Popup = popup;
+            if (Popup is not null) Popup.Closed += (_, _) => Popup = null;
+        });
     }
 
     private void ShowInfo(string info)
@@ -185,12 +188,12 @@ public partial class MainWindowViewModel : ObservableObject
 
     public void ShowLibrary(long libraryId)
     {
-        SetPage(new LibraryPage(libraryId));
+        SetPage(new LibraryPageViewModel(libraryId));
     }
 
     public void ChangePageHome()
     {
-        SetPage(new HomePage());
+        SetPage(new HomePageViewModel());
     }
 
     public void ChangePageIssues()
@@ -220,7 +223,7 @@ public partial class MainWindowViewModel : ObservableObject
 
     public void ChangePageAppSettings()
     {
-        SetPage(new SettingsApp());
+        SetPage(new SettingsAppViewModel());
     }
 
     public void ChangePageUserStats()

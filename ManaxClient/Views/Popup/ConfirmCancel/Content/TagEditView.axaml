@@ -7,7 +7,7 @@
     mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="250"
     x:Class="ManaxClient.Views.Popup.ConfirmCancel.Content.TagEditView"
     x:DataType="content:TagEditViewModel">
-    <Grid RowDefinitions="Auto,Auto,Auto" RowSpacing="16" Margin="16">
+    <Grid RowDefinitions="Auto,Auto,Auto,Auto" RowSpacing="16" Margin="16">
         <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="12" Margin="0,0,0,8">
             <TextBlock Text="🏷️" FontSize="24" VerticalAlignment="Center"/>
             <StackPanel Spacing="4">
@@ -52,11 +52,18 @@
                 Text="Couleur"
                 FontWeight="Medium"
                 Foreground="#495057"/>
-            <Rectangle
-                Width="40"
-                Height="20"
-                Fill="{Binding Color}"
-                HorizontalAlignment="Left"/>
+            <ColorPicker
+                Color="{Binding Color,Mode=TwoWay}"/>
         </StackPanel>
+        <Border
+            Grid.Row="3"
+            HorizontalAlignment="Left"
+            CornerRadius="5"
+            Background="{Binding ColorBrush}">
+            <TextBlock
+                Margin="5"
+                Text="{Binding Name}"/>
+        </Border>
+        
     </Grid>
 </UserControl>

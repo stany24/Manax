@@ -4,23 +4,70 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:content="clr-namespace:ManaxClient.ViewModels.Popup.ConfirmCancel.Content"
-    mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+    mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="200"
     x:Class="ManaxClient.Views.Popup.ConfirmCancel.Content.CreateChapterIssueView"
     x:DataType="content:CreateChapterIssueViewModel">
-    <Grid 
-        RowDefinitions="Auto" 
-        ColumnDefinitions="Auto,*">
-        <TextBlock
-            Grid.Column="0"
-            Text="Problème:"
-            FontSize="18"
-            FontWeight="Bold"
-            Margin="0,0,0,10"/>
+    <Grid RowDefinitions="Auto,Auto,Auto" RowSpacing="16" Margin="16">
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="12" Margin="0,0,0,8">
+            <TextBlock Text="❗" FontSize="24" VerticalAlignment="Center"/>
+            <StackPanel Spacing="4">
+                <TextBlock
+                    Text="Signaler un problème de chapitre"
+                    FontSize="18"
+                    FontWeight="Bold"
+                    Foreground="#212529"/>
+                <TextBlock
+                    Text="Sélectionnez le type de problème rencontré sur ce chapitre"
+                    FontSize="12"
+                    Foreground="#6C757D"/>
+            </StackPanel>
+        </StackPanel>
 
-        <ComboBox
-            Grid.Column="1"
-            HorizontalAlignment="Stretch"
-            ItemsSource="{Binding Issues}"
-            SelectedItem="{Binding SelectedIssue, Mode=TwoWay}"/>
+        <StackPanel Grid.Row="1" Spacing="8">
+            <TextBlock
+                Text="Type de problème"
+                FontWeight="Medium"
+                Foreground="#495057"/>
+            <ComboBox
+                ItemsSource="{Binding Issues}"
+                SelectedItem="{Binding SelectedIssue, Mode=TwoWay}"
+                Padding="12"
+                CornerRadius="8"
+                BorderThickness="1"
+                BorderBrush="#DEE2E6"
+                FontSize="14"
+                HorizontalAlignment="Stretch">
+                <ComboBox.Styles>
+                    <Style Selector="ComboBox:pointerover">
+                        <Setter Property="BorderBrush" Value="#007ACC"/>
+                    </Style>
+                    <Style Selector="ComboBox:focus">
+                        <Setter Property="BorderBrush" Value="#007ACC"/>
+                    </Style>
+                </ComboBox.Styles>
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Name}" Padding="4"/>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+        </StackPanel>
+
+        <Border 
+            Grid.Row="2"
+            Background="#FFF3CD"
+            BorderBrush="#FFC107"
+            BorderThickness="1"
+            CornerRadius="8"
+            Padding="12">
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <TextBlock Text="💡" FontSize="14" VerticalAlignment="Top"/>
+                <TextBlock
+                    Text="Signaler un problème permet d'améliorer la qualité des chapitres. Veuillez choisir le type le plus approprié."
+                    TextWrapping="Wrap"
+                    FontSize="12"
+                    Foreground="#495057"/>
+            </StackPanel>
+        </Border>
     </Grid>
 </UserControl>

@@ -8,14 +8,24 @@ using ManaxLibrary.DTO.Issue.Reported;
 
 namespace ManaxClient.ViewModels.Popup.ConfirmCancel.Content;
 
-public partial class CreateChapterIssueViewModel: ConfirmCancelContentViewModel
+public class CreateChapterIssueViewModel: ConfirmCancelContentViewModel
 {
     public ObservableCollection<ReportedIssueChapterTypeDto> Issues { get; } = [];
-    [ObservableProperty] private ReportedIssueChapterTypeDto? _selectedIssue;
     private readonly long _chapterId;
-    
+    private ReportedIssueChapterTypeDto? _selectedIssue;
+    public ReportedIssueChapterTypeDto? SelectedIssue
+    {
+        get => _selectedIssue;
+        set
+        {
+            SetProperty(ref _selectedIssue, value);
+            CanConfirm = value != null;
+        }
+    }
+
     public CreateChapterIssueViewModel(long chapterId)
     {
+        CanConfirm = false;
         _chapterId = chapterId;
         _ = LoadProblems();
     }

@@ -14,11 +14,11 @@ using ManaxLibrary.Logging;
 
 namespace ManaxClient.ViewModels.Pages.Home;
 
-public partial class HomePage : BaseSeries
+public partial class HomePageViewModel : BaseSeries
 {
     [ObservableProperty] private bool _isFolderPickerOpen;
 
-    public HomePage()
+    public HomePageViewModel()
     {
         Task.Run(async () =>
         {

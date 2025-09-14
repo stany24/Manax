@@ -4,14 +4,14 @@ using ManaxClient.Models;
 
 namespace ManaxClient.ViewModels.Pages.Settings;
 
-public partial class SettingsApp : PageViewModel
+public partial class SettingsAppViewModel : PageViewModel
 {
     [ObservableProperty] private List<Theme> _availableThemes;
 
     private bool _isDarkMode;
     private Theme _selectedTheme;
 
-    public SettingsApp()
+    public SettingsAppViewModel()
     {
         _availableThemes = ThemePresets.GetPresets();
         _selectedTheme = _availableThemes[0];

@@ -1,6 +1,6 @@
 using Avalonia.Controls;
 
-namespace ManaxClient.Views.Popup.ConfirmCancel.Content;
+namespace ManaxClient.Views.Popup.SelectChoice;
 
 public partial class ChooseActionView : UserControl
 {

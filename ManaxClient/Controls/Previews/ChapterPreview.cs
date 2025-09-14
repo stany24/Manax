@@ -10,10 +10,12 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
+using Avalonia.Threading;
 using ManaxClient.Controls.Popups;
 using ManaxClient.Models;
 using ManaxClient.ViewModels.Popup.ConfirmCancel;
 using ManaxClient.ViewModels.Popup.ConfirmCancel.Content;
+using ManaxClient.ViewModels.Popup.SelectChoice;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTO.Issue.Reported;
 using ManaxLibrary.DTO.Read;
@@ -239,20 +241,17 @@ public class ChapterPreview : Button
 
     private void ShowChoices(object? sender, RoutedEventArgs e)
     {
-        ChooseActionViewModel content = new(["Signaler un problème"]);
-        ConfirmCancelViewModel viewmodel = new(content);
+        const string signalIssue = "Signaler un problème";
+        ChooseActionViewModel viewmodel = new([signalIssue]);
         Popup popup = new(viewmodel);
         popup.Closed += (_, _) =>
         {
-            if (!viewmodel.Canceled())
+            string actionName = viewmodel.GetResult();
+            switch (actionName)
             {
-                string actionName = content.GetResult();
-                switch (actionName)
-                {
-                    case "Signaler un problème":
-                        ReportIssue();
-                        break;
-                }
+                case signalIssue:
+                    ReportIssue();
+                    break;
             }
         };
 
@@ -269,16 +268,12 @@ public class ChapterPreview : Button
         {
             try
             {
-                if (viewmodel.Canceled())
-                {
-                    ReportedIssueChapterCreateDto issue = content.GetResult();
-                    ManaxLibrary.Optional<bool> chapterIssueAsync =
-                        await ManaxApiIssueClient.CreateChapterIssueAsync(issue);
-                    if (chapterIssueAsync.Failed)
-                        InfoEmittedCommand?.Execute(chapterIssueAsync.Error);
-                }
-
-                popup.Close();
+                if (viewmodel.Canceled()) return;
+                ReportedIssueChapterCreateDto issue = content.GetResult();
+                ManaxLibrary.Optional<bool> chapterIssueAsync =
+                    await ManaxApiIssueClient.CreateChapterIssueAsync(issue);
+                if (chapterIssueAsync.Failed)
+                    InfoEmittedCommand?.Execute(chapterIssueAsync.Error);
             }
             catch (Exception e)
             {
@@ -286,7 +281,10 @@ public class ChapterPreview : Button
                 Logger.LogError("Erreur lors de la création d'un problème de chapitre", e, Environment.StackTrace);
             }
         };
-        PopupRequestedCommand?.Execute(popup);
+        Dispatcher.UIThread.Post(() =>
+        {
+            PopupRequestedCommand?.Execute(popup);
+        });
     }
 
     protected override void OnPointerEntered(PointerEventArgs e)

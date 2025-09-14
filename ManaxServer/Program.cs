@@ -126,24 +126,13 @@ public class Program
                 new ReportedIssueChapterType { Name = "Bad quality" });
             manaxContext.SaveChanges();
         }
-
+        
         if (!manaxContext.ReportedIssueSerieTypes.Any())
         {
-            IEnumerable<AutomaticIssueSerieType> values =
-                Enum.GetValues(typeof(AutomaticIssueSerieType)).Cast<AutomaticIssueSerieType>();
-            foreach (AutomaticIssueSerieType serieIssueTypeEnum in values)
-                manaxContext.ReportedIssueSerieTypes.Add(new ReportedIssueSerieType
-                    { Name = serieIssueTypeEnum.ToString() });
-            manaxContext.SaveChanges();
-        }
-
-        if (!manaxContext.ReportedIssueChapterTypes.Any())
-        {
-            IEnumerable<AutomaticIssueChapterType> values =
-                Enum.GetValues(typeof(AutomaticIssueChapterType)).Cast<AutomaticIssueChapterType>();
-            foreach (AutomaticIssueChapterType serieIssueTypeEnum in values)
-                manaxContext.ReportedIssueChapterTypes.Add(new ReportedIssueChapterType
-                    { Name = serieIssueTypeEnum.ToString() });
+            manaxContext.ReportedIssueSerieTypes.AddRange(
+                new ReportedIssueSerieType { Name = "Wrong description" },
+                new ReportedIssueSerieType { Name = "Wrong poster" },
+                new ReportedIssueSerieType { Name = "Wrong name" });
             manaxContext.SaveChanges();
         }
     }

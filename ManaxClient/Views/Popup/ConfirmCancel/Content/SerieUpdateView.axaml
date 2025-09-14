@@ -119,6 +119,11 @@
                         <Setter Property="BorderBrush" Value="#007ACC"/>
                     </Style>
                 </ComboBox.Styles>
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Name}" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
             </ComboBox>
         </StackPanel>
     </Grid>

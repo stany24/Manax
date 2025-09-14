@@ -13,11 +13,11 @@ using ManaxLibrary.Notifications;
 
 namespace ManaxClient.ViewModels.Pages.Library;
 
-public partial class LibraryPage : BaseSeries
+public partial class LibraryPageViewModel : BaseSeries
 {
     [ObservableProperty] private LibraryDto? _library;
 
-    public LibraryPage(long libraryId)
+    public LibraryPageViewModel(long libraryId)
     {
         Task.Run(() => { LoadLibrary(libraryId); });
         Task.Run(() => { LoadSeries(new Search { IncludedLibraries = [libraryId] }); });
@@ -27,7 +27,7 @@ public partial class LibraryPage : BaseSeries
     private void OnLibraryDeleted(long libraryId)
     {
         if (Library == null || Library.Id != libraryId) return;
-        PageChangedRequested?.Invoke(this, new HomePage());
+        PageChangedRequested?.Invoke(this, new HomePageViewModel());
         InfoEmitted?.Invoke(this, "Library \'" + Library.Name + "\' was deleted");
     }
 
@@ -64,7 +64,7 @@ public partial class LibraryPage : BaseSeries
         {
             Optional<bool> deleteLibraryResponse = await ManaxApiLibraryClient.DeleteLibraryAsync(Library.Id);
             if (deleteLibraryResponse.Failed)
-                PageChangedRequested?.Invoke(this, new HomePage());
+                PageChangedRequested?.Invoke(this, new HomePageViewModel());
             else
                 InfoEmitted?.Invoke(this, "Library '" + Library.Name + "' was correctly deleted");
         }));

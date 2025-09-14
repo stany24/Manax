@@ -53,13 +53,13 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Avalonia" Version="11.3.4" />
-        <PackageReference Include="Avalonia.Controls.ColorPicker" Version="11.3.4" />
-        <PackageReference Include="Avalonia.Desktop" Version="11.3.4" />
-        <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.4" />
-        <PackageReference Include="Avalonia.Fonts.Inter" Version="11.3.4" />
+        <PackageReference Include="Avalonia" Version="11.3.6" />
+        <PackageReference Include="Avalonia.Controls.ColorPicker" Version="11.3.6" />
+        <PackageReference Include="Avalonia.Desktop" Version="11.3.6" />
+        <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.6" />
+        <PackageReference Include="Avalonia.Fonts.Inter" Version="11.3.6" />
         <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
-        <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.3.4" />
+        <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.3.6" />
         <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
         <PackageReference Include="LiveChartsCore.SkiaSharpView.Avalonia" Version="2.0.0-rc5.4" />
         <PackageReference Include="nulastudio.NetBeauty" Version="2.1.5" />
@@ -122,7 +122,7 @@
           <DependentUpon>SerieUpdateView.axaml</DependentUpon>
           <SubType>Code</SubType>
         </Compile>
-        <Compile Update="Views\Popup\ConfirmCancel\Content\ChooseActionView.axaml.cs">
+        <Compile Update="Views\Popup\SelectChoice\ChooseActionView.axaml.cs">
           <DependentUpon>ChooseActionView.axaml</DependentUpon>
           <SubType>Code</SubType>
         </Compile>

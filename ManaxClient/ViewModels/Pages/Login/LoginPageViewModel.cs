@@ -59,7 +59,7 @@ public partial class LoginPageViewModel : PageViewModel
             _isOwner = self.Role is UserRole.Owner;
             InfoEmitted?.Invoke(this, $"Logged in as {self.Username} ({self.Role})");
             Logger.LogInfo($"Logged in as {self.Username} ({self.Role})");
-            PageChangedRequested?.Invoke(this, new HomePage());
+            PageChangedRequested?.Invoke(this, new HomePageViewModel());
         }
         catch (Exception)
         {

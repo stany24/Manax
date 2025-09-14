@@ -6,7 +6,7 @@
     xmlns:page="clr-namespace:ManaxClient.ViewModels.Pages.Settings"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Pages.Settings.SettingsAppView"
-    x:DataType="page:SettingsApp">
+    x:DataType="page:SettingsAppViewModel">
 
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel Orientation="Vertical" Spacing="24">

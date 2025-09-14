@@ -15,6 +15,7 @@ using ManaxClient.Models;
 using ManaxClient.Models.Collections;
 using ManaxClient.ViewModels.Pages.Chapter;
 using ManaxClient.ViewModels.Popup.ConfirmCancel;
+using ManaxClient.ViewModels.Popup.ConfirmCancel.Content;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTO.Chapter;

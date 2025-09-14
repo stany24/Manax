@@ -8,7 +8,6 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
-using ManaxClient.ViewModels.Popup;
 
 namespace ManaxClient.Controls.Popups;
 
@@ -140,7 +139,7 @@ public class Popup : Panel
         }
     }
 
-    public async void Close(bool delay = true)
+    private async void Close(bool delay = true)
     {
         try
         {

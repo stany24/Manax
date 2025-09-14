@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using ManaxClient.ViewModels.Popup.ConfirmCancel;
+using ManaxClient.ViewModels.Popup.ConfirmCancel.Content;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTO.Library;
