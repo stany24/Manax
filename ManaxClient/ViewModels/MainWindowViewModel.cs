@@ -9,19 +9,20 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using ManaxClient.Models;
 using ManaxClient.Models.Collections;
 using ManaxClient.Models.History;
-using ManaxClient.ViewModels.Home;
-using ManaxClient.ViewModels.Issue;
-using ManaxClient.ViewModels.Library;
-using ManaxClient.ViewModels.Login;
-using ManaxClient.ViewModels.Rank;
-using ManaxClient.ViewModels.Settings;
-using ManaxClient.ViewModels.Stats;
-using ManaxClient.ViewModels.Tag;
-using ManaxClient.ViewModels.User;
+using ManaxClient.ViewModels.Pages.Tag;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTO.Library;
 using ManaxLibrary.Notifications;
+using ManaxClient.ViewModels.Pages;
+using ManaxClient.ViewModels.Pages.Home;
+using ManaxClient.ViewModels.Pages.Issue;
+using ManaxClient.ViewModels.Pages.Library;
+using ManaxClient.ViewModels.Pages.Login;
+using ManaxClient.ViewModels.Pages.Rank;
+using ManaxClient.ViewModels.Pages.Settings;
+using ManaxClient.ViewModels.Pages.Stats;
+using ManaxClient.ViewModels.Pages.User;
 
 namespace ManaxClient.ViewModels;
 
@@ -69,7 +70,7 @@ public partial class MainWindowViewModel : ObservableObject
 
     public bool CanGoBack => _history.CanGoBack;
     public bool CanGoForward => _history.CanGoForward;
-    public PageViewModel? CurrentPageViewModel => _history.CurrentPage;
+    public Pages.PageViewModel? CurrentPageViewModel => _history.CurrentPage;
 
     ~MainWindowViewModel()
     {
@@ -176,20 +177,20 @@ public partial class MainWindowViewModel : ObservableObject
         OnPropertyChanged(nameof(CurrentPageViewModel));
     }
 
-    private void SetPage(PageViewModel page)
+    private void SetPage(PageViewModel pageViewModel)
     {
-        _history.SetPage(page);
+        _history.SetPage(pageViewModel);
         OnPropertyChanged(nameof(CurrentPageViewModel));
     }
 
     public void ShowLibrary(long libraryId)
     {
-        SetPage(new LibraryPageViewModel(libraryId));
+        SetPage(new LibraryPage(libraryId));
     }
 
     public void ChangePageHome()
     {
-        SetPage(new HomePageViewModel());
+        SetPage(new HomePage());
     }
 
     public void ChangePageIssues()
@@ -219,7 +220,7 @@ public partial class MainWindowViewModel : ObservableObject
 
     public void ChangePageAppSettings()
     {
-        SetPage(new SettingsAppViewModel());
+        SetPage(new SettingsApp());
     }
 
     public void ChangePageUserStats()

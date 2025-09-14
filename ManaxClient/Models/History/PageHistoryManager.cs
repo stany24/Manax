@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
-using ManaxClient.ViewModels;
-using ManaxClient.ViewModels.Login;
+using ManaxClient.ViewModels.Pages;
+using ManaxClient.ViewModels.Pages.Login;
 
 namespace ManaxClient.Models.History;
 
@@ -18,17 +18,17 @@ public class PageHistoryManager
     public event Action<PageViewModel>? OnPageChanged;
     public event Action<PageViewModel>? OnPageChanging;
 
-    private void SetCurrent(PageViewModel page)
+    private void SetCurrent(PageViewModel pageViewModel)
     {
         CurrentPage?.OnPageClosed();
-        OnPageChanging?.Invoke(page);
-        CurrentPage = page;
-        OnPageChanged?.Invoke(page);
+        OnPageChanging?.Invoke(pageViewModel);
+        CurrentPage = pageViewModel;
+        OnPageChanged?.Invoke(pageViewModel);
     }
 
-    public void SetPage(PageViewModel page)
+    public void SetPage(PageViewModel pageViewModel)
     {
-        if (!_navigatingHistory && !ReferenceEquals(CurrentPage, page))
+        if (!_navigatingHistory && !ReferenceEquals(CurrentPage, pageViewModel))
         {
             if (CurrentPage is LoginPageViewModel)
                 _backStack.Clear();
@@ -37,8 +37,8 @@ public class PageHistoryManager
             _forwardStack.Clear();
         }
 
-        if (ReferenceEquals(CurrentPage, page)) return;
-        SetCurrent(page);
+        if (ReferenceEquals(CurrentPage, pageViewModel)) return;
+        SetCurrent(pageViewModel);
     }
 
     public void GoBack()

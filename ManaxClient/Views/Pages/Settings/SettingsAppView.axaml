@@ -1,0 +1,95 @@
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:page="clr-namespace:ManaxClient.ViewModels.Pages.Settings"
+    mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+    x:Class="ManaxClient.Views.Pages.Settings.SettingsAppView"
+    x:DataType="page:SettingsApp">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Orientation="Vertical" Spacing="24">
+
+            <StackPanel Orientation="Vertical">
+                <TextBlock Classes="title" Text="Paramètres d'apparence" />
+                <TextBlock Text="🎨 Personnalisez l'apparence de votre application Manax"
+                           Foreground="{StaticResource SecondaryBrush}" />
+            </StackPanel>
+
+            <Border Classes="card">
+                <StackPanel Spacing="20">
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <TextBlock Text="🌙" FontSize="20" />
+                        <TextBlock Classes="subtitle" Text="Mode d'affichage" Margin="0" />
+                    </StackPanel>
+
+                    <Grid ColumnDefinitions="*,*" RowDefinitions="Auto" ColumnSpacing="16" RowSpacing="16">
+                        <StackPanel Grid.Column="0" Grid.Row="0" Spacing="6">
+                            <TextBlock Text="Mode sombre" FontWeight="Medium" />
+                            <ToggleSwitch IsChecked="{Binding IsDarkMode}" />
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <Border Classes="card">
+                <StackPanel Spacing="20">
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <TextBlock Text="🎨" FontSize="20" />
+                        <TextBlock Classes="subtitle" Text="Thème de couleur" Margin="0" />
+                    </StackPanel>
+
+                    <Grid ColumnDefinitions="*" RowDefinitions="Auto,Auto" RowSpacing="16">
+                        <StackPanel Grid.Column="0" Grid.Row="0" Spacing="6">
+                            <TextBlock Text="Thème sélectionné" FontWeight="Medium" />
+                            <ComboBox SelectedItem="{Binding SelectedTheme}"
+                                      ItemsSource="{Binding AvailableThemes}"
+                                      HorizontalAlignment="Stretch">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal" Spacing="8">
+                                            <Border Width="16" Height="16" CornerRadius="8"
+                                                    Background="{Binding PrimaryColor}" />
+                                            <TextBlock Text="{Binding Name}" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="0" Grid.Row="1" Spacing="12">
+                            <TextBlock Text="Aperçu des couleurs" FontWeight="Medium" />
+                            <WrapPanel Orientation="Horizontal" ItemWidth="150" ItemHeight="80">
+                                <Border Classes="card" Margin="4" Width="140" Height="70">
+                                    <StackPanel Spacing="4">
+                                        <TextBlock Text="Primaire" FontSize="12" FontWeight="Medium" />
+                                        <Rectangle Height="20" Fill="{Binding SelectedTheme.PrimaryColor}" />
+                                        <TextBlock Text="{Binding SelectedTheme.PrimaryColor.Color}" FontSize="10" />
+                                    </StackPanel>
+                                </Border>
+
+                                <Border Classes="card" Margin="4" Width="140" Height="70">
+                                    <StackPanel Spacing="4">
+                                        <TextBlock Text="Secondaire" FontSize="12" FontWeight="Medium" />
+                                        <Rectangle Height="20" Fill="{Binding SelectedTheme.SecondaryColor}" />
+                                        <TextBlock Text="{Binding SelectedTheme.SecondaryColor.Color}" FontSize="10" />
+                                    </StackPanel>
+                                </Border>
+
+                                <Border Classes="card" Margin="4" Width="140" Height="70">
+                                    <StackPanel Spacing="4">
+                                        <TextBlock Text="Tertiaire" FontSize="12" FontWeight="Medium" />
+                                        <Rectangle Height="20" Fill="{Binding SelectedTheme.TertiaryColor}" />
+                                        <TextBlock Text="{Binding SelectedTheme.TertiaryColor.Color}" FontSize="10" />
+                                    </StackPanel>
+                                </Border>
+                            </WrapPanel>
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+
+</UserControl>

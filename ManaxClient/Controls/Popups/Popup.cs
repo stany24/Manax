@@ -16,7 +16,7 @@ public class Popup : Panel
 {
     private readonly Rectangle _backShadow;
     private readonly Canvas _canvas;
-    private readonly PopupViewModel _viewModel;
+    private readonly ViewModels.Popup.PopupViewModel _viewModel;
 
     private readonly UserControl _form = new()
     {
@@ -29,7 +29,7 @@ public class Popup : Panel
 
     public EventHandler? Closed;
 
-    public Popup(PopupViewModel viewModel)
+    public Popup(ViewModels.Popup.PopupViewModel viewModel)
     {
         DataContext = viewModel;
         _viewModel = viewModel;

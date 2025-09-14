@@ -1,0 +1,20 @@
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:content="clr-namespace:ManaxClient.ViewModels.Popup.ConfirmCancel.Content"
+    mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="200"
+    x:Class="ManaxClient.Views.Popup.ConfirmCancel.Content.ReplaceChapterView"
+    x:DataType="content:ReplaceChapterViewModel">
+    <Grid RowDefinitions="Auto" Margin="16">
+        <TextBlock
+            Text="{Binding FolderPath, StringFormat='When you have finished modifying the chapter at: {0} you can confirm the replacement of the chapter.'}"
+            TextWrapping="Wrap"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Center"
+            FontSize="14"
+            Margin="0,0,0,10"/>
+    </Grid>
+</UserControl>
+

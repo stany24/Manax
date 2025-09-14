@@ -13,6 +13,7 @@ using Avalonia.Media;
 using ManaxClient.Controls.Popups;
 using ManaxClient.Models;
 using ManaxClient.ViewModels.Popup.ConfirmCancel;
+using ManaxClient.ViewModels.Popup.ConfirmCancel.Content;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTO.Issue.Reported;
 using ManaxLibrary.DTO.Read;

@@ -1,4 +1,6 @@
+using System;
 using CommunityToolkit.Mvvm.ComponentModel;
+using ManaxClient.ViewModels.Popup.ConfirmCancel.Content;
 
 namespace ManaxClient.ViewModels.Popup.ConfirmCancel;
 
@@ -14,11 +16,13 @@ public partial class ConfirmCancelViewModel: PopupViewModel
     
     public void Confirm()
     {
+        CloseRequested?.Invoke(this, EventArgs.Empty);
         _canceled = false;
     }
     
     public void Cancel()
     {
+        CloseRequested?.Invoke(this, EventArgs.Empty);
         _canceled = true;
     }
 
@@ -32,6 +36,5 @@ public partial class ConfirmCancelViewModel: PopupViewModel
         if (!Content.CanCancel) return false;
         _canceled = true;
         return true;
-
     }
 }

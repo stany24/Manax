@@ -1,0 +1,99 @@
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:previews="clr-namespace:ManaxClient.Controls.Previews"
+    xmlns:page="clr-namespace:ManaxClient.ViewModels.Pages.Library"
+    mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+    x:Class="ManaxClient.Views.Pages.Library.LibraryPageView"
+    x:DataType="page:LibraryPage"
+    Background="{DynamicResource Background1}">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Orientation="Vertical" Spacing="24">
+
+            <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto">
+                <StackPanel Grid.Column="0" Grid.Row="0" Orientation="Vertical">
+                    <TextBlock Classes="title" Text="{Binding Library.Name}" />
+                    <TextBlock Text="{Binding Series.Count, StringFormat='📚 {0} série(s) dans cette bibliothèque'}"
+                               Foreground="{StaticResource SecondaryBrush}"
+                               FontSize="14" />
+                </StackPanel>
+
+                <Button Grid.Column="1" Grid.Row="0"
+                        IsVisible="{Binding Admin}"
+                        Classes="danger"
+                        Command="{Binding DeleteLibrary}"
+                        VerticalAlignment="Top"
+                        Padding="12,8">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <TextBlock Text="🗑️" FontSize="14" />
+                        <TextBlock Text="Supprimer" FontWeight="Medium" />
+                    </StackPanel>
+                </Button>
+            </Grid>
+
+            <Border Classes="card" IsVisible="{Binding !Series.Count}">
+                <StackPanel Orientation="Vertical"
+                            Spacing="16"
+                            HorizontalAlignment="Center">
+                    <TextBlock Text="📚" FontSize="48" HorizontalAlignment="Center" />
+                    <TextBlock Text="Bibliothèque vide"
+                               FontSize="18"
+                               FontWeight="Medium"
+                               HorizontalAlignment="Center" />
+                    <TextBlock Text="Cette bibliothèque ne contient aucune série pour le moment."
+                               TextAlignment="Center"
+                               TextWrapping="Wrap"
+                               Foreground="{StaticResource SecondaryBrush}"
+                               MaxWidth="400" />
+                </StackPanel>
+            </Border>
+
+            <Border Classes="card" IsVisible="{Binding Series.Count}">
+                <StackPanel Orientation="Vertical" Spacing="20">
+                    <TextBlock Classes="subtitle"
+                               Text="Séries de la bibliothèque"
+                               Margin="0"
+                               VerticalAlignment="Center" />
+
+                    <ItemsControl ItemsSource="{Binding Series}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Background="Transparent"
+                                        Padding="12"
+                                        CornerRadius="12"
+                                        Margin="8">
+                                    <Border.Styles>
+                                        <Style Selector="Border:pointerover">
+                                            <Setter Property="Background" Value="{DynamicResource Background1}" />
+                                        </Style>
+                                    </Border.Styles>
+                                    <Border.Transitions>
+                                        <Transitions>
+                                            <TransformOperationsTransition Property="RenderTransform"
+                                                                           Duration="0:0:0.2" />
+                                            <BrushTransition Property="Background" Duration="0:0:0.2" />
+                                        </Transitions>
+                                    </Border.Transitions>
+                                    <previews:SeriePreview
+                                        Serie="{Binding .}"
+                                        TextColor="{DynamicResource TextColor1}"
+                                        BackGroundColor="{DynamicResource Background1}"
+                                        Command="{Binding $parent[UserControl].((page:LibraryPage)DataContext).MoveToSeriePage}"
+                                        CommandParameter="{Binding .}" />
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel ItemSpacing="12" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ItemsControl>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

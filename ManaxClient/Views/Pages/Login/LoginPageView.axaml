@@ -1,0 +1,115 @@
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:page="clr-namespace:ManaxClient.ViewModels.Pages.Login"
+    mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+    x:Class="ManaxClient.Views.Pages.Login.LoginPageView"
+    x:DataType="page:LoginPageViewModel"
+    Background="{DynamicResource Background1}">
+
+    <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+        <Border Classes="card" MaxWidth="400" MinWidth="350">
+            <ScrollViewer
+                HorizontalScrollBarVisibility="Disabled"
+                VerticalScrollBarVisibility="Hidden">
+                <StackPanel Spacing="24">
+
+                    <StackPanel Spacing="8" HorizontalAlignment="Center">
+                        <TextBlock Text="📺" FontSize="48" HorizontalAlignment="Center" />
+                        <TextBlock Classes="title" Text="Manax" HorizontalAlignment="Center" />
+                        <TextBlock Text="Connectez-vous à votre compte"
+                                   HorizontalAlignment="Center"
+                                   Foreground="{DynamicResource SecondaryBrush}" />
+                    </StackPanel>
+
+                    <StackPanel Spacing="16">
+                        <StackPanel Spacing="6">
+                            <TextBlock Text="Nom d'utilisateur"
+                                       FontWeight="Medium"
+                                       Foreground="{DynamicResource SecondaryBrush}" />
+                            <TextBox Name="TbxUsername"
+                                     Loaded="TbxUsername_OnLoaded"
+                                     Text="{Binding Username}"
+                                     Watermark="Entrez votre nom d'utilisateur"
+                                     Padding="12"
+                                     CornerRadius="8"
+                                     BorderThickness="1"
+                                     BorderBrush="{DynamicResource Background3}" />
+                        </StackPanel>
+
+                        <StackPanel Spacing="6">
+                            <TextBlock Text="Mot de passe"
+                                       FontWeight="Medium"
+                                       Foreground="{DynamicResource SecondaryBrush}" />
+                            <TextBox Text="{Binding Password}"
+                                     PasswordChar="•"
+                                     Watermark="Entrez votre mot de passe"
+                                     Padding="12"
+                                     CornerRadius="8"
+                                     BorderThickness="1"
+                                     BorderBrush="{DynamicResource Background3}" />
+                        </StackPanel>
+
+                        <StackPanel Spacing="6">
+                            <TextBlock Text="Serveur"
+                                       FontWeight="Medium"
+                                       Foreground="{DynamicResource SecondaryBrush}" />
+                            <Grid
+                                ColumnDefinitions="*,Auto,Auto">
+                                <TextBox Text="{Binding Host}"
+                                         Grid.Column="0"
+                                         Watermark="https://votre-serveur.com"
+                                         Padding="12"
+                                         CornerRadius="8"
+                                         BorderThickness="1"
+                                         BorderBrush="{DynamicResource Background3}" />
+                                <Label Content=":"
+                                       Grid.Column="1"
+                                       VerticalAlignment="Center" />
+                                <TextBox Text="{Binding Port}"
+                                         Grid.Column="2"
+                                         Watermark="8080"
+                                         Padding="12"
+                                         CornerRadius="8"
+                                         BorderThickness="1"
+                                         BorderBrush="{DynamicResource Background3}" />
+                            </Grid>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <Button
+                        IsEnabled="{Binding CanLogin}"
+                        Classes="primary"
+                        Command="{Binding Login}"
+                        HorizontalAlignment="Stretch"
+                        Padding="16"
+                        FontSize="16"
+                        HotKey="Enter">
+                        <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center">
+                            <TextBlock Text="{Binding Emoji}" />
+                            <TextBlock Text="Se connecter" FontWeight="Medium" />
+                        </StackPanel>
+                    </Button>
+
+                    <Border Background="{DynamicResource Background2}"
+                            CornerRadius="8"
+                            Padding="12">
+                        <StackPanel Spacing="8">
+                            <TextBlock Text="💡 Astuce"
+                                       FontWeight="Bold"
+                                       Foreground="{DynamicResource InfoBrush}" />
+                            <TextBlock
+                                Text="Assurez-vous que votre serveur Manax est démarré et accessible depuis ce réseau."
+                                TextWrapping="Wrap"
+                                FontSize="12"
+                                Foreground="{DynamicResource SecondaryBrush}" />
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </ScrollViewer>
+
+        </Border>
+    </Grid>
+</UserControl>

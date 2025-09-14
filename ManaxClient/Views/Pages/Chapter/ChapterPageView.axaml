@@ -1,0 +1,181 @@
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:chapter1="clr-namespace:ManaxClient.ViewModels.Pages.Chapter"
+    mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+    x:Class="ManaxClient.Views.Pages.Chapter.ChapterPageView"
+    x:DataType="chapter1:ChapterPageViewModel"
+    Background="{DynamicResource Background1}">
+
+    <Panel>
+        <ScrollViewer Offset="{Binding ScrollOffset,Mode=TwoWay}"
+                      VerticalScrollBarVisibility="Auto"
+                      HorizontalScrollBarVisibility="Auto"
+                      Background="{DynamicResource Background1}">
+            <Interaction.Behaviors>
+                <EventTriggerBehavior EventName="Tapped">
+                    <InvokeCommandAction Command="{Binding ChangeBordersVisibility}" />
+                </EventTriggerBehavior>
+            </Interaction.Behaviors>
+
+            <StackPanel HorizontalAlignment="Center" Background="{DynamicResource Background1}">
+                <Border Background="{DynamicResource Background3}"
+                        CornerRadius="0,0,12,12"
+                        Padding="16,12"
+                        HorizontalAlignment="Center"
+                        IsVisible="{Binding ControlBordersVisible}">
+                    <StackPanel Orientation="Horizontal" Spacing="16">
+                        <TextBlock Text="{Binding Chapter.Info.FileName}"
+                                   Foreground="{DynamicResource TextColor1}"
+                                   FontWeight="Medium"
+                                   VerticalAlignment="Center" />
+                        <TextBlock Text="{Binding Chapter.Pages.Count, StringFormat='({0} pages)'}"
+                                   Foreground="{DynamicResource SecondaryBrush}"
+                                   FontSize="12"
+                                   VerticalAlignment="Center" />
+                    </StackPanel>
+                </Border>
+
+                <ItemsControl ItemsSource="{Binding Chapter.Pages}" Margin="0,8">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border Margin="8,4"
+                                    CornerRadius="8"
+                                    ClipToBounds="True"
+                                    HorizontalAlignment="Center">
+                                <Image Source="{Binding .}"
+                                       Stretch="Uniform"
+                                       MaxWidth="800" />
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Vertical" Spacing="2" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+            </StackPanel>
+        </ScrollViewer>
+
+        <Button Classes="secondary"
+                IsVisible="{Binding ControlBordersVisible}"
+                Command="{Binding Previous}"
+                VerticalAlignment="Top"
+                HorizontalAlignment="Left"
+                Margin="16"
+                Padding="12,8"
+                Background="{DynamicResource Background2}"
+                Foreground="{DynamicResource TextColor1}"
+                BorderThickness="0">
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <TextBlock Text="←" FontSize="16" />
+                <TextBlock Text="Retour" />
+            </StackPanel>
+        </Button>
+
+        <Border Background="{DynamicResource Background2}"
+                CornerRadius="12,12,0,0"
+                Padding="20,16"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Bottom"
+                IsVisible="{Binding ControlBordersVisible}"
+                MinWidth="400">
+            <Grid ColumnDefinitions="*,Auto,*" ColumnSpacing="16">
+                <Button Grid.Column="0"
+                        Classes="secondary"
+                        Command="{Binding PreviousChapter}"
+                        HorizontalAlignment="Stretch"
+                        Background="{DynamicResource Background3}"
+                        Foreground="{DynamicResource TextColor1}"
+                        BorderThickness="1"
+                        BorderBrush="{DynamicResource Background3}">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <TextBlock Text="⏮️" />
+                        <TextBlock Text="Précédent" />
+                    </StackPanel>
+                </Button>
+
+                <StackPanel Grid.Column="1"
+                            Orientation="Vertical"
+                            Spacing="4"
+                            HorizontalAlignment="Center">
+                    <TextBlock Text="Chapitre"
+                               Foreground="{DynamicResource SecondaryBrush}"
+                               FontSize="12"
+                               HorizontalAlignment="Center" />
+                    <TextBlock Text="{Binding Chapter.Info.Number}"
+                               Foreground="{DynamicResource TextColor1}"
+                               FontWeight="Bold"
+                               FontSize="16"
+                               HorizontalAlignment="Center" />
+                </StackPanel>
+
+                <Button Grid.Column="2"
+                        Classes="primary"
+                        Command="{Binding NextChapter}"
+                        HorizontalAlignment="Stretch"
+                        Background="{StaticResource PrimaryBrush}"
+                        Foreground="{DynamicResource TextColor1}">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <TextBlock Text="Suivant" />
+                        <TextBlock Text="⏭️" />
+                    </StackPanel>
+                </Button>
+            </Grid>
+        </Border>
+
+        <Border Background="{DynamicResource Background2}"
+                CornerRadius="12"
+                Padding="8,12"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Margin="16"
+                IsVisible="{Binding ControlBordersVisible}">
+            <StackPanel Spacing="12">
+                <Button Classes="secondary"
+                        Background="{DynamicResource Background3}"
+                        Foreground="{DynamicResource TextColor1}"
+                        BorderThickness="0"
+                        Padding="8"
+                        ToolTip.Tip="Page précédente">
+                    <TextBlock Text="↑" FontSize="16" />
+                </Button>
+
+                <Border Background="{DynamicResource Background3}"
+                        CornerRadius="4"
+                        Padding="8,4">
+                    <TextBlock Text="1/24"
+                               Foreground="{DynamicResource TextColor1}"
+                               FontSize="12"
+                               FontWeight="Medium" />
+                </Border>
+
+                <Button Classes="secondary"
+                        Background="{DynamicResource Background3}"
+                        Foreground="{DynamicResource TextColor1}"
+                        BorderThickness="0"
+                        Padding="8"
+                        ToolTip.Tip="Page suivante">
+                    <TextBlock Text="↓" FontSize="16" />
+                </Button>
+            </StackPanel>
+        </Border>
+
+        <Border Background="{DynamicResource PrimaryBrush}"
+                CornerRadius="0,0,12,12"
+                Padding="12,8"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Top"
+                IsVisible="{Binding !ControlBordersVisible}">
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <TextBlock Text="💡" FontSize="14" />
+                <TextBlock Text="Touchez l'écran pour afficher les contrôles"
+                           Foreground="{DynamicResource TextColor1}"
+                           FontSize="12" />
+            </StackPanel>
+        </Border>
+    </Panel>
+</UserControl>
