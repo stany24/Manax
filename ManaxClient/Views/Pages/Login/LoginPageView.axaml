@@ -68,13 +68,16 @@
                                 <Label Content=":"
                                        Grid.Column="1"
                                        VerticalAlignment="Center" />
-                                <TextBox Text="{Binding Port}"
-                                         Grid.Column="2"
-                                         Watermark="8080"
-                                         Padding="12"
-                                         CornerRadius="8"
-                                         BorderThickness="1"
-                                         BorderBrush="{DynamicResource Background3}" />
+                                <NumericUpDown Value="{Binding Port}"
+                                               Increment="1"
+                                               Minimum="1"
+                                               Maximum="65535"
+                                               Grid.Column="2"
+                                               Watermark="8080"
+                                               Padding="12"
+                                               CornerRadius="8"
+                                               BorderThickness="1"
+                                               BorderBrush="{DynamicResource Background3}" />
                             </Grid>
                         </StackPanel>
                     </StackPanel>

@@ -1,3 +1,5 @@
+using System.Net;
+using System.Threading.RateLimiting;
 using ManaxServer.Localization;
 using ManaxServer.Middleware;
 using ManaxServer.Models;
@@ -57,6 +59,7 @@ public class Program
                 provider.GetRequiredService<IIssueService>()));
         builder.Services.AddSingleton<IPasswordValidationService>(_ =>
             new PasswordValidationService(builder.Environment.IsProduction()));
+        AddRateLimiting(builder);
         
         builder.Services.AddScoped<IMapper>(_ => new ManaxMapper(new ManaxMapping()));
 
@@ -66,7 +69,7 @@ public class Program
             options.Limits.KeepAliveTimeout = TimeSpan.FromMinutes(3);
             options.Limits.RequestHeadersTimeout = TimeSpan.FromSeconds(20);
         });
-
+        
         builder.Services.Configure<FormOptions>(options =>
         {
             options.ValueLengthLimit = int.MaxValue;
@@ -79,6 +82,7 @@ public class Program
         Migrate(app);
 
         app.UseMiddleware<GlobalExceptionMiddleware>();
+        app.UseRateLimiter();
         app.UseMiddleware<BearerAuthenticationMiddleware>();
 
         if (app.Environment.IsDevelopment())
@@ -136,6 +140,31 @@ public class Program
                 new ReportedIssueSerieType { Name = "Wrong name" });
             manaxContext.SaveChanges();
         }
+    }
+
+    private static void AddRateLimiting(WebApplicationBuilder builder)
+    {
+        builder.Services.AddRateLimiter(options =>
+        {
+            options.RejectionStatusCode = (int)HttpStatusCode.TooManyRequests;
+            options.OnRejected = async (context, token) =>
+            {
+                context.HttpContext.Response.StatusCode = (int)HttpStatusCode.TooManyRequests;
+                await context.HttpContext.Response.WriteAsync("Too many requests. Please try again later.", token);
+            };
+            options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(httpContext =>
+            {
+                string clientIp = httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown";
+
+                return RateLimitPartition.GetFixedWindowLimiter(clientIp, _ => new FixedWindowRateLimiterOptions
+                {
+                    AutoReplenishment = true,
+                    PermitLimit = 300,
+                    QueueLimit = 100,
+                    Window = TimeSpan.FromMinutes(1)
+                });
+            });
+        });
     }
 
     private static void AddAuthentication(WebApplicationBuilder builder)
