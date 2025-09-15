@@ -1,4 +1,3 @@
-using ManaxLibrary.DTO.Issue.Automatic;
 using ManaxServer.Localization;
 using ManaxServer.Middleware;
 using ManaxServer.Models;
@@ -40,7 +39,7 @@ public class Program
             opt.UseSqlite($"Data Source={Path.Combine(AppContext.BaseDirectory, "database.db")}"));
 
         AddAuthentication(builder);
-        
+
         // Services
         builder.Services.AddSingleton<INotificationService>(provider =>
             new NotificationService(

@@ -32,6 +32,9 @@ public partial class UploadController(
 {
     [GeneratedRegex("\\d{1,4}")]
     private static partial Regex RegexNumber();
+    
+    [GeneratedRegex(@"[^a-zA-Z0-9_\-\.]")]
+    private static partial Regex InvalidPathChars();
 
     // POST: api/upload/chapter
     [HttpPost("chapter")]
@@ -97,19 +100,27 @@ public partial class UploadController(
         if (serie == null)
             return BadRequest(Localizer.SerieNotFound(serieId));
 
-        if (!TryGetPagesCountFromCbz(file, out int pagesCount))
-            return BadRequest(Localizer.InvalidZipFile());
+        string sanitizedFileName = SanitizeFileName(file.FileName);
+        if (string.IsNullOrEmpty(sanitizedFileName))
+            return BadRequest("Invalid filename");
 
-        string filePath = Path.Combine(serie.SavePath, file.FileName);
+        string filePath = Path.Combine(serie.SavePath, sanitizedFileName);
+        if (!IsPathSafe(filePath, serie.SavePath))
+            return BadRequest("Invalid file path");
+
         if (!Directory.Exists(filePath) && !System.IO.File.Exists(filePath))
         {
             return BadRequest(Localizer.ChapterDoesNotExist());
         }
         
-        int number = ExtractChapterNumber(file.FileName);
+        int number = ExtractChapterNumber(sanitizedFileName);
         Chapter? chapter = context.Chapters.FirstOrDefault(c => c.Number == number);
         if (chapter == null)
             return BadRequest(Localizer.ChapterDoesNotExist());
+        
+        if (!TryGetPagesCountFromCbz(file, out int pagesCount))
+            return BadRequest(Localizer.InvalidZipFile());
+        
         chapter.LastModification = DateTime.UtcNow;
         chapter.Pages = pagesCount;
 
@@ -218,5 +229,26 @@ public partial class UploadController(
             ImageFormat.Jpeg => MagickFormat.Jpeg,
             _ => MagickFormat.WebP
         };
+    }
+
+    private static string SanitizeFileName(string fileName)
+    {
+        if (string.IsNullOrEmpty(fileName)) return string.Empty;
+        fileName = fileName.Replace("..", "").Replace("/", "").Replace("\\", "");
+        return InvalidPathChars().Replace(fileName, "");
+    }
+
+    private static bool IsPathSafe(string filePath, string basePath)
+    {
+        try
+        {
+            string fullFilePath = Path.GetFullPath(filePath);
+            string fullBasePath = Path.GetFullPath(basePath);
+            return fullFilePath.StartsWith(fullBasePath, StringComparison.OrdinalIgnoreCase);
+        }
+        catch
+        {
+            return false;
+        }
     }
 }
