@@ -56,14 +56,27 @@ public static class ManaxApiUserClient
         });
     }
 
-    public static async Task<Optional<bool>> PutUserAsync(long id, UserDto user)
+    public static async Task<Optional<bool>> PutUserAsync(UserUpdateDto userUpdate)
     {
         return await ManaxApiClient.ExecuteWithErrorHandlingAsync(async () =>
         {
-            HttpResponseMessage response = await ManaxApiClient.Client.PutAsJsonAsync($"api/user/{id}", user);
+            HttpResponseMessage response = await ManaxApiClient.Client.PutAsJsonAsync("api/user/update", userUpdate);
             return response.IsSuccessStatusCode
                 ? new Optional<bool>(true)
                 : new Optional<bool>(response);
+        });
+    }
+
+    public static async Task<Optional<string>> ResetPasswordAsync(long id)
+    {
+        return await ManaxApiClient.ExecuteWithErrorHandlingAsync(async () =>
+        {
+            HttpResponseMessage response = await ManaxApiClient.Client.PutAsync($"api/user/{id}/password/reset", null);
+            if (!response.IsSuccessStatusCode) return new Optional<string>(response);
+            string? newPassword = await response.Content.ReadFromJsonAsync<string>();
+            return newPassword == null
+                ? new Optional<string>("Failed to read new password from response.")
+                : new Optional<string>(newPassword);
         });
     }
 
@@ -89,6 +102,17 @@ public static class ManaxApiUserClient
             return user == null
                 ? new Optional<UserLoginResultDto>("Failed to read response content")
                 : new Optional<UserLoginResultDto>(user);
+        });
+    }
+
+    public static async Task<Optional<bool>> LogoutAsync()
+    {
+        return await ManaxApiClient.ExecuteWithErrorHandlingAsync(async () =>
+        {
+            HttpResponseMessage response = await ManaxApiClient.Client.PostAsync("/api/logout", null);
+            return response.IsSuccessStatusCode
+                ? new Optional<bool>(true)
+                : new Optional<bool>(response);
         });
     }
 }

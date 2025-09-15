@@ -54,27 +54,25 @@ public class UserController(
         return mapper.Map<UserDto>(user);
     }
 
-    [HttpPut("password/update")]
+    [HttpPut("update")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> UpdatePassword(string newPassword)
+    public async Task<IActionResult> PutUser(UserUpdateDto userUpdate)
     {
         long? userId = GetCurrentUserId(HttpContext);
         if (userId == null)
             return Unauthorized(Localizer.Unauthorized());
 
-        if (!passwordValidationService.IsPasswordValid(newPassword, out string? errorMessage))
+        User? user = await context.Users.FindAsync(userId);
+        if (user == null) return NotFound(Localizer.UserNotFound((long)userId));
+        
+        if (!passwordValidationService.IsPasswordValid(userUpdate.Password, out string? errorMessage))
         {
             return BadRequest(errorMessage);
         }
 
-        User? user = await context.Users.FindAsync(userId);
-        if (user == null)
-            return Unauthorized(Localizer.Unauthorized());
-
-        user.PasswordHash = hashService.HashPassword(newPassword);
+        user.PasswordHash = hashService.HashPassword(userUpdate.Password);
         await context.SaveChangesAsync();
-
         return Ok();
     }
     
