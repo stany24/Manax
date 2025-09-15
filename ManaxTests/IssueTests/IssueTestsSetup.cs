@@ -12,10 +12,10 @@ namespace ManaxTests.IssueTests;
 
 public abstract class IssueTestsSetup
 {
-    protected ManaxContext Context = null!;
-    protected IssueController Controller = null!;
     private ManaxMapper _mapper = null!;
     private Mock<INotificationService> _mockNotificationService = null!;
+    protected ManaxContext Context = null!;
+    protected IssueController Controller = null!;
 
     [TestInitialize]
     public void Setup()

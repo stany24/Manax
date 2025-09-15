@@ -11,10 +11,7 @@ public partial class SavePointCreateViewModel : ConfirmCancelContentViewModel
     {
         PropertyChanged += (_, args) =>
         {
-            if (args.PropertyName == nameof(Path))
-            {
-                CanConfirm = !string.IsNullOrWhiteSpace(Path);
-            }
+            if (args.PropertyName == nameof(Path)) CanConfirm = !string.IsNullOrWhiteSpace(Path);
         };
     }
 

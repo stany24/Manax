@@ -93,7 +93,7 @@ public partial class SeriePageViewModel : PageViewModel
         if (chapter.SerieId != Serie?.Id) return;
         Dispatcher.UIThread.Post(() => Chapters.Add(new ClientChapter { Info = chapter }));
     }
-    
+
     private void OnChapterModified(ChapterDto chapter)
     {
         if (chapter.SerieId != Serie?.Id) return;
@@ -101,13 +101,9 @@ public partial class SeriePageViewModel : PageViewModel
         {
             ClientChapter? firstOrDefault = Chapters.FirstOrDefault(c => c.Info.Id == chapter.Id);
             if (firstOrDefault == null)
-            {
                 Chapters.Add(new ClientChapter { Info = chapter });
-            }
             else
-            {
                 firstOrDefault.Info = chapter;
-            }
         });
     }
 
@@ -303,7 +299,7 @@ public partial class SeriePageViewModel : PageViewModel
         SerieUpdateViewModel content = new(Serie);
         ConfirmCancelViewModel viewModel = new(content);
         Controls.Popups.Popup popup = new(viewModel);
-        popup.Closed += async (_, _) =>
+        popup.Closed += async void (_, _) =>
         {
             try
             {

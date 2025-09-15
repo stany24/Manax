@@ -5,10 +5,10 @@ using Microsoft.AspNetCore.Mvc;
 namespace ManaxTests.SavePointTests;
 
 [TestClass]
-public class PostSavePointTests: SavePointTestsSetup
+public class PostSavePointTests : SavePointTestsSetup
 {
     [TestMethod]
-    public async Task PostSavePoint_WithValidData_CreatesSavePoint()
+    public async Task PostSavePointWithValidDataCreatesSavePoint()
     {
         SavePointCreateDto createDto = new()
         {
@@ -29,7 +29,7 @@ public class PostSavePointTests: SavePointTestsSetup
     }
 
     [TestMethod]
-    public async Task PostSavePoint_WithDuplicatePath_ReturnsConflict()
+    public async Task PostSavePointWithDuplicatePathReturnsConflict()
     {
         SavePoint existingSavePoint = Context.SavePoints.First();
         SavePointCreateDto createDto = new()
@@ -43,7 +43,7 @@ public class PostSavePointTests: SavePointTestsSetup
     }
 
     [TestMethod]
-    public async Task PostSavePoint_WithNonExistentPath_ReturnsConflict()
+    public async Task PostSavePointWithNonExistentPathReturnsConflict()
     {
         SavePointCreateDto createDto = new()
         {
@@ -56,7 +56,7 @@ public class PostSavePointTests: SavePointTestsSetup
     }
 
     [TestMethod]
-    public async Task PostSavePoint_CreationDateSetCorrectly()
+    public async Task PostSavePointCreationDateSetCorrectly()
     {
         SavePointCreateDto createDto = new()
         {
@@ -77,7 +77,7 @@ public class PostSavePointTests: SavePointTestsSetup
     }
 
     [TestMethod]
-    public async Task PostSavePoint_VerifySavePointCountIncreases()
+    public async Task PostSavePointVerifySavePointCountIncreases()
     {
         int initialCount = Context.SavePoints.Count();
         SavePointCreateDto createDto = new()
@@ -95,7 +95,7 @@ public class PostSavePointTests: SavePointTestsSetup
     }
 
     [TestMethod]
-    public async Task PostSavePoint_WithSpecialCharactersInPath_CreatesSavePoint()
+    public async Task PostSavePointWithSpecialCharactersInPathCreatesSavePoint()
     {
         string specialDirectory = Path.Combine(TestDirectory, "spécial-chars_123");
         Directory.CreateDirectory(specialDirectory);
@@ -119,7 +119,7 @@ public class PostSavePointTests: SavePointTestsSetup
     }
 
     [TestMethod]
-    public async Task PostSavePoint_MultipleDifferentPaths_CreatesMultipleSavePoints()
+    public async Task PostSavePointMultipleDifferentPathsCreatesMultipleSavePoints()
     {
         string[] directories = ["subdir1", "subdir2", "subdir3"];
         List<long> createdIds = [];
@@ -152,7 +152,7 @@ public class PostSavePointTests: SavePointTestsSetup
     }
 
     [TestMethod]
-    public async Task PostSavePoint_WithRelativePath_CreatesConflict()
+    public async Task PostSavePointWithRelativePathCreatesConflict()
     {
         SavePointCreateDto createDto = new()
         {
@@ -165,7 +165,7 @@ public class PostSavePointTests: SavePointTestsSetup
     }
 
     [TestMethod]
-    public async Task PostSavePoint_PathCaseSensitivity_CreatesDistinctSavePoints()
+    public async Task PostSavePointPathCaseSensitivityCreatesDistinctSavePoints()
     {
         string lowerDir = Path.Combine(TestDirectory, "test");
         string upperDir = Path.Combine(TestDirectory, "TEST");
@@ -203,7 +203,7 @@ public class PostSavePointTests: SavePointTestsSetup
     }
 
     [TestMethod]
-    public async Task PostSavePoint_WithEmptyPath_ReturnsConflict()
+    public async Task PostSavePointWithEmptyPathReturnsConflict()
     {
         SavePointCreateDto createDto = new()
         {

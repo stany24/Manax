@@ -5,10 +5,10 @@ using Microsoft.AspNetCore.Mvc;
 namespace ManaxTests.SerieTests;
 
 [TestClass]
-public class PutSerieTests: SerieTestsSetup
+public class PutSerieTests : SerieTestsSetup
 {
     [TestMethod]
-    public async Task PutSerie_WithValidId_UpdatesSerie()
+    public async Task PutSerieWithValidIdUpdatesSerie()
     {
         Serie serie = Context.Series.First();
         SerieUpdateDto updateDto = new()
@@ -30,7 +30,7 @@ public class PutSerieTests: SerieTestsSetup
     }
 
     [TestMethod]
-    public async Task PutSerie_WithInvalidId_ReturnsNotFound()
+    public async Task PutSerieWithInvalidIdReturnsNotFound()
     {
         SerieUpdateDto updateDto = new()
         {
@@ -45,7 +45,7 @@ public class PutSerieTests: SerieTestsSetup
     }
 
     [TestMethod]
-    public async Task PutSerie_WithEmptyTitle_ReturnsBadRequest()
+    public async Task PutSerieWithEmptyTitleReturnsBadRequest()
     {
         Serie serie = Context.Series.First();
         SerieUpdateDto updateDto = new()
@@ -61,7 +61,7 @@ public class PutSerieTests: SerieTestsSetup
     }
 
     [TestMethod]
-    public async Task PutSerie_VerifyLastModificationUpdated()
+    public async Task PutSerieVerifyLastModificationUpdated()
     {
         Serie serie = Context.Series.First();
         DateTime originalLastModification = serie.LastModification;

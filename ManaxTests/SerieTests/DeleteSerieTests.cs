@@ -8,7 +8,7 @@ namespace ManaxTests.SerieTests;
 public class DeleteSerieTests : SerieTestsSetup
 {
     [TestMethod]
-    public async Task DeleteSerie_WithValidId_RemovesSerie()
+    public async Task DeleteSerieWithValidIdRemovesSerie()
     {
         Serie serie = Context.Series.First();
         IActionResult result = await Controller.DeleteSerie(serie.Id);
@@ -20,7 +20,7 @@ public class DeleteSerieTests : SerieTestsSetup
     }
 
     [TestMethod]
-    public async Task DeleteSerie_WithInvalidId_ReturnsNotFound()
+    public async Task DeleteSerieWithInvalidIdReturnsNotFound()
     {
         IActionResult result = await Controller.DeleteSerie(999999);
 
@@ -28,7 +28,7 @@ public class DeleteSerieTests : SerieTestsSetup
     }
 
     [TestMethod]
-    public async Task DeleteSerie_WithAssociatedChapters_RemovesSerieAndChapters()
+    public async Task DeleteSerieWithAssociatedChaptersRemovesSerieAndChapters()
     {
         Serie serie = Context.Series.First();
         List<Chapter> associatedChapters = Context.Chapters.Where(c => c.SerieId == serie.Id).ToList();
@@ -46,7 +46,7 @@ public class DeleteSerieTests : SerieTestsSetup
     }
 
     [TestMethod]
-    public async Task DeleteSerie_VerifySerieCountDecreases()
+    public async Task DeleteSerieVerifySerieCountDecreases()
     {
         int initialCount = Context.Series.Count();
         Serie serie = Context.Series.First();

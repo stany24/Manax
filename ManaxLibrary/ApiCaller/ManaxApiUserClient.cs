@@ -45,14 +45,12 @@ public static class ManaxApiUserClient
         });
     }
 
-    public static async Task<Optional<long>> PostUserAsync(UserCreateDto user)
+    public static async Task<Optional<bool>> PostUserAsync(UserCreateDto user)
     {
         return await ManaxApiClient.ExecuteWithErrorHandlingAsync(async () =>
         {
             HttpResponseMessage response = await ManaxApiClient.Client.PostAsJsonAsync("api/user/create", user);
-            if (!response.IsSuccessStatusCode) return new Optional<long>(response);
-            long? id = await response.Content.ReadFromJsonAsync<long>();
-            return new Optional<long>(id.Value);
+            return !response.IsSuccessStatusCode ? new Optional<bool>(response) : new Optional<bool>(true);
         });
     }
 

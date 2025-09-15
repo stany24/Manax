@@ -4,22 +4,22 @@ using ManaxClient.ViewModels.Popup.ConfirmCancel.Content;
 
 namespace ManaxClient.ViewModels.Popup.ConfirmCancel;
 
-public partial class ConfirmCancelViewModel: PopupViewModel
+public partial class ConfirmCancelViewModel : PopupViewModel
 {
-    [ObservableProperty] private ConfirmCancelContentViewModel _content;
     private bool _canceled;
+    [ObservableProperty] private ConfirmCancelContentViewModel _content;
 
     public ConfirmCancelViewModel(ConfirmCancelContentViewModel content)
     {
         Content = content;
     }
-    
+
     public void Confirm()
     {
         CloseRequested?.Invoke(this, EventArgs.Empty);
         _canceled = false;
     }
-    
+
     public void Cancel()
     {
         CloseRequested?.Invoke(this, EventArgs.Empty);

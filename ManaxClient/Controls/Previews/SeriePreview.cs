@@ -14,11 +14,11 @@ public class SeriePreview : Button
     public static readonly AttachedProperty<ClientSerie?> SerieProperty =
         AvaloniaProperty.RegisterAttached<SeriePreview, Grid, ClientSerie?>(
             "Serie", null, false, BindingMode.OneTime);
-    
+
     public static readonly AttachedProperty<SolidColorBrush> TextColorProperty =
         AvaloniaProperty.RegisterAttached<SeriePreview, Grid, SolidColorBrush>(
             "TextColor", new SolidColorBrush(), false, BindingMode.OneTime);
-    
+
     public static readonly AttachedProperty<SolidColorBrush> BackGroundColorProperty =
         AvaloniaProperty.RegisterAttached<SeriePreview, Grid, SolidColorBrush>(
             "BackGroundColor", new SolidColorBrush(), false, BindingMode.OneTime);
@@ -58,7 +58,7 @@ public class SeriePreview : Button
             CornerRadius = new CornerRadius(0, 0, 12, 12),
             VerticalAlignment = VerticalAlignment.Bottom
         };
-        
+
         titleContainer.Bind(Border.BackgroundProperty, new Binding("BackGroundColor")
         {
             Source = this,
@@ -119,13 +119,13 @@ public class SeriePreview : Button
         get => GetSerie(this);
         set => SetSerie(this, value);
     }
-    
+
     public SolidColorBrush TextColor
     {
         get => GetTextColor(this);
         set => SetTextColor(this, value);
     }
-    
+
     public SolidColorBrush BackGroundColor
     {
         get => GetBackGroundColor(this);

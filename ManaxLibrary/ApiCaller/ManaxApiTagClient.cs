@@ -1,3 +1,4 @@
+using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
 using ManaxLibrary.DTO.Tag;
@@ -14,14 +15,10 @@ public static class ManaxApiTagClient
         return JsonSerializer.Deserialize<List<TagDto>>(json) ?? [];
     }
 
-    public static async Task<long> CreateTagAsync(TagCreateDto tagCreate)
+    public static async Task<Optional<bool>> CreateTagAsync(TagCreateDto tagCreate)
     {
-        string json = JsonSerializer.Serialize(tagCreate);
-        StringContent content = new(json, Encoding.UTF8, "application/json");
-        HttpResponseMessage response = await ManaxApiClient.Client.PostAsync("/api/tag", content);
-        response.EnsureSuccessStatusCode();
-        string responseJson = await response.Content.ReadAsStringAsync();
-        return JsonSerializer.Deserialize<long>(responseJson);
+        HttpResponseMessage response = await ManaxApiClient.Client.PostAsJsonAsync("/api/tag", tagCreate);
+        return response.IsSuccessStatusCode ? new Optional<bool>(true) : new Optional<bool>(response);
     }
 
     public static async Task UpdateTagAsync(TagDto tag)

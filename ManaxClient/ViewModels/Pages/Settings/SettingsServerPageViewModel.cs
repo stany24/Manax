@@ -75,7 +75,7 @@ public partial class SettingsServerPageViewModel : PageViewModel
         SavePointCreateViewModel content = new();
         ConfirmCancelViewModel viewModel = new(content);
         Controls.Popups.Popup popup = new(viewModel);
-        popup.Closed += async (_, _) =>
+        popup.Closed += async void (_, _) =>
         {
             try
             {
@@ -98,7 +98,7 @@ public partial class SettingsServerPageViewModel : PageViewModel
         LibraryCreateViewModel content = new();
         ConfirmCancelViewModel viewModel = new(content);
         Controls.Popups.Popup popup = new(viewModel);
-        popup.Closed += async (_, _) =>
+        popup.Closed += async void (_, _) =>
         {
             try
             {

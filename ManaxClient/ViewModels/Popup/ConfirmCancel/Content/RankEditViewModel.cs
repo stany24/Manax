@@ -5,10 +5,9 @@ namespace ManaxClient.ViewModels.Popup.ConfirmCancel.Content;
 
 public partial class RankEditViewModel : ConfirmCancelContentViewModel
 {
+    private readonly RankDto _originalRank;
     [ObservableProperty] private string _name;
     [ObservableProperty] private double _value;
-    
-    private readonly RankDto _originalRank;
 
     public RankEditViewModel(RankDto rank)
     {
@@ -19,10 +18,7 @@ public partial class RankEditViewModel : ConfirmCancelContentViewModel
 
         PropertyChanged += (_, args) =>
         {
-            if (args.PropertyName == nameof(Name))
-            {
-                CanConfirm = !string.IsNullOrWhiteSpace(Name);
-            }
+            if (args.PropertyName == nameof(Name)) CanConfirm = !string.IsNullOrWhiteSpace(Name);
         };
     }
 

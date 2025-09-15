@@ -8,7 +8,7 @@ namespace ManaxTests.UserTests;
 public class GetUserTests : UserTestsSetup
 {
     [TestMethod]
-    public async Task GetUsers_ReturnsAllUserIds()
+    public async Task GetUsersReturnsAllUserIds()
     {
         ActionResult<IEnumerable<long>> result = await Controller.GetUsers();
 
@@ -22,7 +22,7 @@ public class GetUserTests : UserTestsSetup
     }
 
     [TestMethod]
-    public async Task GetUser_WithValidId_ReturnsUser()
+    public async Task GetUserWithValidIdReturnsUser()
     {
         User user = Context.Users.First();
         ActionResult<UserDto> result = await Controller.GetUser(user.Id);
@@ -38,15 +38,15 @@ public class GetUserTests : UserTestsSetup
     }
 
     [TestMethod]
-    public async Task GetUser_WithInvalidId_ReturnsNotFound()
+    public async Task GetUserWithInvalidIdReturnsNotFound()
     {
         ActionResult<UserDto> result = await Controller.GetUser(999999);
 
         Assert.IsInstanceOfType(result.Result, typeof(NotFoundObjectResult));
     }
-    
+
     [TestMethod]
-    public async Task GetUser_VerifyAllPropertiesMapping()
+    public async Task GetUserVerifyAllPropertiesMapping()
     {
         User user = Context.Users.First();
         ActionResult<UserDto> result = await Controller.GetUser(user.Id);

@@ -1,6 +1,6 @@
 namespace ManaxServer.Localization.Languages;
 
-public class FrenchLocalization: Localization
+public class FrenchLocalization : Localization
 {
     public override Dictionary<LocalizationKey, string> GetLocalization()
     {
@@ -18,7 +18,10 @@ public class FrenchLocalization: Localization
             { LocalizationKey.UserNotFound, "L'utilisateur avec l'ID {0} n'existe pas." },
             { LocalizationKey.UserMustBeLoggedInDelete, "Vous devez être connecté pour supprimer un utilisateur." },
             { LocalizationKey.UserCannotDeleteSelf, "Vous ne pouvez pas vous supprimer vous-même." },
-            { LocalizationKey.UserCannotDeleteAdminOrOwner, "Vous ne pouvez pas supprimer un autre admin ou propriétaire." },
+            {
+                LocalizationKey.UserCannotDeleteAdminOrOwner,
+                "Vous ne pouvez pas supprimer un autre admin ou propriétaire."
+            },
             { LocalizationKey.UserInvalidLogin, "Nom d'utilisateur ou mot de passe invalide." },
             { LocalizationKey.UserClaimNotAllowed, "Réclamation non autorisée, des utilisateurs existent déjà." },
             { LocalizationKey.RankNotFound, "Le rank avec l'id {0} n'existe pas." },
@@ -29,8 +32,14 @@ public class FrenchLocalization: Localization
             { LocalizationKey.PosterAlreadyExists, "Le poster existe déjà." },
             { LocalizationKey.InvalidImageFile, "Image invalide: {0}" },
             { LocalizationKey.IssueNotFound, "Le problème avec l'id {0} n'existe pas" },
-            { LocalizationKey.ChapterFileNotExistOrInvalid, "Le chapitre n'existe pas ou n'est pas un fichier CBZ valide." },
-            { LocalizationKey.PageNumberTooBig, "Le numéro de page {0} est trop grand pour un chapitre avec {1} pages." },
+            {
+                LocalizationKey.ChapterFileNotExistOrInvalid,
+                "Le chapitre n'existe pas ou n'est pas un fichier CBZ valide."
+            },
+            {
+                LocalizationKey.PageNumberTooBig,
+                "Le numéro de page {0} est trop grand pour un chapitre avec {1} pages."
+            },
             { LocalizationKey.UserMustBeLoggedInRead, "Vous devez être connecté pour lire les chapitres." },
             { LocalizationKey.HubConnected, "Client connecté au hub de notifications: {0} - Utilisateur: {1}" },
             { LocalizationKey.HubConnectionError, "Erreur lors de la connexion du client {0}" },
@@ -38,9 +47,15 @@ public class FrenchLocalization: Localization
             { LocalizationKey.HubDisconnectedError, "Client déconnecté avec erreur: {0}" },
             { LocalizationKey.HubDisconnected, "Client déconnecté: {0}" },
             { LocalizationKey.HubMessageSent, "Message envoyé à tous les clients:  {0}" },
-            { LocalizationKey.HubMessageError, "Erreur lors de l'envoi de la notification pendant l'envoi de {0} aux utilisateurs" },
+            {
+                LocalizationKey.HubMessageError,
+                "Erreur lors de l'envoi de la notification pendant l'envoi de {0} aux utilisateurs"
+            },
             { LocalizationKey.TaskError, "Erreur pendant l'execution de la tache: {0}" },
-            { LocalizationKey.SettingsUpdateNotForced, "Les paramètres donnée on un problème, corriger le ou forcez le changement." },
+            {
+                LocalizationKey.SettingsUpdateNotForced,
+                "Les paramètres donnée on un problème, corriger le ou forcez le changement."
+            },
             { LocalizationKey.ServiceInitialized, "Le service {0} à été initializé." },
             { LocalizationKey.HubMessageSentAdmins, "Message envoyé à tous les administrateurs:  {0}" },
             { LocalizationKey.HubMessageSentOwner, "Message envoyé au propriétaire:  {0}" },
@@ -48,7 +63,10 @@ public class FrenchLocalization: Localization
             { LocalizationKey.TaskChapterFix, "Vérification du chapitre" },
             { LocalizationKey.TaskPosterFix, "Vérification du poster" },
             { LocalizationKey.TaskSerieFix, "Vérification de la série" },
-            { LocalizationKey.HubMessageErrorAdmins, "Erreur lors de l'envoi de la notification pendant l'envoi de {0} aux administrateurs" },
+            {
+                LocalizationKey.HubMessageErrorAdmins,
+                "Erreur lors de l'envoi de la notification pendant l'envoi de {0} aux administrateurs"
+            },
             { LocalizationKey.SavePointNameExists, "Un point de sauvegarde avec ce chemin '{0}' existe déjà." },
             { LocalizationKey.SavePointPathNotExists, "Le chemin du point de sauvegarde '{0}' n'existe pas." },
             { LocalizationKey.LibraryNameRequired, "Le nom de la librairie est requis." },
@@ -59,12 +77,15 @@ public class FrenchLocalization: Localization
             { LocalizationKey.Unauthorized, "Accès non autorisé." },
             { LocalizationKey.HubMessageErrorOwner, "Erreur lors de l'envoi de la notification au propriétaire {0}" },
             { LocalizationKey.HubMessageErrorSingle, "Erreur lors de l'envoi de la notification a {0} : {1}" },
-            { LocalizationKey.PasswordEmpty, "Le mot de passe est requis."},
-            { LocalizationKey.PasswordTooShort, "Le mot de passe doit contenir au moins 14 caractères."},
-            { LocalizationKey.PasswordNoLowercase, "Le mot de passe doit contenir au moins une lettre minuscule."},
-            { LocalizationKey.PasswordNoUppercase, "Le mot de passe doit contenir au moins une lettre majuscule."},
-            { LocalizationKey.PasswordNoSpecialCharacterOrDigit, "Le mot de passe doit contenir au moins un caractère spécial ou un chiffre."},
-            { LocalizationKey.TagNotFound, "Le tag avec l'ID {0} n'existe pas."}
+            { LocalizationKey.PasswordEmpty, "Le mot de passe est requis." },
+            { LocalizationKey.PasswordTooShort, "Le mot de passe doit contenir au moins 14 caractères." },
+            { LocalizationKey.PasswordNoLowercase, "Le mot de passe doit contenir au moins une lettre minuscule." },
+            { LocalizationKey.PasswordNoUppercase, "Le mot de passe doit contenir au moins une lettre majuscule." },
+            {
+                LocalizationKey.PasswordNoSpecialCharacterOrDigit,
+                "Le mot de passe doit contenir au moins un caractère spécial ou un chiffre."
+            },
+            { LocalizationKey.TagNotFound, "Le tag avec l'ID {0} n'existe pas." }
         };
     }
 }

@@ -6,10 +6,10 @@ using Microsoft.EntityFrameworkCore;
 namespace ManaxTests.RankTests;
 
 [TestClass]
-public class CreateRankTests: RankTestsSetup
+public class CreateRankTests : RankTestsSetup
 {
     [TestMethod]
-    public async Task CreateRank_WithValidData_CreatesRank()
+    public async Task CreateRankWithValidDataCreatesRank()
     {
         RankCreateDto createDto = new()
         {
@@ -32,7 +32,7 @@ public class CreateRankTests: RankTestsSetup
     }
 
     [TestMethod]
-    public async Task CreateRank_WithDuplicateValue_ThrowsException()
+    public async Task CreateRankWithDuplicateValueThrowsException()
     {
         Rank existingRank = Context.Ranks.First();
         RankCreateDto createDto = new()
@@ -45,7 +45,7 @@ public class CreateRankTests: RankTestsSetup
     }
 
     [TestMethod]
-    public async Task CreateRank_WithDuplicateName_ThrowsException()
+    public async Task CreateRankWithDuplicateNameThrowsException()
     {
         Rank existingRank = Context.Ranks.First();
         RankCreateDto createDto = new()
@@ -56,9 +56,9 @@ public class CreateRankTests: RankTestsSetup
 
         await Assert.ThrowsExactlyAsync<DbUpdateException>(() => Controller.CreateRank(createDto));
     }
-    
+
     [TestMethod]
-    public async Task CreateRank_VerifyRankCountIncreases()
+    public async Task CreateRankVerifyRankCountIncreases()
     {
         int initialCount = Context.Ranks.Count();
         RankCreateDto createDto = new()

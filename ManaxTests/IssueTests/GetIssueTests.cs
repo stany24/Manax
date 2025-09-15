@@ -7,10 +7,10 @@ using Microsoft.AspNetCore.Mvc;
 namespace ManaxTests.IssueTests;
 
 [TestClass]
-public class GetIssueTests:IssueTestsSetup
+public class GetIssueTests : IssueTestsSetup
 {
     [TestMethod]
-    public async Task GetAllAutomaticChapterIssues_ReturnsAllIssues()
+    public async Task GetAllAutomaticChapterIssuesReturnsAllIssues()
     {
         ActionResult<IEnumerable<AutomaticIssueChapterDto>> result = await Controller.GetAllAutomaticChapterIssues();
 
@@ -23,14 +23,15 @@ public class GetIssueTests:IssueTestsSetup
 
         foreach (AutomaticIssueChapter issue in Context.AutomaticIssuesChapter)
         {
-            AutomaticIssueChapterDto? returnedIssue = returnedIssues.FirstOrDefault(i => i.ChapterId == issue.ChapterId);
+            AutomaticIssueChapterDto? returnedIssue =
+                returnedIssues.FirstOrDefault(i => i.ChapterId == issue.ChapterId);
             Assert.IsNotNull(returnedIssue);
             Assert.AreEqual(issue.Problem, returnedIssue.Problem);
         }
     }
 
     [TestMethod]
-    public async Task GetAllAutomaticSerieIssues_ReturnsAllIssues()
+    public async Task GetAllAutomaticSerieIssuesReturnsAllIssues()
     {
         ActionResult<IEnumerable<AutomaticIssueSerieDto>> result = await Controller.GetAllAutomaticSerieIssues();
 
@@ -50,7 +51,7 @@ public class GetIssueTests:IssueTestsSetup
     }
 
     [TestMethod]
-    public async Task GetAllReportedChapterIssues_ReturnsAllIssues()
+    public async Task GetAllReportedChapterIssuesReturnsAllIssues()
     {
         ActionResult<IEnumerable<ReportedIssueChapterDto>> result = await Controller.GetAllReportedChapterIssues();
 
@@ -72,7 +73,7 @@ public class GetIssueTests:IssueTestsSetup
     }
 
     [TestMethod]
-    public async Task GetAllReportedChapterIssuesTypes_ReturnsAllTypes()
+    public async Task GetAllReportedChapterIssuesTypesReturnsAllTypes()
     {
         List<ReportedIssueChapterTypeDto> result = await Controller.GetAllReportedChapterIssuesTypes();
 
@@ -88,7 +89,7 @@ public class GetIssueTests:IssueTestsSetup
     }
 
     [TestMethod]
-    public async Task GetAllReportedSerieIssues_ReturnsAllIssues()
+    public async Task GetAllReportedSerieIssuesReturnsAllIssues()
     {
         ActionResult<IEnumerable<ReportedIssueSerieDto>> result = await Controller.GetAllReportedSerieIssues();
 
@@ -110,7 +111,7 @@ public class GetIssueTests:IssueTestsSetup
     }
 
     [TestMethod]
-    public async Task GetAllReportedSerieIssuesTypes_ReturnsAllTypes()
+    public async Task GetAllReportedSerieIssuesTypesReturnsAllTypes()
     {
         ActionResult<IEnumerable<ReportedIssueSerieType>> result = await Controller.GetAllReportedSerieIssuesTypes();
 
@@ -130,7 +131,7 @@ public class GetIssueTests:IssueTestsSetup
     }
 
     [TestMethod]
-    public async Task GetAllAutomaticChapterIssues_VerifyCorrectMapping()
+    public async Task GetAllAutomaticChapterIssuesVerifyCorrectMapping()
     {
         ActionResult<IEnumerable<AutomaticIssueChapterDto>> result = await Controller.GetAllAutomaticChapterIssues();
 
@@ -138,7 +139,8 @@ public class GetIssueTests:IssueTestsSetup
         Assert.IsNotNull(returnedIssues);
 
         AutomaticIssueChapter expectedIssue = Context.AutomaticIssuesChapter.First();
-        AutomaticIssueChapterDto? returnedIssue = returnedIssues.FirstOrDefault(i => i.ChapterId == expectedIssue.ChapterId);
+        AutomaticIssueChapterDto? returnedIssue =
+            returnedIssues.FirstOrDefault(i => i.ChapterId == expectedIssue.ChapterId);
         Assert.IsNotNull(returnedIssue);
         Assert.AreEqual(expectedIssue.ChapterId, returnedIssue.ChapterId);
         Assert.AreEqual(expectedIssue.Problem, returnedIssue.Problem);
@@ -146,7 +148,7 @@ public class GetIssueTests:IssueTestsSetup
     }
 
     [TestMethod]
-    public async Task GetAllAutomaticSerieIssues_VerifyCorrectMapping()
+    public async Task GetAllAutomaticSerieIssuesVerifyCorrectMapping()
     {
         ActionResult<IEnumerable<AutomaticIssueSerieDto>> result = await Controller.GetAllAutomaticSerieIssues();
 
@@ -162,7 +164,7 @@ public class GetIssueTests:IssueTestsSetup
     }
 
     [TestMethod]
-    public async Task GetAllReportedChapterIssuesTypes_VerifyCorrectCount()
+    public async Task GetAllReportedChapterIssuesTypesVerifyCorrectCount()
     {
         List<ReportedIssueChapterTypeDto> result = await Controller.GetAllReportedChapterIssuesTypes();
 
@@ -171,7 +173,7 @@ public class GetIssueTests:IssueTestsSetup
     }
 
     [TestMethod]
-    public async Task GetAllReportedSerieIssuesTypes_VerifyCorrectCount()
+    public async Task GetAllReportedSerieIssuesTypesVerifyCorrectCount()
     {
         ActionResult<IEnumerable<ReportedIssueSerieType>> result = await Controller.GetAllReportedSerieIssuesTypes();
 

@@ -5,10 +5,10 @@ using Microsoft.AspNetCore.Mvc;
 namespace ManaxTests.RankTests;
 
 [TestClass]
-public class SetRankTests: RankTestsSetup
+public class SetRankTests : RankTestsSetup
 {
     [TestMethod]
-    public async Task SetUserRank_WithNewRank_CreatesUserRank()
+    public async Task SetUserRankWithNewRankCreatesUserRank()
     {
         UserRankCreateDto createDto = new()
         {
@@ -28,7 +28,7 @@ public class SetRankTests: RankTestsSetup
     }
 
     [TestMethod]
-    public async Task SetUserRank_WithExistingRank_UpdatesUserRank()
+    public async Task SetUserRankWithExistingRankUpdatesUserRank()
     {
         UserRankCreateDto updateDto = new()
         {
@@ -46,7 +46,7 @@ public class SetRankTests: RankTestsSetup
     }
 
     [TestMethod]
-    public async Task SetUserRank_VerifyUserRankCountChanges()
+    public async Task SetUserRankVerifyUserRankCountChanges()
     {
         int initialCount = Context.UserRanks.Count();
         UserRankCreateDto createDto = new()

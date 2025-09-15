@@ -10,10 +10,15 @@ using ManaxServer.Services.Notification;
 
 namespace ManaxTests.Mocks;
 
-public class MockNotificationService: INotificationService
+public class MockNotificationService : INotificationService
 {
+    public UserDto? UserCreated { get; set; }
+    public DateTime UserCreatedAt { get; set; }
+
     public void NotifyUserCreatedAsync(UserDto user)
     {
+        UserCreated = user;
+        UserCreatedAt = DateTime.UtcNow;
     }
 
     public void NotifyUserDeletedAsync(long userId)

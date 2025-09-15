@@ -8,7 +8,7 @@ namespace ManaxTests.SerieTests;
 public class PostSerieTests : SerieTestsSetup
 {
     [TestMethod]
-    public async Task PostSerie_WithValidData_CreatesSerie()
+    public async Task PostSerieWithValidDataCreatesSerie()
     {
         SerieCreateDto createDto = new()
         {
@@ -29,7 +29,7 @@ public class PostSerieTests : SerieTestsSetup
     }
 
     [TestMethod]
-    public async Task PostSerie_WithEmptyTitle_ReturnsBadRequest()
+    public async Task PostSerieWithEmptyTitleReturnsBadRequest()
     {
         SerieCreateDto createDto = new()
         {
@@ -42,7 +42,7 @@ public class PostSerieTests : SerieTestsSetup
     }
 
     [TestMethod]
-    public async Task PostSerie_CreationDateSetCorrectly()
+    public async Task PostSerieCreationDateSetCorrectly()
     {
         SerieCreateDto createDto = new()
         {

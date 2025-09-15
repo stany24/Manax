@@ -40,7 +40,7 @@ public interface INotificationService
     void NotifyChapterIssueCreatedAsync(ReportedIssueChapterDto issue);
     void NotifyChapterIssueDeletedAsync(long issueId);
     void NotifySerieIssueDeletedAsync(long issueId);
-    
+
     void NotifyTagCreatedAsync(TagDto tag);
     void NotifyTagUpdatedAsync(TagDto tag);
     void NotifyTagDeletedAsync(long tagId);

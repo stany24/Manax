@@ -12,6 +12,7 @@ using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTO.User;
 using ManaxLibrary.Logging;
 using ManaxLibrary.Notifications;
+
 namespace ManaxClient.ViewModels.Pages.User;
 
 public partial class UsersPageViewModel : PageViewModel
@@ -85,9 +86,9 @@ public partial class UsersPageViewModel : PageViewModel
         {
             try
             {
-                if (context.Canceled()) { return; }
+                if (context.Canceled()) return;
                 UserCreateDto user = content.GetResult();
-                Optional<long> postUserResponse = await ManaxApiUserClient.PostUserAsync(user);
+                Optional<bool> postUserResponse = await ManaxApiUserClient.PostUserAsync(user);
                 if (postUserResponse.Failed) InfoEmitted?.Invoke(this, postUserResponse.Error);
             }
             catch (Exception e)

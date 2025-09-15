@@ -4,10 +4,10 @@ using Microsoft.AspNetCore.Mvc;
 namespace ManaxTests.RankTests;
 
 [TestClass]
-public class UpdateRankTests: RankTestsSetup
+public class UpdateRankTests : RankTestsSetup
 {
     [TestMethod]
-    public async Task UpdateRank_WithValidId_UpdatesRank()
+    public async Task UpdateRankWithValidIdUpdatesRank()
     {
         Rank existingRank = Context.Ranks.First();
         Rank updateRank = new()
@@ -28,7 +28,7 @@ public class UpdateRankTests: RankTestsSetup
     }
 
     [TestMethod]
-    public async Task UpdateRank_WithInvalidId_ReturnsNotFound()
+    public async Task UpdateRankWithInvalidIdReturnsNotFound()
     {
         Rank updateRank = new()
         {
@@ -41,9 +41,9 @@ public class UpdateRankTests: RankTestsSetup
 
         Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
     }
-    
+
     [TestMethod]
-    public async Task UpdateRank_WithExistingValueFromAnotherRank_ReturnsBadRequest()
+    public async Task UpdateRankWithExistingValueFromAnotherRankReturnsBadRequest()
     {
         List<Rank> ranks = Context.Ranks.Take(2).ToList();
         Rank firstRank = ranks[0];
@@ -62,7 +62,7 @@ public class UpdateRankTests: RankTestsSetup
     }
 
     [TestMethod]
-    public async Task UpdateRank_WithExistingNameFromAnotherRank_ReturnsBadRequest()
+    public async Task UpdateRankWithExistingNameFromAnotherRankReturnsBadRequest()
     {
         List<Rank> ranks = Context.Ranks.Take(2).ToList();
         Rank firstRank = ranks[0];

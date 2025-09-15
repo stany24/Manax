@@ -74,7 +74,7 @@ public class ChapterController(ManaxContext context, IMapper mapper, INotificati
             return NotFound(Localizer.ChapterFileNotExistOrInvalid());
         using ZipArchive archive = ZipFile.OpenRead(filePath);
         if (number < 0 || number >= archive.Entries.Count)
-            return NotFound(Localizer.PageNumberTooBig(number,archive.Entries.Count));
+            return NotFound(Localizer.PageNumberTooBig(number, archive.Entries.Count));
         ZipArchiveEntry entry = archive.Entries[number];
         await using Stream stream = entry.Open();
         using MemoryStream memoryStream = new();

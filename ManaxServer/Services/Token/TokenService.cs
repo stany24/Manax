@@ -17,10 +17,11 @@ public class TokenService(IPermissionService permissionService) : Service, IToke
         {
             rng.GetBytes(tokenBytes);
         }
+
         string bearerToken = Convert.ToBase64String(tokenBytes);
-        
+
         List<ManaxLibrary.DTO.User.Permission> userPermissions = permissionService.GetUserPermissions(user.Id).ToList();
-        
+
         DateTime expiry = DateTime.UtcNow.Add(TokenLifetime);
         _activeBearerTokens[bearerToken] = new TokenInfo
         {
@@ -29,13 +30,13 @@ public class TokenService(IPermissionService permissionService) : Service, IToke
             Permissions = userPermissions,
             Expiry = expiry
         };
-        
+
         return bearerToken;
     }
 
     public void RevokeToken(string? token)
     {
-        if(token == null) return;
+        if (token == null) return;
         _revokedTokens.Add(token);
         _activeBearerTokens.Remove(token);
     }
@@ -48,19 +49,19 @@ public class TokenService(IPermissionService permissionService) : Service, IToke
     public bool IsTokenValid(string token, out long userId)
     {
         userId = 0;
-        
+
         if (string.IsNullOrEmpty(token) || _revokedTokens.Contains(token))
             return false;
-            
+
         if (!_activeBearerTokens.TryGetValue(token, out TokenInfo? tokenInfo))
             return false;
-            
+
         if (DateTime.UtcNow > tokenInfo.Expiry)
         {
             _activeBearerTokens.Remove(token);
             return false;
         }
-        
+
         userId = tokenInfo.UserId;
         return true;
     }
@@ -69,16 +70,16 @@ public class TokenService(IPermissionService permissionService) : Service, IToke
     {
         if (string.IsNullOrEmpty(token) || _revokedTokens.Contains(token))
             return false;
-            
+
         if (!_activeBearerTokens.TryGetValue(token, out TokenInfo? tokenInfo))
             return false;
-            
+
         if (DateTime.UtcNow > tokenInfo.Expiry)
         {
             _activeBearerTokens.Remove(token);
             return false;
         }
-        
+
         return tokenInfo.Permissions.Contains(permission);
     }
 
@@ -86,16 +87,16 @@ public class TokenService(IPermissionService permissionService) : Service, IToke
     {
         if (string.IsNullOrEmpty(token) || _revokedTokens.Contains(token))
             return null;
-            
+
         if (!_activeBearerTokens.TryGetValue(token, out TokenInfo? tokenInfo))
             return null;
-            
+
         if (DateTime.UtcNow > tokenInfo.Expiry)
         {
             _activeBearerTokens.Remove(token);
             return null;
         }
-        
+
         return tokenInfo;
     }
 }

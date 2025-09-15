@@ -9,7 +9,7 @@ namespace ManaxTests.SerieTests;
 public class GetSerieTests : SerieTestsSetup
 {
     [TestMethod]
-    public async Task GetSeries_ReturnsAllSerieIds()
+    public async Task GetSeriesReturnsAllSerieIds()
     {
         ActionResult<IEnumerable<long>> result = await Controller.GetSeries();
 
@@ -24,7 +24,7 @@ public class GetSerieTests : SerieTestsSetup
     }
 
     [TestMethod]
-    public async Task GetSerie_WithValidId_ReturnsSerie()
+    public async Task GetSerieWithValidIdReturnsSerie()
     {
         Serie serie = Context.Series.First();
         ActionResult<SerieDto> result = await Controller.GetSerie(serie.Id);
@@ -39,7 +39,7 @@ public class GetSerieTests : SerieTestsSetup
     }
 
     [TestMethod]
-    public async Task GetSerie_WithInvalidId_ReturnsNotFound()
+    public async Task GetSerieWithInvalidIdReturnsNotFound()
     {
         ActionResult<SerieDto> result = await Controller.GetSerie(999999);
 
@@ -47,7 +47,7 @@ public class GetSerieTests : SerieTestsSetup
     }
 
     [TestMethod]
-    public void GetSerieChapters_WithValidId_ReturnsChapterIds()
+    public void GetSerieChaptersWithValidIdReturnsChapterIds()
     {
         Serie serie = Context.Series.First();
         List<Chapter> chaptersOfSerie = Context.Chapters.Where(c => c.SerieId == serie.Id).ToList();
@@ -64,7 +64,7 @@ public class GetSerieTests : SerieTestsSetup
     }
 
     [TestMethod]
-    public void GetSerieChapters_WithInvalidId_ReturnsNotFound()
+    public void GetSerieChaptersWithInvalidIdReturnsNotFound()
     {
         ActionResult<List<long>> result = Controller.GetSerieChapters(999999);
 
@@ -75,7 +75,7 @@ public class GetSerieTests : SerieTestsSetup
     }
 
     [TestMethod]
-    public async Task GetSerie_VerifyAllPropertiesMapping()
+    public async Task GetSerieVerifyAllPropertiesMapping()
     {
         Serie serie = Context.Series.First();
         ActionResult<SerieDto> result = await Controller.GetSerie(serie.Id);

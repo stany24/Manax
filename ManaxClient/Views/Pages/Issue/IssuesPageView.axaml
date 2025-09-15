@@ -80,7 +80,8 @@
                                    Margin="0,0,0,8"
                                    CloseCommand="{Binding Close}"
                                    Command="{Binding $parent[UserControl].((page:IssuesPageViewModel)DataContext).OpenSeriePage}"
-                                   CommandParameter="{Binding Serie.Id}">>
+                                   CommandParameter="{Binding Serie.Id}">
+                >
                 <previews:IssuePreview.Info>
                     <MultiBinding StringFormat="Série: {0} • Utilisateur: {1} • {2:dd/MM/yyyy HH:mm}">
                         <Binding Path="Serie.Title" />

@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using ManaxLibrary.DTO.User;
 using ManaxServer.Models.User;
 using Microsoft.AspNetCore.Mvc;
@@ -8,7 +9,7 @@ namespace ManaxTests.UserTests;
 public class PutUserTests : UserTestsSetup
 {
     [TestMethod]
-    public async Task PutUser_WithValidPassword_UpdatesCurrentUserPassword()
+    public async Task PutUserWithValidPasswordUpdatesCurrentUserPassword()
     {
         User user = Context.Users.First(u => u.Id == 2);
         string originalPasswordHash = user.PasswordHash;
@@ -30,7 +31,7 @@ public class PutUserTests : UserTestsSetup
     }
 
     [TestMethod]
-    public async Task PutUser_WithInvalidPassword_ReturnsBadRequest()
+    public async Task PutUserWithInvalidPasswordReturnsBadRequest()
     {
         User user = Context.Users.First(u => u.Id == 2);
         UserUpdateDto userUpdate = new()
@@ -46,9 +47,9 @@ public class PutUserTests : UserTestsSetup
     }
 
     [TestMethod]
-    public async Task PutUser_WithoutAuthenticatedUser_ReturnsUnauthorized()
+    public async Task PutUserWithoutAuthenticatedUserReturnsUnauthorized()
     {
-        Controller.ControllerContext.HttpContext.User = new System.Security.Claims.ClaimsPrincipal();
+        Controller.ControllerContext.HttpContext.User = new ClaimsPrincipal();
         User user = Context.Users.First(u => u.Id == 2);
         UserUpdateDto userUpdate = new()
         {
@@ -63,7 +64,7 @@ public class PutUserTests : UserTestsSetup
     }
 
     [TestMethod]
-    public async Task ResetPassword_WithValidId_ResetsPasswordAndReturnsNewPassword()
+    public async Task ResetPasswordWithValidIdResetsPasswordAndReturnsNewPassword()
     {
         User user = Context.Users.First(u => u.Id == 2);
         string originalPasswordHash = user.PasswordHash;
@@ -80,7 +81,7 @@ public class PutUserTests : UserTestsSetup
     }
 
     [TestMethod]
-    public async Task ResetPassword_WithInvalidId_ReturnsNotFound()
+    public async Task ResetPasswordWithInvalidIdReturnsNotFound()
     {
         ActionResult<string> result = await Controller.ResetPassword(999);
 

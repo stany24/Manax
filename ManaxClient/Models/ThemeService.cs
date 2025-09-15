@@ -3,7 +3,7 @@ using Avalonia.Media;
 
 namespace ManaxClient.Models;
 
-public class ThemeService
+public static class ThemeService
 {
     public static void UpdateTheme(Theme theme, bool isDark)
     {

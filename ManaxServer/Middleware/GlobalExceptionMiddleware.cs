@@ -24,8 +24,8 @@ public class GlobalExceptionMiddleware(
     private async Task HandleExceptionAsync(HttpContext context, Exception exception)
     {
         string traceId = Guid.NewGuid().ToString();
-        
-        Logger.LogError("An unhandled error occurred "+traceId+": ", exception, Environment.StackTrace);
+
+        Logger.LogError("An unhandled error occurred " + traceId + ": ", exception, Environment.StackTrace);
 
         ApiError error = new()
         {

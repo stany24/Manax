@@ -9,7 +9,7 @@ namespace ManaxTests.UserTests;
 public class LoginUserTests : UserTestsSetup
 {
     [TestMethod]
-    public async Task Login_WithValidCredentials_ReturnsToken()
+    public async Task LoginWithValidCredentialsReturnsToken()
     {
         User user = Context.Users.First();
         user.PasswordHash = "correctPasswordhashed";
@@ -36,7 +36,7 @@ public class LoginUserTests : UserTestsSetup
     }
 
     [TestMethod]
-    public async Task Login_WithInvalidCredentials_ReturnsUnauthorized()
+    public async Task LoginWithInvalidCredentialsReturnsUnauthorized()
     {
         UserLoginDto loginDto = new()
         {
@@ -55,7 +55,7 @@ public class LoginUserTests : UserTestsSetup
     }
 
     [TestMethod]
-    public async Task Login_WithNonExistentUser_ReturnsUnauthorized()
+    public async Task LoginWithNonExistentUserReturnsUnauthorized()
     {
         UserLoginDto loginDto = new()
         {
@@ -73,7 +73,7 @@ public class LoginUserTests : UserTestsSetup
     }
 
     [TestMethod]
-    public async Task Login_UpdatesLastLoginTime()
+    public async Task LoginUpdatesLastLoginTime()
     {
         User user = Context.Users.First();
         user.PasswordHash = "correctPasswordhashed";
@@ -99,7 +99,7 @@ public class LoginUserTests : UserTestsSetup
     }
 
     [TestMethod]
-    public async Task Login_CreatesSuccessfulLoginAttempt()
+    public async Task LoginCreatesSuccessfulLoginAttempt()
     {
         User user = Context.Users.First();
         user.PasswordHash = "correctPasswordhashed";
@@ -123,7 +123,7 @@ public class LoginUserTests : UserTestsSetup
     }
 
     [TestMethod]
-    public async Task Login_WithEmptyDatabase_RedirectsToClaim()
+    public async Task LoginWithEmptyDatabaseRedirectsToClaim()
     {
         Context.Users.RemoveRange(Context.Users);
         await Context.SaveChangesAsync();
@@ -146,7 +146,7 @@ public class LoginUserTests : UserTestsSetup
     }
 
     [TestMethod]
-    public async Task Login_VerifyLoginAttemptHasCorrectOrigin()
+    public async Task LoginVerifyLoginAttemptHasCorrectOrigin()
     {
         User user = Context.Users.First();
         user.PasswordHash = "correctPasswordhashed";

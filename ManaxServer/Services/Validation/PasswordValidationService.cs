@@ -5,18 +5,6 @@ namespace ManaxServer.Services.Validation;
 
 public partial class PasswordValidationService(bool isProduction) : IPasswordValidationService
 {
-    [GeneratedRegex("[a-z]")]
-    private static partial Regex HasLowercase();
-    
-    [GeneratedRegex("[A-Z]")]
-    private static partial Regex HasUppercase();
-    
-    [GeneratedRegex(@"[!@#$%^&*()_+\-=\[\]{};':""\\|,.<>\/?]")]
-    private static partial Regex HasSpecialCharacter();
-    
-    [GeneratedRegex("[0-9]")]
-    private static partial Regex HasDigit();
-
     public bool IsPasswordValid(string password, out string? errorMessage)
     {
         errorMessage = null;
@@ -27,10 +15,7 @@ public partial class PasswordValidationService(bool isProduction) : IPasswordVal
             return false;
         }
 
-        if (!isProduction)
-        {
-            return true;
-        }
+        if (!isProduction) return true;
 
         if (password.Length < 14)
         {
@@ -71,11 +56,20 @@ public partial class PasswordValidationService(bool isProduction) : IPasswordVal
         passwordChars[2] = digits[random.Next(digits.Length)];
         passwordChars[3] = special[random.Next(special.Length)];
 
-        for (int i = 4; i < passwordChars.Length; i++)
-        {
-            passwordChars[i] = all[random.Next(all.Length)];
-        }
+        for (int i = 4; i < passwordChars.Length; i++) passwordChars[i] = all[random.Next(all.Length)];
 
-        return new string(passwordChars.OrderBy(x => random.Next()).ToArray());
+        return new string(passwordChars.OrderBy(_ => random.Next()).ToArray());
     }
+
+    [GeneratedRegex("[a-z]")]
+    private static partial Regex HasLowercase();
+
+    [GeneratedRegex("[A-Z]")]
+    private static partial Regex HasUppercase();
+
+    [GeneratedRegex(@"[!@#$%^&*()_+\-=\[\]{};':""\\|,.<>\/?]")]
+    private static partial Regex HasSpecialCharacter();
+
+    [GeneratedRegex("[0-9]")]
+    private static partial Regex HasDigit();
 }

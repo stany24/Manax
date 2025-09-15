@@ -9,17 +9,17 @@
     x:DataType="content:LibraryCreateViewModel">
     <Grid RowDefinitions="Auto,Auto,Auto" RowSpacing="16" Margin="16">
         <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="12" Margin="0,0,0,8">
-            <TextBlock Text="📚" FontSize="24" VerticalAlignment="Center"/>
+            <TextBlock Text="📚" FontSize="24" VerticalAlignment="Center" />
             <StackPanel Spacing="4">
                 <TextBlock
                     Text="Nouvelle bibliothèque"
                     FontSize="18"
                     FontWeight="Bold"
-                    Foreground="#212529"/>
+                    Foreground="#212529" />
                 <TextBlock
                     Text="Créez une nouvelle bibliothèque pour organiser vos séries"
                     FontSize="12"
-                    Foreground="#6C757D"/>
+                    Foreground="#6C757D" />
             </StackPanel>
         </StackPanel>
 
@@ -27,7 +27,7 @@
             <TextBlock
                 Text="Nom de la bibliothèque"
                 FontWeight="Medium"
-                Foreground="#495057"/>
+                Foreground="#495057" />
             <TextBox
                 Text="{Binding Name}"
                 Watermark="Entrez le nom de la bibliothèque..."
@@ -38,16 +38,16 @@
                 FontSize="14">
                 <TextBox.Styles>
                     <Style Selector="TextBox:pointerover">
-                        <Setter Property="BorderBrush" Value="#007ACC"/>
+                        <Setter Property="BorderBrush" Value="#007ACC" />
                     </Style>
                     <Style Selector="TextBox:focus">
-                        <Setter Property="BorderBrush" Value="#007ACC"/>
+                        <Setter Property="BorderBrush" Value="#007ACC" />
                     </Style>
                 </TextBox.Styles>
             </TextBox>
         </StackPanel>
 
-        <Border 
+        <Border
             Grid.Row="2"
             Background="#E3F2FD"
             BorderBrush="#007ACC"
@@ -55,12 +55,12 @@
             CornerRadius="8"
             Padding="12">
             <StackPanel Orientation="Horizontal" Spacing="8">
-                <TextBlock Text="💡" FontSize="14" VerticalAlignment="Top"/>
+                <TextBlock Text="💡" FontSize="14" VerticalAlignment="Top" />
                 <TextBlock
                     Text="Choisissez un nom descriptif pour votre bibliothèque. Vous pourrez l'organiser et la gérer facilement par la suite."
                     TextWrapping="Wrap"
                     FontSize="12"
-                    Foreground="#495057"/>
+                    Foreground="#495057" />
             </StackPanel>
         </Border>
     </Grid>

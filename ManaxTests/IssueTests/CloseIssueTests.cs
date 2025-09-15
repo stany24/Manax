@@ -4,10 +4,10 @@ using Microsoft.AspNetCore.Mvc;
 namespace ManaxTests.IssueTests;
 
 [TestClass]
-public class CloseIssueTests: IssueTestsSetup
+public class CloseIssueTests : IssueTestsSetup
 {
     [TestMethod]
-    public async Task CloseChapterIssue_WithValidId_RemovesIssue()
+    public async Task CloseChapterIssueWithValidIdRemovesIssue()
     {
         ReportedIssueChapter issue = Context.ReportedIssuesChapter.First();
         IActionResult result = await Controller.CloseChapterIssue(issue.Id);
@@ -19,7 +19,7 @@ public class CloseIssueTests: IssueTestsSetup
     }
 
     [TestMethod]
-    public async Task CloseChapterIssue_WithInvalidId_ReturnsNotFound()
+    public async Task CloseChapterIssueWithInvalidIdReturnsNotFound()
     {
         IActionResult result = await Controller.CloseChapterIssue(999999);
 
@@ -27,7 +27,7 @@ public class CloseIssueTests: IssueTestsSetup
     }
 
     [TestMethod]
-    public async Task CloseChapterIssue_VerifyIssueCountDecreases()
+    public async Task CloseChapterIssueVerifyIssueCountDecreases()
     {
         int initialCount = Context.ReportedIssuesChapter.Count();
         ReportedIssueChapter issue = Context.ReportedIssuesChapter.First();
@@ -41,7 +41,7 @@ public class CloseIssueTests: IssueTestsSetup
     }
 
     [TestMethod]
-    public async Task CloseSerieIssue_WithValidId_RemovesIssue()
+    public async Task CloseSerieIssueWithValidIdRemovesIssue()
     {
         ReportedIssueSerie issue = Context.ReportedIssuesSerie.First();
         IActionResult result = await Controller.CloseSerieIssue(issue.Id);
@@ -53,7 +53,7 @@ public class CloseIssueTests: IssueTestsSetup
     }
 
     [TestMethod]
-    public async Task CloseSerieIssue_WithInvalidId_ReturnsNotFound()
+    public async Task CloseSerieIssueWithInvalidIdReturnsNotFound()
     {
         IActionResult result = await Controller.CloseSerieIssue(999999);
 
@@ -61,7 +61,7 @@ public class CloseIssueTests: IssueTestsSetup
     }
 
     [TestMethod]
-    public async Task CloseSerieIssue_VerifyIssueCountDecreases()
+    public async Task CloseSerieIssueVerifyIssueCountDecreases()
     {
         int initialCount = Context.ReportedIssuesSerie.Count();
         ReportedIssueSerie issue = Context.ReportedIssuesSerie.First();
@@ -75,7 +75,7 @@ public class CloseIssueTests: IssueTestsSetup
     }
 
     [TestMethod]
-    public async Task CloseChapterIssue_OnlyRemovesSpecificIssue()
+    public async Task CloseChapterIssueOnlyRemovesSpecificIssue()
     {
         ReportedIssueChapter issueToDelete = Context.ReportedIssuesChapter.First();
         ReportedIssueChapter otherIssue = Context.ReportedIssuesChapter.First(i => i.Id != issueToDelete.Id);
@@ -92,7 +92,7 @@ public class CloseIssueTests: IssueTestsSetup
     }
 
     [TestMethod]
-    public async Task CloseSerieIssue_OnlyRemovesSpecificIssue()
+    public async Task CloseSerieIssueOnlyRemovesSpecificIssue()
     {
         ReportedIssueSerie issueToDelete = Context.ReportedIssuesSerie.First();
         ReportedIssueSerie otherIssue = Context.ReportedIssuesSerie.First(i => i.Id != issueToDelete.Id);

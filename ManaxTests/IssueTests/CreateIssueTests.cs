@@ -7,10 +7,10 @@ using Microsoft.AspNetCore.Mvc;
 namespace ManaxTests.IssueTests;
 
 [TestClass]
-public class CreateIssueTests: IssueTestsSetup
+public class CreateIssueTests : IssueTestsSetup
 {
     [TestMethod]
-    public async Task CreateChapterIssue_WithValidData_CreatesIssue()
+    public async Task CreateChapterIssueWithValidDataCreatesIssue()
     {
         ReportedIssueChapterCreateDto createDto = new()
         {
@@ -23,7 +23,8 @@ public class CreateIssueTests: IssueTestsSetup
         Assert.IsInstanceOfType(result, typeof(CreatedResult));
 
         ReportedIssueChapter? createdIssue = Context.ReportedIssuesChapter
-            .FirstOrDefault(i => i.ChapterId == createDto.ChapterId && i.UserId == 1 && i.ProblemId == createDto.ProblemId);
+            .FirstOrDefault(i =>
+                i.ChapterId == createDto.ChapterId && i.UserId == 1 && i.ProblemId == createDto.ProblemId);
         Assert.IsNotNull(createdIssue);
         Assert.AreEqual(createDto.ChapterId, createdIssue.ChapterId);
         Assert.AreEqual(createDto.ProblemId, createdIssue.ProblemId);
@@ -31,7 +32,7 @@ public class CreateIssueTests: IssueTestsSetup
     }
 
     [TestMethod]
-    public async Task CreateChapterIssue_WithoutAuthentication_ReturnsUnauthorized()
+    public async Task CreateChapterIssueWithoutAuthenticationReturnsUnauthorized()
     {
         Controller.ControllerContext = new ControllerContext
         {
@@ -50,7 +51,7 @@ public class CreateIssueTests: IssueTestsSetup
     }
 
     [TestMethod]
-    public async Task CreateChapterIssue_VerifyCreationDate()
+    public async Task CreateChapterIssueVerifyCreationDate()
     {
         ReportedIssueChapterCreateDto createDto = new()
         {
@@ -72,7 +73,7 @@ public class CreateIssueTests: IssueTestsSetup
     }
 
     [TestMethod]
-    public async Task CreateSerieIssue_WithValidData_CreatesIssue()
+    public async Task CreateSerieIssueWithValidDataCreatesIssue()
     {
         ReportedIssueSerieCreateDto createDto = new()
         {
@@ -93,7 +94,7 @@ public class CreateIssueTests: IssueTestsSetup
     }
 
     [TestMethod]
-    public async Task CreateSerieIssue_WithoutAuthentication_ReturnsUnauthorized()
+    public async Task CreateSerieIssueWithoutAuthenticationReturnsUnauthorized()
     {
         Controller.ControllerContext = new ControllerContext
         {
@@ -112,7 +113,7 @@ public class CreateIssueTests: IssueTestsSetup
     }
 
     [TestMethod]
-    public async Task CreateSerieIssue_VerifyCreationDate()
+    public async Task CreateSerieIssueVerifyCreationDate()
     {
         ReportedIssueSerieCreateDto createDto = new()
         {
@@ -132,9 +133,9 @@ public class CreateIssueTests: IssueTestsSetup
         Assert.IsTrue(createdIssue.CreatedAt >= before);
         Assert.IsTrue(createdIssue.CreatedAt <= after);
     }
-    
+
     [TestMethod]
-    public async Task CreateChapterIssue_VerifyUserIdSetCorrectly()
+    public async Task CreateChapterIssueVerifyUserIdSetCorrectly()
     {
         ClaimsPrincipal user = new(new ClaimsIdentity([
             new Claim(ClaimTypes.NameIdentifier, "2"),
@@ -167,7 +168,7 @@ public class CreateIssueTests: IssueTestsSetup
     }
 
     [TestMethod]
-    public async Task CreateChapterIssue_MultipleIssuesForSameChapter_CreatesMultipleIssues()
+    public async Task CreateChapterIssueMultipleIssuesForSameChapterCreatesMultipleIssues()
     {
         ReportedIssueChapterCreateDto firstDto = new()
         {
@@ -192,7 +193,7 @@ public class CreateIssueTests: IssueTestsSetup
     }
 
     [TestMethod]
-    public async Task CreateSerieIssue_MultipleIssuesForSameSerie_CreatesMultipleIssues()
+    public async Task CreateSerieIssueMultipleIssuesForSameSerieCreatesMultipleIssues()
     {
         ReportedIssueSerieCreateDto firstDto = new()
         {
@@ -217,7 +218,7 @@ public class CreateIssueTests: IssueTestsSetup
     }
 
     [TestMethod]
-    public async Task CreateChapterIssue_WithDuplicateData_ReturnsConflict()
+    public async Task CreateChapterIssueWithDuplicateDataReturnsConflict()
     {
         ReportedIssueChapterCreateDto createDto = new()
         {
@@ -233,7 +234,7 @@ public class CreateIssueTests: IssueTestsSetup
     }
 
     [TestMethod]
-    public async Task CreateSerieIssue_WithDuplicateData_ReturnsConflict()
+    public async Task CreateSerieIssueWithDuplicateDataReturnsConflict()
     {
         ReportedIssueSerieCreateDto createDto = new()
         {

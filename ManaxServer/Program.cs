@@ -60,7 +60,7 @@ public class Program
         builder.Services.AddSingleton<IPasswordValidationService>(_ =>
             new PasswordValidationService(builder.Environment.IsProduction()));
         AddRateLimiting(builder);
-        
+
         builder.Services.AddScoped<IMapper>(_ => new ManaxMapper(new ManaxMapping()));
 
         builder.Services.Configure<KestrelServerOptions>(options =>
@@ -69,7 +69,7 @@ public class Program
             options.Limits.KeepAliveTimeout = TimeSpan.FromMinutes(3);
             options.Limits.RequestHeadersTimeout = TimeSpan.FromSeconds(20);
         });
-        
+
         builder.Services.Configure<FormOptions>(options =>
         {
             options.ValueLengthLimit = int.MaxValue;
@@ -131,7 +131,7 @@ public class Program
                 new ReportedIssueChapterType { Name = "Bad quality" });
             manaxContext.SaveChanges();
         }
-        
+
         if (!manaxContext.ReportedIssueSerieTypes.Any())
         {
             manaxContext.ReportedIssueSerieTypes.AddRange(
@@ -172,14 +172,12 @@ public class Program
         builder.Services.AddSingleton<IPermissionService>(provider =>
             new PermissionService(provider.GetRequiredService<IServiceScopeFactory>()));
 
-        IPermissionService permissionService = builder.Services.BuildServiceProvider().GetRequiredService<IPermissionService>();
+        IPermissionService permissionService =
+            builder.Services.BuildServiceProvider().GetRequiredService<IPermissionService>();
         TokenService tokenService = new(permissionService);
         builder.Services.AddSingleton<ITokenService>(tokenService);
 
         builder.Services.AddAuthentication()
-            .AddBearerToken(options =>
-            {
-                options.BearerTokenExpiration = TimeSpan.FromHours(12);
-            });
+            .AddBearerToken(options => { options.BearerTokenExpiration = TimeSpan.FromHours(12); });
     }
 }

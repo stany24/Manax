@@ -1,3 +1,5 @@
+// ReSharper disable PropertyCanBeMadeInitOnly.Global
+
 using System.Drawing;
 
 namespace ManaxLibrary.DTO.Tag;

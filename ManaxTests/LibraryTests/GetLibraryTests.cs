@@ -5,10 +5,10 @@ using Microsoft.AspNetCore.Mvc;
 namespace ManaxTests.LibraryTests;
 
 [TestClass]
-public class GetLibraryTests: LibraryTestsSetup
+public class GetLibraryTests : LibraryTestsSetup
 {
     [TestMethod]
-    public async Task GetLibraries_ReturnsAllLibraryIds()
+    public async Task GetLibrariesReturnsAllLibraryIds()
     {
         ActionResult<IEnumerable<long>> result = await Controller.GetLibraries();
 
@@ -22,7 +22,7 @@ public class GetLibraryTests: LibraryTestsSetup
     }
 
     [TestMethod]
-    public async Task GetLibrary_WithValidId_ReturnsLibrary()
+    public async Task GetLibraryWithValidIdReturnsLibrary()
     {
         Library library = Context.Libraries.First();
         ActionResult<LibraryDto> result = await Controller.GetLibrary(library.Id);
@@ -38,7 +38,7 @@ public class GetLibraryTests: LibraryTestsSetup
     }
 
     [TestMethod]
-    public async Task GetLibrary_WithInvalidId_ReturnsNotFound()
+    public async Task GetLibraryWithInvalidIdReturnsNotFound()
     {
         ActionResult<LibraryDto> result = await Controller.GetLibrary(999999);
 

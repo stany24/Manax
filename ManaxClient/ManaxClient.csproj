@@ -49,21 +49,21 @@
 
     <ItemGroup>
         <AvaloniaResource Include="Assets\**"/>
-        <Folder Include="Views\Pages\" />
+        <Folder Include="Views\Pages\"/>
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Avalonia" Version="11.3.6" />
-        <PackageReference Include="Avalonia.Controls.ColorPicker" Version="11.3.6" />
-        <PackageReference Include="Avalonia.Desktop" Version="11.3.6" />
-        <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.6" />
-        <PackageReference Include="Avalonia.Fonts.Inter" Version="11.3.6" />
+        <PackageReference Include="Avalonia" Version="11.3.6"/>
+        <PackageReference Include="Avalonia.Controls.ColorPicker" Version="11.3.6"/>
+        <PackageReference Include="Avalonia.Desktop" Version="11.3.6"/>
+        <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.6"/>
+        <PackageReference Include="Avalonia.Fonts.Inter" Version="11.3.6"/>
         <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
-        <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.3.6" />
-        <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
-        <PackageReference Include="LiveChartsCore.SkiaSharpView.Avalonia" Version="2.0.0-rc5.4" />
-        <PackageReference Include="nulastudio.NetBeauty" Version="2.1.5" />
-        <PackageReference Include="Xaml.Behaviors.Avalonia" Version="11.3.2" />
+        <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.3.6"/>
+        <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0"/>
+        <PackageReference Include="LiveChartsCore.SkiaSharpView.Avalonia" Version="2.0.0-rc5.4"/>
+        <PackageReference Include="nulastudio.NetBeauty" Version="2.1.5"/>
+        <PackageReference Include="Xaml.Behaviors.Avalonia" Version="11.3.2"/>
     </ItemGroup>
 
     <ItemGroup>
@@ -87,64 +87,64 @@
             <SubType>Code</SubType>
         </Compile>
         <Compile Update="Views\Popup\ConfirmCancel\ConfirmCancelView.axaml.cs">
-          <DependentUpon>LoginPageView.axaml</DependentUpon>
-          <SubType>Code</SubType>
+            <DependentUpon>LoginPageView.axaml</DependentUpon>
+            <SubType>Code</SubType>
         </Compile>
         <Compile Update="Views\Popup\ConfirmCancel\Content\ReplaceChapterView.axaml.cs">
-          <DependentUpon>ReplaceChapterView.axaml</DependentUpon>
-          <SubType>Code</SubType>
+            <DependentUpon>ReplaceChapterView.axaml</DependentUpon>
+            <SubType>Code</SubType>
         </Compile>
         <Compile Update="Views\Popup\ConfirmCancel\Content\CreateChapterIssueView.axaml.cs">
-          <DependentUpon>CreateChapterIssueView.axaml</DependentUpon>
-          <SubType>Code</SubType>
+            <DependentUpon>CreateChapterIssueView.axaml</DependentUpon>
+            <SubType>Code</SubType>
         </Compile>
         <Compile Update="Views\Popup\ConfirmCancel\Content\LibraryCreateView.axaml.cs">
-          <DependentUpon>LibraryCreateView.axaml</DependentUpon>
-          <SubType>Code</SubType>
+            <DependentUpon>LibraryCreateView.axaml</DependentUpon>
+            <SubType>Code</SubType>
         </Compile>
         <Compile Update="Views\Popup\ConfirmCancel\Content\RankEditView.axaml.cs">
-          <DependentUpon>RankEditView.axaml</DependentUpon>
-          <SubType>Code</SubType>
+            <DependentUpon>RankEditView.axaml</DependentUpon>
+            <SubType>Code</SubType>
         </Compile>
         <Compile Update="Views\Popup\ConfirmCancel\Content\UserCreateView.axaml.cs">
-          <DependentUpon>UserCreateView.axaml</DependentUpon>
-          <SubType>Code</SubType>
+            <DependentUpon>UserCreateView.axaml</DependentUpon>
+            <SubType>Code</SubType>
         </Compile>
         <Compile Update="Views\Popup\ConfirmCancel\Content\TagEditView.axaml.cs">
-          <DependentUpon>TagEditView.axaml</DependentUpon>
-          <SubType>Code</SubType>
+            <DependentUpon>TagEditView.axaml</DependentUpon>
+            <SubType>Code</SubType>
         </Compile>
         <Compile Update="Views\Popup\ConfirmCancel\Content\SavePointCreateView.axaml.cs">
-          <DependentUpon>SavePointCreateView.axaml</DependentUpon>
-          <SubType>Code</SubType>
+            <DependentUpon>SavePointCreateView.axaml</DependentUpon>
+            <SubType>Code</SubType>
         </Compile>
         <Compile Update="Views\Popup\ConfirmCancel\Content\SerieUpdateView.axaml.cs">
-          <DependentUpon>SerieUpdateView.axaml</DependentUpon>
-          <SubType>Code</SubType>
+            <DependentUpon>SerieUpdateView.axaml</DependentUpon>
+            <SubType>Code</SubType>
         </Compile>
         <Compile Update="Views\Popup\SelectChoice\ChooseActionView.axaml.cs">
-          <DependentUpon>ChooseActionView.axaml</DependentUpon>
-          <SubType>Code</SubType>
+            <DependentUpon>ChooseActionView.axaml</DependentUpon>
+            <SubType>Code</SubType>
         </Compile>
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\ManaxLibrary\ManaxLibrary.csproj" />
+        <ProjectReference Include="..\ManaxLibrary\ManaxLibrary.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-      <AdditionalFiles Include="Views\Pages\Chapter\ChapterPageView.axaml" />
-      <AdditionalFiles Include="Views\Pages\Home\HomePageView.axaml" />
-      <AdditionalFiles Include="Views\Pages\Issue\IssuesPageView.axaml" />
-      <AdditionalFiles Include="Views\Pages\Library\LibraryPageView.axaml" />
-      <AdditionalFiles Include="Views\Pages\Login\LoginPageView.axaml" />
-      <AdditionalFiles Include="Views\Pages\Rank\RankPageView.axaml" />
-      <AdditionalFiles Include="Views\Pages\Serie\SeriePageView.axaml" />
-      <AdditionalFiles Include="Views\Pages\Settings\SettingsAppView.axaml" />
-      <AdditionalFiles Include="Views\Pages\Settings\SettingsServerPageView.axaml" />
-      <AdditionalFiles Include="Views\Pages\Stats\ServerStatsPageView.axaml" />
-      <AdditionalFiles Include="Views\Pages\Stats\UserStatsPageView.axaml" />
-      <AdditionalFiles Include="Views\Pages\Tag\TagPageView.axaml" />
-      <AdditionalFiles Include="Views\Pages\User\UsersPageView.axaml" />
+        <AdditionalFiles Include="Views\Pages\Chapter\ChapterPageView.axaml"/>
+        <AdditionalFiles Include="Views\Pages\Home\HomePageView.axaml"/>
+        <AdditionalFiles Include="Views\Pages\Issue\IssuesPageView.axaml"/>
+        <AdditionalFiles Include="Views\Pages\Library\LibraryPageView.axaml"/>
+        <AdditionalFiles Include="Views\Pages\Login\LoginPageView.axaml"/>
+        <AdditionalFiles Include="Views\Pages\Rank\RankPageView.axaml"/>
+        <AdditionalFiles Include="Views\Pages\Serie\SeriePageView.axaml"/>
+        <AdditionalFiles Include="Views\Pages\Settings\SettingsAppView.axaml"/>
+        <AdditionalFiles Include="Views\Pages\Settings\SettingsServerPageView.axaml"/>
+        <AdditionalFiles Include="Views\Pages\Stats\ServerStatsPageView.axaml"/>
+        <AdditionalFiles Include="Views\Pages\Stats\UserStatsPageView.axaml"/>
+        <AdditionalFiles Include="Views\Pages\Tag\TagPageView.axaml"/>
+        <AdditionalFiles Include="Views\Pages\User\UsersPageView.axaml"/>
     </ItemGroup>
 </Project>

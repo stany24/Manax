@@ -30,13 +30,13 @@ public class TagController(ManaxContext context, IMapper mapper, INotificationSe
     [HttpPost]
     [RequirePermission(Permission.WriteTags)]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<long>> CreateTag(TagCreateDto tagCreate)
+    public async Task<IActionResult> CreateTag(TagCreateDto tagCreate)
     {
         Tag tag = mapper.Map<Tag>(tagCreate);
         context.Tags.Add(tag);
         await context.SaveChangesAsync();
         notificationService.NotifyTagCreatedAsync(mapper.Map<TagDto>(tag));
-        return tag.Id;
+        return Ok();
     }
 
     // PUT: api/tag
@@ -45,12 +45,11 @@ public class TagController(ManaxContext context, IMapper mapper, INotificationSe
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> UpdateTag(Tag tag)
+    public async Task<IActionResult> UpdateTag(TagUpdateDto tag)
     {
         Tag? found = context.Tags.FirstOrDefault(r => r.Id == tag.Id);
         if (found == null) return NotFound(Localizer.TagNotFound(tag.Id));
-        found.Name = tag.Name;
-        found.Color = tag.Color;
+        mapper.Map(tag, found);
         try
         {
             await context.SaveChangesAsync();
@@ -85,20 +84,20 @@ public class TagController(ManaxContext context, IMapper mapper, INotificationSe
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> SetSerieTags(TagOfSerieDto info)
     {
-        Serie? serie = context.Series.FirstOrDefault(s => s.Id == info.serieId);
-        if(serie == null)
-            return NotFound(Localizer.SerieNotFound(info.serieId));
+        Serie? serie = context.Series.FirstOrDefault(s => s.Id == info.SerieId);
+        if (serie == null)
+            return NotFound(Localizer.SerieNotFound(info.SerieId));
 
-        IQueryable<SerieTag> existingTags = context.SerieTags.Where(st => st.SerieId == info.serieId);
+        IQueryable<SerieTag> existingTags = context.SerieTags.Where(st => st.SerieId == info.SerieId);
         context.SerieTags.RemoveRange(existingTags);
-        
-        foreach (TagDto tagDto in info.tags)
+
+        foreach (TagDto tagDto in info.Tags)
         {
             Tag? tag = await context.Tags.FirstOrDefaultAsync(t => t.Id == tagDto.Id);
             if (tag == null) continue;
             SerieTag serieTag = new()
             {
-                SerieId = info.serieId,
+                SerieId = info.SerieId,
                 TagId = tag.Id
             };
             context.SerieTags.Add(serieTag);

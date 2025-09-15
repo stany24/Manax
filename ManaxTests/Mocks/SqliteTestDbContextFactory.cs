@@ -1,15 +1,15 @@
+using ManaxLibrary.DTO.Issue.Automatic;
 using ManaxLibrary.DTO.Serie;
 using ManaxLibrary.DTO.User;
 using ManaxServer.Models;
 using ManaxServer.Models.Chapter;
+using ManaxServer.Models.Issue.Automatic;
+using ManaxServer.Models.Issue.Reported;
 using ManaxServer.Models.Library;
 using ManaxServer.Models.Rank;
 using ManaxServer.Models.SavePoint;
 using ManaxServer.Models.Serie;
 using ManaxServer.Models.User;
-using ManaxServer.Models.Issue.Automatic;
-using ManaxServer.Models.Issue.Reported;
-using ManaxLibrary.DTO.Issue.Automatic;
 using Microsoft.EntityFrameworkCore;
 
 namespace ManaxTests.Mocks;
@@ -330,10 +330,7 @@ public static class SqliteTestDbContextFactory
     {
         string? dbPath = context.Database.GetConnectionString()?.Split('=')[1];
         context.Dispose();
-        
-        if (!string.IsNullOrEmpty(dbPath) && File.Exists(dbPath))
-        {
-            File.Delete(dbPath);
-        }
+
+        if (!string.IsNullOrEmpty(dbPath) && File.Exists(dbPath)) File.Delete(dbPath);
     }
 }

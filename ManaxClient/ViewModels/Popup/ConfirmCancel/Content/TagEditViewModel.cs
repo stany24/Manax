@@ -7,20 +7,10 @@ namespace ManaxClient.ViewModels.Popup.ConfirmCancel.Content;
 
 public partial class TagEditViewModel : ConfirmCancelContentViewModel
 {
-    [ObservableProperty] private string _name;
-    [ObservableProperty]private SolidColorBrush _colorBrush;
-    private Avalonia.Media.Color _color;
-    public Avalonia.Media.Color Color
-    {
-        get => _color;
-        set
-        {
-            SetProperty(ref _color, value);
-            ColorBrush = new SolidColorBrush(value);
-        }
-    }
-    
     private readonly TagDto _originalTag;
+    private Avalonia.Media.Color _color;
+    [ObservableProperty] private SolidColorBrush _colorBrush;
+    [ObservableProperty] private string _name;
 
     public TagEditViewModel(TagDto tag)
     {
@@ -32,11 +22,18 @@ public partial class TagEditViewModel : ConfirmCancelContentViewModel
 
         PropertyChanged += (_, args) =>
         {
-            if (args.PropertyName == nameof(Name))
-            {
-                CanConfirm = !string.IsNullOrWhiteSpace(Name);
-            }
+            if (args.PropertyName == nameof(Name)) CanConfirm = !string.IsNullOrWhiteSpace(Name);
         };
+    }
+
+    public Avalonia.Media.Color Color
+    {
+        get => _color;
+        set
+        {
+            SetProperty(ref _color, value);
+            ColorBrush = new SolidColorBrush(value);
+        }
     }
 
     public TagDto GetResult()
@@ -48,10 +45,14 @@ public partial class TagEditViewModel : ConfirmCancelContentViewModel
             Color = ConvertToDrawingColor(Color)
         };
     }
-    
+
     private static Avalonia.Media.Color ConvertToAvaloniaColor(Color color)
-        => Avalonia.Media.Color.FromArgb(color.A, color.R, color.G, color.B);
+    {
+        return Avalonia.Media.Color.FromArgb(color.A, color.R, color.G, color.B);
+    }
 
     private static Color ConvertToDrawingColor(Avalonia.Media.Color color)
-        => System.Drawing.Color.FromArgb(color.A, color.R, color.G, color.B);
+    {
+        return System.Drawing.Color.FromArgb(color.A, color.R, color.G, color.B);
+    }
 }

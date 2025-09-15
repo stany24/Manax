@@ -5,10 +5,10 @@ using Microsoft.AspNetCore.Mvc;
 namespace ManaxTests.LibraryTests;
 
 [TestClass]
-public class DeleteLibraryTests: LibraryTestsSetup
+public class DeleteLibraryTests : LibraryTestsSetup
 {
     [TestMethod]
-    public async Task DeleteLibrary_WithValidId_RemovesLibrary()
+    public async Task DeleteLibraryWithValidIdRemovesLibrary()
     {
         Library library = Context.Libraries.First();
         IActionResult result = await Controller.DeleteLibrary(library.Id);
@@ -20,7 +20,7 @@ public class DeleteLibraryTests: LibraryTestsSetup
     }
 
     [TestMethod]
-    public async Task DeleteLibrary_WithInvalidId_ReturnsNotFound()
+    public async Task DeleteLibraryWithInvalidIdReturnsNotFound()
     {
         IActionResult result = await Controller.DeleteLibrary(999999);
 
@@ -28,7 +28,7 @@ public class DeleteLibraryTests: LibraryTestsSetup
     }
 
     [TestMethod]
-    public async Task DeleteLibrary_WithAssociatedSeries_RemovesLibraryButKeepsSeries()
+    public async Task DeleteLibraryWithAssociatedSeriesRemovesLibraryButKeepsSeries()
     {
         Library library = Context.Libraries.First();
         List<Serie> associatedSeries = Context.Series.Where(s => s.LibraryId == library.Id).ToList();
@@ -47,5 +47,4 @@ public class DeleteLibraryTests: LibraryTestsSetup
 
         foreach (Serie serie in updatedSeries) Assert.IsNull(serie.LibraryId);
     }
-
 }

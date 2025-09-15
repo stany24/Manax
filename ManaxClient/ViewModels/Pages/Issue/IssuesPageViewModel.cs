@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -47,7 +48,8 @@ public partial class IssuesPageViewModel : PageViewModel
 
     private void OnReportedChapterIssueDeleted(long issueId)
     {
-        ClientReportedIssueChapter? issue = AllReportedChapterIssues.FirstOrDefault<ClientReportedIssueChapter>(i => i.Issue.Id == issueId);
+        ClientReportedIssueChapter? issue =
+            AllReportedChapterIssues.FirstOrDefault(i => i.Issue.Id == issueId);
         if (issue == null) return;
         AllReportedChapterIssues.Remove(issue);
     }
@@ -59,7 +61,8 @@ public partial class IssuesPageViewModel : PageViewModel
 
     private void OnReportedSerieIssueDeleted(long issueId)
     {
-        ClientReportedIssueSerie? issue = AllReportedSerieIssues.FirstOrDefault<ClientReportedIssueSerie>(i => i.Issue.Id == issueId);
+        ClientReportedIssueSerie? issue =
+            AllReportedSerieIssues.FirstOrDefault(i => i.Issue.Id == issueId);
         if (issue == null) return;
         AllReportedSerieIssues.Remove(issue);
     }
@@ -71,21 +74,23 @@ public partial class IssuesPageViewModel : PageViewModel
 
     public void OnChapterIssueClicked(ChapterDto chapter)
     {
-        string serieFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Manax",chapter.SerieId.ToString());
-        if (!Directory.Exists(serieFolder)) { Directory.CreateDirectory(serieFolder);}
+        string serieFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Manax",
+            chapter.SerieId.ToString(CultureInfo.InvariantCulture));
+        if (!Directory.Exists(serieFolder)) Directory.CreateDirectory(serieFolder);
         string saveFile = Path.Combine(serieFolder, chapter.FileName);
         string saveFolder = Path.Combine(serieFolder, Path.GetFileNameWithoutExtension(chapter.FileName));
-        
+
         ReplaceChapterViewModel content = new(saveFolder);
         ConfirmCancelViewModel viewModel = new(content);
         Controls.Popups.Popup popup = new(viewModel);
         popup.Closed += (_, _) => { PopupClosed(viewModel, saveFile, saveFolder, chapter); };
         PopupRequested?.Invoke(this, popup);
-        
+
         DownloadChapter(saveFile, saveFolder, chapter, content);
     }
 
-    private async void DownloadChapter(string saveFile, string saveFolder, ChapterDto chapter, ReplaceChapterViewModel content)
+    private async void DownloadChapter(string saveFile, string saveFolder, ChapterDto chapter,
+        ReplaceChapterViewModel content)
     {
         try
         {
@@ -95,12 +100,12 @@ public partial class IssuesPageViewModel : PageViewModel
                 InfoEmitted?.Invoke(this, chapterPagesAsync.Error);
                 return;
             }
-        
+
             FileStream fileStream = File.Create(saveFile);
             await fileStream.WriteAsync(chapterPagesAsync.GetValue());
             await fileStream.DisposeAsync();
             fileStream.Close();
-            ZipFile.ExtractToDirectory(saveFile,saveFolder );
+            ZipFile.ExtractToDirectory(saveFile, saveFolder);
             File.Delete(saveFile);
             content.CanConfirm = true;
         }
@@ -111,29 +116,30 @@ public partial class IssuesPageViewModel : PageViewModel
         }
     }
 
-    private async void PopupClosed(ConfirmCancelViewModel viewModel, string saveFile, string saveFolder, ChapterDto chapter)
+    private async void PopupClosed(ConfirmCancelViewModel viewModel, string saveFile, string saveFolder,
+        ChapterDto chapter)
     {
         try
         {
-            if (viewModel.Canceled())
-            {
-                return;
-            }
+            if (viewModel.Canceled()) return;
 
-            if (File.Exists(saveFile)) { File.Delete(saveFile); }
+            if (File.Exists(saveFile)) File.Delete(saveFile);
             ZipFile.CreateFromDirectory(saveFolder, saveFile);
             byte[] data = await File.ReadAllBytesAsync(saveFile);
-            
-            Optional<bool> request = await ManaxApiUploadClient.ReplaceChapterAsync(new ByteArrayContent(data),chapter.FileName, chapter.SerieId);
+
+            Optional<bool> request =
+                await ManaxApiUploadClient.ReplaceChapterAsync(new ByteArrayContent(data), chapter.FileName,
+                    chapter.SerieId);
             if (request.Failed)
             {
                 InfoEmitted?.Invoke(this, request.Error);
-                Logger.LogFailure("Replace chapter failed",  Environment.StackTrace);
+                Logger.LogFailure("Replace chapter failed", Environment.StackTrace);
                 return;
             }
+
             File.Delete(saveFile);
             Directory.Delete(saveFolder, true);
-            
+
             InfoEmitted?.Invoke(this, request.GetValue() ? "Replacement successful" : "Failed to replace chapter");
         }
         catch (Exception e)
@@ -142,6 +148,7 @@ public partial class IssuesPageViewModel : PageViewModel
             Logger.LogError("Error replacing chapter", e, Environment.StackTrace);
         }
     }
+
     private void LoadData()
     {
         Task.Run((Func<Task?>)(async () =>

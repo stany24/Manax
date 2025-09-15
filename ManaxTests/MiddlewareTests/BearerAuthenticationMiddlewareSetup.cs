@@ -5,10 +5,10 @@ namespace ManaxTests.MiddlewareTests;
 
 public abstract class BearerAuthenticationMiddlewareSetup
 {
-    protected MockTokenService TokenService = null!;
     protected DefaultHttpContext HttpContext = null!;
     protected RequestDelegate Next = null!;
     protected bool NextCalled;
+    protected MockTokenService TokenService = null!;
 
     [TestInitialize]
     public void Setup()

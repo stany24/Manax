@@ -12,10 +12,10 @@ namespace ManaxTests.RankTests;
 
 public abstract class RankTestsSetup
 {
-    protected ManaxContext Context = null!;
-    protected RankController Controller = null!;
     private ManaxMapper _mapper = null!;
     private Mock<INotificationService> _mockNotificationService = null!;
+    protected ManaxContext Context = null!;
+    protected RankController Controller = null!;
 
     [TestInitialize]
     public void Setup()

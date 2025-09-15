@@ -7,26 +7,26 @@
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Popup.ConfirmCancel.ConfirmCancelView"
     x:DataType="confirmCancel:ConfirmCancelViewModel">
-    <Grid 
-        HorizontalAlignment="Center" 
+    <Grid
+        HorizontalAlignment="Center"
         VerticalAlignment="Center"
         RowDefinitions="Auto,10,Auto"
         ColumnDefinitions="Auto">
-        
+
         <ContentControl
             Grid.Row="0"
             Grid.Column="0"
-            Content="{Binding Content}"></ContentControl>
+            Content="{Binding Content}" />
 
-        <Border 
-            Grid.Column="0" 
-            Grid.Row="1" 
-            Height="1" 
-            Background="#E9ECEF" 
-            Margin="0,16,0,16"/>
+        <Border
+            Grid.Column="0"
+            Grid.Row="1"
+            Height="1"
+            Background="#E9ECEF"
+            Margin="0,16,0,16" />
 
-        <Grid 
-            Grid.Row="2" 
+        <Grid
+            Grid.Row="2"
             Grid.Column="0"
             ColumnDefinitions="*,16,*">
             <Button
@@ -46,7 +46,7 @@
                 Command="{Binding Cancel}">
                 <Button.Styles>
                     <Style Selector="Button:pointerover">
-                        <Setter Property="Background" Value="#DEE2E6"/>
+                        <Setter Property="Background" Value="#DEE2E6" />
                     </Style>
                 </Button.Styles>
             </Button>
@@ -68,7 +68,7 @@
                 HotKey="Enter">
                 <Button.Styles>
                     <Style Selector="Button:pointerover">
-                        <Setter Property="Background" Value="#005A9E"/>
+                        <Setter Property="Background" Value="#005A9E" />
                     </Style>
                 </Button.Styles>
             </Button>

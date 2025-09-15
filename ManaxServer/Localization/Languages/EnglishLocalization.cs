@@ -1,6 +1,6 @@
 namespace ManaxServer.Localization.Languages;
 
-public class EnglishLocalization: Localization
+public class EnglishLocalization : Localization
 {
     public override Dictionary<LocalizationKey, string> GetLocalization()
     {
@@ -40,7 +40,9 @@ public class EnglishLocalization: Localization
             { LocalizationKey.HubMessageSent, "Message sent to all clients: {0}" },
             { LocalizationKey.HubMessageError, "Erreur while sending notification tu users {0}" },
             { LocalizationKey.TaskError, "Error executing task: {0}" },
-            { LocalizationKey.SettingsUpdateNotForced, "The settings given have an issue, fix it or force the change." },
+            {
+                LocalizationKey.SettingsUpdateNotForced, "The settings given have an issue, fix it or force the change."
+            },
             { LocalizationKey.ServiceInitialized, "Service {0} was initialized." },
             { LocalizationKey.HubMessageSentAdmins, "Message sent to all admins: {0}" },
             { LocalizationKey.HubMessageSentOwner, "Message sent to the owner: {0}" },
@@ -59,12 +61,15 @@ public class EnglishLocalization: Localization
             { LocalizationKey.Unauthorized, "Unauthorized access." },
             { LocalizationKey.HubMessageErrorOwner, "Error while sending notification to owner {0}" },
             { LocalizationKey.HubMessageErrorSingle, "Error while sending notification to {0}: {1}" },
-            { LocalizationKey.PasswordEmpty, "Password is required."},
-            { LocalizationKey.PasswordTooShort, "Password must be at least 14 characters long."},
-            { LocalizationKey.PasswordNoLowercase, "Password must contain at least one lowercase letter."},
-            { LocalizationKey.PasswordNoUppercase, "Password must contain at least one uppercase letter."},
-            { LocalizationKey.PasswordNoSpecialCharacterOrDigit, "Password must contain at least one special character or digit."},
-            { LocalizationKey.TagNotFound, "Tag with ID {0} does not exist."}
+            { LocalizationKey.PasswordEmpty, "Password is required." },
+            { LocalizationKey.PasswordTooShort, "Password must be at least 14 characters long." },
+            { LocalizationKey.PasswordNoLowercase, "Password must contain at least one lowercase letter." },
+            { LocalizationKey.PasswordNoUppercase, "Password must contain at least one uppercase letter." },
+            {
+                LocalizationKey.PasswordNoSpecialCharacterOrDigit,
+                "Password must contain at least one special character or digit."
+            },
+            { LocalizationKey.TagNotFound, "Tag with ID {0} does not exist." }
         };
     }
 }

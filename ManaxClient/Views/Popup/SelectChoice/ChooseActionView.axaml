@@ -12,8 +12,8 @@
             Text="Actions"
             FontSize="16"
             FontWeight="Bold"
-            HorizontalAlignment="Center"/>
-        
+            HorizontalAlignment="Center" />
+
         <ItemsControl ItemsSource="{Binding Options}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
@@ -28,7 +28,7 @@
                         CommandParameter="{Binding}">
                         <Button.Styles>
                             <Style Selector="Button:pointerover">
-                                <Setter Property="Background" Value="#F8F9FA"/>
+                                <Setter Property="Background" Value="#F8F9FA" />
                             </Style>
                         </Button.Styles>
                     </Button>
@@ -37,4 +37,3 @@
         </ItemsControl>
     </StackPanel>
 </UserControl>
-

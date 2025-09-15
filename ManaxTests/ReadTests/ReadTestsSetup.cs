@@ -12,9 +12,9 @@ namespace ManaxTests.ReadTests;
 
 public abstract class ReadTestsSetup
 {
+    private ManaxMapper _mapper = null!;
     protected ManaxContext Context = null!;
     protected ReadController Controller = null!;
-    private ManaxMapper _mapper = null!;
     protected Mock<INotificationService> MockNotificationService = null!;
 
     [TestInitialize]

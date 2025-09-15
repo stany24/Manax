@@ -3,13 +3,14 @@ using ManaxServer.Services.Permission;
 
 namespace ManaxTests.Mocks;
 
-public class MockPermissionService: IPermissionService
+public class MockPermissionService : IPermissionService
 {
-    private readonly Dictionary<long,IEnumerable<Permission>> _permissions = [];
-    
+    private readonly Dictionary<long, IEnumerable<Permission>> _permissions = [];
+
     public bool UserHasPermission(long userId, Permission permission)
     {
-        return _permissions.TryGetValue(userId, out IEnumerable<Permission>? permission1) && permission1.Contains(permission);
+        return _permissions.TryGetValue(userId, out IEnumerable<Permission>? permission1) &&
+               permission1.Contains(permission);
     }
 
     public Task<bool> UserHasPermissionAsync(long userId, Permission permission)

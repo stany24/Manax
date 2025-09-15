@@ -1,6 +1,7 @@
+using System.Globalization;
+using System.Net;
 using System.Security.Claims;
 using ManaxServer.Services.Token;
-using System.Net;
 
 namespace ManaxServer.Middleware;
 
@@ -9,15 +10,16 @@ public class BearerAuthenticationMiddleware(RequestDelegate next, ITokenService 
     public async Task InvokeAsync(HttpContext context)
     {
         string? authHeader = context.Request.Headers.Authorization.FirstOrDefault();
-        
-        if (string.IsNullOrEmpty(authHeader) || !authHeader.StartsWith("Bearer "))
+
+        if (string.IsNullOrEmpty(authHeader) ||
+            !authHeader.StartsWith("Bearer ", StringComparison.InvariantCultureIgnoreCase))
         {
             await next(context);
             return;
         }
 
         string token = authHeader["Bearer ".Length..].Trim();
-        
+
         if (tokenService.IsTokenRevoked(token))
         {
             context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
@@ -35,8 +37,8 @@ public class BearerAuthenticationMiddleware(RequestDelegate next, ITokenService 
 
         List<Claim> claims =
         [
-            new(ClaimTypes.NameIdentifier, tokenInfo.UserId.ToString()),
-            new(ClaimTypes.Name, tokenInfo.Username),
+            new(ClaimTypes.NameIdentifier, tokenInfo.UserId.ToString(CultureInfo.InvariantCulture)),
+            new(ClaimTypes.Name, tokenInfo.Username)
         ];
 
         ClaimsIdentity identity = new(claims, "Bearer");

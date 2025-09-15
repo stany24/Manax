@@ -7,8 +7,8 @@ namespace ManaxClient.ViewModels.Popup.SelectChoice;
 
 public partial class ChooseActionViewModel(List<string> options) : PopupViewModel
 {
-    public ObservableCollection<string> Options { get; } = new(options);
     [ObservableProperty] private string _selectedAction = string.Empty;
+    public ObservableCollection<string> Options { get; } = new(options);
 
     public void SelectAction(string? action)
     {

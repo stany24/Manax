@@ -19,13 +19,10 @@ public class RequirePermissionAttribute(params Permission[] permissions) : Attri
         }
 
         ITokenService tokenService = context.HttpContext.RequestServices.GetRequiredService<ITokenService>();
-        
-        bool hasAllPermissions = permissions.All(permission => 
+
+        bool hasAllPermissions = permissions.All(permission =>
             tokenService.TokenHasPermission(token, permission));
 
-        if (!hasAllPermissions)
-        {
-            context.Result = new ForbidResult();
-        }
+        if (!hasAllPermissions) context.Result = new ForbidResult();
     }
 }

@@ -9,10 +9,10 @@ namespace ManaxTests.LibraryTests;
 
 public abstract class LibraryTestsSetup
 {
-    protected ManaxContext Context = null!;
-    protected LibraryController Controller = null!;
     private ManaxMapper _mapper = null!;
     private Mock<INotificationService> _mockNotificationService = null!;
+    protected ManaxContext Context = null!;
+    protected LibraryController Controller = null!;
 
     [TestInitialize]
     public void Setup()

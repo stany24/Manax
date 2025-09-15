@@ -8,15 +8,10 @@ namespace ManaxServer.Services.BackgroundTask;
 public class BackgroundTaskService(INotificationService notificationService) : Service, IBackgroundTaskService
 {
     private const int MaxTasks = 6;
-    private readonly SemaphoreSlim _taskSemaphore = new(1, 1);
-    
+
     private readonly List<(IBackGroundTask Task, Task RunningTask)> _runningTasks = [];
+    private readonly SemaphoreSlim _taskSemaphore = new(1, 1);
     private readonly SortedSet<IBackGroundTask> _waitingTasks = new(TaskPriorityComparer.Instance);
-    
-    ~BackgroundTaskService()
-    {
-        _taskSemaphore.Dispose();
-    }
 
     public async Task AddTaskAsync(IBackGroundTask backGroundTask)
     {
@@ -26,17 +21,22 @@ public class BackgroundTaskService(INotificationService notificationService) : S
             bool alreadyWaiting = _waitingTasks.Contains(backGroundTask);
             bool alreadyRunning = _runningTasks.Any(rt => rt.Task.Equals(backGroundTask));
             if (alreadyWaiting || alreadyRunning) return;
-            
+
             _waitingTasks.Add(backGroundTask);
-            Logger.LogInfo("Task added to waiting list "+backGroundTask.GetName());
+            Logger.LogInfo("Task added to waiting list " + backGroundTask.GetName());
         }
         finally
         {
             _taskSemaphore.Release();
         }
-        
+
         await TryStartTasksAsync().ConfigureAwait(false);
         await PublishTasksAsync().ConfigureAwait(false);
+    }
+
+    ~BackgroundTaskService()
+    {
+        _taskSemaphore.Dispose();
     }
 
     private async Task TryStartTasksAsync()
@@ -47,16 +47,17 @@ public class BackgroundTaskService(INotificationService notificationService) : S
             try
             {
                 if (_runningTasks.Count >= MaxTasks) break;
-                
+
                 IBackGroundTask? backGroundTask = _waitingTasks.Min;
                 if (backGroundTask == null) break;
-                
-                bool hasHigherPriorityRunning = _runningTasks.Any(t => t.Task.GetPriority() < backGroundTask.GetPriority());
+
+                bool hasHigherPriorityRunning =
+                    _runningTasks.Any(t => t.Task.GetPriority() < backGroundTask.GetPriority());
                 if (hasHigherPriorityRunning) break;
-                
+
                 _waitingTasks.Remove(backGroundTask);
-                Logger.LogInfo("Task started "+backGroundTask.GetName());
-                
+                Logger.LogInfo("Task started " + backGroundTask.GetName());
+
                 Task runningTask = new(() =>
                 {
                     try
@@ -68,15 +69,15 @@ public class BackgroundTaskService(INotificationService notificationService) : S
                         Logger.LogError(Localizer.TaskError(backGroundTask.GetName()), e, Environment.StackTrace);
                     }
                 });
-                
+
                 _runningTasks.Add((backGroundTask, runningTask));
-                
+
                 _ = runningTask.ContinueWith(async t =>
                 {
-                    Logger.LogInfo("Task ended "+backGroundTask.GetName());
+                    Logger.LogInfo("Task ended " + backGroundTask.GetName());
                     await RemoveRunningTaskAndTryStartAsync(t).ConfigureAwait(false);
                 }, TaskContinuationOptions.RunContinuationsAsynchronously);
-                
+
                 runningTask.Start();
             }
             finally
@@ -85,7 +86,7 @@ public class BackgroundTaskService(INotificationService notificationService) : S
             }
         }
     }
-    
+
     private async Task RemoveRunningTaskAndTryStartAsync(Task runningTask)
     {
         await _taskSemaphore.WaitAsync().ConfigureAwait(false);
@@ -97,14 +98,13 @@ public class BackgroundTaskService(INotificationService notificationService) : S
         {
             _taskSemaphore.Release();
         }
-        
+
         await TryStartTasksAsync().ConfigureAwait(false);
         await PublishTasksAsync().ConfigureAwait(false);
     }
 
     private async Task PublishTasksAsync()
     {
-        
         await _taskSemaphore.WaitAsync().ConfigureAwait(false);
         try
         {
@@ -113,19 +113,13 @@ public class BackgroundTaskService(INotificationService notificationService) : S
             Dictionary<string, int> waiting = _waitingTasks.GroupBy(t => t.GetName())
                 .ToDictionary(g => g.Key, g => g.Count());
             Dictionary<string, int> taskCounts = new(waiting);
-            
+
             foreach (KeyValuePair<string, int> kvp in running)
-            {
                 if (taskCounts.ContainsKey(kvp.Key))
-                {
                     taskCounts[kvp.Key] += kvp.Value;
-                }
                 else
-                {
                     taskCounts[kvp.Key] = kvp.Value;
-                }
-            }
-            
+
             notificationService.NotifyRunningTasksAsync(taskCounts);
         }
         finally

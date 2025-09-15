@@ -9,7 +9,7 @@ namespace ManaxTests.MiddlewareTests;
 public class BearerAuthenticationMiddlewareTests : BearerAuthenticationMiddlewareSetup
 {
     [TestMethod]
-    public async Task InvokeAsync_NoAuthorizationHeader_CallsNext()
+    public async Task InvokeAsyncNoAuthorizationHeaderCallsNext()
     {
         BearerAuthenticationMiddleware middleware = new(Next, TokenService);
 
@@ -20,7 +20,7 @@ public class BearerAuthenticationMiddlewareTests : BearerAuthenticationMiddlewar
     }
 
     [TestMethod]
-    public async Task InvokeAsync_EmptyAuthorizationHeader_CallsNext()
+    public async Task InvokeAsyncEmptyAuthorizationHeaderCallsNext()
     {
         HttpContext.Request.Headers.Authorization = "";
         BearerAuthenticationMiddleware middleware = new(Next, TokenService);
@@ -32,7 +32,7 @@ public class BearerAuthenticationMiddlewareTests : BearerAuthenticationMiddlewar
     }
 
     [TestMethod]
-    public async Task InvokeAsync_NonBearerToken_CallsNext()
+    public async Task InvokeAsyncNonBearerTokenCallsNext()
     {
         HttpContext.Request.Headers.Authorization = "Basic dGVzdDp0ZXN0";
         BearerAuthenticationMiddleware middleware = new(Next, TokenService);
@@ -44,7 +44,7 @@ public class BearerAuthenticationMiddlewareTests : BearerAuthenticationMiddlewar
     }
 
     [TestMethod]
-    public async Task InvokeAsync_RevokedToken_ReturnsUnauthorized()
+    public async Task InvokeAsyncRevokedTokenReturnsUnauthorized()
     {
         const string token = "revoked-token";
         TokenService.RevokeToken(token);
@@ -56,7 +56,7 @@ public class BearerAuthenticationMiddlewareTests : BearerAuthenticationMiddlewar
 
         Assert.IsFalse(NextCalled);
         Assert.AreEqual((int)HttpStatusCode.Unauthorized, HttpContext.Response.StatusCode);
-        
+
         HttpContext.Response.Body.Position = 0;
         using StreamReader reader = new(HttpContext.Response.Body);
         string responseBody = await reader.ReadToEndAsync();
@@ -64,7 +64,7 @@ public class BearerAuthenticationMiddlewareTests : BearerAuthenticationMiddlewar
     }
 
     [TestMethod]
-    public async Task InvokeAsync_InvalidToken_ReturnsUnauthorized()
+    public async Task InvokeAsyncInvalidTokenReturnsUnauthorized()
     {
         string token = "invalid-token";
         HttpContext.Request.Headers.Authorization = $"Bearer {token}";
@@ -75,7 +75,7 @@ public class BearerAuthenticationMiddlewareTests : BearerAuthenticationMiddlewar
 
         Assert.IsFalse(NextCalled);
         Assert.AreEqual((int)HttpStatusCode.Unauthorized, HttpContext.Response.StatusCode);
-        
+
         HttpContext.Response.Body.Position = 0;
         using StreamReader reader = new(HttpContext.Response.Body);
         string responseBody = await reader.ReadToEndAsync();
@@ -83,7 +83,7 @@ public class BearerAuthenticationMiddlewareTests : BearerAuthenticationMiddlewar
     }
 
     [TestMethod]
-    public async Task InvokeAsync_ValidToken_SetsUserAndCallsNext()
+    public async Task InvokeAsyncValidTokenSetsUserAndCallsNext()
     {
         TokenInfo tokenInfo = new()
         {
@@ -91,7 +91,7 @@ public class BearerAuthenticationMiddlewareTests : BearerAuthenticationMiddlewar
             Username = "testuser",
             Expiry = DateTime.UtcNow.AddHours(1)
         };
-        
+
         const string token = "valid-token";
         TokenService.AddToken(token, tokenInfo);
         HttpContext.Request.Headers.Authorization = $"Bearer {token}";
@@ -107,5 +107,4 @@ public class BearerAuthenticationMiddlewareTests : BearerAuthenticationMiddlewar
         Assert.AreEqual(tokenInfo, HttpContext.Items["TokenInfo"]);
         Assert.AreEqual(token, HttpContext.Items["BearerToken"]);
     }
-    
 }

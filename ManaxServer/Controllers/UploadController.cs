@@ -32,7 +32,7 @@ public partial class UploadController(
 {
     [GeneratedRegex("\\d{1,4}")]
     private static partial Regex RegexNumber();
-    
+
     [GeneratedRegex(@"[^a-zA-Z0-9_\-\.]")]
     private static partial Regex InvalidPathChars();
 
@@ -54,14 +54,12 @@ public partial class UploadController(
 
         string filePath = Path.Combine(serie.SavePath, file.FileName);
         if (Directory.Exists(filePath) || System.IO.File.Exists(filePath))
-        {
             return BadRequest(Localizer.ChapterAlreadyExists());
-        }
 
         await SaveFileAsync(file, filePath);
 
         int number = ExtractChapterNumber(file.FileName);
-        
+
         DateTime creation = GetChapterCreationDate(filePath);
 
         Chapter chapter = new()
@@ -109,18 +107,16 @@ public partial class UploadController(
             return BadRequest("Invalid file path");
 
         if (!Directory.Exists(filePath) && !System.IO.File.Exists(filePath))
-        {
             return BadRequest(Localizer.ChapterDoesNotExist());
-        }
-        
+
         int number = ExtractChapterNumber(sanitizedFileName);
         Chapter? chapter = context.Chapters.FirstOrDefault(c => c.Number == number);
         if (chapter == null)
             return BadRequest(Localizer.ChapterDoesNotExist());
-        
+
         if (!TryGetPagesCountFromCbz(file, out int pagesCount))
             return BadRequest(Localizer.InvalidZipFile());
-        
+
         chapter.LastModification = DateTime.UtcNow;
         chapter.Pages = pagesCount;
 
@@ -128,7 +124,7 @@ public partial class UploadController(
 
         await SaveFileAsync(file, filePath);
         await context.SaveChangesAsync();
-        
+
         notificationService.NotifyChapterModifiedAsync(mapper.Map<ChapterDto>(chapter));
 
         _ = backgroundTaskService.AddTaskAsync(new FixChapterBackGroundTask(fixService, chapter.Id));

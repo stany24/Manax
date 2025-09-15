@@ -7,9 +7,9 @@ namespace ManaxTests.SavePointTests;
 
 public abstract class SavePointTestsSetup
 {
+    private ManaxMapper _mapper = null!;
     protected ManaxContext Context = null!;
     protected SavePointController Controller = null!;
-    private ManaxMapper _mapper = null!;
     protected string TestDirectory = null!;
 
     [TestInitialize]

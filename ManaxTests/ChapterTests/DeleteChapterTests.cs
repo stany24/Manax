@@ -4,10 +4,10 @@ using Microsoft.AspNetCore.Mvc;
 namespace ManaxTests.ChapterTests;
 
 [TestClass]
-public class DeleteChapterTests: ChapterTestsSetup
+public class DeleteChapterTests : ChapterTestsSetup
 {
     [TestMethod]
-    public async Task DeleteChapter_WithValidId_RemovesChapter()
+    public async Task DeleteChapterWithValidIdRemovesChapter()
     {
         Chapter chapter = Context.Chapters.First();
         IActionResult result = await Controller.DeleteChapter(chapter.Id);
@@ -19,7 +19,7 @@ public class DeleteChapterTests: ChapterTestsSetup
     }
 
     [TestMethod]
-    public async Task DeleteChapter_WithInvalidId_ReturnsNotFound()
+    public async Task DeleteChapterWithInvalidIdReturnsNotFound()
     {
         IActionResult result = await Controller.DeleteChapter(999999);
 
@@ -27,7 +27,7 @@ public class DeleteChapterTests: ChapterTestsSetup
     }
 
     [TestMethod]
-    public async Task DeleteChapter_VerifyChapterCountDecreases()
+    public async Task DeleteChapterVerifyChapterCountDecreases()
     {
         int initialCount = Context.Chapters.Count();
         Chapter chapter = Context.Chapters.First();
@@ -41,7 +41,7 @@ public class DeleteChapterTests: ChapterTestsSetup
     }
 
     [TestMethod]
-    public async Task DeleteChapter_FromSpecificSerie_OnlyRemovesThatChapter()
+    public async Task DeleteChapterFromSpecificSerieOnlyRemovesThatChapter()
     {
         Chapter chapter = Context.Chapters.First(c => c.SerieId == 1);
         int initialSerieChaptersCount = Context.Chapters.Count(c => c.SerieId == 1);

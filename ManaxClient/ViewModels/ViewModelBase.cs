@@ -2,4 +2,4 @@ using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace ManaxClient.ViewModels;
 
-public class ViewModelBase: ObservableObject;
+public class ViewModelBase : ObservableObject;

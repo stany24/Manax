@@ -72,7 +72,8 @@ public class SettingsController(
     private void HandlePosterModifications(SettingsData newData, SettingsData oldData, ManaxContext context)
     {
         if (newData.PosterName != oldData.PosterName || newData.PosterFormat != oldData.PosterFormat)
-            renamingService.RenamePosters(oldData.PosterName, newData.PosterName, oldData.PosterFormat, newData.PosterFormat);
+            renamingService.RenamePosters(oldData.PosterName, newData.PosterName, oldData.PosterFormat,
+                newData.PosterFormat);
 
         if (newData.MaxPosterWidth != oldData.MaxPosterWidth || newData.MinPosterWidth != oldData.MinPosterWidth ||
             newData.PosterQuality != oldData.PosterQuality)

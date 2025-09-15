@@ -5,10 +5,10 @@ using Microsoft.AspNetCore.Mvc;
 namespace ManaxTests.LibraryTests;
 
 [TestClass]
-public class UpdateLibraryTests:LibraryTestsSetup
+public class UpdateLibraryTests : LibraryTestsSetup
 {
     [TestMethod]
-    public async Task PutLibrary_WithValidId_UpdatesLibrary()
+    public async Task PutLibraryWithValidIdUpdatesLibrary()
     {
         Library library = Context.Libraries.First();
         LibraryUpdateDto updateDto = new()
@@ -26,7 +26,7 @@ public class UpdateLibraryTests:LibraryTestsSetup
     }
 
     [TestMethod]
-    public async Task PutLibrary_WithInvalidId_ReturnsNotFound()
+    public async Task PutLibraryWithInvalidIdReturnsNotFound()
     {
         LibraryUpdateDto updateDto = new()
         {
@@ -39,7 +39,7 @@ public class UpdateLibraryTests:LibraryTestsSetup
     }
 
     [TestMethod]
-    public async Task PutLibrary_WithDuplicateName_ReturnsConflict()
+    public async Task PutLibraryWithDuplicateNameReturnsConflict()
     {
         Library firstLibrary = Context.Libraries.First();
         Library secondLibrary = Context.Libraries.Skip(1).First();
@@ -55,7 +55,7 @@ public class UpdateLibraryTests:LibraryTestsSetup
     }
 
     [TestMethod]
-    public async Task PutLibrary_WithEmptyName_ReturnsBadRequest()
+    public async Task PutLibraryWithEmptyNameReturnsBadRequest()
     {
         Library library = Context.Libraries.First();
         LibraryUpdateDto updateDto = new()

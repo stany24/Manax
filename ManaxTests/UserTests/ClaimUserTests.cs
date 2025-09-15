@@ -6,10 +6,10 @@ using Microsoft.AspNetCore.Mvc;
 namespace ManaxTests.UserTests;
 
 [TestClass]
-public class ClaimUserTests: UserTestsSetup
+public class ClaimUserTests : UserTestsSetup
 {
     [TestMethod]
-    public async Task Claim_WithNoExistingUsers_CreatesOwnerUser()
+    public async Task ClaimWithNoExistingUsersCreatesOwnerUser()
     {
         Context.Users.RemoveRange(Context.Users);
         await Context.SaveChangesAsync();
@@ -37,7 +37,7 @@ public class ClaimUserTests: UserTestsSetup
     }
 
     [TestMethod]
-    public Task Claim_WithExistingUsers_ReturnsUnauthorized()
+    public Task ClaimWithExistingUsersReturnsUnauthorized()
     {
         ClaimRequest claimRequest = new()
         {
@@ -56,7 +56,7 @@ public class ClaimUserTests: UserTestsSetup
     }
 
     [TestMethod]
-    public async Task Claim_CreatesClaimLoginAttempt()
+    public async Task ClaimCreatesClaimLoginAttempt()
     {
         Context.Users.RemoveRange(Context.Users);
         await Context.SaveChangesAsync();
@@ -79,7 +79,7 @@ public class ClaimUserTests: UserTestsSetup
     }
 
     [TestMethod]
-    public async Task Claim_VerifyPasswordIsHashed()
+    public async Task ClaimVerifyPasswordIsHashed()
     {
         Context.Users.RemoveRange(Context.Users);
         await Context.SaveChangesAsync();

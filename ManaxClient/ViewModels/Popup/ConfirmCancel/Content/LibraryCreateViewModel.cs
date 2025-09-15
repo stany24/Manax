@@ -11,10 +11,7 @@ public partial class LibraryCreateViewModel : ConfirmCancelContentViewModel
     {
         PropertyChanged += (_, args) =>
         {
-            if (args.PropertyName == nameof(Name))
-            {
-                CanConfirm = !string.IsNullOrWhiteSpace(Name);
-            }
+            if (args.PropertyName == nameof(Name)) CanConfirm = !string.IsNullOrWhiteSpace(Name);
         };
     }
 

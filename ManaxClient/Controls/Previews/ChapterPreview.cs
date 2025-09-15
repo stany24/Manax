@@ -41,18 +41,6 @@ public class ChapterPreview : Button
     private readonly IBrush _readTextColor = new SolidColorBrush(Color.Parse("#6C757D"));
     private readonly IBrush _unreadTextColor = new SolidColorBrush(Color.Parse("#212529"));
 
-    public ICommand? InfoEmittedCommand
-    {
-        get => GetValue(InfoEmittedCommandProperty);
-        set => SetValue(InfoEmittedCommandProperty, value);
-    }
-
-    public ICommand? PopupRequestedCommand
-    {
-        get => GetValue(PopupRequestedCommandProperty);
-        set => SetValue(PopupRequestedCommandProperty, value);
-    }
-
     public ChapterPreview()
     {
         Background = Brushes.Transparent;
@@ -233,6 +221,18 @@ public class ChapterPreview : Button
         ];
     }
 
+    public ICommand? InfoEmittedCommand
+    {
+        get => GetValue(InfoEmittedCommandProperty);
+        set => SetValue(InfoEmittedCommandProperty, value);
+    }
+
+    public ICommand? PopupRequestedCommand
+    {
+        get => GetValue(PopupRequestedCommandProperty);
+        set => SetValue(PopupRequestedCommandProperty, value);
+    }
+
     public ClientChapter Chapter
     {
         get => GetChapter(this);
@@ -281,10 +281,7 @@ public class ChapterPreview : Button
                 Logger.LogError("Erreur lors de la création d'un problème de chapitre", e, Environment.StackTrace);
             }
         };
-        Dispatcher.UIThread.Post(() =>
-        {
-            PopupRequestedCommand?.Execute(popup);
-        });
+        Dispatcher.UIThread.Post(() => { PopupRequestedCommand?.Execute(popup); });
     }
 
     protected override void OnPointerEntered(PointerEventArgs e)

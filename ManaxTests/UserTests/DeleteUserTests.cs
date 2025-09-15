@@ -10,7 +10,7 @@ namespace ManaxTests.UserTests;
 public class DeleteUserTests : UserTestsSetup
 {
     [TestMethod]
-    public async Task DeleteUser_WithValidId_RemovesUser()
+    public async Task DeleteUserWithValidIdRemovesUser()
     {
         User user = Context.Users.First();
         IActionResult result = await Controller.DeleteUser(user.Id);
@@ -22,7 +22,7 @@ public class DeleteUserTests : UserTestsSetup
     }
 
     [TestMethod]
-    public async Task DeleteUser_WithInvalidId_ReturnsNotFound()
+    public async Task DeleteUserWithInvalidIdReturnsNotFound()
     {
         IActionResult result = await Controller.DeleteUser(999999);
 
@@ -30,7 +30,7 @@ public class DeleteUserTests : UserTestsSetup
     }
 
     [TestMethod]
-    public async Task DeleteUser_TryingToDeleteSelf_ReturnsForbid()
+    public async Task DeleteUserTryingToDeleteSelfReturnsForbid()
     {
         ClaimsPrincipal selfUser = new(new ClaimsIdentity([
             new Claim(ClaimTypes.NameIdentifier, "1"),
@@ -52,7 +52,7 @@ public class DeleteUserTests : UserTestsSetup
     }
 
     [TestMethod]
-    public async Task DeleteUser_AdminTryingToDeleteOwner_ReturnsForbid()
+    public async Task DeleteUserAdminTryingToDeleteOwnerReturnsForbid()
     {
         User ownerUser = new()
         {
@@ -70,7 +70,7 @@ public class DeleteUserTests : UserTestsSetup
     }
 
     [TestMethod]
-    public async Task DeleteUser_AdminTryingToDeleteAnotherAdmin_ReturnsForbid()
+    public async Task DeleteUserAdminTryingToDeleteAnotherAdminReturnsForbid()
     {
         User anotherAdmin = new()
         {
@@ -88,7 +88,7 @@ public class DeleteUserTests : UserTestsSetup
     }
 
     [TestMethod]
-    public async Task DeleteUser_WithoutAuthentication_ReturnsUnauthorized()
+    public async Task DeleteUserWithoutAuthenticationReturnsUnauthorized()
     {
         Controller.ControllerContext = new ControllerContext
         {
@@ -101,7 +101,7 @@ public class DeleteUserTests : UserTestsSetup
     }
 
     [TestMethod]
-    public async Task DeleteUser_VerifyUserCountDecreases()
+    public async Task DeleteUserVerifyUserCountDecreases()
     {
         int initialCount = Context.Users.Count();
         User user = Context.Users.First();
@@ -113,9 +113,9 @@ public class DeleteUserTests : UserTestsSetup
         int finalCount = Context.Users.Count();
         Assert.AreEqual(initialCount - 1, finalCount);
     }
-    
+
     [TestMethod]
-    public async Task DeleteUser_WithNonExistentCurrentUser_ReturnsUnauthorized()
+    public async Task DeleteUserWithNonExistentCurrentUserReturnsUnauthorized()
     {
         ClaimsPrincipal nonExistentUser = new(new ClaimsIdentity([
             new Claim(ClaimTypes.NameIdentifier, "999"),
@@ -137,7 +137,7 @@ public class DeleteUserTests : UserTestsSetup
     }
 
     [TestMethod]
-    public async Task DeleteUser_OwnerCanDeleteAdmin()
+    public async Task DeleteUserOwnerCanDeleteAdmin()
     {
         ClaimsPrincipal ownerUser = new(new ClaimsIdentity([
             new Claim(ClaimTypes.NameIdentifier, "3"),

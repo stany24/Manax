@@ -5,7 +5,7 @@ namespace ManaxServer.Localization;
 public static partial class Localizer
 {
     private static Language _language = Language.English;
-    private static Dictionary<LocalizationKey,string> _currentLocalization = null!;
+    private static Dictionary<LocalizationKey, string> _currentLocalization = null!;
 
     static Localizer()
     {
@@ -37,6 +37,7 @@ public static partial class Localizer
             LoadLanguage(_language);
         }
     }
+
     public static Language GetCurrentLanguage()
     {
         return _language;

@@ -15,13 +15,13 @@ namespace ManaxClient.ViewModels.Pages.Login;
 
 public partial class LoginPageViewModel : PageViewModel
 {
+    private readonly string _saveFile;
     [ObservableProperty] private bool _canLogin = true;
     [ObservableProperty] private string _emoji = "🔑";
-    [ObservableProperty] private string _loginError = string.Empty;
+    [ObservableProperty] private string _host = string.Empty;
     private bool _isAdmin;
     private bool _isOwner;
-    private readonly string _saveFile;
-    [ObservableProperty] private string _host = string.Empty;
+    [ObservableProperty] private string _loginError = string.Empty;
     [ObservableProperty] private string _password = string.Empty;
     [ObservableProperty] private int? _port;
     [ObservableProperty] private string _username = string.Empty;
@@ -85,7 +85,7 @@ public partial class LoginPageViewModel : PageViewModel
         };
         try
         {
-            if(File.Exists(_saveFile)){ File.Delete(_saveFile);}
+            if (File.Exists(_saveFile)) File.Delete(_saveFile);
             using FileStream fileStream = File.OpenWrite(_saveFile);
             using StreamWriter writer = new(fileStream);
             string serialize = JsonSerializer.Serialize(loginValues);
@@ -98,7 +98,7 @@ public partial class LoginPageViewModel : PageViewModel
             throw;
         }
     }
-    
+
     private void TryLoadSavedLogin()
     {
         if (!File.Exists(_saveFile)) return;

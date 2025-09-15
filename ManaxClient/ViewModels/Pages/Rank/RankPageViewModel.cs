@@ -31,7 +31,7 @@ public partial class RankPageViewModel : PageViewModel
     {
         Dispatcher.UIThread.Post(() =>
         {
-            RankDto? firstOrDefault = Ranks.FirstOrDefault<RankDto>(r => r.Id == obj);
+            RankDto? firstOrDefault = Ranks.FirstOrDefault(r => r.Id == obj);
             if (firstOrDefault != null) Ranks.Remove(firstOrDefault);
         });
     }
@@ -40,7 +40,7 @@ public partial class RankPageViewModel : PageViewModel
     {
         Dispatcher.UIThread.Post(() =>
         {
-            if (Ranks.Any<RankDto>(r => r.Id == obj.Id)) return;
+            if (Ranks.Any(r => r.Id == obj.Id)) return;
             Ranks.Add(obj);
         });
     }
@@ -49,7 +49,7 @@ public partial class RankPageViewModel : PageViewModel
     {
         Dispatcher.UIThread.Post(() =>
         {
-            RankDto? firstOrDefault = Ranks.FirstOrDefault<RankDto>(r => r.Id == rank.Id);
+            RankDto? firstOrDefault = Ranks.FirstOrDefault(r => r.Id == rank.Id);
             if (firstOrDefault != null) Ranks.Remove(firstOrDefault);
             Ranks.Add(rank);
         });
@@ -87,15 +87,11 @@ public partial class RankPageViewModel : PageViewModel
         RankEditViewModel content = new(rank);
         ConfirmCancelViewModel viewModel = new(content);
         Controls.Popups.Popup popup = new(viewModel);
-        popup.Closed += async (_, _) =>
+        popup.Closed += async void (_, _) =>
         {
             try
             {
-                if (viewModel.Canceled())
-                {
-                    return;
-                }
-
+                if (viewModel.Canceled()) return;
                 RankDto result = content.GetResult();
                 Optional<bool> updateRankAsync = await ManaxApiRankClient.UpdateRankAsync(result);
                 if (updateRankAsync.Failed)
@@ -132,7 +128,7 @@ public partial class RankPageViewModel : PageViewModel
         RankEditViewModel content = new(new RankDto { Name = "New Rank", Value = 10 });
         ConfirmCancelViewModel viewModel = new(content);
         Controls.Popups.Popup popup = new(viewModel);
-        popup.Closed += async (_, _) =>
+        popup.Closed += async void (_, _) =>
         {
             try
             {

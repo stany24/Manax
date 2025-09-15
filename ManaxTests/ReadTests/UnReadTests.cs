@@ -8,10 +8,10 @@ using Microsoft.EntityFrameworkCore;
 namespace ManaxTests.ReadTests;
 
 [TestClass]
-public class UnReadTests: ReadTestsSetup
+public class UnReadTests : ReadTestsSetup
 {
     [TestMethod]
-    public async Task Unread_WithExistingRead_RemovesRead()
+    public async Task UnreadWithExistingReadRemovesRead()
     {
         Chapter chapter = Context.Chapters.First();
         User user = Context.Users.First();
@@ -38,7 +38,7 @@ public class UnReadTests: ReadTestsSetup
     }
 
     [TestMethod]
-    public async Task Unread_WithNonExistingRead_ReturnsOk()
+    public async Task UnreadWithNonExistingReadReturnsOk()
     {
         Chapter chapter = Context.Chapters.First();
 
@@ -48,7 +48,7 @@ public class UnReadTests: ReadTestsSetup
     }
 
     [TestMethod]
-    public async Task Unread_WithInvalidChapterId_ReturnsOk()
+    public async Task UnreadWithInvalidChapterIdReturnsOk()
     {
         IActionResult result = await Controller.Unread(999999);
 
@@ -56,7 +56,7 @@ public class UnReadTests: ReadTestsSetup
     }
 
     [TestMethod]
-    public async Task Unread_WithoutAuthentication_ReturnsUnauthorized()
+    public async Task UnreadWithoutAuthenticationReturnsUnauthorized()
     {
         Controller.ControllerContext = new ControllerContext
         {
@@ -69,7 +69,7 @@ public class UnReadTests: ReadTestsSetup
     }
 
     [TestMethod]
-    public async Task Unread_VerifyReadCountDecreases()
+    public async Task UnreadVerifyReadCountDecreases()
     {
         Chapter chapter = Context.Chapters.First();
         User user = Context.Users.First();
@@ -97,7 +97,7 @@ public class UnReadTests: ReadTestsSetup
     }
 
     [TestMethod]
-    public async Task Unread_WithDifferentUser_DoesNotAffectOtherUserReads()
+    public async Task UnreadWithDifferentUserDoesNotAffectOtherUserReads()
     {
         Chapter chapter = Context.Chapters.First();
         User user = Context.Users.First();

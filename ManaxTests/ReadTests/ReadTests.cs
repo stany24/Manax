@@ -10,10 +10,10 @@ using Moq;
 namespace ManaxTests.ReadTests;
 
 [TestClass]
-public class TestReadController: ReadTestsSetup
-{ 
+public class TestReadController : ReadTestsSetup
+{
     [TestMethod]
-    public async Task Read_WithValidChapter_CreatesNewRead()
+    public async Task ReadWithValidChapterCreatesNewRead()
     {
         Chapter chapter = Context.Chapters.First();
         ReadCreateDto readCreateDto = new()
@@ -35,7 +35,7 @@ public class TestReadController: ReadTestsSetup
     }
 
     [TestMethod]
-    public async Task Read_WithExistingRead_UpdatesExistingRead()
+    public async Task ReadWithExistingReadUpdatesExistingRead()
     {
         Chapter chapter = Context.Chapters.First();
         User user = Context.Users.First();
@@ -71,7 +71,7 @@ public class TestReadController: ReadTestsSetup
     }
 
     [TestMethod]
-    public async Task Read_WithInvalidChapter_ReturnsNotFound()
+    public async Task ReadWithInvalidChapterReturnsNotFound()
     {
         ReadCreateDto readCreateDto = new()
         {
@@ -85,7 +85,7 @@ public class TestReadController: ReadTestsSetup
     }
 
     [TestMethod]
-    public async Task Read_WithoutAuthentication_ReturnsUnauthorized()
+    public async Task ReadWithoutAuthenticationReturnsUnauthorized()
     {
         Controller.ControllerContext = new ControllerContext
         {
@@ -104,7 +104,7 @@ public class TestReadController: ReadTestsSetup
     }
 
     [TestMethod]
-    public async Task Read_VerifyDateIsSetToUtcNow()
+    public async Task ReadVerifyDateIsSetToUtcNow()
     {
         Chapter chapter = Context.Chapters.First();
         ReadCreateDto readCreateDto = new()
@@ -127,7 +127,7 @@ public class TestReadController: ReadTestsSetup
     }
 
     [TestMethod]
-    public async Task Read_VerifyNotificationIsSent()
+    public async Task ReadVerifyNotificationIsSent()
     {
         Chapter chapter = Context.Chapters.First();
         ReadCreateDto readCreateDto = new()
@@ -143,7 +143,7 @@ public class TestReadController: ReadTestsSetup
     }
 
     [TestMethod]
-    public async Task Read_WithZeroPage_CreatesRead()
+    public async Task ReadWithZeroPageCreatesRead()
     {
         Chapter chapter = Context.Chapters.First();
         ReadCreateDto readCreateDto = new()
@@ -163,7 +163,7 @@ public class TestReadController: ReadTestsSetup
     }
 
     [TestMethod]
-    public async Task Read_WithNegativePage_CreatesRead()
+    public async Task ReadWithNegativePageCreatesRead()
     {
         Chapter chapter = Context.Chapters.First();
         ReadCreateDto readCreateDto = new()
@@ -183,7 +183,7 @@ public class TestReadController: ReadTestsSetup
     }
 
     [TestMethod]
-    public async Task Read_UpdateExistingRead_VerifyOnlyOneReadExists()
+    public async Task ReadUpdateExistingReadVerifyOnlyOneReadExists()
     {
         Chapter chapter = Context.Chapters.First();
         User user = Context.Users.First();
@@ -215,7 +215,7 @@ public class TestReadController: ReadTestsSetup
     }
 
     [TestMethod]
-    public async Task Read_WithDifferentUser_DoesNotAffectOtherUserReads()
+    public async Task ReadWithDifferentUserDoesNotAffectOtherUserReads()
     {
         Chapter chapter = Context.Chapters.First();
         User otherUser = Context.Users.Skip(1).First();
@@ -254,7 +254,7 @@ public class TestReadController: ReadTestsSetup
     }
 
     [TestMethod]
-    public async Task Read_VerifyNotificationCalledWithCorrectData()
+    public async Task ReadVerifyNotificationCalledWithCorrectData()
     {
         Chapter chapter = Context.Chapters.First();
         ReadCreateDto readCreateDto = new()
@@ -275,7 +275,7 @@ public class TestReadController: ReadTestsSetup
     }
 
     [TestMethod]
-    public async Task Read_WithLargePage_CreatesRead()
+    public async Task ReadWithLargePageCreatesRead()
     {
         Chapter chapter = Context.Chapters.First();
         ReadCreateDto readCreateDto = new()
@@ -295,7 +295,7 @@ public class TestReadController: ReadTestsSetup
     }
 
     [TestMethod]
-    public async Task Read_MultipleReadsForDifferentChapters_CreatesMultipleReads()
+    public async Task ReadMultipleReadsForDifferentChaptersCreatesMultipleReads()
     {
         List<Chapter> chapters = Context.Chapters.Take(2).ToList();
 

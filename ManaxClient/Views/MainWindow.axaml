@@ -97,7 +97,7 @@
                             <TextBlock Text="Rangs" />
                         </StackPanel>
                     </Button>
-                    
+
                     <Button Classes="sidebar"
                             IsVisible="{Binding IsAdmin}"
                             Command="{Binding ChangePageTags}">

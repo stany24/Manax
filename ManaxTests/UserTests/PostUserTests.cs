@@ -1,5 +1,4 @@
 using ManaxLibrary.DTO.User;
-using ManaxServer.Models.User;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ManaxTests.UserTests;
@@ -8,7 +7,7 @@ namespace ManaxTests.UserTests;
 public class PostUserTests : UserTestsSetup
 {
     [TestMethod]
-    public async Task PostUser_WithValidData_CreatesUser()
+    public async Task PostUserWithValidDataCreatesUser()
     {
         UserCreateDto createDto = new()
         {
@@ -17,23 +16,20 @@ public class PostUserTests : UserTestsSetup
             Role = UserRole.User
         };
 
-        ActionResult<long> result = await Controller.PostUser(createDto);
+        IActionResult result = await Controller.PostUser(createDto);
 
-        OkObjectResult? okResult = result.Result as OkObjectResult;
-        Assert.IsNull(okResult);
+        OkResult? okResult = result as OkResult;
+        Assert.IsNotNull(okResult);
+        Assert.IsNotNull(MockNotificationService.UserCreated);
 
-        long? userId = result.Value;
-        Assert.IsNotNull(userId);
-
-        User? createdUser = await Context.Users.FindAsync(userId);
-        Assert.IsNotNull(createdUser);
+        UserDto createdUser = MockNotificationService.UserCreated;
         Assert.AreEqual(createDto.Username, createdUser.Username);
         Assert.AreEqual(createDto.Role, createdUser.Role);
         MockHashService.VerifyHashPasswordCalled("password123");
     }
 
     [TestMethod]
-    public async Task PostUser_CreationDateSetCorrectly()
+    public async Task PostUserCreationDateSetCorrectly()
     {
         UserCreateDto createDto = new()
         {
@@ -43,20 +39,21 @@ public class PostUserTests : UserTestsSetup
         };
 
         DateTime beforeCreation = DateTime.UtcNow;
-        ActionResult<long> result = await Controller.PostUser(createDto);
+        IActionResult result = await Controller.PostUser(createDto);
         DateTime afterCreation = DateTime.UtcNow;
 
-        long? userId = result.Value;
-        Assert.IsNotNull(userId);
+        OkResult? okResult = result as OkResult;
+        Assert.IsNotNull(okResult);
+        Assert.IsNotNull(MockNotificationService.UserCreated);
 
-        User? createdUser = await Context.Users.FindAsync(userId);
+        UserDto createdUser = MockNotificationService.UserCreated;
         Assert.IsNotNull(createdUser);
-        Assert.IsTrue(createdUser.Creation >= beforeCreation);
-        Assert.IsTrue(createdUser.Creation <= afterCreation);
+        Assert.IsTrue(MockNotificationService.UserCreatedAt >= beforeCreation);
+        Assert.IsTrue(MockNotificationService.UserCreatedAt <= afterCreation);
     }
 
     [TestMethod]
-    public async Task PostUser_VerifyUserCountIncreases()
+    public async Task PostUserVerifyUserCountIncreases()
     {
         int initialCount = Context.Users.Count();
         UserCreateDto createDto = new()
@@ -66,17 +63,17 @@ public class PostUserTests : UserTestsSetup
             Role = UserRole.User
         };
 
-        ActionResult<long> result = await Controller.PostUser(createDto);
+        IActionResult result = await Controller.PostUser(createDto);
 
-        long? userId = result.Value;
-        Assert.IsNotNull(userId);
+        OkResult? okResult = result as OkResult;
+        Assert.IsNotNull(okResult);
 
         int finalCount = Context.Users.Count();
         Assert.AreEqual(initialCount + 1, finalCount);
     }
-    
+
     [TestMethod]
-    public async Task PostUser_VerifyNotificationCalledWithCorrectData()
+    public async Task PostUserVerifyNotificationCalledWithCorrectData()
     {
         UserCreateDto createDto = new()
         {
@@ -85,9 +82,9 @@ public class PostUserTests : UserTestsSetup
             Role = UserRole.User
         };
 
-        ActionResult<long> result = await Controller.PostUser(createDto);
+        IActionResult result = await Controller.PostUser(createDto);
 
-        long? userId = result.Value;
-        Assert.IsNotNull(userId);
+        OkResult? okResult = result as OkResult;
+        Assert.IsNotNull(okResult);
     }
 }

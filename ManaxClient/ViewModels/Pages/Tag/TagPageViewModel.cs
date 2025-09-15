@@ -1,19 +1,19 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 using ManaxClient.ViewModels.Popup.ConfirmCancel;
 using ManaxClient.ViewModels.Popup.ConfirmCancel.Content;
+using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTO.Tag;
 using ManaxLibrary.Notifications;
 
 namespace ManaxClient.ViewModels.Pages.Tag;
 
-public class TagPageViewModel: PageViewModel
+public class TagPageViewModel : PageViewModel
 {
-    public ObservableCollection<TagDto> Tags { get; } = [];
-    
     public TagPageViewModel()
     {
         Task.Run(LoadTags);
@@ -21,6 +21,8 @@ public class TagPageViewModel: PageViewModel
         ServerNotification.OnTagUpdated += OnTagUpdated;
         ServerNotification.OnTagDeleted += OnTagDeleted;
     }
+
+    public ObservableCollection<TagDto> Tags { get; } = [];
 
     private void OnTagDeleted(long tagId)
     {
@@ -49,10 +51,7 @@ public class TagPageViewModel: PageViewModel
         {
             List<TagDto> tags = await ManaxApiTagClient.GetTagsAsync();
             Tags.Clear();
-            foreach (TagDto tag in tags)
-            {
-                Tags.Add(tag);
-            }
+            foreach (TagDto tag in tags) Tags.Add(tag);
         }
         catch
         {
@@ -62,32 +61,31 @@ public class TagPageViewModel: PageViewModel
 
     public void CreateTag()
     {
-        TagEditViewModel content = new(new TagDto { Name = "Nouveau Tag", Color = System.Drawing.Color.Blue });
+        TagEditViewModel content = new(new TagDto { Name = "Nouveau Tag", Color = Color.Blue });
         ConfirmCancelViewModel viewModel = new(content);
         Controls.Popups.Popup popup = new(viewModel);
-        popup.Closed += async (_, _) =>
+        popup.Closed += async void (_, _) =>
         {
-            if (viewModel.Canceled())
-            {
-                return;
-            }
-            TagDto result = content.GetResult();
             try
             {
+                if (viewModel.Canceled()) return;
+                TagDto result = content.GetResult();
                 TagCreateDto tagCreate = new()
                 {
                     Name = result.Name,
                     Color = result.Color
                 };
-                
-                await ManaxApiTagClient.CreateTagAsync(tagCreate);
+
+                Optional<bool> request = await ManaxApiTagClient.CreateTagAsync(tagCreate);
+                if (request.Failed)
+                    InfoEmitted?.Invoke(this, "Erreur lors de la création du tag.");
             }
             catch
             {
                 InfoEmitted?.Invoke(this, "Erreur lors de la création du tag.");
             }
         };
-        
+
         PopupRequested?.Invoke(this, popup);
     }
 
@@ -96,16 +94,13 @@ public class TagPageViewModel: PageViewModel
         TagEditViewModel content = new(tag);
         ConfirmCancelViewModel viewModel = new(content);
         Controls.Popups.Popup popup = new(viewModel);
-        
-        popup.Closed += async (_, _) =>
+
+        popup.Closed += async void (_, _) =>
         {
-            if (viewModel.Canceled())
-            {
-                return;
-            }
-            TagDto result = content.GetResult();
             try
             {
+                if (viewModel.Canceled()) return;
+                TagDto result = content.GetResult();
                 await ManaxApiTagClient.UpdateTagAsync(result);
             }
             catch
@@ -113,7 +108,7 @@ public class TagPageViewModel: PageViewModel
                 InfoEmitted?.Invoke(this, "Erreur lors de la mise à jour du tag.");
             }
         };
-        
+
         PopupRequested?.Invoke(this, popup);
     }
 

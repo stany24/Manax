@@ -85,14 +85,11 @@ public class IssueController(ManaxContext context, IMapper mapper, INotification
         if (currentUserId == null) return Unauthorized();
 
         bool issueExists = await context.ReportedIssuesChapter
-            .AnyAsync(i => i.UserId == currentUserId && 
-                          i.ChapterId == reportedIssueChapterCreate.ChapterId && 
-                          i.ProblemId == reportedIssueChapterCreate.ProblemId);
+            .AnyAsync(i => i.UserId == currentUserId &&
+                           i.ChapterId == reportedIssueChapterCreate.ChapterId &&
+                           i.ProblemId == reportedIssueChapterCreate.ProblemId);
 
-        if (issueExists)
-        {
-            return Conflict("Issue already reported for this chapter and problem type.");
-        }
+        if (issueExists) return Conflict("Issue already reported for this chapter and problem type.");
 
         ReportedIssueChapter issue = mapper.Map<ReportedIssueChapter>(reportedIssueChapterCreate);
         issue.UserId = (long)currentUserId;
@@ -116,14 +113,11 @@ public class IssueController(ManaxContext context, IMapper mapper, INotification
         if (currentUserId == null) return Unauthorized();
 
         bool issueExists = await context.ReportedIssuesSerie
-            .AnyAsync(i => i.UserId == currentUserId && 
-                          i.SerieId == reportedIssueSerieCreate.SerieId && 
-                          i.ProblemId == reportedIssueSerieCreate.ProblemId);
+            .AnyAsync(i => i.UserId == currentUserId &&
+                           i.SerieId == reportedIssueSerieCreate.SerieId &&
+                           i.ProblemId == reportedIssueSerieCreate.ProblemId);
 
-        if (issueExists)
-        {
-            return Conflict("Issue already reported for this series and problem type.");
-        }
+        if (issueExists) return Conflict("Issue already reported for this series and problem type.");
 
         ReportedIssueSerie issue = mapper.Map<ReportedIssueSerie>(reportedIssueSerieCreate);
         issue.UserId = (long)currentUserId;

@@ -5,10 +5,10 @@ using Microsoft.AspNetCore.Mvc;
 namespace ManaxTests.ChapterTests;
 
 [TestClass]
-public class GetChapterTests: ChapterTestsSetup
+public class GetChapterTests : ChapterTestsSetup
 {
     [TestMethod]
-    public async Task GetChapters_ReturnsAllChapterIds()
+    public async Task GetChaptersReturnsAllChapterIds()
     {
         ActionResult<IEnumerable<long>> result = await Controller.GetChapters();
 
@@ -22,7 +22,7 @@ public class GetChapterTests: ChapterTestsSetup
     }
 
     [TestMethod]
-    public async Task GetChapter_WithValidId_ReturnsChapter()
+    public async Task GetChapterWithValidIdReturnsChapter()
     {
         Chapter chapter = Context.Chapters.First();
         ActionResult<ChapterDto> result = await Controller.GetChapter(chapter.Id);
@@ -38,7 +38,7 @@ public class GetChapterTests: ChapterTestsSetup
     }
 
     [TestMethod]
-    public async Task GetChapter_WithInvalidId_ReturnsNotFound()
+    public async Task GetChapterWithInvalidIdReturnsNotFound()
     {
         ActionResult<ChapterDto> result = await Controller.GetChapter(999999);
 
@@ -46,7 +46,7 @@ public class GetChapterTests: ChapterTestsSetup
     }
 
     [TestMethod]
-    public async Task GetChapterPage_WithInvalidId_ReturnsNotFound()
+    public async Task GetChapterPageWithInvalidIdReturnsNotFound()
     {
         IActionResult result = await Controller.GetChapterPage(999999, 0);
 
@@ -54,7 +54,7 @@ public class GetChapterTests: ChapterTestsSetup
     }
 
     [TestMethod]
-    public async Task GetChapterPages_WithInvalidId_ReturnsNotFound()
+    public async Task GetChapterPagesWithInvalidIdReturnsNotFound()
     {
         IActionResult result = await Controller.GetChapterPages(999999);
 
@@ -62,7 +62,7 @@ public class GetChapterTests: ChapterTestsSetup
     }
 
     [TestMethod]
-    public async Task GetChapterPage_WithValidIdAndInvalidPageNumber_ReturnsNotFound()
+    public async Task GetChapterPageWithValidIdAndInvalidPageNumberReturnsNotFound()
     {
         Chapter chapter = Context.Chapters.First();
         IActionResult result = await Controller.GetChapterPage(chapter.Id, 999);
@@ -71,7 +71,7 @@ public class GetChapterTests: ChapterTestsSetup
     }
 
     [TestMethod]
-    public async Task GetChapterPage_WithNegativePageNumber_ReturnsNotFound()
+    public async Task GetChapterPageWithNegativePageNumberReturnsNotFound()
     {
         Chapter chapter = Context.Chapters.First();
         IActionResult result = await Controller.GetChapterPage(chapter.Id, -1);
@@ -80,7 +80,7 @@ public class GetChapterTests: ChapterTestsSetup
     }
 
     [TestMethod]
-    public async Task GetChapter_VerifyAllPropertiesMapping()
+    public async Task GetChapterVerifyAllPropertiesMapping()
     {
         Chapter chapter = Context.Chapters.First();
         ActionResult<ChapterDto> result = await Controller.GetChapter(chapter.Id);
@@ -97,7 +97,7 @@ public class GetChapterTests: ChapterTestsSetup
     }
 
     [TestMethod]
-    public async Task GetChapterPage_WithSubZeroNumber_ReturnsNotFound()
+    public async Task GetChapterPageWithSubZeroNumberReturnsNotFound()
     {
         Chapter chapter = Context.Chapters.First();
         IActionResult result = await Controller.GetChapterPage(chapter.Id, -1);
@@ -106,7 +106,7 @@ public class GetChapterTests: ChapterTestsSetup
     }
 
     [TestMethod]
-    public async Task GetChapters_VerifyCorrectCount()
+    public async Task GetChaptersVerifyCorrectCount()
     {
         ActionResult<IEnumerable<long>> result = await Controller.GetChapters();
 

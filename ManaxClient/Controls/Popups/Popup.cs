@@ -8,6 +8,7 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
+using ManaxClient.ViewModels.Popup;
 
 namespace ManaxClient.Controls.Popups;
 
@@ -15,7 +16,6 @@ public class Popup : Panel
 {
     private readonly Rectangle _backShadow;
     private readonly Canvas _canvas;
-    private readonly ViewModels.Popup.PopupViewModel _viewModel;
 
     private readonly UserControl _form = new()
     {
@@ -26,9 +26,9 @@ public class Popup : Panel
         Margin = new Thickness(20)
     };
 
-    public EventHandler? Closed;
+    private readonly PopupViewModel _viewModel;
 
-    public Popup(ViewModels.Popup.PopupViewModel viewModel)
+    public Popup(PopupViewModel viewModel)
     {
         DataContext = viewModel;
         _viewModel = viewModel;
@@ -96,6 +96,8 @@ public class Popup : Panel
         Loaded += OnLoaded;
     }
 
+    public EventHandler? Closed { get; set; }
+
     private void OnLoaded(object? sender, RoutedEventArgs e)
     {
         _canvas.Opacity = 1;
@@ -125,18 +127,12 @@ public class Popup : Panel
 
     private void BackShadowPointerPressed(object? sender, PointerPressedEventArgs e)
     {
-        if (_viewModel.CloseAccepted())
-        {
-            Close();
-        }
+        if (_viewModel.CloseAccepted()) Close();
     }
 
     private void BackShadowTapped(object? sender, TappedEventArgs e)
     {
-        if (_viewModel.CloseAccepted())
-        {
-            Close();
-        }
+        if (_viewModel.CloseAccepted()) Close();
     }
 
     private async void Close(bool delay = true)

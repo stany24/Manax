@@ -9,11 +9,6 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using ManaxClient.Models;
 using ManaxClient.Models.Collections;
 using ManaxClient.Models.History;
-using ManaxClient.ViewModels.Pages.Tag;
-using ManaxLibrary;
-using ManaxLibrary.ApiCaller;
-using ManaxLibrary.DTO.Library;
-using ManaxLibrary.Notifications;
 using ManaxClient.ViewModels.Pages;
 using ManaxClient.ViewModels.Pages.Home;
 using ManaxClient.ViewModels.Pages.Issue;
@@ -22,7 +17,12 @@ using ManaxClient.ViewModels.Pages.Login;
 using ManaxClient.ViewModels.Pages.Rank;
 using ManaxClient.ViewModels.Pages.Settings;
 using ManaxClient.ViewModels.Pages.Stats;
+using ManaxClient.ViewModels.Pages.Tag;
 using ManaxClient.ViewModels.Pages.User;
+using ManaxLibrary;
+using ManaxLibrary.ApiCaller;
+using ManaxLibrary.DTO.Library;
+using ManaxLibrary.Notifications;
 
 namespace ManaxClient.ViewModels;
 
@@ -70,7 +70,7 @@ public partial class MainWindowViewModel : ObservableObject
 
     public bool CanGoBack => _history.CanGoBack;
     public bool CanGoForward => _history.CanGoForward;
-    public Pages.PageViewModel? CurrentPageViewModel => _history.CurrentPage;
+    public PageViewModel? CurrentPageViewModel => _history.CurrentPage;
 
     ~MainWindowViewModel()
     {
@@ -210,7 +210,7 @@ public partial class MainWindowViewModel : ObservableObject
     {
         SetPage(new RankPageViewModel());
     }
-    
+
     public void ChangePageTags()
     {
         SetPage(new TagPageViewModel());

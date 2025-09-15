@@ -9,17 +9,17 @@
     x:DataType="content:SerieUpdateViewModel">
     <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" RowSpacing="16" Margin="16">
         <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="12" Margin="0,0,0,8">
-            <TextBlock Text="📖" FontSize="24" VerticalAlignment="Center"/>
+            <TextBlock Text="📖" FontSize="24" VerticalAlignment="Center" />
             <StackPanel Spacing="4">
                 <TextBlock
                     Text="Mettre à jour la série"
                     FontSize="18"
                     FontWeight="Bold"
-                    Foreground="#212529"/>
+                    Foreground="#212529" />
                 <TextBlock
                     Text="Modifiez les informations de la série"
                     FontSize="12"
-                    Foreground="#6C757D"/>
+                    Foreground="#6C757D" />
             </StackPanel>
         </StackPanel>
 
@@ -27,7 +27,7 @@
             <TextBlock
                 Text="Titre"
                 FontWeight="Medium"
-                Foreground="#495057"/>
+                Foreground="#495057" />
             <TextBox
                 Text="{Binding Title}"
                 Watermark="Entrez le titre de la série..."
@@ -38,10 +38,10 @@
                 FontSize="14">
                 <TextBox.Styles>
                     <Style Selector="TextBox:pointerover">
-                        <Setter Property="BorderBrush" Value="#007ACC"/>
+                        <Setter Property="BorderBrush" Value="#007ACC" />
                     </Style>
                     <Style Selector="TextBox:focus">
-                        <Setter Property="BorderBrush" Value="#007ACC"/>
+                        <Setter Property="BorderBrush" Value="#007ACC" />
                     </Style>
                 </TextBox.Styles>
             </TextBox>
@@ -51,7 +51,7 @@
             <TextBlock
                 Text="Description"
                 FontWeight="Medium"
-                Foreground="#495057"/>
+                Foreground="#495057" />
             <TextBox
                 Text="{Binding Description}"
                 Watermark="Entrez la description de la série..."
@@ -65,10 +65,10 @@
                 FontSize="14">
                 <TextBox.Styles>
                     <Style Selector="TextBox:pointerover">
-                        <Setter Property="BorderBrush" Value="#007ACC"/>
+                        <Setter Property="BorderBrush" Value="#007ACC" />
                     </Style>
                     <Style Selector="TextBox:focus">
-                        <Setter Property="BorderBrush" Value="#007ACC"/>
+                        <Setter Property="BorderBrush" Value="#007ACC" />
                     </Style>
                 </TextBox.Styles>
             </TextBox>
@@ -78,7 +78,7 @@
             <TextBlock
                 Text="Statut"
                 FontWeight="Medium"
-                Foreground="#495057"/>
+                Foreground="#495057" />
             <ComboBox
                 ItemsSource="{Binding StatusOptions}"
                 SelectedItem="{Binding SelectedStatus}"
@@ -89,10 +89,10 @@
                 BorderBrush="#DEE2E6">
                 <ComboBox.Styles>
                     <Style Selector="ComboBox:pointerover">
-                        <Setter Property="BorderBrush" Value="#007ACC"/>
+                        <Setter Property="BorderBrush" Value="#007ACC" />
                     </Style>
                     <Style Selector="ComboBox:focus">
-                        <Setter Property="BorderBrush" Value="#007ACC"/>
+                        <Setter Property="BorderBrush" Value="#007ACC" />
                     </Style>
                 </ComboBox.Styles>
             </ComboBox>
@@ -102,7 +102,7 @@
             <TextBlock
                 Text="Bibliothèque"
                 FontWeight="Medium"
-                Foreground="#495057"/>
+                Foreground="#495057" />
             <ComboBox
                 ItemsSource="{Binding Libraries}"
                 SelectedItem="{Binding SelectedLibrary}"
@@ -113,10 +113,10 @@
                 BorderBrush="#DEE2E6">
                 <ComboBox.Styles>
                     <Style Selector="ComboBox:pointerover">
-                        <Setter Property="BorderBrush" Value="#007ACC"/>
+                        <Setter Property="BorderBrush" Value="#007ACC" />
                     </Style>
                     <Style Selector="ComboBox:focus">
-                        <Setter Property="BorderBrush" Value="#007ACC"/>
+                        <Setter Property="BorderBrush" Value="#007ACC" />
                     </Style>
                 </ComboBox.Styles>
                 <ComboBox.ItemTemplate>

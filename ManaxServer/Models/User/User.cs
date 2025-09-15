@@ -18,6 +18,6 @@ public class User
 
     public DateTime Creation { get; set; }
     public DateTime LastLogin { get; set; }
-    
+
     public ICollection<UserPermission> UserPermissions { get; set; } = new List<UserPermission>();
 }

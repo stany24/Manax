@@ -11,6 +11,7 @@ public class MockPasswordValidationService : IPasswordValidationService
             errorMessage = "Password cannot be empty.";
             return false;
         }
+
         errorMessage = string.Empty;
         return true;
     }

@@ -7,7 +7,7 @@ namespace ManaxTests.UserTests;
 public class ResetPasswordTests : UserTestsSetup
 {
     [TestMethod]
-    public async Task ResetPassword_WithValidId_ResetsPasswordAndReturnsNewPassword()
+    public async Task ResetPasswordWithValidIdResetsPasswordAndReturnsNewPassword()
     {
         User user = Context.Users.First();
         string originalPasswordHash = user.PasswordHash;
@@ -24,7 +24,7 @@ public class ResetPasswordTests : UserTestsSetup
     }
 
     [TestMethod]
-    public async Task ResetPassword_WithInvalidId_ReturnsNotFound()
+    public async Task ResetPasswordWithInvalidIdReturnsNotFound()
     {
         ActionResult<string> result = await Controller.ResetPassword(999999);
 

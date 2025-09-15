@@ -45,7 +45,7 @@ public static class ServerNotification
     public static event Action<long>? OnReportedChapterIssueDeleted;
     public static event Action<ReportedIssueSerieDto>? OnReportedSerieIssueCreated;
     public static event Action<long>? OnReportedSerieIssueDeleted;
-    
+
     public static event Action<TagDto>? OnTagCreated;
     public static event Action<TagDto>? OnTagUpdated;
     public static event Action<long>? OnTagDeleted;
@@ -60,10 +60,8 @@ public static class ServerNotification
         string baseUrl = _serverUrl.EndsWith('/') ? _serverUrl : _serverUrl + "/";
 
         _hubConnection = new HubConnectionBuilder()
-            .WithUrl($"{baseUrl}notificationHub", options =>
-            {
-                options.AccessTokenProvider = () => Task.FromResult(_token);
-            })
+            .WithUrl($"{baseUrl}notificationHub",
+                options => { options.AccessTokenProvider = () => Task.FromResult(_token)!; })
             .WithAutomaticReconnect()
             .Build();
 
@@ -96,7 +94,7 @@ public static class ServerNotification
 
         _hubConnection.On<ChapterDto>(nameof(NotificationType.ChapterAdded),
             chapterData => { OnChapterAdded?.Invoke(chapterData); });
-        
+
         _hubConnection.On<ChapterDto>(nameof(NotificationType.ChapterModified),
             chapterData => { OnChapterModified?.Invoke(chapterData); });
 
@@ -132,7 +130,7 @@ public static class ServerNotification
 
         _hubConnection.On<long>(nameof(NotificationType.ReportedSerieIssueDeleted),
             issueId => { OnReportedSerieIssueDeleted?.Invoke(issueId); });
-        
+
         _hubConnection.On<TagDto>(nameof(NotificationType.TagCreated),
             tagData => { OnTagCreated?.Invoke(tagData); });
 
@@ -189,20 +187,5 @@ public static class ServerNotification
             await Task.Delay(5000);
             await ConnectAsync();
         }
-    }
-
-    public static async Task StopAsync()
-    {
-        if (_hubConnection != null)
-            try
-            {
-                await _hubConnection.StopAsync();
-                await _hubConnection.DisposeAsync();
-                _hubConnection = null;
-            }
-            catch (Exception ex)
-            {
-                Logger.LogError("SignalR: Erreur lors de l'arrêt de la connexion", ex, Environment.StackTrace);
-            }
     }
 }

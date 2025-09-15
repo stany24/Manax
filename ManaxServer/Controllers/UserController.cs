@@ -65,17 +65,15 @@ public class UserController(
 
         User? user = await context.Users.FindAsync(userId);
         if (user == null) return NotFound(Localizer.UserNotFound((long)userId));
-        
+
         if (!passwordValidationService.IsPasswordValid(userUpdate.Password, out string? errorMessage))
-        {
             return BadRequest(errorMessage);
-        }
 
         user.PasswordHash = hashService.HashPassword(userUpdate.Password);
         await context.SaveChangesAsync();
         return Ok();
     }
-    
+
     [HttpPut("{id:long}/password/reset")]
     [RequirePermission(Permission.ResetPasswords)]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -84,7 +82,7 @@ public class UserController(
     {
         User? user = await context.Users.FindAsync(id);
         if (user == null) return NotFound(Localizer.UserNotFound(id));
-        
+
         string newPassword = passwordValidationService.GenerateValidPassword();
 
         user.PasswordHash = hashService.HashPassword(newPassword);
@@ -97,12 +95,10 @@ public class UserController(
     [HttpPost("create")]
     [RequirePermission(Permission.WriteUsers)]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<long>> PostUser(UserCreateDto userCreate)
+    public async Task<IActionResult> PostUser(UserCreateDto userCreate)
     {
         if (!passwordValidationService.IsPasswordValid(userCreate.Password, out string? errorMessage))
-        {
             return BadRequest(errorMessage);
-        }
         User user = mapper.Map<User>(userCreate);
         user.Creation = DateTime.UtcNow;
         user.PasswordHash = hashService.HashPassword(userCreate.Password);
@@ -110,11 +106,12 @@ public class UserController(
         context.Users.Add(user);
         await context.SaveChangesAsync();
 
-        await permissionService.SetUserPermissionsAsync(user.Id,PermissionController.GetDefaultPermissionsForRole(user.Role));
+        await permissionService.SetUserPermissionsAsync(user.Id,
+            PermissionController.GetDefaultPermissionsForRole(user.Role));
 
         notificationService.NotifyUserCreatedAsync(mapper.Map<UserDto>(user));
 
-        return user.Id;
+        return Ok();
     }
 
     // DELETE: api/User/5
@@ -143,10 +140,7 @@ public class UserController(
             return Forbid(Localizer.UserCannotDeleteAdminOrOwner());
 
         StringValues auths = Request.Headers.Authorization;
-        foreach (string? token in auths)
-        {
-            tokenService.RevokeToken(token);
-        }
+        foreach (string? token in auths) tokenService.RevokeToken(token);
 
         context.Users.Remove(userToDelete);
         await context.SaveChangesAsync();
@@ -203,9 +197,7 @@ public class UserController(
     public ActionResult<UserLoginResultDto> Claim(ClaimRequest request)
     {
         if (!passwordValidationService.IsPasswordValid(request.Password, out string? errorMessage))
-        {
             return BadRequest(errorMessage);
-        }
         LoginAttempt loginAttempt = new()
         {
             Origin = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "Unknown",
@@ -235,8 +227,8 @@ public class UserController(
             context.LoginAttempts.Add(loginAttempt);
             context.Users.Add(user);
             context.SaveChanges();
-            
-            permissionService.SetUserPermissions(user.Id,PermissionController.GetDefaultPermissionsForRole(user.Role));
+
+            permissionService.SetUserPermissions(user.Id, PermissionController.GetDefaultPermissionsForRole(user.Role));
 
             string token = tokenService.GenerateToken(user);
             UserDto userDto = mapper.Map<UserDto>(user);
@@ -262,13 +254,10 @@ public class UserController(
         User? user = await context.Users.FindAsync(userId);
         if (user == null)
             return Unauthorized(Localizer.UserNotFound((long)userId));
-        
+
         StringValues auths = Request.Headers.Authorization;
-        foreach (string? token in auths)
-        {
-            tokenService.RevokeToken(token);
-        }
-        
+        foreach (string? token in auths) tokenService.RevokeToken(token);
+
         LoginAttempt logoutAttempt = new()
         {
             Origin = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "Unknown",

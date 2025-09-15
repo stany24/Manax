@@ -46,7 +46,7 @@ public abstract partial class BaseSeries : PageViewModel
         {
             lock (_serieLock)
             {
-                ClientSerie? existingSerie = Series.FirstOrDefault<ClientSerie>(s => s.Info.Id == serie.Id);
+                ClientSerie? existingSerie = Series.FirstOrDefault(s => s.Info.Id == serie.Id);
                 if (existingSerie != null) return;
                 Series.Add(new ClientSerie(serie));
             }
@@ -59,7 +59,7 @@ public abstract partial class BaseSeries : PageViewModel
         {
             lock (_serieLock)
             {
-                ClientSerie? existingSerie = Series.FirstOrDefault<ClientSerie>(s => s.Info.Id == serieId);
+                ClientSerie? existingSerie = Series.FirstOrDefault(s => s.Info.Id == serieId);
                 if (existingSerie != null) Series.Remove(existingSerie);
             }
         });
@@ -72,7 +72,7 @@ public abstract partial class BaseSeries : PageViewModel
             ClientSerie? serie;
             lock (_serieLock)
             {
-                serie = Series.FirstOrDefault<ClientSerie>(s => s.Info.Id == serieId);
+                serie = Series.FirstOrDefault(s => s.Info.Id == serieId);
             }
 
             if (serie == null) return;
@@ -116,7 +116,7 @@ public abstract partial class BaseSeries : PageViewModel
             {
                 lock (_serieLock)
                 {
-                    if (Series.FirstOrDefault<ClientSerie>(s => s.Info.Id == serieId) != null) continue;
+                    if (Series.FirstOrDefault(s => s.Info.Id == serieId) != null) continue;
                 }
 
                 Optional<SerieDto> serieInfoAsync = await ManaxApiSerieClient.GetSerieInfoAsync(serieId);

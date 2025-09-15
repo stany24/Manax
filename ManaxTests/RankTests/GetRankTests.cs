@@ -5,10 +5,10 @@ using Microsoft.AspNetCore.Mvc;
 namespace ManaxTests.RankTests;
 
 [TestClass]
-public class GetRankTests: RankTestsSetup
+public class GetRankTests : RankTestsSetup
 {
     [TestMethod]
-    public async Task GetRanking_ReturnsUserRanks()
+    public async Task GetRankingReturnsUserRanks()
     {
         ActionResult<IEnumerable<UserRankDto>> result = await Controller.GetRanking();
 
@@ -29,9 +29,9 @@ public class GetRankTests: RankTestsSetup
             Assert.AreEqual(expectedRank.UserId, returnedRank.UserId);
         }
     }
-    
+
     [TestMethod]
-    public async Task GetRanks_ReturnsAllRanks()
+    public async Task GetRanksReturnsAllRanks()
     {
         ActionResult<IEnumerable<RankDto>> result = await Controller.GetRanks();
 
@@ -51,7 +51,7 @@ public class GetRankTests: RankTestsSetup
     }
 
     [TestMethod]
-    public async Task GetRanks_VerifyCorrectRankMapping()
+    public async Task GetRanksVerifyCorrectRankMapping()
     {
         ActionResult<IEnumerable<RankDto>> result = await Controller.GetRanks();
 

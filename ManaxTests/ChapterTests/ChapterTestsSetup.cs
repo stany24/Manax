@@ -9,10 +9,10 @@ namespace ManaxTests.ChapterTests;
 
 public abstract class ChapterTestsSetup
 {
-    protected ManaxContext Context = null!;
-    protected ChapterController Controller = null!;
     private ManaxMapper _mapper = null!;
     private Mock<INotificationService> _mockNotificationService = null!;
+    protected ManaxContext Context = null!;
+    protected ChapterController Controller = null!;
 
     [TestInitialize]
     public void Setup()

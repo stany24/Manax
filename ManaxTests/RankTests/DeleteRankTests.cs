@@ -4,10 +4,10 @@ using Microsoft.AspNetCore.Mvc;
 namespace ManaxTests.RankTests;
 
 [TestClass]
-public class DeleteRankTests: RankTestsSetup
+public class DeleteRankTests : RankTestsSetup
 {
     [TestMethod]
-    public async Task DeleteRank_WithValidId_RemovesRank()
+    public async Task DeleteRankWithValidIdRemovesRank()
     {
         Rank rank = Context.Ranks.First();
         IActionResult result = await Controller.DeleteRank(rank.Id);
@@ -19,7 +19,7 @@ public class DeleteRankTests: RankTestsSetup
     }
 
     [TestMethod]
-    public async Task DeleteRank_WithInvalidId_ReturnsNotFound()
+    public async Task DeleteRankWithInvalidIdReturnsNotFound()
     {
         IActionResult result = await Controller.DeleteRank(999999);
 
@@ -27,7 +27,7 @@ public class DeleteRankTests: RankTestsSetup
     }
 
     [TestMethod]
-    public async Task DeleteRank_VerifyRankCountDecreases()
+    public async Task DeleteRankVerifyRankCountDecreases()
     {
         int initialCount = Context.Ranks.Count();
         Rank rank = Context.Ranks.First();
@@ -39,9 +39,9 @@ public class DeleteRankTests: RankTestsSetup
         int finalCount = Context.Ranks.Count();
         Assert.AreEqual(initialCount - 1, finalCount);
     }
-    
+
     [TestMethod]
-    public async Task DeleteRank_WithAssociatedUserRanks_RemovesUserRanks()
+    public async Task DeleteRankWithAssociatedUserRanksRemovesUserRanks()
     {
         Rank rankWithUserRanks = Context.Ranks.First(r => Context.UserRanks.Any(ur => ur.RankId == r.Id));
 

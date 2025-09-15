@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
@@ -12,15 +13,11 @@ namespace ManaxClient.ViewModels.Popup.ConfirmCancel.Content;
 
 public partial class SerieUpdateViewModel : ConfirmCancelContentViewModel
 {
-    [ObservableProperty] private string _title;
-    [ObservableProperty] private string _description;
-    [ObservableProperty] private Status _selectedStatus;
-    [ObservableProperty] private LibraryDto? _selectedLibrary;
-
-    public ObservableCollection<LibraryDto> Libraries { get; } = [];
-    public ObservableCollection<Status> StatusOptions { get; } = [];
-
     private readonly SerieDto _originalSerie;
+    [ObservableProperty] private string _description;
+    [ObservableProperty] private LibraryDto? _selectedLibrary;
+    [ObservableProperty] private Status _selectedStatus;
+    [ObservableProperty] private string _title;
 
     public SerieUpdateViewModel(SerieDto serie)
     {
@@ -29,21 +26,21 @@ public partial class SerieUpdateViewModel : ConfirmCancelContentViewModel
         _description = serie.Description;
         _selectedStatus = serie.Status;
 
-        foreach (Status status in System.Enum.GetValues<Status>())
+        foreach (Status status in Enum.GetValues<Status>())
             StatusOptions.Add(status);
 
         CanConfirm = true;
 
         PropertyChanged += (_, args) =>
         {
-            if (args.PropertyName == nameof(Title))
-            {
-                CanConfirm = !string.IsNullOrWhiteSpace(Title);
-            }
+            if (args.PropertyName == nameof(Title)) CanConfirm = !string.IsNullOrWhiteSpace(Title);
         };
 
         _ = LoadLibraries();
     }
+
+    public ObservableCollection<LibraryDto> Libraries { get; } = [];
+    public ObservableCollection<Status> StatusOptions { get; } = [];
 
     private async Task LoadLibraries()
     {
@@ -54,10 +51,7 @@ public partial class SerieUpdateViewModel : ConfirmCancelContentViewModel
             foreach (long id in libraryIds.GetValue())
             {
                 Optional<LibraryDto> libraryResponse = await ManaxApiLibraryClient.GetLibraryAsync(id);
-                if (!libraryResponse.Failed)
-                {
-                    libraries.Add(libraryResponse.GetValue());
-                }
+                if (!libraryResponse.Failed) libraries.Add(libraryResponse.GetValue());
             }
 
             Dispatcher.UIThread.Post(() =>

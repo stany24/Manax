@@ -11,12 +11,12 @@ namespace ManaxTests.SerieTests;
 
 public abstract class SerieTestsSetup
 {
-    protected ManaxContext Context = null!;
-    protected SerieController Controller = null!;
     private ManaxMapper _mapper = null!;
     private Mock<IFixService> _mockFixService = null!;
     private Mock<INotificationService> _mockNotificationService = null!;
     private Mock<IBackgroundTaskService> _mockTaskService = null!;
+    protected ManaxContext Context = null!;
+    protected SerieController Controller = null!;
 
     [TestInitialize]
     public void Setup()

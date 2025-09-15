@@ -10,7 +10,7 @@ public class PermissionService(IServiceScopeFactory serviceScopeFactory) : Servi
     {
         using IServiceScope scope = serviceScopeFactory.CreateScope();
         ManaxContext context = scope.ServiceProvider.GetRequiredService<ManaxContext>();
-        
+
         return context.UserPermissions
             .Any(up => up.UserId == userId && up.Permission == permission);
     }
@@ -19,7 +19,7 @@ public class PermissionService(IServiceScopeFactory serviceScopeFactory) : Servi
     {
         using IServiceScope scope = serviceScopeFactory.CreateScope();
         ManaxContext context = scope.ServiceProvider.GetRequiredService<ManaxContext>();
-        
+
         return await context.UserPermissions
             .AnyAsync(up => up.UserId == userId && up.Permission == permission);
     }
@@ -28,7 +28,7 @@ public class PermissionService(IServiceScopeFactory serviceScopeFactory) : Servi
     {
         using IServiceScope scope = serviceScopeFactory.CreateScope();
         ManaxContext context = scope.ServiceProvider.GetRequiredService<ManaxContext>();
-        
+
         return context.UserPermissions
             .Where(up => up.UserId == userId)
             .Select(up => up.Permission)
@@ -39,7 +39,7 @@ public class PermissionService(IServiceScopeFactory serviceScopeFactory) : Servi
     {
         using IServiceScope scope = serviceScopeFactory.CreateScope();
         ManaxContext context = scope.ServiceProvider.GetRequiredService<ManaxContext>();
-        
+
         return await context.UserPermissions
             .Where(up => up.UserId == userId)
             .Select(up => up.Permission)
@@ -50,19 +50,19 @@ public class PermissionService(IServiceScopeFactory serviceScopeFactory) : Servi
     {
         using IServiceScope scope = serviceScopeFactory.CreateScope();
         ManaxContext context = scope.ServiceProvider.GetRequiredService<ManaxContext>();
-        
+
         List<UserPermission> existingPermissions = context.UserPermissions
             .Where(up => up.UserId == userId)
             .ToList();
-        
+
         context.UserPermissions.RemoveRange(existingPermissions);
-        
+
         IEnumerable<UserPermission> newPermissions = permissions.Select(p => new UserPermission
         {
             UserId = userId,
             Permission = p
         });
-        
+
         context.UserPermissions.AddRange(newPermissions);
         context.SaveChanges();
     }
@@ -71,19 +71,19 @@ public class PermissionService(IServiceScopeFactory serviceScopeFactory) : Servi
     {
         using IServiceScope scope = serviceScopeFactory.CreateScope();
         ManaxContext context = scope.ServiceProvider.GetRequiredService<ManaxContext>();
-        
+
         List<UserPermission> existingPermissions = await context.UserPermissions
             .Where(up => up.UserId == userId)
             .ToListAsync();
-        
+
         context.UserPermissions.RemoveRange(existingPermissions);
-        
+
         IEnumerable<UserPermission> newPermissions = permissions.Select(p => new UserPermission
         {
             UserId = userId,
             Permission = p
         });
-        
+
         context.UserPermissions.AddRange(newPermissions);
         await context.SaveChangesAsync();
     }
