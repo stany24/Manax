@@ -1,3 +1,4 @@
+using System.Collections.Concurrent;
 using System.Globalization;
 using System.Security.Claims;
 using ManaxLibrary.DTO.Chapter;
@@ -11,90 +12,93 @@ using ManaxLibrary.DTO.User;
 using ManaxLibrary.Logging;
 using ManaxLibrary.Notifications;
 using ManaxServer.Localization;
+using ManaxServer.Services.Permission;
 using Microsoft.AspNetCore.SignalR;
 
 namespace ManaxServer.Services.Notification;
 
-public class NotificationService(IHubContext<NotificationService> hubContext) : Hub, INotificationService
+public class NotificationService(IHubContext<NotificationService> hubContext, IPermissionService permissionService) : Hub, INotificationService
 {
+    private static readonly ConcurrentDictionary<string, long> Connections = new();
+
     public void NotifyLibraryCreatedAsync(LibraryDto library)
     {
-        TrySendToAllClientsAsync(NotificationType.LibraryCreated, library);
+        TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadLibrary, NotificationType.LibraryCreated, library);
     }
 
     public void NotifyLibraryDeletedAsync(long libraryId)
     {
-        TrySendToAllClientsAsync(NotificationType.LibraryDeleted, libraryId);
+        TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadLibrary, NotificationType.LibraryDeleted, libraryId);
     }
 
     public void NotifyLibraryUpdatedAsync(LibraryDto library)
     {
-        TrySendToAllClientsAsync(NotificationType.LibraryUpdated, library);
+        TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadLibrary, NotificationType.LibraryUpdated, library);
     }
 
     public void NotifySerieCreatedAsync(SerieDto serie)
     {
-        TrySendToAllClientsAsync(NotificationType.SerieCreated, serie);
+        TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadSeries, NotificationType.SerieCreated, serie);
     }
 
     public void NotifySerieUpdatedAsync(SerieDto serie)
     {
-        TrySendToAllClientsAsync(NotificationType.SerieUpdated, serie);
+        TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadSeries, NotificationType.SerieUpdated, serie);
     }
 
     public void NotifySerieDeletedAsync(long serieId)
     {
-        TrySendToAllClientsAsync(NotificationType.SerieDeleted, serieId);
+        TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadSeries, NotificationType.SerieDeleted, serieId);
     }
 
     public void NotifyRankCreatedAsync(RankDto rank)
     {
-        TrySendToAllClientsAsync(NotificationType.RankCreated, rank);
+        TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadRanks, NotificationType.RankCreated, rank);
     }
 
     public void NotifyRankUpdatedAsync(RankDto rank)
     {
-        TrySendToAllClientsAsync(NotificationType.RankUpdated, rank);
+        TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadRanks, NotificationType.RankUpdated, rank);
     }
 
     public void NotifyRankDeletedAsync(long rankId)
     {
-        TrySendToAllClientsAsync(NotificationType.RankDeleted, rankId);
+        TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadRanks, NotificationType.RankDeleted, rankId);
     }
 
     public void NotifyChapterAddedAsync(ChapterDto chapter)
     {
-        TrySendToAllClientsAsync(NotificationType.ChapterAdded, chapter);
+        TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadChapters, NotificationType.ChapterAdded, chapter);
     }
     
     public void NotifyChapterModifiedAsync(ChapterDto chapter)
     {
-        TrySendToAllClientsAsync(NotificationType.ChapterModified, chapter);
+        TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadChapters, NotificationType.ChapterModified, chapter);
     }
 
     public void NotifyChapterRemovedAsync(long chapterId)
     {
-        TrySendToAllClientsAsync(NotificationType.ChapterRemoved, chapterId);
+        TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadChapters, NotificationType.ChapterRemoved, chapterId);
     }
 
     public void NotifyUserCreatedAsync(UserDto user)
     {
-        TrySendToAdminsAsync(NotificationType.UserCreated, user);
+        TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadUsers, NotificationType.UserCreated, user);
     }
 
     public void NotifyUserDeletedAsync(long userId)
     {
-        TrySendToAdminsAsync(NotificationType.UserDeleted, userId);
+        TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadUsers, NotificationType.UserDeleted, userId);
     }
 
     public void NotifyRunningTasksAsync(Dictionary<string, int> tasks)
     {
-        TrySendToAdminsAsync(NotificationType.RunningTasks, tasks);
+        TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadServerStats, NotificationType.RunningTasks, tasks);
     }
 
     public void NotifyPosterModifiedAsync(long serieId)
     {
-        TrySendToAllClientsAsync(NotificationType.PosterModified, serieId);
+        TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadSeries, NotificationType.PosterModified, serieId);
     }
 
     public void NotifyReadCreated(ReadDto existingRead)
@@ -109,37 +113,37 @@ public class NotificationService(IHubContext<NotificationService> hubContext) : 
 
     public void NotifySerieIssueCreatedAsync(ReportedIssueSerieDto issue)
     {
-        TrySendToAdminsAsync(NotificationType.ReportedSerieIssueCreated, issue);
+        TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadAllIssues, NotificationType.ReportedSerieIssueCreated, issue);
     }
 
     public void NotifyChapterIssueCreatedAsync(ReportedIssueChapterDto issue)
     {
-        TrySendToAdminsAsync(NotificationType.ReportedChapterIssueCreated, issue);
+        TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadAllIssues, NotificationType.ReportedChapterIssueCreated, issue);
     }
 
     public void NotifyChapterIssueDeletedAsync(long issueId)
     {
-        TrySendToAdminsAsync(NotificationType.ReportedChapterIssueDeleted, issueId);
+        TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadAllIssues, NotificationType.ReportedChapterIssueDeleted, issueId);
     }
 
     public void NotifySerieIssueDeletedAsync(long issueId)
     {
-        TrySendToAdminsAsync(NotificationType.ReportedSerieIssueDeleted, issueId);
+        TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadAllIssues, NotificationType.ReportedSerieIssueDeleted, issueId);
     }
     
     public void NotifyTagCreatedAsync(TagDto tag)
     {
-        TrySendToAdminsAsync(NotificationType.TagCreated, tag);
+        TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadTags, NotificationType.TagCreated, tag);
     }
 
     public void NotifyTagUpdatedAsync(TagDto tag)
     {
-        TrySendToAdminsAsync(NotificationType.TagUpdated, tag);
+        TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadTags, NotificationType.TagUpdated, tag);
     }
 
     public void NotifyTagDeletedAsync(long tagId)
     {
-        TrySendToAllClientsAsync(NotificationType.TagDeleted, tagId);
+        TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadTags, NotificationType.TagDeleted, tagId);
     }
 
     public override async Task OnConnectedAsync()
@@ -147,13 +151,13 @@ public class NotificationService(IHubContext<NotificationService> hubContext) : 
         try
         {
             Logger.LogInfo(Localizer.HubConnected(Context.ConnectionId, Context.User?.Identity?.Name ?? "Unknown"));
-            ClaimsPrincipal? user = Context.User;
-            if (user != null)
+            
+            if (Context.User?.Identity?.IsAuthenticated == true)
             {
-                bool isAdmin = user.HasClaim(c => c.Type is "role" or ClaimTypes.Role && c.Value is "Admin" or "Owner");
-                bool isOwner = user.HasClaim(c => c.Type is "role" or ClaimTypes.Role && c.Value == "Owner");
-                if (isAdmin) await Groups.AddToGroupAsync(Context.ConnectionId, "Admins");
-                if (isOwner) await Groups.AddToGroupAsync(Context.ConnectionId, "Owner");
+                if (long.TryParse(Context.User.FindFirst(ClaimTypes.NameIdentifier)?.Value, out long userId))
+                {
+                    Connections.TryAdd(Context.ConnectionId, userId);
+                }
             }
 
             await base.OnConnectedAsync();
@@ -169,6 +173,8 @@ public class NotificationService(IHubContext<NotificationService> hubContext) : 
     {
         try
         {
+            Connections.TryRemove(Context.ConnectionId, out _);
+            
             if (exception != null)
                 Logger.LogError(Localizer.HubDisconnectedError(Context.ConnectionId), exception,
                     Environment.StackTrace);
@@ -183,45 +189,27 @@ public class NotificationService(IHubContext<NotificationService> hubContext) : 
         }
     }
 
-    private void TrySendToAllClientsAsync(NotificationType type, object? arg)
+    private void TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission permission, NotificationType type, object? arg)
     {
         string methodName = type.ToString();
         try
         {
-            hubContext.Clients.All.SendAsync(methodName, arg);
+            List<string> connectionIds = [];
+            foreach (KeyValuePair<string, long> connection in Connections)
+            {
+                if (permissionService.UserHasPermission(connection.Value, permission))
+                {
+                    connectionIds.Add(connection.Key);
+                }
+            }
+
+            if (connectionIds.Count <= 0) return;
+            hubContext.Clients.Clients(connectionIds).SendAsync(methodName, arg);
             Logger.LogInfo(Localizer.HubMessageSent(methodName));
         }
         catch (Exception ex)
         {
             Logger.LogError(Localizer.HubMessageError(methodName), ex, Environment.StackTrace);
-        }
-    }
-
-    private void TrySendToAdminsAsync(NotificationType type, object? arg)
-    {
-        string methodName = type.ToString();
-        try
-        {
-            hubContext.Clients.Group("Admins").SendAsync(methodName, arg);
-            Logger.LogInfo(Localizer.HubMessageSentAdmins(methodName));
-        }
-        catch (Exception ex)
-        {
-            Logger.LogError(Localizer.HubMessageErrorAdmins(methodName), ex, Environment.StackTrace);
-        }
-    }
-
-    private void TrySendToOwnerAsync(NotificationType type, object? arg)
-    {
-        string methodName = type.ToString();
-        try
-        {
-            hubContext.Clients.Group("Owner").SendAsync(methodName, arg);
-            Logger.LogInfo(Localizer.HubMessageSentOwner(methodName));
-        }
-        catch (Exception ex)
-        {
-            Logger.LogError(Localizer.HubMessageErrorOwner(methodName), ex, Environment.StackTrace);
         }
     }
 
@@ -231,11 +219,11 @@ public class NotificationService(IHubContext<NotificationService> hubContext) : 
         try
         {
             hubContext.Clients.User(id.ToString(CultureInfo.InvariantCulture)).SendAsync(methodName, arg);
-            Logger.LogInfo(Localizer.HubMessageSentSingle(id,methodName));
+            Logger.LogInfo(Localizer.HubMessageSentSingle(id, methodName));
         }
         catch (Exception ex)
         {
-            Logger.LogError(Localizer.HubMessageErrorSingle(id,methodName), ex, Environment.StackTrace);
+            Logger.LogError(Localizer.HubMessageErrorSingle(id, methodName), ex, Environment.StackTrace);
         }
     }
 }

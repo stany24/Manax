@@ -342,7 +342,7 @@ public partial class SeriePageViewModel : PageViewModel
                     [
                         new FilePickerFileType("Images")
                         {
-                            Patterns = ["*.jpg", "*.jpeg", "*.png", "*.bmp", "*.gif"]
+                            Patterns = ["*.jpg", "*.webp", "*.jpeg", "*.png", "*.bmp", "*.gif"]
                         }
                     ]
                 });

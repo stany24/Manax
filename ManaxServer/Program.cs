@@ -43,7 +43,9 @@ public class Program
         
         // Services
         builder.Services.AddSingleton<INotificationService>(provider =>
-            new NotificationService(provider.GetRequiredService<IHubContext<NotificationService>>()));
+            new NotificationService(
+                provider.GetRequiredService<IHubContext<NotificationService>>(),
+                provider.GetRequiredService<IPermissionService>()));
         builder.Services.AddSingleton<IHashService>(_ => new HashService());
         builder.Services.AddSingleton<IRenamingService>(provider =>
             new RenamingService(provider.GetRequiredService<IServiceScopeFactory>()));
