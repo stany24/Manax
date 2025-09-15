@@ -54,36 +54,45 @@ public class UserController(
         return mapper.Map<UserDto>(user);
     }
 
-    // PUT: api/User/5
-    [HttpPut("{id:long}")]
-    [RequirePermission(Permission.WriteUsers)]
+    [HttpPut("password/update")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> PutUser(long id, UserUpdateDto userUpdate)
+    public async Task<IActionResult> UpdatePassword(string newPassword)
     {
-        if (!passwordValidationService.IsPasswordValid(userUpdate.Password, out string? errorMessage))
+        long? userId = GetCurrentUserId(HttpContext);
+        if (userId == null)
+            return Unauthorized(Localizer.Unauthorized());
+
+        if (!passwordValidationService.IsPasswordValid(newPassword, out string? errorMessage))
         {
             return BadRequest(errorMessage);
         }
-        User? user = await context.Users.FindAsync(id);
 
-        if (user == null) return NotFound(Localizer.UserNotFound(id));
+        User? user = await context.Users.FindAsync(userId);
+        if (user == null)
+            return Unauthorized(Localizer.Unauthorized());
 
-        mapper.Map(userUpdate, user);
-
-        if (!string.IsNullOrEmpty(userUpdate.Password))
-            user.PasswordHash = hashService.HashPassword(userUpdate.Password);
-
-        try
-        {
-            await context.SaveChangesAsync();
-        }
-        catch (DbUpdateConcurrencyException) when (!UserExists(id))
-        {
-            return NotFound();
-        }
+        user.PasswordHash = hashService.HashPassword(newPassword);
+        await context.SaveChangesAsync();
 
         return Ok();
+    }
+    
+    [HttpPut("{id:long}/password/reset")]
+    [RequirePermission(Permission.ResetPasswords)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<string>> ResetPassword(long id)
+    {
+        User? user = await context.Users.FindAsync(id);
+        if (user == null) return NotFound(Localizer.UserNotFound(id));
+        
+        string newPassword = passwordValidationService.GenerateValidPassword();
+
+        user.PasswordHash = hashService.HashPassword(newPassword);
+        await context.SaveChangesAsync();
+
+        return newPassword;
     }
 
     // POST: api/User
@@ -283,10 +292,5 @@ public class UserController(
         string? userIdClaim = httpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
         if (userIdClaim == null || !long.TryParse(userIdClaim, out long userId)) return null;
         return userId;
-    }
-
-    private bool UserExists(long id)
-    {
-        return context.Users.Any(e => e.Id == id);
     }
 }

@@ -65,7 +65,8 @@ public class PermissionController(IPermissionService permissionService) : Contro
             Permission.DeleteSeries,
             Permission.DeleteChapters,
             Permission.DeleteLibrary,
-            Permission.DeleteUsers
+            Permission.DeleteUsers,
+            Permission.ResetPasswords
         ]).ToArray();
         
         return role switch

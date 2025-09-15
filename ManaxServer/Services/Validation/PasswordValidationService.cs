@@ -54,4 +54,28 @@ public partial class PasswordValidationService(bool isProduction) : IPasswordVal
         errorMessage = Localizer.PasswordNoSpecialCharacterOrDigit();
         return false;
     }
+
+    public string GenerateValidPassword()
+    {
+        const string lower = "abcdefghijklmnopqrstuvwxyz";
+        const string upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        const string digits = "0123456789";
+        const string special = "!@#$%^&*()_+-=[]{};':\"\\|,.<>/?";
+        const string all = lower + upper + digits + special;
+
+        Random random = new();
+        char[] passwordChars = new char[14];
+
+        passwordChars[0] = lower[random.Next(lower.Length)];
+        passwordChars[1] = upper[random.Next(upper.Length)];
+        passwordChars[2] = digits[random.Next(digits.Length)];
+        passwordChars[3] = special[random.Next(special.Length)];
+
+        for (int i = 4; i < passwordChars.Length; i++)
+        {
+            passwordChars[i] = all[random.Next(all.Length)];
+        }
+
+        return new string(passwordChars.OrderBy(x => random.Next()).ToArray());
+    }
 }

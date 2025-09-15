@@ -13,6 +13,7 @@ public enum Permission
     ReadUsers = 31,
     WriteUsers = 32,
     DeleteUsers = 33,
+    ResetPasswords = 34,
     
     ReadAllIssues = 41,
     WriteIssues = 42,
