@@ -55,7 +55,7 @@ public class SerieController(
     }
 
     // GET: api/series/{id}/chapters
-    [HttpGet("/api/series/{id:long}/chapters")]
+    [HttpGet("{id:long}/chapters")]
     [RequirePermission(Permission.ReadChapters)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -72,7 +72,7 @@ public class SerieController(
     }
 
     // GET: api/series/{id}/chapters
-    [HttpGet("/api/series/{id:long}/reads")]
+    [HttpGet("{id:long}/reads")]
     [RequirePermission(Permission.ReadSavePoints)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]

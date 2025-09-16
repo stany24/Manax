@@ -113,18 +113,18 @@ public class GetIssueTests : IssueTestsSetup
     [TestMethod]
     public async Task GetAllReportedSerieIssuesTypesReturnsAllTypes()
     {
-        ActionResult<IEnumerable<ReportedIssueSerieType>> result = await Controller.GetAllReportedSerieIssuesTypes();
+        ActionResult<IEnumerable<ReportedIssueSerieTypeDto>> result = await Controller.GetAllReportedSerieIssuesTypes();
 
         OkObjectResult? okResult = result.Result as OkObjectResult;
         Assert.IsNull(okResult);
 
-        List<ReportedIssueSerieType>? returnedTypes = result.Value as List<ReportedIssueSerieType>;
+        List<ReportedIssueSerieTypeDto>? returnedTypes = result.Value as List<ReportedIssueSerieTypeDto>;
         Assert.IsNotNull(returnedTypes);
         Assert.AreEqual(Context.ReportedIssueSerieTypes.Count(), returnedTypes.Count);
 
         foreach (ReportedIssueSerieType type in Context.ReportedIssueSerieTypes)
         {
-            ReportedIssueSerieType? returnedType = returnedTypes.FirstOrDefault(t => t.Id == type.Id);
+            ReportedIssueSerieTypeDto? returnedType = returnedTypes.FirstOrDefault(t => t.Id == type.Id);
             Assert.IsNotNull(returnedType);
             Assert.AreEqual(type.Name, returnedType.Name);
         }
@@ -175,9 +175,9 @@ public class GetIssueTests : IssueTestsSetup
     [TestMethod]
     public async Task GetAllReportedSerieIssuesTypesVerifyCorrectCount()
     {
-        ActionResult<IEnumerable<ReportedIssueSerieType>> result = await Controller.GetAllReportedSerieIssuesTypes();
+        ActionResult<IEnumerable<ReportedIssueSerieTypeDto>> result = await Controller.GetAllReportedSerieIssuesTypes();
 
-        List<ReportedIssueSerieType>? returnedTypes = result.Value as List<ReportedIssueSerieType>;
+        List<ReportedIssueSerieTypeDto>? returnedTypes = result.Value as List<ReportedIssueSerieTypeDto>;
         Assert.IsNotNull(returnedTypes);
         Assert.HasCount(3, returnedTypes);
     }

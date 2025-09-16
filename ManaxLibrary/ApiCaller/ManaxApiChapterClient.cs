@@ -56,31 +56,7 @@ public static class ManaxApiChapterClient
                 : new Optional<byte[]>(data);
         });
     }
-
-    public static async Task<Optional<ChapterDto>> PostChapterAsync(ChapterDto chapter)
-    {
-        return await ManaxApiClient.ExecuteWithErrorHandlingAsync(async () =>
-        {
-            HttpResponseMessage response = await ManaxApiClient.Client.PostAsJsonAsync("api/chapter", chapter);
-            if (!response.IsSuccessStatusCode) return new Optional<ChapterDto>(response);
-            ChapterDto? createdChapter = await response.Content.ReadFromJsonAsync<ChapterDto>();
-            return createdChapter == null
-                ? new Optional<ChapterDto>("Failed to read created chapter from response.")
-                : new Optional<ChapterDto>(createdChapter);
-        });
-    }
-
-    public static async Task<Optional<bool>> PutChapterAsync(long id, ChapterDto chapter)
-    {
-        return await ManaxApiClient.ExecuteWithErrorHandlingAsync(async () =>
-        {
-            HttpResponseMessage response = await ManaxApiClient.Client.PutAsJsonAsync($"api/chapter/{id}", chapter);
-            return response.IsSuccessStatusCode
-                ? new Optional<bool>(true)
-                : new Optional<bool>(response);
-        });
-    }
-
+    
     public static async Task<Optional<bool>> DeleteChapterAsync(long id)
     {
         return await ManaxApiClient.ExecuteWithErrorHandlingAsync(async () =>

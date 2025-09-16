@@ -1,3 +1,4 @@
+using ManaxLibrary.DTO.Rank;
 using ManaxServer.Models.Rank;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,7 +11,7 @@ public class UpdateRankTests : RankTestsSetup
     public async Task UpdateRankWithValidIdUpdatesRank()
     {
         Rank existingRank = Context.Ranks.First();
-        Rank updateRank = new()
+        RankUpdateDto updateRank = new()
         {
             Id = existingRank.Id,
             Value = 8,
@@ -30,7 +31,7 @@ public class UpdateRankTests : RankTestsSetup
     [TestMethod]
     public async Task UpdateRankWithInvalidIdReturnsNotFound()
     {
-        Rank updateRank = new()
+        RankUpdateDto updateRank = new()
         {
             Id = 999999,
             Value = 8,
@@ -49,7 +50,7 @@ public class UpdateRankTests : RankTestsSetup
         Rank firstRank = ranks[0];
         Rank secondRank = ranks[1];
 
-        Rank updateRank = new()
+        RankUpdateDto updateRank = new()
         {
             Id = firstRank.Id,
             Value = secondRank.Value,
@@ -68,7 +69,7 @@ public class UpdateRankTests : RankTestsSetup
         Rank firstRank = ranks[0];
         Rank secondRank = ranks[1];
 
-        Rank updateRank = new()
+        RankUpdateDto updateRank = new()
         {
             Id = firstRank.Id,
             Value = 99,

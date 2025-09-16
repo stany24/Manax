@@ -84,7 +84,13 @@ public partial class RankPageViewModel : PageViewModel
 
     public void UpdateRank(RankDto rank)
     {
-        RankEditViewModel content = new(rank);
+        RankUpdateDto update = new()
+        {
+            Id = rank.Id,
+            Name = rank.Name,
+            Value = rank.Value
+        };
+        RankEditViewModel content = new(update);
         ConfirmCancelViewModel viewModel = new(content);
         Controls.Popups.Popup popup = new(viewModel);
         popup.Closed += async void (_, _) =>
@@ -92,7 +98,7 @@ public partial class RankPageViewModel : PageViewModel
             try
             {
                 if (viewModel.Canceled()) return;
-                RankDto result = content.GetResult();
+                RankUpdateDto result = content.GetResult();
                 Optional<bool> updateRankAsync = await ManaxApiRankClient.UpdateRankAsync(result);
                 if (updateRankAsync.Failed)
                     InfoEmitted?.Invoke(this, updateRankAsync.Error);
@@ -125,7 +131,7 @@ public partial class RankPageViewModel : PageViewModel
 
     public void CreateRank()
     {
-        RankEditViewModel content = new(new RankDto { Name = "New Rank", Value = 10 });
+        RankEditViewModel content = new(new RankUpdateDto { Name = "New Rank", Value = 10 });
         ConfirmCancelViewModel viewModel = new(content);
         Controls.Popups.Popup popup = new(viewModel);
         popup.Closed += async void (_, _) =>
@@ -133,7 +139,7 @@ public partial class RankPageViewModel : PageViewModel
             try
             {
                 if (viewModel.Canceled()) return;
-                RankDto result = content.GetResult();
+                RankUpdateDto result = content.GetResult();
                 Optional<bool> rankResponse = await ManaxApiRankClient.CreateRankAsync(new RankCreateDto
                     { Name = result.Name, Value = result.Value });
 

@@ -18,7 +18,7 @@ namespace ManaxServer.Controllers;
 public class StatsController(ManaxContext context, IMapper mapper) : ControllerBase
 {
     // GET: api/Chapter
-    [HttpGet("/api/stats")]
+    [HttpGet("api/stats")]
     [RequirePermission(Permission.ReadSelfStats)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -66,7 +66,7 @@ public class StatsController(ManaxContext context, IMapper mapper) : ControllerB
         return stats;
     }
 
-    [HttpGet("/api/server-stats")]
+    [HttpGet("api/server-stats")]
     [RequirePermission(Permission.ReadServerStats)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<ServerStats>> GetServerStats()

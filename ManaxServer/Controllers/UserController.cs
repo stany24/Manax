@@ -32,7 +32,7 @@ public class UserController(
     private readonly object _claimLock = new();
 
     // GET: api/Users
-    [HttpGet("/api/Users")]
+    [HttpGet("/api/users")]
     [RequirePermission(Permission.ReadUsers)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<long>>> GetUsers()

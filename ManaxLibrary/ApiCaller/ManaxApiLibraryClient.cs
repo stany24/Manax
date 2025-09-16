@@ -42,7 +42,7 @@ public static class ManaxApiLibraryClient
         });
     }
 
-    public static async Task<Optional<bool>> PutLibraryAsync(long id, LibraryCreateDto library)
+    public static async Task<Optional<bool>> PutLibraryAsync(long id, LibraryUpdateDto library)
     {
         return await ManaxApiClient.ExecuteWithErrorHandlingAsync(async () =>
         {

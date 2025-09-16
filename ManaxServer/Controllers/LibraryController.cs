@@ -18,7 +18,7 @@ public class LibraryController(ManaxContext context, IMapper mapper, INotificati
     : ControllerBase
 {
     // GET: api/Library
-    [HttpGet("/api/Libraries")]
+    [HttpGet("/api/libraries")]
     [RequirePermission(Permission.ReadLibrary)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<long>>> GetLibraries()

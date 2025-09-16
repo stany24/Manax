@@ -10,7 +10,7 @@ public static class ManaxApiUserClient
         return await ManaxApiClient.ExecuteWithErrorHandlingAsync(async () =>
         {
             HttpResponseMessage response =
-                await ManaxApiClient.Client.PostAsJsonAsync("/api/login", new { username, password });
+                await ManaxApiClient.Client.PostAsJsonAsync("api/login", new { username, password });
             if (!response.IsSuccessStatusCode) return new Optional<UserLoginResultDto>(response);
             UserLoginResultDto? user = await response.Content.ReadFromJsonAsync<UserLoginResultDto>();
             return user == null
@@ -94,7 +94,7 @@ public static class ManaxApiUserClient
         return await ManaxApiClient.ExecuteWithErrorHandlingAsync(async () =>
         {
             HttpResponseMessage response =
-                await ManaxApiClient.Client.PostAsJsonAsync("/api/claim", new { username, password });
+                await ManaxApiClient.Client.PostAsJsonAsync("api/claim", new { username, password });
             if (!response.IsSuccessStatusCode) return new Optional<UserLoginResultDto>(response);
             UserLoginResultDto? user = await response.Content.ReadFromJsonAsync<UserLoginResultDto>();
             return user == null
@@ -107,7 +107,7 @@ public static class ManaxApiUserClient
     {
         return await ManaxApiClient.ExecuteWithErrorHandlingAsync(async () =>
         {
-            HttpResponseMessage response = await ManaxApiClient.Client.PostAsync("/api/logout", null);
+            HttpResponseMessage response = await ManaxApiClient.Client.PostAsync("api/logout", null);
             return response.IsSuccessStatusCode
                 ? new Optional<bool>(true)
                 : new Optional<bool>(response);

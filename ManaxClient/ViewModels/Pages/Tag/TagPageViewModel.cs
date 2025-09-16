@@ -61,7 +61,7 @@ public class TagPageViewModel : PageViewModel
 
     public void CreateTag()
     {
-        TagEditViewModel content = new(new TagDto { Name = "Nouveau Tag", Color = Color.Blue });
+        TagEditViewModel content = new(new TagUpdateDto { Name = "Nouveau Tag", Color = Color.Blue });
         ConfirmCancelViewModel viewModel = new(content);
         Controls.Popups.Popup popup = new(viewModel);
         popup.Closed += async void (_, _) =>
@@ -69,7 +69,7 @@ public class TagPageViewModel : PageViewModel
             try
             {
                 if (viewModel.Canceled()) return;
-                TagDto result = content.GetResult();
+                TagUpdateDto result = content.GetResult();
                 TagCreateDto tagCreate = new()
                 {
                     Name = result.Name,
@@ -91,7 +91,13 @@ public class TagPageViewModel : PageViewModel
 
     public void UpdateTag(TagDto tag)
     {
-        TagEditViewModel content = new(tag);
+        TagUpdateDto update = new()
+        {
+            Id = tag.Id,
+            Name = tag.Name,
+            Color = tag.Color
+        };
+        TagEditViewModel content = new(update);
         ConfirmCancelViewModel viewModel = new(content);
         Controls.Popups.Popup popup = new(viewModel);
 
@@ -100,7 +106,7 @@ public class TagPageViewModel : PageViewModel
             try
             {
                 if (viewModel.Canceled()) return;
-                TagDto result = content.GetResult();
+                TagUpdateDto result = content.GetResult();
                 await ManaxApiTagClient.UpdateTagAsync(result);
             }
             catch

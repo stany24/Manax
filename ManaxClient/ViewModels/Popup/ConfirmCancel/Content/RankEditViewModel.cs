@@ -5,11 +5,11 @@ namespace ManaxClient.ViewModels.Popup.ConfirmCancel.Content;
 
 public partial class RankEditViewModel : ConfirmCancelContentViewModel
 {
-    private readonly RankDto _originalRank;
+    private readonly RankUpdateDto _originalRank;
     [ObservableProperty] private string _name;
     [ObservableProperty] private double _value;
 
-    public RankEditViewModel(RankDto rank)
+    public RankEditViewModel(RankUpdateDto rank)
     {
         _originalRank = rank;
         _name = rank.Name;
@@ -22,9 +22,9 @@ public partial class RankEditViewModel : ConfirmCancelContentViewModel
         };
     }
 
-    public RankDto GetResult()
+    public RankUpdateDto GetResult()
     {
-        return new RankDto
+        return new RankUpdateDto
         {
             Id = _originalRank.Id,
             Name = Name.Trim(),

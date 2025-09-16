@@ -44,12 +44,11 @@ public class RankController(ManaxContext context, IMapper mapper, INotificationS
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> UpdateRank(Rank rank)
+    public async Task<IActionResult> UpdateRank(RankUpdateDto rank)
     {
         Rank? found = context.Ranks.FirstOrDefault(r => r.Id == rank.Id);
         if (found == null) return NotFound(Localizer.RankNotFound(rank.Id));
-        found.Name = rank.Name;
-        found.Value = rank.Value;
+        mapper.Map(rank, found);
         try
         {
             await context.SaveChangesAsync();

@@ -10,7 +10,7 @@ public static class ManaxApiIssueClient
     {
         return await ManaxApiClient.ExecuteWithErrorHandlingAsync(async () =>
         {
-            HttpResponseMessage response = await ManaxApiClient.Client.GetAsync("/api/issue/chapter/automatic");
+            HttpResponseMessage response = await ManaxApiClient.Client.GetAsync("api/issue/chapter/automatic");
             if (!response.IsSuccessStatusCode) return new Optional<List<AutomaticIssueChapterDto>>(response);
             List<AutomaticIssueChapterDto>? issues =
                 await response.Content.ReadFromJsonAsync<List<AutomaticIssueChapterDto>>();
@@ -24,7 +24,7 @@ public static class ManaxApiIssueClient
     {
         return await ManaxApiClient.ExecuteWithErrorHandlingAsync(async () =>
         {
-            HttpResponseMessage response = await ManaxApiClient.Client.GetAsync("/api/issue/serie/automatic");
+            HttpResponseMessage response = await ManaxApiClient.Client.GetAsync("api/issue/serie/automatic");
             if (!response.IsSuccessStatusCode) return new Optional<List<AutomaticIssueSerieDto>>(response);
             List<AutomaticIssueSerieDto>? issues =
                 await response.Content.ReadFromJsonAsync<List<AutomaticIssueSerieDto>>();
@@ -38,7 +38,7 @@ public static class ManaxApiIssueClient
     {
         return await ManaxApiClient.ExecuteWithErrorHandlingAsync(async () =>
         {
-            HttpResponseMessage response = await ManaxApiClient.Client.GetAsync("/api/issue/chapter/reported");
+            HttpResponseMessage response = await ManaxApiClient.Client.GetAsync("api/issue/chapter/reported");
             if (!response.IsSuccessStatusCode) return new Optional<List<ReportedIssueChapterDto>>(response);
             List<ReportedIssueChapterDto>? issues =
                 await response.Content.ReadFromJsonAsync<List<ReportedIssueChapterDto>>();
@@ -52,7 +52,7 @@ public static class ManaxApiIssueClient
     {
         return await ManaxApiClient.ExecuteWithErrorHandlingAsync(async () =>
         {
-            HttpResponseMessage response = await ManaxApiClient.Client.GetAsync("/api/issue/chapter/reported/types");
+            HttpResponseMessage response = await ManaxApiClient.Client.GetAsync("api/issue/chapter/reported/types");
             if (!response.IsSuccessStatusCode) return new Optional<List<ReportedIssueChapterTypeDto>>(response);
             List<ReportedIssueChapterTypeDto>? issues =
                 await response.Content.ReadFromJsonAsync<List<ReportedIssueChapterTypeDto>>();
@@ -67,7 +67,7 @@ public static class ManaxApiIssueClient
     {
         return await ManaxApiClient.ExecuteWithErrorHandlingAsync(async () =>
         {
-            HttpResponseMessage response = await ManaxApiClient.Client.GetAsync("/api/issue/serie/reported");
+            HttpResponseMessage response = await ManaxApiClient.Client.GetAsync("api/issue/serie/reported");
             if (!response.IsSuccessStatusCode) return new Optional<List<ReportedIssueSerieDto>>(response);
             List<ReportedIssueSerieDto>? issues =
                 await response.Content.ReadFromJsonAsync<List<ReportedIssueSerieDto>>();
@@ -81,13 +81,13 @@ public static class ManaxApiIssueClient
     {
         return await ManaxApiClient.ExecuteWithErrorHandlingAsync(async () =>
         {
-            HttpResponseMessage response = await ManaxApiClient.Client.GetAsync("/api/issue/chapter/reported/types");
+            HttpResponseMessage response = await ManaxApiClient.Client.GetAsync("api/issue/serie/reported/types");
             if (!response.IsSuccessStatusCode) return new Optional<List<ReportedIssueSerieTypeDto>>(response);
             List<ReportedIssueSerieTypeDto>? issues =
                 await response.Content.ReadFromJsonAsync<List<ReportedIssueSerieTypeDto>>();
             return issues == null
                 ? new Optional<List<ReportedIssueSerieTypeDto>>(
-                    "Failed to read reported chapter issue type from response.")
+                    "Failed to read reported serie issue type from response.")
                 : new Optional<List<ReportedIssueSerieTypeDto>>(issues);
         });
     }
@@ -97,7 +97,7 @@ public static class ManaxApiIssueClient
         return await ManaxApiClient.ExecuteWithErrorHandlingAsync(async () =>
         {
             HttpResponseMessage response =
-                await ManaxApiClient.Client.PostAsJsonAsync("/api/issue/chapter", reportedIssueChapter);
+                await ManaxApiClient.Client.PostAsJsonAsync("api/issue/chapter", reportedIssueChapter);
             return response.IsSuccessStatusCode
                 ? new Optional<bool>(true)
                 : new Optional<bool>(response);
@@ -109,7 +109,7 @@ public static class ManaxApiIssueClient
         return await ManaxApiClient.ExecuteWithErrorHandlingAsync(async () =>
         {
             HttpResponseMessage response =
-                await ManaxApiClient.Client.PostAsJsonAsync("/api/issue/serie", reportedIssueSerie);
+                await ManaxApiClient.Client.PostAsJsonAsync("api/issue/serie", reportedIssueSerie);
             return response.IsSuccessStatusCode
                 ? new Optional<bool>(true)
                 : new Optional<bool>(response);
@@ -120,7 +120,7 @@ public static class ManaxApiIssueClient
     {
         return await ManaxApiClient.ExecuteWithErrorHandlingAsync(async () =>
         {
-            HttpResponseMessage response = await ManaxApiClient.Client.PutAsync($"/api/issue/chapter/{id}/close", null);
+            HttpResponseMessage response = await ManaxApiClient.Client.PutAsync($"api/issue/chapter/{id}/close", null);
             return response.IsSuccessStatusCode
                 ? new Optional<bool>(true)
                 : new Optional<bool>(response);
@@ -131,7 +131,7 @@ public static class ManaxApiIssueClient
     {
         return await ManaxApiClient.ExecuteWithErrorHandlingAsync(async () =>
         {
-            HttpResponseMessage response = await ManaxApiClient.Client.PutAsync($"/api/issue/serie/{id}/close", null);
+            HttpResponseMessage response = await ManaxApiClient.Client.PutAsync($"api/issue/serie/{id}/close", null);
             return response.IsSuccessStatusCode
                 ? new Optional<bool>(true)
                 : new Optional<bool>(response);

@@ -37,7 +37,7 @@ public static class ManaxApiSerieClient
     {
         return await ManaxApiClient.ExecuteWithErrorHandlingAsync(async () =>
         {
-            HttpResponseMessage response = await ManaxApiClient.Client.GetAsync($"api/series/{id}/chapters");
+            HttpResponseMessage response = await ManaxApiClient.Client.GetAsync($"api/serie/{id}/chapters");
             if (!response.IsSuccessStatusCode) return new Optional<List<long>>(response);
             List<long>? ids = await response.Content.ReadFromJsonAsync<List<long>>();
             return ids == null
@@ -50,7 +50,7 @@ public static class ManaxApiSerieClient
     {
         return await ManaxApiClient.ExecuteWithErrorHandlingAsync(async () =>
         {
-            HttpResponseMessage response = await ManaxApiClient.Client.GetAsync($"api/series/{id}/reads");
+            HttpResponseMessage response = await ManaxApiClient.Client.GetAsync($"api/serie/{id}/reads");
             if (!response.IsSuccessStatusCode) return new Optional<List<ReadDto>>(response);
             List<ReadDto>? ids = await response.Content.ReadFromJsonAsync<List<ReadDto>>();
             return ids == null
@@ -63,7 +63,7 @@ public static class ManaxApiSerieClient
     {
         return await ManaxApiClient.ExecuteWithErrorHandlingAsync(async () =>
         {
-            HttpResponseMessage response = await ManaxApiClient.Client.PostAsJsonAsync("/api/serie", serieCreate);
+            HttpResponseMessage response = await ManaxApiClient.Client.PostAsJsonAsync("api/serie", serieCreate);
             if (!response.IsSuccessStatusCode) return new Optional<long>(response);
             long id = await response.Content.ReadFromJsonAsync<long>();
             return new Optional<long>(id);

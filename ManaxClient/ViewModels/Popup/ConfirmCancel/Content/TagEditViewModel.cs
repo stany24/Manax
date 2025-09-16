@@ -7,12 +7,12 @@ namespace ManaxClient.ViewModels.Popup.ConfirmCancel.Content;
 
 public partial class TagEditViewModel : ConfirmCancelContentViewModel
 {
-    private readonly TagDto _originalTag;
+    private readonly TagUpdateDto _originalTag;
     private Avalonia.Media.Color _color;
     [ObservableProperty] private SolidColorBrush _colorBrush;
     [ObservableProperty] private string _name;
 
-    public TagEditViewModel(TagDto tag)
+    public TagEditViewModel(TagUpdateDto tag)
     {
         _originalTag = tag;
         Name = tag.Name;
@@ -36,9 +36,9 @@ public partial class TagEditViewModel : ConfirmCancelContentViewModel
         }
     }
 
-    public TagDto GetResult()
+    public TagUpdateDto GetResult()
     {
-        return new TagDto
+        return new TagUpdateDto
         {
             Id = _originalTag.Id,
             Name = Name.Trim(),

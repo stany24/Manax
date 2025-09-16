@@ -54,6 +54,7 @@ public class ManaxMapping : Mapping
 
         CreateMap<Rank, RankDto>();
         CreateMap<RankCreateDto, Rank>();
+        CreateMap<RankUpdateDto, Rank>();
         CreateMap<UserRank, UserRankDto>();
 
         CreateMap<SavePointCreateDto, SavePoint>();

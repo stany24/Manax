@@ -1,6 +1,5 @@
 using System.Net.Http.Json;
 using ManaxLibrary.DTO.Rank;
-
 namespace ManaxLibrary.ApiCaller;
 
 public static class ManaxApiRankClient
@@ -9,7 +8,7 @@ public static class ManaxApiRankClient
     {
         return await ManaxApiClient.ExecuteWithErrorHandlingAsync(async () =>
         {
-            HttpResponseMessage response = await ManaxApiClient.Client.GetAsync("/api/ranks");
+            HttpResponseMessage response = await ManaxApiClient.Client.GetAsync("api/ranks");
             if (!response.IsSuccessStatusCode) return new Optional<List<RankDto>>(response);
             List<RankDto>? ranks = await response.Content.ReadFromJsonAsync<List<RankDto>>();
             return ranks == null
@@ -22,18 +21,18 @@ public static class ManaxApiRankClient
     {
         return await ManaxApiClient.ExecuteWithErrorHandlingAsync(async () =>
         {
-            HttpResponseMessage response = await ManaxApiClient.Client.PostAsJsonAsync("/api/rank", rank);
+            HttpResponseMessage response = await ManaxApiClient.Client.PostAsJsonAsync("api/rank", rank);
             return response.IsSuccessStatusCode
                 ? new Optional<bool>(true)
                 : new Optional<bool>(response);
         });
     }
 
-    public static async Task<Optional<bool>> UpdateRankAsync(RankDto rank)
+    public static async Task<Optional<bool>> UpdateRankAsync(RankUpdateDto rank)
     {
         return await ManaxApiClient.ExecuteWithErrorHandlingAsync(async () =>
         {
-            HttpResponseMessage response = await ManaxApiClient.Client.PutAsJsonAsync($"/api/rank/{rank.Id}", rank);
+            HttpResponseMessage response = await ManaxApiClient.Client.PutAsJsonAsync("api/rank", rank);
             return response.IsSuccessStatusCode
                 ? new Optional<bool>(true)
                 : new Optional<bool>(response);
@@ -44,7 +43,7 @@ public static class ManaxApiRankClient
     {
         return await ManaxApiClient.ExecuteWithErrorHandlingAsync(async () =>
         {
-            HttpResponseMessage response = await ManaxApiClient.Client.DeleteAsync($"/api/rank/{id}");
+            HttpResponseMessage response = await ManaxApiClient.Client.DeleteAsync($"api/rank/{id}");
             return response.IsSuccessStatusCode
                 ? new Optional<bool>(true)
                 : new Optional<bool>(response);
@@ -55,7 +54,7 @@ public static class ManaxApiRankClient
     {
         return await ManaxApiClient.ExecuteWithErrorHandlingAsync(async () =>
         {
-            HttpResponseMessage response = await ManaxApiClient.Client.PostAsJsonAsync("/api/rank/set", rank);
+            HttpResponseMessage response = await ManaxApiClient.Client.PostAsJsonAsync("api/rank/set", rank);
             return response.IsSuccessStatusCode
                 ? new Optional<bool>(true)
                 : new Optional<bool>(response);
@@ -66,7 +65,7 @@ public static class ManaxApiRankClient
     {
         return await ManaxApiClient.ExecuteWithErrorHandlingAsync(async () =>
         {
-            HttpResponseMessage response = await ManaxApiClient.Client.GetAsync("/api/ranking");
+            HttpResponseMessage response = await ManaxApiClient.Client.GetAsync("api/ranking");
             if (!response.IsSuccessStatusCode) return new Optional<List<UserRankDto>>(response);
             List<UserRankDto>? ranking = await response.Content.ReadFromJsonAsync<List<UserRankDto>>();
             return ranking == null
