@@ -103,7 +103,7 @@ namespace ManaxServer.Migrations
                     Id = table.Column<long>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(type: "TEXT", nullable: false),
-                    Color = table.Column<int>(type: "INTEGER", nullable: false)
+                    ColorArgb = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {

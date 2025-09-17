@@ -15,7 +15,7 @@ namespace ManaxServer.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "9.0.8");
+            modelBuilder.HasAnnotation("ProductVersion", "9.0.9");
 
             modelBuilder.Entity("ManaxServer.Models.Chapter.Chapter", b =>
                 {
@@ -348,7 +348,7 @@ namespace ManaxServer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("Color")
+                    b.Property<int>("ColorArgb")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")

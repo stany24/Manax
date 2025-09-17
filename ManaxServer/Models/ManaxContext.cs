@@ -1,4 +1,3 @@
-using ManaxServer.Models.Converters;
 using ManaxServer.Models.Issue.Automatic;
 using ManaxServer.Models.Issue.Reported;
 using ManaxServer.Models.Rank;
@@ -31,11 +30,4 @@ public class ManaxContext(DbContextOptions<ManaxContext> options) : DbContext(op
     public virtual DbSet<Rank.Rank> Ranks { get; set; } = null!;
     public virtual DbSet<Tag.Tag> Tags { get; set; } = null!;
     public virtual DbSet<SerieTag> SerieTags { get; set; } = null!;
-
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        modelBuilder.Entity<Tag.Tag>()
-            .Property(t => t.Color)
-            .HasConversion<ColorToInt32Converter>();
-    }
 }

@@ -49,9 +49,15 @@ public class TagPageViewModel : PageViewModel
     {
         try
         {
-            List<TagDto> tags = await ManaxApiTagClient.GetTagsAsync();
+            
+            Optional<List<TagDto>> response = await ManaxApiTagClient.GetTagsAsync();
+            if (response.Failed)
+            {
+                InfoEmitted?.Invoke(this, "Erreur lors du chargement des tags.");
+                return;
+            }
             Tags.Clear();
-            foreach (TagDto tag in tags) Tags.Add(tag);
+            foreach (TagDto tag in response.GetValue()) Tags.Add(tag);
         }
         catch
         {

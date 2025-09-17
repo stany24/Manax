@@ -7,12 +7,18 @@ namespace ManaxLibrary.ApiCaller;
 
 public static class ManaxApiTagClient
 {
-    public static async Task<List<TagDto>> GetTagsAsync()
+    public static async Task<Optional<List<TagDto>>> GetTagsAsync()
     {
-        HttpResponseMessage response = await ManaxApiClient.Client.GetAsync("api/tags");
-        response.EnsureSuccessStatusCode();
-        string json = await response.Content.ReadAsStringAsync();
-        return JsonSerializer.Deserialize<List<TagDto>>(json) ?? [];
+        return await ManaxApiClient.ExecuteWithErrorHandlingAsync(async () =>
+        {
+            HttpResponseMessage response = await ManaxApiClient.Client.GetAsync("api/tags");
+            if (!response.IsSuccessStatusCode) return new Optional<List<TagDto>>(response);
+            List<TagDto>? issues =
+                await response.Content.ReadFromJsonAsync<List<TagDto>>();
+            return issues == null
+                ? new Optional<List<TagDto>>("Failed to read automatic chapter issues from response.")
+                : new Optional<List<TagDto>>(issues);
+        });
     }
 
     public static async Task<Optional<bool>> CreateTagAsync(TagCreateDto tagCreate)

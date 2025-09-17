@@ -1,4 +1,3 @@
-using System.Drawing;
 using Microsoft.EntityFrameworkCore;
 
 namespace ManaxServer.Models.Tag;
@@ -8,5 +7,5 @@ public class Tag
 {
     public long Id { get; set; }
     public string Name { get; set; } = null!;
-    public Color Color { get; set; }
+    public int ColorArgb { get; set; }
 }
