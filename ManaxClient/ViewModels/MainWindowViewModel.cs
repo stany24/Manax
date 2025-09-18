@@ -31,7 +31,6 @@ public partial class MainWindowViewModel : ObservableObject
     private readonly PageHistoryManager _history = new();
     [ObservableProperty] private ObservableCollection<string> _infos = [];
     [ObservableProperty] private bool _isAdmin;
-    [ObservableProperty] private bool _isOwner;
     [ObservableProperty] private ObservableCollection<LibraryDto> _libraries = [];
     [ObservableProperty] private Thickness _pageMargin = new(0, 0, 0, 0);
     [ObservableProperty] private Controls.Popups.Popup? _popup;
@@ -44,7 +43,6 @@ public partial class MainWindowViewModel : ObservableObject
         {
             if (CurrentPageViewModel == null) return;
             CurrentPageViewModel.Admin = IsAdmin;
-            CurrentPageViewModel.Owner = IsOwner;
             CurrentPageViewModel.PageChangedRequested += (_, e) => { SetPage(e); };
             CurrentPageViewModel.PopupRequested += (_, e) => { SetPopup(e); };
             CurrentPageViewModel.InfoEmitted += (_, e) => { ShowInfo(e); };
@@ -57,12 +55,12 @@ public partial class MainWindowViewModel : ObservableObject
         {
             if (CurrentPageViewModel is not LoginPageViewModel login) return;
             IsAdmin = login.IsAdmin();
-            IsOwner = login.IsOwner();
             ServerNotification.OnRunningTasks += OnRunningTasksHandler;
             ServerNotification.OnLibraryCreated += OnLibraryCreatedHandler;
             ServerNotification.OnLibraryUpdated += OnLibraryUpdatedHandler;
             ServerNotification.OnLibraryDeleted += OnLibraryDeletedHandler;
-            Dispatcher.UIThread.Post(LoadLibraries);
+            Task.Run(LoadLibraries);
+            Task.Run(LoadPermissions);
         };
 
         SetPage(new LoginPageViewModel());

@@ -19,7 +19,7 @@ public class LibraryController(ManaxContext context, IMapper mapper, INotificati
 {
     // GET: api/Library
     [HttpGet("/api/libraries")]
-    [RequirePermission(Permission.ReadLibrary)]
+    [RequirePermission(Permission.ReadLibraries)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<long>>> GetLibraries()
     {
@@ -28,7 +28,7 @@ public class LibraryController(ManaxContext context, IMapper mapper, INotificati
 
     // GET: api/library/{id}
     [HttpGet("{id:long}")]
-    [RequirePermission(Permission.ReadLibrary)]
+    [RequirePermission(Permission.ReadLibraries)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<LibraryDto>> GetLibrary(long id)
@@ -44,7 +44,7 @@ public class LibraryController(ManaxContext context, IMapper mapper, INotificati
 
     // PUT: api/Library/5
     [HttpPut("{id:long}")]
-    [RequirePermission(Permission.WriteLibrary)]
+    [RequirePermission(Permission.WriteLibraries)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -82,7 +82,7 @@ public class LibraryController(ManaxContext context, IMapper mapper, INotificati
 
     // POST: api/Library
     [HttpPost("create")]
-    [RequirePermission(Permission.WriteLibrary)]
+    [RequirePermission(Permission.WriteLibraries)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<ActionResult<long>> PostLibrary(LibraryCreateDto libraryCreate)
@@ -112,7 +112,7 @@ public class LibraryController(ManaxContext context, IMapper mapper, INotificati
 
     // DELETE: api/Library/5
     [HttpDelete("{id:long}")]
-    [RequirePermission(Permission.DeleteLibrary)]
+    [RequirePermission(Permission.DeleteLibraries)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteLibrary(long id)

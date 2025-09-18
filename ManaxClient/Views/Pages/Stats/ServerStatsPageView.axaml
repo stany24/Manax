@@ -6,9 +6,11 @@
     xmlns:avalonia="clr-namespace:LiveChartsCore.SkiaSharpView.Avalonia;assembly=LiveChartsCore.SkiaSharpView.Avalonia"
     xmlns:previews="clr-namespace:ManaxClient.Controls.Previews"
     xmlns:page="clr-namespace:ManaxClient.ViewModels.Pages.Stats"
+    xmlns:viewModels="clr-namespace:ManaxClient.ViewModels"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Pages.Stats.ServerStatsPageView"
-    x:DataType="page:ServerStatsPageViewModel">
+    x:DataType="page:ServerStatsPageViewModel"
+    IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).CanReadServerStats}">
 
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel Orientation="Vertical" Spacing="24">

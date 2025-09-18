@@ -4,9 +4,11 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:page="clr-namespace:ManaxClient.ViewModels.Pages.User"
+    xmlns:viewModels="clr-namespace:ManaxClient.ViewModels"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Pages.User.UsersPageView"
-    x:DataType="page:UsersPageViewModel">
+    x:DataType="page:UsersPageViewModel"
+    IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).CanReadUsers}">
 
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel Orientation="Vertical" Spacing="24">
@@ -19,6 +21,7 @@
                 </StackPanel>
 
                 <Button Grid.Column="1"
+                        IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).CanWriteUsers}"
                         Classes="primary"
                         Command="{Binding CreateUser}"
                         VerticalAlignment="Center">
@@ -42,6 +45,7 @@
                                TextAlignment="Center"
                                Foreground="{StaticResource SecondaryBrush}" />
                     <Button Classes="primary"
+                            IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).CanWriteUsers}"
                             Command="{Binding CreateUser}"
                             HorizontalAlignment="Center">
                         <StackPanel Orientation="Horizontal" Spacing="8">
@@ -106,6 +110,7 @@
                                         </Button>
 
                                         <Button Grid.Column="4"
+                                                IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).CanDeleteUsers}"
                                                 Classes="danger"
                                                 Command="{Binding $parent[UserControl].((page:UsersPageViewModel)DataContext).DeleteUser}"
                                                 CommandParameter="{Binding .}"

@@ -19,6 +19,17 @@ public class PermissionController(IPermissionService permissionService) : Contro
         await permissionService.SetUserPermissionsAsync(userId, permissions);
         return Ok();
     }
+    
+    // GET: api/Permission/self
+    [HttpGet("self")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<ActionResult<List<Permission>>> GetMyPermissions()
+    {
+        long? currentUserId = UserController.GetCurrentUserId(HttpContext);
+        if (currentUserId == null) return Unauthorized();
+        IEnumerable<Permission> permissions = await permissionService.GetUserPermissionsAsync((long)currentUserId);
+        return Ok(permissions);
+    }
 
     public static Permission[] GetDefaultPermissionsForRole(UserRole role)
     {
@@ -27,7 +38,7 @@ public class PermissionController(IPermissionService permissionService) : Contro
             Permission.ReadSeries,
             Permission.ReadChapters,
             Permission.ReadSelfStats,
-            Permission.ReadLibrary,
+            Permission.ReadLibraries,
             Permission.ReadRanks,
             Permission.ReadTags,
 
@@ -58,13 +69,13 @@ public class PermissionController(IPermissionService permissionService) : Contro
             Permission.WriteUsers,
             Permission.WriteServerSettings,
             Permission.WriteSavePoints,
-            Permission.WriteLibrary,
+            Permission.WriteLibraries,
             Permission.WriteTags,
 
             Permission.DeleteTags,
             Permission.DeleteSeries,
             Permission.DeleteChapters,
-            Permission.DeleteLibrary,
+            Permission.DeleteLibraries,
             Permission.DeleteUsers,
             Permission.ResetPasswords
         ]).ToArray();

@@ -20,7 +20,6 @@ public partial class LoginPageViewModel : PageViewModel
     [ObservableProperty] private string _emoji = "🔑";
     [ObservableProperty] private string _host = string.Empty;
     private bool _isAdmin;
-    private bool _isOwner;
     [ObservableProperty] private string _loginError = string.Empty;
     [ObservableProperty] private string _password = string.Empty;
     [ObservableProperty] private int? _port;
@@ -63,7 +62,6 @@ public partial class LoginPageViewModel : PageViewModel
 
             UserDto self = result.User;
             _isAdmin = self.Role is UserRole.Admin or UserRole.Owner;
-            _isOwner = self.Role is UserRole.Owner;
             InfoEmitted?.Invoke(this, $"Logged in as {self.Username} ({self.Role})");
             Logger.LogInfo($"Logged in as {self.Username} ({self.Role})");
             SaveLoginValues();
@@ -122,10 +120,5 @@ public partial class LoginPageViewModel : PageViewModel
     public bool IsAdmin()
     {
         return _isAdmin;
-    }
-
-    public bool IsOwner()
-    {
-        return _isOwner;
     }
 }

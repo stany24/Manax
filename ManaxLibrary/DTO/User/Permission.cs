@@ -33,9 +33,9 @@ public enum Permission
     ReadSavePoints = 81,
     WriteSavePoints = 82,
 
-    ReadLibrary = 91,
-    WriteLibrary = 92,
-    DeleteLibrary = 93,
+    ReadLibraries = 91,
+    WriteLibraries = 92,
+    DeleteLibraries = 93,
 
     MarkChapterAsRead = 101,
 

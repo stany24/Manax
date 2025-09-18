@@ -24,19 +24,19 @@ public class NotificationService(IHubContext<NotificationService> hubContext, IP
 
     public void NotifyLibraryCreatedAsync(LibraryDto library)
     {
-        TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadLibrary,
+        TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadLibraries,
             NotificationType.LibraryCreated, library);
     }
 
     public void NotifyLibraryDeletedAsync(long libraryId)
     {
-        TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadLibrary,
+        TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadLibraries,
             NotificationType.LibraryDeleted, libraryId);
     }
 
     public void NotifyLibraryUpdatedAsync(LibraryDto library)
     {
-        TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadLibrary,
+        TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadLibraries,
             NotificationType.LibraryUpdated, library);
     }
 

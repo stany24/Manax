@@ -5,10 +5,12 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:previews="clr-namespace:ManaxClient.Controls.Previews"
     xmlns:page="clr-namespace:ManaxClient.ViewModels.Pages.Library"
+    xmlns:viewModels="clr-namespace:ManaxClient.ViewModels"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Pages.Library.LibraryPageView"
     x:DataType="page:LibraryPageViewModel"
-    Background="{DynamicResource Background1}">
+    Background="{DynamicResource Background1}"
+    IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).CanReadLibraries}">
 
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel Orientation="Vertical" Spacing="24">
@@ -22,7 +24,7 @@
                 </StackPanel>
 
                 <Button Grid.Column="1" Grid.Row="0"
-                        IsVisible="{Binding Admin}"
+                        IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).CanDeleteLibraries}"
                         Classes="danger"
                         Command="{Binding DeleteLibrary}"
                         VerticalAlignment="Top"

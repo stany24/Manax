@@ -6,9 +6,11 @@
     xmlns:previews="clr-namespace:ManaxClient.Controls.Previews"
     xmlns:issue="clr-namespace:ManaxClient.Models.Issue"
     xmlns:page="clr-namespace:ManaxClient.ViewModels.Pages.Issue"
+    xmlns:viewModels="clr-namespace:ManaxClient.ViewModels"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Pages.Issue.IssuesPageView"
-    x:DataType="page:IssuesPageViewModel">
+    x:DataType="page:IssuesPageViewModel"
+    IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).CanReadAllIssues}">
 
     <UserControl.Resources>
         <DataTemplate x:Key="AutomaticChapterIssueTemplate" DataType="issue:ClientAutomaticIssueChapter">
@@ -81,7 +83,6 @@
                                    CloseCommand="{Binding Close}"
                                    Command="{Binding $parent[UserControl].((page:IssuesPageViewModel)DataContext).OpenSeriePage}"
                                    CommandParameter="{Binding Serie.Id}">
-                >
                 <previews:IssuePreview.Info>
                     <MultiBinding StringFormat="Série: {0} • Utilisateur: {1} • {2:dd/MM/yyyy HH:mm}">
                         <Binding Path="Serie.Title" />

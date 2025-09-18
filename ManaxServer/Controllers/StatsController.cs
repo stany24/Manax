@@ -13,16 +13,15 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ManaxServer.Controllers;
 
-[Route("api/chapter")]
+[Route("api/stats")]
 [ApiController]
 public class StatsController(ManaxContext context, IMapper mapper) : ControllerBase
 {
     // GET: api/Chapter
-    [HttpGet("api/stats")]
+    [HttpGet("self")]
     [RequirePermission(Permission.ReadSelfStats)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<UserStats>> GetStats()
     {
         long? currentUserId = UserController.GetCurrentUserId(HttpContext);
@@ -66,7 +65,7 @@ public class StatsController(ManaxContext context, IMapper mapper) : ControllerB
         return stats;
     }
 
-    [HttpGet("api/server-stats")]
+    [HttpGet("server")]
     [RequirePermission(Permission.ReadServerStats)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<ServerStats>> GetServerStats()

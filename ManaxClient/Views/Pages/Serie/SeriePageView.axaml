@@ -5,6 +5,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:previews="clr-namespace:ManaxClient.Controls.Previews"
     xmlns:page="clr-namespace:ManaxClient.ViewModels.Pages.Serie"
+    xmlns:viewModels="clr-namespace:ManaxClient.ViewModels"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Pages.Serie.SeriePageView"
     x:DataType="page:SeriePageViewModel">
@@ -25,7 +26,7 @@
                         <StackPanel
                             Orientation="Horizontal">
                             <Button Classes="secondary"
-                                    IsVisible="{Binding Admin}"
+                                    IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).CanWriteSeries}"
                                     Command="{Binding ReplacePoster}"
                                     IsEnabled="{Binding !IsFilePickerOpen}"
                                     HorizontalAlignment="Stretch">
@@ -33,7 +34,7 @@
                             </Button>
 
                             <Button Classes="secondary"
-                                    IsVisible="{Binding Admin}"
+                                    IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).CanWriteSeries}"
                                     Command="{Binding UpdateSerie}"
                                     IsEnabled="{Binding !IsFilePickerOpen}"
                                     HorizontalAlignment="Stretch">

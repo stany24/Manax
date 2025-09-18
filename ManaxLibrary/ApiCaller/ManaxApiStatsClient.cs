@@ -9,7 +9,7 @@ public static class ManaxApiStatsClient
     {
         return await ManaxApiClient.ExecuteWithErrorHandlingAsync(async () =>
         {
-            HttpResponseMessage response = await ManaxApiClient.Client.GetAsync("api/stats");
+            HttpResponseMessage response = await ManaxApiClient.Client.GetAsync("api/stats/self");
             if (!response.IsSuccessStatusCode) return new Optional<UserStats>(response);
             UserStats? library = await response.Content.ReadFromJsonAsync<UserStats>();
             return library == null
@@ -22,7 +22,7 @@ public static class ManaxApiStatsClient
     {
         return await ManaxApiClient.ExecuteWithErrorHandlingAsync(async () =>
         {
-            HttpResponseMessage response = await ManaxApiClient.Client.GetAsync("api/server-stats");
+            HttpResponseMessage response = await ManaxApiClient.Client.GetAsync("api/stats/server");
             if (!response.IsSuccessStatusCode) return new Optional<ServerStats>(response);
             ServerStats? library = await response.Content.ReadFromJsonAsync<ServerStats>();
             return library == null

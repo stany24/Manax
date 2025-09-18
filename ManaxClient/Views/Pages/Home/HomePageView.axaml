@@ -5,6 +5,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:previews="clr-namespace:ManaxClient.Controls.Previews"
     xmlns:page="clr-namespace:ManaxClient.ViewModels.Pages.Home"
+    xmlns:viewModels="clr-namespace:ManaxClient.ViewModels"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Pages.Home.HomePageView"
     x:DataType="page:HomePageViewModel">
@@ -21,7 +22,7 @@
                 </StackPanel>
 
                 <Button Grid.Column="1"
-                        IsVisible="{Binding Admin}"
+                        IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).CanWriteSeries}"
                         Classes="primary"
                         Command="{Binding UploadSerie}"
                         Padding="16,12">
@@ -48,6 +49,7 @@
                         Foreground="{StaticResource SecondaryBrush}"
                         MaxWidth="400" />
                     <Button Classes="primary"
+                            IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).CanWriteSeries}"
                             Command="{Binding UploadSerie}"
                             HorizontalAlignment="Center"
                             Margin="0,8,0,0">

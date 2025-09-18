@@ -72,7 +72,7 @@
                                IsVisible="{Binding IsAdmin}" />
 
                     <Button Classes="sidebar"
-                            IsVisible="{Binding IsAdmin}"
+                            IsVisible="{Binding CanReadAllIssues}"
                             Command="{Binding ChangePageIssues}">
                         <StackPanel Orientation="Horizontal" Spacing="12">
                             <TextBlock Text="⚙️" FontSize="14" />
@@ -81,7 +81,7 @@
                     </Button>
 
                     <Button Classes="sidebar"
-                            IsVisible="{Binding IsAdmin}"
+                            IsVisible="{Binding CanReadUsers}"
                             Command="{Binding ChangePageUsers}">
                         <StackPanel Orientation="Horizontal" Spacing="12">
                             <TextBlock Text="👥" FontSize="14" />
@@ -90,7 +90,7 @@
                     </Button>
 
                     <Button Classes="sidebar"
-                            IsVisible="{Binding IsAdmin}"
+                            IsVisible="{Binding CanReadRanks}"
                             Command="{Binding ChangePageRanks}">
                         <StackPanel Orientation="Horizontal" Spacing="12">
                             <TextBlock Text="🏆" FontSize="14" />
@@ -99,7 +99,7 @@
                     </Button>
 
                     <Button Classes="sidebar"
-                            IsVisible="{Binding IsAdmin}"
+                            IsVisible="{Binding CanReadTags}"
                             Command="{Binding ChangePageTags}">
                         <StackPanel Orientation="Horizontal" Spacing="12">
                             <TextBlock Text="🏆" FontSize="14" />
@@ -112,7 +112,7 @@
                                Margin="16,8" />
 
                     <Button Classes="sidebar"
-                            IsVisible="{Binding IsOwner}"
+                            IsVisible="{Binding CanReadServerSettings}"
                             Command="{Binding ChangePageSettings}">
                         <StackPanel Orientation="Horizontal" Spacing="12">
                             <TextBlock Text="⚙️" FontSize="14" />
@@ -143,7 +143,7 @@
                     </Button>
 
                     <Button Classes="sidebar"
-                            IsVisible="{Binding IsAdmin}"
+                            IsVisible="{Binding CanReadServerStats}"
                             Command="{Binding ChangePageServerStats}">
                         <StackPanel Orientation="Horizontal" Spacing="12">
                             <TextBlock Text="🖥️" FontSize="14" />

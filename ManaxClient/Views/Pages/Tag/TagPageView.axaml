@@ -5,9 +5,11 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:tag="clr-namespace:ManaxClient.ViewModels.Pages.Tag"
     xmlns:converters="clr-namespace:ManaxClient.Converters"
+    xmlns:viewModels="clr-namespace:ManaxClient.ViewModels"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Pages.Tag.TagPageView"
-    x:DataType="tag:TagPageViewModel">
+    x:DataType="tag:TagPageViewModel"
+    IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).CanReadTags}">
     
     <UserControl.Resources>
         <converters:ColorToSolidBrushConverter x:Key="ColorToBrushConverter"/>
@@ -23,6 +25,7 @@
                 </StackPanel>
 
                 <Button Grid.Column="1"
+                        IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).CanWriteTags}"
                         Classes="primary"
                         Command="{Binding CreateTag}"
                         VerticalAlignment="Center">
@@ -46,6 +49,7 @@
                                TextAlignment="Center"
                                Foreground="{StaticResource SecondaryBrush}" />
                     <Button Classes="primary"
+                            IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).CanWriteTags}"
                             Command="{Binding CreateTag}"
                             HorizontalAlignment="Center">
                         <StackPanel Orientation="Horizontal" Spacing="8">
@@ -88,6 +92,7 @@
                                                    FontSize="16" />
 
                                         <Button Grid.Column="2"
+                                                IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).CanWriteTags}"
                                                 Classes="secondary"
                                                 Command="{Binding $parent[UserControl].((tag:TagPageViewModel)DataContext).UpdateTag}"
                                                 CommandParameter="{Binding .}"
@@ -97,6 +102,7 @@
                                         </Button>
 
                                         <Button Grid.Column="3"
+                                                IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).CanDeleteTags}"
                                                 Classes="danger"
                                                 Command="{Binding $parent[UserControl].((tag:TagPageViewModel)DataContext).DeleteTag}"
                                                 CommandParameter="{Binding .}"
