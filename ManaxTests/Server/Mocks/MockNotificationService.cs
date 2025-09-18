@@ -15,6 +15,9 @@ public class MockNotificationService : INotificationService
     public UserDto? UserCreated { get; set; }
     public DateTime UserCreatedAt { get; set; }
     public ReadDto? ReadCreated { get; set; }
+    public TagDto? TagCreated { get; set; }
+    public TagDto? TagUpdated { get; set; }
+    public long TagDeletedId { get; set; }
 
     public void NotifyUserCreatedAsync(UserDto user)
     {
@@ -109,13 +112,16 @@ public class MockNotificationService : INotificationService
 
     public void NotifyTagCreatedAsync(TagDto tag)
     {
+        TagCreated = tag;
     }
 
     public void NotifyTagUpdatedAsync(TagDto tag)
     {
+        TagUpdated = tag;
     }
 
     public void NotifyTagDeletedAsync(long tagId)
     {
+        TagDeletedId = tagId;
     }
 }

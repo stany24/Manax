@@ -1,7 +1,5 @@
 using System.Net;
 using System.Threading.RateLimiting;
-using ManaxServer.Controllers;
-using ManaxServer.Localization;
 using ManaxServer.Middleware;
 using ManaxServer.Models;
 using ManaxServer.Models.Issue.Reported;
