@@ -54,7 +54,6 @@ public class PermissionController(IPermissionService permissionService) : Contro
 
             Permission.WriteSeries,
             Permission.UploadChapter,
-            Permission.WriteIssues,
             Permission.WriteRanks,
             Permission.SetSerieTags,
 

@@ -12,12 +12,6 @@ public static partial class Localizer
         LoadLanguage(_language);
     }
 
-    public static void VerifyLocalizations()
-    {
-        new FrenchLocalization().VerifyLocalizationKeys();
-        new EnglishLocalization().VerifyLocalizationKeys();
-    }
-
     private static void LoadLanguage(Language language)
     {
         _currentLocalization = language switch

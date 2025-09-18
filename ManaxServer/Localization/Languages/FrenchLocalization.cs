@@ -1,8 +1,8 @@
 namespace ManaxServer.Localization.Languages;
 
-public class FrenchLocalization : Localization
+public class FrenchLocalization : ILocalization
 {
-    public override Dictionary<LocalizationKey, string> GetLocalization()
+    public Dictionary<LocalizationKey, string> GetLocalization()
     {
         return new Dictionary<LocalizationKey, string>
         {

@@ -1,5 +1,6 @@
 using System.Net;
 using System.Threading.RateLimiting;
+using ManaxServer.Controllers;
 using ManaxServer.Localization;
 using ManaxServer.Middleware;
 using ManaxServer.Models;
@@ -87,7 +88,6 @@ public class Program
 
         if (app.Environment.IsDevelopment())
         {
-            Localizer.VerifyLocalizations();
             app.UseSwagger();
             app.UseSwaggerUI();
         }
