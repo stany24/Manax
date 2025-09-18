@@ -1,16 +1,14 @@
 using ManaxServer.Controllers;
 using ManaxServer.Models;
 using ManaxServer.Services.Mapper;
-using ManaxServer.Services.Notification;
 using ManaxTests.Server.Mocks;
-using Moq;
 
 namespace ManaxTests.Server.ChapterTests;
 
 public abstract class ChapterTestsSetup
 {
     private ManaxMapper _mapper = null!;
-    private Mock<INotificationService> _mockNotificationService = null!;
+    private MockNotificationService _mockNotificationService = null!;
     protected ManaxContext Context = null!;
     protected ChapterController Controller = null!;
 
@@ -20,9 +18,9 @@ public abstract class ChapterTestsSetup
         Context = SqliteTestDbContextFactory.CreateTestContext();
 
         _mapper = new ManaxMapper(new ManaxMapping());
-        _mockNotificationService = new Mock<INotificationService>();
+        _mockNotificationService = new MockNotificationService();
 
-        Controller = new ChapterController(Context, _mapper, _mockNotificationService.Object);
+        Controller = new ChapterController(Context, _mapper, _mockNotificationService);
     }
 
     [TestCleanup]

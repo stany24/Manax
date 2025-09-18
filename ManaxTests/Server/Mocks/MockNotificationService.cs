@@ -14,6 +14,7 @@ public class MockNotificationService : INotificationService
 {
     public UserDto? UserCreated { get; set; }
     public DateTime UserCreatedAt { get; set; }
+    public ReadDto? ReadCreated { get; set; }
 
     public void NotifyUserCreatedAsync(UserDto user)
     {
@@ -83,6 +84,7 @@ public class MockNotificationService : INotificationService
 
     public void NotifyReadCreated(ReadDto existingRead)
     {
+        ReadCreated = existingRead;
     }
 
     public void NotifyReadRemoved(ReadDto existingRead)

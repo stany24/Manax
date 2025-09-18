@@ -5,7 +5,6 @@ using ManaxServer.Models.User;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Moq;
 
 namespace ManaxTests.Server.ReadTests;
 
@@ -139,7 +138,7 @@ public class TestReadController : ReadTestsSetup
         IActionResult result = await Controller.Read(readCreateDto);
 
         Assert.IsInstanceOfType(result, typeof(OkResult));
-        MockNotificationService.Verify(x => x.NotifyReadCreated(It.IsAny<ReadDto>()), Times.Once);
+        Assert.IsNotNull(MockNotificationService.ReadCreated);
     }
 
     [TestMethod]
@@ -267,11 +266,11 @@ public class TestReadController : ReadTestsSetup
 
         Assert.IsInstanceOfType(result, typeof(OkResult));
 
-        MockNotificationService.Verify(x => x.NotifyReadCreated(It.Is<ReadDto>(dto =>
-            dto.ChapterId == chapter.Id &&
-            dto.Page == 10 &&
-            dto.UserId == 1
-        )), Times.Once);
+        ReadDto? readCreated = MockNotificationService.ReadCreated;
+        Assert.IsNotNull(readCreated);
+        Assert.AreEqual(10, readCreated.Page);
+        Assert.AreEqual(chapter.Id, readCreated.ChapterId);
+        Assert.AreEqual(1, readCreated.UserId);
     }
 
     [TestMethod]

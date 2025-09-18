@@ -1,16 +1,14 @@
 using ManaxServer.Controllers;
 using ManaxServer.Models;
 using ManaxServer.Services.Mapper;
-using ManaxServer.Services.Notification;
 using ManaxTests.Server.Mocks;
-using Moq;
 
 namespace ManaxTests.Server.LibraryTests;
 
 public abstract class LibraryTestsSetup
 {
     private ManaxMapper _mapper = null!;
-    private Mock<INotificationService> _mockNotificationService = null!;
+    private MockNotificationService _mockNotificationService = null!;
     protected ManaxContext Context = null!;
     protected LibraryController Controller = null!;
 
@@ -20,9 +18,9 @@ public abstract class LibraryTestsSetup
         Context = SqliteTestDbContextFactory.CreateTestContext();
 
         _mapper = new ManaxMapper(new ManaxMapping());
-        _mockNotificationService = new Mock<INotificationService>();
+        _mockNotificationService = new MockNotificationService();
 
-        Controller = new LibraryController(Context, _mapper, _mockNotificationService.Object);
+        Controller = new LibraryController(Context, _mapper, _mockNotificationService);
     }
 
     [TestCleanup]

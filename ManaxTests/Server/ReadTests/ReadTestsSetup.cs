@@ -2,11 +2,9 @@ using System.Security.Claims;
 using ManaxServer.Controllers;
 using ManaxServer.Models;
 using ManaxServer.Services.Mapper;
-using ManaxServer.Services.Notification;
 using ManaxTests.Server.Mocks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Moq;
 
 namespace ManaxTests.Server.ReadTests;
 
@@ -15,7 +13,7 @@ public abstract class ReadTestsSetup
     private ManaxMapper _mapper = null!;
     protected ManaxContext Context = null!;
     protected ReadController Controller = null!;
-    protected Mock<INotificationService> MockNotificationService = null!;
+    protected MockNotificationService MockNotificationService = null!;
 
     [TestInitialize]
     public void Setup()
@@ -23,9 +21,9 @@ public abstract class ReadTestsSetup
         Context = SqliteTestDbContextFactory.CreateTestContext();
 
         _mapper = new ManaxMapper(new ManaxMapping());
-        MockNotificationService = new Mock<INotificationService>();
+        MockNotificationService = new MockNotificationService();
 
-        Controller = new ReadController(Context, _mapper, MockNotificationService.Object);
+        Controller = new ReadController(Context, _mapper, MockNotificationService);
 
         ClaimsPrincipal user = new(new ClaimsIdentity([
             new Claim(ClaimTypes.NameIdentifier, "1"),
