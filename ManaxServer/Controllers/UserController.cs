@@ -220,7 +220,9 @@ public class UserController(
             {
                 Role = UserRole.Owner,
                 Username = request.Username,
-                PasswordHash = hashService.HashPassword(request.Password)
+                PasswordHash = hashService.HashPassword(request.Password),
+                Creation = DateTime.UtcNow,
+                LastLogin = DateTime.UtcNow
             };
 
             loginAttempt.Success = true;

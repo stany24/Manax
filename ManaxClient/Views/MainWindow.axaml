@@ -23,10 +23,18 @@
                             IsVisible="{Binding CurrentPageViewModel.ControlBarVisible}"
                             Orientation="Vertical">
 
-                    <TextBlock Classes="title"
-                               Text="Manax"
-                               HorizontalAlignment="Center"
-                               Margin="0,0,0,24" />
+                    <StackPanel
+                        Orientation="Horizontal">
+                        <Button
+                            Command="{Binding Logout}">
+                            Logout
+                        </Button>
+                        <TextBlock Classes="title"
+                                   Text="Manax"
+                                   HorizontalAlignment="Center"
+                                   Margin="0,0,0,24" />
+                    </StackPanel>
+                    
 
                     <Button Classes="sidebar primary"
                             Command="{Binding ChangePageHome}">

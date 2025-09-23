@@ -18,7 +18,7 @@ public static class SettingsManager
 
     private static void Load()
     {
-        if (!File.Exists(SavePath)) File.WriteAllText(SavePath, "{}");
+        if (!File.Exists(SavePath)) File.WriteAllText(SavePath, JsonSerializer.Serialize(Data));
 
         SettingsData? settingsData = JsonSerializer.Deserialize<SettingsData>(File.ReadAllText(SavePath));
         if (settingsData == null)

@@ -120,6 +120,13 @@ public partial class MainWindowViewModel : ObservableObject
         });
     }
 
+    public async void Logout()
+    {
+        Optional<bool> logoutAsync = await ManaxApiUserClient.LogoutAsync();
+        if (logoutAsync.Failed) ShowInfo(logoutAsync.Error);
+        SetPage(new LoginPageViewModel());
+    }
+
     private void LoadLibraries()
     {
         Task.Run(async () =>

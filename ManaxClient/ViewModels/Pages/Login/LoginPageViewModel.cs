@@ -27,6 +27,7 @@ public partial class LoginPageViewModel : PageViewModel
 
     public LoginPageViewModel()
     {
+        ManaxApiConfig.SetToken("");
         _saveFile = Path.Combine(Directory.GetCurrentDirectory(), "login.json");
         ControlBarVisible = false;
         TryLoadSavedLogin();
