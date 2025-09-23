@@ -73,7 +73,6 @@ public class SerieController(
 
     // GET: api/series/{id}/chapters
     [HttpGet("{id:long}/reads")]
-    [RequirePermission(Permission.ReadSavePoints)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public ActionResult<List<ReadDto>> GetSerieReads(long id)

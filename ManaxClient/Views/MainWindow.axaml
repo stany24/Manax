@@ -22,20 +22,12 @@
                 <StackPanel Classes="sidebar"
                             IsVisible="{Binding CurrentPageViewModel.ControlBarVisible}"
                             Orientation="Vertical">
-
-                    <StackPanel
-                        Orientation="Horizontal">
-                        <Button
-                            Command="{Binding Logout}">
-                            Logout
-                        </Button>
-                        <TextBlock Classes="title"
-                                   Text="Manax"
-                                   HorizontalAlignment="Center"
-                                   Margin="0,0,0,24" />
-                    </StackPanel>
                     
-
+                    <TextBlock Classes="title"
+                               Text="Manax"
+                               HorizontalAlignment="Center"
+                               Margin="0,0,0,24" />
+                    
                     <Button Classes="sidebar primary"
                             Command="{Binding ChangePageHome}">
                         <StackPanel Orientation="Horizontal" Spacing="12">
@@ -157,6 +149,12 @@
                             <TextBlock Text="🖥️" FontSize="14" />
                             <TextBlock Text="Stats serveur" />
                         </StackPanel>
+                    </Button>
+                    
+                    <Button
+                        Classes="sidebar"
+                        Command="{Binding Logout}">
+                        Logout
                     </Button>
 
                     <Border Classes="card"
