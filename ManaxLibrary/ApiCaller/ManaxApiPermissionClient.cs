@@ -19,6 +19,19 @@ public static class ManaxApiPermissionClient
                 : new Optional<List<Permission>>(permissions);
         });
     }
+    
+    public static async Task<Optional<List<Permission>>> GetUserPermissionsAsync(long userId)
+    {
+        return await ManaxApiClient.ExecuteWithErrorHandlingAsync(async () =>
+        {
+            HttpResponseMessage response = await ManaxApiClient.Client.GetAsync("api/permission/"+userId);
+            if (!response.IsSuccessStatusCode) return new Optional<List<Permission>>(response);
+            List<Permission>? permissions = await response.Content.ReadFromJsonAsync<List<Permission>>();
+            return permissions == null
+                ? new Optional<List<Permission>>("Failed to read permissions from response.")
+                : new Optional<List<Permission>>(permissions);
+        });
+    }
 
     public static async Task<Optional<bool>> SetPermissionsAsync(long userId, List<Permission> permissions)
     {

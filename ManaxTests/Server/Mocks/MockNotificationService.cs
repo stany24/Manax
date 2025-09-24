@@ -19,6 +19,10 @@ public class MockNotificationService : INotificationService
     public TagDto? TagUpdated { get; set; }
     public long TagDeletedId { get; set; }
 
+    public void NotifyPermissionModifiedAsync(long userId, List<Permission> permissions)
+    {
+    }
+
     public void NotifyUserCreatedAsync(UserDto user)
     {
         UserCreated = user;

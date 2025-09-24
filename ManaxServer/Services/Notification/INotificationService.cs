@@ -11,6 +11,8 @@ namespace ManaxServer.Services.Notification;
 
 public interface INotificationService
 {
+    void NotifyPermissionModifiedAsync(long userId, List<ManaxLibrary.DTO.User.Permission> permissions);
+    
     void NotifyUserCreatedAsync(UserDto user);
     void NotifyUserDeletedAsync(long userId);
 

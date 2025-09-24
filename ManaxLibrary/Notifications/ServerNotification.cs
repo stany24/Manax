@@ -17,6 +17,7 @@ public static class ServerNotification
     private static string _serverUrl = null!;
     private static string _token = null!;
 
+    public static event Action<List<Permission>>? OnPermissionModified;
     public static event Action<Dictionary<string, int>>? OnRunningTasks;
     public static event Action<long>? OnPosterModified;
 
@@ -112,6 +113,9 @@ public static class ServerNotification
 
         _hubConnection.On<long>(nameof(NotificationType.PosterModified),
             serieId => { OnPosterModified?.Invoke(serieId); });
+        
+        _hubConnection.On<List<Permission>>(nameof(NotificationType.PermissionModified),
+            serieId => { OnPermissionModified?.Invoke(serieId); });
 
         _hubConnection.On<ReadDto>(nameof(NotificationType.ReadCreated),
             readData => { OnReadCreated?.Invoke(readData); });

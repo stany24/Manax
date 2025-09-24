@@ -2,6 +2,8 @@ namespace ManaxLibrary.Notifications;
 
 public enum NotificationType
 {
+    PermissionModified,
+    
     LibraryCreated,
     LibraryDeleted,
     LibraryUpdated,

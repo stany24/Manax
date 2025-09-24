@@ -75,6 +75,29 @@ public partial class UsersPageViewModel : PageViewModel
                 : $"User '{user.Username}' was deleted");
         });
     }
+    
+    public void EditUserPermissions(long userId)
+    {
+        UserPermissionsEditViewModel content = new(userId);
+        ConfirmCancelViewModel context = new(content);
+        Controls.Popups.Popup popup = new(context);
+        PopupRequested?.Invoke(this, popup);
+        popup.Closed += async void (_, _) =>
+        {
+            try
+            {
+                if (context.Canceled()) return;
+                List<Permission> perms = content.GetSelectedPermissions();
+                Optional<bool> postUserResponse = await ManaxApiPermissionClient.SetPermissionsAsync(userId,perms);
+                if (postUserResponse.Failed) InfoEmitted?.Invoke(this, postUserResponse.Error);
+            }
+            catch (Exception e)
+            {
+                Logger.LogError("Error updating user permissions", e, Environment.StackTrace);
+                InfoEmitted?.Invoke(this, "Error updating user permissions");
+            }
+        };
+    }
 
     public void CreateUser()
     {

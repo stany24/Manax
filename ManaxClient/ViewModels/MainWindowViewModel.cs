@@ -59,6 +59,7 @@ public partial class MainWindowViewModel : ObservableObject
             ServerNotification.OnLibraryCreated += OnLibraryCreatedHandler;
             ServerNotification.OnLibraryUpdated += OnLibraryUpdatedHandler;
             ServerNotification.OnLibraryDeleted += OnLibraryDeletedHandler;
+            ServerNotification.OnPermissionModified += OnPermissionModifiedHandler;
             Task.Run(LoadLibraries);
             Task.Run(LoadPermissions);
         };
@@ -76,6 +77,7 @@ public partial class MainWindowViewModel : ObservableObject
         ServerNotification.OnLibraryCreated -= OnLibraryCreatedHandler;
         ServerNotification.OnLibraryUpdated -= OnLibraryUpdatedHandler;
         ServerNotification.OnLibraryDeleted -= OnLibraryDeletedHandler;
+        ServerNotification.OnPermissionModified -= OnPermissionModifiedHandler;
     }
 
     private void OnRunningTasksHandler(Dictionary<string, int> tasks)

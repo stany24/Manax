@@ -21,6 +21,12 @@ public partial class MainWindowViewModel
         _permissions = myPermissionsAsync.GetValue();
         NotifyAll();
     }
+    
+    private void OnPermissionModifiedHandler(List<Permission> permissions)
+    {
+        _permissions = permissions;
+        NotifyAll();
+    }
 
     private void NotifyAll()
     {
@@ -33,6 +39,10 @@ public partial class MainWindowViewModel
             }
         }
     }
+    
+    // Permission permissions
+    public bool CanReadPermissions => _permissions.Contains(Permission.ReadPermissions);
+    public bool CanWritePermissions => _permissions.Contains(Permission.WritePermissions);
     
     // Series permissions
     public bool CanReadSeries => _permissions.Contains(Permission.ReadSeries);

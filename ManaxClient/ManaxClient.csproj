@@ -126,6 +126,10 @@
             <DependentUpon>ChooseActionView.axaml</DependentUpon>
             <SubType>Code</SubType>
         </Compile>
+        <Compile Update="Views\Popup\ConfirmCancel\Content\UserPermissionsEditView.axaml.cs">
+          <DependentUpon>UserPermissionsEdit.axaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
     </ItemGroup>
 
     <ItemGroup>

@@ -1,22 +1,24 @@
 using ManaxLibrary.DTO.User;
+using ManaxServer.Attributes;
+using ManaxServer.Services.Notification;
 using ManaxServer.Services.Permission;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ManaxServer.Controllers;
 
 [Route("api/permission")]
 [ApiController]
-public class PermissionController(IPermissionService permissionService) : ControllerBase
+public class PermissionController(IPermissionService permissionService,INotificationService notificationService) : ControllerBase
 {
-    // POST: api/SavePoint
+    // POST: api/Permission/{userId}
     [HttpPost("{userId:long}")]
-    [Authorize("admin")]
+    [RequirePermission(Permission.WritePermissions)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<ActionResult<long>> SetPermissions(long userId, List<Permission> permissions)
     {
         await permissionService.SetUserPermissionsAsync(userId, permissions);
+        notificationService.NotifyPermissionModifiedAsync(userId,permissions);
         return Ok();
     }
     
@@ -28,6 +30,16 @@ public class PermissionController(IPermissionService permissionService) : Contro
         long? currentUserId = UserController.GetCurrentUserId(HttpContext);
         if (currentUserId == null) return Unauthorized();
         IEnumerable<Permission> permissions = await permissionService.GetUserPermissionsAsync((long)currentUserId);
+        return Ok(permissions);
+    }
+    
+    // GET: api/Permission/{userId}
+    [HttpGet("{userId:long}")]
+    [RequirePermission(Permission.ReadPermissions)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<ActionResult<List<Permission>>> GetUserPermissions(long userId)
+    {
+        IEnumerable<Permission> permissions = await permissionService.GetUserPermissionsAsync(userId);
         return Ok(permissions);
     }
 
@@ -62,6 +74,9 @@ public class PermissionController(IPermissionService permissionService) : Contro
         ]).ToArray();
 
         Permission[] owner = admin.Concat([
+            Permission.ReadPermissions,
+            Permission.WritePermissions,
+            
             Permission.ReadSavePoints,
             Permission.ReadServerSettings,
 
