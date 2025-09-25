@@ -327,21 +327,6 @@ namespace ManaxServer.Migrations
                     b.ToTable("Series");
                 });
 
-            modelBuilder.Entity("ManaxServer.Models.Tag.SerieTag", b =>
-                {
-                    b.Property<long>("TagId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<long>("SerieId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("TagId", "SerieId");
-
-                    b.HasIndex("SerieId");
-
-                    b.ToTable("SerieTags");
-                });
-
             modelBuilder.Entity("ManaxServer.Models.Tag.Tag", b =>
                 {
                     b.Property<long>("Id")
@@ -445,6 +430,21 @@ namespace ManaxServer.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("UserPermissions");
+                });
+
+            modelBuilder.Entity("SerieTag", b =>
+                {
+                    b.Property<long>("SeriesId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<long>("TagsId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("SeriesId", "TagsId");
+
+                    b.HasIndex("TagsId");
+
+                    b.ToTable("SerieTag");
                 });
 
             modelBuilder.Entity("ManaxServer.Models.Chapter.Chapter", b =>
@@ -597,25 +597,6 @@ namespace ManaxServer.Migrations
                     b.Navigation("SavePoint");
                 });
 
-            modelBuilder.Entity("ManaxServer.Models.Tag.SerieTag", b =>
-                {
-                    b.HasOne("ManaxServer.Models.Serie.Serie", "Serie")
-                        .WithMany()
-                        .HasForeignKey("SerieId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ManaxServer.Models.Tag.Tag", "Tag")
-                        .WithMany()
-                        .HasForeignKey("TagId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Serie");
-
-                    b.Navigation("Tag");
-                });
-
             modelBuilder.Entity("ManaxServer.Models.User.UserPermission", b =>
                 {
                     b.HasOne("ManaxServer.Models.User.User", "User")
@@ -625,6 +606,21 @@ namespace ManaxServer.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("SerieTag", b =>
+                {
+                    b.HasOne("ManaxServer.Models.Serie.Serie", null)
+                        .WithMany()
+                        .HasForeignKey("SeriesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ManaxServer.Models.Tag.Tag", null)
+                        .WithMany()
+                        .HasForeignKey("TagsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("ManaxServer.Models.User.User", b =>

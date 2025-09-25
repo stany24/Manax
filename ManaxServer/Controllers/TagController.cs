@@ -3,7 +3,6 @@ using ManaxLibrary.DTO.User;
 using ManaxServer.Attributes;
 using ManaxServer.Localization;
 using ManaxServer.Models;
-using ManaxServer.Models.Serie;
 using ManaxServer.Models.Tag;
 using ManaxServer.Services.Mapper;
 using ManaxServer.Services.Notification;
@@ -75,35 +74,6 @@ public class TagController(ManaxContext context, IMapper mapper, INotificationSe
         context.Tags.Remove(tag);
         await context.SaveChangesAsync();
         notificationService.NotifyTagDeletedAsync(id);
-        return Ok();
-    }
-
-    [HttpPost("serie")]
-    [RequirePermission(Permission.SetSerieTags)]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<IActionResult> SetSerieTags(TagOfSerieDto info)
-    {
-        Serie? serie = context.Series.FirstOrDefault(s => s.Id == info.SerieId);
-        if (serie == null)
-            return NotFound(Localizer.SerieNotFound(info.SerieId));
-
-        IQueryable<SerieTag> existingTags = context.SerieTags.Where(st => st.SerieId == info.SerieId);
-        context.SerieTags.RemoveRange(existingTags);
-
-        foreach (TagDto tagDto in info.Tags)
-        {
-            Tag? tag = await context.Tags.FirstOrDefaultAsync(t => t.Id == tagDto.Id);
-            if (tag == null) continue;
-            SerieTag serieTag = new()
-            {
-                SerieId = info.SerieId,
-                TagId = tag.Id
-            };
-            context.SerieTags.Add(serieTag);
-        }
-
-        await context.SaveChangesAsync();
         return Ok();
     }
 }

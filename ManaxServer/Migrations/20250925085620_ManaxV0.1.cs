@@ -257,24 +257,24 @@ namespace ManaxServer.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "SerieTags",
+                name: "SerieTag",
                 columns: table => new
                 {
-                    TagId = table.Column<long>(type: "INTEGER", nullable: false),
-                    SerieId = table.Column<long>(type: "INTEGER", nullable: false)
+                    SeriesId = table.Column<long>(type: "INTEGER", nullable: false),
+                    TagsId = table.Column<long>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SerieTags", x => new { x.TagId, x.SerieId });
+                    table.PrimaryKey("PK_SerieTag", x => new { x.SeriesId, x.TagsId });
                     table.ForeignKey(
-                        name: "FK_SerieTags_Series_SerieId",
-                        column: x => x.SerieId,
+                        name: "FK_SerieTag_Series_SeriesId",
+                        column: x => x.SeriesId,
                         principalTable: "Series",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_SerieTags_Tags_TagId",
-                        column: x => x.TagId,
+                        name: "FK_SerieTag_Tags_TagsId",
+                        column: x => x.TagsId,
                         principalTable: "Tags",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -465,9 +465,9 @@ namespace ManaxServer.Migrations
                 column: "SavePointId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SerieTags_SerieId",
-                table: "SerieTags",
-                column: "SerieId");
+                name: "IX_SerieTag_TagsId",
+                table: "SerieTag",
+                column: "TagsId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Tags_Name",
@@ -519,7 +519,7 @@ namespace ManaxServer.Migrations
                 name: "ReportedIssuesSerie");
 
             migrationBuilder.DropTable(
-                name: "SerieTags");
+                name: "SerieTag");
 
             migrationBuilder.DropTable(
                 name: "UserPermissions");

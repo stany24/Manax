@@ -62,5 +62,6 @@ public class ManaxMapping : Mapping
         CreateMap<TagCreateDto, Tag>();
         CreateMap<TagUpdateDto, Tag>();
         CreateMap<Tag, TagDto>();
+        CreateMap<TagDto, Tag>();
     }
 }

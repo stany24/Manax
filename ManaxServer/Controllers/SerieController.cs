@@ -47,6 +47,7 @@ public class SerieController(
     public async Task<ActionResult<SerieDto>> GetSerie(long id)
     {
         Serie? serie = await context.Series
+            .Include(s => s.Tags)
             .FirstOrDefaultAsync(l => l.Id == id);
 
         if (serie == null) return NotFound(Localizer.SerieNotFound(id));
@@ -156,7 +157,6 @@ public class SerieController(
         {
             string folderPath = savePoint.Path + Path.DirectorySeparatorChar + serieCreate.Title;
             if (System.IO.File.Exists(folderPath)) return BadRequest(Localizer.SerieAlreadyExists());
-            Directory.CreateDirectory(folderPath);
             Serie serie = new()
             {
                 SavePointId = savePoint.Id,
@@ -169,6 +169,7 @@ public class SerieController(
             };
             context.Series.Add(serie);
             await context.SaveChangesAsync();
+            Directory.CreateDirectory(folderPath);
             notificationService.NotifySerieCreatedAsync(mapper.Map<SerieDto>(serie));
             _ = backgroundTaskService.AddTaskAsync(new FixSerieBackGroundTask(fixService, serie.Id));
             return serie.Id;

@@ -8,4 +8,6 @@ public class Tag
     public long Id { get; set; }
     public string Name { get; set; } = null!;
     public int ColorArgb { get; set; }
+    
+    public List<Serie.Serie> Series { get; set; } = [];
 }

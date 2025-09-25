@@ -1,7 +1,6 @@
 using ManaxServer.Models.Issue.Automatic;
 using ManaxServer.Models.Issue.Reported;
 using ManaxServer.Models.Rank;
-using ManaxServer.Models.Tag;
 using ManaxServer.Models.User;
 using Microsoft.EntityFrameworkCore;
 
@@ -29,5 +28,4 @@ public class ManaxContext(DbContextOptions<ManaxContext> options) : DbContext(op
 
     public virtual DbSet<Rank.Rank> Ranks { get; set; } = null!;
     public virtual DbSet<Tag.Tag> Tags { get; set; } = null!;
-    public virtual DbSet<SerieTag> SerieTags { get; set; } = null!;
 }

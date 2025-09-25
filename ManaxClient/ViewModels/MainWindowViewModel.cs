@@ -19,7 +19,6 @@ using ManaxClient.ViewModels.Pages.Settings;
 using ManaxClient.ViewModels.Pages.Stats;
 using ManaxClient.ViewModels.Pages.Tag;
 using ManaxClient.ViewModels.Pages.User;
-using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTO.Library;
 using ManaxLibrary.Notifications;
@@ -124,7 +123,7 @@ public partial class MainWindowViewModel : ObservableObject
 
     public async void Logout()
     {
-        Optional<bool> logoutAsync = await ManaxApiUserClient.LogoutAsync();
+        ManaxLibrary.Optional<bool> logoutAsync = await ManaxApiUserClient.LogoutAsync();
         if (logoutAsync.Failed) ShowInfo(logoutAsync.Error);
         SetPage(new LoginPageViewModel());
     }
@@ -133,7 +132,7 @@ public partial class MainWindowViewModel : ObservableObject
     {
         Task.Run(async () =>
         {
-            Optional<List<long>> libraryIdsResponse = await ManaxApiLibraryClient.GetLibraryIdsAsync();
+            ManaxLibrary.Optional<List<long>> libraryIdsResponse = await ManaxApiLibraryClient.GetLibraryIdsAsync();
             if (libraryIdsResponse.Failed)
             {
                 ShowInfo(libraryIdsResponse.Error);
@@ -144,7 +143,7 @@ public partial class MainWindowViewModel : ObservableObject
             List<long> ids = libraryIdsResponse.GetValue();
             foreach (long id in ids)
             {
-                Optional<LibraryDto> libraryResponse = await ManaxApiLibraryClient.GetLibraryAsync(id);
+                ManaxLibrary.Optional<LibraryDto> libraryResponse = await ManaxApiLibraryClient.GetLibraryAsync(id);
                 if (libraryResponse.Failed)
                 {
                     ShowInfo(libraryResponse.Error);

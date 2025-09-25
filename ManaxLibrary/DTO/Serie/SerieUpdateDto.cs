@@ -15,4 +15,5 @@ public class SerieUpdateDto
     public string Description { get; set; }
     public long? LibraryId { get; set; }
     [Required] public Status Status { get; set; }
+    public List<Tag.TagDto> Tags { get; set; } = [];
 }
