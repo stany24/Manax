@@ -43,9 +43,7 @@
                 <ItemsControl ItemsSource="{Binding Chapter.Pages}" Margin="0,8">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Border Margin="8,4"
-                                    CornerRadius="8"
-                                    ClipToBounds="True"
+                            <Border ClipToBounds="True"
                                     HorizontalAlignment="Center">
                                 <Image Source="{Binding .}"
                                        Stretch="Uniform"
@@ -73,7 +71,7 @@
                 Foreground="{DynamicResource TextColor1}"
                 BorderThickness="0">
             <StackPanel Orientation="Horizontal" Spacing="8">
-                <TextBlock Text="←" FontSize="16" />
+                <TextBlock VerticalAlignment="Center" Text="←" FontSize="16" />
                 <TextBlock Text="Retour" />
             </StackPanel>
         </Button>
@@ -142,17 +140,26 @@
                         Foreground="{DynamicResource TextColor1}"
                         BorderThickness="0"
                         Padding="8"
-                        ToolTip.Tip="Page précédente">
+                        ToolTip.Tip="Page précédente"
+                        Command="{Binding PreviousPage}">
                     <TextBlock Text="↑" FontSize="16" />
                 </Button>
 
                 <Border Background="{DynamicResource Background3}"
                         CornerRadius="4"
                         Padding="8,4">
-                    <TextBlock Text="1/24"
-                               Foreground="{DynamicResource TextColor1}"
-                               FontSize="12"
-                               FontWeight="Medium" />
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding CurrentPage}"
+                                   Foreground="{DynamicResource TextColor1}"
+                                   FontSize="12"
+                                   FontWeight="Medium" />
+                        <TextBlock>/</TextBlock>
+                        <TextBlock Text="{Binding Chapter.Pages.Count}"
+                                   Foreground="{DynamicResource TextColor1}"
+                                   FontSize="12"
+                                   FontWeight="Medium" />
+                    </StackPanel>
+                    
                 </Border>
 
                 <Button Classes="secondary"
@@ -160,23 +167,10 @@
                         Foreground="{DynamicResource TextColor1}"
                         BorderThickness="0"
                         Padding="8"
-                        ToolTip.Tip="Page suivante">
+                        ToolTip.Tip="Page suivante"
+                        Command="{Binding NextPage}">
                     <TextBlock Text="↓" FontSize="16" />
                 </Button>
-            </StackPanel>
-        </Border>
-
-        <Border Background="{DynamicResource PrimaryBrush}"
-                CornerRadius="0,0,12,12"
-                Padding="12,8"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Top"
-                IsVisible="{Binding !ControlBordersVisible}">
-            <StackPanel Orientation="Horizontal" Spacing="8">
-                <TextBlock Text="💡" FontSize="14" />
-                <TextBlock Text="Touchez l'écran pour afficher les contrôles"
-                           Foreground="{DynamicResource TextColor1}"
-                           FontSize="12" />
             </StackPanel>
         </Border>
     </Panel>

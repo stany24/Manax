@@ -22,7 +22,7 @@ public partial class ChapterPageViewModel : PageViewModel
     private readonly List<ClientChapter> _chapters;
     [ObservableProperty] private ClientChapter _chapter = new();
     [ObservableProperty] private bool _controlBordersVisible;
-    private int _currentPage;
+    [ObservableProperty] private int _currentPage;
     private CancellationTokenSource? _loadPagesCts;
     [ObservableProperty] private Vector _scrollOffset = new(0, 0);
 
@@ -44,6 +44,26 @@ public partial class ChapterPageViewModel : PageViewModel
     public void ChangeBordersVisibility()
     {
         ControlBordersVisible = !ControlBordersVisible;
+    }
+    
+    public void NextPage()
+    {
+        if (CurrentPage + 1 == Chapter.Pages.Count)
+        {
+            return;
+        }
+
+        ScrollOffset  = new Vector(0,ScrollOffset.Y + Chapter.Pages[CurrentPage].Size.Height);
+    }
+
+    public void PreviousPage()
+    {
+        if (CurrentPage == 0)
+        {
+            return;
+        }
+
+        ScrollOffset  = new Vector(0,ScrollOffset.Y - Chapter.Pages[CurrentPage].Size.Height);
     }
 
     public void PreviousChapter()
@@ -77,8 +97,8 @@ public partial class ChapterPageViewModel : PageViewModel
         {
             height += Chapter.Pages[i].Size.Height;
             if (!(height > ScrollOffset.Y)) continue;
-            _currentPage = i;
-            Console.WriteLine(_currentPage);
+            CurrentPage = i;
+            Console.WriteLine(CurrentPage);
             return;
         }
     }
@@ -123,7 +143,7 @@ public partial class ChapterPageViewModel : PageViewModel
 
     public override void OnPageClosed()
     {
-        if (_currentPage == 0) return;
+        if (CurrentPage == 0) return;
         MarkAsRead();
     }
 
@@ -132,7 +152,7 @@ public partial class ChapterPageViewModel : PageViewModel
         ReadCreateDto readCreateDto = new()
         {
             ChapterId = Chapter.Info.Id,
-            Page = _currentPage
+            Page = CurrentPage
         };
         Task.Run(async () =>
         {
