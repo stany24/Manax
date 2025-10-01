@@ -36,7 +36,7 @@ namespace ManaxServer.Migrations
                     b.Property<int>("Number")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("Pages")
+                    b.Property<int>("PageNumber")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Path")

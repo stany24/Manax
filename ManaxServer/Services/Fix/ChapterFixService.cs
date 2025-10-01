@@ -33,7 +33,7 @@ public partial class FixService(IServiceScopeFactory scopeFactory, IIssueService
         Chapter? chapter = manaxContext.Chapters.Find(chapterId);
         if (chapter == null) return;
 
-        chapter.Pages = ZipFile.OpenRead(chapter.Path).Entries.Count;
+        chapter.PageNumber = ZipFile.OpenRead(chapter.Path).Entries.Count;
 
         FixChapterDeep(chapter);
         manaxContext.SaveChangesAsync();

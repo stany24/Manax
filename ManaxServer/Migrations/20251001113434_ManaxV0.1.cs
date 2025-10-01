@@ -206,7 +206,7 @@ namespace ManaxServer.Migrations
                     SerieId = table.Column<long>(type: "INTEGER", nullable: false),
                     FileName = table.Column<string>(type: "TEXT", nullable: false),
                     Number = table.Column<int>(type: "INTEGER", nullable: false),
-                    Pages = table.Column<int>(type: "INTEGER", nullable: false),
+                    PageNumber = table.Column<int>(type: "INTEGER", nullable: false),
                     Path = table.Column<string>(type: "TEXT", nullable: false),
                     Creation = table.Column<DateTime>(type: "TEXT", nullable: false),
                     LastModification = table.Column<DateTime>(type: "TEXT", nullable: false)

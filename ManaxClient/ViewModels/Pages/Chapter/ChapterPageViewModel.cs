@@ -19,20 +19,20 @@ namespace ManaxClient.ViewModels.Pages.Chapter;
 
 public partial class ChapterPageViewModel : PageViewModel
 {
-    private readonly List<ClientChapter> _chapters;
-    [ObservableProperty] private ClientChapter _chapter = new();
+    private readonly List<Models.Chapter.Chapter> _chapters;
+    [ObservableProperty] private Models.Chapter.Chapter _chapter = new();
     [ObservableProperty] private bool _controlBordersVisible;
     [ObservableProperty] private int _currentPage;
     private CancellationTokenSource? _loadPagesCts;
     [ObservableProperty] private Vector _scrollOffset = new(0, 0);
 
-    public ChapterPageViewModel(List<ClientChapter> chapters, ClientChapter chapter)
+    public ChapterPageViewModel(List<Models.Chapter.Chapter> chapters, Models.Chapter.Chapter chapter)
     {
         _chapters = chapters;
         ControlBarVisible = false;
         HasMargin = false;
         Chapter = chapter;
-        LoadPages(chapter.Info.Pages, chapter.Info.Id);
+        LoadPages(chapter.PageNumber, chapter.Id);
         PropertyChanged += HandleOffsetChanged;
     }
 
@@ -69,22 +69,22 @@ public partial class ChapterPageViewModel : PageViewModel
     public void PreviousChapter()
     {
         MarkAsRead();
-        int index = _chapters.FindIndex(c => c.Info.Id == Chapter.Info.Id);
+        int index = _chapters.FindIndex(c => c.Id == Chapter.Id);
         if (index == 0) return;
         Chapter.Pages.Clear();
         Chapter = _chapters[index - 1];
-        LoadPages(Chapter.Info.Pages, Chapter.Info.Id);
+        LoadPages(Chapter.PageNumber, Chapter.Id);
         ScrollOffset = new Vector(0, 0);
     }
 
     public void NextChapter()
     {
         MarkAsRead();
-        int index = _chapters.FindIndex(c => c.Info.Id == Chapter.Info.Id);
+        int index = _chapters.FindIndex(c => c.Id == Chapter.Id);
         if (index + 1 == _chapters.Count) return;
         Chapter.Pages.Clear();
         Chapter = _chapters[index + 1];
-        LoadPages(Chapter.Info.Pages, Chapter.Info.Id);
+        LoadPages(Chapter.PageNumber, Chapter.Id);
         ScrollOffset = new Vector(0, 0);
     }
 
@@ -151,7 +151,7 @@ public partial class ChapterPageViewModel : PageViewModel
     {
         ReadCreateDto readCreateDto = new()
         {
-            ChapterId = Chapter.Info.Id,
+            ChapterId = Chapter.Id,
             Page = CurrentPage
         };
         Task.Run(async () =>

@@ -92,7 +92,7 @@ public static class SqliteTestDbContextFactory
                 SerieId = 1,
                 FileName = "chapter1.cbz",
                 Number = 1,
-                Pages = 24,
+                PageNumber = 24,
                 Path = "/test_path/serie1/chapter1.cbz",
                 Creation = DateTime.UtcNow,
                 LastModification = DateTime.UtcNow
@@ -104,7 +104,7 @@ public static class SqliteTestDbContextFactory
                 SerieId = 1,
                 FileName = "chapter2.cbz",
                 Number = 2,
-                Pages = 30,
+                PageNumber = 30,
                 Path = "/test_path/serie1/chapter2.cbz",
                 Creation = DateTime.UtcNow,
                 LastModification = DateTime.UtcNow
@@ -116,7 +116,7 @@ public static class SqliteTestDbContextFactory
                 SerieId = 2,
                 FileName = "chapter1.cbz",
                 Number = 1,
-                Pages = 25,
+                PageNumber = 25,
                 Path = "/test_path/serie2/chapter1.cbz",
                 Creation = DateTime.UtcNow,
                 LastModification = DateTime.UtcNow

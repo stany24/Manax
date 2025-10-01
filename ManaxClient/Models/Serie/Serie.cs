@@ -31,7 +31,7 @@ public partial class Serie:ObservableObject
    [ObservableProperty] private List<TagDto> _tags = [];
    
    [ObservableProperty] private Bitmap? _poster;
-   [ObservableProperty] private SortedObservableCollection<ClientChapter> _chapters= new([]) { SortingSelector = dto => dto.Info.Number };
+   [ObservableProperty] private SortedObservableCollection<Chapter.Chapter> _chapters= new([]) { SortingSelector = dto => dto.Number };
    
    public EventHandler<string>? ErrorEmitted;
 
@@ -45,7 +45,6 @@ public partial class Serie:ObservableObject
        ServerNotification.OnSerieUpdated += OnSerieUpdated;
        ServerNotification.OnPosterModified += OnPosterModified;
        ServerNotification.OnChapterAdded += OnChapterAdded;
-       ServerNotification.OnChapterModified += OnChapterModified;
        ServerNotification.OnChapterDeleted += OnChapterDeleted;
        ServerNotification.OnReadCreated += OnReadCreated;
        ServerNotification.OnReadDeleted += OnReadDeleted;
@@ -146,7 +145,7 @@ public partial class Serie:ObservableObject
 
                 Dispatcher.UIThread.Invoke(() =>
                 {
-                    foreach (ChapterDto chapter in chapters) Chapters.Add(new ClientChapter { Info = chapter });
+                    foreach (ChapterDto chapter in chapters) Chapters.Add(new Chapter.Chapter(chapter));
                 });
                 LoadReads(Id);
             }
@@ -178,7 +177,7 @@ public partial class Serie:ObservableObject
             {
                 foreach (ReadDto read in reads)
                 {
-                    ClientChapter? chapter = Chapters.FirstOrDefault(c => c.Info.Id == read.ChapterId);
+                    Chapter.Chapter? chapter = Chapters.FirstOrDefault(c => c.Id == read.ChapterId);
                     if (chapter == null) continue;
                     chapter.Read = read;
                 }
@@ -194,14 +193,14 @@ public partial class Serie:ObservableObject
     
     private void OnReadDeleted(long obj)
     {
-        ClientChapter? chapter = Chapters.FirstOrDefault(c => c.Info.Id == obj);
+        Chapter.Chapter? chapter = Chapters.FirstOrDefault(c => c.Id == obj);
         if (chapter == null) return;
         chapter.Read = null;
     }
 
     private void OnReadCreated(ReadDto read)
     {
-        ClientChapter? chapter = Chapters.FirstOrDefault(c => c.Info.Id == read.ChapterId);
+        Chapter.Chapter? chapter = Chapters.FirstOrDefault(c => c.Id == read.ChapterId);
         if (chapter == null) return;
         chapter.Read = read;
     }
@@ -215,22 +214,12 @@ public partial class Serie:ObservableObject
     private void OnChapterAdded(ChapterDto chapter)
     {
         if (chapter.SerieId != Id) return;
-        Chapters.Add(new ClientChapter { Info = chapter });
-    }
-
-    private void OnChapterModified(ChapterDto chapter)
-    {
-        if (chapter.SerieId != Id) return;
-        ClientChapter? firstOrDefault = Chapters.FirstOrDefault(c => c.Info.Id == chapter.Id);
-        if (firstOrDefault == null)
-            Chapters.Add(new ClientChapter { Info = chapter });
-        else
-            firstOrDefault.Info = chapter;
+        Chapters.Add(new Chapter.Chapter(chapter));
     }
 
     private void OnChapterDeleted(long chapterId)
     {
-        ClientChapter? chapter = Chapters.FirstOrDefault(c => c.Info.Id == chapterId);
+        Chapter.Chapter? chapter = Chapters.FirstOrDefault(c => c.Id == chapterId);
         if (chapter == null) return;
         Chapters.Remove(chapter);
     }

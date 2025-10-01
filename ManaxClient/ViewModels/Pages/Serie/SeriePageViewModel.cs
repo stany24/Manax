@@ -99,7 +99,7 @@ public partial class SeriePageViewModel : PageViewModel
         };
     }
 
-    public void MoveToChapterPage(ClientChapter chapter)
+    public void MoveToChapterPage(Models.Chapter.Chapter chapter)
     {
         ChapterPageViewModel chapterPageViewModel = new(Serie.Chapters.ToList(), chapter);
         PageChangedRequested?.Invoke(this, chapterPageViewModel);

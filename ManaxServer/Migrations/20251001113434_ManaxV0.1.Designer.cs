@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ManaxServer.Migrations
 {
     [DbContext(typeof(ManaxContext))]
-    [Migration("20250925085620_ManaxV0.1")]
+    [Migration("20251001113434_ManaxV0.1")]
     partial class ManaxV01
     {
         /// <inheritdoc />
@@ -39,7 +39,7 @@ namespace ManaxServer.Migrations
                     b.Property<int>("Number")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("Pages")
+                    b.Property<int>("PageNumber")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Path")

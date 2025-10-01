@@ -29,7 +29,7 @@
                         HorizontalAlignment="Center"
                         IsVisible="{Binding ControlBordersVisible}">
                     <StackPanel Orientation="Horizontal" Spacing="16">
-                        <TextBlock Text="{Binding Chapter.Info.FileName}"
+                        <TextBlock Text="{Binding Chapter.FileName}"
                                    Foreground="{DynamicResource TextColor1}"
                                    FontWeight="Medium"
                                    VerticalAlignment="Center" />
@@ -106,7 +106,7 @@
                                Foreground="{DynamicResource SecondaryBrush}"
                                FontSize="12"
                                HorizontalAlignment="Center" />
-                    <TextBlock Text="{Binding Chapter.Info.Number}"
+                    <TextBlock Text="{Binding Chapter.Number}"
                                Foreground="{DynamicResource TextColor1}"
                                FontWeight="Bold"
                                FontSize="16"

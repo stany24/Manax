@@ -68,7 +68,7 @@ public partial class UploadController(
             Path = filePath,
             FileName = file.FileName,
             Number = number,
-            Pages = pagesCount,
+            PageNumber = pagesCount,
             Creation = creation,
             LastModification = DateTime.UtcNow
         };
@@ -118,7 +118,7 @@ public partial class UploadController(
             return BadRequest(Localizer.InvalidZipFile());
 
         chapter.LastModification = DateTime.UtcNow;
-        chapter.Pages = pagesCount;
+        chapter.PageNumber = pagesCount;
 
         serie.LastModification = DateTime.UtcNow;
 
