@@ -16,7 +16,7 @@ public class ClientReportedIssueSerie : ObservableObject
     private ReportedIssueSerieTypeDto? _problem;
     private SerieDto? _serie;
 
-    private UserDto? _user;
+    private User.User? _user;
 
     public ClientReportedIssueSerie(ReportedIssueSerieDto issue)
     {
@@ -26,7 +26,7 @@ public class ClientReportedIssueSerie : ObservableObject
             Optional<SerieDto> info = await ManaxApiSerieClient.GetSerieInfoAsync(issue.SerieId);
             if (!info.Failed) Serie = info.GetValue();
             Optional<UserDto> user = await ManaxApiUserClient.GetUserAsync(issue.UserId);
-            if (!user.Failed) User = user.GetValue();
+            if (!user.Failed) User = new User.User(user.GetValue());
             Optional<List<ReportedIssueSerieTypeDto>> problem =
                 await ManaxApiIssueClient.GetAllReportedSerieIssueTypesAsync();
             if (!problem.Failed) Problem = problem.GetValue().Find(p => p.Id == issue.Id);
@@ -53,7 +53,7 @@ public class ClientReportedIssueSerie : ObservableObject
         }
     }
 
-    public UserDto? User
+    public User.User? User
     {
         get => _user;
         set

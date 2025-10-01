@@ -151,7 +151,7 @@ public partial class IssuesPageViewModel : PageViewModel
 
     private void LoadData()
     {
-        Task.Run((Func<Task?>)(async () =>
+        Task.Run(async () =>
         {
             Optional<List<AutomaticIssueSerieDto>> allAutomaticSerieIssuesResponse =
                 await ManaxApiIssueClient.GetAllAutomaticSerieIssuesAsync();
@@ -189,6 +189,6 @@ public partial class IssuesPageViewModel : PageViewModel
                 AllReportedSerieIssues =
                     new ObservableCollection<ClientReportedIssueSerie>(allReportedSerieIssuesResponse.GetValue()
                         .Select(s => new ClientReportedIssueSerie(s)));
-        }));
+        });
     }
 }

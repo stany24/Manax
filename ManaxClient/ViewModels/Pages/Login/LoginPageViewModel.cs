@@ -36,7 +36,7 @@ public partial class LoginPageViewModel : PageViewModel
     public void Login()
     {
         LoginError = string.Empty;
-        Task.Run((Func<Task?>)(async () =>
+        Task.Run(async () =>
         {
             CanLogin = false;
             Emoji = "⌛";
@@ -52,7 +52,7 @@ public partial class LoginPageViewModel : PageViewModel
             }
 
             CheckToken(loginResponse.GetValue());
-        }));
+        });
     }
 
     private void CheckToken(UserLoginResultDto result)

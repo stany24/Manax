@@ -38,7 +38,9 @@ public static class ServerNotification
     public static event Action<long>? OnChapterDeleted;
 
     public static event Action<UserDto>? OnUserCreated;
+    public static event Action<UserDto>? OnUserUpdated;
     public static event Action<long>? OnUserDeleted;
+    
     public static event Action<ReadDto>? OnReadCreated;
     public static event Action<long>? OnReadDeleted;
 
@@ -96,7 +98,7 @@ public static class ServerNotification
         _hubConnection.On<ChapterDto>(nameof(NotificationType.ChapterAdded),
             chapterData => { OnChapterAdded?.Invoke(chapterData); });
 
-        _hubConnection.On<ChapterDto>(nameof(NotificationType.ChapterModified),
+        _hubConnection.On<ChapterDto>(nameof(NotificationType.ChapterUpdated),
             chapterData => { OnChapterModified?.Invoke(chapterData); });
 
         _hubConnection.On<long>(nameof(NotificationType.ChapterRemoved),
@@ -104,6 +106,9 @@ public static class ServerNotification
 
         _hubConnection.On<UserDto>(nameof(NotificationType.UserCreated),
             userData => { OnUserCreated?.Invoke(userData); });
+        
+        _hubConnection.On<UserDto>(nameof(NotificationType.UserUpdated),
+            userData => { OnUserUpdated?.Invoke(userData); });
 
         _hubConnection.On<long>(nameof(NotificationType.UserDeleted),
             userId => { OnUserDeleted?.Invoke(userId); });
@@ -111,7 +116,7 @@ public static class ServerNotification
         _hubConnection.On<Dictionary<string, int>>(nameof(NotificationType.RunningTasks),
             tasks => { OnRunningTasks?.Invoke(tasks); });
 
-        _hubConnection.On<long>(nameof(NotificationType.PosterModified),
+        _hubConnection.On<long>(nameof(NotificationType.PosterUpdated),
             serieId => { OnPosterModified?.Invoke(serieId); });
         
         _hubConnection.On<List<Permission>>(nameof(NotificationType.PermissionModified),

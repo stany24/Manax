@@ -70,6 +70,7 @@ public class UserController(
             return BadRequest(errorMessage);
 
         user.PasswordHash = hashService.HashPassword(userUpdate.Password);
+        notificationService.NotifyUserUpdatedAsync(mapper.Map<UserDto>(user));
         await context.SaveChangesAsync();
         return Ok();
     }

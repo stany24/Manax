@@ -29,6 +29,10 @@ public class MockNotificationService : INotificationService
         UserCreatedAt = DateTime.UtcNow;
     }
 
+    public void NotifyUserUpdatedAsync(UserDto user)
+    {
+    }
+
     public void NotifyUserDeletedAsync(long userId)
     {
     }
@@ -45,7 +49,7 @@ public class MockNotificationService : INotificationService
     {
     }
 
-    public void NotifyPosterModifiedAsync(long serieId)
+    public void NotifyPosterUpdatedAsync(long serieId)
     {
     }
 

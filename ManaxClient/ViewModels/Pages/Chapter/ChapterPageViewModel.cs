@@ -107,7 +107,7 @@ public partial class ChapterPageViewModel : PageViewModel
         _loadPagesCts?.Cancel();
         _loadPagesCts = new CancellationTokenSource();
         CancellationToken token = _loadPagesCts.Token;
-        Task.Run((Func<Task?>)(async () =>
+        Task.Run(async () =>
         {
             Chapter.Pages = new ObservableCollection<Bitmap>(new Bitmap[pageCount]);
             for (int i = 0; i < pageCount; i++)
@@ -137,7 +137,7 @@ public partial class ChapterPageViewModel : PageViewModel
                         Environment.StackTrace);
                 }
             }
-        }), token);
+        }, token);
     }
 
     public override void OnPageClosed()

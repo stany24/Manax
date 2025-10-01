@@ -206,7 +206,7 @@ public partial class UploadController(
             image.Quality = SettingsManager.Data.PosterQuality;
             await image.WriteAsync(path, GetMagickFormat(format));
             _ = backgroundTaskService.AddTaskAsync(new FixPosterBackGroundTask(fixService, serie.Id));
-            notificationService.NotifyPosterModifiedAsync(serie.Id);
+            notificationService.NotifyPosterUpdatedAsync(serie.Id);
         }
         catch (Exception e)
         {

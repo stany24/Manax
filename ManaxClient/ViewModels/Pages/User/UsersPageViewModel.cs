@@ -17,11 +17,11 @@ namespace ManaxClient.ViewModels.Pages.User;
 
 public partial class UsersPageViewModel : PageViewModel
 {
-    [ObservableProperty] private ObservableCollection<UserDto> _users = [];
+    [ObservableProperty] private ObservableCollection<Models.User.User> _users = [];
 
     public UsersPageViewModel()
     {
-        Task.Run((Func<Task?>)(async () =>
+        Task.Run(async () =>
         {
             Optional<List<long>> usersIdsResponse = await ManaxApiUserClient.GetUsersIdsAsync();
             if (usersIdsResponse.Failed)
@@ -40,9 +40,9 @@ public partial class UsersPageViewModel : PageViewModel
                     continue;
                 }
 
-                Dispatcher.UIThread.Post(() => Users.Add(userResponse.GetValue()));
+                Dispatcher.UIThread.Post(() => Users.Add(new Models.User.User(userResponse.GetValue())));
             }
-        }));
+        });
         ServerNotification.OnUserCreated += OnUserCreated;
         ServerNotification.OnUserDeleted += OnUserDeleted;
     }
@@ -55,17 +55,17 @@ public partial class UsersPageViewModel : PageViewModel
 
     private void OnUserDeleted(long userId)
     {
-        UserDto? user = Users.FirstOrDefault(u => u.Id == userId);
+        Models.User.User? user = Users.FirstOrDefault(u => u.Id == userId);
         if (user == null) return;
         Dispatcher.UIThread.Post(() => Users.Remove(user));
     }
 
     private void OnUserCreated(UserDto user)
     {
-        Dispatcher.UIThread.Post(() => Users.Add(user));
+        Dispatcher.UIThread.Post(() => Users.Add(new Models.User.User(user)));
     }
 
-    public void DeleteUser(UserDto user)
+    public void DeleteUser(Models.User.User user)
     {
         Task.Run(async () =>
         {

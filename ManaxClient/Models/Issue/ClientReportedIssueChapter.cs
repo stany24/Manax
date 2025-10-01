@@ -16,7 +16,7 @@ public class ClientReportedIssueChapter : ObservableObject
 
     private ReportedIssueChapterTypeDto? _problem;
 
-    private UserDto? _user;
+    private User.User? _user;
 
     public ClientReportedIssueChapter(ReportedIssueChapterDto issue)
     {
@@ -26,7 +26,7 @@ public class ClientReportedIssueChapter : ObservableObject
             Optional<ChapterDto> chapterInfo = await ManaxApiChapterClient.GetChapterAsync(issue.ChapterId);
             if (!chapterInfo.Failed) Chapter = chapterInfo.GetValue();
             Optional<UserDto> user = await ManaxApiUserClient.GetUserAsync(issue.UserId);
-            if (!user.Failed) User = user.GetValue();
+            if (!user.Failed) User = new User.User(user.GetValue());
             Optional<List<ReportedIssueChapterTypeDto>> problem =
                 await ManaxApiIssueClient.GetAllReportedChapterIssueTypesAsync();
             if (!problem.Failed) Problem = problem.GetValue().Find(p => p.Id == issue.Id);
@@ -53,7 +53,7 @@ public class ClientReportedIssueChapter : ObservableObject
         }
     }
 
-    public UserDto? User
+    public User.User? User
     {
         get => _user;
         set

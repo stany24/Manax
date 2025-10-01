@@ -11,17 +11,18 @@ public enum NotificationType
     SerieCreated,
     SerieUpdated,
     SerieDeleted,
-    PosterModified,
+    PosterUpdated,
 
     RankCreated,
     RankUpdated,
     RankDeleted,
 
     ChapterAdded,
-    ChapterModified,
+    ChapterUpdated,
     ChapterRemoved,
 
     UserCreated,
+    UserUpdated,
     UserDeleted,
 
     RunningTasks,

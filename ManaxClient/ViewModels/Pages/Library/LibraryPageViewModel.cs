@@ -60,13 +60,13 @@ public partial class LibraryPageViewModel : BaseSeries
     public void DeleteLibrary()
     {
         if (Library == null) return;
-        Task.Run((Func<Task?>)(async () =>
+        Task.Run(async () =>
         {
             Optional<bool> deleteLibraryResponse = await ManaxApiLibraryClient.DeleteLibraryAsync(Library.Id);
             if (deleteLibraryResponse.Failed)
                 PageChangedRequested?.Invoke(this, new HomePageViewModel());
             else
                 InfoEmitted?.Invoke(this, "Library '" + Library.Name + "' was correctly deleted");
-        }));
+        });
     }
 }

@@ -85,7 +85,7 @@ public class NotificationService(IHubContext<NotificationService> hubContext, IP
     public void NotifyChapterModifiedAsync(ChapterDto chapter)
     {
         TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadChapters,
-            NotificationType.ChapterModified, chapter);
+            NotificationType.ChapterUpdated, chapter);
     }
 
     public void NotifyChapterRemovedAsync(long chapterId)
@@ -105,6 +105,12 @@ public class NotificationService(IHubContext<NotificationService> hubContext, IP
             user);
     }
 
+    public void NotifyUserUpdatedAsync(UserDto user)
+    {
+        TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadUsers, NotificationType.UserUpdated,
+            user);
+    }
+
     public void NotifyUserDeletedAsync(long userId)
     {
         TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadUsers, NotificationType.UserDeleted,
@@ -117,10 +123,10 @@ public class NotificationService(IHubContext<NotificationService> hubContext, IP
             NotificationType.RunningTasks, tasks);
     }
 
-    public void NotifyPosterModifiedAsync(long serieId)
+    public void NotifyPosterUpdatedAsync(long serieId)
     {
         TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadSeries,
-            NotificationType.PosterModified, serieId);
+            NotificationType.PosterUpdated, serieId);
     }
 
     public void NotifyReadCreated(ReadDto existingRead)
