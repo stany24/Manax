@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
+using ManaxClient.Models.Serie;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTO.Library;
@@ -15,7 +16,7 @@ namespace ManaxClient.ViewModels.Popup.ConfirmCancel.Content;
 
 public partial class SerieUpdateViewModel : ConfirmCancelContentViewModel
 {
-    private readonly SerieDto _originalSerie;
+    private readonly Serie _originalSerie;
     
     public ObservableCollection<LibraryDto> Libraries { get; } = [];
     public ObservableCollection<Status> StatusOptions { get; } = [];
@@ -29,7 +30,7 @@ public partial class SerieUpdateViewModel : ConfirmCancelContentViewModel
     [ObservableProperty] private string _tagSearchText = "";
     [ObservableProperty] private TagDto? _selectedTag;
 
-    public SerieUpdateViewModel(SerieDto serie)
+    public SerieUpdateViewModel(Serie serie)
     {
         _originalSerie = serie;
         _title = serie.Title;
