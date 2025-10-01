@@ -73,7 +73,7 @@ public class ChapterPreview : Button
         };
         statusIndicator.SetValue(Grid.ColumnProperty, 0);
 
-        statusIndicator.Bind(Border.BackgroundProperty, new Binding("Chapter.Read")
+        statusIndicator.Bind(Border.BackgroundProperty, new Binding(nameof(Chapter)+"."+nameof(Chapter.Read))
         {
             Source = this,
             Mode = BindingMode.OneWay,
@@ -115,7 +115,7 @@ public class ChapterPreview : Button
                 Path.GetFileNameWithoutExtension(fileName) ?? fileName ?? string.Empty)
         });
 
-        chapterName.Bind(ForegroundProperty, new Binding("Chapter.Read")
+        chapterName.Bind(ForegroundProperty, new Binding(nameof(Chapter)+"."+nameof(Chapter.Read))
         {
             Source = this,
             Mode = BindingMode.OneWay,
@@ -149,7 +149,7 @@ public class ChapterPreview : Button
             Foreground = new SolidColorBrush(Color.Parse("#495057"))
         };
 
-        progressText.Bind(TextBlock.TextProperty, new Binding("Chapter.Read")
+        progressText.Bind(TextBlock.TextProperty, new Binding(nameof(Chapter)+"."+nameof(Chapter.Read))
         {
             Source = this,
             Mode = BindingMode.OneWay,
@@ -164,7 +164,7 @@ public class ChapterPreview : Button
 
         progressBadge.Child = progressText;
 
-        progressBadge.Bind(Border.BackgroundProperty, new Binding("Chapter.Read")
+        progressBadge.Bind(Border.BackgroundProperty, new Binding(nameof(Chapter)+"."+nameof(Chapter.Read))
         {
             Source = this,
             Mode = BindingMode.OneWay,

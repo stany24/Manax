@@ -30,7 +30,8 @@ public partial class SeriePageViewModel : PageViewModel
 
     public SeriePageViewModel(long serieId)
     {
-        Serie = new Models.Serie.Serie { Id = serieId };
+        Serie = new Models.Serie.Serie(serieId);
+        Serie.ErrorEmitted += (_, msg) => { InfoEmitted?.Invoke(this, msg); };
         Serie.LoadInfo();
         Serie.LoadChapters();
         Serie.LoadPoster();

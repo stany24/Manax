@@ -5,14 +5,14 @@ using Avalonia.Data.Converters;
 using Avalonia.Input;
 using Avalonia.Layout;
 using Avalonia.Media;
-using ManaxClient.Models;
+using ManaxClient.Models.Serie;
 
 namespace ManaxClient.Controls.Previews;
 
 public class SeriePreview : Button
 {
-    public static readonly AttachedProperty<ClientSerie?> SerieProperty =
-        AvaloniaProperty.RegisterAttached<SeriePreview, Grid, ClientSerie?>(
+    public static readonly AttachedProperty<Serie?> SerieProperty =
+        AvaloniaProperty.RegisterAttached<SeriePreview, Grid, Serie?>(
             "Serie", null, false, BindingMode.OneTime);
 
     public static readonly AttachedProperty<SolidColorBrush> TextColorProperty =
@@ -37,7 +37,7 @@ public class SeriePreview : Button
             Stretch = Stretch.UniformToFill,
             ClipToBounds = true
         };
-        image.Bind(Image.SourceProperty, new Binding("Serie.Poster")
+        image.Bind(Image.SourceProperty, new Binding(nameof(Serie)+"."+nameof(Serie.Poster))
         {
             Source = this,
             Mode = BindingMode.OneWay
@@ -59,7 +59,7 @@ public class SeriePreview : Button
             VerticalAlignment = VerticalAlignment.Bottom
         };
 
-        titleContainer.Bind(Border.BackgroundProperty, new Binding("BackGroundColor")
+        titleContainer.Bind(Border.BackgroundProperty, new Binding(nameof(BackGroundColor))
         {
             Source = this,
             Mode = BindingMode.OneWay,
@@ -84,12 +84,12 @@ public class SeriePreview : Button
             MaxLines = 2,
             TextTrimming = TextTrimming.CharacterEllipsis
         };
-        textBlock.Bind(TextBlock.TextProperty, new Binding("Serie.Info.Title")
+        textBlock.Bind(TextBlock.TextProperty, new Binding(nameof(Serie) +"."+ nameof(Serie.Title))
         {
             Source = this,
             Mode = BindingMode.OneWay
         });
-        textBlock.Bind(TextBlock.ForegroundProperty, new Binding("TextColor")
+        textBlock.Bind(TextBlock.ForegroundProperty, new Binding(nameof(TextColor))
         {
             Source = this,
             Mode = BindingMode.OneWay
@@ -114,7 +114,7 @@ public class SeriePreview : Button
         Content = outerBorder;
     }
 
-    public ClientSerie? Serie
+    public Serie? Serie
     {
         get => GetSerie(this);
         set => SetSerie(this, value);
@@ -144,12 +144,12 @@ public class SeriePreview : Button
         RenderTransform = new ScaleTransform(1.0, 1.0);
     }
 
-    private static void SetSerie(AvaloniaObject element, ClientSerie? serieValue)
+    private static void SetSerie(AvaloniaObject element, Serie? serieValue)
     {
         element.SetValue(SerieProperty, serieValue);
     }
 
-    private static ClientSerie? GetSerie(AvaloniaObject element)
+    private static Serie? GetSerie(AvaloniaObject element)
     {
         return element.GetValue(SerieProperty);
     }

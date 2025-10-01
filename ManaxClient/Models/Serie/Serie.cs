@@ -35,8 +35,13 @@ public partial class Serie:ObservableObject
    
    public EventHandler<string>? ErrorEmitted;
 
-   public Serie()
+   public Serie(long id) : this(new SerieDto { Id = id })
    {
+   }
+
+   public Serie(SerieDto dto)
+   {
+       FromSerieDto(dto);
        ServerNotification.OnSerieUpdated += OnSerieUpdated;
        ServerNotification.OnPosterModified += OnPosterModified;
        ServerNotification.OnChapterAdded += OnChapterAdded;
@@ -54,6 +59,18 @@ public partial class Serie:ObservableObject
        ServerNotification.OnChapterDeleted -= OnChapterDeleted;
        ServerNotification.OnReadCreated -= OnReadCreated;
        ServerNotification.OnReadDeleted -= OnReadDeleted;
+   }
+   
+   private void FromSerieDto(SerieDto dto)
+   {
+       Id = dto.Id;
+       Title = dto.Title;
+       Description = dto.Description;
+       Status = dto.Status;
+       Creation = dto.Creation;
+       LastModification = dto.LastModification;
+       Tags = dto.Tags;
+       LibraryId = dto.LibraryId;
    }
    
    public void LoadInfo()
@@ -74,18 +91,6 @@ public partial class Serie:ObservableObject
                Logger.LogError(message, e, Environment.StackTrace);
            }
        });
-   }
-   
-   private void FromSerieDto(SerieDto dto)
-   {
-       Id = dto.Id;
-       Title = dto.Title;
-       Description = dto.Description;
-       Status = dto.Status;
-       Creation = dto.Creation;
-       LastModification = dto.LastModification;
-       Tags = dto.Tags;
-       LibraryId = dto.LibraryId;
    }
    
    public void LoadPoster()
