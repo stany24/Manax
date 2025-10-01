@@ -14,35 +14,32 @@ namespace ManaxClient.ViewModels.Pages.Tag;
 
 public class TagPageViewModel : PageViewModel
 {
+    public ObservableCollection<Models.Tag.Tag> Tags { get; } = [];
+    
     public TagPageViewModel()
     {
         Task.Run(LoadTags);
         ServerNotification.OnTagCreated += OnTagCreated;
-        ServerNotification.OnTagUpdated += OnTagUpdated;
         ServerNotification.OnTagDeleted += OnTagDeleted;
     }
-
-    public ObservableCollection<TagDto> Tags { get; } = [];
+    
+    ~TagPageViewModel()
+    {
+        ServerNotification.OnTagCreated -= OnTagCreated;
+        ServerNotification.OnTagDeleted -= OnTagDeleted;
+    }
 
     private void OnTagDeleted(long tagId)
     {
-        TagDto? found = Tags.FirstOrDefault(t => t.Id == tagId);
+        Models.Tag.Tag? found = Tags.FirstOrDefault(t => t.Id == tagId);
         if (found == null) return;
         Tags.Remove(found);
     }
 
-    private void OnTagUpdated(TagDto tag)
-    {
-        TagDto? found = Tags.FirstOrDefault(t => t.Id == tag.Id);
-        if (found == null) return;
-        found.Name = tag.Name;
-        found.Color = tag.Color;
-    }
-
     private void OnTagCreated(TagDto tag)
     {
-        if (Tags.Any(t => t.Id == tag.Id)) OnTagUpdated(tag);
-        Tags.Add(tag);
+        if (Tags.Any(t => t.Id == tag.Id)) {return;};
+        Tags.Add(new Models.Tag.Tag(tag));
     }
 
     private async void LoadTags()
@@ -57,7 +54,7 @@ public class TagPageViewModel : PageViewModel
                 return;
             }
             Tags.Clear();
-            foreach (TagDto tag in response.GetValue()) Tags.Add(tag);
+            foreach (TagDto tag in response.GetValue()) Tags.Add(new Models.Tag.Tag(tag));
         }
         catch
         {
@@ -95,7 +92,7 @@ public class TagPageViewModel : PageViewModel
         PopupRequested?.Invoke(this, popup);
     }
 
-    public void UpdateTag(TagDto tag)
+    public void UpdateTag(Models.Tag.Tag tag)
     {
         TagUpdateDto update = new()
         {
@@ -124,7 +121,7 @@ public class TagPageViewModel : PageViewModel
         PopupRequested?.Invoke(this, popup);
     }
 
-    public void DeleteTag(TagDto tag)
+    public void DeleteTag(Models.Tag.Tag tag)
     {
         Task.Run(async () =>
         {

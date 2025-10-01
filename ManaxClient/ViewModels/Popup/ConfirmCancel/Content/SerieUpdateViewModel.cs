@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using ManaxClient.Models.Serie;
+using ManaxClient.Models.Tag;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTO.Library;
@@ -20,15 +21,15 @@ public partial class SerieUpdateViewModel : ConfirmCancelContentViewModel
     
     public ObservableCollection<LibraryDto> Libraries { get; } = [];
     public ObservableCollection<Status> StatusOptions { get; } = [];
-    public ObservableCollection<TagDto> AvailableTags { get; set; }= [];
-    public ObservableCollection<TagDto> SelectedTags { get; set; } = [];
+    public ObservableCollection<Tag> AvailableTags { get; set; }= [];
+    public ObservableCollection<Tag> SelectedTags { get; set; } = [];
     
     [ObservableProperty] private string _description;
     [ObservableProperty] private LibraryDto? _selectedLibrary;
     [ObservableProperty] private Status _selectedStatus;
     [ObservableProperty] private string _title;
     [ObservableProperty] private string _tagSearchText = "";
-    [ObservableProperty] private TagDto? _selectedTag;
+    [ObservableProperty] private Tag? _selectedTag;
 
     public SerieUpdateViewModel(Serie serie)
     {
@@ -63,7 +64,7 @@ public partial class SerieUpdateViewModel : ConfirmCancelContentViewModel
         _ = LoadTags();
     }
 
-    public void AddTag(TagDto tag)
+    public void AddTag(Tag tag)
     {
         Dispatcher.UIThread.Post(() =>
         {
@@ -73,7 +74,7 @@ public partial class SerieUpdateViewModel : ConfirmCancelContentViewModel
         });
     }
 
-    public void RemoveTag(TagDto tag)
+    public void RemoveTag(Tag tag)
     {
         Dispatcher.UIThread.Post(() =>
         {
@@ -111,25 +112,24 @@ public partial class SerieUpdateViewModel : ConfirmCancelContentViewModel
         Optional<List<TagDto>> tagsResponse = await ManaxApiTagClient.GetTagsAsync();
         if (!tagsResponse.Failed)
         {
-            List<TagDto> allTags = tagsResponse.GetValue();
+            List<Tag> allTags = tagsResponse.GetValue().Select(t => new Tag(t)).ToList();
             Dispatcher.UIThread.Post(() =>
             {
                 SelectedTags.Clear();
-                foreach (TagDto tag in _originalSerie.Tags)
+                foreach (Tag tag in _originalSerie.Tags)
                 {
                     SelectedTags.Add(tag);
                     allTags.Remove(tag);
                 }
                 AvailableTags.Clear();
-                foreach (TagDto tag in allTags)
+                foreach (Tag tag in allTags)
                 {
                     AvailableTags.Add(tag);
                 }
             });
         }
     }
-
-
+    
     public SerieUpdateDto GetResult()
     {
         return new SerieUpdateDto
@@ -138,7 +138,7 @@ public partial class SerieUpdateViewModel : ConfirmCancelContentViewModel
             Description = Description.Trim(),
             Status = SelectedStatus,
             LibraryId = SelectedLibrary?.Id ?? _originalSerie.LibraryId,
-            Tags = SelectedTags.ToList()
+            Tags = SelectedTags.Select(t => t.ToTagDto()).ToList()
         };
     }
 }

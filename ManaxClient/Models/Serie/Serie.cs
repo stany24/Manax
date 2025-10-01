@@ -12,7 +12,6 @@ using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTO.Chapter;
 using ManaxLibrary.DTO.Read;
 using ManaxLibrary.DTO.Serie;
-using ManaxLibrary.DTO.Tag;
 using ManaxLibrary.Logging;
 using ManaxLibrary.Notifications;
 
@@ -28,7 +27,7 @@ public partial class Serie:ObservableObject
 
    [ObservableProperty] private DateTime _creation;
    [ObservableProperty] private DateTime _lastModification;
-   [ObservableProperty] private List<TagDto> _tags = [];
+   [ObservableProperty] private List<Tag.Tag> _tags = [];
    
    [ObservableProperty] private Bitmap? _poster;
    [ObservableProperty] private SortedObservableCollection<Chapter.Chapter> _chapters= new([]) { SortingSelector = dto => dto.Number };
@@ -68,7 +67,7 @@ public partial class Serie:ObservableObject
        Status = dto.Status;
        Creation = dto.Creation;
        LastModification = dto.LastModification;
-       Tags = dto.Tags;
+       Tags = dto.Tags.Select(t => new Tag.Tag(t)).ToList();
        LibraryId = dto.LibraryId;
    }
    

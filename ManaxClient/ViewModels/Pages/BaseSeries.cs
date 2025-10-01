@@ -37,8 +37,7 @@ public abstract partial class BaseSeries : PageViewModel
 
     protected void AddSerieToCollection(SerieDto serieDto)
     {
-        Models.Serie.Serie? existingSerie = Series.FirstOrDefault(s => s.Id == serieDto.Id);
-        if (existingSerie != null) return;
+        if (Series.Any(s => s.Id == serieDto.Id)) { return; }
         Models.Serie.Serie serie = new(serieDto);
         serie.ErrorEmitted += (_, info) => { InfoEmitted?.Invoke(this, info); };
         serie.LoadInfo();
