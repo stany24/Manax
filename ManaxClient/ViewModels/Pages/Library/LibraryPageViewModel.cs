@@ -1,60 +1,34 @@
-using System;
 using System.Threading.Tasks;
-using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
-using ManaxClient.ViewModels.Pages.Home;
+using ManaxClient.ViewModels.Pages.Serie;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
-using ManaxLibrary.DTO.Library;
-using ManaxLibrary.DTO.Search;
-using ManaxLibrary.DTO.Serie;
-using ManaxLibrary.Logging;
 using ManaxLibrary.Notifications;
 
 namespace ManaxClient.ViewModels.Pages.Library;
 
-public partial class LibraryPageViewModel : BaseSeries
+public partial class LibraryPageViewModel:PageViewModel
 {
-    [ObservableProperty] private LibraryDto? _library;
+    [ObservableProperty] private Models.Library.Library? _library;
 
     public LibraryPageViewModel(long libraryId)
     {
-        Task.Run(() => { LoadLibrary(libraryId); });
-        Task.Run(() => { LoadSeries(new Search { IncludedLibraries = [libraryId] }); });
         ServerNotification.OnLibraryDeleted += OnLibraryDeleted;
+        Library = new Models.Library.Library(libraryId);
+        Library.LoadInfo();
+        Library.LoadSeries();
     }
 
-    private void OnLibraryDeleted(long libraryId)
+    private void OnLibraryDeleted(long id)
     {
-        if (Library == null || Library.Id != libraryId) return;
-        PageChangedRequested?.Invoke(this, new HomePageViewModel());
-        InfoEmitted?.Invoke(this, "Library \'" + Library.Name + "\' was deleted");
+        if (Library?.Id != id) return;
+        PageChangedRequested?.Invoke(this, new Home.HomePageViewModel());
     }
 
-    protected override void OnSerieCreated(SerieDto serie)
+    public void MoveToSeriePage(Models.Serie.Serie serie)
     {
-        Logger.LogInfo("A new Serie has been created in " + Library?.Name);
-        if (serie.LibraryId != Library?.Id) return;
-        AddSerieToCollection(serie);
-    }
-
-    private async void LoadLibrary(long libraryId)
-    {
-        try
-        {
-            Optional<LibraryDto> libraryResponse = await ManaxApiLibraryClient.GetLibraryAsync(libraryId);
-            if (libraryResponse.Failed)
-            {
-                InfoEmitted?.Invoke(this, libraryResponse.Error);
-                return;
-            }
-
-            Dispatcher.UIThread.Post(() => Library = libraryResponse.GetValue());
-        }
-        catch (Exception e)
-        {
-            Logger.LogError("Failed to load the library with ID: " + libraryId, e, Environment.StackTrace);
-        }
+        SeriePageViewModel seriePageViewModel = new(serie.Id);
+        PageChangedRequested?.Invoke(this, seriePageViewModel);
     }
 
     public void DeleteLibrary()
@@ -64,9 +38,7 @@ public partial class LibraryPageViewModel : BaseSeries
         {
             Optional<bool> deleteLibraryResponse = await ManaxApiLibraryClient.DeleteLibraryAsync(Library.Id);
             if (deleteLibraryResponse.Failed)
-                PageChangedRequested?.Invoke(this, new HomePageViewModel());
-            else
-                InfoEmitted?.Invoke(this, "Library '" + Library.Name + "' was correctly deleted");
+                InfoEmitted?.Invoke(this, "Failed to delete Library '" + Library.Name + "'");
         });
     }
 }

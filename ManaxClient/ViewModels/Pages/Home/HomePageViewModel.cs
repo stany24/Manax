@@ -1,11 +1,15 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Platform.Storage;
+using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
+using ManaxClient.Models.Collections;
+using ManaxClient.ViewModels.Pages.Serie;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTO.Search;
@@ -14,9 +18,11 @@ using ManaxLibrary.Logging;
 
 namespace ManaxClient.ViewModels.Pages.Home;
 
-public partial class HomePageViewModel : BaseSeries
+public partial class HomePageViewModel : PageViewModel
 {
     [ObservableProperty] private bool _isFolderPickerOpen;
+    public SortedObservableCollection<Models.Serie.Serie> Series { get; set; } =
+        new([]) { SortingSelector = dto => dto.Title, Descending = false };
 
     public HomePageViewModel()
     {
@@ -33,11 +39,51 @@ public partial class HomePageViewModel : BaseSeries
         });
     }
 
-    protected override void OnSerieCreated(SerieDto serie)
+    private void LoadSeries(Search search)
     {
-        Logger.LogInfo("A new Serie has been created");
-        AddSerieToCollection(serie);
+        try
+        {
+            Optional<List<long>> searchResultResponse = ManaxApiSerieClient.GetSearchResult(search).Result;
+            if (searchResultResponse.Failed)
+            {
+                InfoEmitted?.Invoke(this, searchResultResponse.Error);
+                return;
+            }
+
+            foreach (long serieId in searchResultResponse.GetValue())
+            {
+                if (Series.FirstOrDefault(s => s.Id == serieId) != null) continue;
+
+                Optional<SerieDto> serieInfoAsync = ManaxApiSerieClient.GetSerieInfoAsync(serieId).Result;
+                if (serieInfoAsync.Failed)
+                {
+                    InfoEmitted?.Invoke(this, serieInfoAsync.Error);
+                    continue;
+                }
+
+                Models.Serie.Serie serie = new(serieInfoAsync.GetValue());
+                serie.ErrorEmitted += (_, info) => { InfoEmitted?.Invoke(this, info); };
+                serie.LoadInfo();
+                serie.LoadPoster();
+
+                Dispatcher.UIThread.Post(() =>
+                {
+                    Series.Add(serie);
+                });
+            }
+        }
+        catch (Exception e)
+        {
+            Logger.LogError("Failed to load series", e, Environment.StackTrace);
+        }
     }
+    
+    public void MoveToSeriePage(Models.Serie.Serie serie)
+    {
+        SeriePageViewModel seriePageViewModel = new(serie.Id);
+        PageChangedRequested?.Invoke(this, seriePageViewModel);
+    }
+
 
     public async void UploadSerie()
     {

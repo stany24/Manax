@@ -22,7 +22,7 @@ public partial class MainWindowViewModel
         NotifyAll();
     }
     
-    private void OnPermissionModifiedHandler(List<Permission> permissions)
+    private void OnPermissionModified(List<Permission> permissions)
     {
         _permissions = permissions;
         NotifyAll();

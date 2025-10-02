@@ -54,11 +54,10 @@ public partial class MainWindowViewModel : ObservableObject
         {
             if (CurrentPageViewModel is not LoginPageViewModel login) return;
             IsAdmin = login.IsAdmin();
-            ServerNotification.OnRunningTasks += OnRunningTasksHandler;
-            ServerNotification.OnLibraryCreated += OnLibraryCreatedHandler;
-            ServerNotification.OnLibraryUpdated += OnLibraryUpdatedHandler;
-            ServerNotification.OnLibraryDeleted += OnLibraryDeletedHandler;
-            ServerNotification.OnPermissionModified += OnPermissionModifiedHandler;
+            ServerNotification.OnRunningTasks += OnRunningTasks;
+            ServerNotification.OnLibraryCreated += OnLibraryCreated;
+            ServerNotification.OnLibraryDeleted += OnLibraryDeleted;
+            ServerNotification.OnPermissionModified += OnPermissionModified;
             Task.Run(LoadLibraries);
             Task.Run(LoadPermissions);
         };
@@ -72,14 +71,13 @@ public partial class MainWindowViewModel : ObservableObject
 
     ~MainWindowViewModel()
     {
-        ServerNotification.OnRunningTasks -= OnRunningTasksHandler;
-        ServerNotification.OnLibraryCreated -= OnLibraryCreatedHandler;
-        ServerNotification.OnLibraryUpdated -= OnLibraryUpdatedHandler;
-        ServerNotification.OnLibraryDeleted -= OnLibraryDeletedHandler;
-        ServerNotification.OnPermissionModified -= OnPermissionModifiedHandler;
+        ServerNotification.OnRunningTasks -= OnRunningTasks;
+        ServerNotification.OnLibraryCreated -= OnLibraryCreated;
+        ServerNotification.OnLibraryDeleted -= OnLibraryDeleted;
+        ServerNotification.OnPermissionModified -= OnPermissionModified;
     }
 
-    private void OnRunningTasksHandler(Dictionary<string, int> tasks)
+    private void OnRunningTasks(Dictionary<string, int> tasks)
     {
         Dispatcher.UIThread.Invoke(() =>
         {
@@ -90,7 +88,7 @@ public partial class MainWindowViewModel : ObservableObject
         });
     }
 
-    private void OnLibraryCreatedHandler(LibraryDto library)
+    private void OnLibraryCreated(LibraryDto library)
     {
         Dispatcher.UIThread.Invoke(() =>
         {
@@ -99,18 +97,7 @@ public partial class MainWindowViewModel : ObservableObject
         });
     }
 
-    private void OnLibraryUpdatedHandler(LibraryDto library)
-    {
-        Dispatcher.UIThread.Invoke(() =>
-        {
-            LibraryDto? old = Libraries.FirstOrDefault(l => l.Id == library.Id);
-            if (old != null) Libraries.Remove(old);
-            Libraries.Add(library);
-            ShowInfo($"Library '{old?.Name ?? "null"}' was updated to '{library.Name}'");
-        });
-    }
-
-    private void OnLibraryDeletedHandler(long libraryId)
+    private void OnLibraryDeleted(long libraryId)
     {
         Dispatcher.UIThread.Invoke(() =>
         {
