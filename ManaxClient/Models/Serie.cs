@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Avalonia.Media.Imaging;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
+using DynamicData;
 using ManaxClient.Models.Collections;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
@@ -19,6 +20,10 @@ namespace ManaxClient.Models;
 
 public partial class Serie:ObservableObject
 {
+    public static readonly SourceCache<Serie, long> Series = new (x => x.Id);
+    public static readonly object SeriesLock = new();
+    public static readonly object LoadLock = new();
+    
    [ObservableProperty] private long _id;
    [ObservableProperty] private long? _libraryId;
    [ObservableProperty] private string _title = string.Empty;
@@ -32,12 +37,21 @@ public partial class Serie:ObservableObject
    [ObservableProperty] private Bitmap? _poster;
    [ObservableProperty] private SortedObservableCollection<Chapter> _chapters= new([]) { SortingSelector = dto => dto.Number };
    
+   private bool _posterLoaded;
+   private bool _chaptersLoaded;
+   private bool _infoLoaded;
+   
    public EventHandler<string>? ErrorEmitted;
 
    public Serie(long id) : this(new SerieDto { Id = id })
    {
    }
 
+   static Serie()
+   {
+       ServerNotification.OnSerieCreated += OnSerieCreated;
+       ServerNotification.OnSerieDeleted += OnSerieDeleted;
+   }
    public Serie(SerieDto dto)
    {
        FromSerieDto(dto);
@@ -59,6 +73,25 @@ public partial class Serie:ObservableObject
        ServerNotification.OnReadDeleted -= OnReadDeleted;
    }
    
+   private static void OnSerieCreated(SerieDto dto)
+   {
+       Serie serie = new(dto);
+       serie.LoadInfo();
+       serie.LoadPoster();
+       lock (SeriesLock)
+       {
+           Series.AddOrUpdate(serie);
+       }
+   }
+
+   private static void OnSerieDeleted(long id)
+   {
+       lock (SeriesLock)
+       {
+           Series.RemoveKey(id);
+       }
+   }
+   
    private void FromSerieDto(SerieDto dto)
    {
        Id = dto.Id;
@@ -70,9 +103,39 @@ public partial class Serie:ObservableObject
        Tags = dto.Tags.Select(t => new Tag(t)).ToList();
        LibraryId = dto.LibraryId;
    }
+
+   public static void LoadSeries()
+   {
+         Task.Run(() =>
+         {
+             lock (LoadLock)
+             {
+                 try
+                 {
+                     Optional<List<long>> seriesIdsResponse = ManaxApiSerieClient.GetSeriesIdsAsync().Result;
+                     if (seriesIdsResponse.Failed)
+                     {
+                         Logger.LogFailure(seriesIdsResponse.Error,Environment.StackTrace);
+                         return;
+                     }
+    
+                     List<long> seriesIds = seriesIdsResponse.GetValue();
+                     lock (SeriesLock)
+                     {
+                         Series.AddOrUpdate(seriesIds.Select(serieId => new Serie(serieId)));
+                     }
+                 }
+                 catch (Exception e)
+                 {
+                     Logger.LogError("Failed to load series", e, Environment.StackTrace);
+                 }
+             }
+         });
+   }
    
    public void LoadInfo()
    {
+       if (_infoLoaded) return;
        Task.Run(() =>
        {
            try
@@ -81,6 +144,7 @@ public partial class Serie:ObservableObject
                if (serieInfoResponse.Failed) ErrorEmitted?.Invoke(this, serieInfoResponse.Error);
 
                FromSerieDto(serieInfoResponse.GetValue());
+                _infoLoaded = true;
            }
            catch (Exception e)
            {
@@ -93,6 +157,7 @@ public partial class Serie:ObservableObject
    
    public void LoadPoster()
    {
+         if (_posterLoaded) return;
        Task.Run(() =>
        {
            try
@@ -106,6 +171,7 @@ public partial class Serie:ObservableObject
                }
 
                Poster = new Bitmap(new MemoryStream(seriePosterResponse.GetValue()));
+                _posterLoaded = true;
            }
            catch (Exception e)
            {
@@ -118,6 +184,7 @@ public partial class Serie:ObservableObject
 
     public void LoadChapters()
     {
+        if (_chaptersLoaded) return;
         Task.Run(() =>
         {
             try
@@ -138,7 +205,6 @@ public partial class Serie:ObservableObject
                         ErrorEmitted?.Invoke(this, chapterResponse.Error);
                         continue;
                     }
-
                     chapters.Add(chapterResponse.GetValue());
                 }
 
@@ -146,6 +212,7 @@ public partial class Serie:ObservableObject
                 {
                     foreach (ChapterDto chapter in chapters) Chapters.Add(new Chapter(chapter));
                 });
+                _chaptersLoaded = true;
                 LoadReads(Id);
             }
             catch (Exception e)

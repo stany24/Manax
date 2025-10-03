@@ -1,15 +1,12 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
-using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
-using ManaxClient.Models.Collections;
+using DynamicData;
+using DynamicData.Binding;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTO.Library;
-using ManaxLibrary.DTO.Search;
-using ManaxLibrary.DTO.Serie;
 using ManaxLibrary.Logging;
 using ManaxLibrary.Notifications;
 
@@ -22,19 +19,30 @@ public partial class Library:ObservableObject
     [ObservableProperty] private  string _name = string.Empty;
     [ObservableProperty] private  DateTime _creation;
     
-    public SortedObservableCollection<Serie> Series { get; set; }
-    
+    private readonly ReadOnlyObservableCollection<Serie> _series;
+    public ReadOnlyObservableCollection<Serie> Series => _series;
     
     public EventHandler<string>? ErrorEmitted;
 
     public Library(LibraryDto dto)
     {
-        FromLibraryDto(dto);
         ServerNotification.OnLibraryUpdated += OnLibraryUpdated;
-        ServerNotification.OnSerieCreated += OnSerieCreated;
-        ServerNotification.OnSerieDeleted += OnSerieDeleted;
-        Series = new SortedObservableCollection<Serie>([])
-            { SortingSelector = serie => serie.Title, Descending = false };
+        FromLibraryDto(dto);
+        SortExpressionComparer<Serie> comparer = SortExpressionComparer<Serie>.Descending(serie => serie.Title);
+        Serie.LoadSeries();
+        Serie.Series
+            .Connect()
+            .Filter(serie => serie.LibraryId == Id)
+            .SortAndBind(out _series, comparer)
+            .Subscribe(changes =>
+            {
+                foreach (Change<Serie, long> change in changes)
+                {
+                    if (change.Reason != ChangeReason.Add) continue;
+                    change.Current.LoadInfo();
+                    change.Current.LoadPoster();
+                }
+            });
     }
 
     public Library(long id):this(new LibraryDto { Id = id })
@@ -44,8 +52,6 @@ public partial class Library:ObservableObject
     ~Library()
     {
         ServerNotification.OnLibraryUpdated += OnLibraryUpdated;
-        ServerNotification.OnSerieCreated -= OnSerieCreated;
-        ServerNotification.OnSerieDeleted -= OnSerieDeleted;
     }
 
     private void FromLibraryDto(LibraryDto dto)
@@ -59,29 +65,6 @@ public partial class Library:ObservableObject
     {
         if (dto.Id != Id) return;
         FromLibraryDto(dto);
-    }
-    
-    private void OnSerieCreated(SerieDto dto)
-    {
-        if(dto.LibraryId != Id) return;
-        if (Series.Any(s => s.Id == dto.Id)) { return; }
-        Serie serie = new(dto);
-        serie.ErrorEmitted += (_, info) => { ErrorEmitted?.Invoke(this, info); };
-        serie.LoadInfo();
-        serie.LoadPoster();
-        Dispatcher.UIThread.Post(() =>
-        {
-            Series.Add(serie);
-        });
-    }
-
-    private void OnSerieDeleted(long serieId)
-    {
-        Dispatcher.UIThread.Post(() =>
-        {
-            Serie? existingSerie = Series.FirstOrDefault(s => s.Id == serieId);
-            if (existingSerie != null) Series.Remove(existingSerie);
-        });
     }
     
     public void LoadInfo()
@@ -102,50 +85,6 @@ public partial class Library:ObservableObject
             catch (Exception e)
             {
                 Logger.LogError("Failed to load the library with ID: " + Id, e, Environment.StackTrace);
-            }
-        });
-    }
-    
-    public void LoadSeries(Search? search = null)
-    {
-        Task.Run(() =>
-        {
-            try
-            {
-                search ??= new Search { IncludedLibraries = [Id] };
-
-                Optional<List<long>> searchResultResponse = ManaxApiSerieClient.GetSearchResult(search).Result;
-                if (searchResultResponse.Failed)
-                {
-                    ErrorEmitted?.Invoke(this, searchResultResponse.Error);
-                    return;
-                }
-
-                foreach (long serieId in searchResultResponse.GetValue())
-                {
-                    if (Series.FirstOrDefault(s => s.Id == serieId) != null) continue;
-
-                    Optional<SerieDto> serieInfoAsync = ManaxApiSerieClient.GetSerieInfoAsync(serieId).Result;
-                    if (serieInfoAsync.Failed)
-                    {
-                        ErrorEmitted?.Invoke(this, serieInfoAsync.Error);
-                        continue;
-                    }
-
-                    Serie serie = new(serieInfoAsync.GetValue());
-                    serie.ErrorEmitted += (_, info) => { ErrorEmitted?.Invoke(this, info); };
-                    serie.LoadInfo();
-                    serie.LoadPoster();
-
-                    Dispatcher.UIThread.Post(() =>
-                    {
-                        Series.Add(serie);
-                    });
-                }
-            }
-            catch (Exception e)
-            {
-                Logger.LogError("Failed to load series", e, Environment.StackTrace);
             }
         });
     }

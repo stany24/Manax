@@ -16,7 +16,6 @@ public partial class LibraryPageViewModel:PageViewModel
         ServerNotification.OnLibraryDeleted += OnLibraryDeleted;
         Library = new Models.Library(libraryId);
         Library.LoadInfo();
-        Library.LoadSeries();
     }
 
     private void OnLibraryDeleted(long id)

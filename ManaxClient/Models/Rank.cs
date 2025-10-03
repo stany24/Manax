@@ -14,7 +14,7 @@ namespace ManaxClient.Models;
 
 public partial class Rank:ObservableObject
 {
-    public static readonly SourceCache<Rank, long> NewRanks = new (x => x.Id);
+    public static readonly SourceCache<Rank, long> Ranks = new (x => x.Id);
     private static bool _loaded;
     private static readonly object LoadLock = new();
     private static readonly object RanksLock = new ();
@@ -57,7 +57,7 @@ public partial class Rank:ObservableObject
     {
         lock (RanksLock)
         {
-            NewRanks.RemoveKey(id);
+            Ranks.RemoveKey(id);
         }
     }
 
@@ -65,7 +65,7 @@ public partial class Rank:ObservableObject
     {
         lock (RanksLock)
         {
-            NewRanks.AddOrUpdate(new Rank(dto));
+            Ranks.AddOrUpdate(new Rank(dto));
         }
     }
 
@@ -84,14 +84,14 @@ public partial class Rank:ObservableObject
                         Logger.LogFailure(ranksResponse.Error,Environment.StackTrace);
                         lock (RanksLock)
                         {
-                            NewRanks.Clear();
+                            Ranks.Clear();
                         }
                         return;
                     }
 
                     lock (RanksLock)
                     {
-                        NewRanks.Edit(updater =>
+                        Ranks.Edit(updater =>
                         {
                             updater.Clear();
                             List<Rank> ranks = ranksResponse.GetValue().Select(dto => new Rank(dto)).ToList();
@@ -106,7 +106,7 @@ public partial class Rank:ObservableObject
                     Logger.LogError(error,e,Environment.StackTrace);
                     lock (RanksLock)
                     {
-                        NewRanks.Clear();
+                        Ranks.Clear();
                     }
                 }
             }

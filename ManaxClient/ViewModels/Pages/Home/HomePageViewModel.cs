@@ -1,19 +1,16 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Collections.ObjectModel;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Platform.Storage;
-using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
-using ManaxClient.Models.Collections;
+using DynamicData;
+using DynamicData.Binding;
 using ManaxClient.ViewModels.Pages.Serie;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
-using ManaxLibrary.DTO.Search;
-using ManaxLibrary.DTO.Serie;
 using ManaxLibrary.Logging;
 
 namespace ManaxClient.ViewModels.Pages.Home;
@@ -21,61 +18,26 @@ namespace ManaxClient.ViewModels.Pages.Home;
 public partial class HomePageViewModel : PageViewModel
 {
     [ObservableProperty] private bool _isFolderPickerOpen;
-    public SortedObservableCollection<Models.Serie> Series { get; set; } =
-        new([]) { SortingSelector = dto => dto.Title, Descending = false };
+    
+    private readonly ReadOnlyObservableCollection<Models.Serie> _series;
+    public ReadOnlyObservableCollection<Models.Serie> Series => _series;
 
     public HomePageViewModel()
     {
-        Task.Run(async () =>
-        {
-            Optional<List<long>> libraryIdsAsync = await ManaxApiLibraryClient.GetLibraryIdsAsync();
-            if (libraryIdsAsync.Failed)
+        SortExpressionComparer<Models.Serie> comparer = SortExpressionComparer<Models.Serie>.Descending(serie => serie.Title);
+        Models.Serie.LoadSeries();
+        Models.Serie.Series
+            .Connect()
+            .SortAndBind(out _series, comparer)
+            .Subscribe(changes =>
             {
-                InfoEmitted?.Invoke(this, libraryIdsAsync.Error);
-                return;
-            }
-
-            LoadSeries(new Search());
-        });
-    }
-
-    private void LoadSeries(Search search)
-    {
-        try
-        {
-            Optional<List<long>> searchResultResponse = ManaxApiSerieClient.GetSearchResult(search).Result;
-            if (searchResultResponse.Failed)
-            {
-                InfoEmitted?.Invoke(this, searchResultResponse.Error);
-                return;
-            }
-
-            foreach (long serieId in searchResultResponse.GetValue())
-            {
-                if (Series.FirstOrDefault(s => s.Id == serieId) != null) continue;
-
-                Optional<SerieDto> serieInfoAsync = ManaxApiSerieClient.GetSerieInfoAsync(serieId).Result;
-                if (serieInfoAsync.Failed)
+                foreach (Change<Models.Serie, long> change in changes)
                 {
-                    InfoEmitted?.Invoke(this, serieInfoAsync.Error);
-                    continue;
+                    if (change.Reason != ChangeReason.Add) continue;
+                    change.Current.LoadInfo();
+                    change.Current.LoadPoster();
                 }
-
-                Models.Serie serie = new(serieInfoAsync.GetValue());
-                serie.ErrorEmitted += (_, info) => { InfoEmitted?.Invoke(this, info); };
-                serie.LoadInfo();
-                serie.LoadPoster();
-
-                Dispatcher.UIThread.Post(() =>
-                {
-                    Series.Add(serie);
-                });
-            }
-        }
-        catch (Exception e)
-        {
-            Logger.LogError("Failed to load series", e, Environment.StackTrace);
-        }
+            });
     }
     
     public void MoveToSeriePage(Models.Serie serie)
