@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Avalonia;
@@ -23,12 +22,12 @@ namespace ManaxClient.ViewModels.Pages.Serie;
 public partial class SeriePageViewModel : PageViewModel
 {
     [ObservableProperty] private bool _isFilePickerOpen;
-    [ObservableProperty] private ObservableCollection<RankDto> _ranks = [];
-    [ObservableProperty] private RankDto? _selectedRank;
+    [ObservableProperty] private Models.Rank.Rank? _selectedRank;
     [ObservableProperty] private Models.Serie.Serie? _serie;
 
     public SeriePageViewModel(long serieId)
     {
+        Models.Rank.Rank.LoadRanks();
         Serie = new Models.Serie.Serie(serieId);
         Serie.ErrorEmitted += (_, msg) => { InfoEmitted?.Invoke(this, msg); };
         Serie.LoadInfo();
@@ -41,19 +40,6 @@ public partial class SeriePageViewModel : PageViewModel
     {
         try
         {
-            Optional<List<RankDto>> ranksResponse = await ManaxApiRankClient.GetRanksAsync();
-            if (ranksResponse.Failed)
-            {
-                InfoEmitted?.Invoke(this, ranksResponse.Error);
-                return;
-            }
-
-            List<RankDto> ranks = ranksResponse.GetValue();
-            Dispatcher.UIThread.Post(() =>
-            {
-                foreach (RankDto rank in ranks) Ranks.Add(rank);
-            });
-
             Optional<List<UserRankDto>> rankingResponse = await ManaxApiRankClient.GetRankingAsync();
             if (rankingResponse.Failed)
             {
@@ -68,7 +54,7 @@ public partial class SeriePageViewModel : PageViewModel
                 return;
             }
 
-            RankDto? userRank = ranks.FirstOrDefault(r => r.Id == rank.RankId);
+            Models.Rank.Rank? userRank = Models.Rank.Rank.Ranks.FirstOrDefault(r => r.Id == rank.RankId);
             Dispatcher.UIThread.Invoke(() => { SelectedRank = userRank; });
             BindToRankChange(serieId);
         }

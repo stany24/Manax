@@ -6,6 +6,7 @@
     xmlns:previews="clr-namespace:ManaxClient.Controls.Previews"
     xmlns:page="clr-namespace:ManaxClient.ViewModels.Pages.Serie"
     xmlns:viewModels="clr-namespace:ManaxClient.ViewModels"
+    xmlns:rank="clr-namespace:ManaxClient.Models.Rank"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Pages.Serie.SeriePageView"
     x:DataType="page:SeriePageViewModel">
@@ -44,11 +45,11 @@
 
                         <StackPanel Spacing="8">
                             <TextBlock Text="Note de la série" FontWeight="Medium" />
-                            <ComboBox ItemsSource="{Binding Ranks}"
+                            <ComboBox ItemsSource="{Binding Source={x:Static rank:Rank.Ranks}}"
                                       SelectedItem="{Binding SelectedRank}"
                                       HorizontalAlignment="Stretch">
                                 <ComboBox.ItemTemplate>
-                                    <DataTemplate>
+                                    <DataTemplate  x:DataType="rank:Rank">
                                         <TextBlock Text="{Binding Name}" />
                                     </DataTemplate>
                                 </ComboBox.ItemTemplate>
