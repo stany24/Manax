@@ -17,7 +17,7 @@ namespace ManaxClient.ViewModels.Pages.User;
 
 public partial class UsersPageViewModel : PageViewModel
 {
-    [ObservableProperty] private ObservableCollection<Models.User.User> _users = [];
+    [ObservableProperty] private ObservableCollection<Models.User> _users = [];
 
     public UsersPageViewModel()
     {
@@ -40,7 +40,7 @@ public partial class UsersPageViewModel : PageViewModel
                     continue;
                 }
 
-                Dispatcher.UIThread.Post(() => Users.Add(new Models.User.User(userResponse.GetValue())));
+                Dispatcher.UIThread.Post(() => Users.Add(new Models.User(userResponse.GetValue())));
             }
         });
         ServerNotification.OnUserCreated += OnUserCreated;
@@ -55,17 +55,17 @@ public partial class UsersPageViewModel : PageViewModel
 
     private void OnUserDeleted(long userId)
     {
-        Models.User.User? user = Users.FirstOrDefault(u => u.Id == userId);
+        Models.User? user = Users.FirstOrDefault(u => u.Id == userId);
         if (user == null) return;
         Dispatcher.UIThread.Post(() => Users.Remove(user));
     }
 
     private void OnUserCreated(UserDto user)
     {
-        Dispatcher.UIThread.Post(() => Users.Add(new Models.User.User(user)));
+        Dispatcher.UIThread.Post(() => Users.Add(new Models.User(user)));
     }
 
-    public void DeleteUser(Models.User.User user)
+    public void DeleteUser(Models.User user)
     {
         Task.Run(async () =>
         {

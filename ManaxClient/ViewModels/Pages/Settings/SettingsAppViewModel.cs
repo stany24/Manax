@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using CommunityToolkit.Mvvm.ComponentModel;
 using ManaxClient.Models;
+using ManaxClient.Models.Theme;
 
 namespace ManaxClient.ViewModels.Pages.Settings;
 

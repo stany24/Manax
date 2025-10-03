@@ -8,13 +8,13 @@ namespace ManaxClient.ViewModels.Pages.Chapter;
 
 public partial class ChapterPageViewModel : PageViewModel
 {
-    private readonly List<Models.Chapter.Chapter> _chapters;
-    [ObservableProperty] private Models.Chapter.Chapter _chapter = new();
+    private readonly List<Models.Chapter> _chapters;
+    [ObservableProperty] private Models.Chapter _chapter = new();
     [ObservableProperty] private bool _controlBordersVisible;
     [ObservableProperty] private int _currentPage;
     [ObservableProperty] private Vector _scrollOffset = new(0, 0);
 
-    public ChapterPageViewModel(List<Models.Chapter.Chapter> chapters, Models.Chapter.Chapter chapter)
+    public ChapterPageViewModel(List<Models.Chapter> chapters, Models.Chapter chapter)
     {
         _chapters = chapters;
         ControlBarVisible = false;
@@ -83,7 +83,7 @@ public partial class ChapterPageViewModel : PageViewModel
             height += Chapter.Pages[i].Size.Height;
             if (!(height > ScrollOffset.Y)) continue;
             CurrentPage = i;
-            Console.WriteLine(CurrentPage);
+            Console.WriteLine((int)CurrentPage);
             return;
         }
     }

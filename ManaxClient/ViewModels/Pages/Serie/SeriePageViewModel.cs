@@ -22,13 +22,13 @@ namespace ManaxClient.ViewModels.Pages.Serie;
 public partial class SeriePageViewModel : PageViewModel
 {
     [ObservableProperty] private bool _isFilePickerOpen;
-    [ObservableProperty] private Models.Rank.Rank? _selectedRank;
-    [ObservableProperty] private Models.Serie.Serie? _serie;
+    [ObservableProperty] private Models.Rank? _selectedRank;
+    [ObservableProperty] private Models.Serie? _serie;
 
     public SeriePageViewModel(long serieId)
     {
-        Models.Rank.Rank.LoadRanks();
-        Serie = new Models.Serie.Serie(serieId);
+        Models.Rank.LoadRanks();
+        Serie = new Models.Serie(serieId);
         Serie.ErrorEmitted += (_, msg) => { InfoEmitted?.Invoke(this, msg); };
         Serie.LoadInfo();
         Serie.LoadChapters();
@@ -54,7 +54,7 @@ public partial class SeriePageViewModel : PageViewModel
                 return;
             }
 
-            Models.Rank.Rank? userRank = Models.Rank.Rank.Ranks.FirstOrDefault(r => r.Id == rank.RankId);
+            Models.Rank? userRank = Models.Rank.Ranks.FirstOrDefault(r => r.Id == rank.RankId);
             Dispatcher.UIThread.Invoke(() => { SelectedRank = userRank; });
             BindToRankChange(serieId);
         }
@@ -84,7 +84,7 @@ public partial class SeriePageViewModel : PageViewModel
         };
     }
 
-    public void MoveToChapterPage(Models.Chapter.Chapter chapter)
+    public void MoveToChapterPage(Models.Chapter chapter)
     {
         ChapterPageViewModel chapterPageViewModel = new(Serie.Chapters.ToList(), chapter);
         PageChangedRequested?.Invoke(this, chapterPageViewModel);

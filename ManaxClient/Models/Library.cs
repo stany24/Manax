@@ -13,7 +13,7 @@ using ManaxLibrary.DTO.Serie;
 using ManaxLibrary.Logging;
 using ManaxLibrary.Notifications;
 
-namespace ManaxClient.Models.Library;
+namespace ManaxClient.Models;
 
 public partial class Library:ObservableObject
 {
@@ -22,7 +22,7 @@ public partial class Library:ObservableObject
     [ObservableProperty] private  string _name = string.Empty;
     [ObservableProperty] private  DateTime _creation;
     
-    public SortedObservableCollection<Models.Serie.Serie> Series { get; set; }
+    public SortedObservableCollection<Serie> Series { get; set; }
     
     
     public EventHandler<string>? ErrorEmitted;
@@ -33,7 +33,7 @@ public partial class Library:ObservableObject
         ServerNotification.OnLibraryUpdated += OnLibraryUpdated;
         ServerNotification.OnSerieCreated += OnSerieCreated;
         ServerNotification.OnSerieDeleted += OnSerieDeleted;
-        Series = new SortedObservableCollection<Models.Serie.Serie>([])
+        Series = new SortedObservableCollection<Serie>([])
             { SortingSelector = serie => serie.Title, Descending = false };
     }
 
@@ -65,7 +65,7 @@ public partial class Library:ObservableObject
     {
         if(dto.LibraryId != Id) return;
         if (Series.Any(s => s.Id == dto.Id)) { return; }
-        Models.Serie.Serie serie = new(dto);
+        Serie serie = new(dto);
         serie.ErrorEmitted += (_, info) => { ErrorEmitted?.Invoke(this, info); };
         serie.LoadInfo();
         serie.LoadPoster();
@@ -79,7 +79,7 @@ public partial class Library:ObservableObject
     {
         Dispatcher.UIThread.Post(() =>
         {
-            Models.Serie.Serie? existingSerie = Series.FirstOrDefault(s => s.Id == serieId);
+            Serie? existingSerie = Series.FirstOrDefault(s => s.Id == serieId);
             if (existingSerie != null) Series.Remove(existingSerie);
         });
     }
@@ -132,7 +132,7 @@ public partial class Library:ObservableObject
                         continue;
                     }
 
-                    Models.Serie.Serie serie = new(serieInfoAsync.GetValue());
+                    Serie serie = new(serieInfoAsync.GetValue());
                     serie.ErrorEmitted += (_, info) => { ErrorEmitted?.Invoke(this, info); };
                     serie.LoadInfo();
                     serie.LoadPoster();

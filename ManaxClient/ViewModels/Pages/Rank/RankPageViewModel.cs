@@ -14,9 +14,9 @@ public class RankPageViewModel : PageViewModel
 
     public RankPageViewModel()
     {
-        Models.Rank.Rank.LoadRanks();
+        Models.Rank.LoadRanks();
     }
-    public void UpdateRank(Models.Rank.Rank rank)
+    public void UpdateRank(Models.Rank rank)
     {
         RankUpdateDto update = new()
         {
@@ -46,7 +46,7 @@ public class RankPageViewModel : PageViewModel
         PopupRequested?.Invoke(this, popup);
     }
 
-    public void DeleteRank(Models.Rank.Rank rank)
+    public void DeleteRank(Models.Rank rank)
     {
         Task.Run(async () =>
         {

@@ -1,15 +1,7 @@
 using System.Collections.Generic;
 using Avalonia.Media;
 
-namespace ManaxClient.Models;
-
-public class Theme(string name, SolidColorBrush primary, SolidColorBrush secondary, SolidColorBrush tertiary)
-{
-    public string Name { get; set; } = name;
-    public SolidColorBrush PrimaryColor { get; set; } = primary;
-    public SolidColorBrush SecondaryColor { get; set; } = secondary;
-    public SolidColorBrush TertiaryColor { get; set; } = tertiary;
-}
+namespace ManaxClient.Models.Theme;
 
 public static class ThemePresets
 {

@@ -10,7 +10,7 @@ using ManaxLibrary.DTO.Rank;
 using ManaxLibrary.Logging;
 using ManaxLibrary.Notifications;
 
-namespace ManaxClient.Models.Rank;
+namespace ManaxClient.Models;
 
 public partial class Rank:ObservableObject
 {

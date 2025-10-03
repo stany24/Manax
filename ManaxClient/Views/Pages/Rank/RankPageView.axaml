@@ -5,7 +5,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:page="clr-namespace:ManaxClient.ViewModels.Pages.Rank"
     xmlns:viewModels="clr-namespace:ManaxClient.ViewModels"
-    xmlns:rank="clr-namespace:ManaxClient.Models.Rank"
+    xmlns:models="clr-namespace:ManaxClient.Models"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Pages.Rank.RankPageView"
     x:DataType="page:RankPageViewModel">
@@ -16,7 +16,7 @@
             <Grid ColumnDefinitions="*,Auto">
                 <StackPanel Grid.Column="0" Orientation="Vertical">
                     <TextBlock Classes="title" Text="Gestion des rangs" />
-                    <TextBlock Text="{Binding Source={x:Static rank:Rank.Ranks}, Path=Count, StringFormat='🏆 {0} rang(s) configuré(s)'}"
+                    <TextBlock Text="{Binding Source={x:Static models:Rank.Ranks}, Path=Count, StringFormat='🏆 {0} rang(s) configuré(s)'}"
                                Foreground="{StaticResource SecondaryBrush}" />
                 </StackPanel>
 
@@ -32,7 +32,7 @@
                 </Button>
             </Grid>
 
-            <Border Classes="card" IsVisible="{Binding Source={x:Static rank:Rank.Ranks}, Path=!Count}">
+            <Border Classes="card" IsVisible="{Binding Source={x:Static models:Rank.Ranks}, Path=!Count}">
                 <StackPanel Orientation="Vertical"
                             Spacing="16"
                             HorizontalAlignment="Center">
@@ -56,13 +56,13 @@
                 </StackPanel>
             </Border>
 
-            <Border Classes="card" IsVisible="{Binding Source={x:Static rank:Rank.Ranks}, Path=Count}">
+            <Border Classes="card" IsVisible="{Binding Source={x:Static models:Rank.Ranks}, Path=Count}">
                 <StackPanel Spacing="16">
                     <TextBlock Classes="subtitle" Text="Liste des rangs" />
 
-                    <ItemsControl ItemsSource="{Binding Source={x:Static rank:Rank.Ranks}}">
+                    <ItemsControl ItemsSource="{Binding Source={x:Static models:Rank.Ranks}}">
                         <ItemsControl.ItemTemplate>
-                            <DataTemplate x:DataType="rank:Rank">
+                            <DataTemplate x:DataType="models:Rank">
                                 <Border Background="{DynamicResource Background1}"
                                         BorderBrush="{DynamicResource Background2}"
                                         BorderThickness="1"

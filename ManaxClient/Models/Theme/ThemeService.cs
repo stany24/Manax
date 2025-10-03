@@ -1,7 +1,7 @@
 using Avalonia;
 using Avalonia.Media;
 
-namespace ManaxClient.Models;
+namespace ManaxClient.Models.Theme;
 
 public static class ThemeService
 {

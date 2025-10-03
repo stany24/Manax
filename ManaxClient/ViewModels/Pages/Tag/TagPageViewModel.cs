@@ -14,7 +14,7 @@ namespace ManaxClient.ViewModels.Pages.Tag;
 
 public class TagPageViewModel : PageViewModel
 {
-    public ObservableCollection<Models.Tag.Tag> Tags { get; } = [];
+    public ObservableCollection<Models.Tag> Tags { get; } = [];
     
     public TagPageViewModel()
     {
@@ -31,7 +31,7 @@ public class TagPageViewModel : PageViewModel
 
     private void OnTagDeleted(long tagId)
     {
-        Models.Tag.Tag? found = Tags.FirstOrDefault(t => t.Id == tagId);
+        Models.Tag? found = Tags.FirstOrDefault(t => t.Id == tagId);
         if (found == null) return;
         Tags.Remove(found);
     }
@@ -39,7 +39,7 @@ public class TagPageViewModel : PageViewModel
     private void OnTagCreated(TagDto tag)
     {
         if (Tags.Any(t => t.Id == tag.Id)) {return;};
-        Tags.Add(new Models.Tag.Tag(tag));
+        Tags.Add(new Models.Tag(tag));
     }
 
     private async void LoadTags()
@@ -54,7 +54,7 @@ public class TagPageViewModel : PageViewModel
                 return;
             }
             Tags.Clear();
-            foreach (TagDto tag in response.GetValue()) Tags.Add(new Models.Tag.Tag(tag));
+            foreach (TagDto tag in response.GetValue()) Tags.Add(new Models.Tag(tag));
         }
         catch
         {
@@ -92,7 +92,7 @@ public class TagPageViewModel : PageViewModel
         PopupRequested?.Invoke(this, popup);
     }
 
-    public void UpdateTag(Models.Tag.Tag tag)
+    public void UpdateTag(Models.Tag tag)
     {
         TagUpdateDto update = new()
         {
@@ -121,7 +121,7 @@ public class TagPageViewModel : PageViewModel
         PopupRequested?.Invoke(this, popup);
     }
 
-    public void DeleteTag(Models.Tag.Tag tag)
+    public void DeleteTag(Models.Tag tag)
     {
         Task.Run(async () =>
         {

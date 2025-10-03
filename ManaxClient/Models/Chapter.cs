@@ -12,7 +12,7 @@ using ManaxLibrary.DTO.Read;
 using ManaxLibrary.Logging;
 using ManaxLibrary.Notifications;
 
-namespace ManaxClient.Models.Chapter;
+namespace ManaxClient.Models;
 
 public partial class Chapter:ObservableObject
 {

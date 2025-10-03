@@ -9,12 +9,12 @@ namespace ManaxClient.ViewModels.Pages.Library;
 
 public partial class LibraryPageViewModel:PageViewModel
 {
-    [ObservableProperty] private Models.Library.Library? _library;
+    [ObservableProperty] private Models.Library? _library;
 
     public LibraryPageViewModel(long libraryId)
     {
         ServerNotification.OnLibraryDeleted += OnLibraryDeleted;
-        Library = new Models.Library.Library(libraryId);
+        Library = new Models.Library(libraryId);
         Library.LoadInfo();
         Library.LoadSeries();
     }
@@ -25,7 +25,7 @@ public partial class LibraryPageViewModel:PageViewModel
         PageChangedRequested?.Invoke(this, new Home.HomePageViewModel());
     }
 
-    public void MoveToSeriePage(Models.Serie.Serie serie)
+    public void MoveToSeriePage(Models.Serie serie)
     {
         SeriePageViewModel seriePageViewModel = new(serie.Id);
         PageChangedRequested?.Invoke(this, seriePageViewModel);

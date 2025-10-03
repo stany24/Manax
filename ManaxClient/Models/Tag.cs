@@ -3,7 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using ManaxLibrary.DTO.Tag;
 using ManaxLibrary.Notifications;
 
-namespace ManaxClient.Models.Tag;
+namespace ManaxClient.Models;
 
 public partial class Tag:ObservableObject
 {

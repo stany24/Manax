@@ -21,7 +21,7 @@ namespace ManaxClient.ViewModels.Pages.Home;
 public partial class HomePageViewModel : PageViewModel
 {
     [ObservableProperty] private bool _isFolderPickerOpen;
-    public SortedObservableCollection<Models.Serie.Serie> Series { get; set; } =
+    public SortedObservableCollection<Models.Serie> Series { get; set; } =
         new([]) { SortingSelector = dto => dto.Title, Descending = false };
 
     public HomePageViewModel()
@@ -61,7 +61,7 @@ public partial class HomePageViewModel : PageViewModel
                     continue;
                 }
 
-                Models.Serie.Serie serie = new(serieInfoAsync.GetValue());
+                Models.Serie serie = new(serieInfoAsync.GetValue());
                 serie.ErrorEmitted += (_, info) => { InfoEmitted?.Invoke(this, info); };
                 serie.LoadInfo();
                 serie.LoadPoster();
@@ -78,7 +78,7 @@ public partial class HomePageViewModel : PageViewModel
         }
     }
     
-    public void MoveToSeriePage(Models.Serie.Serie serie)
+    public void MoveToSeriePage(Models.Serie serie)
     {
         SeriePageViewModel seriePageViewModel = new(serie.Id);
         PageChangedRequested?.Invoke(this, seriePageViewModel);

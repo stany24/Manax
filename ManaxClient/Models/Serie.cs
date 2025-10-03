@@ -15,7 +15,7 @@ using ManaxLibrary.DTO.Serie;
 using ManaxLibrary.Logging;
 using ManaxLibrary.Notifications;
 
-namespace ManaxClient.Models.Serie;
+namespace ManaxClient.Models;
 
 public partial class Serie:ObservableObject
 {
@@ -27,10 +27,10 @@ public partial class Serie:ObservableObject
 
    [ObservableProperty] private DateTime _creation;
    [ObservableProperty] private DateTime _lastModification;
-   [ObservableProperty] private List<Tag.Tag> _tags = [];
+   [ObservableProperty] private List<Tag> _tags = [];
    
    [ObservableProperty] private Bitmap? _poster;
-   [ObservableProperty] private SortedObservableCollection<Chapter.Chapter> _chapters= new([]) { SortingSelector = dto => dto.Number };
+   [ObservableProperty] private SortedObservableCollection<Chapter> _chapters= new([]) { SortingSelector = dto => dto.Number };
    
    public EventHandler<string>? ErrorEmitted;
 
@@ -67,7 +67,7 @@ public partial class Serie:ObservableObject
        Status = dto.Status;
        Creation = dto.Creation;
        LastModification = dto.LastModification;
-       Tags = dto.Tags.Select(t => new Tag.Tag(t)).ToList();
+       Tags = dto.Tags.Select(t => new Tag(t)).ToList();
        LibraryId = dto.LibraryId;
    }
    
@@ -144,7 +144,7 @@ public partial class Serie:ObservableObject
 
                 Dispatcher.UIThread.Invoke(() =>
                 {
-                    foreach (ChapterDto chapter in chapters) Chapters.Add(new Chapter.Chapter(chapter));
+                    foreach (ChapterDto chapter in chapters) Chapters.Add(new Chapter(chapter));
                 });
                 LoadReads(Id);
             }
@@ -176,7 +176,7 @@ public partial class Serie:ObservableObject
             {
                 foreach (ReadDto read in reads)
                 {
-                    Chapter.Chapter? chapter = Chapters.FirstOrDefault(c => c.Id == read.ChapterId);
+                    Chapter? chapter = Chapters.FirstOrDefault(c => c.Id == read.ChapterId);
                     if (chapter == null) continue;
                     chapter.Read = read;
                 }
@@ -192,14 +192,14 @@ public partial class Serie:ObservableObject
     
     private void OnReadDeleted(long obj)
     {
-        Chapter.Chapter? chapter = Chapters.FirstOrDefault(c => c.Id == obj);
+        Chapter? chapter = Chapters.FirstOrDefault(c => c.Id == obj);
         if (chapter == null) return;
         chapter.Read = null;
     }
 
     private void OnReadCreated(ReadDto read)
     {
-        Chapter.Chapter? chapter = Chapters.FirstOrDefault(c => c.Id == read.ChapterId);
+        Chapter? chapter = Chapters.FirstOrDefault(c => c.Id == read.ChapterId);
         if (chapter == null) return;
         chapter.Read = read;
     }
@@ -213,12 +213,12 @@ public partial class Serie:ObservableObject
     private void OnChapterAdded(ChapterDto chapter)
     {
         if (chapter.SerieId != Id) return;
-        Chapters.Add(new Chapter.Chapter(chapter));
+        Chapters.Add(new Chapter(chapter));
     }
 
     private void OnChapterDeleted(long chapterId)
     {
-        Chapter.Chapter? chapter = Chapters.FirstOrDefault(c => c.Id == chapterId);
+        Chapter? chapter = Chapters.FirstOrDefault(c => c.Id == chapterId);
         if (chapter == null) return;
         Chapters.Remove(chapter);
     }

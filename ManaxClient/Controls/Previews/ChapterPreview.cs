@@ -12,7 +12,7 @@ using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Threading;
 using ManaxClient.Controls.Popups;
-using ManaxClient.Models.Chapter;
+using ManaxClient.Models;
 using ManaxClient.ViewModels.Popup.ConfirmCancel;
 using ManaxClient.ViewModels.Popup.ConfirmCancel.Content;
 using ManaxClient.ViewModels.Popup.SelectChoice;
