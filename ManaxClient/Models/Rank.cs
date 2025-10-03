@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
-using ManaxClient.Models.Collections;
+using DynamicData;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTO.Rank;
@@ -14,9 +14,10 @@ namespace ManaxClient.Models;
 
 public partial class Rank:ObservableObject
 {
-    public static SortedObservableCollection<Rank> Ranks { get; } = new([]) { SortingSelector = r => r.Value,Descending = true };
+    public static readonly SourceCache<Rank, long> NewRanks = new (x => x.Id);
     private static bool _loaded;
     private static readonly object LoadLock = new();
+    private static readonly object RanksLock = new ();
     
     [ObservableProperty] private long _id;
     [ObservableProperty] private int _value;
@@ -36,7 +37,7 @@ public partial class Rank:ObservableObject
 
     ~Rank()
     {
-        ServerNotification.OnRankUpdated += OnRankUpdated;
+        ServerNotification.OnRankUpdated -= OnRankUpdated;
     }
     
     private void FromDto(RankDto dto)
@@ -52,16 +53,20 @@ public partial class Rank:ObservableObject
         FromDto(dto);
     }
     
-    private static void OnRankDeleted(long obj)
+    private static void OnRankDeleted(long id)
     {
-        Rank? firstOrDefault = Ranks.FirstOrDefault(r => r.Id == obj);
-        if (firstOrDefault != null) Ranks.Remove(firstOrDefault);
+        lock (RanksLock)
+        {
+            NewRanks.RemoveKey(id);
+        }
     }
 
-    private static void OnRankCreated(RankDto obj)
+    private static void OnRankCreated(RankDto dto)
     {
-        if (Ranks.Any(r => r.Id == obj.Id)) return;
-        Ranks.Add(new Rank(obj));
+        lock (RanksLock)
+        {
+            NewRanks.AddOrUpdate(new Rank(dto));
+        }
     }
 
     public static void LoadRanks()
@@ -77,13 +82,21 @@ public partial class Rank:ObservableObject
                     if (ranksResponse.Failed)
                     {
                         Logger.LogFailure(ranksResponse.Error,Environment.StackTrace);
-                        Ranks.Clear();
+                        lock (RanksLock)
+                        {
+                            NewRanks.Clear();
+                        }
+                        return;
                     }
 
-                    List<Rank> ranks = ranksResponse.GetValue().Select(dto => new Rank(dto)).ToList();
-                    foreach (Rank rank in ranks)
+                    lock (RanksLock)
                     {
-                        Ranks.Add(rank);
+                        NewRanks.Edit(updater =>
+                        {
+                            updater.Clear();
+                            List<Rank> ranks = ranksResponse.GetValue().Select(dto => new Rank(dto)).ToList();
+                            updater.AddOrUpdate(ranks);
+                        });
                     }
                     _loaded = true;
                 }
@@ -91,7 +104,10 @@ public partial class Rank:ObservableObject
                 {
                     const string error = "Failed to load ranks from server";
                     Logger.LogError(error,e,Environment.StackTrace);
-                    Ranks.Clear();
+                    lock (RanksLock)
+                    {
+                        NewRanks.Clear();
+                    }
                 }
             }
         });

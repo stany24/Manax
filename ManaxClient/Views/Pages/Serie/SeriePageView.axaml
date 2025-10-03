@@ -45,7 +45,7 @@
 
                         <StackPanel Spacing="8">
                             <TextBlock Text="Note de la série" FontWeight="Medium" />
-                            <ComboBox ItemsSource="{Binding Source={x:Static models:Rank.Ranks}}"
+                            <ComboBox ItemsSource="{Binding Ranks}"
                                       SelectedItem="{Binding SelectedRank}"
                                       HorizontalAlignment="Stretch">
                                 <ComboBox.ItemTemplate>

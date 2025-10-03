@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Avalonia;
@@ -8,6 +9,8 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
+using DynamicData;
+using DynamicData.Binding;
 using ManaxClient.ViewModels.Pages.Chapter;
 using ManaxClient.ViewModels.Popup.ConfirmCancel;
 using ManaxClient.ViewModels.Popup.ConfirmCancel.Content;
@@ -24,10 +27,18 @@ public partial class SeriePageViewModel : PageViewModel
     [ObservableProperty] private bool _isFilePickerOpen;
     [ObservableProperty] private Models.Rank? _selectedRank;
     [ObservableProperty] private Models.Serie? _serie;
+    
+    private readonly ReadOnlyObservableCollection<Models.Rank> _ranks;
+    public ReadOnlyObservableCollection<Models.Rank> Ranks => _ranks;
 
     public SeriePageViewModel(long serieId)
     {
         Models.Rank.LoadRanks();
+        SortExpressionComparer<Models.Rank> comparer = SortExpressionComparer<Models.Rank>.Descending(t => t.Value);
+        Models.Rank.NewRanks
+            .Connect()
+            .SortAndBind(out _ranks, comparer)
+            .Subscribe();
         Serie = new Models.Serie(serieId);
         Serie.ErrorEmitted += (_, msg) => { InfoEmitted?.Invoke(this, msg); };
         Serie.LoadInfo();
@@ -54,7 +65,7 @@ public partial class SeriePageViewModel : PageViewModel
                 return;
             }
 
-            Models.Rank? userRank = Models.Rank.Ranks.FirstOrDefault(r => r.Id == rank.RankId);
+            Models.Rank? userRank = Ranks.FirstOrDefault(r => r.Id == rank.RankId);
             Dispatcher.UIThread.Invoke(() => { SelectedRank = userRank; });
             BindToRankChange(serieId);
         }

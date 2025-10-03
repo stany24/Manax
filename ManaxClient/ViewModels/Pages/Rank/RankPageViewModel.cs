@@ -1,5 +1,8 @@
 using System;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using DynamicData;
+using DynamicData.Binding;
 using ManaxClient.ViewModels.Popup.ConfirmCancel;
 using ManaxClient.ViewModels.Popup.ConfirmCancel.Content;
 using ManaxLibrary;
@@ -11,10 +14,16 @@ namespace ManaxClient.ViewModels.Pages.Rank;
 
 public class RankPageViewModel : PageViewModel
 {
+    private readonly ReadOnlyObservableCollection<Models.Rank> _ranks;
+    public ReadOnlyObservableCollection<Models.Rank> Ranks => _ranks;
 
     public RankPageViewModel()
     {
         Models.Rank.LoadRanks();
+        SortExpressionComparer<Models.Rank> comparer = SortExpressionComparer<Models.Rank>.Descending(t => t.Value);
+        Models.Rank.NewRanks.Connect()
+            .SortAndBind(out _ranks, comparer)
+            .Subscribe();
     }
     public void UpdateRank(Models.Rank rank)
     {
