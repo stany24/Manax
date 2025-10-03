@@ -29,12 +29,11 @@ public partial class Library:ObservableObject
         ServerNotification.OnLibraryUpdated += OnLibraryUpdated;
         FromLibraryDto(dto);
         SortExpressionComparer<Serie> comparer = SortExpressionComparer<Serie>.Descending(serie => serie.Title);
-        Serie.LoadSeries();
         Serie.Series
             .Connect()
             .Filter(serie => serie.LibraryId == Id)
             .SortAndBind(out _series, comparer)
-            .Subscribe(changes =>
+            .Subscribe(changes =>   
             {
                 foreach (Change<Serie, long> change in changes)
                 {

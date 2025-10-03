@@ -25,7 +25,6 @@ public partial class HomePageViewModel : PageViewModel
     public HomePageViewModel()
     {
         SortExpressionComparer<Models.Serie> comparer = SortExpressionComparer<Models.Serie>.Descending(serie => serie.Title);
-        Models.Serie.LoadSeries();
         Models.Serie.Series
             .Connect()
             .SortAndBind(out _series, comparer)

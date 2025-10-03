@@ -1,10 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Threading.Tasks;
-using Avalonia.Threading;
-using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData;
 using DynamicData.Binding;
 using ManaxClient.ViewModels.Popup.ConfirmCancel;
@@ -13,7 +10,6 @@ using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTO.User;
 using ManaxLibrary.Logging;
-using ManaxLibrary.Notifications;
 
 namespace ManaxClient.ViewModels.Pages.User;
 

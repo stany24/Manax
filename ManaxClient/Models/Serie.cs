@@ -21,8 +21,9 @@ namespace ManaxClient.Models;
 public partial class Serie:ObservableObject
 {
     public static readonly SourceCache<Serie, long> Series = new (x => x.Id);
-    public static readonly object SeriesLock = new();
-    public static readonly object LoadLock = new();
+    private static bool _isLoaded;
+    private static readonly object SeriesLock = new();
+    private static readonly object LoadLock = new();
     
    [ObservableProperty] private long _id;
    [ObservableProperty] private long? _libraryId;
@@ -51,6 +52,7 @@ public partial class Serie:ObservableObject
    {
        ServerNotification.OnSerieCreated += OnSerieCreated;
        ServerNotification.OnSerieDeleted += OnSerieDeleted;
+       LoadSeries();
    }
    public Serie(SerieDto dto)
    {
@@ -104,12 +106,13 @@ public partial class Serie:ObservableObject
        LibraryId = dto.LibraryId;
    }
 
-   public static void LoadSeries()
+   private static void LoadSeries()
    {
          Task.Run(() =>
          {
              lock (LoadLock)
              {
+                 if (_isLoaded) return;
                  try
                  {
                      Optional<List<long>> seriesIdsResponse = ManaxApiSerieClient.GetSeriesIdsAsync().Result;
@@ -123,6 +126,7 @@ public partial class Serie:ObservableObject
                      lock (SeriesLock)
                      {
                          Series.AddOrUpdate(seriesIds.Select(serieId => new Serie(serieId)));
+                         _isLoaded = true;
                      }
                  }
                  catch (Exception e)

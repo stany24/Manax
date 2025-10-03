@@ -1,65 +1,29 @@
-using System.Collections.Generic;
+using System;
 using System.Collections.ObjectModel;
 using System.Drawing;
-using System.Linq;
 using System.Threading.Tasks;
+using DynamicData;
+using DynamicData.Binding;
 using ManaxClient.ViewModels.Popup.ConfirmCancel;
 using ManaxClient.ViewModels.Popup.ConfirmCancel.Content;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTO.Tag;
-using ManaxLibrary.Notifications;
 
 namespace ManaxClient.ViewModels.Pages.Tag;
 
 public class TagPageViewModel : PageViewModel
 {
-    public ObservableCollection<Models.Tag> Tags { get; } = [];
-    
+    private readonly ReadOnlyObservableCollection<Models.Tag> _tags;
+    public ReadOnlyObservableCollection<Models.Tag> Tags => _tags;
+
     public TagPageViewModel()
     {
-        Task.Run(LoadTags);
-        ServerNotification.OnTagCreated += OnTagCreated;
-        ServerNotification.OnTagDeleted += OnTagDeleted;
-    }
-    
-    ~TagPageViewModel()
-    {
-        ServerNotification.OnTagCreated -= OnTagCreated;
-        ServerNotification.OnTagDeleted -= OnTagDeleted;
-    }
-
-    private void OnTagDeleted(long tagId)
-    {
-        Models.Tag? found = Tags.FirstOrDefault(t => t.Id == tagId);
-        if (found == null) return;
-        Tags.Remove(found);
-    }
-
-    private void OnTagCreated(TagDto tag)
-    {
-        if (Tags.Any(t => t.Id == tag.Id)) {return;};
-        Tags.Add(new Models.Tag(tag));
-    }
-
-    private async void LoadTags()
-    {
-        try
-        {
-            
-            Optional<List<TagDto>> response = await ManaxApiTagClient.GetTagsAsync();
-            if (response.Failed)
-            {
-                InfoEmitted?.Invoke(this, "Erreur lors du chargement des tags.");
-                return;
-            }
-            Tags.Clear();
-            foreach (TagDto tag in response.GetValue()) Tags.Add(new Models.Tag(tag));
-        }
-        catch
-        {
-            InfoEmitted?.Invoke(this, "Erreur lors du chargement des tags.");
-        }
+        SortExpressionComparer<Models.Tag> comparer = SortExpressionComparer<Models.Tag>.Descending(tag => tag.Name);
+        Models.Tag.Tags
+            .Connect()
+            .SortAndBind(out _tags, comparer)
+            .Subscribe();
     }
 
     public void CreateTag()
