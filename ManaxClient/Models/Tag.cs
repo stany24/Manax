@@ -8,6 +8,7 @@ using DynamicData;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTO.Tag;
+using ManaxLibrary.Logging;
 using ManaxLibrary.Notifications;
 
 namespace ManaxClient.Models;
@@ -21,8 +22,9 @@ public partial class Tag:ObservableObject
     
     [ObservableProperty] private long _id;
     [ObservableProperty] private string _name = string.Empty;
-
     [ObservableProperty] private Color _color;
+
+    public static EventHandler<string>? ErrorEmitted { get; set; }
 
     static Tag()
     {
@@ -54,6 +56,9 @@ public partial class Tag:ObservableObject
                     Optional<List<TagDto>> response = ManaxApiTagClient.GetTagsAsync().Result;
                     if (response.Failed)
                     {
+                        const string message = "failed to load tags.";
+                        Logger.LogFailure(message,Environment.StackTrace);
+                        ErrorEmitted?.Invoke(null, message);
                         return;
                     }
 
@@ -66,7 +71,9 @@ public partial class Tag:ObservableObject
             }
             catch(Exception e)
             {
-                Console.WriteLine(e);
+                const string message = "An error occurred while loading tags.";
+                Logger.LogError(message,e,Environment.StackTrace);
+                ErrorEmitted?.Invoke(null, message);
             }
         });
     }

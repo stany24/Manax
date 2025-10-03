@@ -40,7 +40,6 @@ public partial class SeriePageViewModel : PageViewModel
             .SortAndBind(out _ranks, comparer)
             .Subscribe();
         Serie = new Models.Serie(serieId);
-        Serie.ErrorEmitted += (_, msg) => { InfoEmitted?.Invoke(this, msg); };
         Serie.LoadInfo();
         Serie.LoadChapters();
         Serie.LoadPoster();

@@ -14,7 +14,6 @@ namespace ManaxClient.Models;
 
 public partial class Library:ObservableObject
 {
-    
     [ObservableProperty] private long _id;
     [ObservableProperty] private  string _name = string.Empty;
     [ObservableProperty] private  DateTime _creation;
@@ -22,7 +21,7 @@ public partial class Library:ObservableObject
     private readonly ReadOnlyObservableCollection<Serie> _series;
     public ReadOnlyObservableCollection<Serie> Series => _series;
     
-    public EventHandler<string>? ErrorEmitted;
+    public static EventHandler<string>? ErrorEmitted { get; set; }
 
     public Library(LibraryDto dto)
     {
@@ -75,6 +74,7 @@ public partial class Library:ObservableObject
                 Optional<LibraryDto> libraryResponse = ManaxApiLibraryClient.GetLibraryAsync(Id).Result;
                 if (libraryResponse.Failed)
                 {
+                    Logger.LogFailure(libraryResponse.Error, Environment.StackTrace);
                     ErrorEmitted?.Invoke(this, libraryResponse.Error);
                     return;
                 }
@@ -83,7 +83,9 @@ public partial class Library:ObservableObject
             }
             catch (Exception e)
             {
-                Logger.LogError("Failed to load the library with ID: " + Id, e, Environment.StackTrace);
+                string error = "Failed to load the library with ID: " + Id;
+                Logger.LogError(error, e, Environment.StackTrace);
+                ErrorEmitted?.Invoke(this, error);
             }
         });
     }

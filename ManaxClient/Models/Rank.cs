@@ -22,6 +22,8 @@ public partial class Rank:ObservableObject
     [ObservableProperty] private long _id;
     [ObservableProperty] private int _value;
     [ObservableProperty] private string _name = string.Empty;
+    
+    public static EventHandler<string>? ErrorEmitted { get; set; }
 
     static Rank()
     {
@@ -82,10 +84,7 @@ public partial class Rank:ObservableObject
                     if (ranksResponse.Failed)
                     {
                         Logger.LogFailure(ranksResponse.Error,Environment.StackTrace);
-                        lock (RanksLock)
-                        {
-                            Ranks.Clear();
-                        }
+                        ErrorEmitted?.Invoke(null,ranksResponse.Error);
                         return;
                     }
 
@@ -104,10 +103,7 @@ public partial class Rank:ObservableObject
                 {
                     const string error = "Failed to load ranks from server";
                     Logger.LogError(error,e,Environment.StackTrace);
-                    lock (RanksLock)
-                    {
-                        Ranks.Clear();
-                    }
+                    ErrorEmitted?.Invoke(null,error);
                 }
             }
         });

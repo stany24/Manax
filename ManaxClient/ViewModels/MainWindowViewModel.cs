@@ -53,6 +53,12 @@ public partial class MainWindowViewModel : ObservableObject
         _history.OnPageChanging += _ =>
         {
             if (CurrentPageViewModel is not LoginPageViewModel login) return;
+            Library.ErrorEmitted += (_,e) => ShowInfo(e);
+            Serie.ErrorEmitted += (_,e) => ShowInfo(e);
+            Chapter.ErrorEmitted += (_,e) => ShowInfo(e);
+            Rank.ErrorEmitted += (_,e) => ShowInfo(e);
+            Tag.ErrorEmitted += (_,e) => ShowInfo(e);
+            User.ErrorEmitted += (_,e) => ShowInfo(e);
             IsAdmin = login.IsAdmin();
             ServerNotification.OnRunningTasks += OnRunningTasks;
             ServerNotification.OnLibraryCreated += OnLibraryCreated;

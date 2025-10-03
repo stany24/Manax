@@ -42,7 +42,7 @@ public partial class Serie:ObservableObject
    private bool _chaptersLoaded;
    private bool _infoLoaded;
    
-   public EventHandler<string>? ErrorEmitted;
+   public static EventHandler<string>? ErrorEmitted { get; set; }
 
    public Serie(long id) : this(new SerieDto { Id = id })
    {

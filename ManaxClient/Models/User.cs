@@ -6,6 +6,7 @@ using DynamicData;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTO.User;
+using ManaxLibrary.Logging;
 using ManaxLibrary.Notifications;
 
 namespace ManaxClient.Models;
@@ -19,6 +20,8 @@ public partial class User:ObservableObject
     [ObservableProperty] private string _username = string.Empty;
     [ObservableProperty] private UserRole _role;
     [ObservableProperty] private DateTime _lastLogin;
+    
+    public static EventHandler<string>? ErrorEmitted { get; set; }
 
     static User()
     {
@@ -40,28 +43,41 @@ public partial class User:ObservableObject
 
     private static void LoadUsers()
     {
-        Task.Run(async () =>
+        Task.Run(async void () =>
         {
-            Optional<List<long>> usersIdsResponse = await ManaxApiUserClient.GetUsersIdsAsync();
-            if (usersIdsResponse.Failed)
+            try
             {
-                return;
+                Optional<List<long>> usersIdsResponse = await ManaxApiUserClient.GetUsersIdsAsync();
+                if (usersIdsResponse.Failed)
+                {
+                    Logger.LogFailure(usersIdsResponse.Error,Environment.StackTrace);
+                    ErrorEmitted?.Invoke(null, usersIdsResponse.Error);
+                    return;
+                }
+
+                List<long> ids = usersIdsResponse.GetValue();
+                foreach (long id in ids)
+                {
+                    Optional<UserDto> userResponse = await ManaxApiUserClient.GetUserAsync(id);
+                    if (userResponse.Failed)
+                    {
+                    
+                        Logger.LogFailure(userResponse.Error,Environment.StackTrace);
+                        ErrorEmitted?.Invoke(null, userResponse.Error);
+                        continue;
+                    }
+
+                    UserDto dto = userResponse.GetValue();
+                    lock (UsersLock)
+                    {
+                        Users.AddOrUpdate(new User(dto));
+                    }
+                }
             }
-
-            List<long> ids = usersIdsResponse.GetValue();
-            foreach (long id in ids)
+            catch (Exception e)
             {
-                Optional<UserDto> userResponse = await ManaxApiUserClient.GetUserAsync(id);
-                if (userResponse.Failed)
-                {
-                    continue;
-                }
-
-                UserDto dto = userResponse.GetValue();
-                lock (UsersLock)
-                {
-                    Users.AddOrUpdate(new User(dto));
-                }
+                const string error = "Failed to load users from server";
+                Logger.LogError(error,e,Environment.StackTrace);
             }
         });
     }

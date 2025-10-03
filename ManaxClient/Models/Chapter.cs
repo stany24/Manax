@@ -26,9 +26,9 @@ public partial class Chapter:ObservableObject
     [ObservableProperty] private DateTime _lastModification;
     [ObservableProperty] private ObservableCollection<Bitmap> _pages = [];
     [ObservableProperty] private ReadDto? _read;
-    
-    public EventHandler<string>? ErrorEmitted;
-    
+
+    public static EventHandler<string>? ErrorEmitted { get; set; }
+
     private CancellationTokenSource? _loadPagesCts;
 
     public Chapter(ChapterDto chapter)
