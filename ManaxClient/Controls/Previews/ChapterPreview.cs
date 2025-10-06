@@ -269,7 +269,7 @@ public class ChapterPreview : Button
             try
             {
                 if (viewmodel.Canceled()) return;
-                ReportedIssueChapterCreateDto issue = content.GetResult();
+                IssueChapterReportedCreateDto issue = content.GetResult();
                 ManaxLibrary.Optional<bool> chapterIssueAsync =
                     await ManaxApiIssueClient.CreateChapterIssueAsync(issue);
                 if (chapterIssueAsync.Failed)

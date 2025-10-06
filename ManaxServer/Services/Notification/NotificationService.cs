@@ -139,13 +139,13 @@ public class NotificationService(IHubContext<NotificationService> hubContext, IP
         TrySendToSingleClientAsync(existingRead.UserId, NotificationType.ReadCreated, existingRead.ChapterId);
     }
 
-    public void NotifySerieIssueCreatedAsync(ReportedIssueSerieDto issue)
+    public void NotifySerieIssueCreatedAsync(IssueSerieReportedDto issue)
     {
         TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadAllIssues,
             NotificationType.ReportedSerieIssueCreated, issue);
     }
 
-    public void NotifyChapterIssueCreatedAsync(ReportedIssueChapterDto issue)
+    public void NotifyChapterIssueCreatedAsync(IssueChapterReportedDto issue)
     {
         TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadAllIssues,
             NotificationType.ReportedChapterIssueCreated, issue);

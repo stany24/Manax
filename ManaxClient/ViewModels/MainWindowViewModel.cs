@@ -9,6 +9,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using ManaxClient.Models;
 using ManaxClient.Models.Collections;
 using ManaxClient.Models.History;
+using ManaxClient.Models.Issue;
 using ManaxClient.ViewModels.Pages;
 using ManaxClient.ViewModels.Pages.Home;
 using ManaxClient.ViewModels.Pages.Issue;
@@ -59,6 +60,7 @@ public partial class MainWindowViewModel : ObservableObject
             Rank.ErrorEmitted += (_,e) => ShowInfo(e);
             Tag.ErrorEmitted += (_,e) => ShowInfo(e);
             User.ErrorEmitted += (_,e) => ShowInfo(e);
+            IssueSource.ErrorEmitted += (_,e) => ShowInfo(e);
             IsAdmin = login.IsAdmin();
             ServerNotification.OnRunningTasks += OnRunningTasks;
             ServerNotification.OnLibraryCreated += OnLibraryCreated;

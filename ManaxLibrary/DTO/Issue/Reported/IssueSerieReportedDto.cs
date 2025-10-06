@@ -1,17 +1,17 @@
 // ReSharper disable InconsistentNaming
 // ReSharper disable PropertyCanBeMadeInitOnly.Global
 // ReSharper disable UnusedMember.Global
+// ReSharper disable UnusedAutoPropertyAccessor.Global
 
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
 
-
-using System.ComponentModel.DataAnnotations;
-
 namespace ManaxLibrary.DTO.Issue.Reported;
 
-public class ReportedIssueChapterCreateDto
+public class IssueSerieReportedDto
 {
-    [Required] public long ChapterId { get; set; }
-
-    [Required] public long ProblemId { get; set; }
+    public long Id { get; set; }
+    public DateTime CreatedAt { get; set; }
+    public long UserId { get; set; }
+    public long SerieId { get; set; }
+    public long ProblemId { get; set; }
 }

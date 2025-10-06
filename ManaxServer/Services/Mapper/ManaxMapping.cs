@@ -37,15 +37,15 @@ public class ManaxMapping : Mapping
         CreateMap<LibraryCreateDto, Library>();
         CreateMap<LibraryUpdateDto, Library>();
 
-        CreateMap<ReportedIssueChapter, ReportedIssueChapterDto>();
-        CreateMap<ReportedIssueChapterCreateDto, ReportedIssueChapter>();
-        CreateMap<ReportedIssueSerie, ReportedIssueSerieDto>();
-        CreateMap<ReportedIssueSerieCreateDto, ReportedIssueSerie>();
-        CreateMap<AutomaticIssueSerie, AutomaticIssueSerieDto>();
-        CreateMap<AutomaticIssueChapter, AutomaticIssueChapterDto>();
-        CreateMap<ReportedIssueChapterType, ReportedIssueChapterTypeDto>();
-        CreateMap<ReportedIssueSerieType, ReportedIssueSerieTypeDto>();
-        CreateMap<ReportedIssueChapterDto, ReportedIssueChapter>();
+        CreateMap<IssueChapterReported, IssueChapterReportedDto>();
+        CreateMap<IssueChapterReportedCreateDto, IssueChapterReported>();
+        CreateMap<IssueSerieReported, IssueSerieReportedDto>();
+        CreateMap<IssueSerieReportedCreateDto, IssueSerieReported>();
+        CreateMap<AutomaticIssueSerie, IssueSerieAutomaticDto>();
+        CreateMap<IssueChapterAutomatic, IssueChapterAutomaticDto>();
+        CreateMap<IssueChapterReportedType, IssueChapterReportedTypeDto>();
+        CreateMap<IssueSerieReportedType, IssueSerieReportedTypeDto>();
+        CreateMap<IssueChapterReportedDto, IssueChapterReported>();
 
         CreateMap<Chapter, ChapterDto>();
 

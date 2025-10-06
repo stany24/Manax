@@ -1,6 +1,6 @@
 namespace ManaxLibrary.DTO.Issue.Automatic;
 
-public enum AutomaticIssueSerieType
+public enum IssueSerieAutomaticType
 {
     PosterCouldNotOpen,
     PosterMissing,

@@ -16,5 +16,5 @@ public class AutomaticIssueSerie
     public long SerieId { get; set; }
 
     [ForeignKey(nameof(SerieId))] public Serie.Serie Serie { get; set; } = null!;
-    public AutomaticIssueSerieType Problem { get; set; }
+    public IssueSerieAutomaticType Problem { get; set; }
 }

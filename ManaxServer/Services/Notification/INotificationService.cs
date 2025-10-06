@@ -40,8 +40,8 @@ public interface INotificationService
     void NotifyReadCreated(ReadDto existingRead);
     void NotifyReadRemoved(ReadDto existingRead);
 
-    void NotifySerieIssueCreatedAsync(ReportedIssueSerieDto issue);
-    void NotifyChapterIssueCreatedAsync(ReportedIssueChapterDto issue);
+    void NotifySerieIssueCreatedAsync(IssueSerieReportedDto issue);
+    void NotifyChapterIssueCreatedAsync(IssueChapterReportedDto issue);
     void NotifyChapterIssueDeletedAsync(long issueId);
     void NotifySerieIssueDeletedAsync(long issueId);
 

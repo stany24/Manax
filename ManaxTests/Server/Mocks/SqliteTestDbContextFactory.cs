@@ -192,18 +192,18 @@ public static class SqliteTestDbContextFactory
             }
         ];
 
-        List<AutomaticIssueChapter> automaticIssuesChapter =
+        List<IssueChapterAutomatic> automaticIssuesChapter =
         [
             new()
             {
                 ChapterId = 1,
-                Problem = AutomaticIssueChapterType.ImageTooSmall,
+                Problem = IssueChapterAutomaticType.ImageTooSmall,
                 CreatedAt = DateTime.UtcNow
             },
             new()
             {
                 ChapterId = 2,
-                Problem = AutomaticIssueChapterType.CouldNotOpen,
+                Problem = IssueChapterAutomaticType.CouldNotOpen,
                 CreatedAt = DateTime.UtcNow
             }
         ];
@@ -213,18 +213,18 @@ public static class SqliteTestDbContextFactory
             new()
             {
                 SerieId = 1,
-                Problem = AutomaticIssueSerieType.PosterMissing,
+                Problem = IssueSerieAutomaticType.PosterMissing,
                 CreatedAt = DateTime.UtcNow
             },
             new()
             {
                 SerieId = 2,
-                Problem = AutomaticIssueSerieType.DescriptionTooShort,
+                Problem = IssueSerieAutomaticType.DescriptionTooShort,
                 CreatedAt = DateTime.UtcNow
             }
         ];
 
-        List<ReportedIssueChapterType> reportedIssueChapterTypes =
+        List<IssueChapterReportedType> reportedIssueChapterTypes =
         [
             new()
             {
@@ -243,7 +243,7 @@ public static class SqliteTestDbContextFactory
             }
         ];
 
-        List<ReportedIssueSerieType> reportedIssueSerieTypes =
+        List<IssueSerieReportedType> reportedIssueSerieTypes =
         [
             new()
             {
@@ -262,7 +262,7 @@ public static class SqliteTestDbContextFactory
             }
         ];
 
-        List<ReportedIssueChapter> reportedIssuesChapter =
+        List<IssueChapterReported> reportedIssuesChapter =
         [
             new()
             {
@@ -282,7 +282,7 @@ public static class SqliteTestDbContextFactory
             }
         ];
 
-        List<ReportedIssueSerie> reportedIssuesSerie =
+        List<IssueSerieReported> reportedIssuesSerie =
         [
             new()
             {

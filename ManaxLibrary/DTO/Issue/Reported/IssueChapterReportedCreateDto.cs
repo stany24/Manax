@@ -9,9 +9,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ManaxLibrary.DTO.Issue.Reported;
 
-public class ReportedIssueSerieCreateDto
+public class IssueChapterReportedCreateDto
 {
-    [Required] public long SerieId { get; set; }
+    [Required] public long ChapterId { get; set; }
 
     [Required] public long ProblemId { get; set; }
 }

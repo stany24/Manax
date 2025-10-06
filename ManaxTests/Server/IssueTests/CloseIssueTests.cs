@@ -9,12 +9,12 @@ public class CloseIssueTests : IssueTestsSetup
     [TestMethod]
     public async Task CloseChapterIssueWithValidIdRemovesIssue()
     {
-        ReportedIssueChapter issue = Context.ReportedIssuesChapter.First();
+        IssueChapterReported issue = Context.ReportedIssuesChapter.First();
         IActionResult result = await Controller.CloseChapterIssue(issue.Id);
 
         Assert.IsInstanceOfType(result, typeof(OkResult));
 
-        ReportedIssueChapter? deletedIssue = await Context.ReportedIssuesChapter.FindAsync(issue.Id);
+        IssueChapterReported? deletedIssue = await Context.ReportedIssuesChapter.FindAsync(issue.Id);
         Assert.IsNull(deletedIssue);
     }
 
@@ -30,7 +30,7 @@ public class CloseIssueTests : IssueTestsSetup
     public async Task CloseChapterIssueVerifyIssueCountDecreases()
     {
         int initialCount = Context.ReportedIssuesChapter.Count();
-        ReportedIssueChapter issue = Context.ReportedIssuesChapter.First();
+        IssueChapterReported issue = Context.ReportedIssuesChapter.First();
 
         IActionResult result = await Controller.CloseChapterIssue(issue.Id);
 
@@ -43,12 +43,12 @@ public class CloseIssueTests : IssueTestsSetup
     [TestMethod]
     public async Task CloseSerieIssueWithValidIdRemovesIssue()
     {
-        ReportedIssueSerie issue = Context.ReportedIssuesSerie.First();
+        IssueSerieReported issue = Context.ReportedIssuesSerie.First();
         IActionResult result = await Controller.CloseSerieIssue(issue.Id);
 
         Assert.IsInstanceOfType(result, typeof(OkResult));
 
-        ReportedIssueSerie? deletedIssue = await Context.ReportedIssuesSerie.FindAsync(issue.Id);
+        IssueSerieReported? deletedIssue = await Context.ReportedIssuesSerie.FindAsync(issue.Id);
         Assert.IsNull(deletedIssue);
     }
 
@@ -64,7 +64,7 @@ public class CloseIssueTests : IssueTestsSetup
     public async Task CloseSerieIssueVerifyIssueCountDecreases()
     {
         int initialCount = Context.ReportedIssuesSerie.Count();
-        ReportedIssueSerie issue = Context.ReportedIssuesSerie.First();
+        IssueSerieReported issue = Context.ReportedIssuesSerie.First();
 
         IActionResult result = await Controller.CloseSerieIssue(issue.Id);
 
@@ -77,34 +77,34 @@ public class CloseIssueTests : IssueTestsSetup
     [TestMethod]
     public async Task CloseChapterIssueOnlyRemovesSpecificIssue()
     {
-        ReportedIssueChapter issueToDelete = Context.ReportedIssuesChapter.First();
-        ReportedIssueChapter otherIssue = Context.ReportedIssuesChapter.First(i => i.Id != issueToDelete.Id);
+        IssueChapterReported issueToDelete = Context.ReportedIssuesChapter.First();
+        IssueChapterReported otherIssue = Context.ReportedIssuesChapter.First(i => i.Id != issueToDelete.Id);
 
         IActionResult result = await Controller.CloseChapterIssue(issueToDelete.Id);
 
         Assert.IsInstanceOfType(result, typeof(OkResult));
 
-        ReportedIssueChapter? deletedIssue = await Context.ReportedIssuesChapter.FindAsync(issueToDelete.Id);
+        IssueChapterReported? deletedIssue = await Context.ReportedIssuesChapter.FindAsync(issueToDelete.Id);
         Assert.IsNull(deletedIssue);
 
-        ReportedIssueChapter? remainingIssue = await Context.ReportedIssuesChapter.FindAsync(otherIssue.Id);
+        IssueChapterReported? remainingIssue = await Context.ReportedIssuesChapter.FindAsync(otherIssue.Id);
         Assert.IsNotNull(remainingIssue);
     }
 
     [TestMethod]
     public async Task CloseSerieIssueOnlyRemovesSpecificIssue()
     {
-        ReportedIssueSerie issueToDelete = Context.ReportedIssuesSerie.First();
-        ReportedIssueSerie otherIssue = Context.ReportedIssuesSerie.First(i => i.Id != issueToDelete.Id);
+        IssueSerieReported issueToDelete = Context.ReportedIssuesSerie.First();
+        IssueSerieReported otherIssue = Context.ReportedIssuesSerie.First(i => i.Id != issueToDelete.Id);
 
         IActionResult result = await Controller.CloseSerieIssue(issueToDelete.Id);
 
         Assert.IsInstanceOfType(result, typeof(OkResult));
 
-        ReportedIssueSerie? deletedIssue = await Context.ReportedIssuesSerie.FindAsync(issueToDelete.Id);
+        IssueSerieReported? deletedIssue = await Context.ReportedIssuesSerie.FindAsync(issueToDelete.Id);
         Assert.IsNull(deletedIssue);
 
-        ReportedIssueSerie? remainingIssue = await Context.ReportedIssuesSerie.FindAsync(otherIssue.Id);
+        IssueSerieReported? remainingIssue = await Context.ReportedIssuesSerie.FindAsync(otherIssue.Id);
         Assert.IsNotNull(remainingIssue);
     }
 }

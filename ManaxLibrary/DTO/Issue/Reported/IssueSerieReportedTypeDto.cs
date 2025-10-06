@@ -5,7 +5,7 @@
 
 namespace ManaxLibrary.DTO.Issue.Reported;
 
-public class ReportedIssueSerieTypeDto
+public class IssueSerieReportedTypeDto
 {
     public long Id { get; set; }
     public string Name { get; set; }

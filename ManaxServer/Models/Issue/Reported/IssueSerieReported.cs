@@ -8,17 +8,17 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ManaxServer.Models.Issue.Reported;
 
-[Index(nameof(UserId), nameof(ChapterId), nameof(ProblemId), IsUnique = true)]
-public class ReportedIssueChapter
+[Index(nameof(UserId), nameof(SerieId), nameof(ProblemId), IsUnique = true)]
+public class IssueSerieReported
 {
     public long Id { get; set; }
     public DateTime CreatedAt { get; set; }
     public long UserId { get; set; }
 
     [ForeignKey(nameof(UserId))] public User.User User { get; set; } = null!;
-    public long ChapterId { get; set; }
+    public long SerieId { get; set; }
 
-    [ForeignKey(nameof(ChapterId))] public Chapter.Chapter Chapter { get; set; } = null!;
+    [ForeignKey(nameof(SerieId))] public Serie.Serie Serie { get; set; } = null!;
     public long ProblemId { get; set; }
-    [ForeignKey(nameof(ProblemId))] public ReportedIssueChapterType Problem { get; set; } = null!;
+    [ForeignKey(nameof(ProblemId))] public IssueSerieReportedType Problem { get; set; } = null!;
 }

@@ -12,7 +12,7 @@ public class CreateIssueTests : IssueTestsSetup
     [TestMethod]
     public async Task CreateChapterIssueWithValidDataCreatesIssue()
     {
-        ReportedIssueChapterCreateDto createDto = new()
+        IssueChapterReportedCreateDto createDto = new()
         {
             ChapterId = 3,
             ProblemId = 1
@@ -22,7 +22,7 @@ public class CreateIssueTests : IssueTestsSetup
 
         Assert.IsInstanceOfType(result, typeof(CreatedResult));
 
-        ReportedIssueChapter? createdIssue = Context.ReportedIssuesChapter
+        IssueChapterReported? createdIssue = Context.ReportedIssuesChapter
             .FirstOrDefault(i =>
                 i.ChapterId == createDto.ChapterId && i.UserId == 1 && i.ProblemId == createDto.ProblemId);
         Assert.IsNotNull(createdIssue);
@@ -39,7 +39,7 @@ public class CreateIssueTests : IssueTestsSetup
             HttpContext = new DefaultHttpContext()
         };
 
-        ReportedIssueChapterCreateDto createDto = new()
+        IssueChapterReportedCreateDto createDto = new()
         {
             ChapterId = 1,
             ProblemId = 1
@@ -53,7 +53,7 @@ public class CreateIssueTests : IssueTestsSetup
     [TestMethod]
     public async Task CreateChapterIssueVerifyCreationDate()
     {
-        ReportedIssueChapterCreateDto createDto = new()
+        IssueChapterReportedCreateDto createDto = new()
         {
             ChapterId = 3,
             ProblemId = 2
@@ -65,7 +65,7 @@ public class CreateIssueTests : IssueTestsSetup
 
         Assert.IsInstanceOfType(result, typeof(CreatedResult));
 
-        ReportedIssueChapter? createdIssue = Context.ReportedIssuesChapter
+        IssueChapterReported? createdIssue = Context.ReportedIssuesChapter
             .FirstOrDefault(i => i.ChapterId == createDto.ChapterId && i.UserId == 1);
         Assert.IsNotNull(createdIssue);
         Assert.IsTrue(createdIssue.CreatedAt >= before);
@@ -75,7 +75,7 @@ public class CreateIssueTests : IssueTestsSetup
     [TestMethod]
     public async Task CreateSerieIssueWithValidDataCreatesIssue()
     {
-        ReportedIssueSerieCreateDto createDto = new()
+        IssueSerieReportedCreateDto createDto = new()
         {
             SerieId = 3,
             ProblemId = 1
@@ -85,7 +85,7 @@ public class CreateIssueTests : IssueTestsSetup
 
         Assert.IsInstanceOfType(result, typeof(CreatedResult));
 
-        ReportedIssueSerie? createdIssue = Context.ReportedIssuesSerie
+        IssueSerieReported? createdIssue = Context.ReportedIssuesSerie
             .FirstOrDefault(i => i.SerieId == createDto.SerieId && i.ProblemId == createDto.ProblemId && i.UserId == 1);
         Assert.IsNotNull(createdIssue);
         Assert.AreEqual(createDto.SerieId, createdIssue.SerieId);
@@ -101,7 +101,7 @@ public class CreateIssueTests : IssueTestsSetup
             HttpContext = new DefaultHttpContext()
         };
 
-        ReportedIssueSerieCreateDto createDto = new()
+        IssueSerieReportedCreateDto createDto = new()
         {
             SerieId = 1,
             ProblemId = 1
@@ -115,7 +115,7 @@ public class CreateIssueTests : IssueTestsSetup
     [TestMethod]
     public async Task CreateSerieIssueVerifyCreationDate()
     {
-        ReportedIssueSerieCreateDto createDto = new()
+        IssueSerieReportedCreateDto createDto = new()
         {
             SerieId = 3,
             ProblemId = 2
@@ -127,7 +127,7 @@ public class CreateIssueTests : IssueTestsSetup
 
         Assert.IsInstanceOfType(result, typeof(CreatedResult));
 
-        ReportedIssueSerie? createdIssue = Context.ReportedIssuesSerie
+        IssueSerieReported? createdIssue = Context.ReportedIssuesSerie
             .FirstOrDefault(i => i.SerieId == createDto.SerieId && i.ProblemId == createDto.ProblemId && i.UserId == 1);
         Assert.IsNotNull(createdIssue);
         Assert.IsTrue(createdIssue.CreatedAt >= before);
@@ -151,7 +151,7 @@ public class CreateIssueTests : IssueTestsSetup
             }
         };
 
-        ReportedIssueChapterCreateDto createDto = new()
+        IssueChapterReportedCreateDto createDto = new()
         {
             ChapterId = 1,
             ProblemId = 1
@@ -161,7 +161,7 @@ public class CreateIssueTests : IssueTestsSetup
 
         Assert.IsInstanceOfType(result, typeof(CreatedResult));
 
-        ReportedIssueChapter? createdIssue = Context.ReportedIssuesChapter
+        IssueChapterReported? createdIssue = Context.ReportedIssuesChapter
             .FirstOrDefault(i => i.ChapterId == createDto.ChapterId && i.UserId == 2);
         Assert.IsNotNull(createdIssue);
         Assert.AreEqual(2, createdIssue.UserId);
@@ -170,13 +170,13 @@ public class CreateIssueTests : IssueTestsSetup
     [TestMethod]
     public async Task CreateChapterIssueMultipleIssuesForSameChapterCreatesMultipleIssues()
     {
-        ReportedIssueChapterCreateDto firstDto = new()
+        IssueChapterReportedCreateDto firstDto = new()
         {
             ChapterId = 3,
             ProblemId = 1
         };
 
-        ReportedIssueChapterCreateDto secondDto = new()
+        IssueChapterReportedCreateDto secondDto = new()
         {
             ChapterId = 3,
             ProblemId = 2
@@ -195,13 +195,13 @@ public class CreateIssueTests : IssueTestsSetup
     [TestMethod]
     public async Task CreateSerieIssueMultipleIssuesForSameSerieCreatesMultipleIssues()
     {
-        ReportedIssueSerieCreateDto firstDto = new()
+        IssueSerieReportedCreateDto firstDto = new()
         {
             SerieId = 3,
             ProblemId = 1
         };
 
-        ReportedIssueSerieCreateDto secondDto = new()
+        IssueSerieReportedCreateDto secondDto = new()
         {
             SerieId = 3,
             ProblemId = 2
@@ -220,7 +220,7 @@ public class CreateIssueTests : IssueTestsSetup
     [TestMethod]
     public async Task CreateChapterIssueWithDuplicateDataReturnsConflict()
     {
-        ReportedIssueChapterCreateDto createDto = new()
+        IssueChapterReportedCreateDto createDto = new()
         {
             ChapterId = 3,
             ProblemId = 3
@@ -236,7 +236,7 @@ public class CreateIssueTests : IssueTestsSetup
     [TestMethod]
     public async Task CreateSerieIssueWithDuplicateDataReturnsConflict()
     {
-        ReportedIssueSerieCreateDto createDto = new()
+        IssueSerieReportedCreateDto createDto = new()
         {
             SerieId = 3,
             ProblemId = 3

@@ -102,11 +102,11 @@ public class MockNotificationService : INotificationService
     {
     }
 
-    public void NotifySerieIssueCreatedAsync(ReportedIssueSerieDto issue)
+    public void NotifySerieIssueCreatedAsync(IssueSerieReportedDto issue)
     {
     }
 
-    public void NotifyChapterIssueCreatedAsync(ReportedIssueChapterDto issue)
+    public void NotifyChapterIssueCreatedAsync(IssueChapterReportedDto issue)
     {
     }
 

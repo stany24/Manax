@@ -28,9 +28,9 @@ public partial class FixService
     {
         uint max = SettingsManager.Data.MaxDescriptionLength;
         uint min = SettingsManager.Data.MinDescriptionLength;
-        issueService.ManageSerieIssue(serie.Id, AutomaticIssueSerieType.DescriptionTooLong,
+        issueService.ManageSerieIssue(serie.Id, IssueSerieAutomaticType.DescriptionTooLong,
             serie.Description.Length > max);
-        issueService.ManageSerieIssue(serie.Id, AutomaticIssueSerieType.DescriptionTooShort,
+        issueService.ManageSerieIssue(serie.Id, IssueSerieAutomaticType.DescriptionTooShort,
             serie.Description.Length < min);
     }
 
@@ -39,7 +39,7 @@ public partial class FixService
         string[] chapters = Directory.GetFiles(serie.SavePath,
             "*." + SettingsManager.Data.ArchiveFormat.ToString().ToLower(CultureInfo.InvariantCulture),
             SearchOption.TopDirectoryOnly);
-        issueService.ManageSerieIssue(serie.Id, AutomaticIssueSerieType.MissingChapter, chapters.Length == 0);
+        issueService.ManageSerieIssue(serie.Id, IssueSerieAutomaticType.MissingChapter, chapters.Length == 0);
         if (chapters.Length == 0) return;
 
         Array.Sort(chapters);
@@ -47,7 +47,7 @@ public partial class FixService
         string last = Path.GetFileName(chapters[^1]);
         Match match = regex.Match(last);
         if (!match.Success) return;
-        issueService.ManageSerieIssue(serie.Id, AutomaticIssueSerieType.MissingChapter,
+        issueService.ManageSerieIssue(serie.Id, IssueSerieAutomaticType.MissingChapter,
             chapters.Length != Convert.ToInt32(match.Value, CultureInfo.InvariantCulture));
     }
 }

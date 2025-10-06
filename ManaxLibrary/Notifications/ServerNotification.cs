@@ -44,9 +44,9 @@ public static class ServerNotification
     public static event Action<ReadDto>? OnReadCreated;
     public static event Action<long>? OnReadDeleted;
 
-    public static event Action<ReportedIssueChapterDto>? OnReportedChapterIssueCreated;
+    public static event Action<IssueChapterReportedDto>? OnReportedChapterIssueCreated;
     public static event Action<long>? OnReportedChapterIssueDeleted;
-    public static event Action<ReportedIssueSerieDto>? OnReportedSerieIssueCreated;
+    public static event Action<IssueSerieReportedDto>? OnReportedSerieIssueCreated;
     public static event Action<long>? OnReportedSerieIssueDeleted;
 
     public static event Action<TagDto>? OnTagCreated;
@@ -128,13 +128,13 @@ public static class ServerNotification
         _hubConnection.On<long>(nameof(NotificationType.ReadDeleted),
             readId => { OnReadDeleted?.Invoke(readId); });
 
-        _hubConnection.On<ReportedIssueChapterDto>(nameof(NotificationType.ReportedChapterIssueCreated),
+        _hubConnection.On<IssueChapterReportedDto>(nameof(NotificationType.ReportedChapterIssueCreated),
             issueData => { OnReportedChapterIssueCreated?.Invoke(issueData); });
 
         _hubConnection.On<long>(nameof(NotificationType.ReportedChapterIssueDeleted),
             issueId => { OnReportedChapterIssueDeleted?.Invoke(issueId); });
 
-        _hubConnection.On<ReportedIssueSerieDto>(nameof(NotificationType.ReportedSerieIssueCreated),
+        _hubConnection.On<IssueSerieReportedDto>(nameof(NotificationType.ReportedSerieIssueCreated),
             issueData => { OnReportedSerieIssueCreated?.Invoke(issueData); });
 
         _hubConnection.On<long>(nameof(NotificationType.ReportedSerieIssueDeleted),

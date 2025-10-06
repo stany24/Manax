@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ManaxServer.Migrations
 {
     [DbContext(typeof(ManaxContext))]
-    [Migration("20251001113434_ManaxV0.1")]
+    [Migration("20251006090006_ManaxV0.1")]
     partial class ManaxV01
     {
         /// <inheritdoc />
@@ -56,22 +56,6 @@ namespace ManaxServer.Migrations
                     b.ToTable("Chapters");
                 });
 
-            modelBuilder.Entity("ManaxServer.Models.Issue.Automatic.AutomaticIssueChapter", b =>
-                {
-                    b.Property<long>("ChapterId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("Problem")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("ChapterId", "Problem");
-
-                    b.ToTable("AutomaticIssuesChapter");
-                });
-
             modelBuilder.Entity("ManaxServer.Models.Issue.Automatic.AutomaticIssueSerie", b =>
                 {
                     b.Property<long>("SerieId")
@@ -88,7 +72,23 @@ namespace ManaxServer.Migrations
                     b.ToTable("AutomaticIssuesSerie");
                 });
 
-            modelBuilder.Entity("ManaxServer.Models.Issue.Reported.ReportedIssueChapter", b =>
+            modelBuilder.Entity("ManaxServer.Models.Issue.Automatic.IssueChapterAutomatic", b =>
+                {
+                    b.Property<long>("ChapterId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Problem")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("ChapterId", "Problem");
+
+                    b.ToTable("AutomaticIssuesChapter");
+                });
+
+            modelBuilder.Entity("ManaxServer.Models.Issue.Reported.IssueChapterReported", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -118,7 +118,7 @@ namespace ManaxServer.Migrations
                     b.ToTable("ReportedIssuesChapter");
                 });
 
-            modelBuilder.Entity("ManaxServer.Models.Issue.Reported.ReportedIssueChapterType", b =>
+            modelBuilder.Entity("ManaxServer.Models.Issue.Reported.IssueChapterReportedType", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -134,7 +134,7 @@ namespace ManaxServer.Migrations
                     b.ToTable("ReportedIssueChapterTypes");
                 });
 
-            modelBuilder.Entity("ManaxServer.Models.Issue.Reported.ReportedIssueSerie", b =>
+            modelBuilder.Entity("ManaxServer.Models.Issue.Reported.IssueSerieReported", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -164,7 +164,7 @@ namespace ManaxServer.Migrations
                     b.ToTable("ReportedIssuesSerie");
                 });
 
-            modelBuilder.Entity("ManaxServer.Models.Issue.Reported.ReportedIssueSerieType", b =>
+            modelBuilder.Entity("ManaxServer.Models.Issue.Reported.IssueSerieReportedType", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -461,17 +461,6 @@ namespace ManaxServer.Migrations
                     b.Navigation("Serie");
                 });
 
-            modelBuilder.Entity("ManaxServer.Models.Issue.Automatic.AutomaticIssueChapter", b =>
-                {
-                    b.HasOne("ManaxServer.Models.Chapter.Chapter", "Chapter")
-                        .WithMany()
-                        .HasForeignKey("ChapterId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Chapter");
-                });
-
             modelBuilder.Entity("ManaxServer.Models.Issue.Automatic.AutomaticIssueSerie", b =>
                 {
                     b.HasOne("ManaxServer.Models.Serie.Serie", "Serie")
@@ -483,7 +472,7 @@ namespace ManaxServer.Migrations
                     b.Navigation("Serie");
                 });
 
-            modelBuilder.Entity("ManaxServer.Models.Issue.Reported.ReportedIssueChapter", b =>
+            modelBuilder.Entity("ManaxServer.Models.Issue.Automatic.IssueChapterAutomatic", b =>
                 {
                     b.HasOne("ManaxServer.Models.Chapter.Chapter", "Chapter")
                         .WithMany()
@@ -491,7 +480,18 @@ namespace ManaxServer.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ManaxServer.Models.Issue.Reported.ReportedIssueChapterType", "Problem")
+                    b.Navigation("Chapter");
+                });
+
+            modelBuilder.Entity("ManaxServer.Models.Issue.Reported.IssueChapterReported", b =>
+                {
+                    b.HasOne("ManaxServer.Models.Chapter.Chapter", "Chapter")
+                        .WithMany()
+                        .HasForeignKey("ChapterId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ManaxServer.Models.Issue.Reported.IssueChapterReportedType", "Problem")
                         .WithMany()
                         .HasForeignKey("ProblemId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -510,9 +510,9 @@ namespace ManaxServer.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("ManaxServer.Models.Issue.Reported.ReportedIssueSerie", b =>
+            modelBuilder.Entity("ManaxServer.Models.Issue.Reported.IssueSerieReported", b =>
                 {
-                    b.HasOne("ManaxServer.Models.Issue.Reported.ReportedIssueSerieType", "Problem")
+                    b.HasOne("ManaxServer.Models.Issue.Reported.IssueSerieReportedType", "Problem")
                         .WithMany()
                         .HasForeignKey("ProblemId")
                         .OnDelete(DeleteBehavior.Cascade)

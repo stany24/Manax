@@ -124,18 +124,18 @@ public class Program
         if (!manaxContext.ReportedIssueChapterTypes.Any())
         {
             manaxContext.ReportedIssueChapterTypes.AddRange(
-                new ReportedIssueChapterType { Name = "Missing pages" },
-                new ReportedIssueChapterType { Name = "Wrong order" },
-                new ReportedIssueChapterType { Name = "Bad quality" });
+                new IssueChapterReportedType { Name = "Missing pages" },
+                new IssueChapterReportedType { Name = "Wrong order" },
+                new IssueChapterReportedType { Name = "Bad quality" });
             manaxContext.SaveChanges();
         }
 
         if (!manaxContext.ReportedIssueSerieTypes.Any())
         {
             manaxContext.ReportedIssueSerieTypes.AddRange(
-                new ReportedIssueSerieType { Name = "Wrong description" },
-                new ReportedIssueSerieType { Name = "Wrong poster" },
-                new ReportedIssueSerieType { Name = "Wrong name" });
+                new IssueSerieReportedType { Name = "Wrong description" },
+                new IssueSerieReportedType { Name = "Wrong poster" },
+                new IssueSerieReportedType { Name = "Wrong name" });
             manaxContext.SaveChanges();
         }
     }

@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ManaxServer.Models.Issue.Reported;
 
-public class ReportedIssueSerieType
+public class IssueSerieReportedType
 {
     public long Id { get; set; }
     [MaxLength(128)] public string Name { get; set; } = null!;

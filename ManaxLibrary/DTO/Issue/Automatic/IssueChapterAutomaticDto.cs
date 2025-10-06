@@ -6,9 +6,9 @@
 
 namespace ManaxLibrary.DTO.Issue.Automatic;
 
-public class AutomaticIssueChapterDto
+public class IssueChapterAutomaticDto
 {
     public DateTime CreatedAt { get; set; }
     public long ChapterId { get; set; }
-    public AutomaticIssueChapterType Problem { get; set; }
+    public IssueChapterAutomaticType Problem { get; set; }
 }

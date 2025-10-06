@@ -1,6 +1,6 @@
 namespace ManaxLibrary.DTO.Issue.Automatic;
 
-public enum AutomaticIssueChapterType
+public enum IssueChapterAutomaticType
 {
     ImageTooSmall,
     CouldNotOpen,

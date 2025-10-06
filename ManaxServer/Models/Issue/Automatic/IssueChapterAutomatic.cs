@@ -10,11 +10,11 @@ using Microsoft.EntityFrameworkCore;
 namespace ManaxServer.Models.Issue.Automatic;
 
 [PrimaryKey(nameof(ChapterId), nameof(Problem))]
-public class AutomaticIssueChapter
+public class IssueChapterAutomatic
 {
     public DateTime CreatedAt { get; set; }
     public long ChapterId { get; set; }
 
     [ForeignKey(nameof(ChapterId))] public Chapter.Chapter Chapter { get; set; } = null!;
-    public AutomaticIssueChapterType Problem { get; set; }
+    public IssueChapterAutomaticType Problem { get; set; }
 }

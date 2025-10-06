@@ -13,7 +13,7 @@
     IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).CanReadAllIssues}">
 
     <UserControl.Resources>
-        <DataTemplate x:Key="AutomaticChapterIssueTemplate" DataType="issue:ClientAutomaticIssueChapter">
+        <DataTemplate x:Key="AutomaticChapterIssueTemplate" DataType="issue:IssueChapterAutomatic">
             <previews:IssuePreview IssueColor="#DC3545"
                                    BadgeText="Automatique"
                                    Closable="False"
@@ -34,7 +34,7 @@
             </previews:IssuePreview>
         </DataTemplate>
 
-        <DataTemplate x:Key="AutomaticSerieIssueTemplate" DataType="issue:ClientAutomaticIssueSerie">
+        <DataTemplate x:Key="AutomaticSerieIssueTemplate" DataType="issue:IssueSerieAutomatic">
             <previews:IssuePreview IssueColor="#DC3545"
                                    BadgeText="Automatique"
                                    Closable="False"
@@ -55,7 +55,7 @@
             </previews:IssuePreview>
         </DataTemplate>
 
-        <DataTemplate x:Key="ReportedChapterIssueTemplate" DataType="issue:ClientReportedIssueChapter">
+        <DataTemplate x:Key="ReportedChapterIssueTemplate" DataType="issue:IssueChapterReported">
             <previews:IssuePreview IssueColor="#FD7E14"
                                    BadgeText="Signalé"
                                    Closable="True"
@@ -74,7 +74,7 @@
             </previews:IssuePreview>
         </DataTemplate>
 
-        <DataTemplate x:Key="ReportedSerieIssueTemplate" DataType="issue:ClientReportedIssueSerie">
+        <DataTemplate x:Key="ReportedSerieIssueTemplate" DataType="issue:IssueSerieReported">
             <previews:IssuePreview IssueColor="#FD7E14"
                                    BadgeText="Signalé"
                                    Closable="True"

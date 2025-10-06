@@ -20,7 +20,7 @@ namespace ManaxClient.Models;
 
 public partial class Serie:ObservableObject
 {
-    public static readonly SourceCache<Serie, long> Series = new (x => x.Id);
+    public static readonly SourceCache<Serie, long> Series = new (serie => serie.Id);
     private static bool _isLoaded;
     private static readonly object SeriesLock = new();
     private static readonly object LoadLock = new();
