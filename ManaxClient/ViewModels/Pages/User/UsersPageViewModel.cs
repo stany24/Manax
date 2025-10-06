@@ -4,6 +4,8 @@ using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using DynamicData;
 using DynamicData.Binding;
+using ManaxClient.Models;
+using ManaxClient.Models.Sources;
 using ManaxClient.ViewModels.Popup.ConfirmCancel;
 using ManaxClient.ViewModels.Popup.ConfirmCancel.Content;
 using ManaxLibrary;
@@ -21,7 +23,7 @@ public class UsersPageViewModel : PageViewModel
     public UsersPageViewModel()
     {
         SortExpressionComparer<Models.User> comparer = SortExpressionComparer<Models.User>.Descending(user => user.Username);
-        Models.User.Users
+        UserSource.Users
             .Connect()
             .SortAndBind(out _users, comparer)
             .Subscribe();

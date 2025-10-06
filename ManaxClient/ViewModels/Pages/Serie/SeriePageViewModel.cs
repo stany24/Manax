@@ -10,6 +10,8 @@ using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData;
 using DynamicData.Binding;
+using ManaxClient.Models;
+using ManaxClient.Models.Sources;
 using ManaxClient.ViewModels.Pages.Chapter;
 using ManaxClient.ViewModels.Popup.ConfirmCancel;
 using ManaxClient.ViewModels.Popup.ConfirmCancel.Content;
@@ -32,9 +34,8 @@ public partial class SeriePageViewModel : PageViewModel
 
     public SeriePageViewModel(Models.Serie serie)
     {
-        Models.Rank.LoadRanks();
         SortExpressionComparer<Models.Rank> comparer = SortExpressionComparer<Models.Rank>.Descending(t => t.Value);
-        Models.Rank.Ranks
+        RankSource.Ranks
             .Connect()
             .SortAndBind(out _ranks, comparer)
             .Subscribe();

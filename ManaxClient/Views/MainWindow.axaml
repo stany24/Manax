@@ -48,7 +48,7 @@
                                 <DataTemplate>
                                     <Button Classes="sidebar"
                                             Command="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).ShowLibrary}"
-                                            CommandParameter="{Binding Id}">
+                                            CommandParameter="{Binding }">
                                         <StackPanel Orientation="Horizontal" Spacing="12">
                                             <TextBlock Text="📚" FontSize="14" />
                                             <TextBlock Text="{Binding Name}" TextTrimming="CharacterEllipsis" />

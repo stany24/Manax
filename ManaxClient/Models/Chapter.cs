@@ -43,7 +43,6 @@ public partial class Chapter:ObservableObject
 
     ~Chapter()
     {
-        
         ServerNotification.OnChapterModified -= OnChapterModified;
     }
     

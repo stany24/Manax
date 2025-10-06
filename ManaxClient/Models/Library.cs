@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData;
 using DynamicData.Binding;
+using ManaxClient.Models.Sources;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTO.Library;
@@ -28,7 +29,7 @@ public partial class Library:ObservableObject
         ServerNotification.OnLibraryUpdated += OnLibraryUpdated;
         FromLibraryDto(dto);
         SortExpressionComparer<Serie> comparer = SortExpressionComparer<Serie>.Descending(serie => serie.Title);
-        Serie.Series
+        SerieSource.Series
             .Connect()
             .Filter(serie => serie.LibraryId == Id)
             .SortAndBind(out _series, comparer)

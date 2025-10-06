@@ -1,16 +1,16 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Media.Imaging;
-using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData;
-using ManaxClient.Models.Collections;
+using DynamicData.Binding;
+using ManaxClient.Models.Sources;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
-using ManaxLibrary.DTO.Chapter;
 using ManaxLibrary.DTO.Read;
 using ManaxLibrary.DTO.Serie;
 using ManaxLibrary.Logging;
@@ -20,11 +20,6 @@ namespace ManaxClient.Models;
 
 public partial class Serie:ObservableObject
 {
-    public static readonly SourceCache<Serie, long> Series = new (serie => serie.Id);
-    private static bool _isLoaded;
-    private static readonly object SeriesLock = new();
-    private static readonly object LoadLock = new();
-    
    [ObservableProperty] private long _id;
    [ObservableProperty] private long? _libraryId;
    [ObservableProperty] private string _title = string.Empty;
@@ -36,31 +31,28 @@ public partial class Serie:ObservableObject
    [ObservableProperty] private List<Tag> _tags = [];
    
    [ObservableProperty] private Bitmap? _poster;
-   [ObservableProperty] private SortedObservableCollection<Chapter> _chapters= new([]) { SortingSelector = dto => dto.Number };
+   private readonly ReadOnlyObservableCollection<Chapter> _chapters;
+   public ReadOnlyObservableCollection<Chapter> Chapters => _chapters;
    
    private bool _posterLoaded;
-   private bool _chaptersLoaded;
    private bool _infoLoaded;
    
    public static EventHandler<string>? ErrorEmitted { get; set; }
 
    public Serie(long id) : this(new SerieDto { Id = id })
    {
+       SortExpressionComparer<Chapter> comparer = SortExpressionComparer<Chapter>.Descending(chapter => chapter.Number);
+       ChapterSource.Chapters
+           .Connect()
+           .Filter(chapter => chapter.SerieId == Id)
+           .SortAndBind(out _chapters, comparer);
    }
-
-   static Serie()
-   {
-       ServerNotification.OnSerieCreated += OnSerieCreated;
-       ServerNotification.OnSerieDeleted += OnSerieDeleted;
-       LoadSeries();
-   }
+   
    public Serie(SerieDto dto)
    {
        FromSerieDto(dto);
        ServerNotification.OnSerieUpdated += OnSerieUpdated;
        ServerNotification.OnPosterModified += OnPosterModified;
-       ServerNotification.OnChapterAdded += OnChapterAdded;
-       ServerNotification.OnChapterDeleted += OnChapterDeleted;
        ServerNotification.OnReadCreated += OnReadCreated;
        ServerNotification.OnReadDeleted += OnReadDeleted;
    }
@@ -69,29 +61,8 @@ public partial class Serie:ObservableObject
    {
        ServerNotification.OnSerieUpdated -= OnSerieUpdated;
        ServerNotification.OnPosterModified -= OnPosterModified;
-       ServerNotification.OnChapterAdded -= OnChapterAdded;
-       ServerNotification.OnChapterDeleted -= OnChapterDeleted;
        ServerNotification.OnReadCreated -= OnReadCreated;
        ServerNotification.OnReadDeleted -= OnReadDeleted;
-   }
-   
-   private static void OnSerieCreated(SerieDto dto)
-   {
-       Serie serie = new(dto);
-       serie.LoadInfo();
-       serie.LoadPoster();
-       lock (SeriesLock)
-       {
-           Series.AddOrUpdate(serie);
-       }
-   }
-
-   private static void OnSerieDeleted(long id)
-   {
-       lock (SeriesLock)
-       {
-           Series.RemoveKey(id);
-       }
    }
    
    private void FromSerieDto(SerieDto dto)
@@ -104,37 +75,6 @@ public partial class Serie:ObservableObject
        LastModification = dto.LastModification;
        Tags = dto.Tags.Select(t => new Tag(t)).ToList();
        LibraryId = dto.LibraryId;
-   }
-
-   private static void LoadSeries()
-   {
-         Task.Run(() =>
-         {
-             lock (LoadLock)
-             {
-                 if (_isLoaded) return;
-                 try
-                 {
-                     Optional<List<long>> seriesIdsResponse = ManaxApiSerieClient.GetSeriesIdsAsync().Result;
-                     if (seriesIdsResponse.Failed)
-                     {
-                         Logger.LogFailure(seriesIdsResponse.Error);
-                         return;
-                     }
-    
-                     List<long> seriesIds = seriesIdsResponse.GetValue();
-                     lock (SeriesLock)
-                     {
-                         Series.AddOrUpdate(seriesIds.Select(serieId => new Serie(serieId)));
-                         _isLoaded = true;
-                     }
-                 }
-                 catch (Exception e)
-                 {
-                     Logger.LogError("Failed to load series", e);
-                 }
-             }
-         });
    }
    
    public void LoadInfo()
@@ -188,77 +128,7 @@ public partial class Serie:ObservableObject
 
     public void LoadChapters()
     {
-        if (_chaptersLoaded) return;
-        Task.Run(() =>
-        {
-            try
-            {
-                Optional<List<long>> response = ManaxApiSerieClient.GetSerieChaptersAsync(Id).Result;
-                if (response.Failed)
-                {
-                    return response.Error;
-                }
-
-                List<long> chaptersIds = response.GetValue();
-                List<ChapterDto> chapters = [];
-                foreach (long chapterId in chaptersIds)
-                {
-                    Optional<ChapterDto> chapterResponse = ManaxApiChapterClient.GetChapterAsync(chapterId).Result;
-                    if (chapterResponse.Failed)
-                    {
-                        ErrorEmitted?.Invoke(this, chapterResponse.Error);
-                        continue;
-                    }
-                    chapters.Add(chapterResponse.GetValue());
-                }
-
-                Dispatcher.UIThread.Invoke(() =>
-                {
-                    foreach (ChapterDto chapter in chapters) Chapters.Add(new Chapter(chapter));
-                });
-                _chaptersLoaded = true;
-                LoadReads(Id);
-            }
-            catch (Exception e)
-            {
-                string message = "Failed to load chapters for serie with ID: " + Id;
-                ErrorEmitted?.Invoke(this, message);
-                Logger.LogError(message, e);
-            }
-
-            return null;
-        });
-    }
-    
-    private void LoadReads(long serieId)
-    {
-        try
-        {
-            Optional<List<ReadDto>> response = ManaxApiSerieClient.GetSerieChaptersReadAsync(serieId).Result;
-            if (response.Failed)
-            {
-                ErrorEmitted?.Invoke(this, response.Error);
-                return;
-            }
-
-            List<ReadDto> reads = response.GetValue();
-
-            Dispatcher.UIThread.Post(() =>
-            {
-                foreach (ReadDto read in reads)
-                {
-                    Chapter? chapter = Chapters.FirstOrDefault(c => c.Id == read.ChapterId);
-                    if (chapter == null) continue;
-                    chapter.Read = read;
-                }
-            });
-        }
-        catch (Exception e)
-        {
-            string message = "Failed to load chapters for serie with ID: " + serieId;
-            ErrorEmitted?.Invoke(this, message);
-            Logger.LogError(message, e);
-        }
+        ChapterSource.LoadSerieChapters(Id);
     }
     
     private void OnReadDeleted(long obj)
@@ -279,19 +149,6 @@ public partial class Serie:ObservableObject
     {
         if (serie.Id != Id) return;
         FromSerieDto(serie);
-    }
-
-    private void OnChapterAdded(ChapterDto chapter)
-    {
-        if (chapter.SerieId != Id) return;
-        Chapters.Add(new Chapter(chapter));
-    }
-
-    private void OnChapterDeleted(long chapterId)
-    {
-        Chapter? chapter = Chapters.FirstOrDefault(c => c.Id == chapterId);
-        if (chapter == null) return;
-        Chapters.Remove(chapter);
     }
     
     private void OnPosterModified(long id)

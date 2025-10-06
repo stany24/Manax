@@ -8,6 +8,8 @@ using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData;
 using DynamicData.Binding;
+using ManaxClient.Models;
+using ManaxClient.Models.Sources;
 using ManaxClient.ViewModels.Pages.Serie;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
@@ -25,7 +27,7 @@ public partial class HomePageViewModel : PageViewModel
     public HomePageViewModel()
     {
         SortExpressionComparer<Models.Serie> comparer = SortExpressionComparer<Models.Serie>.Descending(serie => serie.Title);
-        Models.Serie.Series
+        SerieSource.Series
             .Connect()
             .SortAndBind(out _series, comparer)
             .Subscribe(changes =>

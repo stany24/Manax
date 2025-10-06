@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia;
@@ -10,6 +9,7 @@ using ManaxClient.Models;
 using ManaxClient.Models.Collections;
 using ManaxClient.Models.History;
 using ManaxClient.Models.Issue;
+using ManaxClient.Models.Sources;
 using ManaxClient.ViewModels.Pages;
 using ManaxClient.ViewModels.Pages.Home;
 using ManaxClient.ViewModels.Pages.Issue;
@@ -21,7 +21,6 @@ using ManaxClient.ViewModels.Pages.Stats;
 using ManaxClient.ViewModels.Pages.Tag;
 using ManaxClient.ViewModels.Pages.User;
 using ManaxLibrary.ApiCaller;
-using ManaxLibrary.DTO.Library;
 using ManaxLibrary.Notifications;
 
 namespace ManaxClient.ViewModels;
@@ -31,7 +30,7 @@ public partial class MainWindowViewModel : ObservableObject
     private readonly PageHistoryManager _history = new();
     [ObservableProperty] private ObservableCollection<string> _infos = [];
     [ObservableProperty] private bool _isAdmin;
-    [ObservableProperty] private ObservableCollection<LibraryDto> _libraries = [];
+    [ObservableProperty] private ObservableCollection<Library> _libraries = [];
     [ObservableProperty] private Thickness _pageMargin = new(0, 0, 0, 0);
     [ObservableProperty] private Controls.Popups.Popup? _popup;
     [ObservableProperty] private SortedObservableCollection<TaskItem> _runningTasks = new([]);
@@ -57,16 +56,13 @@ public partial class MainWindowViewModel : ObservableObject
             Library.ErrorEmitted += (_,e) => ShowInfo(e);
             Serie.ErrorEmitted += (_,e) => ShowInfo(e);
             Chapter.ErrorEmitted += (_,e) => ShowInfo(e);
-            Rank.ErrorEmitted += (_,e) => ShowInfo(e);
-            Tag.ErrorEmitted += (_,e) => ShowInfo(e);
-            User.ErrorEmitted += (_,e) => ShowInfo(e);
+            RankSource.ErrorEmitted += (_,e) => ShowInfo(e);
+            TagSource.ErrorEmitted += (_,e) => ShowInfo(e);
+            UserSource.ErrorEmitted += (_,e) => ShowInfo(e);
             IssueSource.ErrorEmitted += (_,e) => ShowInfo(e);
             IsAdmin = login.IsAdmin();
             ServerNotification.OnRunningTasks += OnRunningTasks;
-            ServerNotification.OnLibraryCreated += OnLibraryCreated;
-            ServerNotification.OnLibraryDeleted += OnLibraryDeleted;
             ServerNotification.OnPermissionModified += OnPermissionModified;
-            Task.Run(LoadLibraries);
             Task.Run(LoadPermissions);
         };
 
@@ -80,8 +76,6 @@ public partial class MainWindowViewModel : ObservableObject
     ~MainWindowViewModel()
     {
         ServerNotification.OnRunningTasks -= OnRunningTasks;
-        ServerNotification.OnLibraryCreated -= OnLibraryCreated;
-        ServerNotification.OnLibraryDeleted -= OnLibraryDeleted;
         ServerNotification.OnPermissionModified -= OnPermissionModified;
     }
 
@@ -96,58 +90,11 @@ public partial class MainWindowViewModel : ObservableObject
         });
     }
 
-    private void OnLibraryCreated(LibraryDto library)
-    {
-        Dispatcher.UIThread.Invoke(() =>
-        {
-            Libraries.Add(library);
-            ShowInfo($"Library '{library.Name}' was created");
-        });
-    }
-
-    private void OnLibraryDeleted(long libraryId)
-    {
-        Dispatcher.UIThread.Invoke(() =>
-        {
-            LibraryDto? library = Libraries.FirstOrDefault(l => l.Id == libraryId);
-            if (library == null) return;
-            Libraries.Remove(library);
-            ShowInfo($"Library '{library.Name}' was deleted");
-        });
-    }
-
     public async void Logout()
     {
         ManaxLibrary.Optional<bool> logoutAsync = await ManaxApiUserClient.LogoutAsync();
         if (logoutAsync.Failed) ShowInfo(logoutAsync.Error);
         SetPage(new LoginPageViewModel());
-    }
-
-    private void LoadLibraries()
-    {
-        Task.Run(async () =>
-        {
-            ManaxLibrary.Optional<List<long>> libraryIdsResponse = await ManaxApiLibraryClient.GetLibraryIdsAsync();
-            if (libraryIdsResponse.Failed)
-            {
-                ShowInfo(libraryIdsResponse.Error);
-                return;
-            }
-
-            Dispatcher.UIThread.Invoke(() => { Libraries.Clear(); });
-            List<long> ids = libraryIdsResponse.GetValue();
-            foreach (long id in ids)
-            {
-                ManaxLibrary.Optional<LibraryDto> libraryResponse = await ManaxApiLibraryClient.GetLibraryAsync(id);
-                if (libraryResponse.Failed)
-                {
-                    ShowInfo(libraryResponse.Error);
-                    continue;
-                }
-
-                Dispatcher.UIThread.Post(() => Libraries.Add(libraryResponse.GetValue()));
-            }
-        });
     }
 
     private void SetPopup(Controls.Popups.Popup? popup)
@@ -187,9 +134,9 @@ public partial class MainWindowViewModel : ObservableObject
         OnPropertyChanged(nameof(CurrentPageViewModel));
     }
 
-    public void ShowLibrary(long libraryId)
+    public void ShowLibrary(Library library)
     {
-        SetPage(new LibraryPageViewModel(libraryId));
+        SetPage(new LibraryPageViewModel(library));
     }
 
     public void ChangePageHome()

@@ -3,6 +3,8 @@ using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using DynamicData;
 using DynamicData.Binding;
+using ManaxClient.Models;
+using ManaxClient.Models.Sources;
 using ManaxClient.ViewModels.Popup.ConfirmCancel;
 using ManaxClient.ViewModels.Popup.ConfirmCancel.Content;
 using ManaxLibrary;
@@ -19,9 +21,8 @@ public class RankPageViewModel : PageViewModel
 
     public RankPageViewModel()
     {
-        Models.Rank.LoadRanks();
         SortExpressionComparer<Models.Rank> comparer = SortExpressionComparer<Models.Rank>.Descending(t => t.Value);
-        Models.Rank.Ranks.Connect()
+        RankSource.Ranks.Connect()
             .SortAndBind(out _ranks, comparer)
             .Subscribe();
     }

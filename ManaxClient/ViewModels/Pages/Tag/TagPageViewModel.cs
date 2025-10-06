@@ -4,6 +4,8 @@ using System.Drawing;
 using System.Threading.Tasks;
 using DynamicData;
 using DynamicData.Binding;
+using ManaxClient.Models;
+using ManaxClient.Models.Sources;
 using ManaxClient.ViewModels.Popup.ConfirmCancel;
 using ManaxClient.ViewModels.Popup.ConfirmCancel.Content;
 using ManaxLibrary;
@@ -20,7 +22,7 @@ public class TagPageViewModel : PageViewModel
     public TagPageViewModel()
     {
         SortExpressionComparer<Models.Tag> comparer = SortExpressionComparer<Models.Tag>.Descending(tag => tag.Name);
-        Models.Tag.Tags
+        TagSource.Tags
             .Connect()
             .SortAndBind(out _tags, comparer)
             .Subscribe();

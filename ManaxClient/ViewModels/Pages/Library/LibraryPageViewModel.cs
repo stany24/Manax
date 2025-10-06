@@ -3,7 +3,6 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using ManaxClient.ViewModels.Pages.Serie;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
-using ManaxLibrary.Notifications;
 
 namespace ManaxClient.ViewModels.Pages.Library;
 
@@ -11,17 +10,10 @@ public partial class LibraryPageViewModel:PageViewModel
 {
     [ObservableProperty] private Models.Library? _library;
 
-    public LibraryPageViewModel(long libraryId)
+    public LibraryPageViewModel(Models.Library library)
     {
-        ServerNotification.OnLibraryDeleted += OnLibraryDeleted;
-        Library = new Models.Library(libraryId);
+        Library = library;
         Library.LoadInfo();
-    }
-
-    private void OnLibraryDeleted(long id)
-    {
-        if (Library?.Id != id) return;
-        PageChangedRequested?.Invoke(this, new Home.HomePageViewModel());
     }
 
     public void MoveToSeriePage(Models.Serie serie)
