@@ -22,13 +22,13 @@
                                    CommandParameter="{Binding Chapter}">
                 <previews:IssuePreview.Problem>
                     <MultiBinding StringFormat="{}{0}">
-                        <Binding Path="Issue.Problem" />
+                        <Binding Path="Problem" />
                     </MultiBinding>
                 </previews:IssuePreview.Problem>
                 <previews:IssuePreview.Info>
                     <MultiBinding StringFormat="Chapitre: {0} • {1:dd/MM/yyyy HH:mm}">
                         <Binding Path="Chapter.FileName" />
-                        <Binding Path="Issue.CreatedAt" />
+                        <Binding Path="CreatedAt" />
                     </MultiBinding>
                 </previews:IssuePreview.Info>
             </previews:IssuePreview>
@@ -43,13 +43,13 @@
                                    CommandParameter="{Binding Serie}">
                 <previews:IssuePreview.Problem>
                     <MultiBinding StringFormat="{}{0}">
-                        <Binding Path="Issue.Problem" />
+                        <Binding Path="Problem" />
                     </MultiBinding>
                 </previews:IssuePreview.Problem>
                 <previews:IssuePreview.Info>
                     <MultiBinding StringFormat="Série: {0} • {1:dd/MM/yyyy HH:mm}">
                         <Binding Path="Serie.Title" />
-                        <Binding Path="Issue.CreatedAt" />
+                        <Binding Path="CreatedAt" />
                     </MultiBinding>
                 </previews:IssuePreview.Info>
             </previews:IssuePreview>
@@ -68,7 +68,7 @@
                     <MultiBinding StringFormat="Chapitre: {0} • Utilisateur: {1} • {2:dd/MM/yyyy HH:mm}">
                         <Binding Path="Chapter.FileName" />
                         <Binding Path="User.Username" />
-                        <Binding Path="Issue.CreatedAt" />
+                        <Binding Path="CreatedAt" />
                     </MultiBinding>
                 </previews:IssuePreview.Info>
             </previews:IssuePreview>
@@ -87,7 +87,7 @@
                     <MultiBinding StringFormat="Série: {0} • Utilisateur: {1} • {2:dd/MM/yyyy HH:mm}">
                         <Binding Path="Serie.Title" />
                         <Binding Path="User.Username" />
-                        <Binding Path="Issue.CreatedAt" />
+                        <Binding Path="CreatedAt" />
                     </MultiBinding>
                 </previews:IssuePreview.Info>
             </previews:IssuePreview>

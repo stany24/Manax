@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using DynamicData;
 using ManaxLibrary;
@@ -24,7 +23,6 @@ public static class LibrarySource
     {
         ServerNotification.OnLibraryCreated += OnLibraryCreated;
         ServerNotification.OnLibraryDeleted += OnLibraryDeleted;
-        LoadLibraries();
     }
     
     private static void OnLibraryDeleted(long id)
@@ -43,7 +41,7 @@ public static class LibrarySource
         }
     }
 
-    private static void LoadLibraries()
+    public static void LoadLibraries()
     {
         Task.Run(() =>
         {
@@ -63,16 +61,18 @@ public static class LibrarySource
                     foreach (long id in response.GetValue())
                     {
                         Optional<LibraryDto> libraryResponse = ManaxApiLibraryClient.GetLibraryAsync(id).Result;
-                        if (!libraryResponse.Failed) continue;
-                        Logger.LogFailure(libraryResponse.Error);
-                        ErrorEmitted?.Invoke(null, libraryResponse.Error);
-                        return;
+                        if (libraryResponse.Failed) {
+                            Logger.LogFailure(libraryResponse.Error);
+                            ErrorEmitted?.Invoke(null, libraryResponse.Error);
+                            continue;
+                        }
+                        
+                        lock (LibrariesLock)
+                        {
+                            Libraries.AddOrUpdate(new Library(libraryResponse.GetValue()));
+                        }
                     }
-
-                    lock (LibrariesLock)
-                    {
-                        Libraries.AddOrUpdate(response.GetValue().Select(dto => new Library(dto)));
-                    }
+                    
                     _loaded = true;
                 }
                 catch (Exception e)

@@ -18,7 +18,7 @@ using ManaxLibrary.Notifications;
 
 namespace ManaxClient.Models;
 
-public partial class Serie:ObservableObject
+public partial class Serie: ObservableObject
 {
    [ObservableProperty] private long _id;
    [ObservableProperty] private long? _libraryId;
@@ -41,11 +41,6 @@ public partial class Serie:ObservableObject
 
    public Serie(long id) : this(new SerieDto { Id = id })
    {
-       SortExpressionComparer<Chapter> comparer = SortExpressionComparer<Chapter>.Descending(chapter => chapter.Number);
-       ChapterSource.Chapters
-           .Connect()
-           .Filter(chapter => chapter.SerieId == Id)
-           .SortAndBind(out _chapters, comparer);
    }
    
    public Serie(SerieDto dto)
@@ -55,6 +50,12 @@ public partial class Serie:ObservableObject
        ServerNotification.OnPosterModified += OnPosterModified;
        ServerNotification.OnReadCreated += OnReadCreated;
        ServerNotification.OnReadDeleted += OnReadDeleted;
+       SortExpressionComparer<Chapter> comparer = SortExpressionComparer<Chapter>.Ascending(chapter => chapter.Number);
+       ChapterSource.Chapters
+           .Connect()
+           .Filter(chapter => chapter.SerieId == Id)
+           .SortAndBind(out _chapters, comparer)
+           .Subscribe();
    }
 
    ~Serie()

@@ -13,11 +13,10 @@ namespace ManaxClient.Models.Issue;
 
 public class IssueSource
 {
-    public static SourceCache<IssueChapterAutomatic,long> IssueChapterAutomatic  = new (issue => issue.ChapterId);
-    public static SourceCache<IssueSerieAutomatic,long> IssueSerieAutomatic  = new (issue => issue.SerieId);
+    public static SourceCache<IssueChapterAutomatic,long> IssueChapterAutomatic  = new (issue => issue.Chapter.Id);
+    public static SourceCache<IssueSerieAutomatic,long> IssueSerieAutomatic  = new (issue => issue.Serie.Id);
     public static SourceCache<IssueChapterReported,long> IssueChapterReported = new (issue => issue.Id);
     public static SourceCache<IssueSerieReported,long> IssueSerieReported = new (serie => serie.Id);
-    
     
     public static EventHandler<string>? ErrorEmitted { get; set; }
 

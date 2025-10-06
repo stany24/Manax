@@ -8,12 +8,11 @@ namespace ManaxClient.ViewModels.Pages.Library;
 
 public partial class LibraryPageViewModel:PageViewModel
 {
-    [ObservableProperty] private Models.Library? _library;
+    [ObservableProperty] private Models.Library _library;
 
     public LibraryPageViewModel(Models.Library library)
     {
         Library = library;
-        Library.LoadInfo();
     }
 
     public void MoveToSeriePage(Models.Serie serie)
@@ -24,7 +23,6 @@ public partial class LibraryPageViewModel:PageViewModel
 
     public void DeleteLibrary()
     {
-        if (Library == null) return;
         Task.Run(async () =>
         {
             Optional<bool> deleteLibraryResponse = await ManaxApiLibraryClient.DeleteLibraryAsync(Library.Id);

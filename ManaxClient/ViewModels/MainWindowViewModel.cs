@@ -1,10 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
+using DynamicData;
+using DynamicData.Binding;
 using ManaxClient.Models;
 using ManaxClient.Models.Collections;
 using ManaxClient.Models.History;
@@ -30,13 +33,23 @@ public partial class MainWindowViewModel : ObservableObject
     private readonly PageHistoryManager _history = new();
     [ObservableProperty] private ObservableCollection<string> _infos = [];
     [ObservableProperty] private bool _isAdmin;
-    [ObservableProperty] private ObservableCollection<Library> _libraries = [];
     [ObservableProperty] private Thickness _pageMargin = new(0, 0, 0, 0);
     [ObservableProperty] private Controls.Popups.Popup? _popup;
     [ObservableProperty] private SortedObservableCollection<TaskItem> _runningTasks = new([]);
+    
+    private readonly ReadOnlyObservableCollection<Library> _libraries;
+    public ReadOnlyObservableCollection<Library> Libraries => _libraries;
+    
+    private readonly IDisposable _librariesSubscription;
 
     public MainWindowViewModel()
     {
+        SortExpressionComparer<Library> comparer = SortExpressionComparer<Library>.Descending(library => library.Name);
+        _librariesSubscription = LibrarySource.Libraries
+            .Connect()
+            .SortAndBind(out _libraries, comparer)
+            .Subscribe();
+        
         RunningTasks.SortingSelector = t => t.TaskName;
         _history.OnPageChanged += _ =>
         {
@@ -64,6 +77,7 @@ public partial class MainWindowViewModel : ObservableObject
             ServerNotification.OnRunningTasks += OnRunningTasks;
             ServerNotification.OnPermissionModified += OnPermissionModified;
             Task.Run(LoadPermissions);
+            LibrarySource.LoadLibraries();
         };
 
         SetPage(new LoginPageViewModel());
@@ -77,6 +91,7 @@ public partial class MainWindowViewModel : ObservableObject
     {
         ServerNotification.OnRunningTasks -= OnRunningTasks;
         ServerNotification.OnPermissionModified -= OnPermissionModified;
+        _librariesSubscription.Dispose();
     }
 
     private void OnRunningTasks(Dictionary<string, int> tasks)
