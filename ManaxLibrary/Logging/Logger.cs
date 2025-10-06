@@ -18,20 +18,20 @@ public static class Logger
         LogToConsole(logMessage, LogType.Info);
     }
 
-    public static void LogWarning(string message, string stackTrace)
+    public static void LogWarning(string message)
     {
-        LogProblem(message, stackTrace, LogType.Warning);
+        LogProblem(message, Environment.StackTrace, LogType.Warning);
     }
 
-    public static void LogFailure(string message, string stackTrace)
+    public static void LogFailure(string message)
     {
-        LogProblem(message, stackTrace, LogType.Failure);
+        LogProblem(message,Environment.StackTrace, LogType.Failure);
     }
 
-    public static void LogError(string message, Exception e, string stackTrace)
+    public static void LogError(string message, Exception e)
     {
         string logMessage =
-            $"{DateTime.Now:yyyy-MM-dd HH:mm:ss} [{LogType.Error}] {message} error: {e} at: {stackTrace}";
+            $"{DateTime.Now:yyyy-MM-dd HH:mm:ss} [{LogType.Error}] {message} error: {e} at: {Environment.StackTrace}";
         LogToFile(logMessage);
         LogToConsole(logMessage, LogType.Error);
     }

@@ -74,7 +74,7 @@ public partial class Library:ObservableObject
                 Optional<LibraryDto> libraryResponse = ManaxApiLibraryClient.GetLibraryAsync(Id).Result;
                 if (libraryResponse.Failed)
                 {
-                    Logger.LogFailure(libraryResponse.Error, Environment.StackTrace);
+                    Logger.LogFailure(libraryResponse.Error);
                     ErrorEmitted?.Invoke(this, libraryResponse.Error);
                     return;
                 }
@@ -84,7 +84,7 @@ public partial class Library:ObservableObject
             catch (Exception e)
             {
                 string error = "Failed to load the library with ID: " + Id;
-                Logger.LogError(error, e, Environment.StackTrace);
+                Logger.LogError(error, e);
                 ErrorEmitted?.Invoke(this, error);
             }
         });

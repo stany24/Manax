@@ -50,7 +50,7 @@ public partial class User:ObservableObject
                 Optional<List<long>> usersIdsResponse = await ManaxApiUserClient.GetUsersIdsAsync();
                 if (usersIdsResponse.Failed)
                 {
-                    Logger.LogFailure(usersIdsResponse.Error,Environment.StackTrace);
+                    Logger.LogFailure(usersIdsResponse.Error);
                     ErrorEmitted?.Invoke(null, usersIdsResponse.Error);
                     return;
                 }
@@ -62,7 +62,7 @@ public partial class User:ObservableObject
                     if (userResponse.Failed)
                     {
                     
-                        Logger.LogFailure(userResponse.Error,Environment.StackTrace);
+                        Logger.LogFailure(userResponse.Error);
                         ErrorEmitted?.Invoke(null, userResponse.Error);
                         continue;
                     }
@@ -77,7 +77,7 @@ public partial class User:ObservableObject
             catch (Exception e)
             {
                 const string error = "Failed to load users from server";
-                Logger.LogError(error,e,Environment.StackTrace);
+                Logger.LogError(error,e);
             }
         });
     }

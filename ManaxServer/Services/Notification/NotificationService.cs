@@ -196,7 +196,7 @@ public class NotificationService(IHubContext<NotificationService> hubContext, IP
         }
         catch (Exception ex)
         {
-            Logger.LogError(Localizer.HubConnectionError(Context.ConnectionId), ex, Environment.StackTrace);
+            Logger.LogError(Localizer.HubConnectionError(Context.ConnectionId), ex);
         }
     }
 
@@ -207,8 +207,7 @@ public class NotificationService(IHubContext<NotificationService> hubContext, IP
             Connections.TryRemove(Context.ConnectionId, out _);
 
             if (exception != null)
-                Logger.LogError(Localizer.HubDisconnectedError(Context.ConnectionId), exception,
-                    Environment.StackTrace);
+                Logger.LogError(Localizer.HubDisconnectedError(Context.ConnectionId), exception);
             else
                 Logger.LogInfo(Localizer.HubDisconnected(Context.ConnectionId));
 
@@ -216,7 +215,7 @@ public class NotificationService(IHubContext<NotificationService> hubContext, IP
         }
         catch (Exception ex)
         {
-            Logger.LogError(Localizer.HubDisconnectedError(Context.ConnectionId), ex, Environment.StackTrace);
+            Logger.LogError(Localizer.HubDisconnectedError(Context.ConnectionId), ex);
         }
     }
 
@@ -237,7 +236,7 @@ public class NotificationService(IHubContext<NotificationService> hubContext, IP
         }
         catch (Exception ex)
         {
-            Logger.LogError(Localizer.HubMessageError(methodName), ex, Environment.StackTrace);
+            Logger.LogError(Localizer.HubMessageError(methodName), ex);
         }
     }
 
@@ -251,7 +250,7 @@ public class NotificationService(IHubContext<NotificationService> hubContext, IP
         }
         catch (Exception ex)
         {
-            Logger.LogError(Localizer.HubMessageErrorSingle(id, methodName), ex, Environment.StackTrace);
+            Logger.LogError(Localizer.HubMessageErrorSingle(id, methodName), ex);
         }
     }
 }

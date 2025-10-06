@@ -37,7 +37,7 @@ public partial class SettingsServerPageViewModel : PageViewModel
             if (updateTask.Failed)
             {
                 Problem = updateTask.Error;
-                Logger.LogFailure("Failed to update settings", Environment.StackTrace);
+                Logger.LogFailure("Failed to update settings");
                 return;
             }
 
@@ -46,7 +46,7 @@ public partial class SettingsServerPageViewModel : PageViewModel
         }
         catch (Exception e)
         {
-            Logger.LogError("Error when updating settings", e, Environment.StackTrace);
+            Logger.LogError("Error when updating settings", e);
         }
     }
 
@@ -58,7 +58,7 @@ public partial class SettingsServerPageViewModel : PageViewModel
             if (settingsAsync.Failed)
             {
                 Problem = settingsAsync.Error;
-                Logger.LogFailure("Failed to load settings", Environment.StackTrace);
+                Logger.LogFailure("Failed to load settings");
                 return;
             }
 
@@ -66,7 +66,7 @@ public partial class SettingsServerPageViewModel : PageViewModel
         }
         catch (Exception e)
         {
-            Logger.LogError("Error when fetching settings", e, Environment.StackTrace);
+            Logger.LogError("Error when fetching settings", e);
         }
     }
 
@@ -86,7 +86,7 @@ public partial class SettingsServerPageViewModel : PageViewModel
             }
             catch (Exception e)
             {
-                Logger.LogError("Error creating save point", e, Environment.StackTrace);
+                Logger.LogError("Error creating save point", e);
                 InfoEmitted?.Invoke(this, "Error creating save point");
             }
         };
@@ -109,7 +109,7 @@ public partial class SettingsServerPageViewModel : PageViewModel
             }
             catch (Exception e)
             {
-                Logger.LogError("Error creating library", e, Environment.StackTrace);
+                Logger.LogError("Error creating library", e);
                 InfoEmitted?.Invoke(this, "Error creating library");
             }
         };

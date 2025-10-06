@@ -71,7 +71,7 @@ public partial class SeriePageViewModel : PageViewModel
         catch (Exception e)
         {
             InfoEmitted?.Invoke(this, "Error loading ranks");
-            Logger.LogError("Failed to load ranks for serie with ID: " + serieId, e, Environment.StackTrace);
+            Logger.LogError("Failed to load ranks for serie with ID: " + serieId, e);
         }
     }
 
@@ -118,7 +118,7 @@ public partial class SeriePageViewModel : PageViewModel
             catch (Exception e)
             {
                 InfoEmitted?.Invoke(this, "Error updating serie");
-                Logger.LogError("Failed to update serie with ID: " + Serie.Id, e, Environment.StackTrace);
+                Logger.LogError("Failed to update serie with ID: " + Serie.Id, e);
             }
         };
         PopupRequested?.Invoke(this, popup);
@@ -173,7 +173,7 @@ public partial class SeriePageViewModel : PageViewModel
         catch (Exception e)
         {
             InfoEmitted?.Invoke(this, "Error replacing poster");
-            Logger.LogError("Error replacing poster for serie ID: " + Serie?.Id, e, Environment.StackTrace);
+            Logger.LogError("Error replacing poster for serie ID: " + Serie?.Id, e);
         }
     }
 }

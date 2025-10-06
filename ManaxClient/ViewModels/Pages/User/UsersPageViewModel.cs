@@ -55,7 +55,7 @@ public class UsersPageViewModel : PageViewModel
             }
             catch (Exception e)
             {
-                Logger.LogError("Error updating user permissions", e, Environment.StackTrace);
+                Logger.LogError("Error updating user permissions", e);
                 InfoEmitted?.Invoke(this, "Error updating user permissions");
             }
         };
@@ -78,7 +78,7 @@ public class UsersPageViewModel : PageViewModel
             }
             catch (Exception e)
             {
-                Logger.LogError("Error creating user", e, Environment.StackTrace);
+                Logger.LogError("Error creating user", e);
                 InfoEmitted?.Invoke(this, "Error creating user");
             }
         };

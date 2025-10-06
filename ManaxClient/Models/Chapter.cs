@@ -100,8 +100,7 @@ public partial class Chapter:ObservableObject
                 catch (Exception e)
                 {
                     ErrorEmitted?.Invoke(this, "Erreur lors du chargement de la page " + index);
-                    Logger.LogError("Échec du chargement de la page " + index + " pour le chapitre " + Id, e,
-                        Environment.StackTrace);
+                    Logger.LogError("Échec du chargement de la page " + index + " pour le chapitre " + Id, e);
                 }
             }
         }, token);

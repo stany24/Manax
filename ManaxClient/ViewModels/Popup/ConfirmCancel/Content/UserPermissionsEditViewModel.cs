@@ -45,7 +45,7 @@ public partial class UserPermissionsEditViewModel : ConfirmCancelContentViewMode
         }
         catch (Exception e)
         {
-            Logger.LogError("Failed to load user permissions: ",e,Environment.StackTrace);
+            Logger.LogError("Failed to load user permissions: ",e);
         }
     }
 

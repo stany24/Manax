@@ -57,7 +57,7 @@ public partial class Tag:ObservableObject
                     if (response.Failed)
                     {
                         const string message = "failed to load tags.";
-                        Logger.LogFailure(message,Environment.StackTrace);
+                        Logger.LogFailure(message);
                         ErrorEmitted?.Invoke(null, message);
                         return;
                     }
@@ -72,7 +72,7 @@ public partial class Tag:ObservableObject
             catch(Exception e)
             {
                 const string message = "An error occurred while loading tags.";
-                Logger.LogError(message,e,Environment.StackTrace);
+                Logger.LogError(message,e);
                 ErrorEmitted?.Invoke(null, message);
             }
         });

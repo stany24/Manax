@@ -155,7 +155,7 @@ public static class ServerNotification
         _hubConnection.Closed += async exception =>
         {
             if (exception != null)
-                Logger.LogError("SignalR: Connexion fermée", exception, Environment.StackTrace);
+                Logger.LogError("SignalR: Connexion fermée", exception);
             else
                 Logger.LogInfo("SignalR: Connexion fermée");
             await Task.Delay(5000);
@@ -165,7 +165,7 @@ public static class ServerNotification
         _hubConnection.Reconnecting += exception =>
         {
             if (exception != null)
-                Logger.LogError("SignalR: Tentative de reconnexion", exception, Environment.StackTrace);
+                Logger.LogError("SignalR: Tentative de reconnexion", exception);
             else
                 Logger.LogInfo("SignalR: Tentative de reconnexion");
             return Task.CompletedTask;
@@ -192,7 +192,7 @@ public static class ServerNotification
         }
         catch (Exception ex)
         {
-            Logger.LogError("SignalR: Erreur de connexion", ex, Environment.StackTrace);
+            Logger.LogError("SignalR: Erreur de connexion", ex);
             await Task.Delay(5000);
             await ConnectAsync();
         }

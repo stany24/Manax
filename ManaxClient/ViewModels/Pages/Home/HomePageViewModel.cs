@@ -82,7 +82,7 @@ public partial class HomePageViewModel : PageViewModel
         }
         catch (Exception e)
         {
-            Logger.LogError("Error uploading series", e, Environment.StackTrace);
+            Logger.LogError("Error uploading series", e);
         }
     }
 }

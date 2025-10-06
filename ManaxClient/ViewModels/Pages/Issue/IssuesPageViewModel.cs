@@ -112,7 +112,7 @@ public partial class IssuesPageViewModel : PageViewModel
         catch (Exception e)
         {
             InfoEmitted?.Invoke(this, e.Message);
-            Logger.LogError("Error downloading chapter", e, Environment.StackTrace);
+            Logger.LogError("Error downloading chapter", e);
         }
     }
 
@@ -133,7 +133,7 @@ public partial class IssuesPageViewModel : PageViewModel
             if (request.Failed)
             {
                 InfoEmitted?.Invoke(this, request.Error);
-                Logger.LogFailure("Replace chapter failed", Environment.StackTrace);
+                Logger.LogFailure("Replace chapter failed");
                 return;
             }
 
@@ -145,7 +145,7 @@ public partial class IssuesPageViewModel : PageViewModel
         catch (Exception e)
         {
             InfoEmitted?.Invoke(this, e.Message);
-            Logger.LogError("Error replacing chapter", e, Environment.StackTrace);
+            Logger.LogError("Error replacing chapter", e);
         }
     }
 

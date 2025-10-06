@@ -39,7 +39,7 @@ public partial class ServerStatsPageViewModel : PageViewModel
             Optional<ServerStats> serverStats = await ManaxApiStatsClient.GetServerStats();
             if (serverStats.Failed)
             {
-                Logger.LogFailure($"Failed to load server stats: {serverStats.Error}", Environment.StackTrace);
+                Logger.LogFailure($"Failed to load server stats: {serverStats.Error}");
                 InfoEmitted?.Invoke(this, $"Failed to load server stats: {serverStats.Error}");
                 return;
             }
@@ -52,7 +52,7 @@ public partial class ServerStatsPageViewModel : PageViewModel
         }
         catch (Exception e)
         {
-            Logger.LogError($"An error occurred while loading server stats: {e.Message}", e, Environment.StackTrace);
+            Logger.LogError($"An error occurred while loading server stats: {e.Message}", e);
             InfoEmitted?.Invoke(this, $"An error occurred while loading server stats: {e.Message}");
         }
     }

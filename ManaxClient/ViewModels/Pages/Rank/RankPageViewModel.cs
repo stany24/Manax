@@ -49,7 +49,7 @@ public class RankPageViewModel : PageViewModel
             catch (Exception e)
             {
                 InfoEmitted?.Invoke(this, "Failed to update rank on server");
-                Logger.LogError("Failed to update rank on server", e, Environment.StackTrace);
+                Logger.LogError("Failed to update rank on server", e);
             }
         };
         PopupRequested?.Invoke(this, popup);
@@ -67,7 +67,7 @@ public class RankPageViewModel : PageViewModel
             catch (Exception e)
             {
                 InfoEmitted?.Invoke(this, "Failed to delete rank on server");
-                Logger.LogError("Failed to delete rank on server", e, Environment.StackTrace);
+                Logger.LogError("Failed to delete rank on server", e);
             }
         });
     }
@@ -92,7 +92,7 @@ public class RankPageViewModel : PageViewModel
             catch (Exception e)
             {
                 InfoEmitted?.Invoke(this, "Failed to create rank on server");
-                Logger.LogError("Failed to create rank on server", e, Environment.StackTrace);
+                Logger.LogError("Failed to create rank on server", e);
             }
         };
         PopupRequested?.Invoke(this, popup);

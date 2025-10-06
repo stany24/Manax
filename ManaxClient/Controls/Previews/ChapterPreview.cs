@@ -278,7 +278,7 @@ public class ChapterPreview : Button
             catch (Exception e)
             {
                 InfoEmittedCommand?.Execute(" Une erreur est survenue lors de la création du problème.");
-                Logger.LogError("Erreur lors de la création d'un problème de chapitre", e, Environment.StackTrace);
+                Logger.LogError("Erreur lors de la création d'un problème de chapitre", e);
             }
         };
         Dispatcher.UIThread.Post(() => { PopupRequestedCommand?.Execute(popup); });

@@ -118,7 +118,7 @@ public partial class Serie:ObservableObject
                      Optional<List<long>> seriesIdsResponse = ManaxApiSerieClient.GetSeriesIdsAsync().Result;
                      if (seriesIdsResponse.Failed)
                      {
-                         Logger.LogFailure(seriesIdsResponse.Error,Environment.StackTrace);
+                         Logger.LogFailure(seriesIdsResponse.Error);
                          return;
                      }
     
@@ -131,7 +131,7 @@ public partial class Serie:ObservableObject
                  }
                  catch (Exception e)
                  {
-                     Logger.LogError("Failed to load series", e, Environment.StackTrace);
+                     Logger.LogError("Failed to load series", e);
                  }
              }
          });
@@ -154,7 +154,7 @@ public partial class Serie:ObservableObject
            {
                string message = "Failed to load serie with ID: " + Id;
                ErrorEmitted?.Invoke(this, message);
-               Logger.LogError(message, e, Environment.StackTrace);
+               Logger.LogError(message, e);
            }
        });
    }
@@ -180,7 +180,7 @@ public partial class Serie:ObservableObject
            catch (Exception e)
            {
                string message = "Failed to load poster for serie with ID: " + Id;
-               Logger.LogError(message, e, Environment.StackTrace);
+               Logger.LogError(message, e);
                ErrorEmitted?.Invoke(this, message);
            }
        });
@@ -223,7 +223,7 @@ public partial class Serie:ObservableObject
             {
                 string message = "Failed to load chapters for serie with ID: " + Id;
                 ErrorEmitted?.Invoke(this, message);
-                Logger.LogError(message, e, Environment.StackTrace);
+                Logger.LogError(message, e);
             }
 
             return null;
@@ -257,7 +257,7 @@ public partial class Serie:ObservableObject
         {
             string message = "Failed to load chapters for serie with ID: " + serieId;
             ErrorEmitted?.Invoke(this, message);
-            Logger.LogError(message, e, Environment.StackTrace);
+            Logger.LogError(message, e);
         }
     }
     

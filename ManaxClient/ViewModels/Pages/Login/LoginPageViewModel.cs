@@ -93,7 +93,7 @@ public partial class LoginPageViewModel : PageViewModel
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
+            Logger.LogError("Failed to save login values",e);
             throw;
         }
     }
@@ -114,7 +114,7 @@ public partial class LoginPageViewModel : PageViewModel
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
+            Logger.LogError("Failed to load login values",e);
         }
     }
 

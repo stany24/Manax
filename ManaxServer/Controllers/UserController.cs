@@ -169,8 +169,7 @@ public class UserController(
         User? user = await context.Users.FirstOrDefaultAsync(u => u.Username == loginDto.Username);
         if (user == null || !hashService.VerifyPassword(loginDto.Password, user.PasswordHash))
         {
-            Logger.LogWarning("Failed login attempt for user " + loginDto.Username + " from " + loginAttempt.Origin,
-                Environment.StackTrace);
+            Logger.LogWarning("Failed login attempt for user " + loginDto.Username + " from " + loginAttempt.Origin);
             context.LoginAttempts.Add(loginAttempt);
             await context.SaveChangesAsync();
             return Unauthorized(Localizer.UserInvalidLogin());

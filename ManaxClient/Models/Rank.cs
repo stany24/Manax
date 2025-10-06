@@ -83,7 +83,7 @@ public partial class Rank:ObservableObject
                     Optional<List<RankDto>> ranksResponse = ManaxApiRankClient.GetRanksAsync().Result;
                     if (ranksResponse.Failed)
                     {
-                        Logger.LogFailure(ranksResponse.Error,Environment.StackTrace);
+                        Logger.LogFailure(ranksResponse.Error);
                         ErrorEmitted?.Invoke(null,ranksResponse.Error);
                         return;
                     }
@@ -102,7 +102,7 @@ public partial class Rank:ObservableObject
                 catch (Exception e)
                 {
                     const string error = "Failed to load ranks from server";
-                    Logger.LogError(error,e,Environment.StackTrace);
+                    Logger.LogError(error,e);
                     ErrorEmitted?.Invoke(null,error);
                 }
             }
