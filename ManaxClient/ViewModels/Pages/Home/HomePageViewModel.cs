@@ -41,7 +41,7 @@ public partial class HomePageViewModel : PageViewModel
     
     public void MoveToSeriePage(Models.Serie serie)
     {
-        SeriePageViewModel seriePageViewModel = new(serie.Id);
+        SeriePageViewModel seriePageViewModel = new(serie);
         PageChangedRequested?.Invoke(this, seriePageViewModel);
     }
 

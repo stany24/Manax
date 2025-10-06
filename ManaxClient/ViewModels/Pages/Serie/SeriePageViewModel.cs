@@ -7,7 +7,6 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Platform.Storage;
-using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData;
 using DynamicData.Binding;
@@ -26,12 +25,12 @@ public partial class SeriePageViewModel : PageViewModel
 {
     [ObservableProperty] private bool _isFilePickerOpen;
     [ObservableProperty] private Models.Rank? _selectedRank;
-    [ObservableProperty] private Models.Serie? _serie;
+    [ObservableProperty] private Models.Serie _serie;
     
     private readonly ReadOnlyObservableCollection<Models.Rank> _ranks;
     public ReadOnlyObservableCollection<Models.Rank> Ranks => _ranks;
 
-    public SeriePageViewModel(long serieId)
+    public SeriePageViewModel(Models.Serie serie)
     {
         Models.Rank.LoadRanks();
         SortExpressionComparer<Models.Rank> comparer = SortExpressionComparer<Models.Rank>.Descending(t => t.Value);
@@ -39,43 +38,14 @@ public partial class SeriePageViewModel : PageViewModel
             .Connect()
             .SortAndBind(out _ranks, comparer)
             .Subscribe();
-        Serie = new Models.Serie(serieId);
+        Serie = serie;
         Serie.LoadInfo();
         Serie.LoadChapters();
         Serie.LoadPoster();
-        Task.Run(() => { LoadRanks(serieId); });
+        BindToRankChange();
     }
 
-    private async void LoadRanks(long serieId)
-    {
-        try
-        {
-            Optional<List<UserRankDto>> rankingResponse = await ManaxApiRankClient.GetRankingAsync();
-            if (rankingResponse.Failed)
-            {
-                InfoEmitted?.Invoke(this, rankingResponse.Error);
-                return;
-            }
-
-            UserRankDto? rank = rankingResponse.GetValue().FirstOrDefault(rank => rank.SerieId == serieId);
-            if (rank == null)
-            {
-                BindToRankChange(serieId);
-                return;
-            }
-
-            Models.Rank? userRank = Ranks.FirstOrDefault(r => r.Id == rank.RankId);
-            Dispatcher.UIThread.Invoke(() => { SelectedRank = userRank; });
-            BindToRankChange(serieId);
-        }
-        catch (Exception e)
-        {
-            InfoEmitted?.Invoke(this, "Error loading ranks");
-            Logger.LogError("Failed to load ranks for serie with ID: " + serieId, e);
-        }
-    }
-
-    private void BindToRankChange(long serieId)
+    private void BindToRankChange()
     {
         PropertyChanged += (_, args) =>
         {
@@ -83,7 +53,7 @@ public partial class SeriePageViewModel : PageViewModel
             if (SelectedRank == null) return;
             UserRankCreateDto userRankCreateDto = new()
             {
-                SerieId = serieId,
+                SerieId = Serie.Id,
                 RankId = SelectedRank.Id
             };
             Task.Run(async () =>
@@ -102,7 +72,6 @@ public partial class SeriePageViewModel : PageViewModel
 
     public void UpdateSerie()
     {
-        if (Serie == null) return;
         SerieUpdateViewModel content = new(Serie);
         ConfirmCancelViewModel viewModel = new(content);
         Controls.Popups.Popup popup = new(viewModel);
@@ -128,7 +97,7 @@ public partial class SeriePageViewModel : PageViewModel
     {
         try
         {
-            if (Serie == null || IsFilePickerOpen) return;
+            if ( IsFilePickerOpen) return;
             IsFilePickerOpen = true;
 
             Window? window = Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop
@@ -173,7 +142,7 @@ public partial class SeriePageViewModel : PageViewModel
         catch (Exception e)
         {
             InfoEmitted?.Invoke(this, "Error replacing poster");
-            Logger.LogError("Error replacing poster for serie ID: " + Serie?.Id, e);
+            Logger.LogError("Error replacing poster for serie ID: " + Serie.Id, e);
         }
     }
 }

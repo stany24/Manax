@@ -67,9 +67,9 @@ public partial class IssuesPageViewModel : PageViewModel
         AllReportedSerieIssues.Remove(issue);
     }
 
-    public void OpenSeriePage(long id)
+    public void OpenSeriePage(Models.Serie serie)
     {
-        PageChangedRequested?.Invoke(this, new SeriePageViewModel(id));
+        PageChangedRequested?.Invoke(this, new SeriePageViewModel(serie));
     }
 
     public void OnChapterIssueClicked(ChapterDto chapter)
