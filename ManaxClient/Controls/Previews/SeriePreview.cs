@@ -37,7 +37,7 @@ public class SeriePreview : Button
             Stretch = Stretch.UniformToFill,
             ClipToBounds = true
         };
-        image.Bind(Image.SourceProperty, new Binding(nameof(Serie)+"."+nameof(Serie.Poster))
+        image.Bind(Image.SourceProperty, new Binding(nameof(Serie) + "." + nameof(Serie.Poster))
         {
             Source = this,
             Mode = BindingMode.OneWay
@@ -84,7 +84,7 @@ public class SeriePreview : Button
             MaxLines = 2,
             TextTrimming = TextTrimming.CharacterEllipsis
         };
-        textBlock.Bind(TextBlock.TextProperty, new Binding(nameof(Serie) +"."+ nameof(Serie.Title))
+        textBlock.Bind(TextBlock.TextProperty, new Binding(nameof(Serie) + "." + nameof(Serie.Title))
         {
             Source = this,
             Mode = BindingMode.OneWay

@@ -21,23 +21,23 @@ namespace ManaxClient.ViewModels.Pages.Issue;
 public partial class IssuesPageViewModel : PageViewModel
 {
     private readonly ReadOnlyObservableCollection<IssueChapterAutomatic> _issueChapterAutomatic;
-    public ReadOnlyObservableCollection<IssueChapterAutomatic> IssueChapterAutomatic => _issueChapterAutomatic;
-    private readonly ReadOnlyObservableCollection<IssueSerieAutomatic> _issueSerieAutomatic;
-    public ReadOnlyObservableCollection<IssueSerieAutomatic> IssueSerieAutomatic => _issueSerieAutomatic;
     private readonly ReadOnlyObservableCollection<IssueChapterReported> _issueChapterReported;
-    public ReadOnlyObservableCollection<IssueChapterReported> IssueChapterReported => _issueChapterReported;
+    private readonly ReadOnlyObservableCollection<IssueSerieAutomatic> _issueSerieAutomatic;
     private readonly ReadOnlyObservableCollection<IssueSerieReported> _issueSerieReported;
-    public ReadOnlyObservableCollection<IssueSerieReported> IssueSerieReported => _issueSerieReported;
 
     [ObservableProperty] private bool _showAutomaticIssues = true;
     [ObservableProperty] private bool _showChapterIssues = true;
 
     public IssuesPageViewModel()
     {
-        SortExpressionComparer<IssueChapterAutomatic> comparer1 = SortExpressionComparer<IssueChapterAutomatic>.Descending(t => t.CreatedAt);
-        SortExpressionComparer<IssueSerieAutomatic> comparer2 = SortExpressionComparer<IssueSerieAutomatic>.Descending(t => t.CreatedAt);
-        SortExpressionComparer<IssueChapterReported> comparer3 = SortExpressionComparer<IssueChapterReported>.Descending(t => t.CreatedAt);
-        SortExpressionComparer<IssueSerieReported> comparer4 = SortExpressionComparer<IssueSerieReported>.Descending(t => t.CreatedAt);
+        SortExpressionComparer<IssueChapterAutomatic> comparer1 =
+            SortExpressionComparer<IssueChapterAutomatic>.Descending(t => t.CreatedAt);
+        SortExpressionComparer<IssueSerieAutomatic> comparer2 =
+            SortExpressionComparer<IssueSerieAutomatic>.Descending(t => t.CreatedAt);
+        SortExpressionComparer<IssueChapterReported> comparer3 =
+            SortExpressionComparer<IssueChapterReported>.Descending(t => t.CreatedAt);
+        SortExpressionComparer<IssueSerieReported> comparer4 =
+            SortExpressionComparer<IssueSerieReported>.Descending(t => t.CreatedAt);
         IssueSource.IssueChapterAutomatic
             .Connect()
             .SortAndBind(out _issueChapterAutomatic, comparer1)
@@ -55,6 +55,11 @@ public partial class IssuesPageViewModel : PageViewModel
             .SortAndBind(out _issueSerieReported, comparer4)
             .Subscribe();
     }
+
+    public ReadOnlyObservableCollection<IssueChapterAutomatic> IssueChapterAutomatic => _issueChapterAutomatic;
+    public ReadOnlyObservableCollection<IssueSerieAutomatic> IssueSerieAutomatic => _issueSerieAutomatic;
+    public ReadOnlyObservableCollection<IssueChapterReported> IssueChapterReported => _issueChapterReported;
+    public ReadOnlyObservableCollection<IssueSerieReported> IssueSerieReported => _issueSerieReported;
 
     public void OpenSeriePage(Models.Serie serie)
     {

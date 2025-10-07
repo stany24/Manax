@@ -96,7 +96,7 @@ public class NotificationService(IHubContext<NotificationService> hubContext, IP
 
     public void NotifyPermissionModifiedAsync(long userId, List<ManaxLibrary.DTO.User.Permission> permissions)
     {
-        TrySendToSingleClientAsync(userId,NotificationType.PermissionModified, permissions);
+        TrySendToSingleClientAsync(userId, NotificationType.PermissionModified, permissions);
     }
 
     public void NotifyUserCreatedAsync(UserDto user)

@@ -101,7 +101,7 @@
                                                        FontSize="12"
                                                        FontWeight="Medium" />
                                         </Border>
-                                        
+
                                         <Button Grid.Column="3"
                                                 IsVisible="{Binding $parent[UserControl].((page:UsersPageViewModel)DataContext).Admin}"
                                                 Classes="danger"

@@ -13,20 +13,20 @@ namespace ManaxClient.Models.Sources;
 
 public static class RankSource
 {
-    public static readonly SourceCache<Rank, long> Ranks = new (x => x.Id);
+    public static readonly SourceCache<Rank, long> Ranks = new(x => x.Id);
     private static bool _loaded;
     private static readonly object LoadLock = new();
-    private static readonly object RanksLock = new ();
-    
-    public static EventHandler<string>? ErrorEmitted { get; set; }
-    
+    private static readonly object RanksLock = new();
+
     static RankSource()
     {
         ServerNotification.OnRankCreated += OnRankCreated;
         ServerNotification.OnRankDeleted += OnRankDeleted;
         LoadRanks();
     }
-    
+
+    public static EventHandler<string>? ErrorEmitted { get; set; }
+
     private static void OnRankDeleted(long id)
     {
         lock (RanksLock)
@@ -56,7 +56,7 @@ public static class RankSource
                     if (ranksResponse.Failed)
                     {
                         Logger.LogFailure(ranksResponse.Error);
-                        ErrorEmitted?.Invoke(null,ranksResponse.Error);
+                        ErrorEmitted?.Invoke(null, ranksResponse.Error);
                         return;
                     }
 
@@ -69,13 +69,14 @@ public static class RankSource
                             updater.AddOrUpdate(ranks);
                         });
                     }
+
                     _loaded = true;
                 }
                 catch (Exception e)
                 {
                     const string error = "Failed to load ranks from server";
-                    Logger.LogError(error,e);
-                    ErrorEmitted?.Invoke(null,error);
+                    Logger.LogError(error, e);
+                    ErrorEmitted?.Invoke(null, error);
                 }
             }
         });

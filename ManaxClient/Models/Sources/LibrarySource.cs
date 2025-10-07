@@ -12,19 +12,19 @@ namespace ManaxClient.Models.Sources;
 
 public static class LibrarySource
 {
-    public static readonly SourceCache<Library, long> Libraries = new (x => x.Id);
+    public static readonly SourceCache<Library, long> Libraries = new(x => x.Id);
     private static bool _loaded;
     private static readonly object LoadLock = new();
-    private static readonly object LibrariesLock = new ();
-    
-    public static EventHandler<string>? ErrorEmitted { get; set; }
-    
+    private static readonly object LibrariesLock = new();
+
     static LibrarySource()
     {
         ServerNotification.OnLibraryCreated += OnLibraryCreated;
         ServerNotification.OnLibraryDeleted += OnLibraryDeleted;
     }
-    
+
+    public static EventHandler<string>? ErrorEmitted { get; set; }
+
     private static void OnLibraryDeleted(long id)
     {
         lock (LibrariesLock)
@@ -54,32 +54,33 @@ public static class LibrarySource
                     if (response.Failed)
                     {
                         Logger.LogFailure(response.Error);
-                        ErrorEmitted?.Invoke(null,response.Error);
+                        ErrorEmitted?.Invoke(null, response.Error);
                         return;
                     }
-                    
+
                     foreach (long id in response.GetValue())
                     {
                         Optional<LibraryDto> libraryResponse = ManaxApiLibraryClient.GetLibraryAsync(id).Result;
-                        if (libraryResponse.Failed) {
+                        if (libraryResponse.Failed)
+                        {
                             Logger.LogFailure(libraryResponse.Error);
                             ErrorEmitted?.Invoke(null, libraryResponse.Error);
                             continue;
                         }
-                        
+
                         lock (LibrariesLock)
                         {
                             Libraries.AddOrUpdate(new Library(libraryResponse.GetValue()));
                         }
                     }
-                    
+
                     _loaded = true;
                 }
                 catch (Exception e)
                 {
                     const string error = "Failed to load libraries from server";
-                    Logger.LogError(error,e);
-                    ErrorEmitted?.Invoke(null,error);
+                    Logger.LogError(error, e);
+                    ErrorEmitted?.Invoke(null, error);
                 }
             }
         });

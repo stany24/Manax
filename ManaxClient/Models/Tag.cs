@@ -5,18 +5,18 @@ using ManaxLibrary.Notifications;
 
 namespace ManaxClient.Models;
 
-public partial class Tag:ObservableObject
+public partial class Tag : ObservableObject
 {
+    [ObservableProperty] private Color _color;
     [ObservableProperty] private long _id;
     [ObservableProperty] private string _name = string.Empty;
-    [ObservableProperty] private Color _color;
-    
+
     public Tag(TagDto dto)
     {
         FromTagDto(dto);
         ServerNotification.OnTagUpdated += OnTagUpdated;
     }
-    
+
     ~Tag()
     {
         ServerNotification.OnTagUpdated -= OnTagUpdated;
@@ -34,7 +34,7 @@ public partial class Tag:ObservableObject
 
     private void OnTagUpdated(TagDto tag)
     {
-        if(tag.Id != Id) return;
+        if (tag.Id != Id) return;
         FromTagDto(tag);
     }
 

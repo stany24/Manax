@@ -6,7 +6,7 @@ using ManaxLibrary.ApiCaller;
 
 namespace ManaxClient.ViewModels.Pages.Library;
 
-public partial class LibraryPageViewModel:PageViewModel
+public partial class LibraryPageViewModel : PageViewModel
 {
     [ObservableProperty] private Models.Library _library;
 

@@ -24,12 +24,10 @@ namespace ManaxClient.ViewModels.Pages.Serie;
 
 public partial class SeriePageViewModel : PageViewModel
 {
+    private readonly ReadOnlyObservableCollection<Models.Rank> _ranks;
     [ObservableProperty] private bool _isFilePickerOpen;
     [ObservableProperty] private Models.Rank? _selectedRank;
     [ObservableProperty] private Models.Serie _serie;
-    
-    private readonly ReadOnlyObservableCollection<Models.Rank> _ranks;
-    public ReadOnlyObservableCollection<Models.Rank> Ranks => _ranks;
 
     public SeriePageViewModel(Models.Serie serie)
     {
@@ -44,6 +42,8 @@ public partial class SeriePageViewModel : PageViewModel
         Serie.LoadPoster();
         BindToRankChange();
     }
+
+    public ReadOnlyObservableCollection<Models.Rank> Ranks => _ranks;
 
     private void BindToRankChange()
     {
@@ -97,7 +97,7 @@ public partial class SeriePageViewModel : PageViewModel
     {
         try
         {
-            if ( IsFilePickerOpen) return;
+            if (IsFilePickerOpen) return;
             IsFilePickerOpen = true;
 
             Window? window = Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop

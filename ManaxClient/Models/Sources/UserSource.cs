@@ -12,18 +12,18 @@ namespace ManaxClient.Models.Sources;
 
 public static class UserSource
 {
-    public static readonly SourceCache<User, long> Users = new (x => x.Id);
+    public static readonly SourceCache<User, long> Users = new(x => x.Id);
     private static readonly object UsersLock = new();
-    
-    public static EventHandler<string>? ErrorEmitted { get; set; }
-    
+
     static UserSource()
     {
         ServerNotification.OnUserCreated += OnUserCreated;
         ServerNotification.OnUserDeleted += OnUserDeleted;
         LoadUsers();
     }
-    
+
+    public static EventHandler<string>? ErrorEmitted { get; set; }
+
     private static void LoadUsers()
     {
         Task.Run(async void () =>
@@ -44,7 +44,6 @@ public static class UserSource
                     Optional<UserDto> userResponse = await ManaxApiUserClient.GetUserAsync(id);
                     if (userResponse.Failed)
                     {
-                    
                         Logger.LogFailure(userResponse.Error);
                         ErrorEmitted?.Invoke(null, userResponse.Error);
                         continue;
@@ -60,16 +59,16 @@ public static class UserSource
             catch (Exception e)
             {
                 const string error = "Failed to load users from server";
-                Logger.LogError(error,e);
+                Logger.LogError(error, e);
             }
         });
     }
-    
+
     private static void OnUserDeleted(long id)
     {
         lock (UsersLock)
         {
-            Users.RemoveKey(id);   
+            Users.RemoveKey(id);
         }
     }
 

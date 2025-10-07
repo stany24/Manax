@@ -18,9 +18,10 @@
             <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto">
                 <StackPanel Grid.Column="0" Grid.Row="0" Orientation="Vertical">
                     <TextBlock Classes="title" Text="{Binding Library.Name}" />
-                    <TextBlock Text="{Binding Library.Series.Count, StringFormat='📚 {0} série(s) dans cette bibliothèque'}"
-                               Foreground="{StaticResource SecondaryBrush}"
-                               FontSize="14" />
+                    <TextBlock
+                        Text="{Binding Library.Series.Count, StringFormat='📚 {0} série(s) dans cette bibliothèque'}"
+                        Foreground="{StaticResource SecondaryBrush}"
+                        FontSize="14" />
                 </StackPanel>
 
                 <Button Grid.Column="1" Grid.Row="0"

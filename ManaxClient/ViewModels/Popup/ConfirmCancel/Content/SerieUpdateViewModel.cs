@@ -13,18 +13,13 @@ namespace ManaxClient.ViewModels.Popup.ConfirmCancel.Content;
 public partial class SerieUpdateViewModel : ConfirmCancelContentViewModel
 {
     private readonly Serie _originalSerie;
-    
-    public ObservableCollection<Library> Libraries { get; } = [];
-    public ObservableCollection<Status> StatusOptions { get; } = [];
-    public ObservableCollection<Tag> AvailableTags { get; set; }= [];
-    public ObservableCollection<Tag> SelectedTags { get; set; } = [];
-    
+
     [ObservableProperty] private string _description;
     [ObservableProperty] private Library? _selectedLibrary;
     [ObservableProperty] private Status _selectedStatus;
-    [ObservableProperty] private string _title;
-    [ObservableProperty] private string _tagSearchText = "";
     [ObservableProperty] private Tag? _selectedTag;
+    [ObservableProperty] private string _tagSearchText = "";
+    [ObservableProperty] private string _title;
 
     public SerieUpdateViewModel(Serie serie)
     {
@@ -51,6 +46,7 @@ public partial class SerieUpdateViewModel : ConfirmCancelContentViewModel
                         AddTag(SelectedTag);
                         SelectedTag = null;
                     }
+
                     break;
             }
         };
@@ -58,6 +54,11 @@ public partial class SerieUpdateViewModel : ConfirmCancelContentViewModel
         LoadTags();
         LoadLibraries();
     }
+
+    public ObservableCollection<Library> Libraries { get; } = [];
+    public ObservableCollection<Status> StatusOptions { get; } = [];
+    public ObservableCollection<Tag> AvailableTags { get; set; } = [];
+    public ObservableCollection<Tag> SelectedTags { get; set; } = [];
 
     public void AddTag(Tag tag)
     {
@@ -102,14 +103,12 @@ public partial class SerieUpdateViewModel : ConfirmCancelContentViewModel
                 SelectedTags.Add(tag);
                 allTags.Remove(tag);
             }
+
             AvailableTags.Clear();
-            foreach (Tag tag in allTags)
-            {
-                AvailableTags.Add(tag);
-            }
+            foreach (Tag tag in allTags) AvailableTags.Add(tag);
         });
     }
-    
+
     public SerieUpdateDto GetResult()
     {
         return new SerieUpdateDto

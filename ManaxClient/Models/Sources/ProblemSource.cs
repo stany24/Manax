@@ -13,36 +13,41 @@ namespace ManaxClient.Models.Sources;
 
 public static class ProblemSource
 {
-    public static readonly SourceCache<IssueChapterReportedType, long> ChapterProblems = new (x => x.Id);
-    public static readonly SourceCache<IssueSerieReportedType, long> SerieProblems = new (x => x.Id);
-    
-    public static EventHandler<string>? ErrorEmitted { get; set; }
-    
+    public static readonly SourceCache<IssueChapterReportedType, long> ChapterProblems = new(x => x.Id);
+    public static readonly SourceCache<IssueSerieReportedType, long> SerieProblems = new(x => x.Id);
+
     static ProblemSource()
     {
         LoadProblems();
     }
 
+    public static EventHandler<string>? ErrorEmitted { get; set; }
+
     private static void LoadProblems()
     {
         Task.Run(() =>
         {
-            Optional<List<IssueChapterReportedTypeDto>> chapterResponse = ManaxApiIssueClient.GetAllReportedChapterIssueTypesAsync().Result;
+            Optional<List<IssueChapterReportedTypeDto>> chapterResponse =
+                ManaxApiIssueClient.GetAllReportedChapterIssueTypesAsync().Result;
             if (chapterResponse.Failed)
             {
                 Logger.LogFailure(chapterResponse.Error);
-                ErrorEmitted?.Invoke(null,chapterResponse.Error);
+                ErrorEmitted?.Invoke(null, chapterResponse.Error);
                 return;
             }
-            ChapterProblems.AddOrUpdate(chapterResponse.GetValue().Select(issue => new IssueChapterReportedType(issue)));
-            
-            Optional<List<IssueSerieReportedTypeDto>> serieResponse = ManaxApiIssueClient.GetAllReportedSerieIssueTypesAsync().Result;
+
+            ChapterProblems.AddOrUpdate(chapterResponse.GetValue()
+                .Select(issue => new IssueChapterReportedType(issue)));
+
+            Optional<List<IssueSerieReportedTypeDto>> serieResponse =
+                ManaxApiIssueClient.GetAllReportedSerieIssueTypesAsync().Result;
             if (serieResponse.Failed)
             {
                 Logger.LogFailure(serieResponse.Error);
-                ErrorEmitted?.Invoke(null,serieResponse.Error);
+                ErrorEmitted?.Invoke(null, serieResponse.Error);
                 return;
             }
+
             SerieProblems.AddOrUpdate(serieResponse.GetValue().Select(issue => new IssueSerieReportedType(issue)));
         });
     }

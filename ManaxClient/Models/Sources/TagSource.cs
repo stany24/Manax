@@ -13,20 +13,20 @@ namespace ManaxClient.Models.Sources;
 
 public static class TagSource
 {
-    public static readonly SourceCache<Tag, long> Tags = new (x => x.Id);
+    public static readonly SourceCache<Tag, long> Tags = new(x => x.Id);
     private static bool _loaded;
     private static readonly object LoadLock = new();
     private static readonly object TagLock = new();
-    
-    public static EventHandler<string>? ErrorEmitted { get; set; }
-    
+
     static TagSource()
     {
         ServerNotification.OnTagCreated += OnTagCreated;
         ServerNotification.OnTagDeleted += OnTagDeleted;
         LoadTags();
     }
-    
+
+    public static EventHandler<string>? ErrorEmitted { get; set; }
+
     private static void LoadTags()
     {
         Task.Run(() =>
@@ -49,18 +49,19 @@ public static class TagSource
                     {
                         Tags.AddOrUpdate(response.GetValue().Select(dto => new Tag(dto)));
                     }
+
                     _loaded = true;
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 const string message = "An error occurred while loading tags.";
-                Logger.LogError(message,e);
+                Logger.LogError(message, e);
                 ErrorEmitted?.Invoke(null, message);
             }
         });
     }
-    
+
     private static void OnTagDeleted(long id)
     {
         lock (TagLock)
@@ -73,7 +74,7 @@ public static class TagSource
     {
         lock (TagLock)
         {
-            Tags.AddOrUpdate(new Tag(tag));   
+            Tags.AddOrUpdate(new Tag(tag));
         }
     }
 }

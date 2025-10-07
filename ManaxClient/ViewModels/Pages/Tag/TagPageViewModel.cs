@@ -16,7 +16,6 @@ namespace ManaxClient.ViewModels.Pages.Tag;
 public class TagPageViewModel : PageViewModel
 {
     private readonly ReadOnlyObservableCollection<Models.Tag> _tags;
-    public ReadOnlyObservableCollection<Models.Tag> Tags => _tags;
 
     public TagPageViewModel()
     {
@@ -26,6 +25,8 @@ public class TagPageViewModel : PageViewModel
             .SortAndBind(out _tags, comparer)
             .Subscribe();
     }
+
+    public ReadOnlyObservableCollection<Models.Tag> Tags => _tags;
 
     public void CreateTag()
     {

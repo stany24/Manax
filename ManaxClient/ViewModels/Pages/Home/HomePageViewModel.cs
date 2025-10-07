@@ -18,14 +18,13 @@ namespace ManaxClient.ViewModels.Pages.Home;
 
 public partial class HomePageViewModel : PageViewModel
 {
-    [ObservableProperty] private bool _isFolderPickerOpen;
-    
     private readonly ReadOnlyObservableCollection<Models.Serie> _series;
-    public ReadOnlyObservableCollection<Models.Serie> Series => _series;
+    [ObservableProperty] private bool _isFolderPickerOpen;
 
     public HomePageViewModel()
     {
-        SortExpressionComparer<Models.Serie> comparer = SortExpressionComparer<Models.Serie>.Descending(serie => serie.Title);
+        SortExpressionComparer<Models.Serie> comparer =
+            SortExpressionComparer<Models.Serie>.Descending(serie => serie.Title);
         SerieSource.Series
             .Connect()
             .SortAndBind(out _series, comparer)
@@ -39,7 +38,9 @@ public partial class HomePageViewModel : PageViewModel
                 }
             });
     }
-    
+
+    public ReadOnlyObservableCollection<Models.Serie> Series => _series;
+
     public void MoveToSeriePage(Models.Serie serie)
     {
         SeriePageViewModel seriePageViewModel = new(serie);

@@ -73,7 +73,7 @@ public class ChapterPreview : Button
         };
         statusIndicator.SetValue(Grid.ColumnProperty, 0);
 
-        statusIndicator.Bind(Border.BackgroundProperty, new Binding(nameof(Chapter)+"."+nameof(Chapter.Read))
+        statusIndicator.Bind(Border.BackgroundProperty, new Binding(nameof(Chapter) + "." + nameof(Chapter.Read))
         {
             Source = this,
             Mode = BindingMode.OneWay,
@@ -107,7 +107,7 @@ public class ChapterPreview : Button
             Foreground = new SolidColorBrush(Color.Parse("#6C757D"))
         };
 
-        chapterName.Bind(TextBlock.TextProperty, new Binding(nameof(Chapter)+"."+nameof(Chapter.FileName))
+        chapterName.Bind(TextBlock.TextProperty, new Binding(nameof(Chapter) + "." + nameof(Chapter.FileName))
         {
             Source = this,
             Mode = BindingMode.OneWay,
@@ -115,7 +115,7 @@ public class ChapterPreview : Button
                 Path.GetFileNameWithoutExtension(fileName) ?? fileName ?? string.Empty)
         });
 
-        chapterName.Bind(ForegroundProperty, new Binding(nameof(Chapter)+"."+nameof(Chapter.Read))
+        chapterName.Bind(ForegroundProperty, new Binding(nameof(Chapter) + "." + nameof(Chapter.Read))
         {
             Source = this,
             Mode = BindingMode.OneWay,
@@ -126,7 +126,7 @@ public class ChapterPreview : Button
             })
         });
 
-        chapterDetails.Bind(TextBlock.TextProperty, new Binding(nameof(Chapter)+"."+nameof(Chapter.PageNumber))
+        chapterDetails.Bind(TextBlock.TextProperty, new Binding(nameof(Chapter) + "." + nameof(Chapter.PageNumber))
         {
             Source = this,
             Mode = BindingMode.OneWay,
@@ -149,7 +149,7 @@ public class ChapterPreview : Button
             Foreground = new SolidColorBrush(Color.Parse("#495057"))
         };
 
-        progressText.Bind(TextBlock.TextProperty, new Binding(nameof(Chapter)+"."+nameof(Chapter.Read))
+        progressText.Bind(TextBlock.TextProperty, new Binding(nameof(Chapter) + "." + nameof(Chapter.Read))
         {
             Source = this,
             Mode = BindingMode.OneWay,
@@ -164,7 +164,7 @@ public class ChapterPreview : Button
 
         progressBadge.Child = progressText;
 
-        progressBadge.Bind(Border.BackgroundProperty, new Binding(nameof(Chapter)+"."+nameof(Chapter.Read))
+        progressBadge.Bind(Border.BackgroundProperty, new Binding(nameof(Chapter) + "." + nameof(Chapter.Read))
         {
             Source = this,
             Mode = BindingMode.OneWay,

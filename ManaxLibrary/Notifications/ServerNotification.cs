@@ -40,7 +40,7 @@ public static class ServerNotification
     public static event Action<UserDto>? OnUserCreated;
     public static event Action<UserDto>? OnUserUpdated;
     public static event Action<long>? OnUserDeleted;
-    
+
     public static event Action<ReadDto>? OnReadCreated;
     public static event Action<long>? OnReadDeleted;
 
@@ -106,7 +106,7 @@ public static class ServerNotification
 
         _hubConnection.On<UserDto>(nameof(NotificationType.UserCreated),
             userData => { OnUserCreated?.Invoke(userData); });
-        
+
         _hubConnection.On<UserDto>(nameof(NotificationType.UserUpdated),
             userData => { OnUserUpdated?.Invoke(userData); });
 
@@ -118,7 +118,7 @@ public static class ServerNotification
 
         _hubConnection.On<long>(nameof(NotificationType.PosterUpdated),
             serieId => { OnPosterModified?.Invoke(serieId); });
-        
+
         _hubConnection.On<List<Permission>>(nameof(NotificationType.PermissionModified),
             serieId => { OnPermissionModified?.Invoke(serieId); });
 

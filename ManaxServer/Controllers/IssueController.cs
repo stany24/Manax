@@ -71,7 +71,8 @@ public class IssueController(ManaxContext context, IMapper mapper, INotification
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<IssueSerieReportedTypeDto>>> GetAllReportedSerieIssuesTypes()
     {
-        return await context.ReportedIssueSerieTypes.Select(i => mapper.Map<IssueSerieReportedTypeDto>(i)).ToListAsync();
+        return await context.ReportedIssueSerieTypes.Select(i => mapper.Map<IssueSerieReportedTypeDto>(i))
+            .ToListAsync();
     }
 
     [HttpPost("chapter")]

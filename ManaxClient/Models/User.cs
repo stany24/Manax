@@ -5,13 +5,13 @@ using ManaxLibrary.Notifications;
 
 namespace ManaxClient.Models;
 
-public partial class User:ObservableObject
+public partial class User : ObservableObject
 {
     [ObservableProperty] private long _id;
-    [ObservableProperty] private string _username = string.Empty;
-    [ObservableProperty] private UserRole _role;
     [ObservableProperty] private DateTime _lastLogin;
-    
+    [ObservableProperty] private UserRole _role;
+    [ObservableProperty] private string _username = string.Empty;
+
     public User(UserDto dto)
     {
         FromUserDto(dto);
@@ -25,8 +25,8 @@ public partial class User:ObservableObject
 
     private void OnUserUpdated(UserDto dto)
     {
-         if(dto.Id != Id){return;}
-         FromUserDto(dto);
+        if (dto.Id != Id) return;
+        FromUserDto(dto);
     }
 
     private void FromUserDto(UserDto dto)

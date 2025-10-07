@@ -11,20 +11,20 @@ namespace ManaxClient.Models.Issue;
 
 public partial class IssueChapterReported : ObservableObject
 {
+    [ObservableProperty] private Chapter _chapter = null!;
+    [ObservableProperty] private DateTime _createdAt;
+    [ObservableProperty] private long _id;
+    [ObservableProperty] private IssueChapterReportedType _problem = null!;
     private IDisposable? _subscriptionChapter;
     private IDisposable? _subscriptionProblem;
     private IDisposable? _subscriptionUser;
-    [ObservableProperty] private long _id;
-    [ObservableProperty] private DateTime _createdAt;
     [ObservableProperty] private User _user = null!;
-    [ObservableProperty] private Chapter _chapter = null!;
-    [ObservableProperty] private IssueChapterReportedType _problem = null!;
 
     public IssueChapterReported(IssueChapterReportedDto dto)
     {
         FromDto(dto);
     }
-    
+
     public void Close()
     {
         Task.Run(async () => { await ManaxApiIssueClient.CloseChapterIssueAsync(Id); });
@@ -34,7 +34,7 @@ public partial class IssueChapterReported : ObservableObject
     {
         Id = dto.Id;
         CreatedAt = dto.CreatedAt;
-        
+
         _subscriptionChapter?.Dispose();
         _subscriptionChapter = ChapterSource.Chapters
             .Connect()
@@ -43,12 +43,9 @@ public partial class IssueChapterReported : ObservableObject
             .Subscribe(changes =>
             {
                 using IEnumerator<Change<Chapter, long>> enumerator = changes.GetEnumerator();
-                if (enumerator.MoveNext())
-                {
-                    Chapter = enumerator.Current.Current;
-                }
+                if (enumerator.MoveNext()) Chapter = enumerator.Current.Current;
             });
-        
+
         _subscriptionUser?.Dispose();
         _subscriptionUser = UserSource.Users
             .Connect()
@@ -57,12 +54,9 @@ public partial class IssueChapterReported : ObservableObject
             .Subscribe(changes =>
             {
                 using IEnumerator<Change<User, long>> enumerator = changes.GetEnumerator();
-                if (enumerator.MoveNext())
-                {
-                    User = enumerator.Current.Current;
-                }
+                if (enumerator.MoveNext()) User = enumerator.Current.Current;
             });
-        
+
         _subscriptionProblem?.Dispose();
         _subscriptionProblem = ProblemSource.ChapterProblems
             .Connect()
@@ -71,10 +65,7 @@ public partial class IssueChapterReported : ObservableObject
             .Subscribe(changes =>
             {
                 using IEnumerator<Change<IssueChapterReportedType, long>> enumerator = changes.GetEnumerator();
-                if (enumerator.MoveNext())
-                {
-                    Problem = enumerator.Current.Current;
-                }
+                if (enumerator.MoveNext()) Problem = enumerator.Current.Current;
             });
     }
 }

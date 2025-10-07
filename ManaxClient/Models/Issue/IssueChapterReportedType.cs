@@ -7,15 +7,15 @@ using ManaxLibrary.DTO.Issue.Reported;
 
 namespace ManaxClient.Models.Issue;
 
-public class IssueChapterReportedType:ObservableObject
+public class IssueChapterReportedType : ObservableObject
 {
-    public long Id { get; set; }
-    public string Name { get; set; }
-    
     public IssueChapterReportedType(IssueChapterReportedTypeDto dto)
     {
         FromDto(dto);
     }
+
+    public long Id { get; set; }
+    public string Name { get; set; }
 
     public void FromDto(IssueChapterReportedTypeDto dto)
     {

@@ -1,6 +1,6 @@
+using System.Collections;
 using System.Reflection;
 using ManaxLibrary.Logging;
-using System.Collections;
 
 namespace ManaxServer.Services.Mapper;
 
@@ -65,7 +65,7 @@ public class ManaxMapper(Mapping mapping) : IMapper
             targetProp.SetValue(target, value);
         }
     }
-    
+
     private static bool IsEnumerable(Type type)
     {
         return type != typeof(string) && typeof(IEnumerable).IsAssignableFrom(type);

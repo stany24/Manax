@@ -28,25 +28,19 @@ public partial class ChapterPageViewModel : PageViewModel
     {
         ControlBordersVisible = !ControlBordersVisible;
     }
-    
+
     public void NextPage()
     {
-        if (CurrentPage + 1 == Chapter.Pages.Count)
-        {
-            return;
-        }
+        if (CurrentPage + 1 == Chapter.Pages.Count) return;
 
-        ScrollOffset  = new Vector(0,ScrollOffset.Y + Chapter.Pages[CurrentPage].Size.Height);
+        ScrollOffset = new Vector(0, ScrollOffset.Y + Chapter.Pages[CurrentPage].Size.Height);
     }
 
     public void PreviousPage()
     {
-        if (CurrentPage == 0)
-        {
-            return;
-        }
+        if (CurrentPage == 0) return;
 
-        ScrollOffset  = new Vector(0,ScrollOffset.Y - Chapter.Pages[CurrentPage].Size.Height);
+        ScrollOffset = new Vector(0, ScrollOffset.Y - Chapter.Pages[CurrentPage].Size.Height);
     }
 
     public void PreviousChapter()

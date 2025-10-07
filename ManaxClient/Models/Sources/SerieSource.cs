@@ -13,18 +13,18 @@ namespace ManaxClient.Models.Sources;
 
 public static class SerieSource
 {
-    public static readonly SourceCache<Serie, long> Series = new (serie => serie.Id);
+    public static readonly SourceCache<Serie, long> Series = new(serie => serie.Id);
     private static bool _isLoaded;
     private static readonly object SeriesLock = new();
     private static readonly object LoadLock = new();
-    
+
     static SerieSource()
     {
         ServerNotification.OnSerieCreated += OnSerieCreated;
         ServerNotification.OnSerieDeleted += OnSerieDeleted;
         LoadSeries();
     }
-    
+
     private static void OnSerieCreated(SerieDto dto)
     {
         Serie serie = new(dto);
@@ -43,7 +43,7 @@ public static class SerieSource
             Series.RemoveKey(id);
         }
     }
-    
+
     private static void LoadSeries()
     {
         Task.Run(() =>
@@ -59,7 +59,7 @@ public static class SerieSource
                         Logger.LogFailure(seriesIdsResponse.Error);
                         return;
                     }
-    
+
                     List<long> seriesIds = seriesIdsResponse.GetValue();
                     lock (SeriesLock)
                     {

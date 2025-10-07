@@ -3,7 +3,7 @@ using ManaxServer.Tasks;
 
 namespace ManaxTests.Server.Mocks;
 
-public class MockBackgroundTaskService:IBackgroundTaskService
+public class MockBackgroundTaskService : IBackgroundTaskService
 {
     public Task AddTaskAsync(IBackGroundTask backGroundTask)
     {

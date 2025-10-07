@@ -9,10 +9,10 @@ namespace ManaxClient.Models.Issue;
 
 public partial class IssueChapterAutomatic : ObservableObject
 {
-    private IDisposable? _subscription;
-    [ObservableProperty] private DateTime _createdAt;
     [ObservableProperty] private Chapter _chapter = null!;
+    [ObservableProperty] private DateTime _createdAt;
     [ObservableProperty] private IssueChapterAutomaticType _problem;
+    private IDisposable? _subscription;
 
     public IssueChapterAutomatic(IssueChapterAutomaticDto dto)
     {
@@ -31,10 +31,7 @@ public partial class IssueChapterAutomatic : ObservableObject
             .Subscribe(changes =>
             {
                 using IEnumerator<Change<Chapter, long>> enumerator = changes.GetEnumerator();
-                if (enumerator.MoveNext())
-                {
-                    Chapter = enumerator.Current.Current;
-                }
+                if (enumerator.MoveNext()) Chapter = enumerator.Current.Current;
             });
     }
 }

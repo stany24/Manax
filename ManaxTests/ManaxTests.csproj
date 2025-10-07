@@ -20,7 +20,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\ManaxClient\ManaxClient.csproj" />
+        <ProjectReference Include="..\ManaxClient\ManaxClient.csproj"/>
         <ProjectReference Include="..\ManaxServer\ManaxServer.csproj"/>
     </ItemGroup>
 

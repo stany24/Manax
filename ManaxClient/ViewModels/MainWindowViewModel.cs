@@ -23,6 +23,7 @@ using ManaxClient.ViewModels.Pages.Settings;
 using ManaxClient.ViewModels.Pages.Stats;
 using ManaxClient.ViewModels.Pages.Tag;
 using ManaxClient.ViewModels.Pages.User;
+using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.Notifications;
 
@@ -31,16 +32,15 @@ namespace ManaxClient.ViewModels;
 public partial class MainWindowViewModel : ObservableObject
 {
     private readonly PageHistoryManager _history = new();
+
+    private readonly ReadOnlyObservableCollection<Library> _libraries;
+
+    private readonly IDisposable _librariesSubscription;
     [ObservableProperty] private ObservableCollection<string> _infos = [];
     [ObservableProperty] private bool _isAdmin;
     [ObservableProperty] private Thickness _pageMargin = new(0, 0, 0, 0);
     [ObservableProperty] private Controls.Popups.Popup? _popup;
     [ObservableProperty] private SortedObservableCollection<TaskItem> _runningTasks = new([]);
-    
-    private readonly ReadOnlyObservableCollection<Library> _libraries;
-    public ReadOnlyObservableCollection<Library> Libraries => _libraries;
-    
-    private readonly IDisposable _librariesSubscription;
 
     public MainWindowViewModel()
     {
@@ -49,7 +49,7 @@ public partial class MainWindowViewModel : ObservableObject
             .Connect()
             .SortAndBind(out _libraries, comparer)
             .Subscribe();
-        
+
         RunningTasks.SortingSelector = t => t.TaskName;
         _history.OnPageChanged += _ =>
         {
@@ -66,13 +66,13 @@ public partial class MainWindowViewModel : ObservableObject
         _history.OnPageChanging += _ =>
         {
             if (CurrentPageViewModel is not LoginPageViewModel login) return;
-            Library.ErrorEmitted += (_,e) => ShowInfo(e);
-            Serie.ErrorEmitted += (_,e) => ShowInfo(e);
-            Chapter.ErrorEmitted += (_,e) => ShowInfo(e);
-            RankSource.ErrorEmitted += (_,e) => ShowInfo(e);
-            TagSource.ErrorEmitted += (_,e) => ShowInfo(e);
-            UserSource.ErrorEmitted += (_,e) => ShowInfo(e);
-            IssueSource.ErrorEmitted += (_,e) => ShowInfo(e);
+            Library.ErrorEmitted += (_, e) => ShowInfo(e);
+            Serie.ErrorEmitted += (_, e) => ShowInfo(e);
+            Chapter.ErrorEmitted += (_, e) => ShowInfo(e);
+            RankSource.ErrorEmitted += (_, e) => ShowInfo(e);
+            TagSource.ErrorEmitted += (_, e) => ShowInfo(e);
+            UserSource.ErrorEmitted += (_, e) => ShowInfo(e);
+            IssueSource.ErrorEmitted += (_, e) => ShowInfo(e);
             IsAdmin = login.IsAdmin();
             ServerNotification.OnRunningTasks += OnRunningTasks;
             ServerNotification.OnPermissionModified += OnPermissionModified;
@@ -82,6 +82,8 @@ public partial class MainWindowViewModel : ObservableObject
 
         SetPage(new LoginPageViewModel());
     }
+
+    public ReadOnlyObservableCollection<Library> Libraries => _libraries;
 
     public bool CanGoBack => _history.CanGoBack;
     public bool CanGoForward => _history.CanGoForward;
@@ -107,7 +109,7 @@ public partial class MainWindowViewModel : ObservableObject
 
     public async void Logout()
     {
-        ManaxLibrary.Optional<bool> logoutAsync = await ManaxApiUserClient.LogoutAsync();
+        Optional<bool> logoutAsync = await ManaxApiUserClient.LogoutAsync();
         if (logoutAsync.Failed) ShowInfo(logoutAsync.Error);
         SetPage(new LoginPageViewModel());
     }

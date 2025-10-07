@@ -9,16 +9,12 @@ using ManaxLibrary.Notifications;
 
 namespace ManaxClient.Models;
 
-public partial class Library:ObservableObject
+public partial class Library : ObservableObject
 {
-    [ObservableProperty] private long _id;
-    [ObservableProperty] private  string _name = string.Empty;
-    [ObservableProperty] private  DateTime _creation;
-    
     private readonly ReadOnlyObservableCollection<Serie> _series;
-    public ReadOnlyObservableCollection<Serie> Series => _series;
-    
-    public static EventHandler<string>? ErrorEmitted { get; set; }
+    [ObservableProperty] private DateTime _creation;
+    [ObservableProperty] private long _id;
+    [ObservableProperty] private string _name = string.Empty;
 
     public Library(LibraryDto dto)
     {
@@ -30,7 +26,7 @@ public partial class Library:ObservableObject
             .AutoRefresh()
             .Filter(serie => serie.LibraryId == Id)
             .SortAndBind(out _series, comparer)
-            .Subscribe(changes =>   
+            .Subscribe(changes =>
             {
                 foreach (Change<Serie, long> change in changes)
                 {
@@ -40,7 +36,11 @@ public partial class Library:ObservableObject
                 }
             });
     }
-    
+
+    public ReadOnlyObservableCollection<Serie> Series => _series;
+
+    public static EventHandler<string>? ErrorEmitted { get; set; }
+
     ~Library()
     {
         ServerNotification.OnLibraryUpdated -= OnLibraryUpdated;

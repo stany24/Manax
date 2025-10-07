@@ -49,7 +49,7 @@
                                       SelectedItem="{Binding SelectedRank}"
                                       HorizontalAlignment="Stretch">
                                 <ComboBox.ItemTemplate>
-                                    <DataTemplate  x:DataType="models:Rank">
+                                    <DataTemplate x:DataType="models:Rank">
                                         <TextBlock Text="{Binding Name}" />
                                     </DataTemplate>
                                 </ComboBox.ItemTemplate>
@@ -103,7 +103,8 @@
                                 </StackPanel>
                             </Border>
 
-                            <ItemsControl ItemsSource="{Binding Serie.Chapters}" IsVisible="{Binding Serie.Chapters.Count}">
+                            <ItemsControl ItemsSource="{Binding Serie.Chapters}"
+                                          IsVisible="{Binding Serie.Chapters.Count}">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
                                         <Border Background="Transparent"

@@ -25,7 +25,7 @@ public static class Logger
 
     public static void LogFailure(string message)
     {
-        LogProblem(message,Environment.StackTrace, LogType.Failure);
+        LogProblem(message, Environment.StackTrace, LogType.Failure);
     }
 
     public static void LogError(string message, Exception e)

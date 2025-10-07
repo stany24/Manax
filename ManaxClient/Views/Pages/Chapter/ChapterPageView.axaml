@@ -159,7 +159,7 @@
                                    FontSize="12"
                                    FontWeight="Medium" />
                     </StackPanel>
-                    
+
                 </Border>
 
                 <Button Classes="secondary"

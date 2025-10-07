@@ -4,13 +4,12 @@ using ManaxLibrary.Notifications;
 
 namespace ManaxClient.Models;
 
-public partial class Rank:ObservableObject
+public partial class Rank : ObservableObject
 {
-   
     [ObservableProperty] private long _id;
-    [ObservableProperty] private int _value;
     [ObservableProperty] private string _name = string.Empty;
-    
+    [ObservableProperty] private int _value;
+
     public Rank(RankDto dto)
     {
         ServerNotification.OnRankUpdated += OnRankUpdated;
@@ -21,17 +20,17 @@ public partial class Rank:ObservableObject
     {
         ServerNotification.OnRankUpdated -= OnRankUpdated;
     }
-    
+
     private void FromDto(RankDto dto)
     {
         Id = dto.Id;
         Value = dto.Value;
         Name = dto.Name;
     }
-    
+
     private void OnRankUpdated(RankDto dto)
     {
-        if(Id != dto.Id) return;
+        if (Id != dto.Id) return;
         FromDto(dto);
     }
 }

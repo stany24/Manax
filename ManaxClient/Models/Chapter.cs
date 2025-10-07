@@ -14,22 +14,19 @@ using ManaxLibrary.Notifications;
 
 namespace ManaxClient.Models;
 
-public partial class Chapter:ObservableObject
+public partial class Chapter : ObservableObject
 {
-    [ObservableProperty] private long _id;
-    [ObservableProperty] private long _serieId;
-    [ObservableProperty] private string _fileName = string.Empty;
-    [ObservableProperty] private int _number;
-    [ObservableProperty] private int _pageNumber;
-
     [ObservableProperty] private DateTime _creation;
+    [ObservableProperty] private string _fileName = string.Empty;
+    [ObservableProperty] private long _id;
     [ObservableProperty] private DateTime _lastModification;
-    [ObservableProperty] private ObservableCollection<Bitmap> _pages = [];
-    [ObservableProperty] private ReadDto? _read;
-
-    public static EventHandler<string>? ErrorEmitted { get; set; }
 
     private CancellationTokenSource? _loadPagesCts;
+    [ObservableProperty] private int _number;
+    [ObservableProperty] private int _pageNumber;
+    [ObservableProperty] private ObservableCollection<Bitmap> _pages = [];
+    [ObservableProperty] private ReadDto? _read;
+    [ObservableProperty] private long _serieId;
 
     public Chapter(ChapterDto chapter)
     {
@@ -37,21 +34,23 @@ public partial class Chapter:ObservableObject
         ServerNotification.OnChapterModified += OnChapterModified;
     }
 
-    public Chapter():this(new ChapterDto())
+    public Chapter() : this(new ChapterDto())
     {
     }
+
+    public static EventHandler<string>? ErrorEmitted { get; set; }
 
     ~Chapter()
     {
         ServerNotification.OnChapterModified -= OnChapterModified;
     }
-    
+
     private void OnChapterModified(ChapterDto chapter)
     {
         if (chapter.Id != Id) return;
         FromChapterDto(chapter);
     }
-    
+
     private void FromChapterDto(ChapterDto dto)
     {
         Id = dto.Id;
@@ -62,19 +61,19 @@ public partial class Chapter:ObservableObject
         Creation = dto.Creation;
         LastModification = dto.LastModification;
     }
-    
-    
+
+
     public void CancelLoadingPages()
     {
         _loadPagesCts?.Cancel();
     }
-    
+
     public void LoadPages()
     {
         CancelLoadingPages();
         _loadPagesCts = new CancellationTokenSource();
         CancellationToken token = _loadPagesCts.Token;
-        
+
         Task.Run(async () =>
         {
             Pages = new ObservableCollection<Bitmap>(new Bitmap[PageNumber]);
@@ -104,10 +103,10 @@ public partial class Chapter:ObservableObject
             }
         }, token);
     }
-    
+
     public void MarkAsRead(int page)
     {
-        if(page == 0){return;}
+        if (page == 0) return;
         ReadCreateDto readCreateDto = new()
         {
             ChapterId = Id,

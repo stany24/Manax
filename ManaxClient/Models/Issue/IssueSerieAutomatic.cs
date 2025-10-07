@@ -9,10 +9,10 @@ namespace ManaxClient.Models.Issue;
 
 public partial class IssueSerieAutomatic : ObservableObject
 {
-    private IDisposable? _subscription;
     [ObservableProperty] private DateTime _createdAt;
-    [ObservableProperty] private Serie _serie = null!;
     [ObservableProperty] private IssueSerieAutomaticType _problem;
+    [ObservableProperty] private Serie _serie = null!;
+    private IDisposable? _subscription;
 
     public IssueSerieAutomatic(IssueSerieAutomaticDto dto)
     {
@@ -23,7 +23,7 @@ public partial class IssueSerieAutomatic : ObservableObject
     {
         CreatedAt = dto.CreatedAt;
         Problem = dto.Problem;
-        
+
         _subscription?.Dispose();
         _subscription = SerieSource.Series
             .Connect()
@@ -32,10 +32,7 @@ public partial class IssueSerieAutomatic : ObservableObject
             .Subscribe(changes =>
             {
                 using IEnumerator<Change<Serie, long>> enumerator = changes.GetEnumerator();
-                if (enumerator.MoveNext())
-                {
-                    Serie = enumerator.Current.Current;
-                }
+                if (enumerator.MoveNext()) Serie = enumerator.Current.Current;
             });
     }
 }

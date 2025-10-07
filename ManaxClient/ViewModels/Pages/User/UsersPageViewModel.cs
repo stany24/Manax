@@ -17,16 +17,18 @@ namespace ManaxClient.ViewModels.Pages.User;
 public class UsersPageViewModel : PageViewModel
 {
     private readonly ReadOnlyObservableCollection<Models.User> _users;
-    public ReadOnlyObservableCollection<Models.User> Users => _users;
 
     public UsersPageViewModel()
     {
-        SortExpressionComparer<Models.User> comparer = SortExpressionComparer<Models.User>.Descending(user => user.Username);
+        SortExpressionComparer<Models.User> comparer =
+            SortExpressionComparer<Models.User>.Descending(user => user.Username);
         UserSource.Users
             .Connect()
             .SortAndBind(out _users, comparer)
             .Subscribe();
     }
+
+    public ReadOnlyObservableCollection<Models.User> Users => _users;
 
     public void DeleteUser(Models.User user)
     {
@@ -38,7 +40,7 @@ public class UsersPageViewModel : PageViewModel
                 : $"User '{user.Username}' was deleted");
         });
     }
-    
+
     public void EditUserPermissions(long userId)
     {
         UserPermissionsEditViewModel content = new(userId);
@@ -51,7 +53,7 @@ public class UsersPageViewModel : PageViewModel
             {
                 if (context.Canceled()) return;
                 List<Permission> perms = content.GetSelectedPermissions();
-                Optional<bool> postUserResponse = await ManaxApiPermissionClient.SetPermissionsAsync(userId,perms);
+                Optional<bool> postUserResponse = await ManaxApiPermissionClient.SetPermissionsAsync(userId, perms);
                 if (postUserResponse.Failed) InfoEmitted?.Invoke(this, postUserResponse.Error);
             }
             catch (Exception e)

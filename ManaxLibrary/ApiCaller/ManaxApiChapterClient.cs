@@ -56,7 +56,7 @@ public static class ManaxApiChapterClient
                 : new Optional<byte[]>(data);
         });
     }
-    
+
     public static async Task<Optional<bool>> DeleteChapterAsync(long id)
     {
         return await ManaxApiClient.ExecuteWithErrorHandlingAsync(async () =>

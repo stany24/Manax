@@ -61,7 +61,7 @@
         <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
         <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.3.6"/>
         <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0"/>
-        <PackageReference Include="DynamicData" Version="9.4.1" />
+        <PackageReference Include="DynamicData" Version="9.4.1"/>
         <PackageReference Include="LiveChartsCore.SkiaSharpView.Avalonia" Version="2.0.0-rc5.4"/>
         <PackageReference Include="nulastudio.NetBeauty" Version="2.1.5"/>
         <PackageReference Include="Xaml.Behaviors.Avalonia" Version="11.3.2"/>
@@ -128,8 +128,8 @@
             <SubType>Code</SubType>
         </Compile>
         <Compile Update="Views\Popup\ConfirmCancel\Content\UserPermissionsEditView.axaml.cs">
-          <DependentUpon>UserPermissionsEdit.axaml</DependentUpon>
-          <SubType>Code</SubType>
+            <DependentUpon>UserPermissionsEdit.axaml</DependentUpon>
+            <SubType>Code</SubType>
         </Compile>
     </ItemGroup>
 

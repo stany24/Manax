@@ -11,14 +11,14 @@ namespace ManaxClient.Models.Issue;
 
 public partial class IssueSerieReported : ObservableObject
 {
-    private IDisposable? _subscriptionSerie;
-    private IDisposable? _subscriptionProblem;
-    private IDisposable? _subscriptionUser;
-    [ObservableProperty] private long _id;
     [ObservableProperty] private DateTime _createdAt;
-    [ObservableProperty] private User _user = null!;
-    [ObservableProperty] private Serie _serie = null!;
+    [ObservableProperty] private long _id;
     [ObservableProperty] private IssueChapterReportedType _problem = null!;
+    [ObservableProperty] private Serie _serie = null!;
+    private IDisposable? _subscriptionProblem;
+    private IDisposable? _subscriptionSerie;
+    private IDisposable? _subscriptionUser;
+    [ObservableProperty] private User _user = null!;
 
     public IssueSerieReported(IssueSerieReportedDto dto)
     {
@@ -34,7 +34,7 @@ public partial class IssueSerieReported : ObservableObject
     {
         Id = dto.Id;
         CreatedAt = dto.CreatedAt;
-        
+
         _subscriptionSerie?.Dispose();
         _subscriptionSerie = SerieSource.Series
             .Connect()
@@ -45,7 +45,7 @@ public partial class IssueSerieReported : ObservableObject
                 using IEnumerator<Change<Serie, long>> enumerator = changes.GetEnumerator();
                 Serie = enumerator.Current.Current;
             });
-        
+
         _subscriptionUser?.Dispose();
         _subscriptionUser = UserSource.Users
             .Connect()
@@ -56,7 +56,7 @@ public partial class IssueSerieReported : ObservableObject
                 using IEnumerator<Change<User, long>> enumerator = changes.GetEnumerator();
                 User = enumerator.Current.Current;
             });
-        
+
         _subscriptionProblem?.Dispose();
         _subscriptionProblem = ProblemSource.ChapterProblems
             .Connect()

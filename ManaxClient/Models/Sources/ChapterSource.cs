@@ -15,17 +15,17 @@ namespace ManaxClient.Models.Sources;
 
 public static class ChapterSource
 {
-    public static readonly SourceCache<Chapter, long> Chapters = new (x => x.Id);
-    private static readonly object ChaptersLock = new ();
-    
-    public static EventHandler<string>? ErrorEmitted { get; set; }
-    
+    public static readonly SourceCache<Chapter, long> Chapters = new(x => x.Id);
+    private static readonly object ChaptersLock = new();
+
     static ChapterSource()
     {
         ServerNotification.OnChapterAdded += OnChapterCreated;
         ServerNotification.OnChapterDeleted += OnChapterDeleted;
     }
-    
+
+    public static EventHandler<string>? ErrorEmitted { get; set; }
+
     private static void OnChapterDeleted(long id)
     {
         lock (ChaptersLock)
@@ -52,21 +52,18 @@ public static class ChapterSource
                 if (response.Failed)
                 {
                     Logger.LogFailure(response.Error);
-                    ErrorEmitted?.Invoke(null,response.Error);
+                    ErrorEmitted?.Invoke(null, response.Error);
                     return;
                 }
-                
-                foreach (long chapterId in response.GetValue())
-                {
-                    LoadChapter(chapterId);
-                }
-                if(loadReads){ LoadSerieReads(id);}
+
+                foreach (long chapterId in response.GetValue()) LoadChapter(chapterId);
+                if (loadReads) LoadSerieReads(id);
             }
             catch (Exception e)
             {
                 const string error = "Failed to load chapters from server";
-                Logger.LogError(error,e);
-                ErrorEmitted?.Invoke(null,error);
+                Logger.LogError(error, e);
+                ErrorEmitted?.Invoke(null, error);
             }
         });
     }
@@ -75,7 +72,7 @@ public static class ChapterSource
     {
         lock (ChaptersLock)
         {
-            if (Chapters.Keys.Contains(id)) { return; }
+            if (Chapters.Keys.Contains(id)) return;
         }
 
         try
@@ -84,7 +81,7 @@ public static class ChapterSource
             if (response.Failed)
             {
                 Logger.LogFailure(response.Error);
-                ErrorEmitted?.Invoke(null,response.Error);
+                ErrorEmitted?.Invoke(null, response.Error);
                 return;
             }
 
@@ -99,7 +96,7 @@ public static class ChapterSource
             throw;
         }
     }
-    
+
     private static void LoadSerieReads(long serieId)
     {
         try
@@ -116,14 +113,12 @@ public static class ChapterSource
             Dispatcher.UIThread.Post(() =>
             {
                 foreach (ReadDto read in reads)
-                {
                     lock (ChaptersLock)
                     {
                         Chapter? chapter = Chapters.Items.FirstOrDefault(c => c.Id == read.ChapterId);
                         if (chapter == null) continue;
                         chapter.Read = read;
                     }
-                }
             });
         }
         catch (Exception e)

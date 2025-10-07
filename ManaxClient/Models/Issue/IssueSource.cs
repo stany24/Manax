@@ -12,16 +12,16 @@ using ManaxLibrary.Notifications;
 
 namespace ManaxClient.Models.Issue;
 
-public class IssueSource
+public static class IssueSource
 {
-    public static readonly SourceCache<IssueChapterAutomatic,long> IssueChapterAutomatic  = new (issue => issue.Chapter.Id);
-    public static readonly SourceCache<IssueSerieAutomatic,long> IssueSerieAutomatic  = new (issue => issue.Serie.Id);
-    public static readonly SourceCache<IssueChapterReported,long> IssueChapterReported = new (issue => issue.Id);
-    public static readonly SourceCache<IssueSerieReported,long> IssueSerieReported = new (serie => serie.Id);
-    
-    private static readonly object IssueLock = new ();
-    
-    public static EventHandler<string>? ErrorEmitted { get; set; }
+    public static readonly SourceCache<IssueChapterAutomatic, long> IssueChapterAutomatic =
+        new(issue => issue.Chapter.Id);
+
+    public static readonly SourceCache<IssueSerieAutomatic, long> IssueSerieAutomatic = new(issue => issue.Serie.Id);
+    public static readonly SourceCache<IssueChapterReported, long> IssueChapterReported = new(issue => issue.Id);
+    public static readonly SourceCache<IssueSerieReported, long> IssueSerieReported = new(serie => serie.Id);
+
+    private static readonly object IssueLock = new();
 
     static IssueSource()
     {
@@ -31,7 +31,9 @@ public class IssueSource
         ServerNotification.OnReportedSerieIssueCreated += OnReportedSerieIssueCreated;
         ServerNotification.OnReportedSerieIssueDeleted += OnReportedSerieIssueDeleted;
     }
-    
+
+    public static EventHandler<string>? ErrorEmitted { get; set; }
+
     private static void OnReportedChapterIssueCreated(IssueChapterReportedDto issue)
     {
         lock (IssueLock)
@@ -63,20 +65,22 @@ public class IssueSource
             IssueSerieReported.RemoveKey(issueId);
         }
     }
-    
+
     private static void LoadData()
     {
         Task.Run(() =>
         {
             try
             {
-                Optional<List<IssueSerieAutomaticDto>> allAutomaticSerieIssuesResponse =
+                Optional<List<IssueSerieAutomaticDto>> responseIssueSerieAutomatic =
                     ManaxApiIssueClient.GetAllAutomaticSerieIssuesAsync().Result;
-                if (allAutomaticSerieIssuesResponse.Failed)
-                    ErrorEmitted?.Invoke(null, allAutomaticSerieIssuesResponse.Error);
+                if (responseIssueSerieAutomatic.Failed)
+                {
+                    ErrorEmitted?.Invoke(null, responseIssueSerieAutomatic.Error);
+                }
                 else
                 {
-                    IEnumerable<IssueSerieAutomatic> series = allAutomaticSerieIssuesResponse.GetValue()
+                    IEnumerable<IssueSerieAutomatic> series = responseIssueSerieAutomatic.GetValue()
                         .Select(s => new IssueSerieAutomatic(s));
                     lock (IssueLock)
                     {
@@ -84,13 +88,15 @@ public class IssueSource
                     }
                 }
 
-                Optional<List<IssueChapterAutomaticDto>> allAutomaticChapterIssuesResponse =
+                Optional<List<IssueChapterAutomaticDto>> responseIssueChapterAutomatic =
                     ManaxApiIssueClient.GetAllAutomaticChapterIssuesAsync().Result;
-                if (allAutomaticChapterIssuesResponse.Failed)
-                    ErrorEmitted?.Invoke(null, allAutomaticChapterIssuesResponse.Error);
+                if (responseIssueChapterAutomatic.Failed)
+                {
+                    ErrorEmitted?.Invoke(null, responseIssueChapterAutomatic.Error);
+                }
                 else
                 {
-                    IEnumerable<IssueChapterAutomatic> series = allAutomaticChapterIssuesResponse.GetValue()
+                    IEnumerable<IssueChapterAutomatic> series = responseIssueChapterAutomatic.GetValue()
                         .Select(c => new IssueChapterAutomatic(c));
                     lock (IssueLock)
                     {
@@ -98,13 +104,15 @@ public class IssueSource
                     }
                 }
 
-                Optional<List<IssueChapterReportedDto>> allReportedChapterIssuesResponse =
+                Optional<List<IssueChapterReportedDto>> responseIssueChapterReported =
                     ManaxApiIssueClient.GetAllReportedChapterIssuesAsync().Result;
-                if (allReportedChapterIssuesResponse.Failed)
-                    ErrorEmitted?.Invoke(null, allReportedChapterIssuesResponse.Error);
+                if (responseIssueChapterReported.Failed)
+                {
+                    ErrorEmitted?.Invoke(null, responseIssueChapterReported.Error);
+                }
                 else
                 {
-                    IEnumerable<IssueChapterReported> series = allReportedChapterIssuesResponse.GetValue()
+                    IEnumerable<IssueChapterReported> series = responseIssueChapterReported.GetValue()
                         .Select(c => new IssueChapterReported(c));
                     lock (IssueLock)
                     {
@@ -112,13 +120,15 @@ public class IssueSource
                     }
                 }
 
-                Optional<List<IssueSerieReportedDto>> allReportedSerieIssuesResponse =
+                Optional<List<IssueSerieReportedDto>> responseIssueSerieReported =
                     ManaxApiIssueClient.GetAllReportedSerieIssuesAsync().Result;
-                if (allReportedSerieIssuesResponse.Failed)
-                    ErrorEmitted?.Invoke(null, allReportedSerieIssuesResponse.Error);
+                if (responseIssueSerieReported.Failed)
+                {
+                    ErrorEmitted?.Invoke(null, responseIssueSerieReported.Error);
+                }
                 else
                 {
-                    IEnumerable<IssueSerieReported> series = allReportedSerieIssuesResponse.GetValue()
+                    IEnumerable<IssueSerieReported> series = responseIssueSerieReported.GetValue()
                         .Select(s => new IssueSerieReported(s));
                     lock (IssueLock)
                     {

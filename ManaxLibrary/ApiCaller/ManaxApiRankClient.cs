@@ -1,5 +1,6 @@
 using System.Net.Http.Json;
 using ManaxLibrary.DTO.Rank;
+
 namespace ManaxLibrary.ApiCaller;
 
 public static class ManaxApiRankClient

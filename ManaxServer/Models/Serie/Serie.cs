@@ -25,7 +25,7 @@ public class Serie
 
     public DateTime Creation { get; set; }
     public DateTime LastModification { get; set; }
-    
+
     public List<Tag.Tag> Tags { get; set; } = [];
 
     public string SavePath => SavePoint.Path + Path.DirectorySeparatorChar + FolderName;

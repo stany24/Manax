@@ -16,7 +16,6 @@ namespace ManaxClient.ViewModels.Pages.Rank;
 public class RankPageViewModel : PageViewModel
 {
     private readonly ReadOnlyObservableCollection<Models.Rank> _ranks;
-    public ReadOnlyObservableCollection<Models.Rank> Ranks => _ranks;
 
     public RankPageViewModel()
     {
@@ -25,6 +24,9 @@ public class RankPageViewModel : PageViewModel
             .SortAndBind(out _ranks, comparer)
             .Subscribe();
     }
+
+    public ReadOnlyObservableCollection<Models.Rank> Ranks => _ranks;
+
     public void UpdateRank(Models.Rank rank)
     {
         RankUpdateDto update = new()
