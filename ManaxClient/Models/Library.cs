@@ -34,7 +34,6 @@ public partial class Library:ObservableObject
             {
                 foreach (Change<Serie, long> change in changes)
                 {
-                    Console.WriteLine("Change detected in library series: " + change);
                     if (change.Reason != ChangeReason.Add) continue;
                     change.Current.LoadInfo();
                     change.Current.LoadPoster();

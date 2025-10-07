@@ -11,9 +11,9 @@ namespace ManaxClient.Models.Issue;
 
 public partial class IssueChapterReported : ObservableObject
 {
-    private IDisposable _subscriptionChapter = null!;
-    private IDisposable _subscriptionProblem = null!;
-    private IDisposable _subscriptionUser = null!;
+    private IDisposable? _subscriptionChapter;
+    private IDisposable? _subscriptionProblem;
+    private IDisposable? _subscriptionUser;
     [ObservableProperty] private long _id;
     [ObservableProperty] private DateTime _createdAt;
     [ObservableProperty] private User _user = null!;
@@ -35,37 +35,46 @@ public partial class IssueChapterReported : ObservableObject
         Id = dto.Id;
         CreatedAt = dto.CreatedAt;
         
-        _subscriptionChapter.Dispose();
+        _subscriptionChapter?.Dispose();
         _subscriptionChapter = ChapterSource.Chapters
             .Connect()
-            .AutoRefresh(o => o)
+            .AutoRefresh()
             .Filter(o => o.Id == dto.ChapterId)
             .Subscribe(changes =>
             {
                 using IEnumerator<Change<Chapter, long>> enumerator = changes.GetEnumerator();
-                Chapter = enumerator.Current.Current;
+                if (enumerator.MoveNext())
+                {
+                    Chapter = enumerator.Current.Current;
+                }
             });
         
-        _subscriptionUser.Dispose();
+        _subscriptionUser?.Dispose();
         _subscriptionUser = UserSource.Users
             .Connect()
-            .AutoRefresh(o => o)
+            .AutoRefresh()
             .Filter(o => o.Id == dto.UserId)
             .Subscribe(changes =>
             {
                 using IEnumerator<Change<User, long>> enumerator = changes.GetEnumerator();
-                User = enumerator.Current.Current;
+                if (enumerator.MoveNext())
+                {
+                    User = enumerator.Current.Current;
+                }
             });
         
-        _subscriptionProblem.Dispose();
+        _subscriptionProblem?.Dispose();
         _subscriptionProblem = ProblemSource.ChapterProblems
             .Connect()
-            .AutoRefresh(o => o)
+            .AutoRefresh()
             .Filter(o => o.Id == dto.ProblemId)
             .Subscribe(changes =>
             {
                 using IEnumerator<Change<IssueChapterReportedType, long>> enumerator = changes.GetEnumerator();
-                Problem = enumerator.Current.Current;
+                if (enumerator.MoveNext())
+                {
+                    Problem = enumerator.Current.Current;
+                }
             });
     }
 }

@@ -21,7 +21,17 @@ public partial class Tag:ObservableObject
     {
         ServerNotification.OnTagUpdated -= OnTagUpdated;
     }
-    
+
+    public override bool Equals(object? obj)
+    {
+        return obj is Tag tag && Id == tag.Id;
+    }
+
+    public override int GetHashCode()
+    {
+        return Id.GetHashCode();
+    }
+
     private void OnTagUpdated(TagDto tag)
     {
         if(tag.Id != Id) return;

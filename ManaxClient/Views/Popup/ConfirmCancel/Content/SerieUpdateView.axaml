@@ -4,7 +4,6 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:content="clr-namespace:ManaxClient.ViewModels.Popup.ConfirmCancel.Content"
-    xmlns:tag="clr-namespace:ManaxLibrary.DTO.Tag;assembly=ManaxLibrary"
     xmlns:converters="clr-namespace:ManaxClient.Converters"
     mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="500"
     x:Class="ManaxClient.Views.Popup.ConfirmCancel.Content.SerieUpdateView"
@@ -161,7 +160,7 @@
                 BorderBrush="#DEE2E6"
                 FontSize="12">
                 <ComboBox.ItemTemplate>
-                    <DataTemplate DataType="tag:TagDto">
+                    <DataTemplate>
                         <TextBlock Text="{Binding Name}" />
                     </DataTemplate>
                 </ComboBox.ItemTemplate>

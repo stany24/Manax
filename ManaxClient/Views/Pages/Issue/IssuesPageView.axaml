@@ -149,13 +149,13 @@
                                    FontWeight="SemiBold"
                                    Foreground="#495057" />
 
-                        <ItemsControl ItemsSource="{Binding AllAutomaticChapterIssues}"
+                        <ItemsControl ItemsSource="{Binding IssueChapterAutomatic}"
                                       ItemTemplate="{StaticResource AutomaticChapterIssueTemplate}" />
 
                         <TextBlock Text="Aucun problème automatique de chapitre trouvé"
                                    FontStyle="Italic"
                                    Foreground="#6C757D"
-                                   IsVisible="{Binding AllAutomaticChapterIssues.Count, Converter={x:Static StringConverters.IsNullOrEmpty}}" />
+                                   IsVisible="{Binding IssueChapterAutomatic.Count, Converter={x:Static StringConverters.IsNullOrEmpty}}" />
                     </StackPanel>
 
                     <StackPanel IsVisible="{Binding !ShowChapterIssues}" Spacing="12">
@@ -164,13 +164,13 @@
                                    FontWeight="SemiBold"
                                    Foreground="#495057" />
 
-                        <ItemsControl ItemsSource="{Binding AllAutomaticSerieIssues}"
+                        <ItemsControl ItemsSource="{Binding IssueSerieAutomatic}"
                                       ItemTemplate="{StaticResource AutomaticSerieIssueTemplate}" />
 
                         <TextBlock Text="Aucun problème automatique de série trouvé"
                                    FontStyle="Italic"
                                    Foreground="#6C757D"
-                                   IsVisible="{Binding AllAutomaticSerieIssues.Count, Converter={x:Static StringConverters.IsNullOrEmpty}}" />
+                                   IsVisible="{Binding IssueSerieAutomatic.Count, Converter={x:Static StringConverters.IsNullOrEmpty}}" />
                     </StackPanel>
                 </StackPanel>
 
@@ -181,13 +181,13 @@
                                    FontWeight="SemiBold"
                                    Foreground="#495057" />
 
-                        <ItemsControl ItemsSource="{Binding AllReportedChapterIssues}"
+                        <ItemsControl ItemsSource="{Binding IssueChapterReported}"
                                       ItemTemplate="{StaticResource ReportedChapterIssueTemplate}" />
 
                         <TextBlock Text="Aucun problème signalé de chapitre trouvé"
                                    FontStyle="Italic"
                                    Foreground="#6C757D"
-                                   IsVisible="{Binding AllReportedChapterIssues.Count, Converter={x:Static StringConverters.IsNullOrEmpty}}" />
+                                   IsVisible="{Binding IssueChapterReported.Count, Converter={x:Static StringConverters.IsNullOrEmpty}}" />
                     </StackPanel>
 
                     <StackPanel IsVisible="{Binding !ShowChapterIssues}" Spacing="12">
@@ -196,13 +196,13 @@
                                    FontWeight="SemiBold"
                                    Foreground="#495057" />
 
-                        <ItemsControl ItemsSource="{Binding AllReportedSerieIssues}"
+                        <ItemsControl ItemsSource="{Binding IssueSerieReported}"
                                       ItemTemplate="{StaticResource ReportedSerieIssueTemplate}" />
 
                         <TextBlock Text="Aucun problème signalé de série trouvé"
                                    FontStyle="Italic"
                                    Foreground="#6C757D"
-                                   IsVisible="{Binding AllReportedSerieIssues.Count, Converter={x:Static StringConverters.IsNullOrEmpty}}" />
+                                   IsVisible="{Binding IssueSerieReported.Count, Converter={x:Static StringConverters.IsNullOrEmpty}}" />
                     </StackPanel>
                 </StackPanel>
             </StackPanel>
