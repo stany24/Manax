@@ -91,7 +91,7 @@ public class GetChapterTests : ChapterTestsSetup
         Assert.AreEqual(chapter.SerieId, returnedChapter.SerieId);
         Assert.AreEqual(chapter.FileName, returnedChapter.FileName);
         Assert.AreEqual(chapter.Number, returnedChapter.Number);
-        Assert.AreEqual(chapter.Pages, returnedChapter.Pages);
+        Assert.AreEqual(chapter.PageNumber, returnedChapter.PageNumber);
         Assert.AreEqual(chapter.Creation, returnedChapter.Creation);
         Assert.AreEqual(chapter.LastModification, returnedChapter.LastModification);
     }

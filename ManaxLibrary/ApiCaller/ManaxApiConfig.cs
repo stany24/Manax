@@ -11,7 +11,7 @@ public static class ManaxApiConfig
     {
         ManaxApiClient.SetToken(token);
     }
-    
+
     public static void ResetToken()
     {
         ManaxApiClient.ResetToken();

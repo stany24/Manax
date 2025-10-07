@@ -36,7 +36,7 @@ public partial class LoginPageViewModel : PageViewModel
     public void Login()
     {
         LoginError = string.Empty;
-        Task.Run((Func<Task?>)(async () =>
+        Task.Run(async () =>
         {
             CanLogin = false;
             Emoji = "⌛";
@@ -52,7 +52,7 @@ public partial class LoginPageViewModel : PageViewModel
             }
 
             CheckToken(loginResponse.GetValue());
-        }));
+        });
     }
 
     private void CheckToken(UserLoginResultDto result)
@@ -93,7 +93,7 @@ public partial class LoginPageViewModel : PageViewModel
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
+            Logger.LogError("Failed to save login values", e);
             throw;
         }
     }
@@ -114,7 +114,7 @@ public partial class LoginPageViewModel : PageViewModel
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
+            Logger.LogError("Failed to load login values", e);
         }
     }
 

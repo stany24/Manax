@@ -85,7 +85,7 @@ public class NotificationService(IHubContext<NotificationService> hubContext, IP
     public void NotifyChapterModifiedAsync(ChapterDto chapter)
     {
         TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadChapters,
-            NotificationType.ChapterModified, chapter);
+            NotificationType.ChapterUpdated, chapter);
     }
 
     public void NotifyChapterRemovedAsync(long chapterId)
@@ -96,12 +96,18 @@ public class NotificationService(IHubContext<NotificationService> hubContext, IP
 
     public void NotifyPermissionModifiedAsync(long userId, List<ManaxLibrary.DTO.User.Permission> permissions)
     {
-        TrySendToSingleClientAsync(userId,NotificationType.PermissionModified, permissions);
+        TrySendToSingleClientAsync(userId, NotificationType.PermissionModified, permissions);
     }
 
     public void NotifyUserCreatedAsync(UserDto user)
     {
         TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadUsers, NotificationType.UserCreated,
+            user);
+    }
+
+    public void NotifyUserUpdatedAsync(UserDto user)
+    {
+        TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadUsers, NotificationType.UserUpdated,
             user);
     }
 
@@ -117,10 +123,10 @@ public class NotificationService(IHubContext<NotificationService> hubContext, IP
             NotificationType.RunningTasks, tasks);
     }
 
-    public void NotifyPosterModifiedAsync(long serieId)
+    public void NotifyPosterUpdatedAsync(long serieId)
     {
         TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadSeries,
-            NotificationType.PosterModified, serieId);
+            NotificationType.PosterUpdated, serieId);
     }
 
     public void NotifyReadCreated(ReadDto existingRead)
@@ -133,13 +139,13 @@ public class NotificationService(IHubContext<NotificationService> hubContext, IP
         TrySendToSingleClientAsync(existingRead.UserId, NotificationType.ReadCreated, existingRead.ChapterId);
     }
 
-    public void NotifySerieIssueCreatedAsync(ReportedIssueSerieDto issue)
+    public void NotifySerieIssueCreatedAsync(IssueSerieReportedDto issue)
     {
         TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadAllIssues,
             NotificationType.ReportedSerieIssueCreated, issue);
     }
 
-    public void NotifyChapterIssueCreatedAsync(ReportedIssueChapterDto issue)
+    public void NotifyChapterIssueCreatedAsync(IssueChapterReportedDto issue)
     {
         TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadAllIssues,
             NotificationType.ReportedChapterIssueCreated, issue);
@@ -190,7 +196,7 @@ public class NotificationService(IHubContext<NotificationService> hubContext, IP
         }
         catch (Exception ex)
         {
-            Logger.LogError(Localizer.HubConnectionError(Context.ConnectionId), ex, Environment.StackTrace);
+            Logger.LogError(Localizer.HubConnectionError(Context.ConnectionId), ex);
         }
     }
 
@@ -201,8 +207,7 @@ public class NotificationService(IHubContext<NotificationService> hubContext, IP
             Connections.TryRemove(Context.ConnectionId, out _);
 
             if (exception != null)
-                Logger.LogError(Localizer.HubDisconnectedError(Context.ConnectionId), exception,
-                    Environment.StackTrace);
+                Logger.LogError(Localizer.HubDisconnectedError(Context.ConnectionId), exception);
             else
                 Logger.LogInfo(Localizer.HubDisconnected(Context.ConnectionId));
 
@@ -210,7 +215,7 @@ public class NotificationService(IHubContext<NotificationService> hubContext, IP
         }
         catch (Exception ex)
         {
-            Logger.LogError(Localizer.HubDisconnectedError(Context.ConnectionId), ex, Environment.StackTrace);
+            Logger.LogError(Localizer.HubDisconnectedError(Context.ConnectionId), ex);
         }
     }
 
@@ -231,7 +236,7 @@ public class NotificationService(IHubContext<NotificationService> hubContext, IP
         }
         catch (Exception ex)
         {
-            Logger.LogError(Localizer.HubMessageError(methodName), ex, Environment.StackTrace);
+            Logger.LogError(Localizer.HubMessageError(methodName), ex);
         }
     }
 
@@ -245,7 +250,7 @@ public class NotificationService(IHubContext<NotificationService> hubContext, IP
         }
         catch (Exception ex)
         {
-            Logger.LogError(Localizer.HubMessageErrorSingle(id, methodName), ex, Environment.StackTrace);
+            Logger.LogError(Localizer.HubMessageErrorSingle(id, methodName), ex);
         }
     }
 }

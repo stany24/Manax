@@ -1,69 +1,32 @@
-using System.Collections.Generic;
+using System;
 using System.Collections.ObjectModel;
 using System.Drawing;
-using System.Linq;
 using System.Threading.Tasks;
+using DynamicData;
+using DynamicData.Binding;
+using ManaxClient.Models.Sources;
 using ManaxClient.ViewModels.Popup.ConfirmCancel;
 using ManaxClient.ViewModels.Popup.ConfirmCancel.Content;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTO.Tag;
-using ManaxLibrary.Notifications;
 
 namespace ManaxClient.ViewModels.Pages.Tag;
 
 public class TagPageViewModel : PageViewModel
 {
+    private readonly ReadOnlyObservableCollection<Models.Tag> _tags;
+
     public TagPageViewModel()
     {
-        Task.Run(LoadTags);
-        ServerNotification.OnTagCreated += OnTagCreated;
-        ServerNotification.OnTagUpdated += OnTagUpdated;
-        ServerNotification.OnTagDeleted += OnTagDeleted;
+        SortExpressionComparer<Models.Tag> comparer = SortExpressionComparer<Models.Tag>.Descending(tag => tag.Name);
+        TagSource.Tags
+            .Connect()
+            .SortAndBind(out _tags, comparer)
+            .Subscribe();
     }
 
-    public ObservableCollection<TagDto> Tags { get; } = [];
-
-    private void OnTagDeleted(long tagId)
-    {
-        TagDto? found = Tags.FirstOrDefault(t => t.Id == tagId);
-        if (found == null) return;
-        Tags.Remove(found);
-    }
-
-    private void OnTagUpdated(TagDto tag)
-    {
-        TagDto? found = Tags.FirstOrDefault(t => t.Id == tag.Id);
-        if (found == null) return;
-        found.Name = tag.Name;
-        found.Color = tag.Color;
-    }
-
-    private void OnTagCreated(TagDto tag)
-    {
-        if (Tags.Any(t => t.Id == tag.Id)) OnTagUpdated(tag);
-        Tags.Add(tag);
-    }
-
-    private async void LoadTags()
-    {
-        try
-        {
-            
-            Optional<List<TagDto>> response = await ManaxApiTagClient.GetTagsAsync();
-            if (response.Failed)
-            {
-                InfoEmitted?.Invoke(this, "Erreur lors du chargement des tags.");
-                return;
-            }
-            Tags.Clear();
-            foreach (TagDto tag in response.GetValue()) Tags.Add(tag);
-        }
-        catch
-        {
-            InfoEmitted?.Invoke(this, "Erreur lors du chargement des tags.");
-        }
-    }
+    public ReadOnlyObservableCollection<Models.Tag> Tags => _tags;
 
     public void CreateTag()
     {
@@ -95,7 +58,7 @@ public class TagPageViewModel : PageViewModel
         PopupRequested?.Invoke(this, popup);
     }
 
-    public void UpdateTag(TagDto tag)
+    public void UpdateTag(Models.Tag tag)
     {
         TagUpdateDto update = new()
         {
@@ -124,7 +87,7 @@ public class TagPageViewModel : PageViewModel
         PopupRequested?.Invoke(this, popup);
     }
 
-    public void DeleteTag(TagDto tag)
+    public void DeleteTag(Models.Tag tag)
     {
         Task.Run(async () =>
         {

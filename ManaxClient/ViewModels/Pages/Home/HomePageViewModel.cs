@@ -1,43 +1,52 @@
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
+using System.Collections.ObjectModel;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
+using DynamicData;
+using DynamicData.Binding;
+using ManaxClient.Models.Sources;
+using ManaxClient.ViewModels.Pages.Serie;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
-using ManaxLibrary.DTO.Search;
-using ManaxLibrary.DTO.Serie;
 using ManaxLibrary.Logging;
 
 namespace ManaxClient.ViewModels.Pages.Home;
 
-public partial class HomePageViewModel : BaseSeries
+public partial class HomePageViewModel : PageViewModel
 {
+    private readonly ReadOnlyObservableCollection<Models.Serie> _series;
     [ObservableProperty] private bool _isFolderPickerOpen;
 
     public HomePageViewModel()
     {
-        Task.Run(async () =>
-        {
-            Optional<List<long>> libraryIdsAsync = await ManaxApiLibraryClient.GetLibraryIdsAsync();
-            if (libraryIdsAsync.Failed)
+        SortExpressionComparer<Models.Serie> comparer =
+            SortExpressionComparer<Models.Serie>.Descending(serie => serie.Title);
+        SerieSource.Series
+            .Connect()
+            .SortAndBind(out _series, comparer)
+            .Subscribe(changes =>
             {
-                InfoEmitted?.Invoke(this, libraryIdsAsync.Error);
-                return;
-            }
-
-            LoadSeries(new Search());
-        });
+                foreach (Change<Models.Serie, long> change in changes)
+                {
+                    if (change.Reason != ChangeReason.Add) continue;
+                    change.Current.LoadInfo();
+                    change.Current.LoadPoster();
+                }
+            });
     }
 
-    protected override void OnSerieCreated(SerieDto serie)
+    public ReadOnlyObservableCollection<Models.Serie> Series => _series;
+
+    public void MoveToSeriePage(Models.Serie serie)
     {
-        Logger.LogInfo("A new Serie has been created");
-        AddSerieToCollection(serie);
+        SeriePageViewModel seriePageViewModel = new(serie);
+        PageChangedRequested?.Invoke(this, seriePageViewModel);
     }
+
 
     public async void UploadSerie()
     {
@@ -75,7 +84,7 @@ public partial class HomePageViewModel : BaseSeries
         }
         catch (Exception e)
         {
-            Logger.LogError("Error uploading series", e, Environment.StackTrace);
+            Logger.LogError("Error uploading series", e);
         }
     }
 }

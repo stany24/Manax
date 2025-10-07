@@ -33,7 +33,7 @@ public partial class FixService(IServiceScopeFactory scopeFactory, IIssueService
         Chapter? chapter = manaxContext.Chapters.Find(chapterId);
         if (chapter == null) return;
 
-        chapter.Pages = ZipFile.OpenRead(chapter.Path).Entries.Count;
+        chapter.PageNumber = ZipFile.OpenRead(chapter.Path).Entries.Count;
 
         FixChapterDeep(chapter);
         manaxContext.SaveChangesAsync();
@@ -56,7 +56,7 @@ public partial class FixService(IServiceScopeFactory scopeFactory, IIssueService
         catch
         {
             if (Directory.Exists(copyName)) Directory.Delete(copyName, true);
-            issueService.CreateChapterIssue(chapter.Id, AutomaticIssueChapterType.CouldNotOpen);
+            issueService.CreateChapterIssue(chapter.Id, IssueChapterAutomaticType.CouldNotOpen);
             return;
         }
 
@@ -82,7 +82,7 @@ public partial class FixService(IServiceScopeFactory scopeFactory, IIssueService
     {
         int? chapterNumber = GetChapterNumber(chapter.FileName);
         if (chapterNumber != null) return ChangeChapterName(chapter, (int)chapterNumber);
-        issueService.CreateChapterIssue(chapter.Id, AutomaticIssueChapterType.ChapterNumberMissing);
+        issueService.CreateChapterIssue(chapter.Id, IssueChapterAutomaticType.ChapterNumberMissing);
         return false;
     }
 
@@ -129,7 +129,7 @@ public partial class FixService(IServiceScopeFactory scopeFactory, IIssueService
             catch
             {
                 images[i] = null;
-                issueService.CreateChapterIssue(chapterId, AutomaticIssueChapterType.CouldNotOpen);
+                issueService.CreateChapterIssue(chapterId, IssueChapterAutomaticType.CouldNotOpen);
             }
 
         return images;
@@ -168,10 +168,10 @@ public partial class FixService(IServiceScopeFactory scopeFactory, IIssueService
             try
             {
                 if (image == null) continue;
-                issueService.RemoveChapterIssue(id, AutomaticIssueChapterType.CouldNotOpen);
+                issueService.RemoveChapterIssue(id, IssueChapterAutomaticType.CouldNotOpen);
                 uint min = SettingsManager.Data.MinChapterWidth;
                 uint max = SettingsManager.Data.MaxChapterWidth;
-                issueService.ManageChapterIssue(id, AutomaticIssueChapterType.ImageTooSmall, image.Width < min);
+                issueService.ManageChapterIssue(id, IssueChapterAutomaticType.ImageTooSmall, image.Width < min);
                 if (image.Width <= max) continue;
                 image.Resize(max, image.Height * max / image.Width);
                 image.Write(image.FileName!);
@@ -179,7 +179,7 @@ public partial class FixService(IServiceScopeFactory scopeFactory, IIssueService
             }
             catch
             {
-                issueService.CreateChapterIssue(id, AutomaticIssueChapterType.CouldNotOpen);
+                issueService.CreateChapterIssue(id, IssueChapterAutomaticType.CouldNotOpen);
             }
 
         return modified;

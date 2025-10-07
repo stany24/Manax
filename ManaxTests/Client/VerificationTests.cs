@@ -3,6 +3,7 @@ using ManaxClient.ViewModels;
 using ManaxLibrary.DTO.User;
 
 namespace ManaxTests.Client;
+
 [TestClass]
 public class VerificationTests
 {
@@ -16,9 +17,7 @@ public class VerificationTests
         {
             string propertyName = "Can" + permission;
             if (!propertyInfos.Any(p => p.Name == propertyName && p.PropertyType == typeof(bool)))
-            {
                 Assert.Fail($"Missing permission property: {propertyName} in {type}");
-            }
         }
     }
 }

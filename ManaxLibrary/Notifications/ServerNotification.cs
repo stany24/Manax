@@ -38,13 +38,15 @@ public static class ServerNotification
     public static event Action<long>? OnChapterDeleted;
 
     public static event Action<UserDto>? OnUserCreated;
+    public static event Action<UserDto>? OnUserUpdated;
     public static event Action<long>? OnUserDeleted;
+
     public static event Action<ReadDto>? OnReadCreated;
     public static event Action<long>? OnReadDeleted;
 
-    public static event Action<ReportedIssueChapterDto>? OnReportedChapterIssueCreated;
+    public static event Action<IssueChapterReportedDto>? OnReportedChapterIssueCreated;
     public static event Action<long>? OnReportedChapterIssueDeleted;
-    public static event Action<ReportedIssueSerieDto>? OnReportedSerieIssueCreated;
+    public static event Action<IssueSerieReportedDto>? OnReportedSerieIssueCreated;
     public static event Action<long>? OnReportedSerieIssueDeleted;
 
     public static event Action<TagDto>? OnTagCreated;
@@ -96,7 +98,7 @@ public static class ServerNotification
         _hubConnection.On<ChapterDto>(nameof(NotificationType.ChapterAdded),
             chapterData => { OnChapterAdded?.Invoke(chapterData); });
 
-        _hubConnection.On<ChapterDto>(nameof(NotificationType.ChapterModified),
+        _hubConnection.On<ChapterDto>(nameof(NotificationType.ChapterUpdated),
             chapterData => { OnChapterModified?.Invoke(chapterData); });
 
         _hubConnection.On<long>(nameof(NotificationType.ChapterRemoved),
@@ -105,15 +107,18 @@ public static class ServerNotification
         _hubConnection.On<UserDto>(nameof(NotificationType.UserCreated),
             userData => { OnUserCreated?.Invoke(userData); });
 
+        _hubConnection.On<UserDto>(nameof(NotificationType.UserUpdated),
+            userData => { OnUserUpdated?.Invoke(userData); });
+
         _hubConnection.On<long>(nameof(NotificationType.UserDeleted),
             userId => { OnUserDeleted?.Invoke(userId); });
 
         _hubConnection.On<Dictionary<string, int>>(nameof(NotificationType.RunningTasks),
             tasks => { OnRunningTasks?.Invoke(tasks); });
 
-        _hubConnection.On<long>(nameof(NotificationType.PosterModified),
+        _hubConnection.On<long>(nameof(NotificationType.PosterUpdated),
             serieId => { OnPosterModified?.Invoke(serieId); });
-        
+
         _hubConnection.On<List<Permission>>(nameof(NotificationType.PermissionModified),
             serieId => { OnPermissionModified?.Invoke(serieId); });
 
@@ -123,13 +128,13 @@ public static class ServerNotification
         _hubConnection.On<long>(nameof(NotificationType.ReadDeleted),
             readId => { OnReadDeleted?.Invoke(readId); });
 
-        _hubConnection.On<ReportedIssueChapterDto>(nameof(NotificationType.ReportedChapterIssueCreated),
+        _hubConnection.On<IssueChapterReportedDto>(nameof(NotificationType.ReportedChapterIssueCreated),
             issueData => { OnReportedChapterIssueCreated?.Invoke(issueData); });
 
         _hubConnection.On<long>(nameof(NotificationType.ReportedChapterIssueDeleted),
             issueId => { OnReportedChapterIssueDeleted?.Invoke(issueId); });
 
-        _hubConnection.On<ReportedIssueSerieDto>(nameof(NotificationType.ReportedSerieIssueCreated),
+        _hubConnection.On<IssueSerieReportedDto>(nameof(NotificationType.ReportedSerieIssueCreated),
             issueData => { OnReportedSerieIssueCreated?.Invoke(issueData); });
 
         _hubConnection.On<long>(nameof(NotificationType.ReportedSerieIssueDeleted),
@@ -150,7 +155,7 @@ public static class ServerNotification
         _hubConnection.Closed += async exception =>
         {
             if (exception != null)
-                Logger.LogError("SignalR: Connexion fermée", exception, Environment.StackTrace);
+                Logger.LogError("SignalR: Connexion fermée", exception);
             else
                 Logger.LogInfo("SignalR: Connexion fermée");
             await Task.Delay(5000);
@@ -160,7 +165,7 @@ public static class ServerNotification
         _hubConnection.Reconnecting += exception =>
         {
             if (exception != null)
-                Logger.LogError("SignalR: Tentative de reconnexion", exception, Environment.StackTrace);
+                Logger.LogError("SignalR: Tentative de reconnexion", exception);
             else
                 Logger.LogInfo("SignalR: Tentative de reconnexion");
             return Task.CompletedTask;
@@ -187,7 +192,7 @@ public static class ServerNotification
         }
         catch (Exception ex)
         {
-            Logger.LogError("SignalR: Erreur de connexion", ex, Environment.StackTrace);
+            Logger.LogError("SignalR: Erreur de connexion", ex);
             await Task.Delay(5000);
             await ConnectAsync();
         }

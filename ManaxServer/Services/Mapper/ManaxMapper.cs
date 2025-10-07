@@ -1,6 +1,6 @@
+using System.Collections;
 using System.Reflection;
 using ManaxLibrary.Logging;
-using System.Collections;
 
 namespace ManaxServer.Services.Mapper;
 
@@ -12,8 +12,7 @@ public class ManaxMapper(Mapping mapping) : IMapper
         bool allowed = mapping.Allowed(sourceType, typeof(T));
         if (!allowed)
         {
-            Logger.LogError($"Cannot map from {typeof(T)} to {sourceType}", new NotImplementedException(),
-                Environment.StackTrace);
+            Logger.LogError($"Cannot map from {typeof(T)} to {sourceType}", new NotImplementedException());
             throw new NotImplementedException();
         }
 
@@ -29,8 +28,7 @@ public class ManaxMapper(Mapping mapping) : IMapper
         bool allowed = mapping.Allowed(sourceType, targetType);
         if (!allowed)
         {
-            Logger.LogError($"Cannot map from {sourceType} to {targetType}", new NotImplementedException(),
-                Environment.StackTrace);
+            Logger.LogError($"Cannot map from {sourceType} to {targetType}", new NotImplementedException());
             throw new NotImplementedException();
         }
 
@@ -67,7 +65,7 @@ public class ManaxMapper(Mapping mapping) : IMapper
             targetProp.SetValue(target, value);
         }
     }
-    
+
     private static bool IsEnumerable(Type type)
     {
         return type != typeof(string) && typeof(IEnumerable).IsAssignableFrom(type);

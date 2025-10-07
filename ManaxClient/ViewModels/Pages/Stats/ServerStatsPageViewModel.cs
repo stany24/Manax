@@ -8,7 +8,6 @@ using LiveChartsCore;
 using LiveChartsCore.Measure;
 using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Painting;
-using ManaxClient.Models;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTO.Stats;
@@ -28,7 +27,7 @@ public partial class ServerStatsPageViewModel : PageViewModel
         Task.Run(LoadServerStats);
     }
 
-    public ObservableCollection<ClientSerie> NeverReadSeries { get; set; } = new([]);
+    public ObservableCollection<Models.Serie> NeverReadSeries { get; set; } = new([]);
     public ObservableCollection<ISeries> UserActivitySeries { get; set; } = new([]);
     public ObservableCollection<ISeries> LibraryDistributionSeries { get; set; } = new([]);
     public ObservableCollection<ISeries> DiskUsageSeries { get; set; } = new([]);
@@ -40,7 +39,7 @@ public partial class ServerStatsPageViewModel : PageViewModel
             Optional<ServerStats> serverStats = await ManaxApiStatsClient.GetServerStats();
             if (serverStats.Failed)
             {
-                Logger.LogFailure($"Failed to load server stats: {serverStats.Error}", Environment.StackTrace);
+                Logger.LogFailure($"Failed to load server stats: {serverStats.Error}");
                 InfoEmitted?.Invoke(this, $"Failed to load server stats: {serverStats.Error}");
                 return;
             }
@@ -53,7 +52,7 @@ public partial class ServerStatsPageViewModel : PageViewModel
         }
         catch (Exception e)
         {
-            Logger.LogError($"An error occurred while loading server stats: {e.Message}", e, Environment.StackTrace);
+            Logger.LogError($"An error occurred while loading server stats: {e.Message}", e);
             InfoEmitted?.Invoke(this, $"An error occurred while loading server stats: {e.Message}");
         }
     }
@@ -127,7 +126,7 @@ public partial class ServerStatsPageViewModel : PageViewModel
             colorIndex++;
         }
 
-        foreach (ClientSerie serie in ServerStats.NeverReadSeries.ConvertAll(s => new ClientSerie(s)))
+        foreach (Models.Serie serie in ServerStats.NeverReadSeries.ConvertAll(s => new Models.Serie(s)))
             NeverReadSeries.Add(serie);
     }
 }

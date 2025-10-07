@@ -11,7 +11,7 @@ public class ChapterDto
     public long SerieId { get; set; }
     public string FileName { get; set; } = string.Empty;
     public int Number { get; set; }
-    public int Pages { get; set; }
+    public int PageNumber { get; set; }
 
     public DateTime Creation { get; set; }
     public DateTime LastModification { get; set; }

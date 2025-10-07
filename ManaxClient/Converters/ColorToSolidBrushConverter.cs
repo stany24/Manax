@@ -5,7 +5,7 @@ using Avalonia.Media;
 
 namespace ManaxClient.Converters;
 
-public class ColorToSolidBrushConverter:IValueConverter
+public class ColorToSolidBrushConverter : IValueConverter
 {
     public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {

@@ -8,7 +8,8 @@ namespace ManaxServer.Controllers;
 
 [Route("api/permission")]
 [ApiController]
-public class PermissionController(IPermissionService permissionService,INotificationService notificationService) : ControllerBase
+public class PermissionController(IPermissionService permissionService, INotificationService notificationService)
+    : ControllerBase
 {
     // POST: api/Permission/{userId}
     [HttpPost("{userId:long}")]
@@ -18,10 +19,10 @@ public class PermissionController(IPermissionService permissionService,INotifica
     public async Task<ActionResult<long>> SetPermissions(long userId, List<Permission> permissions)
     {
         await permissionService.SetUserPermissionsAsync(userId, permissions);
-        notificationService.NotifyPermissionModifiedAsync(userId,permissions);
+        notificationService.NotifyPermissionModifiedAsync(userId, permissions);
         return Ok();
     }
-    
+
     // GET: api/Permission/self
     [HttpGet("self")]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -32,7 +33,7 @@ public class PermissionController(IPermissionService permissionService,INotifica
         IEnumerable<Permission> permissions = await permissionService.GetUserPermissionsAsync((long)currentUserId);
         return Ok(permissions);
     }
-    
+
     // GET: api/Permission/{userId}
     [HttpGet("{userId:long}")]
     [RequirePermission(Permission.ReadPermissions)]
@@ -76,7 +77,7 @@ public class PermissionController(IPermissionService permissionService,INotifica
         Permission[] owner = admin.Concat([
             Permission.ReadPermissions,
             Permission.WritePermissions,
-            
+
             Permission.ReadSavePoints,
             Permission.ReadServerSettings,
 

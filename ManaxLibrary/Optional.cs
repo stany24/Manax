@@ -22,7 +22,7 @@ public class Optional<T>
         if (isError)
         {
             Error = error;
-            Logger.LogFailure(error, Environment.StackTrace);
+            Logger.LogFailure(error);
         }
         else
         {
@@ -36,7 +36,7 @@ public class Optional<T>
     {
         string error = response.StatusCode + ": " + response.Content.ReadAsStringAsync().Result;
         Error = error;
-        Logger.LogFailure(error, Environment.StackTrace);
+        Logger.LogFailure(error);
     }
 
     public string Error { get; } = string.Empty;

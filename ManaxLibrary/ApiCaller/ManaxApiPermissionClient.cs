@@ -1,7 +1,7 @@
 using System.Net.Http.Json;
-using ManaxLibrary.DTO.User;
-using System.Text.Json;
 using System.Text;
+using System.Text.Json;
+using ManaxLibrary.DTO.User;
 
 namespace ManaxLibrary.ApiCaller;
 
@@ -19,12 +19,12 @@ public static class ManaxApiPermissionClient
                 : new Optional<List<Permission>>(permissions);
         });
     }
-    
+
     public static async Task<Optional<List<Permission>>> GetUserPermissionsAsync(long userId)
     {
         return await ManaxApiClient.ExecuteWithErrorHandlingAsync(async () =>
         {
-            HttpResponseMessage response = await ManaxApiClient.Client.GetAsync("api/permission/"+userId);
+            HttpResponseMessage response = await ManaxApiClient.Client.GetAsync("api/permission/" + userId);
             if (!response.IsSuccessStatusCode) return new Optional<List<Permission>>(response);
             List<Permission>? permissions = await response.Content.ReadFromJsonAsync<List<Permission>>();
             return permissions == null

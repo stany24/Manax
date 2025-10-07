@@ -4,26 +4,25 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:content="clr-namespace:ManaxClient.ViewModels.Popup.ConfirmCancel.Content"
-    xmlns:tag="clr-namespace:ManaxLibrary.DTO.Tag;assembly=ManaxLibrary"
     xmlns:converters="clr-namespace:ManaxClient.Converters"
     mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="500"
     x:Class="ManaxClient.Views.Popup.ConfirmCancel.Content.SerieUpdateView"
     x:DataType="content:SerieUpdateViewModel"
     Name="Popup">
-    
+
     <UserControl.Resources>
-        <converters:ColorToSolidBrushConverter x:Key="ColorToBrushConverter"/>
+        <converters:ColorToSolidBrushConverter x:Key="ColorToBrushConverter" />
     </UserControl.Resources>
-    
+
     <Grid Name="MainGrid"
-          RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" 
+          RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto"
           ColumnDefinitions="*" RowSpacing="16" Margin="16">
-        <StackPanel Grid.Row="0" 
-                    Orientation="Horizontal" 
-                    Spacing="12" 
+        <StackPanel Grid.Row="0"
+                    Orientation="Horizontal"
+                    Spacing="12"
                     Margin="0,0,0,8">
-            <TextBlock Text="📖" 
-                       FontSize="24" 
+            <TextBlock Text="📖"
+                       FontSize="24"
                        VerticalAlignment="Center" />
             <StackPanel Spacing="4">
                 <TextBlock
@@ -161,7 +160,7 @@
                 BorderBrush="#DEE2E6"
                 FontSize="12">
                 <ComboBox.ItemTemplate>
-                    <DataTemplate DataType="tag:TagDto">
+                    <DataTemplate>
                         <TextBlock Text="{Binding Name}" />
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
@@ -175,66 +174,66 @@
                 </ComboBox.Styles>
             </ComboBox>
         </StackPanel>
-        
+
         <Border Grid.Row="5"
                 BorderBrush="#DEE2E6"
                 BorderThickness="1"
                 CornerRadius="8"
                 Padding="8"
                 MinHeight="60">
-                 <ItemsControl ItemsSource="{Binding SelectedTags}"
-                              HorizontalAlignment="Stretch">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <WrapPanel Orientation="Horizontal" MaxWidth="460" />
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Border
-                                Background="#E7F3FF"
-                                BorderBrush="{Binding Color, Converter={StaticResource ColorToBrushConverter}}"
-                                BorderThickness="2"
-                                CornerRadius="16"
-                                Margin="2"
-                                Padding="8,4">
-                                <StackPanel Orientation="Horizontal" Spacing="4">
-                                    <TextBlock
-                                        Text="{Binding Name}"
-                                        FontSize="12"
-                                        VerticalAlignment="Center"/>
-                                    <Button
-                                        Content="✕"
-                                        VerticalContentAlignment="Center"
-                                        HorizontalContentAlignment="Center"
-                                        FontSize="10"
-                                        Width="16"
-                                        Height="16"
-                                        Padding="0"
-                                        Background="Transparent"
-                                        BorderThickness="0"
-                                        Foreground="#007ACC"
-                                        Command="{Binding $parent[UserControl].((content:SerieUpdateViewModel)DataContext).RemoveTag}"
-                                        CommandParameter="{Binding}">
-                                        <Button.Styles>
-                                            <Style Selector="Button:pointerover">
-                                                <Setter Property="Foreground" Value="Red" />
-                                            </Style>
-                                        </Button.Styles>
-                                    </Button>
-                                </StackPanel>
-                            </Border>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-            </Border>
-            <TextBlock
-                Grid.Row="5"
-                Text="Aucun tag sélectionné"
-                FontSize="12"
-                Foreground="#6C757D"
-                HorizontalAlignment="Center"
-                Margin="0,8,0,0"
-                IsVisible="{Binding !SelectedTags.Count}" />
+            <ItemsControl ItemsSource="{Binding SelectedTags}"
+                          HorizontalAlignment="Stretch">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel Orientation="Horizontal" MaxWidth="460" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border
+                            Background="#E7F3FF"
+                            BorderBrush="{Binding Color, Converter={StaticResource ColorToBrushConverter}}"
+                            BorderThickness="2"
+                            CornerRadius="16"
+                            Margin="2"
+                            Padding="8,4">
+                            <StackPanel Orientation="Horizontal" Spacing="4">
+                                <TextBlock
+                                    Text="{Binding Name}"
+                                    FontSize="12"
+                                    VerticalAlignment="Center" />
+                                <Button
+                                    Content="✕"
+                                    VerticalContentAlignment="Center"
+                                    HorizontalContentAlignment="Center"
+                                    FontSize="10"
+                                    Width="16"
+                                    Height="16"
+                                    Padding="0"
+                                    Background="Transparent"
+                                    BorderThickness="0"
+                                    Foreground="#007ACC"
+                                    Command="{Binding $parent[UserControl].((content:SerieUpdateViewModel)DataContext).RemoveTag}"
+                                    CommandParameter="{Binding}">
+                                    <Button.Styles>
+                                        <Style Selector="Button:pointerover">
+                                            <Setter Property="Foreground" Value="Red" />
+                                        </Style>
+                                    </Button.Styles>
+                                </Button>
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </Border>
+        <TextBlock
+            Grid.Row="5"
+            Text="Aucun tag sélectionné"
+            FontSize="12"
+            Foreground="#6C757D"
+            HorizontalAlignment="Center"
+            Margin="0,8,0,0"
+            IsVisible="{Binding !SelectedTags.Count}" />
     </Grid>
 </UserControl>

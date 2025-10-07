@@ -68,7 +68,7 @@ public partial class UploadController(
             Path = filePath,
             FileName = file.FileName,
             Number = number,
-            Pages = pagesCount,
+            PageNumber = pagesCount,
             Creation = creation,
             LastModification = DateTime.UtcNow
         };
@@ -118,7 +118,7 @@ public partial class UploadController(
             return BadRequest(Localizer.InvalidZipFile());
 
         chapter.LastModification = DateTime.UtcNow;
-        chapter.Pages = pagesCount;
+        chapter.PageNumber = pagesCount;
 
         serie.LastModification = DateTime.UtcNow;
 
@@ -206,7 +206,7 @@ public partial class UploadController(
             image.Quality = SettingsManager.Data.PosterQuality;
             await image.WriteAsync(path, GetMagickFormat(format));
             _ = backgroundTaskService.AddTaskAsync(new FixPosterBackGroundTask(fixService, serie.Id));
-            notificationService.NotifyPosterModifiedAsync(serie.Id);
+            notificationService.NotifyPosterUpdatedAsync(serie.Id);
         }
         catch (Exception e)
         {

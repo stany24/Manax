@@ -23,7 +23,7 @@ public partial class FixService
         string fileName = SettingsManager.Data.PosterName + "." +
                           SettingsManager.Data.PosterFormat.ToString().ToLower(CultureInfo.InvariantCulture);
         string posterPath = Path.Combine(directory, fileName);
-        issueService.ManageSerieIssue(serie.Id, AutomaticIssueSerieType.PosterMissing, !File.Exists(posterPath));
+        issueService.ManageSerieIssue(serie.Id, IssueSerieAutomaticType.PosterMissing, !File.Exists(posterPath));
         if (!File.Exists(posterPath)) return;
 
         uint min = SettingsManager.Data.MinPosterWidth;
@@ -31,8 +31,8 @@ public partial class FixService
         try
         {
             using MagickImage poster = new(posterPath);
-            issueService.RemoveSerieIssue(serieId, AutomaticIssueSerieType.PosterCouldNotOpen);
-            issueService.ManageSerieIssue(serieId, AutomaticIssueSerieType.PosterTooSmall, poster.Width < min);
+            issueService.RemoveSerieIssue(serieId, IssueSerieAutomaticType.PosterCouldNotOpen);
+            issueService.ManageSerieIssue(serieId, IssueSerieAutomaticType.PosterTooSmall, poster.Width < min);
 
             if (poster.Width <= max) return;
             poster.Resize(max, poster.Height * max / poster.Width);
@@ -40,7 +40,7 @@ public partial class FixService
         }
         catch (Exception)
         {
-            issueService.CreateSerieIssue(serieId, AutomaticIssueSerieType.PosterCouldNotOpen);
+            issueService.CreateSerieIssue(serieId, IssueSerieAutomaticType.PosterCouldNotOpen);
         }
     }
 }

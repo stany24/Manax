@@ -11,7 +11,7 @@ namespace ManaxClient.ViewModels.Popup.ConfirmCancel.Content;
 public class CreateChapterIssueViewModel : ConfirmCancelContentViewModel
 {
     private readonly long _chapterId;
-    private ReportedIssueChapterTypeDto? _selectedIssue;
+    private IssueChapterReportedTypeDto? _selectedIssue;
 
     public CreateChapterIssueViewModel(long chapterId)
     {
@@ -20,9 +20,9 @@ public class CreateChapterIssueViewModel : ConfirmCancelContentViewModel
         _ = LoadProblems();
     }
 
-    public ObservableCollection<ReportedIssueChapterTypeDto> Issues { get; } = [];
+    public ObservableCollection<IssueChapterReportedTypeDto> Issues { get; } = [];
 
-    public ReportedIssueChapterTypeDto? SelectedIssue
+    public IssueChapterReportedTypeDto? SelectedIssue
     {
         get => _selectedIssue;
         set
@@ -34,12 +34,12 @@ public class CreateChapterIssueViewModel : ConfirmCancelContentViewModel
 
     private async Task LoadProblems()
     {
-        Optional<List<ReportedIssueChapterTypeDto>> issuesTypes =
+        Optional<List<IssueChapterReportedTypeDto>> issuesTypes =
             await ManaxApiIssueClient.GetAllReportedChapterIssueTypesAsync();
         if (!issuesTypes.Failed)
             Dispatcher.UIThread.Post(() =>
             {
-                foreach (ReportedIssueChapterTypeDto issue in issuesTypes.GetValue())
+                foreach (IssueChapterReportedTypeDto issue in issuesTypes.GetValue())
                     Issues.Add(issue);
                 if (Issues.Count <= 0) return;
                 SelectedIssue = Issues[0];
@@ -47,9 +47,9 @@ public class CreateChapterIssueViewModel : ConfirmCancelContentViewModel
             });
     }
 
-    public ReportedIssueChapterCreateDto GetResult()
+    public IssueChapterReportedCreateDto GetResult()
     {
-        return new ReportedIssueChapterCreateDto
+        return new IssueChapterReportedCreateDto
         {
             ChapterId = _chapterId,
             ProblemId = SelectedIssue?.Id ?? 0

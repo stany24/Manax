@@ -22,12 +22,12 @@
                 <StackPanel Classes="sidebar"
                             IsVisible="{Binding CurrentPageViewModel.ControlBarVisible}"
                             Orientation="Vertical">
-                    
+
                     <TextBlock Classes="title"
                                Text="Manax"
                                HorizontalAlignment="Center"
                                Margin="0,0,0,24" />
-                    
+
                     <Button Classes="sidebar primary"
                             Command="{Binding ChangePageHome}">
                         <StackPanel Orientation="Horizontal" Spacing="12">
@@ -48,7 +48,7 @@
                                 <DataTemplate>
                                     <Button Classes="sidebar"
                                             Command="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).ShowLibrary}"
-                                            CommandParameter="{Binding Id}">
+                                            CommandParameter="{Binding }">
                                         <StackPanel Orientation="Horizontal" Spacing="12">
                                             <TextBlock Text="📚" FontSize="14" />
                                             <TextBlock Text="{Binding Name}" TextTrimming="CharacterEllipsis" />
@@ -150,7 +150,7 @@
                             <TextBlock Text="Stats serveur" />
                         </StackPanel>
                     </Button>
-                    
+
                     <Button
                         Classes="sidebar"
                         Command="{Binding Logout}">

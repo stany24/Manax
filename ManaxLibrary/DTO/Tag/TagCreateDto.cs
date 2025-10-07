@@ -9,7 +9,7 @@ public class TagCreateDto
 {
     public string Name { get; set; } = null!;
     public int ColorArgb { get; set; }
-    
+
     [JsonIgnore]
     public Color Color
     {

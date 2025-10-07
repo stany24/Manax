@@ -1,71 +1,36 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Threading.Tasks;
-using Avalonia.Threading;
-using CommunityToolkit.Mvvm.ComponentModel;
+using DynamicData;
+using DynamicData.Binding;
+using ManaxClient.Models.Sources;
 using ManaxClient.ViewModels.Popup.ConfirmCancel;
 using ManaxClient.ViewModels.Popup.ConfirmCancel.Content;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTO.User;
 using ManaxLibrary.Logging;
-using ManaxLibrary.Notifications;
 
 namespace ManaxClient.ViewModels.Pages.User;
 
-public partial class UsersPageViewModel : PageViewModel
+public class UsersPageViewModel : PageViewModel
 {
-    [ObservableProperty] private ObservableCollection<UserDto> _users = [];
+    private readonly ReadOnlyObservableCollection<Models.User> _users;
 
     public UsersPageViewModel()
     {
-        Task.Run((Func<Task?>)(async () =>
-        {
-            Optional<List<long>> usersIdsResponse = await ManaxApiUserClient.GetUsersIdsAsync();
-            if (usersIdsResponse.Failed)
-            {
-                InfoEmitted?.Invoke(this, usersIdsResponse.Error);
-                return;
-            }
-
-            List<long> ids = usersIdsResponse.GetValue();
-            foreach (long id in ids)
-            {
-                Optional<UserDto> userResponse = await ManaxApiUserClient.GetUserAsync(id);
-                if (userResponse.Failed)
-                {
-                    InfoEmitted?.Invoke(this, userResponse.Error);
-                    continue;
-                }
-
-                Dispatcher.UIThread.Post(() => Users.Add(userResponse.GetValue()));
-            }
-        }));
-        ServerNotification.OnUserCreated += OnUserCreated;
-        ServerNotification.OnUserDeleted += OnUserDeleted;
+        SortExpressionComparer<Models.User> comparer =
+            SortExpressionComparer<Models.User>.Descending(user => user.Username);
+        UserSource.Users
+            .Connect()
+            .SortAndBind(out _users, comparer)
+            .Subscribe();
     }
 
-    ~UsersPageViewModel()
-    {
-        ServerNotification.OnUserCreated -= OnUserCreated;
-        ServerNotification.OnUserDeleted -= OnUserDeleted;
-    }
+    public ReadOnlyObservableCollection<Models.User> Users => _users;
 
-    private void OnUserDeleted(long userId)
-    {
-        UserDto? user = Users.FirstOrDefault(u => u.Id == userId);
-        if (user == null) return;
-        Dispatcher.UIThread.Post(() => Users.Remove(user));
-    }
-
-    private void OnUserCreated(UserDto user)
-    {
-        Dispatcher.UIThread.Post(() => Users.Add(user));
-    }
-
-    public void DeleteUser(UserDto user)
+    public void DeleteUser(Models.User user)
     {
         Task.Run(async () =>
         {
@@ -75,7 +40,7 @@ public partial class UsersPageViewModel : PageViewModel
                 : $"User '{user.Username}' was deleted");
         });
     }
-    
+
     public void EditUserPermissions(long userId)
     {
         UserPermissionsEditViewModel content = new(userId);
@@ -88,12 +53,12 @@ public partial class UsersPageViewModel : PageViewModel
             {
                 if (context.Canceled()) return;
                 List<Permission> perms = content.GetSelectedPermissions();
-                Optional<bool> postUserResponse = await ManaxApiPermissionClient.SetPermissionsAsync(userId,perms);
+                Optional<bool> postUserResponse = await ManaxApiPermissionClient.SetPermissionsAsync(userId, perms);
                 if (postUserResponse.Failed) InfoEmitted?.Invoke(this, postUserResponse.Error);
             }
             catch (Exception e)
             {
-                Logger.LogError("Error updating user permissions", e, Environment.StackTrace);
+                Logger.LogError("Error updating user permissions", e);
                 InfoEmitted?.Invoke(this, "Error updating user permissions");
             }
         };
@@ -116,7 +81,7 @@ public partial class UsersPageViewModel : PageViewModel
             }
             catch (Exception e)
             {
-                Logger.LogError("Error creating user", e, Environment.StackTrace);
+                Logger.LogError("Error creating user", e);
                 InfoEmitted?.Invoke(this, "Error creating user");
             }
         };

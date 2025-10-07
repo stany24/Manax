@@ -1,3 +1,5 @@
+// ReSharper disable PropertyCanBeMadeInitOnly.Global
+
 using Microsoft.EntityFrameworkCore;
 
 namespace ManaxServer.Models.Tag;
@@ -8,6 +10,6 @@ public class Tag
     public long Id { get; set; }
     public string Name { get; set; } = null!;
     public int ColorArgb { get; set; }
-    
+
     public List<Serie.Serie> Series { get; set; } = [];
 }

@@ -70,6 +70,7 @@ public class UserController(
             return BadRequest(errorMessage);
 
         user.PasswordHash = hashService.HashPassword(userUpdate.Password);
+        notificationService.NotifyUserUpdatedAsync(mapper.Map<UserDto>(user));
         await context.SaveChangesAsync();
         return Ok();
     }
@@ -168,8 +169,7 @@ public class UserController(
         User? user = await context.Users.FirstOrDefaultAsync(u => u.Username == loginDto.Username);
         if (user == null || !hashService.VerifyPassword(loginDto.Password, user.PasswordHash))
         {
-            Logger.LogWarning("Failed login attempt for user " + loginDto.Username + " from " + loginAttempt.Origin,
-                Environment.StackTrace);
+            Logger.LogWarning("Failed login attempt for user " + loginDto.Username + " from " + loginAttempt.Origin);
             context.LoginAttempts.Add(loginAttempt);
             await context.SaveChangesAsync();
             return Unauthorized(Localizer.UserInvalidLogin());

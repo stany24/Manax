@@ -12,15 +12,17 @@ namespace ManaxServer.Services.Notification;
 public interface INotificationService
 {
     void NotifyPermissionModifiedAsync(long userId, List<ManaxLibrary.DTO.User.Permission> permissions);
-    
+
     void NotifyUserCreatedAsync(UserDto user);
+    void NotifyUserUpdatedAsync(UserDto user);
     void NotifyUserDeletedAsync(long userId);
+
 
     void NotifySerieCreatedAsync(SerieDto serie);
     void NotifySerieUpdatedAsync(SerieDto serie);
     void NotifySerieDeletedAsync(long serieId);
 
-    void NotifyPosterModifiedAsync(long serieId);
+    void NotifyPosterUpdatedAsync(long serieId);
 
     void NotifyLibraryCreatedAsync(LibraryDto library);
     void NotifyLibraryUpdatedAsync(LibraryDto library);
@@ -38,8 +40,8 @@ public interface INotificationService
     void NotifyReadCreated(ReadDto existingRead);
     void NotifyReadRemoved(ReadDto existingRead);
 
-    void NotifySerieIssueCreatedAsync(ReportedIssueSerieDto issue);
-    void NotifyChapterIssueCreatedAsync(ReportedIssueChapterDto issue);
+    void NotifySerieIssueCreatedAsync(IssueSerieReportedDto issue);
+    void NotifyChapterIssueCreatedAsync(IssueChapterReportedDto issue);
     void NotifyChapterIssueDeletedAsync(long issueId);
     void NotifySerieIssueDeletedAsync(long issueId);
 

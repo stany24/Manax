@@ -5,6 +5,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:page="clr-namespace:ManaxClient.ViewModels.Pages.Rank"
     xmlns:viewModels="clr-namespace:ManaxClient.ViewModels"
+    xmlns:models="clr-namespace:ManaxClient.Models"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Pages.Rank.RankPageView"
     x:DataType="page:RankPageViewModel">
@@ -61,7 +62,7 @@
 
                     <ItemsControl ItemsSource="{Binding Ranks}">
                         <ItemsControl.ItemTemplate>
-                            <DataTemplate>
+                            <DataTemplate x:DataType="models:Rank">
                                 <Border Background="{DynamicResource Background1}"
                                         BorderBrush="{DynamicResource Background2}"
                                         BorderThickness="1"

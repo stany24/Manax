@@ -2,7 +2,7 @@ using ManaxServer.Services.Fix;
 
 namespace ManaxTests.Server.Mocks;
 
-public class MockFixService:IFixService
+public class MockFixService : IFixService
 {
     public void FixSerie(long serieId)
     {

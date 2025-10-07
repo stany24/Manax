@@ -57,10 +57,7 @@ public class CreateTagTests : TagTestsSetup
             ColorArgb = -16776961
         };
 
-        await Assert.ThrowsExactlyAsync<DbUpdateException>(async () =>
-        {
-            await Controller.CreateTag(tagCreate);
-        });
+        await Assert.ThrowsExactlyAsync<DbUpdateException>(async () => { await Controller.CreateTag(tagCreate); });
     }
 
     [TestMethod]
@@ -131,7 +128,8 @@ public class CreateTagTests : TagTestsSetup
 
         Assert.IsInstanceOfType(result, typeof(OkResult));
 
-        Tag? createdTag = await Context.Tags.FirstOrDefaultAsync(t => t.Name == "Very Long Tag Name That Should Still Be Valid");
+        Tag? createdTag =
+            await Context.Tags.FirstOrDefaultAsync(t => t.Name == "Very Long Tag Name That Should Still Be Valid");
         Assert.IsNotNull(createdTag);
     }
 

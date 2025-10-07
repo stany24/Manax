@@ -10,9 +10,9 @@
     x:Class="ManaxClient.Views.Pages.Tag.TagPageView"
     x:DataType="tag:TagPageViewModel"
     IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).CanReadTags}">
-    
+
     <UserControl.Resources>
-        <converters:ColorToSolidBrushConverter x:Key="ColorToBrushConverter"/>
+        <converters:ColorToSolidBrushConverter x:Key="ColorToBrushConverter" />
     </UserControl.Resources>
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel Orientation="Vertical" Spacing="24">

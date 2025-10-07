@@ -1,88 +1,33 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
-using Avalonia.Threading;
-using CommunityToolkit.Mvvm.ComponentModel;
-using ManaxClient.Models.Collections;
+using DynamicData;
+using DynamicData.Binding;
+using ManaxClient.Models.Sources;
 using ManaxClient.ViewModels.Popup.ConfirmCancel;
 using ManaxClient.ViewModels.Popup.ConfirmCancel.Content;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTO.Rank;
 using ManaxLibrary.Logging;
-using ManaxLibrary.Notifications;
 
 namespace ManaxClient.ViewModels.Pages.Rank;
 
-public partial class RankPageViewModel : PageViewModel
+public class RankPageViewModel : PageViewModel
 {
-    [ObservableProperty] private SortedObservableCollection<RankDto> _ranks = new([]);
+    private readonly ReadOnlyObservableCollection<Models.Rank> _ranks;
 
     public RankPageViewModel()
     {
-        Task.Run(LoadRanks);
-        ServerNotification.OnRankUpdated += OnRankUpdated;
-        ServerNotification.OnRankCreated += OnRankCreated;
-        ServerNotification.OnRankDeleted += OnRankDeleted;
+        SortExpressionComparer<Models.Rank> comparer = SortExpressionComparer<Models.Rank>.Descending(t => t.Value);
+        RankSource.Ranks.Connect()
+            .SortAndBind(out _ranks, comparer)
+            .Subscribe();
     }
 
-    private void OnRankDeleted(long obj)
-    {
-        Dispatcher.UIThread.Post(() =>
-        {
-            RankDto? firstOrDefault = Ranks.FirstOrDefault(r => r.Id == obj);
-            if (firstOrDefault != null) Ranks.Remove(firstOrDefault);
-        });
-    }
+    public ReadOnlyObservableCollection<Models.Rank> Ranks => _ranks;
 
-    private void OnRankCreated(RankDto obj)
-    {
-        Dispatcher.UIThread.Post(() =>
-        {
-            if (Ranks.Any(r => r.Id == obj.Id)) return;
-            Ranks.Add(obj);
-        });
-    }
-
-    private void OnRankUpdated(RankDto rank)
-    {
-        Dispatcher.UIThread.Post(() =>
-        {
-            RankDto? firstOrDefault = Ranks.FirstOrDefault(r => r.Id == rank.Id);
-            if (firstOrDefault != null) Ranks.Remove(firstOrDefault);
-            Ranks.Add(rank);
-        });
-    }
-
-    private async void LoadRanks()
-    {
-        try
-        {
-            Optional<List<RankDto>> ranksResponse = await ManaxApiRankClient.GetRanksAsync();
-            if (ranksResponse.Failed)
-            {
-                InfoEmitted?.Invoke(this, ranksResponse.Error);
-                return;
-            }
-
-            Dispatcher.UIThread.Post(() =>
-            {
-                Ranks = new SortedObservableCollection<RankDto>(ranksResponse.GetValue())
-                {
-                    SortingSelector = r => r.Value,
-                    Descending = true
-                };
-            });
-        }
-        catch (Exception e)
-        {
-            InfoEmitted?.Invoke(this, "Failed to load ranks from server");
-            Logger.LogError("Failed to load ranks from server", e, Environment.StackTrace);
-        }
-    }
-
-    public void UpdateRank(RankDto rank)
+    public void UpdateRank(Models.Rank rank)
     {
         RankUpdateDto update = new()
         {
@@ -106,13 +51,13 @@ public partial class RankPageViewModel : PageViewModel
             catch (Exception e)
             {
                 InfoEmitted?.Invoke(this, "Failed to update rank on server");
-                Logger.LogError("Failed to update rank on server", e, Environment.StackTrace);
+                Logger.LogError("Failed to update rank on server", e);
             }
         };
         PopupRequested?.Invoke(this, popup);
     }
 
-    public void DeleteRank(RankDto rank)
+    public void DeleteRank(Models.Rank rank)
     {
         Task.Run(async () =>
         {
@@ -124,7 +69,7 @@ public partial class RankPageViewModel : PageViewModel
             catch (Exception e)
             {
                 InfoEmitted?.Invoke(this, "Failed to delete rank on server");
-                Logger.LogError("Failed to delete rank on server", e, Environment.StackTrace);
+                Logger.LogError("Failed to delete rank on server", e);
             }
         });
     }
@@ -149,7 +94,7 @@ public partial class RankPageViewModel : PageViewModel
             catch (Exception e)
             {
                 InfoEmitted?.Invoke(this, "Failed to create rank on server");
-                Logger.LogError("Failed to create rank on server", e, Environment.StackTrace);
+                Logger.LogError("Failed to create rank on server", e);
             }
         };
         PopupRequested?.Invoke(this, popup);

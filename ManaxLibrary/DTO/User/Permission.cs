@@ -4,7 +4,7 @@ public enum Permission
 {
     ReadPermissions = 1,
     WritePermissions = 2,
-    
+
     ReadSeries = 11,
     WriteSeries = 12,
     DeleteSeries = 13,

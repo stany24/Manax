@@ -2,34 +2,26 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Threading.Tasks;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
-using ManaxLibrary;
-using ManaxLibrary.ApiCaller;
-using ManaxLibrary.DTO.Library;
+using ManaxClient.Models;
+using ManaxClient.Models.Sources;
 using ManaxLibrary.DTO.Serie;
-using ManaxLibrary.DTO.Tag;
 
 namespace ManaxClient.ViewModels.Popup.ConfirmCancel.Content;
 
 public partial class SerieUpdateViewModel : ConfirmCancelContentViewModel
 {
-    private readonly SerieDto _originalSerie;
-    
-    public ObservableCollection<LibraryDto> Libraries { get; } = [];
-    public ObservableCollection<Status> StatusOptions { get; } = [];
-    public ObservableCollection<TagDto> AvailableTags { get; set; }= [];
-    public ObservableCollection<TagDto> SelectedTags { get; set; } = [];
-    
-    [ObservableProperty] private string _description;
-    [ObservableProperty] private LibraryDto? _selectedLibrary;
-    [ObservableProperty] private Status _selectedStatus;
-    [ObservableProperty] private string _title;
-    [ObservableProperty] private string _tagSearchText = "";
-    [ObservableProperty] private TagDto? _selectedTag;
+    private readonly Serie _originalSerie;
 
-    public SerieUpdateViewModel(SerieDto serie)
+    [ObservableProperty] private string _description;
+    [ObservableProperty] private Library? _selectedLibrary;
+    [ObservableProperty] private Status _selectedStatus;
+    [ObservableProperty] private Tag? _selectedTag;
+    [ObservableProperty] private string _tagSearchText = "";
+    [ObservableProperty] private string _title;
+
+    public SerieUpdateViewModel(Serie serie)
     {
         _originalSerie = serie;
         _title = serie.Title;
@@ -54,15 +46,21 @@ public partial class SerieUpdateViewModel : ConfirmCancelContentViewModel
                         AddTag(SelectedTag);
                         SelectedTag = null;
                     }
+
                     break;
             }
         };
 
-        _ = LoadLibraries();
-        _ = LoadTags();
+        LoadTags();
+        LoadLibraries();
     }
 
-    public void AddTag(TagDto tag)
+    public ObservableCollection<Library> Libraries { get; } = [];
+    public ObservableCollection<Status> StatusOptions { get; } = [];
+    public ObservableCollection<Tag> AvailableTags { get; set; } = [];
+    public ObservableCollection<Tag> SelectedTags { get; set; } = [];
+
+    private void AddTag(Tag tag)
     {
         Dispatcher.UIThread.Post(() =>
         {
@@ -72,7 +70,7 @@ public partial class SerieUpdateViewModel : ConfirmCancelContentViewModel
         });
     }
 
-    public void RemoveTag(TagDto tag)
+    public void RemoveTag(Tag tag)
     {
         Dispatcher.UIThread.Post(() =>
         {
@@ -81,53 +79,35 @@ public partial class SerieUpdateViewModel : ConfirmCancelContentViewModel
         });
     }
 
-    private async Task LoadLibraries()
+    private void LoadLibraries()
     {
-        Optional<List<long>> libraryIds = await ManaxApiLibraryClient.GetLibraryIdsAsync();
-        if (!libraryIds.Failed)
+        Dispatcher.UIThread.Post(() =>
         {
-            List<LibraryDto> libraries = [];
-            foreach (long id in libraryIds.GetValue())
+            foreach (Library library in LibrarySource.Libraries.Items.ToList())
             {
-                Optional<LibraryDto> libraryResponse = await ManaxApiLibraryClient.GetLibraryAsync(id);
-                if (!libraryResponse.Failed) libraries.Add(libraryResponse.GetValue());
+                Libraries.Add(library);
+                if (library.Id == _originalSerie.LibraryId)
+                    SelectedLibrary = library;
+            }
+        });
+    }
+
+    private void LoadTags()
+    {
+        List<Tag> allTags = TagSource.Tags.Items.ToList();
+        Dispatcher.UIThread.Post(() =>
+        {
+            SelectedTags.Clear();
+            foreach (Tag tag in _originalSerie.Tags)
+            {
+                SelectedTags.Add(tag);
+                allTags.Remove(tag);
             }
 
-            Dispatcher.UIThread.Post(() =>
-            {
-                foreach (LibraryDto library in libraries)
-                {
-                    Libraries.Add(library);
-                    if (library.Id == _originalSerie.LibraryId)
-                        SelectedLibrary = library;
-                }
-            });
-        }
+            AvailableTags.Clear();
+            foreach (Tag tag in allTags) AvailableTags.Add(tag);
+        });
     }
-
-    private async Task LoadTags()
-    {
-        Optional<List<TagDto>> tagsResponse = await ManaxApiTagClient.GetTagsAsync();
-        if (!tagsResponse.Failed)
-        {
-            List<TagDto> allTags = tagsResponse.GetValue();
-            Dispatcher.UIThread.Post(() =>
-            {
-                SelectedTags.Clear();
-                foreach (TagDto tag in _originalSerie.Tags)
-                {
-                    SelectedTags.Add(tag);
-                    allTags.Remove(tag);
-                }
-                AvailableTags.Clear();
-                foreach (TagDto tag in allTags)
-                {
-                    AvailableTags.Add(tag);
-                }
-            });
-        }
-    }
-
 
     public SerieUpdateDto GetResult()
     {
@@ -137,7 +117,7 @@ public partial class SerieUpdateViewModel : ConfirmCancelContentViewModel
             Description = Description.Trim(),
             Status = SelectedStatus,
             LibraryId = SelectedLibrary?.Id ?? _originalSerie.LibraryId,
-            Tags = SelectedTags.ToList()
+            Tags = SelectedTags.Select(t => t.ToTagDto()).ToList()
         };
     }
 }

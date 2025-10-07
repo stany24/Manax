@@ -1,5 +1,6 @@
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable UnusedMember.Global
+// ReSharper disable PropertyCanBeMadeInitOnly.Global
 
 namespace ManaxServer.Models;
 

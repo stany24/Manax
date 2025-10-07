@@ -92,7 +92,7 @@ public static class SqliteTestDbContextFactory
                 SerieId = 1,
                 FileName = "chapter1.cbz",
                 Number = 1,
-                Pages = 24,
+                PageNumber = 24,
                 Path = "/test_path/serie1/chapter1.cbz",
                 Creation = DateTime.UtcNow,
                 LastModification = DateTime.UtcNow
@@ -104,7 +104,7 @@ public static class SqliteTestDbContextFactory
                 SerieId = 1,
                 FileName = "chapter2.cbz",
                 Number = 2,
-                Pages = 30,
+                PageNumber = 30,
                 Path = "/test_path/serie1/chapter2.cbz",
                 Creation = DateTime.UtcNow,
                 LastModification = DateTime.UtcNow
@@ -116,7 +116,7 @@ public static class SqliteTestDbContextFactory
                 SerieId = 2,
                 FileName = "chapter1.cbz",
                 Number = 1,
-                Pages = 25,
+                PageNumber = 25,
                 Path = "/test_path/serie2/chapter1.cbz",
                 Creation = DateTime.UtcNow,
                 LastModification = DateTime.UtcNow
@@ -192,18 +192,18 @@ public static class SqliteTestDbContextFactory
             }
         ];
 
-        List<AutomaticIssueChapter> automaticIssuesChapter =
+        List<IssueChapterAutomatic> automaticIssuesChapter =
         [
             new()
             {
                 ChapterId = 1,
-                Problem = AutomaticIssueChapterType.ImageTooSmall,
+                Problem = IssueChapterAutomaticType.ImageTooSmall,
                 CreatedAt = DateTime.UtcNow
             },
             new()
             {
                 ChapterId = 2,
-                Problem = AutomaticIssueChapterType.CouldNotOpen,
+                Problem = IssueChapterAutomaticType.CouldNotOpen,
                 CreatedAt = DateTime.UtcNow
             }
         ];
@@ -213,18 +213,18 @@ public static class SqliteTestDbContextFactory
             new()
             {
                 SerieId = 1,
-                Problem = AutomaticIssueSerieType.PosterMissing,
+                Problem = IssueSerieAutomaticType.PosterMissing,
                 CreatedAt = DateTime.UtcNow
             },
             new()
             {
                 SerieId = 2,
-                Problem = AutomaticIssueSerieType.DescriptionTooShort,
+                Problem = IssueSerieAutomaticType.DescriptionTooShort,
                 CreatedAt = DateTime.UtcNow
             }
         ];
 
-        List<ReportedIssueChapterType> reportedIssueChapterTypes =
+        List<IssueChapterReportedType> reportedIssueChapterTypes =
         [
             new()
             {
@@ -243,7 +243,7 @@ public static class SqliteTestDbContextFactory
             }
         ];
 
-        List<ReportedIssueSerieType> reportedIssueSerieTypes =
+        List<IssueSerieReportedType> reportedIssueSerieTypes =
         [
             new()
             {
@@ -262,7 +262,7 @@ public static class SqliteTestDbContextFactory
             }
         ];
 
-        List<ReportedIssueChapter> reportedIssuesChapter =
+        List<IssueChapterReported> reportedIssuesChapter =
         [
             new()
             {
@@ -282,7 +282,7 @@ public static class SqliteTestDbContextFactory
             }
         ];
 
-        List<ReportedIssueSerie> reportedIssuesSerie =
+        List<IssueSerieReported> reportedIssuesSerie =
         [
             new()
             {
