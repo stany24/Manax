@@ -25,6 +25,7 @@ using ManaxClient.ViewModels.Pages.Tag;
 using ManaxClient.ViewModels.Pages.User;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
+using ManaxLibrary.Logging;
 using ManaxLibrary.Notifications;
 
 namespace ManaxClient.ViewModels;
@@ -109,9 +110,23 @@ public partial class MainWindowViewModel : ObservableObject
 
     public async void Logout()
     {
-        Optional<bool> logoutAsync = await ManaxApiUserClient.LogoutAsync();
-        if (logoutAsync.Failed) ShowInfo(logoutAsync.Error);
-        SetPage(new LoginPageViewModel());
+        try
+        {
+            Optional<bool> logoutAsync = await ManaxApiUserClient.LogoutAsync();
+            if (logoutAsync.Failed)
+            {
+                Logger.LogFailure(logoutAsync.Error);
+                ShowInfo(logoutAsync.Error);
+                return;
+            }
+            SetPage(new LoginPageViewModel());
+        }
+        catch (Exception e)
+        {
+            const string error = "Failed to logout from server";
+            Logger.LogError(error, e);
+            ShowInfo(error);
+        }
     }
 
     private void SetPopup(Controls.Popups.Popup? popup)

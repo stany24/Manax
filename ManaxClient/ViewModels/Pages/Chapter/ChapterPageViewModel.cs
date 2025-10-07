@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using Avalonia;
 using CommunityToolkit.Mvvm.ComponentModel;
 using ManaxLibrary.Logging;
@@ -77,7 +78,7 @@ public partial class ChapterPageViewModel : PageViewModel
             height += Chapter.Pages[i].Size.Height;
             if (!(height > ScrollOffset.Y)) continue;
             CurrentPage = i;
-            Logger.LogInfo(CurrentPage.ToString());
+            Logger.LogInfo(CurrentPage.ToString(CultureInfo.InvariantCulture));
             return;
         }
     }

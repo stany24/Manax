@@ -1,3 +1,5 @@
+// ReSharper disable PropertyCanBeMadeInitOnly.Global
+
 using ManaxLibrary.DTO.User;
 
 namespace ManaxServer.Models.User;

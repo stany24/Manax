@@ -61,12 +61,12 @@ public partial class UserPermissionsEditViewModel : ConfirmCancelContentViewMode
             item.PropertyChanged += (_, _) => CanConfirm = true;
 
             string name = permission.ToString();
-            if (name.StartsWith("Read"))
+            if (name.StartsWith("Read",StringComparison.InvariantCulture))
                 ReadPermissions.Add(item);
-            else if (name.StartsWith("Write") || name.StartsWith("Upload") || name.StartsWith("Set") ||
-                     name.StartsWith("Mark"))
+            else if (name.StartsWith("Write",StringComparison.InvariantCulture) || name.StartsWith("Upload",StringComparison.InvariantCulture) || name.StartsWith("Set",StringComparison.InvariantCulture) ||
+                     name.StartsWith("Mark",StringComparison.InvariantCulture))
                 WritePermissions.Add(item);
-            else if (name.StartsWith("Delete"))
+            else if (name.StartsWith("Delete",StringComparison.InvariantCulture))
                 DeletePermissions.Add(item);
             else
                 OtherPermissions.Add(item);

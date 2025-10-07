@@ -60,7 +60,7 @@ public partial class SerieUpdateViewModel : ConfirmCancelContentViewModel
     public ObservableCollection<Tag> AvailableTags { get; set; } = [];
     public ObservableCollection<Tag> SelectedTags { get; set; } = [];
 
-    public void AddTag(Tag tag)
+    private void AddTag(Tag tag)
     {
         Dispatcher.UIThread.Post(() =>
         {
