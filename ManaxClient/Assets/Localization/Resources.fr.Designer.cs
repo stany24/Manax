@@ -44,5 +44,71 @@ namespace ManaxClient.Assets.Localization {
                 resourceCulture = value;
             }
         }
+        
+        internal static string Login_Title {
+            get {
+                return ResourceManager.GetString("Login.Title", resourceCulture);
+            }
+        }
+        
+        internal static string Login_Subtitle {
+            get {
+                return ResourceManager.GetString("Login.Subtitle", resourceCulture);
+            }
+        }
+        
+        internal static string Login_Username {
+            get {
+                return ResourceManager.GetString("Login.Username", resourceCulture);
+            }
+        }
+        
+        internal static string Login_Username_Placeholder {
+            get {
+                return ResourceManager.GetString("Login.Username.Placeholder", resourceCulture);
+            }
+        }
+        
+        internal static string Login_Password {
+            get {
+                return ResourceManager.GetString("Login.Password", resourceCulture);
+            }
+        }
+        
+        internal static string Login_Password_Placeholder {
+            get {
+                return ResourceManager.GetString("Login.Password.Placeholder", resourceCulture);
+            }
+        }
+        
+        internal static string Login_Server {
+            get {
+                return ResourceManager.GetString("Login.Server", resourceCulture);
+            }
+        }
+        
+        internal static string Login_Server_Placeholder {
+            get {
+                return ResourceManager.GetString("Login.Server.Placeholder", resourceCulture);
+            }
+        }
+        
+        internal static string Login_SignIn {
+            get {
+                return ResourceManager.GetString("Login.SignIn", resourceCulture);
+            }
+        }
+        
+        internal static string Login_Tip_Title {
+            get {
+                return ResourceManager.GetString("Login.Tip.Title", resourceCulture);
+            }
+        }
+        
+        internal static string Login_Tip_Message {
+            get {
+                return ResourceManager.GetString("Login.Tip.Message", resourceCulture);
+            }
+        }
     }
 }

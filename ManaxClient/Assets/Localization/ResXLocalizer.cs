@@ -32,7 +32,7 @@ public class ResXLocalizer : BaseLocalizer
         if (!_hasLoaded)
             Reload();
 
-        var langString = Resources.ResourceManager.GetString(key, Resources.Culture);
+        string? langString = Resources.ResourceManager.GetString(key, Resources.Culture);
         return langString != null
             ? langString.Replace("\\n", "\n")
             : $"{Language}:{key}";

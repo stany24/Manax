@@ -9,7 +9,7 @@ using Jeek.Avalonia.Localization;
 
 namespace ManaxClient.ViewModels;
 
-public class LocalizedViewModel:ObservableObject
+public abstract class LocalizedViewModel:ObservableObject
 {
     private readonly List<LocalizedProperty> _localizedProperties = [];
     private readonly Dictionary<object, List<LocalizedProperty>> _nestedObjectSubscriptions = [];
