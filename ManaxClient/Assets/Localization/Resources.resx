@@ -51,4 +51,25 @@
     <data name="LoginPage.Tip.Message" xml:space="preserve">
         <value>Make sure your Manax server is running and accessible from this network.</value>
     </data>
+    <data name="ChapterPage.Pages" xml:space="preserve">
+        <value>{0} pages</value>
+    </data>
+    <data name="ChapterPage.Back" xml:space="preserve">
+        <value>Back</value>
+    </data>
+    <data name="ChapterPage.Previous" xml:space="preserve">
+        <value>Previous</value>
+    </data>
+    <data name="ChapterPage.Chapter" xml:space="preserve">
+        <value>Chapter</value>
+    </data>
+    <data name="ChapterPage.Next" xml:space="preserve">
+        <value>Next</value>
+    </data>
+    <data name="ChapterPage.PreviousPage" xml:space="preserve">
+        <value>Previous page</value>
+    </data>
+    <data name="ChapterPage.NextPage" xml:space="preserve">
+        <value>Next page</value>
+    </data>
 </root>

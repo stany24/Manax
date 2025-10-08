@@ -33,7 +33,7 @@
                                    Foreground="{DynamicResource TextColor1}"
                                    FontWeight="Medium"
                                    VerticalAlignment="Center" />
-                        <TextBlock Text="{Binding Chapter.Pages.Count, StringFormat='({0} pages)'}"
+                        <TextBlock Text="{Binding PagesText}"
                                    Foreground="{DynamicResource SecondaryBrush}"
                                    FontSize="12"
                                    VerticalAlignment="Center" />
@@ -72,7 +72,7 @@
                 BorderThickness="0">
             <StackPanel Orientation="Horizontal" Spacing="8">
                 <TextBlock VerticalAlignment="Center" Text="←" FontSize="16" />
-                <TextBlock Text="Retour" />
+                <TextBlock Text="{Binding BackText}" />
             </StackPanel>
         </Button>
 
@@ -94,7 +94,7 @@
                         BorderBrush="{DynamicResource Background3}">
                     <StackPanel Orientation="Horizontal" Spacing="8">
                         <TextBlock Text="⏮️" />
-                        <TextBlock Text="Précédent" />
+                        <TextBlock Text="{Binding PreviousText}" />
                     </StackPanel>
                 </Button>
 
@@ -102,7 +102,7 @@
                             Orientation="Vertical"
                             Spacing="4"
                             HorizontalAlignment="Center">
-                    <TextBlock Text="Chapitre"
+                    <TextBlock Text="{Binding ChapterText}"
                                Foreground="{DynamicResource SecondaryBrush}"
                                FontSize="12"
                                HorizontalAlignment="Center" />
@@ -120,7 +120,7 @@
                         Background="{StaticResource PrimaryBrush}"
                         Foreground="{DynamicResource TextColor1}">
                     <StackPanel Orientation="Horizontal" Spacing="8">
-                        <TextBlock Text="Suivant" />
+                        <TextBlock Text="{Binding NextText}" />
                         <TextBlock Text="⏭️" />
                     </StackPanel>
                 </Button>
@@ -140,7 +140,7 @@
                         Foreground="{DynamicResource TextColor1}"
                         BorderThickness="0"
                         Padding="8"
-                        ToolTip.Tip="Page précédente"
+                        ToolTip.Tip="{Binding PreviousPageTooltip}"
                         Command="{Binding PreviousPage}">
                     <TextBlock Text="↑" FontSize="16" />
                 </Button>
@@ -167,7 +167,7 @@
                         Foreground="{DynamicResource TextColor1}"
                         BorderThickness="0"
                         Padding="8"
-                        ToolTip.Tip="Page suivante"
+                        ToolTip.Tip="{Binding NextPageTooltip}"
                         Command="{Binding NextPage}">
                     <TextBlock Text="↓" FontSize="16" />
                 </Button>

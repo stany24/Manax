@@ -14,6 +14,14 @@ public partial class ChapterPageViewModel : PageViewModel
     [ObservableProperty] private bool _controlBordersVisible;
     [ObservableProperty] private int _currentPage;
     [ObservableProperty] private Vector _scrollOffset = new(0, 0);
+    
+    [ObservableProperty] private string _pagesText = string.Empty;
+    [ObservableProperty] private string _backText = string.Empty;
+    [ObservableProperty] private string _previousText = string.Empty;
+    [ObservableProperty] private string _chapterText = string.Empty;
+    [ObservableProperty] private string _nextText = string.Empty;
+    [ObservableProperty] private string _previousPageTooltip = string.Empty;
+    [ObservableProperty] private string _nextPageTooltip = string.Empty;
 
     public ChapterPageViewModel(List<Models.Chapter> chapters, Models.Chapter chapter)
     {
@@ -23,6 +31,19 @@ public partial class ChapterPageViewModel : PageViewModel
         Chapter = chapter;
         Chapter.LoadPages();
         PropertyChanged += HandleOffsetChanged;
+        
+        BindLocalizedStrings();
+    }
+
+    private void BindLocalizedStrings()
+    {
+        Localize(() => PagesText, "ChapterPage.Pages", () => Chapter.Pages.Count);
+        Localize(() => BackText, "ChapterPage.Back");
+        Localize(() => PreviousText, "ChapterPage.Previous");
+        Localize(() => ChapterText, "ChapterPage.Chapter");
+        Localize(() => NextText, "ChapterPage.Next");
+        Localize(() => PreviousPageTooltip, "ChapterPage.PreviousPage");
+        Localize(() => NextPageTooltip, "ChapterPage.NextPage");
     }
 
     public void ChangeBordersVisibility()
