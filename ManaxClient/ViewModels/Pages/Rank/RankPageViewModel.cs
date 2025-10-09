@@ -10,12 +10,21 @@ using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTO.Rank;
 using ManaxLibrary.Logging;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace ManaxClient.ViewModels.Pages.Rank;
 
-public class RankPageViewModel : PageViewModel
+public partial class RankPageViewModel : PageViewModel
 {
     private readonly ReadOnlyObservableCollection<Models.Rank> _ranks;
+    
+    [ObservableProperty] private string _title = string.Empty;
+    [ObservableProperty] private string _ranksCountText = string.Empty;
+    [ObservableProperty] private string _newRankButtonText = string.Empty;
+    [ObservableProperty] private string _noRanksTitle = string.Empty;
+    [ObservableProperty] private string _noRanksDescription = string.Empty;
+    [ObservableProperty] private string _createFirstRankText = string.Empty;
+    [ObservableProperty] private string _ranksListTitle = string.Empty;
 
     public RankPageViewModel()
     {
@@ -23,6 +32,19 @@ public class RankPageViewModel : PageViewModel
         RankSource.Ranks.Connect()
             .SortAndBind(out _ranks, comparer)
             .Subscribe();
+            
+        BindLocalizedStrings();
+    }
+
+    private void BindLocalizedStrings()
+    {
+        Localize(() => Title, "RankPage.Title");
+        Localize(() => RanksCountText, "RankPage.RanksCount", () => Ranks.Count);
+        Localize(() => NewRankButtonText, "RankPage.NewRank");
+        Localize(() => NoRanksTitle, "RankPage.NoRanks.Title");
+        Localize(() => NoRanksDescription, "RankPage.NoRanks.Description");
+        Localize(() => CreateFirstRankText, "RankPage.CreateFirstRank");
+        Localize(() => RanksListTitle, "RankPage.RanksList.Title");
     }
 
     public ReadOnlyObservableCollection<Models.Rank> Ranks => _ranks;

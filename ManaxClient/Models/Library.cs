@@ -10,7 +10,7 @@ using ManaxLibrary.Notifications;
 
 namespace ManaxClient.Models;
 
-public partial class Library : LocalizedObject
+public partial class Library : ObservableObject
 {
     private readonly ReadOnlyObservableCollection<Serie> _series;
     [ObservableProperty] private DateTime _creation;
