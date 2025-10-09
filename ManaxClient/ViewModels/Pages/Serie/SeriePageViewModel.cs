@@ -29,6 +29,18 @@ public partial class SeriePageViewModel : PageViewModel
     [ObservableProperty] private Models.Rank? _selectedRank;
     [ObservableProperty] private Models.Serie _serie;
 
+    [ObservableProperty] private string _changeButtonText = string.Empty;
+    [ObservableProperty] private string _serieRatingText = string.Empty;
+    [ObservableProperty] private string _chaptersText = string.Empty;
+    [ObservableProperty] private string _noChaptersAvailableText = string.Empty;
+    [ObservableProperty] private string _noChaptersDescriptionText = string.Empty;
+    [ObservableProperty] private string _selectPosterImageText = string.Empty;
+    [ObservableProperty] private string _posterReplacedSuccessText = string.Empty;
+    [ObservableProperty] private string _errorReplacingPosterText = string.Empty;
+    [ObservableProperty] private string _errorUpdatingSerieText = string.Empty;
+    [ObservableProperty] private string _rankSetCorrectlyText = string.Empty;
+    [ObservableProperty] private string _chapterCountText = string.Empty;
+
     public SeriePageViewModel(Models.Serie serie)
     {
         SortExpressionComparer<Models.Rank> comparer = SortExpressionComparer<Models.Rank>.Descending(t => t.Value);
@@ -40,29 +52,41 @@ public partial class SeriePageViewModel : PageViewModel
         Serie.LoadInfo();
         Serie.LoadChapters();
         Serie.LoadPoster();
-        BindToRankChange();
+        
+        BindLocalizedStrings();
+    }
+
+    partial void OnSelectedRankChanged(Models.Rank? value)
+    {
+        if (value == null) return;
+        UserRankCreateDto userRankCreateDto = new()
+        {
+            SerieId = Serie.Id,
+            RankId = value.Id
+        };
+        Task.Run(async () =>
+        {
+            Optional<bool> userRankResponse = await ManaxApiRankClient.SetUserRankAsync(userRankCreateDto);
+            InfoEmitted?.Invoke(this, userRankResponse.Failed ? userRankResponse.Error : RankSetCorrectlyText);
+        });
+    }
+
+    private void BindLocalizedStrings()
+    {
+        Localize(() => ChangeButtonText, "SeriePage.ChangeButton");
+        Localize(() => SerieRatingText, "SeriePage.SerieRating");
+        Localize(() => ChaptersText, "SeriePage.Chapters");
+        Localize(() => NoChaptersAvailableText, "SeriePage.NoChaptersAvailable");
+        Localize(() => NoChaptersDescriptionText, "SeriePage.NoChaptersDescription");
+        Localize(() => SelectPosterImageText, "SeriePage.SelectPosterImage");
+        Localize(() => PosterReplacedSuccessText, "SeriePage.PosterReplacedSuccess");
+        Localize(() => ErrorReplacingPosterText, "SeriePage.ErrorReplacingPoster");
+        Localize(() => ErrorUpdatingSerieText, "SeriePage.ErrorUpdatingSerie");
+        Localize(() => RankSetCorrectlyText, "SeriePage.RankSetCorrectly");
+        Localize(() => ChapterCountText, "SeriePage.ChapterCount", () => Serie.Chapters.Count);
     }
 
     public ReadOnlyObservableCollection<Models.Rank> Ranks => _ranks;
-
-    private void BindToRankChange()
-    {
-        PropertyChanged += (_, args) =>
-        {
-            if (args.PropertyName != nameof(SelectedRank)) return;
-            if (SelectedRank == null) return;
-            UserRankCreateDto userRankCreateDto = new()
-            {
-                SerieId = Serie.Id,
-                RankId = SelectedRank.Id
-            };
-            Task.Run(async () =>
-            {
-                Optional<bool> userRankResponse = await ManaxApiRankClient.SetUserRankAsync(userRankCreateDto);
-                InfoEmitted?.Invoke(this, userRankResponse.Failed ? userRankResponse.Error : "Rank set correctly");
-            });
-        };
-    }
 
     public void MoveToChapterPage(Models.Chapter chapter)
     {
@@ -86,7 +110,7 @@ public partial class SeriePageViewModel : PageViewModel
             }
             catch (Exception e)
             {
-                InfoEmitted?.Invoke(this, "Error updating serie");
+                InfoEmitted?.Invoke(this, ErrorUpdatingSerieText);
                 Logger.LogError("Failed to update serie with ID: " + Serie.Id, e);
             }
         };
@@ -108,7 +132,7 @@ public partial class SeriePageViewModel : PageViewModel
             IReadOnlyList<IStorageFile> files = await window.StorageProvider.OpenFilePickerAsync(
                 new FilePickerOpenOptions
                 {
-                    Title = "Sélectionnez une image pour le poster",
+                    Title = SelectPosterImageText,
                     AllowMultiple = false,
                     FileTypeFilter =
                     [
@@ -135,13 +159,13 @@ public partial class SeriePageViewModel : PageViewModel
             }
             else
             {
-                InfoEmitted?.Invoke(this, "Poster replaced successfully");
+                InfoEmitted?.Invoke(this, PosterReplacedSuccessText);
                 Logger.LogInfo("Poster replaced successfully for serie ID: " + Serie.Id);
             }
         }
         catch (Exception e)
         {
-            InfoEmitted?.Invoke(this, "Error replacing poster");
+            InfoEmitted?.Invoke(this, ErrorReplacingPosterText);
             Logger.LogError("Error replacing poster for serie ID: " + Serie.Id, e);
         }
     }

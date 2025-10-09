@@ -204,4 +204,37 @@
     <data name="RankPage.Level" xml:space="preserve">
         <value>Level: {0}</value>
     </data>
+    <data name="SeriePage.ChangeButton" xml:space="preserve">
+        <value>Change</value>
+    </data>
+    <data name="SeriePage.SerieRating" xml:space="preserve">
+        <value>Series rating</value>
+    </data>
+    <data name="SeriePage.Chapters" xml:space="preserve">
+        <value>Chapters</value>
+    </data>
+    <data name="SeriePage.NoChaptersAvailable" xml:space="preserve">
+        <value>No chapters available</value>
+    </data>
+    <data name="SeriePage.NoChaptersDescription" xml:space="preserve">
+        <value>This series doesn't contain any chapters yet.</value>
+    </data>
+    <data name="SeriePage.ChapterCount" xml:space="preserve">
+        <value>{0} chapter(s)</value>
+    </data>
+    <data name="SeriePage.SelectPosterImage" xml:space="preserve">
+        <value>Select an image for the poster</value>
+    </data>
+    <data name="SeriePage.PosterReplacedSuccess" xml:space="preserve">
+        <value>Poster replaced successfully</value>
+    </data>
+    <data name="SeriePage.ErrorReplacingPoster" xml:space="preserve">
+        <value>Error replacing poster</value>
+    </data>
+    <data name="SeriePage.ErrorUpdatingSerie" xml:space="preserve">
+        <value>Error updating series</value>
+    </data>
+    <data name="SeriePage.RankSetCorrectly" xml:space="preserve">
+        <value>Rank set correctly</value>
+    </data>
 </root>

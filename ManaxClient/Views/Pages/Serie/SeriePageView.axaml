@@ -39,12 +39,12 @@
                                     Command="{Binding UpdateSerie}"
                                     IsEnabled="{Binding !IsFilePickerOpen}"
                                     HorizontalAlignment="Stretch">
-                                <TextBlock Text="Changer" />
+                                <TextBlock Text="{Binding ChangeButtonText}" />
                             </Button>
                         </StackPanel>
 
                         <StackPanel Spacing="8">
-                            <TextBlock Text="Note de la série" FontWeight="Medium" />
+                            <TextBlock Text="{Binding SerieRatingText}" FontWeight="Medium" />
                             <ComboBox ItemsSource="{Binding Ranks}"
                                       SelectedItem="{Binding SelectedRank}"
                                       HorizontalAlignment="Stretch">
@@ -68,7 +68,7 @@
                                                FontWeight="Medium" />
                                 </Border>
 
-                                <TextBlock Text="{Binding Serie.Chapters.Count, StringFormat='{}{0} chapitre(s)'}"
+                                <TextBlock Text="{Binding ChapterCountText}"
                                            Foreground="{StaticResource SecondaryBrush}" />
                             </StackPanel>
 
@@ -87,7 +87,7 @@
 
                     <Border Classes="card">
                         <StackPanel Spacing="16">
-                            <TextBlock Classes="subtitle" Text="Chapitres" Margin="0" />
+                            <TextBlock Classes="subtitle" Text="{Binding ChaptersText}" Margin="0" />
 
                             <Border Background="{DynamicResource Background2}"
                                     CornerRadius="8"
@@ -95,9 +95,9 @@
                                     IsVisible="{Binding !Serie.Chapters.Count}">
                                 <StackPanel Spacing="8" HorizontalAlignment="Center">
                                     <TextBlock Text="📖" FontSize="32" />
-                                    <TextBlock Text="Aucun chapitre disponible"
+                                    <TextBlock Text="{Binding NoChaptersAvailableText}"
                                                FontWeight="Medium" />
-                                    <TextBlock Text="Cette série ne contient pas encore de chapitres."
+                                    <TextBlock Text="{Binding NoChaptersDescriptionText}"
                                                FontSize="12"
                                                Foreground="{StaticResource SecondaryBrush}" />
                                 </StackPanel>
