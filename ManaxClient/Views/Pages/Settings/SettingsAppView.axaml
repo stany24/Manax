@@ -12,8 +12,8 @@
         <StackPanel Orientation="Vertical" Spacing="24">
 
             <StackPanel Orientation="Vertical">
-                <TextBlock Classes="title" Text="Paramètres d'apparence" />
-                <TextBlock Text="🎨 Personnalisez l'apparence de votre application Manax"
+                <TextBlock Classes="title" Text="{Binding PageTitle}" />
+                <TextBlock Text="{Binding PageSubtitle}"
                            Foreground="{StaticResource SecondaryBrush}" />
             </StackPanel>
 
@@ -21,12 +21,12 @@
                 <StackPanel Spacing="20">
                     <StackPanel Orientation="Horizontal" Spacing="12">
                         <TextBlock Text="🌙" FontSize="20" />
-                        <TextBlock Classes="subtitle" Text="Mode d'affichage" Margin="0" />
+                        <TextBlock Classes="subtitle" Text="{Binding DisplayModeTitle}" Margin="0" />
                     </StackPanel>
 
                     <Grid ColumnDefinitions="*,*" RowDefinitions="Auto" ColumnSpacing="16" RowSpacing="16">
                         <StackPanel Grid.Column="0" Grid.Row="0" Spacing="6">
-                            <TextBlock Text="Mode sombre" FontWeight="Medium" />
+                            <TextBlock Text="{Binding DarkModeLabel}" FontWeight="Medium" />
                             <ToggleSwitch IsChecked="{Binding IsDarkMode}" />
                         </StackPanel>
                     </Grid>
@@ -37,12 +37,12 @@
                 <StackPanel Spacing="20">
                     <StackPanel Orientation="Horizontal" Spacing="12">
                         <TextBlock Text="🎨" FontSize="20" />
-                        <TextBlock Classes="subtitle" Text="Thème de couleur" Margin="0" />
+                        <TextBlock Classes="subtitle" Text="{Binding ColorThemeTitle}" Margin="0" />
                     </StackPanel>
 
                     <Grid ColumnDefinitions="*" RowDefinitions="Auto,Auto" RowSpacing="16">
                         <StackPanel Grid.Column="0" Grid.Row="0" Spacing="6">
-                            <TextBlock Text="Thème sélectionné" FontWeight="Medium" />
+                            <TextBlock Text="{Binding SelectedThemeLabel}" FontWeight="Medium" />
                             <ComboBox SelectedItem="{Binding SelectedTheme}"
                                       ItemsSource="{Binding AvailableThemes}"
                                       HorizontalAlignment="Stretch">
@@ -59,11 +59,11 @@
                         </StackPanel>
 
                         <StackPanel Grid.Column="0" Grid.Row="1" Spacing="12">
-                            <TextBlock Text="Aperçu des couleurs" FontWeight="Medium" />
+                            <TextBlock Text="{Binding ColorPreviewLabel}" FontWeight="Medium" />
                             <WrapPanel Orientation="Horizontal" ItemWidth="150" ItemHeight="80">
                                 <Border Classes="card" Margin="4" Width="140" Height="70">
                                     <StackPanel Spacing="4">
-                                        <TextBlock Text="Primaire" FontSize="12" FontWeight="Medium" />
+                                        <TextBlock Text="{Binding PrimaryColorLabel}" FontSize="12" FontWeight="Medium" />
                                         <Rectangle Height="20" Fill="{Binding SelectedTheme.PrimaryColor}" />
                                         <TextBlock Text="{Binding SelectedTheme.PrimaryColor.Color}" FontSize="10" />
                                     </StackPanel>
@@ -71,7 +71,7 @@
 
                                 <Border Classes="card" Margin="4" Width="140" Height="70">
                                     <StackPanel Spacing="4">
-                                        <TextBlock Text="Secondaire" FontSize="12" FontWeight="Medium" />
+                                        <TextBlock Text="{Binding SecondaryColorLabel}" FontSize="12" FontWeight="Medium" />
                                         <Rectangle Height="20" Fill="{Binding SelectedTheme.SecondaryColor}" />
                                         <TextBlock Text="{Binding SelectedTheme.SecondaryColor.Color}" FontSize="10" />
                                     </StackPanel>
@@ -79,7 +79,7 @@
 
                                 <Border Classes="card" Margin="4" Width="140" Height="70">
                                     <StackPanel Spacing="4">
-                                        <TextBlock Text="Tertiaire" FontSize="12" FontWeight="Medium" />
+                                        <TextBlock Text="{Binding TertiaryColorLabel}" FontSize="12" FontWeight="Medium" />
                                         <Rectangle Height="20" Fill="{Binding SelectedTheme.TertiaryColor}" />
                                         <TextBlock Text="{Binding SelectedTheme.TertiaryColor.Color}" FontSize="10" />
                                     </StackPanel>

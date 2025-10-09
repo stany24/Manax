@@ -237,4 +237,103 @@
     <data name="SeriePage.RankSetCorrectly" xml:space="preserve">
         <value>Rang défini correctement</value>
     </data>
+    <data name="SettingsAppPage.Title" xml:space="preserve">
+        <value>Paramètres d'apparence</value>
+    </data>
+    <data name="SettingsAppPage.Subtitle" xml:space="preserve">
+        <value>🎨 Personnalisez l'apparence de votre application Manax</value>
+    </data>
+    <data name="SettingsAppPage.DisplayMode" xml:space="preserve">
+        <value>Mode d'affichage</value>
+    </data>
+    <data name="SettingsAppPage.DarkMode" xml:space="preserve">
+        <value>Mode sombre</value>
+    </data>
+    <data name="SettingsAppPage.ColorTheme" xml:space="preserve">
+        <value>Thème de couleur</value>
+    </data>
+    <data name="SettingsAppPage.SelectedTheme" xml:space="preserve">
+        <value>Thème sélectionné</value>
+    </data>
+    <data name="SettingsAppPage.ColorPreview" xml:space="preserve">
+        <value>Aperçu des couleurs</value>
+    </data>
+    <data name="SettingsAppPage.PrimaryColor" xml:space="preserve">
+        <value>Primaire</value>
+    </data>
+    <data name="SettingsAppPage.SecondaryColor" xml:space="preserve">
+        <value>Secondaire</value>
+    </data>
+    <data name="SettingsAppPage.TertiaryColor" xml:space="preserve">
+        <value>Tertiaire</value>
+    </data>
+    <data name="SettingsServerPage.Title" xml:space="preserve">
+        <value>Paramètres du serveur</value>
+    </data>
+    <data name="SettingsServerPage.Subtitle" xml:space="preserve">
+        <value>⚙️ Configurez les paramètres globaux de votre serveur Manax</value>
+    </data>
+    <data name="SettingsServerPage.AddSavePoint" xml:space="preserve">
+        <value>Ajouter un point de sauvegarde</value>
+    </data>
+    <data name="SettingsServerPage.AddLibrary" xml:space="preserve">
+        <value>Ajouter une bibliothèque</value>
+    </data>
+    <data name="SettingsServerPage.PosterConfig" xml:space="preserve">
+        <value>Configuration des affiches</value>
+    </data>
+    <data name="SettingsServerPage.PosterName" xml:space="preserve">
+        <value>Nom du fichier affiche</value>
+    </data>
+    <data name="SettingsServerPage.ImageFormat" xml:space="preserve">
+        <value>Format d'image</value>
+    </data>
+    <data name="SettingsServerPage.Quality" xml:space="preserve">
+        <value>Qualité (1-100)</value>
+    </data>
+    <data name="SettingsServerPage.MaxWidth" xml:space="preserve">
+        <value>Largeur maximale</value>
+    </data>
+    <data name="SettingsServerPage.MinWidth" xml:space="preserve">
+        <value>Largeur minimale</value>
+    </data>
+    <data name="SettingsServerPage.ChapterConfig" xml:space="preserve">
+        <value>Configuration des chapitres</value>
+    </data>
+    <data name="SettingsServerPage.MaxPageWidth" xml:space="preserve">
+        <value>Largeur max des pages</value>
+    </data>
+    <data name="SettingsServerPage.MinPageWidth" xml:space="preserve">
+        <value>Largeur min des pages</value>
+    </data>
+    <data name="SettingsServerPage.ArchiveFormat" xml:space="preserve">
+        <value>Format d'archive</value>
+    </data>
+    <data name="SettingsServerPage.SeriesConfig" xml:space="preserve">
+        <value>Configuration des séries</value>
+    </data>
+    <data name="SettingsServerPage.MaxDescriptionLength" xml:space="preserve">
+        <value>Longueur max description</value>
+    </data>
+    <data name="SettingsServerPage.MinDescriptionLength" xml:space="preserve">
+        <value>Longueur min description</value>
+    </data>
+    <data name="SettingsServerPage.TipTitle" xml:space="preserve">
+        <value>💡 Conseil</value>
+    </data>
+    <data name="SettingsServerPage.TipMessage" xml:space="preserve">
+        <value>Les modifications seront appliquées après validation. Assurez-vous de tester les paramètres avant de les sauvegarder.</value>
+    </data>
+    <data name="SettingsServerPage.SaveButton" xml:space="preserve">
+        <value>Sauvegarder</value>
+    </data>
+    <data name="SettingsServerPage.SettingsUpdatedSuccess" xml:space="preserve">
+        <value>Paramètres mis à jour avec succès.</value>
+    </data>
+    <data name="SettingsServerPage.ErrorCreatingSavePoint" xml:space="preserve">
+        <value>Erreur lors de la création du point de sauvegarde</value>
+    </data>
+    <data name="SettingsServerPage.ErrorCreatingLibrary" xml:space="preserve">
+        <value>Erreur lors de la création de la bibliothèque</value>
+    </data>
 </root>

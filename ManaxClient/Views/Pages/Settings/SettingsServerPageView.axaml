@@ -14,8 +14,8 @@
         <StackPanel Orientation="Vertical" Spacing="24">
 
             <StackPanel Orientation="Vertical">
-                <TextBlock Classes="title" Text="Paramètres du serveur" />
-                <TextBlock Text="⚙️ Configurez les paramètres globaux de votre serveur Manax"
+                <TextBlock Classes="title" Text="{Binding PageTitle}" />
+                <TextBlock Text="{Binding PageSubtitle}"
                            Foreground="{StaticResource SecondaryBrush}" />
             </StackPanel>
 
@@ -29,7 +29,7 @@
                             VerticalAlignment="Center">
                         <StackPanel Orientation="Horizontal" Spacing="8">
                             <TextBlock Text="💾" />
-                            <TextBlock Text="Ajouter un point de sauvegarde" FontWeight="Medium" />
+                            <TextBlock Text="{Binding AddSavePointText}" FontWeight="Medium" />
                         </StackPanel>
                     </Button>
 
@@ -41,7 +41,7 @@
                             VerticalAlignment="Center">
                         <StackPanel Orientation="Horizontal" Spacing="8">
                             <TextBlock Text="💾" />
-                            <TextBlock Text="Ajouter une bibliothèque" FontWeight="Medium" />
+                            <TextBlock Text="{Binding AddLibraryText}" FontWeight="Medium" />
                         </StackPanel>
                     </Button>
                 </StackPanel>
@@ -51,27 +51,27 @@
                 <StackPanel Spacing="20">
                     <StackPanel Orientation="Horizontal" Spacing="12">
                         <TextBlock Text="🖼️" FontSize="20" />
-                        <TextBlock Classes="subtitle" Text="Configuration des affiches" Margin="0" />
+                        <TextBlock Classes="subtitle" Text="{Binding PosterConfigTitle}" Margin="0" />
                     </StackPanel>
 
                     <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto"
                           ColumnSpacing="16" RowSpacing="16">
 
                         <StackPanel Grid.Column="0" Grid.Row="0" Spacing="6">
-                            <TextBlock Text="Nom du fichier affiche" FontWeight="Medium" />
+                            <TextBlock Text="{Binding PosterNameLabel}" FontWeight="Medium" />
                             <TextBox Text="{Binding Settings.PosterName}"
                                      Watermark="poster.jpg" />
                         </StackPanel>
 
                         <StackPanel Grid.Column="1" Grid.Row="0" Spacing="6">
-                            <TextBlock Text="Format d'image" FontWeight="Medium" />
+                            <TextBlock Text="{Binding ImageFormatLabel}" FontWeight="Medium" />
                             <ComboBox SelectedItem="{Binding Settings.PosterFormat}"
                                       ItemsSource="{Binding AllImageFormats}"
                                       HorizontalAlignment="Stretch" />
                         </StackPanel>
 
                         <StackPanel Grid.Column="0" Grid.Row="1" Spacing="6">
-                            <TextBlock Text="Qualité (1-100)" FontWeight="Medium" />
+                            <TextBlock Text="{Binding QualityLabel}" FontWeight="Medium" />
                             <NumericUpDown FormatString="0"
                                            Value="{Binding Settings.PosterQuality}"
                                            Maximum="100"
@@ -79,14 +79,14 @@
                         </StackPanel>
 
                         <StackPanel Grid.Column="1" Grid.Row="1" Spacing="6">
-                            <TextBlock Text="Largeur maximale" FontWeight="Medium" />
+                            <TextBlock Text="{Binding MaxWidthLabel}" FontWeight="Medium" />
                             <NumericUpDown FormatString="0"
                                            Value="{Binding Settings.MaxPosterWidth}"
                                            Minimum="{Binding Settings.MinPosterWidth}" />
                         </StackPanel>
 
                         <StackPanel Grid.Column="0" Grid.Row="2" Spacing="6">
-                            <TextBlock Text="Largeur minimale" FontWeight="Medium" />
+                            <TextBlock Text="{Binding MinWidthLabel}" FontWeight="Medium" />
                             <NumericUpDown FormatString="0"
                                            Value="{Binding Settings.MinPosterWidth}"
                                            Maximum="{Binding Settings.MaxPosterWidth}"
@@ -100,35 +100,35 @@
                 <StackPanel Spacing="20">
                     <StackPanel Orientation="Horizontal" Spacing="12">
                         <TextBlock Text="📖" FontSize="20" />
-                        <TextBlock Classes="subtitle" Text="Configuration des chapitres" Margin="0" />
+                        <TextBlock Classes="subtitle" Text="{Binding ChapterConfigTitle}" Margin="0" />
                     </StackPanel>
 
                     <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto,Auto"
                           ColumnSpacing="16" RowSpacing="16">
 
                         <StackPanel Grid.Column="0" Grid.Row="0" Spacing="6">
-                            <TextBlock Text="Largeur max des pages" FontWeight="Medium" />
+                            <TextBlock Text="{Binding MaxPageWidthLabel}" FontWeight="Medium" />
                             <NumericUpDown FormatString="0"
                                            Value="{Binding Settings.MaxChapterWidth}"
                                            Minimum="{Binding Settings.MinChapterWidth}" />
                         </StackPanel>
 
                         <StackPanel Grid.Column="1" Grid.Row="0" Spacing="6">
-                            <TextBlock Text="Largeur min des pages" FontWeight="Medium" />
+                            <TextBlock Text="{Binding MinPageWidthLabel}" FontWeight="Medium" />
                             <NumericUpDown Value="{Binding Settings.MinChapterWidth}"
                                            Maximum="{Binding Settings.MaxChapterWidth}"
                                            Minimum="1" />
                         </StackPanel>
 
                         <StackPanel Grid.Column="0" Grid.Row="1" Spacing="6">
-                            <TextBlock Text="Format d'image" FontWeight="Medium" />
+                            <TextBlock Text="{Binding ImageFormatLabel}" FontWeight="Medium" />
                             <ComboBox SelectedItem="{Binding Settings.ImageFormat}"
                                       ItemsSource="{Binding AllImageFormats}"
                                       HorizontalAlignment="Stretch" />
                         </StackPanel>
 
                         <StackPanel Grid.Column="1" Grid.Row="1" Spacing="6">
-                            <TextBlock Text="Format d'archive" FontWeight="Medium" />
+                            <TextBlock Text="{Binding ArchiveFormatLabel}" FontWeight="Medium" />
                             <ComboBox SelectedItem="{Binding Settings.ArchiveFormat}"
                                       ItemsSource="{Binding AllArchiveFormats}"
                                       HorizontalAlignment="Stretch" />
@@ -141,21 +141,21 @@
                 <StackPanel Spacing="20">
                     <StackPanel Orientation="Horizontal" Spacing="12">
                         <TextBlock Text="📚" FontSize="20" />
-                        <TextBlock Classes="subtitle" Text="Configuration des séries" Margin="0" />
+                        <TextBlock Classes="subtitle" Text="{Binding SeriesConfigTitle}" Margin="0" />
                     </StackPanel>
 
                     <Grid ColumnDefinitions="*,*" RowDefinitions="Auto"
                           ColumnSpacing="16" RowSpacing="16">
 
                         <StackPanel Grid.Column="0" Grid.Row="0" Spacing="6">
-                            <TextBlock Text="Longueur max description" FontWeight="Medium" />
+                            <TextBlock Text="{Binding MaxDescriptionLengthLabel}" FontWeight="Medium" />
                             <NumericUpDown FormatString="0"
                                            Value="{Binding Settings.MaxDescriptionLength}"
                                            Minimum="{Binding Settings.MinDescriptionLength}" />
                         </StackPanel>
 
                         <StackPanel Grid.Column="1" Grid.Row="0" Spacing="6">
-                            <TextBlock Text="Longueur min description" FontWeight="Medium" />
+                            <TextBlock Text="{Binding MinDescriptionLengthLabel}" FontWeight="Medium" />
                             <NumericUpDown FormatString="0"
                                            Value="{Binding Settings.MinDescriptionLength}"
                                            Maximum="{Binding Settings.MaxDescriptionLength}"
@@ -167,17 +167,16 @@
 
             <Grid ColumnDefinitions="*,Auto,Auto">
 
-
                 <Border Grid.Column="0"
                         Background="{DynamicResource Background2}"
                         CornerRadius="8"
                         Padding="12">
                     <StackPanel Spacing="8">
-                        <TextBlock Text="💡 Conseil"
+                        <TextBlock Text="{Binding TipTitle}"
                                    FontWeight="Bold"
                                    Foreground="{StaticResource InfoBrush}" />
                         <TextBlock
-                            Text="Les modifications seront appliquées après validation. Assurez-vous de tester les paramètres avant de les sauvegarder."
+                            Text="{Binding TipMessage}"
                             TextWrapping="Wrap"
                             FontSize="12"
                             Foreground="{StaticResource SecondaryBrush}" />
@@ -194,7 +193,7 @@
                         VerticalAlignment="Center">
                     <StackPanel Orientation="Horizontal" Spacing="8">
                         <TextBlock Text="💾" />
-                        <TextBlock Text="Sauvegarder" FontWeight="Medium" />
+                        <TextBlock Text="{Binding SaveButtonText}" FontWeight="Medium" />
                     </StackPanel>
                 </Button>
             </Grid>
