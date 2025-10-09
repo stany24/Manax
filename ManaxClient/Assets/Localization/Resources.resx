@@ -108,4 +108,61 @@
     <data name="HomePage.UploadFailure" xml:space="preserve">
         <value>Upload failed: {0}</value>
     </data>
+    <data name="IssuesPage.Title" xml:space="preserve">
+        <value>Issues Management</value>
+    </data>
+    <data name="IssuesPage.Automatic" xml:space="preserve">
+        <value>Automatic</value>
+    </data>
+    <data name="IssuesPage.Reported" xml:space="preserve">
+        <value>Reported</value>
+    </data>
+    <data name="IssuesPage.Chapters" xml:space="preserve">
+        <value>Chapters</value>
+    </data>
+    <data name="IssuesPage.Series" xml:space="preserve">
+        <value>Series</value>
+    </data>
+    <data name="IssuesPage.AutomaticChapters" xml:space="preserve">
+        <value>Automatic Issues - Chapters</value>
+    </data>
+    <data name="IssuesPage.AutomaticSeries" xml:space="preserve">
+        <value>Automatic Issues - Series</value>
+    </data>
+    <data name="IssuesPage.ReportedChapters" xml:space="preserve">
+        <value>Reported Issues - Chapters</value>
+    </data>
+    <data name="IssuesPage.ReportedSeries" xml:space="preserve">
+        <value>Reported Issues - Series</value>
+    </data>
+    <data name="IssuesPage.NoAutomaticChapter" xml:space="preserve">
+        <value>No automatic chapter issues found</value>
+    </data>
+    <data name="IssuesPage.NoAutomaticSeries" xml:space="preserve">
+        <value>No automatic series issues found</value>
+    </data>
+    <data name="IssuesPage.NoReportedChapter" xml:space="preserve">
+        <value>No reported chapter issues found</value>
+    </data>
+    <data name="IssuesPage.NoReportedSeries" xml:space="preserve">
+        <value>No reported series issues found</value>
+    </data>
+    <data name="IssuesPage.ChapterInfo" xml:space="preserve">
+        <value>Chapter: {0} • {1:dd/MM/yyyy HH:mm}</value>
+    </data>
+    <data name="IssuesPage.SeriesInfo" xml:space="preserve">
+        <value>Series: {0} • {1:dd/MM/yyyy HH:mm}</value>
+    </data>
+    <data name="IssuesPage.ChapterUserInfo" xml:space="preserve">
+        <value>Chapter: {0} • User: {1} • {2:dd/MM/yyyy HH:mm}</value>
+    </data>
+    <data name="IssuesPage.SeriesUserInfo" xml:space="preserve">
+        <value>Series: {0} • User: {1} • {2:dd/MM/yyyy HH:mm}</value>
+    </data>
+    <data name="IssuesPage.ReplacementSuccessful" xml:space="preserve">
+        <value>Replacement successful</value>
+    </data>
+    <data name="IssuesPage.ReplacementFailed" xml:space="preserve">
+        <value>Failed to replace chapter</value>
+    </data>
 </root>

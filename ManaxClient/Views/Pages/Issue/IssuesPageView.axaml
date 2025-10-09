@@ -15,7 +15,7 @@
     <UserControl.Resources>
         <DataTemplate x:Key="AutomaticChapterIssueTemplate" DataType="issue:IssueChapterAutomatic">
             <previews:IssuePreview IssueColor="#DC3545"
-                                   BadgeText="Automatique"
+                                   BadgeText="{Binding AutomaticBadgeText}"
                                    Closable="False"
                                    Margin="0,0,0,8"
                                    Command="{Binding $parent[UserControl].((page:IssuesPageViewModel)DataContext).OnChapterIssueClicked}"
@@ -26,17 +26,14 @@
                     </MultiBinding>
                 </previews:IssuePreview.Problem>
                 <previews:IssuePreview.Info>
-                    <MultiBinding StringFormat="Chapitre: {0} • {1:dd/MM/yyyy HH:mm}">
-                        <Binding Path="Chapter.FileName" />
-                        <Binding Path="CreatedAt" />
-                    </MultiBinding>
+                    <Binding Path="FormattedInfo" />
                 </previews:IssuePreview.Info>
             </previews:IssuePreview>
         </DataTemplate>
 
         <DataTemplate x:Key="AutomaticSerieIssueTemplate" DataType="issue:IssueSerieAutomatic">
             <previews:IssuePreview IssueColor="#DC3545"
-                                   BadgeText="Automatique"
+                                   BadgeText="{Binding AutomaticBadgeText}"
                                    Closable="False"
                                    Margin="0,0,0,8"
                                    Command="{Binding $parent[UserControl].((page:IssuesPageViewModel)DataContext).OpenSeriePage}"
@@ -47,17 +44,14 @@
                     </MultiBinding>
                 </previews:IssuePreview.Problem>
                 <previews:IssuePreview.Info>
-                    <MultiBinding StringFormat="Série: {0} • {1:dd/MM/yyyy HH:mm}">
-                        <Binding Path="Serie.Title" />
-                        <Binding Path="CreatedAt" />
-                    </MultiBinding>
+                    <Binding Path="FormattedInfo" />
                 </previews:IssuePreview.Info>
             </previews:IssuePreview>
         </DataTemplate>
 
         <DataTemplate x:Key="ReportedChapterIssueTemplate" DataType="issue:IssueChapterReported">
             <previews:IssuePreview IssueColor="#FD7E14"
-                                   BadgeText="Signalé"
+                                   BadgeText="{Binding ReportedBadgeText}"
                                    Closable="True"
                                    Problem="{Binding Problem.Name}"
                                    Margin="0,0,0,8"
@@ -65,18 +59,14 @@
                                    Command="{Binding $parent[UserControl].((page:IssuesPageViewModel)DataContext).OnChapterIssueClicked}"
                                    CommandParameter="{Binding Chapter}">
                 <previews:IssuePreview.Info>
-                    <MultiBinding StringFormat="Chapitre: {0} • Utilisateur: {1} • {2:dd/MM/yyyy HH:mm}">
-                        <Binding Path="Chapter.FileName" />
-                        <Binding Path="User.Username" />
-                        <Binding Path="CreatedAt" />
-                    </MultiBinding>
+                    <Binding Path="FormattedInfo" />
                 </previews:IssuePreview.Info>
             </previews:IssuePreview>
         </DataTemplate>
 
         <DataTemplate x:Key="ReportedSerieIssueTemplate" DataType="issue:IssueSerieReported">
             <previews:IssuePreview IssueColor="#FD7E14"
-                                   BadgeText="Signalé"
+                                   BadgeText="{Binding ReportedBadgeText}"
                                    Closable="True"
                                    Problem="{Binding Problem.Name}"
                                    Margin="0,0,0,8"
@@ -84,11 +74,7 @@
                                    Command="{Binding $parent[UserControl].((page:IssuesPageViewModel)DataContext).OpenSeriePage}"
                                    CommandParameter="{Binding Serie}">
                 <previews:IssuePreview.Info>
-                    <MultiBinding StringFormat="Série: {0} • Utilisateur: {1} • {2:dd/MM/yyyy HH:mm}">
-                        <Binding Path="Serie.Title" />
-                        <Binding Path="User.Username" />
-                        <Binding Path="CreatedAt" />
-                    </MultiBinding>
+                    <Binding Path="FormattedInfo" />
                 </previews:IssuePreview.Info>
             </previews:IssuePreview>
         </DataTemplate>
@@ -96,14 +82,14 @@
 
     <ScrollViewer>
         <StackPanel Margin="24" Spacing="24">
-            <TextBlock Text="Gestion des Problèmes"
+            <TextBlock Text="{Binding PageTitle}"
                        FontSize="28"
                        FontWeight="Bold"
                        Foreground="#212529" />
 
             <StackPanel Orientation="Horizontal" Spacing="16">
                 <ToggleButton x:Name="AutomaticToggle"
-                              Content="Automatiques"
+                              Content="{Binding AutomaticText}"
                               IsChecked="{Binding ShowAutomaticIssues}"
                               Padding="12,8"
                               CornerRadius="8"
@@ -112,7 +98,7 @@
                               BorderThickness="0" />
 
                 <ToggleButton x:Name="ReportedToggle"
-                              Content="Signalés"
+                              Content="{Binding ReportedText}"
                               IsChecked="{Binding !ShowAutomaticIssues}"
                               Padding="12,8"
                               CornerRadius="8"
@@ -123,7 +109,7 @@
                 <Border Width="1" Height="24" Background="#DEE2E6" VerticalAlignment="Center" />
 
                 <ToggleButton x:Name="ChapterToggle"
-                              Content="Chapitres"
+                              Content="{Binding ChaptersText}"
                               IsChecked="{Binding ShowChapterIssues}"
                               Padding="12,8"
                               CornerRadius="8"
@@ -132,7 +118,7 @@
                               BorderThickness="0" />
 
                 <ToggleButton x:Name="SerieToggle"
-                              Content="Séries"
+                              Content="{Binding SeriesText}"
                               IsChecked="{Binding !ShowChapterIssues}"
                               Padding="12,8"
                               CornerRadius="8"
@@ -144,7 +130,7 @@
             <StackPanel Spacing="16">
                 <StackPanel IsVisible="{Binding ShowAutomaticIssues}">
                     <StackPanel IsVisible="{Binding ShowChapterIssues}" Spacing="12">
-                        <TextBlock Text="Problèmes Automatiques - Chapitres"
+                        <TextBlock Text="{Binding AutomaticChaptersTitle}"
                                    FontSize="18"
                                    FontWeight="SemiBold"
                                    Foreground="#495057" />
@@ -152,14 +138,14 @@
                         <ItemsControl ItemsSource="{Binding IssueChapterAutomatic}"
                                       ItemTemplate="{StaticResource AutomaticChapterIssueTemplate}" />
 
-                        <TextBlock Text="Aucun problème automatique de chapitre trouvé"
+                        <TextBlock Text="{Binding NoAutomaticChapterText}"
                                    FontStyle="Italic"
                                    Foreground="#6C757D"
                                    IsVisible="{Binding IssueChapterAutomatic.Count, Converter={x:Static StringConverters.IsNullOrEmpty}}" />
                     </StackPanel>
 
                     <StackPanel IsVisible="{Binding !ShowChapterIssues}" Spacing="12">
-                        <TextBlock Text="Problèmes Automatiques - Séries"
+                        <TextBlock Text="{Binding AutomaticSeriesTitle}"
                                    FontSize="18"
                                    FontWeight="SemiBold"
                                    Foreground="#495057" />
@@ -167,7 +153,7 @@
                         <ItemsControl ItemsSource="{Binding IssueSerieAutomatic}"
                                       ItemTemplate="{StaticResource AutomaticSerieIssueTemplate}" />
 
-                        <TextBlock Text="Aucun problème automatique de série trouvé"
+                        <TextBlock Text="{Binding NoAutomaticSeriesText}"
                                    FontStyle="Italic"
                                    Foreground="#6C757D"
                                    IsVisible="{Binding IssueSerieAutomatic.Count, Converter={x:Static StringConverters.IsNullOrEmpty}}" />
@@ -176,7 +162,7 @@
 
                 <StackPanel IsVisible="{Binding !ShowAutomaticIssues}">
                     <StackPanel IsVisible="{Binding ShowChapterIssues}" Spacing="12">
-                        <TextBlock Text="Problèmes Signalés - Chapitres"
+                        <TextBlock Text="{Binding ReportedChaptersTitle}"
                                    FontSize="18"
                                    FontWeight="SemiBold"
                                    Foreground="#495057" />
@@ -184,14 +170,14 @@
                         <ItemsControl ItemsSource="{Binding IssueChapterReported}"
                                       ItemTemplate="{StaticResource ReportedChapterIssueTemplate}" />
 
-                        <TextBlock Text="Aucun problème signalé de chapitre trouvé"
+                        <TextBlock Text="{Binding NoReportedChapterText}"
                                    FontStyle="Italic"
                                    Foreground="#6C757D"
                                    IsVisible="{Binding IssueChapterReported.Count, Converter={x:Static StringConverters.IsNullOrEmpty}}" />
                     </StackPanel>
 
                     <StackPanel IsVisible="{Binding !ShowChapterIssues}" Spacing="12">
-                        <TextBlock Text="Problèmes Signalés - Séries"
+                        <TextBlock Text="{Binding ReportedSeriesTitle}"
                                    FontSize="18"
                                    FontWeight="SemiBold"
                                    Foreground="#495057" />
@@ -199,7 +185,7 @@
                         <ItemsControl ItemsSource="{Binding IssueSerieReported}"
                                       ItemTemplate="{StaticResource ReportedSerieIssueTemplate}" />
 
-                        <TextBlock Text="Aucun problème signalé de série trouvé"
+                        <TextBlock Text="{Binding NoReportedSeriesText}"
                                    FontStyle="Italic"
                                    Foreground="#6C757D"
                                    IsVisible="{Binding IssueSerieReported.Count, Converter={x:Static StringConverters.IsNullOrEmpty}}" />

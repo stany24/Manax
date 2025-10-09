@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData;
+using Jeek.Avalonia.Localization;
 using ManaxClient.Models.Sources;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTO.Issue.Reported;
@@ -19,6 +20,9 @@ public partial class IssueSerieReported : ObservableObject
     private IDisposable? _subscriptionSerie;
     private IDisposable? _subscriptionUser;
     [ObservableProperty] private User _user = null!;
+
+    public string FormattedInfo => string.Format(Localizer.Get("IssuesPage.SerieUserInfo"),Serie?.Title ?? "",User?.Username ?? "",CreatedAt);
+    public string ReportedBadgeText => Localizer.Get("IssuesPage.Reported");
 
     public IssueSerieReported(IssueSerieReportedDto dto)
     {
@@ -43,7 +47,7 @@ public partial class IssueSerieReported : ObservableObject
             .Subscribe(changes =>
             {
                 using IEnumerator<Change<Serie, long>> enumerator = changes.GetEnumerator();
-                Serie = enumerator.Current.Current;
+                if (enumerator.MoveNext()) Serie = enumerator.Current.Current;
             });
 
         _subscriptionUser?.Dispose();
@@ -54,7 +58,7 @@ public partial class IssueSerieReported : ObservableObject
             .Subscribe(changes =>
             {
                 using IEnumerator<Change<User, long>> enumerator = changes.GetEnumerator();
-                User = enumerator.Current.Current;
+                if (enumerator.MoveNext()) User = enumerator.Current.Current;
             });
 
         _subscriptionProblem?.Dispose();
@@ -65,7 +69,22 @@ public partial class IssueSerieReported : ObservableObject
             .Subscribe(changes =>
             {
                 using IEnumerator<Change<IssueChapterReportedType, long>> enumerator = changes.GetEnumerator();
-                Problem = enumerator.Current.Current;
+                if (enumerator.MoveNext()) Problem = enumerator.Current.Current;
             });
+    }
+
+    partial void OnSerieChanged(Serie value)
+    {
+        OnPropertyChanged(nameof(FormattedInfo));
+    }
+
+    partial void OnUserChanged(User value)
+    {
+        OnPropertyChanged(nameof(FormattedInfo));
+    }
+
+    partial void OnCreatedAtChanged(DateTime value)
+    {
+        OnPropertyChanged(nameof(FormattedInfo));
     }
 }

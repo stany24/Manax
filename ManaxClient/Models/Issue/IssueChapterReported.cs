@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData;
+using Jeek.Avalonia.Localization;
 using ManaxClient.Models.Sources;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTO.Issue.Reported;
@@ -19,6 +20,9 @@ public partial class IssueChapterReported : ObservableObject
     private IDisposable? _subscriptionProblem;
     private IDisposable? _subscriptionUser;
     [ObservableProperty] private User _user = null!;
+    
+    public string FormattedInfo => string.Format(Localizer.Get("IssuesPage.ChapterUserInfo"),Chapter?.FileName ?? "",User?.Username ?? "",CreatedAt);
+    public string ReportedBadgeText => Localizer.Get("IssuesPage.Reported");
 
     public IssueChapterReported(IssueChapterReportedDto dto)
     {
@@ -28,6 +32,21 @@ public partial class IssueChapterReported : ObservableObject
     public void Close()
     {
         Task.Run(async () => { await ManaxApiIssueClient.CloseChapterIssueAsync(Id); });
+    }
+
+    partial void OnChapterChanged(Chapter value)
+    {
+        OnPropertyChanged(nameof(FormattedInfo));
+    }
+
+    partial void OnUserChanged(User value)
+    {
+        OnPropertyChanged(nameof(FormattedInfo));
+    }
+
+    partial void OnCreatedAtChanged(DateTime value)
+    {
+        OnPropertyChanged(nameof(FormattedInfo));
     }
 
     private void FromDto(IssueChapterReportedDto dto)

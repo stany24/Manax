@@ -108,4 +108,61 @@
     <data name="HomePage.UploadFailure" xml:space="preserve">
         <value>Échec du téléchargement : {0}</value>
     </data>
+    <data name="IssuesPage.Title" xml:space="preserve">
+        <value>Gestion des Problèmes</value>
+    </data>
+    <data name="IssuesPage.Automatic" xml:space="preserve">
+        <value>Automatiques</value>
+    </data>
+    <data name="IssuesPage.Reported" xml:space="preserve">
+        <value>Signalés</value>
+    </data>
+    <data name="IssuesPage.Chapters" xml:space="preserve">
+        <value>Chapitres</value>
+    </data>
+    <data name="IssuesPage.Series" xml:space="preserve">
+        <value>Séries</value>
+    </data>
+    <data name="IssuesPage.AutomaticChapters" xml:space="preserve">
+        <value>Problèmes Automatiques - Chapitres</value>
+    </data>
+    <data name="IssuesPage.AutomaticSeries" xml:space="preserve">
+        <value>Problèmes Automatiques - Séries</value>
+    </data>
+    <data name="IssuesPage.ReportedChapters" xml:space="preserve">
+        <value>Problèmes Signalés - Chapitres</value>
+    </data>
+    <data name="IssuesPage.ReportedSeries" xml:space="preserve">
+        <value>Problèmes Signalés - Séries</value>
+    </data>
+    <data name="IssuesPage.NoAutomaticChapter" xml:space="preserve">
+        <value>Aucun problème automatique de chapitre trouvé</value>
+    </data>
+    <data name="IssuesPage.NoAutomaticSeries" xml:space="preserve">
+        <value>Aucun problème automatique de série trouvé</value>
+    </data>
+    <data name="IssuesPage.NoReportedChapter" xml:space="preserve">
+        <value>Aucun problème signalé de chapitre trouvé</value>
+    </data>
+    <data name="IssuesPage.NoReportedSeries" xml:space="preserve">
+        <value>Aucun problème signalé de série trouvé</value>
+    </data>
+    <data name="IssuesPage.ChapterInfo" xml:space="preserve">
+        <value>Chapitre: {0} • {1:dd/MM/yyyy HH:mm}</value>
+    </data>
+    <data name="IssuesPage.SeriesInfo" xml:space="preserve">
+        <value>Série: {0} • {1:dd/MM/yyyy HH:mm}</value>
+    </data>
+    <data name="IssuesPage.ChapterUserInfo" xml:space="preserve">
+        <value>Chapitre: {0} • Utilisateur: {1} • {2:dd/MM/yyyy HH:mm}</value>
+    </data>
+    <data name="IssuesPage.SeriesUserInfo" xml:space="preserve">
+        <value>Série: {0} • Utilisateur: {1} • {2:dd/MM/yyyy HH:mm}</value>
+    </data>
+    <data name="IssuesPage.ReplacementSuccessful" xml:space="preserve">
+        <value>Remplacement réussi</value>
+    </data>
+    <data name="IssuesPage.ReplacementFailed" xml:space="preserve">
+        <value>Échec du remplacement du chapitre</value>
+    </data>
 </root>
