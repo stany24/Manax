@@ -165,4 +165,19 @@
     <data name="IssuesPage.ReplacementFailed" xml:space="preserve">
         <value>Échec du remplacement du chapitre</value>
     </data>
+    <data name="LibraryPage.SeriesCount" xml:space="preserve">
+        <value>📚 {0} série(s) dans cette bibliothèque</value>
+    </data>
+    <data name="LibraryPage.Delete" xml:space="preserve">
+        <value>Supprimer</value>
+    </data>
+    <data name="LibraryPage.EmptyLibrary.Title" xml:space="preserve">
+        <value>Bibliothèque vide</value>
+    </data>
+    <data name="LibraryPage.EmptyLibrary.Description" xml:space="preserve">
+        <value>Cette bibliothèque ne contient aucune série pour le moment.</value>
+    </data>
+    <data name="LibraryPage.LibrarySeries.Title" xml:space="preserve">
+        <value>Séries de la bibliothèque</value>
+    </data>
 </root>

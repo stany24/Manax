@@ -165,4 +165,19 @@
     <data name="IssuesPage.ReplacementFailed" xml:space="preserve">
         <value>Failed to replace chapter</value>
     </data>
+    <data name="LibraryPage.SeriesCount" xml:space="preserve">
+        <value>📚 {0} series in this library</value>
+    </data>
+    <data name="LibraryPage.Delete" xml:space="preserve">
+        <value>Delete</value>
+    </data>
+    <data name="LibraryPage.EmptyLibrary.Title" xml:space="preserve">
+        <value>Empty library</value>
+    </data>
+    <data name="LibraryPage.EmptyLibrary.Description" xml:space="preserve">
+        <value>This library doesn't contain any series yet.</value>
+    </data>
+    <data name="LibraryPage.LibrarySeries.Title" xml:space="preserve">
+        <value>Library series</value>
+    </data>
 </root>

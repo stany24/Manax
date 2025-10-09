@@ -19,7 +19,7 @@
                 <StackPanel Grid.Column="0" Grid.Row="0" Orientation="Vertical">
                     <TextBlock Classes="title" Text="{Binding Library.Name}" />
                     <TextBlock
-                        Text="{Binding Library.Series.Count, StringFormat='📚 {0} série(s) dans cette bibliothèque'}"
+                        Text="{Binding SeriesCountText}"
                         Foreground="{StaticResource SecondaryBrush}"
                         FontSize="14" />
                 </StackPanel>
@@ -32,7 +32,7 @@
                         Padding="12,8">
                     <StackPanel Orientation="Horizontal" Spacing="8">
                         <TextBlock Text="🗑️" FontSize="14" />
-                        <TextBlock Text="Supprimer" FontWeight="Medium" />
+                        <TextBlock Text="{Binding DeleteText}" FontWeight="Medium" />
                     </StackPanel>
                 </Button>
             </Grid>
@@ -42,11 +42,11 @@
                             Spacing="16"
                             HorizontalAlignment="Center">
                     <TextBlock Text="📚" FontSize="48" HorizontalAlignment="Center" />
-                    <TextBlock Text="Bibliothèque vide"
+                    <TextBlock Text="{Binding EmptyLibraryTitle}"
                                FontSize="18"
                                FontWeight="Medium"
                                HorizontalAlignment="Center" />
-                    <TextBlock Text="Cette bibliothèque ne contient aucune série pour le moment."
+                    <TextBlock Text="{Binding EmptyLibraryDescription}"
                                TextAlignment="Center"
                                TextWrapping="Wrap"
                                Foreground="{StaticResource SecondaryBrush}"
@@ -57,7 +57,7 @@
             <Border Classes="card" IsVisible="{Binding Library.Series.Count}">
                 <StackPanel Orientation="Vertical" Spacing="20">
                     <TextBlock Classes="subtitle"
-                               Text="Séries de la bibliothèque"
+                               Text="{Binding LibrarySeriesTitle}"
                                Margin="0"
                                VerticalAlignment="Center" />
 

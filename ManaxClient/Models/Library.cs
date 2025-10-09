@@ -4,12 +4,13 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData;
 using DynamicData.Binding;
 using ManaxClient.Models.Sources;
+using ManaxClient.ViewModels;
 using ManaxLibrary.DTO.Library;
 using ManaxLibrary.Notifications;
 
 namespace ManaxClient.Models;
 
-public partial class Library : ObservableObject
+public partial class Library : LocalizedObject
 {
     private readonly ReadOnlyObservableCollection<Serie> _series;
     [ObservableProperty] private DateTime _creation;
