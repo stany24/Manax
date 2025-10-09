@@ -72,4 +72,40 @@
     <data name="ChapterPage.NextPage" xml:space="preserve">
         <value>Next page</value>
     </data>
+    <data name="HomePage.Welcome" xml:space="preserve">
+        <value>Welcome to Manax</value>
+    </data>
+    <data name="HomePage.Subtitle" xml:space="preserve">
+        <value>Discover and manage your favorite series</value>
+    </data>
+    <data name="HomePage.AddSeries" xml:space="preserve">
+        <value>Add series</value>
+    </data>
+    <data name="HomePage.NoSeries" xml:space="preserve">
+        <value>No series available</value>
+    </data>
+    <data name="HomePage.NoSeries.Description" xml:space="preserve">
+        <value>Start by adding your first series to discover all the features of Manax.</value>
+    </data>
+    <data name="HomePage.AddFirstSeries" xml:space="preserve">
+        <value>Add my first series</value>
+    </data>
+    <data name="HomePage.RecentSeries" xml:space="preserve">
+        <value>Recent series</value>
+    </data>
+    <data name="HomePage.SeriesCount" xml:space="preserve">
+        <value>{0} series</value>
+    </data>
+    <data name="HomePage.SelectFolder" xml:space="preserve">
+        <value>Select a folder to upload</value>
+    </data>
+    <data name="HomePage.UploadSuccess" xml:space="preserve">
+        <value>{0} upload successful</value>
+    </data>
+    <data name="HomePage.UploadError" xml:space="preserve">
+        <value>Error uploading serie</value>
+    </data>
+    <data name="HomePage.UploadFailure" xml:space="preserve">
+        <value>Upload failed: {0}</value>
+    </data>
 </root>

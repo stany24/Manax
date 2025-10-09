@@ -72,4 +72,40 @@
     <data name="ChapterPage.NextPage" xml:space="preserve">
         <value>Page suivante</value>
     </data>
+    <data name="HomePage.Welcome" xml:space="preserve">
+        <value>Bienvenue dans Manax</value>
+    </data>
+    <data name="HomePage.Subtitle" xml:space="preserve">
+        <value>Découvrez et gérez vos séries préférées</value>
+    </data>
+    <data name="HomePage.AddSeries" xml:space="preserve">
+        <value>Ajouter une série</value>
+    </data>
+    <data name="HomePage.NoSeries" xml:space="preserve">
+        <value>Aucune série disponible</value>
+    </data>
+    <data name="HomePage.NoSeries.Description" xml:space="preserve">
+        <value>Commencez par ajouter votre première série pour découvrir toutes les fonctionnalités de Manax.</value>
+    </data>
+    <data name="HomePage.AddFirstSeries" xml:space="preserve">
+        <value>Ajouter ma première série</value>
+    </data>
+    <data name="HomePage.RecentSeries" xml:space="preserve">
+        <value>Séries récentes</value>
+    </data>
+    <data name="HomePage.SeriesCount" xml:space="preserve">
+        <value>{0} série(s)</value>
+    </data>
+    <data name="HomePage.SelectFolder" xml:space="preserve">
+        <value>Sélectionnez un dossier à uploader</value>
+    </data>
+    <data name="HomePage.UploadSuccess" xml:space="preserve">
+        <value>Téléchargement de {0} réussi</value>
+    </data>
+    <data name="HomePage.UploadError" xml:space="preserve">
+        <value>Erreur lors du téléchargement de la série</value>
+    </data>
+    <data name="HomePage.UploadFailure" xml:space="preserve">
+        <value>Échec du téléchargement : {0}</value>
+    </data>
 </root>

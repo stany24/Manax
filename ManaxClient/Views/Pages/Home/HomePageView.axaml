@@ -15,9 +15,9 @@
 
             <Grid ColumnDefinitions="*,Auto">
                 <StackPanel Grid.Column="0" Orientation="Vertical">
-                    <TextBlock Classes="title" Text="Bienvenue dans Manax" />
+                    <TextBlock Classes="title" Text="{Binding WelcomeTitle}" />
                     <TextBlock Classes="subtitle"
-                               Text="Découvrez et gérez vos séries préférées"
+                               Text="{Binding Subtitle}"
                                Foreground="{StaticResource SecondaryBrush}" />
                 </StackPanel>
 
@@ -28,7 +28,7 @@
                         Padding="16,12">
                     <StackPanel Orientation="Horizontal" Spacing="8">
                         <TextBlock Text="📤" FontSize="16" />
-                        <TextBlock Text="Ajouter une série" FontWeight="Medium" />
+                        <TextBlock Text="{Binding AddSeriesText}" FontWeight="Medium" />
                     </StackPanel>
                 </Button>
             </Grid>
@@ -38,12 +38,12 @@
                             Spacing="16"
                             HorizontalAlignment="Center">
                     <TextBlock Text="📺" FontSize="48" HorizontalAlignment="Center" />
-                    <TextBlock Text="Aucune série disponible"
+                    <TextBlock Text="{Binding NoSeriesText}"
                                FontSize="18"
                                FontWeight="Medium"
                                HorizontalAlignment="Center" />
                     <TextBlock
-                        Text="Commencez par ajouter votre première série pour découvrir toutes les fonctionnalités de Manax."
+                        Text="{Binding NoSeriesDescription}"
                         TextAlignment="Center"
                         TextWrapping="Wrap"
                         Foreground="{StaticResource SecondaryBrush}"
@@ -55,7 +55,7 @@
                             Margin="0,8,0,0">
                         <StackPanel Orientation="Horizontal" Spacing="8">
                             <TextBlock Text="➕" />
-                            <TextBlock Text="Ajouter ma première série" />
+                            <TextBlock Text="{Binding AddFirstSeriesText}" />
                         </StackPanel>
                     </Button>
                 </StackPanel>
@@ -66,10 +66,10 @@
                     <Grid ColumnDefinitions="*,Auto">
                         <TextBlock Grid.Column="0"
                                    Classes="subtitle"
-                                   Text="Séries récentes"
+                                   Text="{Binding RecentSeriesText}"
                                    Margin="0" />
                         <TextBlock Grid.Column="1"
-                                   Text="{Binding Series.Count, StringFormat='{}{0} série(s)'}"
+                                   Text="{Binding SeriesCountText}"
                                    Foreground="{StaticResource SecondaryBrush}"
                                    VerticalAlignment="Center" />
                     </Grid>

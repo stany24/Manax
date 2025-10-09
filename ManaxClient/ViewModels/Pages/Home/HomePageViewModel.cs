@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
@@ -8,6 +9,7 @@ using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData;
 using DynamicData.Binding;
+using Jeek.Avalonia.Localization;
 using ManaxClient.Models.Sources;
 using ManaxClient.ViewModels.Pages.Serie;
 using ManaxLibrary;
@@ -20,6 +22,16 @@ public partial class HomePageViewModel : PageViewModel
 {
     private readonly ReadOnlyObservableCollection<Models.Serie> _series;
     [ObservableProperty] private bool _isFolderPickerOpen;
+    
+    [ObservableProperty] private string _welcomeTitle = string.Empty;
+    [ObservableProperty] private string _subtitle = string.Empty;
+    [ObservableProperty] private string _addSeriesText = string.Empty;
+    [ObservableProperty] private string _noSeriesText = string.Empty;
+    [ObservableProperty] private string _noSeriesDescription = string.Empty;
+    [ObservableProperty] private string _addFirstSeriesText = string.Empty;
+    [ObservableProperty] private string _recentSeriesText = string.Empty;
+    [ObservableProperty] private string _seriesCountText = string.Empty;
+    [ObservableProperty] private string _selectFolderText = string.Empty;
 
     public HomePageViewModel()
     {
@@ -37,6 +49,21 @@ public partial class HomePageViewModel : PageViewModel
                     change.Current.LoadPoster();
                 }
             });
+        
+        BindLocalizedStrings();
+    }
+
+    private void BindLocalizedStrings()
+    {
+        Localize(() => WelcomeTitle, "HomePage.Welcome");
+        Localize(() => Subtitle, "HomePage.Subtitle");
+        Localize(() => AddSeriesText, "HomePage.AddSeries");
+        Localize(() => NoSeriesText, "HomePage.NoSeries");
+        Localize(() => NoSeriesDescription, "HomePage.NoSeries.Description");
+        Localize(() => AddFirstSeriesText, "HomePage.AddFirstSeries");
+        Localize(() => RecentSeriesText, "HomePage.RecentSeries");
+        Localize(() => SelectFolderText, "HomePage.SelectFolder");
+        Localize(() => SeriesCountText, "HomePage.SeriesCount", () => Series.Count);
     }
 
     public ReadOnlyObservableCollection<Models.Serie> Series => _series;
@@ -46,7 +73,6 @@ public partial class HomePageViewModel : PageViewModel
         SeriePageViewModel seriePageViewModel = new(serie);
         PageChangedRequested?.Invoke(this, seriePageViewModel);
     }
-
 
     public async void UploadSerie()
     {
@@ -59,10 +85,11 @@ public partial class HomePageViewModel : PageViewModel
                 ? desktop.MainWindow
                 : null;
             if (window?.StorageProvider == null) return;
+            
             IReadOnlyList<IStorageFolder> folders = await window.StorageProvider.OpenFolderPickerAsync(
                 new FolderPickerOpenOptions
                 {
-                    Title = "Sélectionnez un dossier à uploader",
+                    Title = SelectFolderText,
                     AllowMultiple = false
                 });
             IsFolderPickerOpen = false;
@@ -74,16 +101,19 @@ public partial class HomePageViewModel : PageViewModel
             Optional<bool> uploadSerieResponse = await ManaxApiUploadClient.UploadSerieAsync(folderPath);
             if (uploadSerieResponse.Failed)
             {
-                InfoEmitted?.Invoke(this, uploadSerieResponse.Error);
+                InfoEmitted?.Invoke(this, 
+                    string.Format(Localizer.Get("HomePage.UploadFailure"),Path.GetDirectoryName(folderPath)));
+                Logger.LogFailure("Failed to upload series: " + uploadSerieResponse.Error);
+                return;
             }
-            else
-            {
-                InfoEmitted?.Invoke(this, "Serie upload successful");
-                Logger.LogInfo("Serie upload successful");
-            }
+            InfoEmitted?.Invoke(this, 
+                string.Format(Localizer.Get("HomePage.UploadSuccess"), Path.GetDirectoryName(folderPath)));
+            Logger.LogInfo("Serie upload successful");
         }
         catch (Exception e)
         {
+            IsFolderPickerOpen = false;
+            InfoEmitted?.Invoke(this, Localizer.Get("HomePage.UploadError"));
             Logger.LogError("Error uploading series", e);
         }
     }
