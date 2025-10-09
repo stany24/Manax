@@ -5,7 +5,7 @@ using CommunityToolkit.Mvvm.Input;
 
 namespace ManaxClient.ViewModels.Pages;
 
-public abstract partial class PageViewModel : LocalizedViewModel
+public abstract partial class PageViewModel : LocalizedObject
 {
     [ObservableProperty] private bool _admin;
     [ObservableProperty] private bool _controlBarVisible = true;

@@ -9,12 +9,12 @@ using Jeek.Avalonia.Localization;
 
 namespace ManaxClient.ViewModels;
 
-public abstract class LocalizedViewModel:ObservableObject
+public abstract class LocalizedObject:ObservableObject
 {
     private readonly List<LocalizedProperty> _localizedProperties = [];
     private readonly Dictionary<object, List<LocalizedProperty>> _nestedObjectSubscriptions = [];
 
-    protected LocalizedViewModel()
+    protected LocalizedObject()
     {
         Localizer.LanguageChanged += (_,_) => UpdateAll();
         PropertyChanged += UpdateChanged;

@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData;
-using Jeek.Avalonia.Localization;
 using ManaxClient.Models.Sources;
+using ManaxClient.ViewModels;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTO.Issue.Reported;
 
 namespace ManaxClient.Models.Issue;
 
-public partial class IssueSerieReported : ObservableObject
+public partial class IssueSerieReported : LocalizedObject
 {
     [ObservableProperty] private DateTime _createdAt;
     [ObservableProperty] private long _id;
@@ -21,12 +21,15 @@ public partial class IssueSerieReported : ObservableObject
     private IDisposable? _subscriptionUser;
     [ObservableProperty] private User _user = null!;
 
-    public string FormattedInfo => string.Format(Localizer.Get("IssuesPage.SerieUserInfo"),Serie?.Title ?? "",User?.Username ?? "",CreatedAt);
-    public string ReportedBadgeText => Localizer.Get("IssuesPage.Reported");
+    [ObservableProperty] private string _formattedInfo = string.Empty;
+    
+    [ObservableProperty] private string _reportedBadgeText = string.Empty;
 
     public IssueSerieReported(IssueSerieReportedDto dto)
     {
         FromDto(dto);
+        Localize(()=> FormattedInfo,"IssuesPage.ChapterUserInfo",()=> Serie.Title,()=> User.Username,()=> CreatedAt);
+        Localize(()=> ReportedBadgeText,"IssuesPage.Reported");
     }
 
     public void Close()
