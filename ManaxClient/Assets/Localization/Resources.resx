@@ -336,4 +336,109 @@
     <data name="SettingsServerPage.ErrorCreatingLibrary" xml:space="preserve">
         <value>Error creating library</value>
     </data>
+    <data name="ServerStatsPage.Title" xml:space="preserve">
+        <value>Server Statistics</value>
+    </data>
+    <data name="ServerStatsPage.Subtitle" xml:space="preserve">
+        <value>📊 Overview of server data and activity</value>
+    </data>
+    <data name="ServerStatsPage.DiskUsage.Title" xml:space="preserve">
+        <value>Disk Space Usage</value>
+    </data>
+    <data name="ServerStatsPage.DiskUsage.Used" xml:space="preserve">
+        <value>🔴 Used</value>
+    </data>
+    <data name="ServerStatsPage.DiskUsage.Available" xml:space="preserve">
+        <value>🟢 Available</value>
+    </data>
+    <data name="ServerStatsPage.UserActivity.Title" xml:space="preserve">
+        <value>User Activity</value>
+    </data>
+    <data name="ServerStatsPage.UserActivity.Active" xml:space="preserve">
+        <value>🔵 Active</value>
+    </data>
+    <data name="ServerStatsPage.UserActivity.Inactive" xml:space="preserve">
+        <value>⚫ Inactive</value>
+    </data>
+    <data name="ServerStatsPage.Content.Title" xml:space="preserve">
+        <value>Server Content</value>
+    </data>
+    <data name="ServerStatsPage.Content.Series" xml:space="preserve">
+        <value>📖 Series</value>
+    </data>
+    <data name="ServerStatsPage.Content.Chapters" xml:space="preserve">
+        <value>📄 Chapters</value>
+    </data>
+    <data name="ServerStatsPage.LibraryDistribution.Title" xml:space="preserve">
+        <value>Library Distribution</value>
+    </data>
+    <data name="ServerStatsPage.NeverRead.Title" xml:space="preserve">
+        <value>Never Read Series</value>
+    </data>
+    <data name="ServerStatsPage.Charts.Used" xml:space="preserve">
+        <value>Used</value>
+    </data>
+    <data name="ServerStatsPage.Charts.Available" xml:space="preserve">
+        <value>Available</value>
+    </data>
+    <data name="ServerStatsPage.Charts.Active" xml:space="preserve">
+        <value>Active</value>
+    </data>
+    <data name="ServerStatsPage.Charts.Inactive" xml:space="preserve">
+        <value>Inactive</value>
+    </data>
+    <data name="UserStatsPage.Title" xml:space="preserve">
+        <value>My Statistics</value>
+    </data>
+    <data name="UserStatsPage.Subtitle" xml:space="preserve">
+        <value>📊 Your activity and progress in Manax</value>
+    </data>
+    <data name="UserStatsPage.SeriesProgress.Title" xml:space="preserve">
+        <value>Series Progress</value>
+    </data>
+    <data name="UserStatsPage.SeriesProgress.Completed" xml:space="preserve">
+        <value>✅ Completed</value>
+    </data>
+    <data name="UserStatsPage.SeriesProgress.InProgress" xml:space="preserve">
+        <value>📖 In Progress</value>
+    </data>
+    <data name="UserStatsPage.SeriesProgress.Remaining" xml:space="preserve">
+        <value>⏳ Remaining</value>
+    </data>
+    <data name="UserStatsPage.ChaptersProgress.Title" xml:space="preserve">
+        <value>Chapters Progress</value>
+    </data>
+    <data name="UserStatsPage.ChaptersProgress.Read" xml:space="preserve">
+        <value>✅ Read</value>
+    </data>
+    <data name="UserStatsPage.ChaptersProgress.Remaining" xml:space="preserve">
+        <value>⏳ Remaining</value>
+    </data>
+    <data name="UserStatsPage.RankDistribution.Title" xml:space="preserve">
+        <value>Rank Distribution</value>
+    </data>
+    <data name="UserStatsPage.ReadsPerDay.Title" xml:space="preserve">
+        <value>Daily Reads</value>
+    </data>
+    <data name="UserStatsPage.Charts.Completed" xml:space="preserve">
+        <value>Completed</value>
+    </data>
+    <data name="UserStatsPage.Charts.InProgress" xml:space="preserve">
+        <value>In Progress</value>
+    </data>
+    <data name="UserStatsPage.Charts.Remaining" xml:space="preserve">
+        <value>Remaining</value>
+    </data>
+    <data name="UserStatsPage.Charts.Read" xml:space="preserve">
+        <value>Read</value>
+    </data>
+    <data name="UserStatsPage.Charts.RemainingChapters" xml:space="preserve">
+        <value>Remaining</value>
+    </data>
+    <data name="UserStatsPage.Charts.SeriesCount" xml:space="preserve">
+        <value>Number of series</value>
+    </data>
+    <data name="UserStatsPage.Charts.DailyReads" xml:space="preserve">
+        <value>Daily reads</value>
+    </data>
 </root>

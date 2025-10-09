@@ -16,8 +16,8 @@
         <StackPanel Orientation="Vertical" Spacing="24">
 
             <StackPanel Orientation="Vertical">
-                <TextBlock Classes="title" Text="Statistiques du serveur" />
-                <TextBlock Text="📊 Vue d'ensemble des données et de l'activité du serveur"
+                <TextBlock Classes="title" Text="{Binding PageTitle}" />
+                <TextBlock Text="{Binding PageSubtitle}"
                            Foreground="{StaticResource SecondaryBrush}" />
             </StackPanel>
 
@@ -26,7 +26,7 @@
                     <StackPanel Spacing="20">
                         <StackPanel Orientation="Horizontal" Spacing="12">
                             <TextBlock Text="💾" FontSize="20" />
-                            <TextBlock Classes="subtitle" Text="Utilisation de l'espace disque" Margin="0" />
+                            <TextBlock Classes="subtitle" Text="{Binding DiskUsageTitle}" Margin="0" />
                         </StackPanel>
 
                         <avalonia:PieChart Series="{Binding DiskUsageSeries}"
@@ -36,7 +36,7 @@
 
                         <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
                             <StackPanel Grid.Column="0" Spacing="4">
-                                <TextBlock Text="🔴 Utilisé" FontSize="12" FontWeight="Medium" />
+                                <TextBlock Text="{Binding UsedDiskLabel}" FontSize="12" FontWeight="Medium" />
                                 <TextBlock Text="{Binding DiskSizeInGb, StringFormat={}{0:F1} GB}"
                                            FontSize="16"
                                            FontWeight="Bold"
@@ -44,7 +44,7 @@
                             </StackPanel>
 
                             <StackPanel Grid.Column="1" Spacing="4">
-                                <TextBlock Text="🟢 Disponible" FontSize="12" FontWeight="Medium" />
+                                <TextBlock Text="{Binding AvailableDiskLabel}" FontSize="12" FontWeight="Medium" />
                                 <TextBlock Text="{Binding AvailableDiskSizeInGb, StringFormat={}{0:F1} GB}"
                                            FontSize="16"
                                            FontWeight="Bold"
@@ -58,7 +58,7 @@
                     <StackPanel Spacing="20">
                         <StackPanel Orientation="Horizontal" Spacing="12">
                             <TextBlock Text="👥" FontSize="20" />
-                            <TextBlock Classes="subtitle" Text="Activité des utilisateurs" Margin="0" />
+                            <TextBlock Classes="subtitle" Text="{Binding UserActivityTitle}" Margin="0" />
                         </StackPanel>
 
                         <avalonia:PieChart Series="{Binding UserActivitySeries}"
@@ -68,7 +68,7 @@
 
                         <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
                             <StackPanel Grid.Column="0" Spacing="4">
-                                <TextBlock Text="🔵 Actifs" FontSize="12" FontWeight="Medium" />
+                                <TextBlock Text="{Binding ActiveUsersLabel}" FontSize="12" FontWeight="Medium" />
                                 <TextBlock Text="{Binding ServerStats.ActiveUsers}"
                                            FontSize="16"
                                            FontWeight="Bold"
@@ -76,7 +76,7 @@
                             </StackPanel>
 
                             <StackPanel Grid.Column="1" Spacing="4">
-                                <TextBlock Text="⚫ Inactifs" FontSize="12" FontWeight="Medium" />
+                                <TextBlock Text="{Binding InactiveUsersLabel}" FontSize="12" FontWeight="Medium" />
                                 <TextBlock Text="{Binding ServerStats.InactiveUsers}"
                                            FontSize="16"
                                            FontWeight="Bold"
@@ -92,12 +92,12 @@
                     <StackPanel Spacing="20">
                         <StackPanel Orientation="Horizontal" Spacing="12">
                             <TextBlock Text="📚" FontSize="20" />
-                            <TextBlock Classes="subtitle" Text="Contenu du serveur" Margin="0" />
+                            <TextBlock Classes="subtitle" Text="{Binding ServerContentTitle}" Margin="0" />
                         </StackPanel>
 
                         <Grid RowDefinitions="Auto,Auto" RowSpacing="16">
                             <StackPanel Grid.Row="0" Spacing="4" HorizontalAlignment="Center">
-                                <TextBlock Text="📖 Séries" FontSize="14" FontWeight="Medium" />
+                                <TextBlock Text="{Binding SeriesLabel}" FontSize="14" FontWeight="Medium" />
                                 <TextBlock Text="{Binding ServerStats.Series}"
                                            FontSize="32"
                                            FontWeight="Bold"
@@ -106,7 +106,7 @@
                             </StackPanel>
 
                             <StackPanel Grid.Row="1" Spacing="4" HorizontalAlignment="Center">
-                                <TextBlock Text="📄 Chapitres" FontSize="14" FontWeight="Medium" />
+                                <TextBlock Text="{Binding ChaptersLabel}" FontSize="14" FontWeight="Medium" />
                                 <TextBlock Text="{Binding ServerStats.Chapters}"
                                            FontSize="32"
                                            FontWeight="Bold"
@@ -121,7 +121,7 @@
                     <StackPanel Spacing="20">
                         <StackPanel Orientation="Horizontal" Spacing="12">
                             <TextBlock Text="📚" FontSize="20" />
-                            <TextBlock Classes="subtitle" Text="Répartition par bibliothèque" Margin="0" />
+                            <TextBlock Classes="subtitle" Text="{Binding LibraryDistributionTitle}" Margin="0" />
                         </StackPanel>
 
                         <avalonia:PieChart Series="{Binding LibraryDistributionSeries}"
@@ -136,7 +136,7 @@
                 <StackPanel Spacing="20">
                     <StackPanel Orientation="Horizontal" Spacing="12">
                         <TextBlock Text="🚫" FontSize="20" />
-                        <TextBlock Classes="subtitle" Text="Séries non lues" Margin="0" />
+                        <TextBlock Classes="subtitle" Text="{Binding NeverReadSeriesTitle}" Margin="0" />
                     </StackPanel>
 
                     <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">

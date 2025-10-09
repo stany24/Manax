@@ -15,8 +15,8 @@
         <StackPanel Orientation="Vertical" Spacing="24">
 
             <StackPanel Orientation="Vertical">
-                <TextBlock Classes="title" Text="Mes statistiques" />
-                <TextBlock Text="📊 Votre activité et progression dans Manax"
+                <TextBlock Classes="title" Text="{Binding PageTitle}" />
+                <TextBlock Text="{Binding PageSubtitle}"
                            Foreground="{StaticResource SecondaryBrush}" />
             </StackPanel>
 
@@ -25,7 +25,7 @@
                     <StackPanel Spacing="20">
                         <StackPanel Orientation="Horizontal" Spacing="12">
                             <TextBlock Text="📚" FontSize="20" />
-                            <TextBlock Classes="subtitle" Text="Progression des séries" Margin="0" />
+                            <TextBlock Classes="subtitle" Text="{Binding SeriesProgressTitle}" Margin="0" />
                         </StackPanel>
 
                         <avalonia:PieChart Series="{Binding SeriesSeries}"
@@ -35,7 +35,7 @@
 
                         <Grid ColumnDefinitions="*,*,*" ColumnSpacing="8">
                             <StackPanel Grid.Column="0" Spacing="4">
-                                <TextBlock Text="✅ Terminées" FontSize="12" FontWeight="Medium" />
+                                <TextBlock Text="{Binding SeriesCompletedLabel}" FontSize="12" FontWeight="Medium" />
                                 <TextBlock Text="{Binding UserStats.SeriesCompleted}"
                                            FontSize="16"
                                            FontWeight="Bold"
@@ -43,7 +43,7 @@
                             </StackPanel>
 
                             <StackPanel Grid.Column="1" Spacing="4">
-                                <TextBlock Text="📖 En cours" FontSize="12" FontWeight="Medium" />
+                                <TextBlock Text="{Binding SeriesInProgressLabel}" FontSize="12" FontWeight="Medium" />
                                 <TextBlock Text="{Binding UserStats.SeriesInProgress}"
                                            FontSize="16"
                                            FontWeight="Bold"
@@ -51,7 +51,7 @@
                             </StackPanel>
 
                             <StackPanel Grid.Column="2" Spacing="4">
-                                <TextBlock Text="⏳ Restantes" FontSize="12" FontWeight="Medium" />
+                                <TextBlock Text="{Binding SeriesRemainingLabel}" FontSize="12" FontWeight="Medium" />
                                 <TextBlock Text="{Binding UserStats.SeriesRemaining}"
                                            FontSize="16"
                                            FontWeight="Bold"
@@ -65,7 +65,7 @@
                     <StackPanel Spacing="20">
                         <StackPanel Orientation="Horizontal" Spacing="12">
                             <TextBlock Text="📖" FontSize="20" />
-                            <TextBlock Classes="subtitle" Text="Progression des chapitres" Margin="0" />
+                            <TextBlock Classes="subtitle" Text="{Binding ChaptersProgressTitle}" Margin="0" />
                         </StackPanel>
 
                         <avalonia:PieChart Series="{Binding ChaptersSeries}"
@@ -75,7 +75,7 @@
 
                         <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
                             <StackPanel Grid.Column="0" Spacing="4">
-                                <TextBlock Text="✅ Lus" FontSize="12" FontWeight="Medium" />
+                                <TextBlock Text="{Binding ChaptersReadLabel}" FontSize="12" FontWeight="Medium" />
                                 <TextBlock Text="{Binding UserStats.ChaptersRead}"
                                            FontSize="16"
                                            FontWeight="Bold"
@@ -83,7 +83,7 @@
                             </StackPanel>
 
                             <StackPanel Grid.Column="1" Spacing="4">
-                                <TextBlock Text="⏳ Restants" FontSize="12" FontWeight="Medium" />
+                                <TextBlock Text="{Binding ChaptersRemainingLabel}" FontSize="12" FontWeight="Medium" />
                                 <TextBlock Text="{Binding UserStats.ChaptersRemaining}"
                                            FontSize="16"
                                            FontWeight="Bold"
@@ -98,7 +98,7 @@
                 <StackPanel Spacing="20">
                     <StackPanel Orientation="Horizontal" Spacing="12">
                         <TextBlock Text="🏆" FontSize="20" />
-                        <TextBlock Classes="subtitle" Text="Répartition par rang" Margin="0" />
+                        <TextBlock Classes="subtitle" Text="{Binding RankDistributionTitle}" Margin="0" />
                     </StackPanel>
 
                     <avalonia:CartesianChart Series="{Binding RanksSeries}"
@@ -113,7 +113,7 @@
                 <StackPanel Spacing="20">
                     <StackPanel Orientation="Horizontal" Spacing="12">
                         <TextBlock Text="📈" FontSize="20" />
-                        <TextBlock Classes="subtitle" Text="Lectures par jour" Margin="0" />
+                        <TextBlock Classes="subtitle" Text="{Binding ReadsPerDayTitle}" Margin="0" />
                     </StackPanel>
 
                     <avalonia:CartesianChart Series="{Binding ReadsPerDaySeries}"
