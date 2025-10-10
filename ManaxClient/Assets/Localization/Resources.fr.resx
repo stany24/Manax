@@ -474,4 +474,37 @@
     <data name="TagPage.DeleteError" xml:space="preserve">
         <value>Erreur lors de la suppression du tag</value>
     </data>
+    <data name="UserPage.Management" xml:space="preserve">
+        <value>Gestion des utilisateurs</value>
+    </data>
+    <data name="UserPage.Count" xml:space="preserve">
+        <value>👥 {0} utilisateur(s) enregistré(s)</value>
+    </data>
+    <data name="UserPage.Add" xml:space="preserve">
+        <value>Ajouter</value>
+    </data>
+    <data name="UserPage.NoUsers" xml:space="preserve">
+        <value>Aucun utilisateur</value>
+    </data>
+    <data name="UserPage.NoUsers.Description" xml:space="preserve">
+        <value>Commencez par créer votre premier utilisateur.</value>
+    </data>
+    <data name="UserPage.CreateFirst" xml:space="preserve">
+        <value>Créer un utilisateur</value>
+    </data>
+    <data name="UserPage.List" xml:space="preserve">
+        <value>Liste des utilisateurs</value>
+    </data>
+    <data name="UserPage.Permissions" xml:space="preserve">
+        <value>Permissions</value>
+    </data>
+    <data name="UserPage.CreateError" xml:space="preserve">
+        <value>Erreur lors de la création de l'utilisateur</value>
+    </data>
+    <data name="UserPage.DeleteError" xml:space="preserve">
+        <value>Erreur lors de la suppression de l'utilisateur</value>
+    </data>
+    <data name="UserPage.UpdatePermissionsError" xml:space="preserve">
+        <value>Erreur lors de la mise à jour des permissions</value>
+    </data>
 </root>

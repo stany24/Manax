@@ -474,4 +474,37 @@
     <data name="TagPage.DeleteError" xml:space="preserve">
         <value>Error deleting tag</value>
     </data>
+    <data name="UserPage.Management" xml:space="preserve">
+        <value>User Management</value>
+    </data>
+    <data name="UserPage.Count" xml:space="preserve">
+        <value>👥 {0} user(s) registered</value>
+    </data>
+    <data name="UserPage.Add" xml:space="preserve">
+        <value>Add</value>
+    </data>
+    <data name="UserPage.NoUsers" xml:space="preserve">
+        <value>No users</value>
+    </data>
+    <data name="UserPage.NoUsers.Description" xml:space="preserve">
+        <value>Start by creating your first user.</value>
+    </data>
+    <data name="UserPage.CreateFirst" xml:space="preserve">
+        <value>Create a user</value>
+    </data>
+    <data name="UserPage.List" xml:space="preserve">
+        <value>User list</value>
+    </data>
+    <data name="UserPage.Permissions" xml:space="preserve">
+        <value>Permissions</value>
+    </data>
+    <data name="UserPage.CreateError" xml:space="preserve">
+        <value>Error creating user</value>
+    </data>
+    <data name="UserPage.DeleteError" xml:space="preserve">
+        <value>Error deleting user</value>
+    </data>
+    <data name="UserPage.UpdatePermissionsError" xml:space="preserve">
+        <value>Error updating user permissions</value>
+    </data>
 </root>
