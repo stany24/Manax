@@ -2,6 +2,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData;
 using DynamicData.Binding;
 using ManaxClient.Models.Sources;
@@ -13,9 +14,21 @@ using ManaxLibrary.DTO.Tag;
 
 namespace ManaxClient.ViewModels.Pages.Tag;
 
-public class TagPageViewModel : PageViewModel
+public partial class TagPageViewModel : PageViewModel
 {
     private readonly ReadOnlyObservableCollection<Models.Tag> _tags;
+    
+    [ObservableProperty] private string _tagManagementTitle = string.Empty;
+    [ObservableProperty] private string _tagsCountText = string.Empty;
+    [ObservableProperty] private string _newTagText = string.Empty;
+    [ObservableProperty] private string _noTagsConfiguredText = string.Empty;
+    [ObservableProperty] private string _noTagsDescriptionText = string.Empty;
+    [ObservableProperty] private string _createFirstTagText = string.Empty;
+    [ObservableProperty] private string _tagListText = string.Empty;
+    [ObservableProperty] private string _defaultNewTagName = string.Empty;
+    [ObservableProperty] private string _createTagErrorText = string.Empty;
+    [ObservableProperty] private string _updateTagErrorText = string.Empty;
+    [ObservableProperty] private string _deleteTagErrorText = string.Empty;
 
     public TagPageViewModel()
     {
@@ -24,13 +37,30 @@ public class TagPageViewModel : PageViewModel
             .Connect()
             .SortAndBind(out _tags, comparer)
             .Subscribe();
+            
+        BindLocalizedStrings();
+    }
+    
+    private void BindLocalizedStrings()
+    {
+        Localize(() => TagManagementTitle, "TagPage.Management");
+        Localize(() => TagsCountText, "TagPage.Count", () => Tags.Count);
+        Localize(() => NewTagText, "TagPage.NewTag");
+        Localize(() => NoTagsConfiguredText, "TagPage.NoTags");
+        Localize(() => NoTagsDescriptionText, "TagPage.NoTags.Description");
+        Localize(() => CreateFirstTagText, "TagPage.CreateFirst");
+        Localize(() => TagListText, "TagPage.List");
+        Localize(() => DefaultNewTagName, "TagPage.DefaultName");
+        Localize(() => CreateTagErrorText, "TagPage.CreateError");
+        Localize(() => UpdateTagErrorText, "TagPage.UpdateError");
+        Localize(() => DeleteTagErrorText, "TagPage.DeleteError");
     }
 
     public ReadOnlyObservableCollection<Models.Tag> Tags => _tags;
 
     public void CreateTag()
     {
-        TagEditViewModel content = new(new TagUpdateDto { Name = "Nouveau Tag", Color = Color.Blue });
+        TagEditViewModel content = new(new TagUpdateDto { Name = DefaultNewTagName, Color = Color.Blue });
         ConfirmCancelViewModel viewModel = new(content);
         Controls.Popups.Popup popup = new(viewModel);
         popup.Closed += async void (_, _) =>
@@ -47,11 +77,11 @@ public class TagPageViewModel : PageViewModel
 
                 Optional<bool> request = await ManaxApiTagClient.CreateTagAsync(tagCreate);
                 if (request.Failed)
-                    InfoEmitted?.Invoke(this, "Erreur lors de la création du tag.");
+                    InfoEmitted?.Invoke(this, CreateTagErrorText);
             }
             catch
             {
-                InfoEmitted?.Invoke(this, "Erreur lors de la création du tag.");
+                InfoEmitted?.Invoke(this, CreateTagErrorText);
             }
         };
 
@@ -80,7 +110,7 @@ public class TagPageViewModel : PageViewModel
             }
             catch
             {
-                InfoEmitted?.Invoke(this, "Erreur lors de la mise à jour du tag.");
+                InfoEmitted?.Invoke(this, UpdateTagErrorText);
             }
         };
 
@@ -97,7 +127,7 @@ public class TagPageViewModel : PageViewModel
             }
             catch
             {
-                InfoEmitted?.Invoke(this, "Erreur lors de la suppression du tag.");
+                InfoEmitted?.Invoke(this, DeleteTagErrorText);
             }
         });
     }

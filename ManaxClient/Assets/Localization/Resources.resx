@@ -441,4 +441,37 @@
     <data name="UserStatsPage.Charts.DailyReads" xml:space="preserve">
         <value>Daily reads</value>
     </data>
+    <data name="TagPage.Management" xml:space="preserve">
+        <value>Tag Management</value>
+    </data>
+    <data name="TagPage.Count" xml:space="preserve">
+        <value>🏷️ {0} tag(s) configured</value>
+    </data>
+    <data name="TagPage.NewTag" xml:space="preserve">
+        <value>New tag</value>
+    </data>
+    <data name="TagPage.NoTags" xml:space="preserve">
+        <value>No tags configured</value>
+    </data>
+    <data name="TagPage.NoTags.Description" xml:space="preserve">
+        <value>Create tags to organize and categorize your series.</value>
+    </data>
+    <data name="TagPage.CreateFirst" xml:space="preserve">
+        <value>Create the first tag</value>
+    </data>
+    <data name="TagPage.List" xml:space="preserve">
+        <value>Tag list</value>
+    </data>
+    <data name="TagPage.DefaultName" xml:space="preserve">
+        <value>New Tag</value>
+    </data>
+    <data name="TagPage.CreateError" xml:space="preserve">
+        <value>Error creating tag</value>
+    </data>
+    <data name="TagPage.UpdateError" xml:space="preserve">
+        <value>Error updating tag</value>
+    </data>
+    <data name="TagPage.DeleteError" xml:space="preserve">
+        <value>Error deleting tag</value>
+    </data>
 </root>
