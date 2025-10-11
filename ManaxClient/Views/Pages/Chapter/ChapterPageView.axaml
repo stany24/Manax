@@ -5,6 +5,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:chapter1="clr-namespace:ManaxClient.ViewModels.Pages.Chapter"
     xmlns:viewModels="clr-namespace:ManaxClient.ViewModels"
+    xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Pages.Chapter.ChapterPageView"
     x:DataType="chapter1:ChapterPageViewModel"
@@ -72,7 +73,7 @@
                 BorderThickness="0">
             <StackPanel Orientation="Horizontal" Spacing="8">
                 <TextBlock VerticalAlignment="Center" Text="←" FontSize="16" />
-                <TextBlock Text="{Binding BackText}" />
+                <TextBlock Text="{localization:Localize ChapterPage.Back}" />
             </StackPanel>
         </Button>
 
@@ -94,7 +95,7 @@
                         BorderBrush="{DynamicResource Background3}">
                     <StackPanel Orientation="Horizontal" Spacing="8">
                         <TextBlock Text="⏮️" />
-                        <TextBlock Text="{Binding PreviousText}" />
+                        <TextBlock Text="{localization:Localize ChapterPage.Previous}" />
                     </StackPanel>
                 </Button>
 
@@ -102,7 +103,7 @@
                             Orientation="Vertical"
                             Spacing="4"
                             HorizontalAlignment="Center">
-                    <TextBlock Text="{Binding ChapterText}"
+                    <TextBlock Text="{localization:Localize ChapterPage.Chapter}"
                                Foreground="{DynamicResource SecondaryBrush}"
                                FontSize="12"
                                HorizontalAlignment="Center" />
@@ -120,7 +121,7 @@
                         Background="{StaticResource PrimaryBrush}"
                         Foreground="{DynamicResource TextColor1}">
                     <StackPanel Orientation="Horizontal" Spacing="8">
-                        <TextBlock Text="{Binding NextText}" />
+                        <TextBlock Text="{localization:Localize ChapterPage.Next}" />
                         <TextBlock Text="⏭️" />
                     </StackPanel>
                 </Button>
@@ -140,7 +141,7 @@
                         Foreground="{DynamicResource TextColor1}"
                         BorderThickness="0"
                         Padding="8"
-                        ToolTip.Tip="{Binding PreviousPageTooltip}"
+                        ToolTip.Tip="{localization:Localize ChapterPage.PreviousPage}"
                         Command="{Binding PreviousPage}">
                     <TextBlock Text="↑" FontSize="16" />
                 </Button>
@@ -167,7 +168,7 @@
                         Foreground="{DynamicResource TextColor1}"
                         BorderThickness="0"
                         Padding="8"
-                        ToolTip.Tip="{Binding NextPageTooltip}"
+                        ToolTip.Tip="{localization:Localize ChapterPage.NextPage}"
                         Command="{Binding NextPage}">
                     <TextBlock Text="↓" FontSize="16" />
                 </Button>

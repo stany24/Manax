@@ -6,6 +6,7 @@
     xmlns:previews="clr-namespace:ManaxClient.Controls.Previews"
     xmlns:page="clr-namespace:ManaxClient.ViewModels.Pages.Home"
     xmlns:viewModels="clr-namespace:ManaxClient.ViewModels"
+    xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Pages.Home.HomePageView"
     x:DataType="page:HomePageViewModel">
@@ -15,9 +16,9 @@
 
             <Grid ColumnDefinitions="*,Auto">
                 <StackPanel Grid.Column="0" Orientation="Vertical">
-                    <TextBlock Classes="title" Text="{Binding WelcomeTitle}" />
+                    <TextBlock Classes="title" Text="{localization:Localize HomePage.Welcome}" />
                     <TextBlock Classes="subtitle"
-                               Text="{Binding Subtitle}"
+                               Text="{localization:Localize HomePage.Subtitle}"
                                Foreground="{StaticResource SecondaryBrush}" />
                 </StackPanel>
 
@@ -28,7 +29,7 @@
                         Padding="16,12">
                     <StackPanel Orientation="Horizontal" Spacing="8">
                         <TextBlock Text="📤" FontSize="16" />
-                        <TextBlock Text="{Binding AddSeriesText}" FontWeight="Medium" />
+                        <TextBlock Text="{localization:Localize HomePage.AddSeries}" FontWeight="Medium" />
                     </StackPanel>
                 </Button>
             </Grid>
@@ -38,12 +39,12 @@
                             Spacing="16"
                             HorizontalAlignment="Center">
                     <TextBlock Text="📺" FontSize="48" HorizontalAlignment="Center" />
-                    <TextBlock Text="{Binding NoSeriesText}"
+                    <TextBlock Text="{localization:Localize HomePage.NoSeries}"
                                FontSize="18"
                                FontWeight="Medium"
                                HorizontalAlignment="Center" />
                     <TextBlock
-                        Text="{Binding NoSeriesDescription}"
+                        Text="{localization:Localize HomePage.NoSeries.Description}"
                         TextAlignment="Center"
                         TextWrapping="Wrap"
                         Foreground="{StaticResource SecondaryBrush}"
@@ -55,7 +56,7 @@
                             Margin="0,8,0,0">
                         <StackPanel Orientation="Horizontal" Spacing="8">
                             <TextBlock Text="➕" />
-                            <TextBlock Text="{Binding AddFirstSeriesText}" />
+                            <TextBlock Text="{localization:Localize HomePage.AddFirstSeries}" />
                         </StackPanel>
                     </Button>
                 </StackPanel>
@@ -66,7 +67,7 @@
                     <Grid ColumnDefinitions="*,Auto">
                         <TextBlock Grid.Column="0"
                                    Classes="subtitle"
-                                   Text="{Binding RecentSeriesText}"
+                                   Text="{localization:Localize HomePage.RecentSeries}"
                                    Margin="0" />
                         <TextBlock Grid.Column="1"
                                    Text="{Binding SeriesCountText}"

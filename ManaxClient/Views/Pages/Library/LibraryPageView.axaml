@@ -6,6 +6,7 @@
     xmlns:previews="clr-namespace:ManaxClient.Controls.Previews"
     xmlns:page="clr-namespace:ManaxClient.ViewModels.Pages.Library"
     xmlns:viewModels="clr-namespace:ManaxClient.ViewModels"
+    xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Pages.Library.LibraryPageView"
     x:DataType="page:LibraryPageViewModel"
@@ -32,7 +33,7 @@
                         Padding="12,8">
                     <StackPanel Orientation="Horizontal" Spacing="8">
                         <TextBlock Text="🗑️" FontSize="14" />
-                        <TextBlock Text="{Binding DeleteText}" FontWeight="Medium" />
+                        <TextBlock Text="{localization:Localize LibraryPage.Delete}" FontWeight="Medium" />
                     </StackPanel>
                 </Button>
             </Grid>
@@ -42,11 +43,11 @@
                             Spacing="16"
                             HorizontalAlignment="Center">
                     <TextBlock Text="📚" FontSize="48" HorizontalAlignment="Center" />
-                    <TextBlock Text="{Binding EmptyLibraryTitle}"
+                    <TextBlock Text="{localization:Localize LibraryPage.EmptyLibrary.Title}"
                                FontSize="18"
                                FontWeight="Medium"
                                HorizontalAlignment="Center" />
-                    <TextBlock Text="{Binding EmptyLibraryDescription}"
+                    <TextBlock Text="{localization:Localize LibraryPage.EmptyLibrary.Description}"
                                TextAlignment="Center"
                                TextWrapping="Wrap"
                                Foreground="{StaticResource SecondaryBrush}"
@@ -57,7 +58,7 @@
             <Border Classes="card" IsVisible="{Binding Library.Series.Count}">
                 <StackPanel Orientation="Vertical" Spacing="20">
                     <TextBlock Classes="subtitle"
-                               Text="{Binding LibrarySeriesTitle}"
+                               Text="{localization:Localize LibraryPage.LibrarySeries}"
                                Margin="0"
                                VerticalAlignment="Center" />
 

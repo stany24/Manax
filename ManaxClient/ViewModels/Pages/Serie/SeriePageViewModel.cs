@@ -10,6 +10,7 @@ using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData;
 using DynamicData.Binding;
+using Jeek.Avalonia.Localization;
 using ManaxClient.Models.Sources;
 using ManaxClient.ViewModels.Pages.Chapter;
 using ManaxClient.ViewModels.Popup.ConfirmCancel;
@@ -29,16 +30,6 @@ public partial class SeriePageViewModel : PageViewModel
     [ObservableProperty] private Models.Rank? _selectedRank;
     [ObservableProperty] private Models.Serie _serie;
 
-    [ObservableProperty] private string _changeButtonText = string.Empty;
-    [ObservableProperty] private string _serieRatingText = string.Empty;
-    [ObservableProperty] private string _chaptersText = string.Empty;
-    [ObservableProperty] private string _noChaptersAvailableText = string.Empty;
-    [ObservableProperty] private string _noChaptersDescriptionText = string.Empty;
-    [ObservableProperty] private string _selectPosterImageText = string.Empty;
-    [ObservableProperty] private string _posterReplacedSuccessText = string.Empty;
-    [ObservableProperty] private string _errorReplacingPosterText = string.Empty;
-    [ObservableProperty] private string _errorUpdatingSerieText = string.Empty;
-    [ObservableProperty] private string _rankSetCorrectlyText = string.Empty;
     [ObservableProperty] private string _chapterCountText = string.Empty;
 
     public SeriePageViewModel(Models.Serie serie)
@@ -67,22 +58,12 @@ public partial class SeriePageViewModel : PageViewModel
         Task.Run(async () =>
         {
             Optional<bool> userRankResponse = await ManaxApiRankClient.SetUserRankAsync(userRankCreateDto);
-            InfoEmitted?.Invoke(this, userRankResponse.Failed ? userRankResponse.Error : RankSetCorrectlyText);
+            InfoEmitted?.Invoke(this, userRankResponse.Failed ? userRankResponse.Error : Localizer.Get("SeriePage.RankSetCorrectly"));
         });
     }
 
     private void BindLocalizedStrings()
     {
-        Localize(() => ChangeButtonText, "SeriePage.ChangeButton");
-        Localize(() => SerieRatingText, "SeriePage.SerieRating");
-        Localize(() => ChaptersText, "SeriePage.Chapters");
-        Localize(() => NoChaptersAvailableText, "SeriePage.NoChaptersAvailable");
-        Localize(() => NoChaptersDescriptionText, "SeriePage.NoChaptersDescription");
-        Localize(() => SelectPosterImageText, "SeriePage.SelectPosterImage");
-        Localize(() => PosterReplacedSuccessText, "SeriePage.PosterReplacedSuccess");
-        Localize(() => ErrorReplacingPosterText, "SeriePage.ErrorReplacingPoster");
-        Localize(() => ErrorUpdatingSerieText, "SeriePage.ErrorUpdatingSerie");
-        Localize(() => RankSetCorrectlyText, "SeriePage.RankSetCorrectly");
         Localize(() => ChapterCountText, "SeriePage.ChapterCount", () => Serie.Chapters.Count);
     }
 
@@ -110,7 +91,7 @@ public partial class SeriePageViewModel : PageViewModel
             }
             catch (Exception e)
             {
-                InfoEmitted?.Invoke(this, ErrorUpdatingSerieText);
+                InfoEmitted?.Invoke(this, Localizer.Get("SeriePage.ErrorUpdatingSerie"));
                 Logger.LogError("Failed to update serie with ID: " + Serie.Id, e);
             }
         };
@@ -132,7 +113,7 @@ public partial class SeriePageViewModel : PageViewModel
             IReadOnlyList<IStorageFile> files = await window.StorageProvider.OpenFilePickerAsync(
                 new FilePickerOpenOptions
                 {
-                    Title = SelectPosterImageText,
+                    Title = Localizer.Get("SeriePage.SelectPosterImage"),
                     AllowMultiple = false,
                     FileTypeFilter =
                     [
@@ -159,13 +140,13 @@ public partial class SeriePageViewModel : PageViewModel
             }
             else
             {
-                InfoEmitted?.Invoke(this, PosterReplacedSuccessText);
+                InfoEmitted?.Invoke(this, Localizer.Get("SeriePage.PosterReplacedSuccess"));
                 Logger.LogInfo("Poster replaced successfully for serie ID: " + Serie.Id);
             }
         }
         catch (Exception e)
         {
-            InfoEmitted?.Invoke(this, ErrorReplacingPosterText);
+            InfoEmitted?.Invoke(this, Localizer.Get("SeriePage.ErrorReplacingPoster"));
             Logger.LogError("Error replacing poster for serie ID: " + Serie.Id, e);
         }
     }

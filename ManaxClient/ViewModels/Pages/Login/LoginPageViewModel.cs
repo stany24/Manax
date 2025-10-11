@@ -27,18 +27,6 @@ public sealed partial class LoginPageViewModel : PageViewModel
     [ObservableProperty] private string _password = string.Empty;
     [ObservableProperty] private int? _port;
     [ObservableProperty] private string _username = string.Empty;
-
-    [ObservableProperty] private string _titleText = string.Empty;
-    [ObservableProperty] private string _subtitleText = string.Empty;
-    [ObservableProperty] private string _usernameLabel = string.Empty;
-    [ObservableProperty] private string _usernamePlaceholder = string.Empty;
-    [ObservableProperty] private string _passwordLabel = string.Empty;
-    [ObservableProperty] private string _passwordPlaceholder = string.Empty;
-    [ObservableProperty] private string _serverLabel = string.Empty;
-    [ObservableProperty] private string _serverPlaceholder = string.Empty;
-    [ObservableProperty] private string _signInText = string.Empty;
-    [ObservableProperty] private string _tipTitle = string.Empty;
-    [ObservableProperty] private string _tipMessage = string.Empty;
     
     [ObservableProperty] private List<LanguageItem> _availableLanguages = [];
     [ObservableProperty] private LanguageItem? _selectedLanguage;
@@ -50,7 +38,6 @@ public sealed partial class LoginPageViewModel : PageViewModel
         ControlBarVisible = false;
         
         InitializeLanguages();
-        BindLocalizedStrings();
         TryLoadSavedLogin();
     }
 
@@ -73,21 +60,6 @@ public sealed partial class LoginPageViewModel : PageViewModel
         {
             Localizer.Language = value.Code;
         }
-    }
-
-    private void BindLocalizedStrings()
-    {
-        Localize(() => TitleText, "LoginPage.Title");
-        Localize(() => SubtitleText, "LoginPage.Subtitle");
-        Localize(() => UsernameLabel, "LoginPage.Username");
-        Localize(() => UsernamePlaceholder, "LoginPage.Username.Placeholder");
-        Localize(() => PasswordLabel, "LoginPage.Password");
-        Localize(() => PasswordPlaceholder, "LoginPage.Password.Placeholder");
-        Localize(() => ServerLabel, "LoginPage.Server");
-        Localize(() => ServerPlaceholder, "LoginPage.Server.Placeholder");
-        Localize(() => SignInText, "LoginPage.SignIn");
-        Localize(() => TipTitle, "LoginPage.Tip.Title");
-        Localize(() => TipMessage, "LoginPage.Tip.Message");
     }
 
     public void Login()

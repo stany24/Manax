@@ -23,15 +23,7 @@ public partial class HomePageViewModel : PageViewModel
     private readonly ReadOnlyObservableCollection<Models.Serie> _series;
     [ObservableProperty] private bool _isFolderPickerOpen;
     
-    [ObservableProperty] private string _welcomeTitle = string.Empty;
-    [ObservableProperty] private string _subtitle = string.Empty;
-    [ObservableProperty] private string _addSeriesText = string.Empty;
-    [ObservableProperty] private string _noSeriesText = string.Empty;
-    [ObservableProperty] private string _noSeriesDescription = string.Empty;
-    [ObservableProperty] private string _addFirstSeriesText = string.Empty;
-    [ObservableProperty] private string _recentSeriesText = string.Empty;
     [ObservableProperty] private string _seriesCountText = string.Empty;
-    [ObservableProperty] private string _selectFolderText = string.Empty;
 
     public HomePageViewModel()
     {
@@ -55,14 +47,6 @@ public partial class HomePageViewModel : PageViewModel
 
     private void BindLocalizedStrings()
     {
-        Localize(() => WelcomeTitle, "HomePage.Welcome");
-        Localize(() => Subtitle, "HomePage.Subtitle");
-        Localize(() => AddSeriesText, "HomePage.AddSeries");
-        Localize(() => NoSeriesText, "HomePage.NoSeries");
-        Localize(() => NoSeriesDescription, "HomePage.NoSeries.Description");
-        Localize(() => AddFirstSeriesText, "HomePage.AddFirstSeries");
-        Localize(() => RecentSeriesText, "HomePage.RecentSeries");
-        Localize(() => SelectFolderText, "HomePage.SelectFolder");
         Localize(() => SeriesCountText, "HomePage.SeriesCount", () => Series.Count);
     }
 
@@ -89,7 +73,7 @@ public partial class HomePageViewModel : PageViewModel
             IReadOnlyList<IStorageFolder> folders = await window.StorageProvider.OpenFolderPickerAsync(
                 new FolderPickerOpenOptions
                 {
-                    Title = SelectFolderText,
+                    Title = Localizer.Get("HomePage.SelectFolder"),
                     AllowMultiple = false
                 });
             IsFolderPickerOpen = false;

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData;
 using DynamicData.Binding;
+using Jeek.Avalonia.Localization;
 using ManaxClient.Models.Sources;
 using ManaxClient.ViewModels.Popup.ConfirmCancel;
 using ManaxClient.ViewModels.Popup.ConfirmCancel.Content;
@@ -19,17 +20,7 @@ public partial class UsersPageViewModel : PageViewModel
 {
     private readonly ReadOnlyObservableCollection<Models.User> _users;
     
-    [ObservableProperty] private string _userManagementTitle = string.Empty;
     [ObservableProperty] private string _usersCountText = string.Empty;
-    [ObservableProperty] private string _addUserText = string.Empty;
-    [ObservableProperty] private string _noUsersText = string.Empty;
-    [ObservableProperty] private string _noUsersDescriptionText = string.Empty;
-    [ObservableProperty] private string _createFirstUserText = string.Empty;
-    [ObservableProperty] private string _userListText = string.Empty;
-    [ObservableProperty] private string _permissionsText = string.Empty;
-    [ObservableProperty] private string _createUserErrorText = string.Empty;
-    [ObservableProperty] private string _deleteUserErrorText = string.Empty;
-    [ObservableProperty] private string _updatePermissionsErrorText = string.Empty;
 
     public UsersPageViewModel()
     {
@@ -45,17 +36,7 @@ public partial class UsersPageViewModel : PageViewModel
     
     private void BindLocalizedStrings()
     {
-        Localize(() => UserManagementTitle, "UserPage.Management");
         Localize(() => UsersCountText, "UserPage.Count", () => Users.Count);
-        Localize(() => AddUserText, "UserPage.Add");
-        Localize(() => NoUsersText, "UserPage.NoUsers");
-        Localize(() => NoUsersDescriptionText, "UserPage.NoUsers.Description");
-        Localize(() => CreateFirstUserText, "UserPage.CreateFirst");
-        Localize(() => UserListText, "UserPage.List");
-        Localize(() => PermissionsText, "UserPage.Permissions");
-        Localize(() => CreateUserErrorText, "UserPage.CreateError");
-        Localize(() => DeleteUserErrorText, "UserPage.DeleteError");
-        Localize(() => UpdatePermissionsErrorText, "UserPage.UpdatePermissionsError");
     }
 
     public ReadOnlyObservableCollection<Models.User> Users => _users;
@@ -84,12 +65,12 @@ public partial class UsersPageViewModel : PageViewModel
                 if (context.Canceled()) return;
                 List<Permission> perms = content.GetSelectedPermissions();
                 Optional<bool> postUserResponse = await ManaxApiPermissionClient.SetPermissionsAsync(userId, perms);
-                if (postUserResponse.Failed) InfoEmitted?.Invoke(this, UpdatePermissionsErrorText);
+                if (postUserResponse.Failed) InfoEmitted?.Invoke(this, Localizer.Get("UserPage.UpdatePermissionsError"));
             }
             catch (Exception e)
             {
                 Logger.LogError("Error updating user permissions", e);
-                InfoEmitted?.Invoke(this, UpdatePermissionsErrorText);
+                InfoEmitted?.Invoke(this, Localizer.Get("UserPage.UpdatePermissionsError"));
             }
         };
     }
@@ -107,12 +88,12 @@ public partial class UsersPageViewModel : PageViewModel
                 if (context.Canceled()) return;
                 UserCreateDto user = content.GetResult();
                 Optional<bool> postUserResponse = await ManaxApiUserClient.PostUserAsync(user);
-                if (postUserResponse.Failed) InfoEmitted?.Invoke(this, CreateUserErrorText);
+                if (postUserResponse.Failed) InfoEmitted?.Invoke(this, Localizer.Get("UserPage.CreateError"));
             }
             catch (Exception e)
             {
                 Logger.LogError("Error creating user", e);
-                InfoEmitted?.Invoke(this, CreateUserErrorText);
+                InfoEmitted?.Invoke(this, Localizer.Get("UserPage.CreateError"));
             }
         };
     }

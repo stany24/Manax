@@ -7,6 +7,7 @@ using System.Net.Http;
 using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData;
 using DynamicData.Binding;
+using Jeek.Avalonia.Localization;
 using ManaxClient.Models.Issue;
 using ManaxClient.ViewModels.Pages.Serie;
 using ManaxClient.ViewModels.Popup.ConfirmCancel;
@@ -27,22 +28,6 @@ public partial class IssuesPageViewModel : PageViewModel
 
     [ObservableProperty] private bool _showAutomaticIssues = true;
     [ObservableProperty] private bool _showChapterIssues = true;
-
-    [ObservableProperty] private string _pageTitle = string.Empty;
-    [ObservableProperty] private string _automaticText = string.Empty;
-    [ObservableProperty] private string _reportedText = string.Empty;
-    [ObservableProperty] private string _chaptersText = string.Empty;
-    [ObservableProperty] private string _seriesText = string.Empty;
-    [ObservableProperty] private string _automaticChaptersTitle = string.Empty;
-    [ObservableProperty] private string _automaticSeriesTitle = string.Empty;
-    [ObservableProperty] private string _reportedChaptersTitle = string.Empty;
-    [ObservableProperty] private string _reportedSeriesTitle = string.Empty;
-    [ObservableProperty] private string _noAutomaticChapterText = string.Empty;
-    [ObservableProperty] private string _noAutomaticSeriesText = string.Empty;
-    [ObservableProperty] private string _noReportedChapterText = string.Empty;
-    [ObservableProperty] private string _noReportedSeriesText = string.Empty;
-    [ObservableProperty] private string _replacementSuccessfulText = string.Empty;
-    [ObservableProperty] private string _replacementFailedText = string.Empty;
 
     public IssuesPageViewModel()
     {
@@ -71,27 +56,6 @@ public partial class IssuesPageViewModel : PageViewModel
             .Connect()
             .SortAndBind(out _issueSerieReported, comparer4)
             .Subscribe();
-        
-        InitializeLocalization();
-    }
-
-    private void InitializeLocalization()
-    {
-        Localize(() => PageTitle, "IssuesPage.Title");
-        Localize(() => AutomaticText, "IssuesPage.Automatic");
-        Localize(() => ReportedText, "IssuesPage.Reported");
-        Localize(() => ChaptersText, "IssuesPage.Chapters");
-        Localize(() => SeriesText, "IssuesPage.Series");
-        Localize(() => AutomaticChaptersTitle, "IssuesPage.AutomaticChapters");
-        Localize(() => AutomaticSeriesTitle, "IssuesPage.AutomaticSeries");
-        Localize(() => ReportedChaptersTitle, "IssuesPage.ReportedChapters");
-        Localize(() => ReportedSeriesTitle, "IssuesPage.ReportedSeries");
-        Localize(() => NoAutomaticChapterText, "IssuesPage.NoAutomaticChapter");
-        Localize(() => NoAutomaticSeriesText, "IssuesPage.NoAutomaticSeries");
-        Localize(() => NoReportedChapterText, "IssuesPage.NoReportedChapter");
-        Localize(() => NoReportedSeriesText, "IssuesPage.NoReportedSeries");
-        Localize(() => ReplacementSuccessfulText, "IssuesPage.ReplacementSuccessful");
-        Localize(() => ReplacementFailedText, "IssuesPage.ReplacementFailed");
     }
 
     public ReadOnlyObservableCollection<IssueChapterAutomatic> IssueChapterAutomatic => _issueChapterAutomatic;
@@ -172,7 +136,9 @@ public partial class IssuesPageViewModel : PageViewModel
             File.Delete(saveFile);
             Directory.Delete(saveFolder, true);
 
-            string message = request.GetValue() ? ReplacementSuccessfulText : ReplacementFailedText;
+            string message = request.GetValue() 
+                ? Localizer.Get("IssuesPage.ReplacementSuccessful") 
+                : Localizer.Get("IssuesPage.ReplacementFailed");
             InfoEmitted?.Invoke(this, message);
         }
         catch (Exception e)

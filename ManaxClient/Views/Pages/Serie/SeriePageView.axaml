@@ -7,6 +7,7 @@
     xmlns:page="clr-namespace:ManaxClient.ViewModels.Pages.Serie"
     xmlns:viewModels="clr-namespace:ManaxClient.ViewModels"
     xmlns:models="clr-namespace:ManaxClient.Models"
+    xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Pages.Serie.SeriePageView"
     x:DataType="page:SeriePageViewModel">
@@ -39,12 +40,12 @@
                                     Command="{Binding UpdateSerie}"
                                     IsEnabled="{Binding !IsFilePickerOpen}"
                                     HorizontalAlignment="Stretch">
-                                <TextBlock Text="{Binding ChangeButtonText}" />
+                                <TextBlock Text="{localization:Localize SeriePage.ChangeButton}" />
                             </Button>
                         </StackPanel>
 
                         <StackPanel Spacing="8">
-                            <TextBlock Text="{Binding SerieRatingText}" FontWeight="Medium" />
+                            <TextBlock Text="{localization:Localize SeriePage.SerieRating}" FontWeight="Medium" />
                             <ComboBox ItemsSource="{Binding Ranks}"
                                       SelectedItem="{Binding SelectedRank}"
                                       HorizontalAlignment="Stretch">
@@ -87,7 +88,7 @@
 
                     <Border Classes="card">
                         <StackPanel Spacing="16">
-                            <TextBlock Classes="subtitle" Text="{Binding ChaptersText}" Margin="0" />
+                            <TextBlock Classes="subtitle" Text="{localization:Localize SeriePage.Chapters}" Margin="0" />
 
                             <Border Background="{DynamicResource Background2}"
                                     CornerRadius="8"
@@ -95,9 +96,9 @@
                                     IsVisible="{Binding !Serie.Chapters.Count}">
                                 <StackPanel Spacing="8" HorizontalAlignment="Center">
                                     <TextBlock Text="📖" FontSize="32" />
-                                    <TextBlock Text="{Binding NoChaptersAvailableText}"
+                                    <TextBlock Text="{localization:Localize SeriePage.NoChaptersAvailable}"
                                                FontWeight="Medium" />
-                                    <TextBlock Text="{Binding NoChaptersDescriptionText}"
+                                    <TextBlock Text="{localization:Localize SeriePage.NoChaptersDescription}"
                                                FontSize="12"
                                                Foreground="{StaticResource SecondaryBrush}" />
                                 </StackPanel>

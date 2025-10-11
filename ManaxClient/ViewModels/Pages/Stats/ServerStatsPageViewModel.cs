@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
+using Jeek.Avalonia.Localization;
 using LiveChartsCore;
 using LiveChartsCore.Measure;
 using LiveChartsCore.SkiaSharpView;
@@ -22,50 +23,11 @@ public partial class ServerStatsPageViewModel : PageViewModel
     [ObservableProperty] private double _diskSizeInGb;
     [ObservableProperty] private ServerStats? _serverStats;
 
-    [ObservableProperty] private string _pageTitle = string.Empty;
-    [ObservableProperty] private string _pageSubtitle = string.Empty;
-    [ObservableProperty] private string _diskUsageTitle = string.Empty;
-    [ObservableProperty] private string _usedDiskLabel = string.Empty;
-    [ObservableProperty] private string _availableDiskLabel = string.Empty;
-    [ObservableProperty] private string _userActivityTitle = string.Empty;
-    [ObservableProperty] private string _activeUsersLabel = string.Empty;
-    [ObservableProperty] private string _inactiveUsersLabel = string.Empty;
-    [ObservableProperty] private string _serverContentTitle = string.Empty;
-    [ObservableProperty] private string _seriesLabel = string.Empty;
-    [ObservableProperty] private string _chaptersLabel = string.Empty;
-    [ObservableProperty] private string _libraryDistributionTitle = string.Empty;
-    [ObservableProperty] private string _neverReadSeriesTitle = string.Empty;
-    [ObservableProperty] private string _usedText = string.Empty;
-    [ObservableProperty] private string _availableText = string.Empty;
-    [ObservableProperty] private string _activeText = string.Empty;
-    [ObservableProperty] private string _inactiveText = string.Empty;
-
     public ServerStatsPageViewModel()
     {
-        BindLocalizedStrings();
         Task.Run(LoadServerStats);
     }
 
-    private void BindLocalizedStrings()
-    {
-        Localize(() => PageTitle, "ServerStatsPage.Title");
-        Localize(() => PageSubtitle, "ServerStatsPage.Subtitle");
-        Localize(() => DiskUsageTitle, "ServerStatsPage.DiskUsage.Title");
-        Localize(() => UsedDiskLabel, "ServerStatsPage.DiskUsage.Used");
-        Localize(() => AvailableDiskLabel, "ServerStatsPage.DiskUsage.Available");
-        Localize(() => UserActivityTitle, "ServerStatsPage.UserActivity.Title");
-        Localize(() => ActiveUsersLabel, "ServerStatsPage.UserActivity.Active");
-        Localize(() => InactiveUsersLabel, "ServerStatsPage.UserActivity.Inactive");
-        Localize(() => ServerContentTitle, "ServerStatsPage.Content.Title");
-        Localize(() => SeriesLabel, "ServerStatsPage.Content.Series");
-        Localize(() => ChaptersLabel, "ServerStatsPage.Content.Chapters");
-        Localize(() => LibraryDistributionTitle, "ServerStatsPage.LibraryDistribution.Title");
-        Localize(() => NeverReadSeriesTitle, "ServerStatsPage.NeverRead.Title");
-        Localize(() => UsedText, "ServerStatsPage.Charts.Used");
-        Localize(() => AvailableText, "ServerStatsPage.Charts.Available");
-        Localize(() => ActiveText, "ServerStatsPage.Charts.Active");
-        Localize(() => InactiveText, "ServerStatsPage.Charts.Inactive");
-    }
 
     public ObservableCollection<Models.Serie> NeverReadSeries { get; set; } = new([]);
     public ObservableCollection<ISeries> UserActivitySeries { get; set; } = new([]);
@@ -107,7 +69,7 @@ public partial class ServerStatsPageViewModel : PageViewModel
         DiskUsageSeries.Add(new PieSeries<double>
         {
             Values = [DiskSizeInGb],
-            Name = UsedText,
+            Name = Localizer.Get("ServerStatsPage.Charts.Used"),
             Fill = new SolidColorPaint(SKColors.OrangeRed),
             DataLabelsPaint = new SolidColorPaint(SKColors.White),
             DataLabelsSize = 12,
@@ -118,7 +80,7 @@ public partial class ServerStatsPageViewModel : PageViewModel
         DiskUsageSeries.Add(new PieSeries<double>
         {
             Values = [AvailableDiskSizeInGb],
-            Name = AvailableText,
+            Name = Localizer.Get("ServerStatsPage.Charts.Available"),
             Fill = new SolidColorPaint(SKColors.Green),
             DataLabelsPaint = new SolidColorPaint(SKColors.White),
             DataLabelsSize = 12,
@@ -130,7 +92,7 @@ public partial class ServerStatsPageViewModel : PageViewModel
         UserActivitySeries.Add(new PieSeries<int>
         {
             Values = [ServerStats.ActiveUsers],
-            Name = ActiveText,
+            Name = Localizer.Get("ServerStatsPage.Charts.Active"),
             Fill = new SolidColorPaint(SKColors.DodgerBlue),
             DataLabelsPaint = new SolidColorPaint(SKColors.White),
             DataLabelsSize = 12,
@@ -139,7 +101,7 @@ public partial class ServerStatsPageViewModel : PageViewModel
         UserActivitySeries.Add(new PieSeries<int>
         {
             Values = [ServerStats.Users - ServerStats.ActiveUsers],
-            Name = InactiveText,
+            Name = Localizer.Get("ServerStatsPage.Charts.Inactive"),
             Fill = new SolidColorPaint(SKColors.Gray),
             DataLabelsPaint = new SolidColorPaint(SKColors.White),
             DataLabelsSize = 12,

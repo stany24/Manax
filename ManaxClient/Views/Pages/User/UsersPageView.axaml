@@ -5,6 +5,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:page="clr-namespace:ManaxClient.ViewModels.Pages.User"
     xmlns:viewModels="clr-namespace:ManaxClient.ViewModels"
+    xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Pages.User.UsersPageView"
     x:DataType="page:UsersPageViewModel"
@@ -15,7 +16,7 @@
 
             <Grid ColumnDefinitions="*,Auto">
                 <StackPanel Grid.Column="0" Orientation="Vertical">
-                    <TextBlock Classes="title" Text="{Binding UserManagementTitle}" />
+                    <TextBlock Classes="title" Text="{localization:Localize UserPage.Management}" />
                     <TextBlock Text="{Binding UsersCountText}"
                                Foreground="{StaticResource SecondaryBrush}" />
                 </StackPanel>
@@ -27,7 +28,7 @@
                         VerticalAlignment="Center">
                     <StackPanel Orientation="Horizontal" Spacing="8">
                         <TextBlock Text="➕" />
-                        <TextBlock Text="{Binding AddUserText}" />
+                        <TextBlock Text="{localization:Localize UserPage.Add}" />
                     </StackPanel>
                 </Button>
             </Grid>
@@ -37,11 +38,11 @@
                             Spacing="16"
                             HorizontalAlignment="Center">
                     <TextBlock Text="👥" FontSize="48" HorizontalAlignment="Center" />
-                    <TextBlock Text="{Binding NoUsersText}"
+                    <TextBlock Text="{localization:Localize UserPage.NoUsers}"
                                FontSize="18"
                                FontWeight="Medium"
                                HorizontalAlignment="Center" />
-                    <TextBlock Text="{Binding NoUsersDescriptionText}"
+                    <TextBlock Text="{localization:Localize UserPage.NoUsers.Description}"
                                TextAlignment="Center"
                                Foreground="{StaticResource SecondaryBrush}" />
                     <Button Classes="primary"
@@ -50,7 +51,7 @@
                             HorizontalAlignment="Center">
                         <StackPanel Orientation="Horizontal" Spacing="8">
                             <TextBlock Text="➕" />
-                            <TextBlock Text="{Binding CreateFirstUserText}" />
+                            <TextBlock Text="{localization:Localize UserPage.CreateFirst}" />
                         </StackPanel>
                     </Button>
                 </StackPanel>
@@ -58,7 +59,7 @@
 
             <Border Classes="card" IsVisible="{Binding Users.Count}">
                 <StackPanel Spacing="16">
-                    <TextBlock Classes="subtitle" Text="{Binding UserListText}" />
+                    <TextBlock Classes="subtitle" Text="{localization:Localize UserPage.List}" />
 
                     <ItemsControl ItemsSource="{Binding Users}">
                         <ItemsControl.ItemTemplate>
@@ -103,13 +104,13 @@
                                         </Border>
 
                                         <Button Grid.Column="3"
-                                                IsVisible="{Binding $parent[UserControl].((page:UsersPageViewModel)DataContext).Admin}"
-                                                Classes="danger"
+                                                IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).CanWritePermissions}"
+                                                Classes="secondary"
                                                 Command="{Binding $parent[UserControl].((page:UsersPageViewModel)DataContext).EditUserPermissions}"
                                                 CommandParameter="{Binding Id}"
                                                 Padding="8"
                                                 VerticalAlignment="Center">
-                                            <TextBlock Text="{Binding $parent[UserControl].((page:UsersPageViewModel)DataContext).PermissionsText}" />
+                                            <TextBlock Text="{localization:Localize UserPage.Permissions}" />
                                         </Button>
 
                                         <Button Grid.Column="4"

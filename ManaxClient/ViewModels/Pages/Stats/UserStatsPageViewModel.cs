@@ -22,52 +22,10 @@ namespace ManaxClient.ViewModels.Pages.Stats;
 public partial class UserStatsPageViewModel : PageViewModel
 {
     [ObservableProperty] private UserStats? _userStats;
-    
-    [ObservableProperty] private string _pageTitle = string.Empty;
-    [ObservableProperty] private string _pageSubtitle = string.Empty;
-    [ObservableProperty] private string _seriesProgressTitle = string.Empty;
-    [ObservableProperty] private string _seriesCompletedLabel = string.Empty;
-    [ObservableProperty] private string _seriesInProgressLabel = string.Empty;
-    [ObservableProperty] private string _seriesRemainingLabel = string.Empty;
-    [ObservableProperty] private string _chaptersProgressTitle = string.Empty;
-    [ObservableProperty] private string _chaptersReadLabel = string.Empty;
-    [ObservableProperty] private string _chaptersRemainingLabel = string.Empty;
-    [ObservableProperty] private string _rankDistributionTitle = string.Empty;
-    [ObservableProperty] private string _readsPerDayTitle = string.Empty;
-    [ObservableProperty] private string _completedText = string.Empty;
-    [ObservableProperty] private string _inProgressText = string.Empty;
-    [ObservableProperty] private string _remainingText = string.Empty;
-    [ObservableProperty] private string _readText = string.Empty;
-    [ObservableProperty] private string _remainingChaptersText = string.Empty;
-    [ObservableProperty] private string _seriesCountText = string.Empty;
-    [ObservableProperty] private string _dailyReadsText = string.Empty;
 
     public UserStatsPageViewModel()
     {
-        BindLocalizedStrings();
         Task.Run(LoadUserStats);
-    }
-
-    private void BindLocalizedStrings()
-    {
-        Localize(() => PageTitle, "UserStatsPage.Title");
-        Localize(() => PageSubtitle, "UserStatsPage.Subtitle");
-        Localize(() => SeriesProgressTitle, "UserStatsPage.SeriesProgress.Title");
-        Localize(() => SeriesCompletedLabel, "UserStatsPage.SeriesProgress.Completed");
-        Localize(() => SeriesInProgressLabel, "UserStatsPage.SeriesProgress.InProgress");
-        Localize(() => SeriesRemainingLabel, "UserStatsPage.SeriesProgress.Remaining");
-        Localize(() => ChaptersProgressTitle, "UserStatsPage.ChaptersProgress.Title");
-        Localize(() => ChaptersReadLabel, "UserStatsPage.ChaptersProgress.Read");
-        Localize(() => ChaptersRemainingLabel, "UserStatsPage.ChaptersProgress.Remaining");
-        Localize(() => RankDistributionTitle, "UserStatsPage.RankDistribution.Title");
-        Localize(() => ReadsPerDayTitle, "UserStatsPage.ReadsPerDay.Title");
-        Localize(() => CompletedText, "UserStatsPage.Charts.Completed");
-        Localize(() => InProgressText, "UserStatsPage.Charts.InProgress");
-        Localize(() => RemainingText, "UserStatsPage.Charts.Remaining");
-        Localize(() => ReadText, "UserStatsPage.Charts.Read");
-        Localize(() => RemainingChaptersText, "UserStatsPage.Charts.RemainingChapters");
-        Localize(() => SeriesCountText, "UserStatsPage.Charts.SeriesCount");
-        Localize(() => DailyReadsText, "UserStatsPage.Charts.DailyReads");
     }
 
     public ObservableCollection<Axis> ReadsXAxes { get; set; } = new([new Axis()]);
@@ -108,7 +66,7 @@ public partial class UserStatsPageViewModel : PageViewModel
         SeriesSeries.Add(new PieSeries<long>
         {
             Values = [UserStats.SeriesCompleted],
-            Name = CompletedText,
+            Name = Localizer.Get("UserStatsPage.Charts.Completed"),
             Fill = new SolidColorPaint(SKColors.Green),
             DataLabelsPaint = new SolidColorPaint(SKColors.White),
             DataLabelsSize = 12,
@@ -117,7 +75,7 @@ public partial class UserStatsPageViewModel : PageViewModel
         SeriesSeries.Add(new PieSeries<long>
         {
             Values = [UserStats.SeriesInProgress],
-            Name = InProgressText,
+            Name = Localizer.Get("UserStatsPage.Charts.InProgress"),
             Fill = new SolidColorPaint(SKColors.Orange),
             DataLabelsPaint = new SolidColorPaint(SKColors.White),
             DataLabelsSize = 12,
@@ -126,7 +84,7 @@ public partial class UserStatsPageViewModel : PageViewModel
         SeriesSeries.Add(new PieSeries<long>
         {
             Values = [UserStats.SeriesRemaining],
-            Name = RemainingText,
+            Name = Localizer.Get("UserStatsPage.Charts.Remaining"),
             Fill = new SolidColorPaint(SKColors.Gray),
             DataLabelsPaint = new SolidColorPaint(SKColors.White),
             DataLabelsSize = 12,
@@ -136,7 +94,7 @@ public partial class UserStatsPageViewModel : PageViewModel
         ChaptersSeries.Add(new PieSeries<long>
         {
             Values = [UserStats.ChaptersRead],
-            Name = ReadText,
+            Name = Localizer.Get("UserStatsPage.Charts.Read"),
             Fill = new SolidColorPaint(SKColors.Green),
             DataLabelsPaint = new SolidColorPaint(SKColors.White),
             DataLabelsSize = 12,
@@ -145,7 +103,7 @@ public partial class UserStatsPageViewModel : PageViewModel
         ChaptersSeries.Add(new PieSeries<long>
         {
             Values = [UserStats.ChaptersRemaining],
-            Name = RemainingChaptersText,
+            Name = Localizer.Get("UserStatsPage.Charts.RemainingChapters"),
             Fill = new SolidColorPaint(SKColors.Gray),
             DataLabelsPaint = new SolidColorPaint(SKColors.White),
             DataLabelsSize = 12,
@@ -167,7 +125,7 @@ public partial class UserStatsPageViewModel : PageViewModel
             RanksSeries.Add(new ColumnSeries<double>
             {
                 Values = values,
-                Name = SeriesCountText,
+                Name = Localizer.Get("UserStatsPage.Charts.SeriesCount"),
                 Fill = new SolidColorPaint(SKColors.DodgerBlue)
             });
 
@@ -195,7 +153,7 @@ public partial class UserStatsPageViewModel : PageViewModel
             ReadsPerDaySeries.Add(new LineSeries<double>
             {
                 Values = readCounts,
-                Name = DailyReadsText,
+                Name = Localizer.Get("UserStatsPage.Charts.DailyReads"),
                 Fill = null,
                 Stroke = new SolidColorPaint(SKColors.Purple) { StrokeThickness = 3 },
                 GeometryFill = new SolidColorPaint(SKColors.Purple),
