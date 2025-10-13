@@ -152,9 +152,3 @@ public sealed partial class LoginPageViewModel : PageViewModel
         return _isAdmin;
     }
 }
-
-public class LanguageItem
-{
-    public string Code { get; set; } = string.Empty;
-    public string DisplayName { get; set; } = string.Empty;
-}

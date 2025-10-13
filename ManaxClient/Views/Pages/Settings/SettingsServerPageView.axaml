@@ -45,6 +45,19 @@
                             <TextBlock Text="{localization:Localize SettingsServerPage.AddLibrary}" FontWeight="Medium" />
                         </StackPanel>
                     </Button>
+                    
+                    <ComboBox HorizontalAlignment="Right" 
+                              VerticalAlignment="Top"
+                              Margin="20"
+                              MinWidth="120"
+                              ItemsSource="{Binding AvailableLanguages}"
+                              SelectedItem="{Binding SelectedLanguage}"
+                              DisplayMemberBinding="{Binding DisplayName}"
+                              Padding="8,6"
+                              CornerRadius="6"
+                              BorderThickness="1"
+                              BorderBrush="{DynamicResource Background3}"
+                              Background="{DynamicResource Background2}" />
                 </StackPanel>
             </Border>
 

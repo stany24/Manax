@@ -507,16 +507,19 @@
     <data name="UserPage.UpdatePermissionsError" xml:space="preserve">
         <value>Error updating user permissions</value>
     </data>
-    <data name="CreateChapterIssuePopup.Title" xml:space="preserve">
-        <value>Signal a chapter issue</value>
+    <data name="LibraryCreatePopup.NewLibrary" xml:space="preserve">
+        <value>New library</value>
     </data>
-    <data name="CreateChapterIssuePopup.Select" xml:space="preserve">
-        <value>Select the correct type of issue for this chapter</value>
+    <data name="LibraryCreatePopup.Description" xml:space="preserve">
+        <value>Create a new library to organise your series</value>
     </data>
-    <data name="CreateChapterIssuePopup.Info" xml:space="preserve">
-        <value>Reporting a problem helps improve the quality of the chapters. Please choose the most appropriate type.</value>
+    <data name="LibraryCreatePopup.Name" xml:space="preserve">
+        <value>Library name</value>
     </data>
-    <data name="CreateChapterIssuePopup.ProblemType" xml:space="preserve">
-        <value>Problem type</value>
+    <data name="LibraryCreatePopup.Name.Placeholder" xml:space="preserve">
+        <value>Enter the name of the library</value>
+    </data>
+    <data name="LibraryCreatePopup.Info" xml:space="preserve">
+        <value>Choose a descriptive name for your library. Libraries help you organize your books and find them easily.</value>
     </data>
 </root>

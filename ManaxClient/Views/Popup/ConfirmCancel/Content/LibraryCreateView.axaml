@@ -4,6 +4,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:content="clr-namespace:ManaxClient.ViewModels.Popup.ConfirmCancel.Content"
+    xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
     mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="400"
     x:Class="ManaxClient.Views.Popup.ConfirmCancel.Content.LibraryCreateView"
     x:DataType="content:LibraryCreateViewModel">
@@ -12,12 +13,12 @@
             <TextBlock Text="📚" FontSize="24" VerticalAlignment="Center" />
             <StackPanel Spacing="4">
                 <TextBlock
-                    Text="Nouvelle bibliothèque"
+                    Text="{localization:Localize LibraryCreatePopup.NewLibrary}"
                     FontSize="18"
                     FontWeight="Bold"
                     Foreground="#212529" />
                 <TextBlock
-                    Text="Créez une nouvelle bibliothèque pour organiser vos séries"
+                    Text="{localization:Localize LibraryCreatePopup.Description}"
                     FontSize="12"
                     Foreground="#6C757D" />
             </StackPanel>
@@ -25,12 +26,12 @@
 
         <StackPanel Grid.Row="1" Spacing="8">
             <TextBlock
-                Text="Nom de la bibliothèque"
+                Text="{localization:Localize LibraryCreatePopup.Name}"
                 FontWeight="Medium"
                 Foreground="#495057" />
             <TextBox
-                Text="{Binding Name}"
-                Watermark="Entrez le nom de la bibliothèque..."
+                Text="{Binding Name}" 
+                Watermark="{localization:Localize LibraryCreatePopup.Name.Placeholder}"
                 Padding="12"
                 CornerRadius="8"
                 BorderThickness="1"
@@ -57,7 +58,7 @@
             <StackPanel Orientation="Horizontal" Spacing="8">
                 <TextBlock Text="💡" FontSize="14" VerticalAlignment="Top" />
                 <TextBlock
-                    Text="Choisissez un nom descriptif pour votre bibliothèque. Vous pourrez l'organiser et la gérer facilement par la suite."
+                    Text="{localization:Localize LibraryCreatePopup.Info}"
                     TextWrapping="Wrap"
                     FontSize="12"
                     Foreground="#495057" />
