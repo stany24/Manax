@@ -522,4 +522,19 @@
     <data name="LibraryCreatePopup.Info" xml:space="preserve">
         <value>Choose a descriptive name for your library. Libraries help you organize your books and find them easily.</value>
     </data>
+    <data name="RankEditPopup.Title" xml:space="preserve">
+        <value>Modify the rank</value>
+    </data>
+    <data name="RankEditPopup.Description" xml:space="preserve">
+        <value>Modify the properties of the rank</value>
+    </data>
+    <data name="RankEditPopup.Name" xml:space="preserve">
+        <value>Name of the rank</value>
+    </data>
+    <data name="RankEditPopup.Name.Placeholder" xml:space="preserve">
+        <value>Enter the rank name...</value>
+    </data>
+    <data name="RankEditPopup.Value" xml:space="preserve">
+        <value>Value</value>
+    </data>
 </root>
