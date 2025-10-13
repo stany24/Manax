@@ -507,4 +507,16 @@
     <data name="UserPage.UpdatePermissionsError" xml:space="preserve">
         <value>Error updating user permissions</value>
     </data>
+    <data name="CreateChapterIssuePopup.Title" xml:space="preserve">
+        <value>Signal a chapter issue</value>
+    </data>
+    <data name="CreateChapterIssuePopup.Select" xml:space="preserve">
+        <value>Select the correct type of issue for this chapter</value>
+    </data>
+    <data name="CreateChapterIssuePopup.Info" xml:space="preserve">
+        <value>Reporting a problem helps improve the quality of the chapters. Please choose the most appropriate type.</value>
+    </data>
+    <data name="CreateChapterIssuePopup.ProblemType" xml:space="preserve">
+        <value>Problem type</value>
+    </data>
 </root>
