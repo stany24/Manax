@@ -1256,5 +1256,17 @@ namespace ManaxClient.Localization {
                 return ResourceManager.GetString("UserCreatePopup.Tip", resourceCulture);
             }
         }
+        
+        public static string ConfirmCancelPopup_Confirm {
+            get {
+                return ResourceManager.GetString("ConfirmCancelPopup.Confirm", resourceCulture);
+            }
+        }
+        
+        public static string ConfirmCancelPopup_Cancel {
+            get {
+                return ResourceManager.GetString("ConfirmCancelPopup.Cancel", resourceCulture);
+            }
+        }
     }
 }

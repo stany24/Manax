@@ -624,4 +624,10 @@
     <data name="UserCreatePopup.Tip" xml:space="preserve">
         <value>Roles define the user's default permissions. These permissions can be modified later on the users page.</value>
     </data>
+    <data name="ConfirmCancelPopup.Confirm" xml:space="preserve">
+        <value>Confirm</value>
+    </data>
+    <data name="ConfirmCancelPopup.Cancel" xml:space="preserve">
+        <value>Cancel</value>
+    </data>
 </root>

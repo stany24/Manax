@@ -624,4 +624,10 @@
     <data name="UserCreatePopup.Title" xml:space="preserve">
         <value>Nouvel utilisateur</value>
     </data>
+    <data name="ConfirmCancelPopup.Cancel" xml:space="preserve">
+        <value>Annuler</value>
+    </data>
+    <data name="ConfirmCancelPopup.Confirm" xml:space="preserve">
+        <value>Confirmer</value>
+    </data>
 </root>
