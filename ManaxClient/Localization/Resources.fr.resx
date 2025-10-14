@@ -585,4 +585,19 @@
     <data name="SerieUpdatePopup.Description" xml:space="preserve">
         <value>Modifiez les informations de la série</value>
     </data>
+    <data name="TagEditPopup.Color" xml:space="preserve">
+        <value>Couleur</value>
+    </data>
+    <data name="TagEditPopup.Name.Placeholder" xml:space="preserve">
+        <value>Entrez le nom du tag...</value>
+    </data>
+    <data name="TagEditPopup.Name" xml:space="preserve">
+        <value>Nom</value>
+    </data>
+    <data name="TagEditPopup.Description" xml:space="preserve">
+        <value>Modifiez les propriétés du tag</value>
+    </data>
+    <data name="TagEditPopup.Title" xml:space="preserve">
+        <value>Modifier le tag</value>
+    </data>
 </root>

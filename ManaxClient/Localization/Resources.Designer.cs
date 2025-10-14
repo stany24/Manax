@@ -1178,5 +1178,35 @@ namespace ManaxClient.Localization {
                 return ResourceManager.GetString("SerieUpdatePopup.Description", resourceCulture);
             }
         }
+        
+        public static string TagEditPopup_Title {
+            get {
+                return ResourceManager.GetString("TagEditPopup.Title", resourceCulture);
+            }
+        }
+        
+        public static string TagEditPopup_Description {
+            get {
+                return ResourceManager.GetString("TagEditPopup.Description", resourceCulture);
+            }
+        }
+        
+        public static string TagEditPopup_Name {
+            get {
+                return ResourceManager.GetString("TagEditPopup.Name", resourceCulture);
+            }
+        }
+        
+        public static string TagEditPopup_Name_Placeholder {
+            get {
+                return ResourceManager.GetString("TagEditPopup.Name.Placeholder", resourceCulture);
+            }
+        }
+        
+        public static string TagEditPopup_Color {
+            get {
+                return ResourceManager.GetString("TagEditPopup.Color", resourceCulture);
+            }
+        }
     }
 }
