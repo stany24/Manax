@@ -132,12 +132,12 @@
             <DependentUpon>UserPermissionsEdit.axaml</DependentUpon>
             <SubType>Code</SubType>
         </Compile>
-        <Compile Update="Assets\Localization\Resources.Designer.cs">
+        <Compile Update="Localization\Resources.Designer.cs">
           <DesignTime>True</DesignTime>
           <AutoGen>True</AutoGen>
           <DependentUpon>Resources.resx</DependentUpon>
         </Compile>
-        <Compile Update="Assets\Localization\Resources.fr.Designer.cs">
+        <Compile Update="Localization\Resources.fr.Designer.cs">
           <DesignTime>True</DesignTime>
           <AutoGen>True</AutoGen>
           <DependentUpon>Resources.fr.resx</DependentUpon>
@@ -165,13 +165,13 @@
     </ItemGroup>
 
     <ItemGroup>
-      <EmbeddedResource Update="Assets\Localization\Resources.resx">
-        <Generator>ResXFileCodeGenerator</Generator>
-        <LastGenOutput>Ressources.Designer.cs</LastGenOutput>
+      <EmbeddedResource Update="Localization\Resources.resx">
+        <Generator>PublicResXFileCodeGenerator</Generator>
+        <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       </EmbeddedResource>
-      <EmbeddedResource Update="Assets\Localization\Resources.fr.resx">
-        <Generator>ResXFileCodeGenerator</Generator>
-        <LastGenOutput>Ressources.fr.Designer.cs</LastGenOutput>
+      <EmbeddedResource Update="Localization\Resources.fr.resx">
+        <Generator>PublicResXFileCodeGenerator</Generator>
+        <LastGenOutput>Resources.fr.Designer.cs</LastGenOutput>
       </EmbeddedResource>
     </ItemGroup>
 </Project>
