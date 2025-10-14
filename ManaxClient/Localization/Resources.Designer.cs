@@ -1268,5 +1268,101 @@ namespace ManaxClient.Localization {
                 return ResourceManager.GetString("ConfirmCancelPopup.Cancel", resourceCulture);
             }
         }
+        
+        public static string MainWindow_Title {
+            get {
+                return ResourceManager.GetString("MainWindow.Title", resourceCulture);
+            }
+        }
+        
+        public static string MainWindow_Home {
+            get {
+                return ResourceManager.GetString("MainWindow.Home", resourceCulture);
+            }
+        }
+        
+        public static string MainWindow_Libraries {
+            get {
+                return ResourceManager.GetString("MainWindow.Libraries", resourceCulture);
+            }
+        }
+        
+        public static string MainWindow_Admin {
+            get {
+                return ResourceManager.GetString("MainWindow.Admin", resourceCulture);
+            }
+        }
+        
+        public static string MainWindow_Issues {
+            get {
+                return ResourceManager.GetString("MainWindow.Issues", resourceCulture);
+            }
+        }
+        
+        public static string MainWindow_Users {
+            get {
+                return ResourceManager.GetString("MainWindow.Users", resourceCulture);
+            }
+        }
+        
+        public static string MainWindow_Ranks {
+            get {
+                return ResourceManager.GetString("MainWindow.Ranks", resourceCulture);
+            }
+        }
+        
+        public static string MainWindow_Tags {
+            get {
+                return ResourceManager.GetString("MainWindow.Tags", resourceCulture);
+            }
+        }
+        
+        public static string MainWindow_Parameters {
+            get {
+                return ResourceManager.GetString("MainWindow.Parameters", resourceCulture);
+            }
+        }
+        
+        public static string MainWindow_Stats {
+            get {
+                return ResourceManager.GetString("MainWindow.Stats", resourceCulture);
+            }
+        }
+        
+        public static string MainWindow_Stats_User {
+            get {
+                return ResourceManager.GetString("MainWindow.Stats.User", resourceCulture);
+            }
+        }
+        
+        public static string MainWindow_Stats_Server {
+            get {
+                return ResourceManager.GetString("MainWindow.Stats.Server", resourceCulture);
+            }
+        }
+        
+        public static string MainWindow_Parameters_UI {
+            get {
+                return ResourceManager.GetString("MainWindow.Parameters.UI", resourceCulture);
+            }
+        }
+        
+        public static string MainWindow_Logout {
+            get {
+                return ResourceManager.GetString("MainWindow.Logout", resourceCulture);
+            }
+        }
+        
+        public static string MainWindow_RunningTasks {
+            get {
+                return ResourceManager.GetString("MainWindow.RunningTasks", resourceCulture);
+            }
+        }
+        
+        public static string MainWindow_Parameters_Server {
+            get {
+                return ResourceManager.GetString("MainWindow.Parameters.Server", resourceCulture);
+            }
+        }
     }
 }

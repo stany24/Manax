@@ -4,11 +4,12 @@
     xmlns:vm="using:ManaxClient.ViewModels"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
     mc:Ignorable="d" d:DesignWidth="1200" d:DesignHeight="800"
     x:Class="ManaxClient.Views.MainWindow"
     x:DataType="vm:MainWindowViewModel"
     Icon="/Assets/avalonia-logo.ico"
-    Title="Manax"
+    Title="{localization:Localize MainWindow.Title}"
     MinWidth="960"
     MinHeight="500"
     WindowStartupLocation="CenterScreen">
@@ -24,7 +25,7 @@
                             Orientation="Vertical">
 
                     <TextBlock Classes="title"
-                               Text="Manax"
+                               Text="{localization:Localize MainWindow.Title}"
                                HorizontalAlignment="Center"
                                Margin="0,0,0,24" />
 
@@ -32,14 +33,14 @@
                             Command="{Binding ChangePageHome}">
                         <StackPanel Orientation="Horizontal" Spacing="12">
                             <TextBlock Text="🏠" FontSize="16" />
-                            <TextBlock Text="Accueil" />
+                            <TextBlock Text="{localization:Localize MainWindow.Home}" />
                         </StackPanel>
                     </Button>
 
                     <Separator Margin="8,16" Background="{DynamicResource Background2}" />
 
                     <TextBlock Classes="subtitle"
-                               Text="Bibliothèques"
+                               Text="{localization:Localize MainWindow.Libraries}"
                                Margin="16,8" />
 
                     <ScrollViewer MaxHeight="300" VerticalScrollBarVisibility="Auto">
@@ -67,7 +68,7 @@
                     <Separator Margin="8,16" Background="{DynamicResource Background2}" IsVisible="{Binding IsAdmin}" />
 
                     <TextBlock Classes="subtitle"
-                               Text="Administration"
+                               Text="{localization:Localize MainWindow.Admin}"
                                Margin="16,8"
                                IsVisible="{Binding IsAdmin}" />
 
@@ -76,7 +77,7 @@
                             Command="{Binding ChangePageIssues}">
                         <StackPanel Orientation="Horizontal" Spacing="12">
                             <TextBlock Text="⚙️" FontSize="14" />
-                            <TextBlock Text="Problèmes" />
+                            <TextBlock Text="{localization:Localize MainWindow.Issues}" />
                         </StackPanel>
                     </Button>
 
@@ -85,7 +86,7 @@
                             Command="{Binding ChangePageUsers}">
                         <StackPanel Orientation="Horizontal" Spacing="12">
                             <TextBlock Text="👥" FontSize="14" />
-                            <TextBlock Text="Utilisateurs" />
+                            <TextBlock Text="{localization:Localize MainWindow.Users}" />
                         </StackPanel>
                     </Button>
 
@@ -94,7 +95,7 @@
                             Command="{Binding ChangePageRanks}">
                         <StackPanel Orientation="Horizontal" Spacing="12">
                             <TextBlock Text="🏆" FontSize="14" />
-                            <TextBlock Text="Rangs" />
+                            <TextBlock Text="{localization:Localize MainWindow.Ranks}" />
                         </StackPanel>
                     </Button>
 
@@ -108,7 +109,7 @@
                     </Button>
 
                     <TextBlock Classes="subtitle"
-                               Text="Paramètres"
+                               Text="{localization:Localize MainWindow.Parameters}"
                                Margin="16,8" />
 
                     <Button Classes="sidebar"
@@ -116,7 +117,7 @@
                             Command="{Binding ChangePageSettings}">
                         <StackPanel Orientation="Horizontal" Spacing="12">
                             <TextBlock Text="⚙️" FontSize="14" />
-                            <TextBlock Text="Paramètres" />
+                            <TextBlock Text="{localization:Localize MainWindow.Parameters.Server}" />
                         </StackPanel>
                     </Button>
 
@@ -124,21 +125,21 @@
                             Command="{Binding ChangePageAppSettings}">
                         <StackPanel Orientation="Horizontal" Spacing="12">
                             <TextBlock Text="🎨" FontSize="14" />
-                            <TextBlock Text="Apparence" />
+                            <TextBlock Text="{localization:Localize MainWindow.Parameters.UI}" />
                         </StackPanel>
                     </Button>
 
                     <Separator Margin="8,16" Background="{DynamicResource Background2}" />
 
                     <TextBlock Classes="subtitle"
-                               Text="Statistiques"
+                               Text="{localization:Localize MainWindow.Stats}"
                                Margin="16,8" />
 
                     <Button Classes="sidebar"
                             Command="{Binding ChangePageUserStats}">
                         <StackPanel Orientation="Horizontal" Spacing="12">
                             <TextBlock Text="📊" FontSize="14" />
-                            <TextBlock Text="Mes statistiques" />
+                            <TextBlock Text="{localization:Localize MainWindow.Stats.User}" />
                         </StackPanel>
                     </Button>
 
@@ -147,22 +148,21 @@
                             Command="{Binding ChangePageServerStats}">
                         <StackPanel Orientation="Horizontal" Spacing="12">
                             <TextBlock Text="🖥️" FontSize="14" />
-                            <TextBlock Text="Stats serveur" />
+                            <TextBlock Text="{localization:Localize MainWindow.Stats.Server}" />
                         </StackPanel>
                     </Button>
 
                     <Button
                         Classes="sidebar"
-                        Command="{Binding Logout}">
-                        Logout
-                    </Button>
+                        Command="{Binding Logout}"
+                        Content="{localization:Localize MainWindow.Logout}"/>
 
                     <Border Classes="card"
                             Margin="8,16,8,8"
                             IsVisible="{Binding RunningTasks.Count}">
                         <StackPanel>
                             <TextBlock Classes="subtitle"
-                                       Text="Tâches en cours"
+                                       Text="{localization:Localize MainWindow.RunningTasks}"
                                        HorizontalAlignment="Center"
                                        Margin="0,0,0,12" />
 

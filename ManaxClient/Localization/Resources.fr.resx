@@ -630,4 +630,52 @@
     <data name="ConfirmCancelPopup.Confirm" xml:space="preserve">
         <value>Confirmer</value>
     </data>
+    <data name="MainWindow.RunningTasks" xml:space="preserve">
+        <value>Tâches en cours</value>
+    </data>
+    <data name="MainWindow.Stats.User" xml:space="preserve">
+        <value>Mes statistiques</value>
+    </data>
+    <data name="MainWindow.Stats" xml:space="preserve">
+        <value>Statistiques</value>
+    </data>
+    <data name="MainWindow.Parameters.UI" xml:space="preserve">
+        <value>Apparence</value>
+    </data>
+    <data name="MainWindow.Parameters.Server" xml:space="preserve">
+        <value>Paramètres serveur</value>
+    </data>
+    <data name="MainWindow.Parameters" xml:space="preserve">
+        <value>Paramètres</value>
+    </data>
+    <data name="MainWindow.Ranks" xml:space="preserve">
+        <value>Rangs</value>
+    </data>
+    <data name="MainWindow.Users" xml:space="preserve">
+        <value>Utilisateurs</value>
+    </data>
+    <data name="MainWindow.Issues" xml:space="preserve">
+        <value>Problèmes</value>
+    </data>
+    <data name="MainWindow.Admin" xml:space="preserve">
+        <value>Administration</value>
+    </data>
+    <data name="MainWindow.Libraries" xml:space="preserve">
+        <value>Bibliothèques</value>
+    </data>
+    <data name="MainWindow.Home" xml:space="preserve">
+        <value>Accueil</value>
+    </data>
+    <data name="MainWindow.Title" xml:space="preserve">
+        <value>Manax</value>
+    </data>
+    <data name="MainWindow.Tags" xml:space="preserve">
+        <value>Tags</value>
+    </data>
+    <data name="MainWindow.Stats.Server" xml:space="preserve">
+        <value>Statistiques serveur</value>
+    </data>
+    <data name="MainWindow.Logout" xml:space="preserve">
+        <value>Déconnection</value>
+    </data>
 </root>
