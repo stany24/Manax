@@ -600,4 +600,28 @@
     <data name="TagEditPopup.Title" xml:space="preserve">
         <value>Modifier le tag</value>
     </data>
+    <data name="UserCreatePopup.Tip" xml:space="preserve">
+        <value>Les roles définissent les permissions par défault de l'utilisateur, ces permissions peuvent être modifiées ultérieurement dans la page utilisateurs.</value>
+    </data>
+    <data name="UserCreatePopup.Role" xml:space="preserve">
+        <value>Rôle utilisateur</value>
+    </data>
+    <data name="UserCreatePopup.Password.Placeholder" xml:space="preserve">
+        <value>Entrez le mot de passe...</value>
+    </data>
+    <data name="UserCreatePopup.Password" xml:space="preserve">
+        <value>Mot de passe</value>
+    </data>
+    <data name="UserCreatePopup.Username.Placeholder" xml:space="preserve">
+        <value>Entrez le nom d'utilisateur...</value>
+    </data>
+    <data name="UserCreatePopup.Username" xml:space="preserve">
+        <value>Nom d'utilisateur</value>
+    </data>
+    <data name="UserCreatePopup.Description" xml:space="preserve">
+        <value>Créez un nouveau compte utilisateur pour accéder à Manax</value>
+    </data>
+    <data name="UserCreatePopup.Title" xml:space="preserve">
+        <value>Nouvel utilisateur</value>
+    </data>
 </root>

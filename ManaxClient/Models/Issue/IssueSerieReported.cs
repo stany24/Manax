@@ -22,14 +22,11 @@ public partial class IssueSerieReported : LocalizedObject
     [ObservableProperty] private User _user = null!;
 
     [ObservableProperty] private string _formattedInfo = string.Empty;
-    
-    [ObservableProperty] private string _reportedBadgeText = string.Empty;
 
     public IssueSerieReported(IssueSerieReportedDto dto)
     {
         FromDto(dto);
         Localize(()=> FormattedInfo,"IssuesPage.ChapterUserInfo",()=> Serie.Title,()=> User.Username,()=> CreatedAt);
-        Localize(()=> ReportedBadgeText,"IssuesPage.Reported");
     }
 
     public void Close()

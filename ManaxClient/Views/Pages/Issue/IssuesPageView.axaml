@@ -52,7 +52,7 @@
 
         <DataTemplate x:Key="ReportedChapterIssueTemplate" DataType="issue:IssueChapterReported">
             <previews:IssuePreview IssueColor="#FD7E14"
-                                   BadgeText="{Binding ReportedBadgeText}"
+                                   BadgeText="{localization:Localize IssuesPage.Reported}"
                                    Closable="True"
                                    Problem="{Binding Problem.Name}"
                                    Margin="0,0,0,8"
@@ -67,7 +67,7 @@
 
         <DataTemplate x:Key="ReportedSerieIssueTemplate" DataType="issue:IssueSerieReported">
             <previews:IssuePreview IssueColor="#FD7E14"
-                                   BadgeText="{Binding ReportedBadgeText}"
+                                   BadgeText="{localization:Localize IssuesPage.Reported}"
                                    Closable="True"
                                    Problem="{Binding Problem.Name}"
                                    Margin="0,0,0,8"

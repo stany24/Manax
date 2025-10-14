@@ -1208,5 +1208,53 @@ namespace ManaxClient.Localization {
                 return ResourceManager.GetString("TagEditPopup.Title", resourceCulture);
             }
         }
+        
+        public static string UserCreatePopup_Tip {
+            get {
+                return ResourceManager.GetString("UserCreatePopup.Tip", resourceCulture);
+            }
+        }
+        
+        public static string UserCreatePopup_Role {
+            get {
+                return ResourceManager.GetString("UserCreatePopup.Role", resourceCulture);
+            }
+        }
+        
+        public static string UserCreatePopup_Password_Placeholder {
+            get {
+                return ResourceManager.GetString("UserCreatePopup.Password.Placeholder", resourceCulture);
+            }
+        }
+        
+        public static string UserCreatePopup_Password {
+            get {
+                return ResourceManager.GetString("UserCreatePopup.Password", resourceCulture);
+            }
+        }
+        
+        public static string UserCreatePopup_Username_Placeholder {
+            get {
+                return ResourceManager.GetString("UserCreatePopup.Username.Placeholder", resourceCulture);
+            }
+        }
+        
+        public static string UserCreatePopup_Username {
+            get {
+                return ResourceManager.GetString("UserCreatePopup.Username", resourceCulture);
+            }
+        }
+        
+        public static string UserCreatePopup_Description {
+            get {
+                return ResourceManager.GetString("UserCreatePopup.Description", resourceCulture);
+            }
+        }
+        
+        public static string UserCreatePopup_Title {
+            get {
+                return ResourceManager.GetString("UserCreatePopup.Title", resourceCulture);
+            }
+        }
     }
 }
