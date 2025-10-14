@@ -537,4 +537,19 @@
     <data name="RankEditPopup.Value" xml:space="preserve">
         <value>Valeur</value>
     </data>
+    <data name="SavePointCreatePopup.Title" xml:space="preserve">
+        <value>Nouveau point de sauvegarde</value>
+    </data>
+    <data name="SavePointCreatePopup.Description" xml:space="preserve">
+        <value>Définissez un répertoire de sauvegarde pour vos séries</value>
+    </data>
+    <data name="SavePointCreatePopup.Path" xml:space="preserve">
+        <value>Chemin de sauvegarde</value>
+    </data>
+    <data name="SavePointCreatePopup.Path.Placeholder" xml:space="preserve">
+        <value>Entrez le chemin du répertoire...</value>
+    </data>
+    <data name="SavePointCreatePopup.Tip" xml:space="preserve">
+        <value>Sélectionnez un répertoire accessible où les séries seront stockées.</value>
+    </data>
 </root>

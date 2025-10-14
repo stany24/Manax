@@ -1082,5 +1082,35 @@ namespace ManaxClient.Localization {
                 return ResourceManager.GetString("RankEditPopup.Value", resourceCulture);
             }
         }
+        
+        public static string SavePointCreatePopup_Title {
+            get {
+                return ResourceManager.GetString("SavePointCreatePopup.Title", resourceCulture);
+            }
+        }
+        
+        public static string SavePointCreatePopup_Description {
+            get {
+                return ResourceManager.GetString("SavePointCreatePopup.Description", resourceCulture);
+            }
+        }
+        
+        public static string SavePointCreatePopup_Path {
+            get {
+                return ResourceManager.GetString("SavePointCreatePopup.Path", resourceCulture);
+            }
+        }
+        
+        public static string SavePointCreatePopup_Path_Placeholder {
+            get {
+                return ResourceManager.GetString("SavePointCreatePopup.Path.Placeholder", resourceCulture);
+            }
+        }
+        
+        public static string SavePointCreatePopup_Tip {
+            get {
+                return ResourceManager.GetString("SavePointCreatePopup.Tip", resourceCulture);
+            }
+        }
     }
 }

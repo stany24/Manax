@@ -4,6 +4,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:content="clr-namespace:ManaxClient.ViewModels.Popup.ConfirmCancel.Content"
+    xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
     mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="300"
     x:Class="ManaxClient.Views.Popup.ConfirmCancel.Content.SavePointCreateView"
     x:DataType="content:SavePointCreateViewModel">
@@ -12,12 +13,12 @@
             <TextBlock Text="💾" FontSize="24" VerticalAlignment="Center" />
             <StackPanel Spacing="4">
                 <TextBlock
-                    Text="Nouveau point de sauvegarde"
+                    Text="{localization:Localize SavePointCreatePopup.Title}"
                     FontSize="18"
                     FontWeight="Bold"
                     Foreground="#212529" />
                 <TextBlock
-                    Text="Définissez un répertoire de sauvegarde pour vos données"
+                    Text="{localization:Localize SavePointCreatePopup.Description}"
                     FontSize="12"
                     Foreground="#6C757D" />
             </StackPanel>
@@ -25,14 +26,14 @@
 
         <StackPanel Grid.Row="1" Spacing="8">
             <TextBlock
-                Text="Chemin de sauvegarde"
+                Text="{localization:Localize SavePointCreatePopup.Path}"
                 FontWeight="Medium"
                 Foreground="#495057" />
             <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
                 <TextBox
                     Grid.Column="0"
                     Text="{Binding Path}"
-                    Watermark="Entrez le chemin du répertoire..."
+                    Watermark="{localization:Localize SavePointCreatePopup.Path.Placeholder}"
                     Padding="12"
                     CornerRadius="8"
                     BorderThickness="1"
@@ -74,7 +75,7 @@
             <StackPanel Orientation="Horizontal" Spacing="8">
                 <TextBlock Text="ℹ️" FontSize="14" VerticalAlignment="Top" />
                 <TextBlock
-                    Text="Sélectionnez un répertoire accessible où les données de sauvegarde seront stockées."
+                    Text="{localization:Localize SavePointCreatePopup.Tip}"
                     TextWrapping="Wrap"
                     FontSize="12"
                     Foreground="#495057" />
