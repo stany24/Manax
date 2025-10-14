@@ -22,8 +22,6 @@ public partial class HomePageViewModel : PageViewModel
 {
     private readonly ReadOnlyObservableCollection<Models.Serie> _series;
     [ObservableProperty] private bool _isFolderPickerOpen;
-    
-    [ObservableProperty] private string _seriesCountText = string.Empty;
 
     public HomePageViewModel()
     {
@@ -41,13 +39,6 @@ public partial class HomePageViewModel : PageViewModel
                     change.Current.LoadPoster();
                 }
             });
-        
-        BindLocalizedStrings();
-    }
-
-    private void BindLocalizedStrings()
-    {
-        Localize(() => SeriesCountText, "HomePage.SeriesCount", () => Series.Count);
     }
 
     public ReadOnlyObservableCollection<Models.Serie> Series => _series;

@@ -7,6 +7,7 @@
     xmlns:viewModels="clr-namespace:ManaxClient.ViewModels"
     xmlns:models="clr-namespace:ManaxClient.Models"
     xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
+    xmlns:localization1="clr-namespace:ManaxClient.Localization"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Pages.Rank.RankPageView"
     x:DataType="page:RankPageViewModel">
@@ -17,7 +18,8 @@
             <Grid ColumnDefinitions="*,Auto">
                 <StackPanel Grid.Column="0" Orientation="Vertical">
                     <TextBlock Classes="title" Text="{localization:Localize RankPage.Title}" />
-                    <TextBlock Text="{Binding RanksCountText}"
+                    <TextBlock Text="{localization1:LocalizeFormat RankPage.RanksCount,
+                                   Param1={Binding $parent[UserControl].((page:RankPageViewModel)DataContext).Ranks.Count}}"
                                Foreground="{StaticResource SecondaryBrush}" />
                 </StackPanel>
 
@@ -87,7 +89,8 @@
                                             <TextBlock Text="{Binding Name}"
                                                        FontWeight="Bold"
                                                        FontSize="16" />
-                                            <TextBlock Text="{Binding DisplayLevel}"
+                                            <TextBlock Text="{localization1:LocalizeFormat RankPage.Level,
+                                                           Param1={Binding Value}}"
                                                        Foreground="{StaticResource SecondaryBrush}"
                                                        FontSize="12" />
                                         </StackPanel>

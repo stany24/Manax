@@ -4,7 +4,6 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData;
 using DynamicData.Binding;
 using ManaxClient.Models.Sources;
-using ManaxClient.ViewModels;
 using ManaxLibrary.DTO.Library;
 using ManaxLibrary.Notifications;
 

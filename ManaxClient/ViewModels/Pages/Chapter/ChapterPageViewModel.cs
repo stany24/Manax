@@ -14,8 +14,6 @@ public partial class ChapterPageViewModel : PageViewModel
     [ObservableProperty] private bool _controlBordersVisible;
     [ObservableProperty] private int _currentPage;
     [ObservableProperty] private Vector _scrollOffset = new(0, 0);
-    
-    [ObservableProperty] private string _pagesText = string.Empty;
 
     public ChapterPageViewModel(List<Models.Chapter> chapters, Models.Chapter chapter)
     {
@@ -25,13 +23,6 @@ public partial class ChapterPageViewModel : PageViewModel
         Chapter = chapter;
         Chapter.LoadPages();
         PropertyChanged += HandleOffsetChanged;
-        
-        BindLocalizedStrings();
-    }
-
-    private void BindLocalizedStrings()
-    {
-        Localize(() => PagesText, "ChapterPage.Pages", () => Chapter.Pages.Count);
     }
 
     public void ChangeBordersVisibility()

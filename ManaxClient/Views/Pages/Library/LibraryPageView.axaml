@@ -7,6 +7,7 @@
     xmlns:page="clr-namespace:ManaxClient.ViewModels.Pages.Library"
     xmlns:viewModels="clr-namespace:ManaxClient.ViewModels"
     xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
+    xmlns:localization1="clr-namespace:ManaxClient.Localization"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Pages.Library.LibraryPageView"
     x:DataType="page:LibraryPageViewModel"
@@ -20,7 +21,8 @@
                 <StackPanel Grid.Column="0" Grid.Row="0" Orientation="Vertical">
                     <TextBlock Classes="title" Text="{Binding Library.Name}" />
                     <TextBlock
-                        Text="{Binding SeriesCountText}"
+                        Text="{localization1:LocalizeFormat LibraryPage.SeriesCount,
+                                   Param1={Binding $parent[UserControl].((page:LibraryPageViewModel)DataContext).Library.Series.Count}}"
                         Foreground="{StaticResource SecondaryBrush}"
                         FontSize="14" />
                 </StackPanel>

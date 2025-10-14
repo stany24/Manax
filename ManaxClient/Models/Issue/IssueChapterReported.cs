@@ -4,13 +4,12 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData;
 using ManaxClient.Models.Sources;
-using ManaxClient.ViewModels;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTO.Issue.Reported;
 
 namespace ManaxClient.Models.Issue;
 
-public partial class IssueChapterReported : LocalizedObject
+public partial class IssueChapterReported : ObservableObject
 {
     [ObservableProperty] private Chapter _chapter = null!;
     [ObservableProperty] private DateTime _createdAt;
@@ -21,32 +20,14 @@ public partial class IssueChapterReported : LocalizedObject
     private IDisposable? _subscriptionUser;
     [ObservableProperty] private User _user = null!;
 
-    [ObservableProperty] private string _formattedInfo = string.Empty;
-
     public IssueChapterReported(IssueChapterReportedDto dto)
     {
         FromDto(dto);
-        Localize(()=> FormattedInfo,"IssuesPage.ChapterUserInfo",()=> Chapter.FileName,()=> User.Username,()=> CreatedAt);
     }
 
     public void Close()
     {
         Task.Run(async () => { await ManaxApiIssueClient.CloseChapterIssueAsync(Id); });
-    }
-
-    partial void OnChapterChanged(Chapter value)
-    {
-        OnPropertyChanged(nameof(FormattedInfo));
-    }
-
-    partial void OnUserChanged(User value)
-    {
-        OnPropertyChanged(nameof(FormattedInfo));
-    }
-
-    partial void OnCreatedAtChanged(DateTime value)
-    {
-        OnPropertyChanged(nameof(FormattedInfo));
     }
 
     private void FromDto(IssueChapterReportedDto dto)

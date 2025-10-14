@@ -6,6 +6,7 @@
     xmlns:page="clr-namespace:ManaxClient.ViewModels.Pages.User"
     xmlns:viewModels="clr-namespace:ManaxClient.ViewModels"
     xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
+    xmlns:localization1="clr-namespace:ManaxClient.Localization"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Pages.User.UsersPageView"
     x:DataType="page:UsersPageViewModel"
@@ -17,7 +18,8 @@
             <Grid ColumnDefinitions="*,Auto">
                 <StackPanel Grid.Column="0" Orientation="Vertical">
                     <TextBlock Classes="title" Text="{localization:Localize UserPage.Management}" />
-                    <TextBlock Text="{Binding UsersCountText}"
+                    <TextBlock Text="{localization1:LocalizeFormat UserPage.Count,
+                                   Param1={Binding $parent[UserControl].((page:UsersPageViewModel)DataContext).Users.Count}}"
                                Foreground="{StaticResource SecondaryBrush}" />
                 </StackPanel>
 

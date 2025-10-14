@@ -7,6 +7,7 @@
     xmlns:converters="clr-namespace:ManaxClient.Converters"
     xmlns:viewModels="clr-namespace:ManaxClient.ViewModels"
     xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
+    xmlns:localization1="clr-namespace:ManaxClient.Localization"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Pages.Tag.TagPageView"
     x:DataType="tag:TagPageViewModel"
@@ -21,7 +22,8 @@
             <Grid ColumnDefinitions="*,Auto">
                 <StackPanel Grid.Column="0" Orientation="Vertical">
                     <TextBlock Classes="title" Text="{localization:Localize TagPage.Management}" />
-                    <TextBlock Text="{Binding TagsCountText}"
+                    <TextBlock Text="{localization1:LocalizeFormat LibraryPage.SeriesCount,
+                                   Param1={Binding $parent[UserControl].((tag:TagPageViewModel)DataContext).Tags.Count}}"
                                Foreground="{StaticResource SecondaryBrush}" />
                 </StackPanel>
 

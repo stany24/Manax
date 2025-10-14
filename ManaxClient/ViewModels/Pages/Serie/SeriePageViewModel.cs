@@ -30,8 +30,6 @@ public partial class SeriePageViewModel : PageViewModel
     [ObservableProperty] private Models.Rank? _selectedRank;
     [ObservableProperty] private Models.Serie _serie;
 
-    [ObservableProperty] private string _chapterCountText = string.Empty;
-
     public SeriePageViewModel(Models.Serie serie)
     {
         SortExpressionComparer<Models.Rank> comparer = SortExpressionComparer<Models.Rank>.Descending(t => t.Value);
@@ -43,8 +41,6 @@ public partial class SeriePageViewModel : PageViewModel
         Serie.LoadInfo();
         Serie.LoadChapters();
         Serie.LoadPoster();
-        
-        BindLocalizedStrings();
     }
 
     partial void OnSelectedRankChanged(Models.Rank? value)
@@ -60,11 +56,6 @@ public partial class SeriePageViewModel : PageViewModel
             Optional<bool> userRankResponse = await ManaxApiRankClient.SetUserRankAsync(userRankCreateDto);
             InfoEmitted?.Invoke(this, userRankResponse.Failed ? userRankResponse.Error : Localizer.Get("SeriePage.RankSetCorrectly"));
         });
-    }
-
-    private void BindLocalizedStrings()
-    {
-        Localize(() => ChapterCountText, "SeriePage.ChapterCount", () => Serie.Chapters.Count);
     }
 
     public ReadOnlyObservableCollection<Models.Rank> Ranks => _ranks;

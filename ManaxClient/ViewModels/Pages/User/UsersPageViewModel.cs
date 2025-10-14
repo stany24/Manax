@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
-using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData;
 using DynamicData.Binding;
 using Jeek.Avalonia.Localization;
@@ -16,11 +15,9 @@ using ManaxLibrary.Logging;
 
 namespace ManaxClient.ViewModels.Pages.User;
 
-public partial class UsersPageViewModel : PageViewModel
+public class UsersPageViewModel : PageViewModel
 {
     private readonly ReadOnlyObservableCollection<Models.User> _users;
-    
-    [ObservableProperty] private string _usersCountText = string.Empty;
 
     public UsersPageViewModel()
     {
@@ -30,13 +27,6 @@ public partial class UsersPageViewModel : PageViewModel
             .Connect()
             .SortAndBind(out _users, comparer)
             .Subscribe();
-            
-        BindLocalizedStrings();
-    }
-    
-    private void BindLocalizedStrings()
-    {
-        Localize(() => UsersCountText, "UserPage.Count", () => Users.Count);
     }
 
     public ReadOnlyObservableCollection<Models.User> Users => _users;

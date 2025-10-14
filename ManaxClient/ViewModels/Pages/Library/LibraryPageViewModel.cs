@@ -9,18 +9,10 @@ namespace ManaxClient.ViewModels.Pages.Library;
 public partial class LibraryPageViewModel : PageViewModel
 {
     [ObservableProperty] private Models.Library _library;
-    
-    [ObservableProperty] private string _seriesCountText = string.Empty;
 
     public LibraryPageViewModel(Models.Library library)
     {
         Library = library;
-        BindLocalizedStrings();
-    }
-
-    private void BindLocalizedStrings()
-    {
-        Localize(() => SeriesCountText, "LibraryPage.SeriesCount", () => Library.Series.Count);
     }
 
     public void MoveToSeriePage(Models.Serie serie)

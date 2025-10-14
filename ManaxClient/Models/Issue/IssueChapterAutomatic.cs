@@ -1,9 +1,9 @@
 using System;
 using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData;
+using Jeek.Avalonia.Localization;
 using ManaxClient.Models.Sources;
 using ManaxLibrary.DTO.Issue.Automatic;
-using Jeek.Avalonia.Localization;
 
 namespace ManaxClient.Models.Issue;
 

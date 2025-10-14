@@ -2,7 +2,6 @@ using System;
 using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Threading.Tasks;
-using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData;
 using DynamicData.Binding;
 using Jeek.Avalonia.Localization;
@@ -15,11 +14,9 @@ using ManaxLibrary.DTO.Tag;
 
 namespace ManaxClient.ViewModels.Pages.Tag;
 
-public partial class TagPageViewModel : PageViewModel
+public class TagPageViewModel : PageViewModel
 {
     private readonly ReadOnlyObservableCollection<Models.Tag> _tags;
-    
-    [ObservableProperty] private string _tagsCountText = string.Empty;
 
     public TagPageViewModel()
     {
@@ -28,13 +25,6 @@ public partial class TagPageViewModel : PageViewModel
             .Connect()
             .SortAndBind(out _tags, comparer)
             .Subscribe();
-            
-        BindLocalizedStrings();
-    }
-    
-    private void BindLocalizedStrings()
-    {
-        Localize(() => TagsCountText, "TagPage.Count", () => Tags.Count);
     }
 
     public ReadOnlyObservableCollection<Models.Tag> Tags => _tags;

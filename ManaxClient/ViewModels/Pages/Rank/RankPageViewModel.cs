@@ -10,15 +10,12 @@ using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTO.Rank;
 using ManaxLibrary.Logging;
-using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace ManaxClient.ViewModels.Pages.Rank;
 
-public partial class RankPageViewModel : PageViewModel
+public class RankPageViewModel : PageViewModel
 {
     private readonly ReadOnlyObservableCollection<Models.Rank> _ranks;
-    
-    [ObservableProperty] private string _ranksCountText = string.Empty;
 
     public RankPageViewModel()
     {
@@ -26,13 +23,6 @@ public partial class RankPageViewModel : PageViewModel
         RankSource.Ranks.Connect()
             .SortAndBind(out _ranks, comparer)
             .Subscribe();
-            
-        BindLocalizedStrings();
-    }
-
-    private void BindLocalizedStrings()
-    {
-        Localize(() => RanksCountText, "RankPage.RanksCount", () => Ranks.Count);
     }
 
     public ReadOnlyObservableCollection<Models.Rank> Ranks => _ranks;

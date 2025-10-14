@@ -8,6 +8,7 @@
     xmlns:page="clr-namespace:ManaxClient.ViewModels.Pages.Issue"
     xmlns:viewModels="clr-namespace:ManaxClient.ViewModels"
     xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
+    xmlns:localization1="clr-namespace:ManaxClient.Localization"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Pages.Issue.IssuesPageView"
     x:DataType="page:IssuesPageViewModel"
@@ -58,10 +59,11 @@
                                    Margin="0,0,0,8"
                                    CloseCommand="{Binding Close}"
                                    Command="{Binding $parent[UserControl].((page:IssuesPageViewModel)DataContext).OnChapterIssueClicked}"
-                                   CommandParameter="{Binding Chapter}">
-                <previews:IssuePreview.Info>
-                    <Binding Path="FormattedInfo" />
-                </previews:IssuePreview.Info>
+                                   CommandParameter="{Binding Chapter}"
+                                   Info="{localization1:LocalizeFormat IssuesPage.ChapterUserInfo,
+                                   Param1={Binding Chapter.FileName},
+                                   Param2={Binding User.Username},
+                                   Param3={Binding CreatedAt}}">
             </previews:IssuePreview>
         </DataTemplate>
 
@@ -73,10 +75,11 @@
                                    Margin="0,0,0,8"
                                    CloseCommand="{Binding Close}"
                                    Command="{Binding $parent[UserControl].((page:IssuesPageViewModel)DataContext).OpenSeriePage}"
-                                   CommandParameter="{Binding Serie}">
-                <previews:IssuePreview.Info>
-                    <Binding Path="FormattedInfo" />
-                </previews:IssuePreview.Info>
+                                   CommandParameter="{Binding Serie}"
+                                   Info="{localization1:LocalizeFormat IssuesPage.SerieUserInfo,
+                                   Param1={Binding Serie.Title},
+                                   Param2={Binding User.Username},
+                                   Param3={Binding CreatedAt}}">>
             </previews:IssuePreview>
         </DataTemplate>
     </UserControl.Resources>

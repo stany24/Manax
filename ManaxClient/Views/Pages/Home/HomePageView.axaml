@@ -7,6 +7,7 @@
     xmlns:page="clr-namespace:ManaxClient.ViewModels.Pages.Home"
     xmlns:viewModels="clr-namespace:ManaxClient.ViewModels"
     xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
+    xmlns:localization1="clr-namespace:ManaxClient.Localization"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Pages.Home.HomePageView"
     x:DataType="page:HomePageViewModel">
@@ -70,7 +71,8 @@
                                    Text="{localization:Localize HomePage.RecentSeries}"
                                    Margin="0" />
                         <TextBlock Grid.Column="1"
-                                   Text="{Binding SeriesCountText}"
+                                   Text="{localization1:LocalizeFormat HomePage.SeriesCount,
+                                       Param1={Binding $parent[UserControl].((page:HomePageViewModel)DataContext).Series.Count}}"
                                    Foreground="{StaticResource SecondaryBrush}"
                                    VerticalAlignment="Center" />
                     </Grid>
