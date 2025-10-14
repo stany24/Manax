@@ -1112,5 +1112,71 @@ namespace ManaxClient.Localization {
                 return ResourceManager.GetString("SavePointCreatePopup.Tip", resourceCulture);
             }
         }
+        
+        public static string SerieUpdatePopup_Serie_Title {
+            get {
+                return ResourceManager.GetString("SerieUpdatePopup.Serie.Title", resourceCulture);
+            }
+        }
+        
+        public static string SerieUpdatePopup_Serie_Description {
+            get {
+                return ResourceManager.GetString("SerieUpdatePopup.Serie.Description", resourceCulture);
+            }
+        }
+        
+        public static string SerieUpdatePopup_Serie_Title_Placeholder {
+            get {
+                return ResourceManager.GetString("SerieUpdatePopup.Serie.Title.Placeholder", resourceCulture);
+            }
+        }
+        
+        public static string SerieUpdatePopup_Serie_Description_Placeholder {
+            get {
+                return ResourceManager.GetString("SerieUpdatePopup.Serie.Description.Placeholder", resourceCulture);
+            }
+        }
+        
+        public static string SerieUpdatePopup_Status {
+            get {
+                return ResourceManager.GetString("SerieUpdatePopup.Status", resourceCulture);
+            }
+        }
+        
+        public static string SerieUpdatePopup_Library {
+            get {
+                return ResourceManager.GetString("SerieUpdatePopup.Library", resourceCulture);
+            }
+        }
+        
+        public static string SerieUpdatePopup_Tags {
+            get {
+                return ResourceManager.GetString("SerieUpdatePopup.Tags", resourceCulture);
+            }
+        }
+        
+        public static string SerieUpdatePopup_Tags_Placeholder {
+            get {
+                return ResourceManager.GetString("SerieUpdatePopup.Tags.Placeholder", resourceCulture);
+            }
+        }
+        
+        public static string SerieUpdatePopup_NoTags {
+            get {
+                return ResourceManager.GetString("SerieUpdatePopup.NoTags", resourceCulture);
+            }
+        }
+        
+        public static string SerieUpdatePopup_Title {
+            get {
+                return ResourceManager.GetString("SerieUpdatePopup.Title", resourceCulture);
+            }
+        }
+        
+        public static string SerieUpdatePopup_Description {
+            get {
+                return ResourceManager.GetString("SerieUpdatePopup.Description", resourceCulture);
+            }
+        }
     }
 }

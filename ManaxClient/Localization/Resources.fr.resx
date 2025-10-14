@@ -552,4 +552,37 @@
     <data name="SavePointCreatePopup.Tip" xml:space="preserve">
         <value>Sélectionnez un répertoire accessible où les séries seront stockées.</value>
     </data>
+    <data name="SerieUpdatePopup.NoTags" xml:space="preserve">
+        <value>Aucun tag sélectionné</value>
+    </data>
+    <data name="SerieUpdatePopup.Tags.Placeholder" xml:space="preserve">
+        <value>Sélectionner un tag...</value>
+    </data>
+    <data name="SerieUpdatePopup.Tags" xml:space="preserve">
+        <value>Tags</value>
+    </data>
+    <data name="SerieUpdatePopup.Library" xml:space="preserve">
+        <value>Bibliothèque</value>
+    </data>
+    <data name="SerieUpdatePopup.Status" xml:space="preserve">
+        <value>Statut</value>
+    </data>
+    <data name="SerieUpdatePopup.Serie.Description.Placeholder" xml:space="preserve">
+        <value>Entrez la description de la série...</value>
+    </data>
+    <data name="SerieUpdatePopup.Serie.Description" xml:space="preserve">
+        <value>Description</value>
+    </data>
+    <data name="SerieUpdatePopup.Serie.Title.Placeholder" xml:space="preserve">
+        <value>Entrez le titre de la série...</value>
+    </data>
+    <data name="SerieUpdatePopup.Serie.Title" xml:space="preserve">
+        <value>Titre</value>
+    </data>
+    <data name="SerieUpdatePopup.Title" xml:space="preserve">
+        <value>Mettre à jour la série</value>
+    </data>
+    <data name="SerieUpdatePopup.Description" xml:space="preserve">
+        <value>Modifiez les informations de la série</value>
+    </data>
 </root>
