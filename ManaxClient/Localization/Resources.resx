@@ -678,4 +678,16 @@
     <data name="MainWindow.Parameters.Server" xml:space="preserve">
         <value>Server settings</value>
     </data>
+    <data name="CreateChapterIssuePopup.Title" xml:space="preserve">
+        <value>Report issue</value>
+    </data>
+    <data name="CreateChapterIssuePopup.Description" xml:space="preserve">
+        <value>Report a new issue for this chapter</value>
+    </data>
+    <data name="CreateChapterIssuePopup.Type" xml:space="preserve">
+        <value>Issue type</value>
+    </data>
+    <data name="CreateChapterIssuePopup.Tip" xml:space="preserve">
+        <value>Reporting chapter issue helps the admins to fix them</value>
+    </data>
 </root>

@@ -678,4 +678,16 @@
     <data name="MainWindow.Logout" xml:space="preserve">
         <value>Déconnection</value>
     </data>
+    <data name="CreateChapterIssuePopup.Type" xml:space="preserve">
+        <value>Type de problème</value>
+    </data>
+    <data name="CreateChapterIssuePopup.Title" xml:space="preserve">
+        <value>Signaler un problème</value>
+    </data>
+    <data name="CreateChapterIssuePopup.Description" xml:space="preserve">
+        <value>Signaler un nouveau problème pour ce chapitre</value>
+    </data>
+    <data name="CreateChapterIssuePopup.Tip" xml:space="preserve">
+        <value>Signaler les problèmes aide les admins à les résoudres</value>
+    </data>
 </root>

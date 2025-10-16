@@ -7,41 +7,36 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using System.CodeDom.Compiler;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
-using System.Resources;
-using System.Runtime.CompilerServices;
-
 namespace ManaxClient.Localization {
-    [GeneratedCode("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
-    [DebuggerNonUserCode()]
-    [CompilerGenerated()]
+    using System;
+    
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resources_fr {
         
-        private static ResourceManager resourceMan;
+        private static System.Resources.ResourceManager resourceMan;
         
-        private static CultureInfo resourceCulture;
+        private static System.Globalization.CultureInfo resourceCulture;
         
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         internal Resources_fr() {
         }
         
-        [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public static ResourceManager ResourceManager {
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        public static System.Resources.ResourceManager ResourceManager {
             get {
-                if (Equals(null, resourceMan)) {
-                    ResourceManager temp = new ResourceManager("ManaxClient.Localization.Resources_fr", typeof(Resources_fr).Assembly);
+                if (object.Equals(null, resourceMan)) {
+                    System.Resources.ResourceManager temp = new System.Resources.ResourceManager("ManaxClient.Localization.Resources_fr", typeof(Resources_fr).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
             }
         }
         
-        [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public static CultureInfo Culture {
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        public static System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -1367,6 +1362,30 @@ namespace ManaxClient.Localization {
         public static string MainWindow_Logout {
             get {
                 return ResourceManager.GetString("MainWindow.Logout", resourceCulture);
+            }
+        }
+        
+        public static string CreateChapterIssuePopup_Type {
+            get {
+                return ResourceManager.GetString("CreateChapterIssuePopup.Type", resourceCulture);
+            }
+        }
+        
+        public static string CreateChapterIssuePopup_Title {
+            get {
+                return ResourceManager.GetString("CreateChapterIssuePopup.Title", resourceCulture);
+            }
+        }
+        
+        public static string CreateChapterIssuePopup_Description {
+            get {
+                return ResourceManager.GetString("CreateChapterIssuePopup.Description", resourceCulture);
+            }
+        }
+        
+        public static string CreateChapterIssuePopup_Tip {
+            get {
+                return ResourceManager.GetString("CreateChapterIssuePopup.Tip", resourceCulture);
             }
         }
     }
