@@ -4,6 +4,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:content="clr-namespace:ManaxClient.ViewModels.Popup.ConfirmCancel.Content"
+    xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
     mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="250"
     x:Class="ManaxClient.Views.Popup.ConfirmCancel.Content.TagEditView"
     x:DataType="content:TagEditViewModel">
@@ -12,12 +13,12 @@
             <TextBlock Text="🏷️" FontSize="24" VerticalAlignment="Center" />
             <StackPanel Spacing="4">
                 <TextBlock
-                    Text="Modifier le tag"
+                    Text="{localization:Localize TagEditPopup.Title}"
                     FontSize="18"
                     FontWeight="Bold"
                     Foreground="#212529" />
                 <TextBlock
-                    Text="Modifiez les propriétés du tag"
+                    Text="{localization:Localize TagEditPopup.Description}"
                     FontSize="12"
                     Foreground="#6C757D" />
             </StackPanel>
@@ -25,12 +26,12 @@
 
         <StackPanel Grid.Row="1" Spacing="8">
             <TextBlock
-                Text="Nom du tag"
+                Text="{localization:Localize TagEditPopup.Name}"
                 FontWeight="Medium"
                 Foreground="#495057" />
             <TextBox
                 Text="{Binding Name}"
-                Watermark="Entrez le nom du tag..."
+                Watermark="{localization:Localize TagEditPopup.Name.Placeholder}"
                 Padding="12"
                 CornerRadius="8"
                 BorderThickness="1"
@@ -49,7 +50,7 @@
 
         <StackPanel Grid.Row="2" Spacing="8">
             <TextBlock
-                Text="Couleur"
+                Text="{localization:Localize TagEditPopup.Color}"
                 FontWeight="Medium"
                 Foreground="#495057" />
             <ColorPicker

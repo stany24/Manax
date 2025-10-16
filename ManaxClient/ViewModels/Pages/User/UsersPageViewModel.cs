@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using DynamicData;
 using DynamicData.Binding;
+using Jeek.Avalonia.Localization;
 using ManaxClient.Models.Sources;
 using ManaxClient.ViewModels.Popup.ConfirmCancel;
 using ManaxClient.ViewModels.Popup.ConfirmCancel.Content;
@@ -54,12 +55,12 @@ public class UsersPageViewModel : PageViewModel
                 if (context.Canceled()) return;
                 List<Permission> perms = content.GetSelectedPermissions();
                 Optional<bool> postUserResponse = await ManaxApiPermissionClient.SetPermissionsAsync(userId, perms);
-                if (postUserResponse.Failed) InfoEmitted?.Invoke(this, postUserResponse.Error);
+                if (postUserResponse.Failed) InfoEmitted?.Invoke(this, Localizer.Get("UserPage.UpdatePermissionsError"));
             }
             catch (Exception e)
             {
                 Logger.LogError("Error updating user permissions", e);
-                InfoEmitted?.Invoke(this, "Error updating user permissions");
+                InfoEmitted?.Invoke(this, Localizer.Get("UserPage.UpdatePermissionsError"));
             }
         };
     }
@@ -77,12 +78,12 @@ public class UsersPageViewModel : PageViewModel
                 if (context.Canceled()) return;
                 UserCreateDto user = content.GetResult();
                 Optional<bool> postUserResponse = await ManaxApiUserClient.PostUserAsync(user);
-                if (postUserResponse.Failed) InfoEmitted?.Invoke(this, postUserResponse.Error);
+                if (postUserResponse.Failed) InfoEmitted?.Invoke(this, Localizer.Get("UserPage.CreateError"));
             }
             catch (Exception e)
             {
                 Logger.LogError("Error creating user", e);
-                InfoEmitted?.Invoke(this, "Error creating user");
+                InfoEmitted?.Invoke(this, Localizer.Get("UserPage.CreateError"));
             }
         };
     }

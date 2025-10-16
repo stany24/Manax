@@ -6,6 +6,8 @@
     xmlns:previews="clr-namespace:ManaxClient.Controls.Previews"
     xmlns:page="clr-namespace:ManaxClient.ViewModels.Pages.Library"
     xmlns:viewModels="clr-namespace:ManaxClient.ViewModels"
+    xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
+    xmlns:localization1="clr-namespace:ManaxClient.Localization"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Pages.Library.LibraryPageView"
     x:DataType="page:LibraryPageViewModel"
@@ -19,7 +21,8 @@
                 <StackPanel Grid.Column="0" Grid.Row="0" Orientation="Vertical">
                     <TextBlock Classes="title" Text="{Binding Library.Name}" />
                     <TextBlock
-                        Text="{Binding Library.Series.Count, StringFormat='📚 {0} série(s) dans cette bibliothèque'}"
+                        Text="{localization1:LocalizeFormat LibraryPage.SeriesCount,
+                                   Param1={Binding $parent[UserControl].((page:LibraryPageViewModel)DataContext).Library.Series.Count}}"
                         Foreground="{StaticResource SecondaryBrush}"
                         FontSize="14" />
                 </StackPanel>
@@ -32,7 +35,7 @@
                         Padding="12,8">
                     <StackPanel Orientation="Horizontal" Spacing="8">
                         <TextBlock Text="🗑️" FontSize="14" />
-                        <TextBlock Text="Supprimer" FontWeight="Medium" />
+                        <TextBlock Text="{localization:Localize LibraryPage.Delete}" FontWeight="Medium" />
                     </StackPanel>
                 </Button>
             </Grid>
@@ -42,11 +45,11 @@
                             Spacing="16"
                             HorizontalAlignment="Center">
                     <TextBlock Text="📚" FontSize="48" HorizontalAlignment="Center" />
-                    <TextBlock Text="Bibliothèque vide"
+                    <TextBlock Text="{localization:Localize LibraryPage.EmptyLibrary.Title}"
                                FontSize="18"
                                FontWeight="Medium"
                                HorizontalAlignment="Center" />
-                    <TextBlock Text="Cette bibliothèque ne contient aucune série pour le moment."
+                    <TextBlock Text="{localization:Localize LibraryPage.EmptyLibrary.Description}"
                                TextAlignment="Center"
                                TextWrapping="Wrap"
                                Foreground="{StaticResource SecondaryBrush}"
@@ -57,7 +60,7 @@
             <Border Classes="card" IsVisible="{Binding Library.Series.Count}">
                 <StackPanel Orientation="Vertical" Spacing="20">
                     <TextBlock Classes="subtitle"
-                               Text="Séries de la bibliothèque"
+                               Text="{localization:Localize LibraryPage.LibrarySeries}"
                                Margin="0"
                                VerticalAlignment="Center" />
 

@@ -5,6 +5,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:content="clr-namespace:ManaxClient.ViewModels.Popup.ConfirmCancel.Content"
     xmlns:converters="clr-namespace:ManaxClient.Converters"
+    xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
     mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="500"
     x:Class="ManaxClient.Views.Popup.ConfirmCancel.Content.SerieUpdateView"
     x:DataType="content:SerieUpdateViewModel"
@@ -26,12 +27,12 @@
                        VerticalAlignment="Center" />
             <StackPanel Spacing="4">
                 <TextBlock
-                    Text="Mettre à jour la série"
+                    Text="{localization:Localize SerieUpdatePopup.Title}"
                     FontSize="18"
                     FontWeight="Bold"
                     Foreground="#212529" />
                 <TextBlock
-                    Text="Modifiez les informations de la série"
+                    Text="{localization:Localize SerieUpdatePopup.Description}"
                     FontSize="12"
                     Foreground="#6C757D" />
             </StackPanel>
@@ -39,12 +40,12 @@
 
         <StackPanel Grid.Row="1" Spacing="8">
             <TextBlock
-                Text="Titre"
+                Text="{localization:Localize SerieUpdatePopup.Serie.Title}"
                 FontWeight="Medium"
                 Foreground="#495057" />
             <TextBox
                 Text="{Binding Title}"
-                Watermark="Entrez le titre de la série..."
+                Watermark="{localization:Localize SerieUpdatePopup.Serie.Title.Placeholder}"
                 Padding="12"
                 CornerRadius="8"
                 BorderThickness="1"
@@ -63,12 +64,12 @@
 
         <StackPanel Grid.Row="2" Spacing="8">
             <TextBlock
-                Text="Description"
+                Text="{localization:Localize SerieUpdatePopup.Serie.Description}"
                 FontWeight="Medium"
                 Foreground="#495057" />
             <TextBox
                 Text="{Binding Description}"
-                Watermark="Entrez la description de la série..."
+                Watermark="{localization:Localize SerieUpdatePopup.Serie.Description.Placeholder}"
                 AcceptsReturn="True"
                 TextWrapping="Wrap"
                 Height="80"
@@ -91,7 +92,7 @@
         <StackPanel Grid.Row="3" Orientation="Horizontal" Spacing="16">
             <StackPanel Spacing="8" HorizontalAlignment="Left" Width="240">
                 <TextBlock
-                    Text="Statut"
+                    Text="{localization:Localize SerieUpdatePopup.Status}"
                     FontWeight="Medium"
                     Foreground="#495057" />
                 <ComboBox
@@ -115,7 +116,7 @@
 
             <StackPanel Spacing="8" HorizontalAlignment="Left" Width="240">
                 <TextBlock
-                    Text="Bibliothèque"
+                    Text="{localization:Localize SerieUpdatePopup.Library}"
                     FontWeight="Medium"
                     Foreground="#495057" />
                 <ComboBox
@@ -145,7 +146,7 @@
 
         <StackPanel Grid.Row="4" Spacing="8">
             <TextBlock
-                Text="Tags"
+                Text="{localization:Localize SerieUpdatePopup.Tags}"
                 FontWeight="Medium"
                 Foreground="#495057"
                 VerticalAlignment="Center" />
@@ -153,7 +154,7 @@
                 Width="200"
                 ItemsSource="{Binding AvailableTags}"
                 SelectedItem="{Binding SelectedTag, Mode=TwoWay}"
-                PlaceholderText="Sélectionner un tag..."
+                PlaceholderText="{localization:Localize SerieUpdatePopup.Tags.Placeholder}"
                 Padding="8"
                 CornerRadius="6"
                 BorderThickness="1"
@@ -229,7 +230,7 @@
         </Border>
         <TextBlock
             Grid.Row="5"
-            Text="Aucun tag sélectionné"
+            Text="{localization:Localize SerieUpdatePopup.NoTags}"
             FontSize="12"
             Foreground="#6C757D"
             HorizontalAlignment="Center"

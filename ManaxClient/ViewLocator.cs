@@ -1,7 +1,7 @@
 using System;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
-using ManaxClient.ViewModels;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace ManaxClient;
 
@@ -23,6 +23,6 @@ public class ViewLocator : IDataTemplate
 
     public bool Match(object? data)
     {
-        return data is ViewModelBase;
+        return data is ObservableObject;
     }
 }

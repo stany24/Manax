@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
+using Jeek.Avalonia.Localization;
 using LiveChartsCore;
 using LiveChartsCore.Measure;
 using LiveChartsCore.SkiaSharpView;
@@ -26,6 +27,7 @@ public partial class ServerStatsPageViewModel : PageViewModel
     {
         Task.Run(LoadServerStats);
     }
+
 
     public ObservableCollection<Models.Serie> NeverReadSeries { get; set; } = new([]);
     public ObservableCollection<ISeries> UserActivitySeries { get; set; } = new([]);
@@ -67,7 +69,7 @@ public partial class ServerStatsPageViewModel : PageViewModel
         DiskUsageSeries.Add(new PieSeries<double>
         {
             Values = [DiskSizeInGb],
-            Name = "Utilisé",
+            Name = Localizer.Get("ServerStatsPage.Charts.Used"),
             Fill = new SolidColorPaint(SKColors.OrangeRed),
             DataLabelsPaint = new SolidColorPaint(SKColors.White),
             DataLabelsSize = 12,
@@ -78,7 +80,7 @@ public partial class ServerStatsPageViewModel : PageViewModel
         DiskUsageSeries.Add(new PieSeries<double>
         {
             Values = [AvailableDiskSizeInGb],
-            Name = "Disponible",
+            Name = Localizer.Get("ServerStatsPage.Charts.Available"),
             Fill = new SolidColorPaint(SKColors.Green),
             DataLabelsPaint = new SolidColorPaint(SKColors.White),
             DataLabelsSize = 12,
@@ -90,7 +92,7 @@ public partial class ServerStatsPageViewModel : PageViewModel
         UserActivitySeries.Add(new PieSeries<int>
         {
             Values = [ServerStats.ActiveUsers],
-            Name = "Actifs",
+            Name = Localizer.Get("ServerStatsPage.Charts.Active"),
             Fill = new SolidColorPaint(SKColors.DodgerBlue),
             DataLabelsPaint = new SolidColorPaint(SKColors.White),
             DataLabelsSize = 12,
@@ -99,7 +101,7 @@ public partial class ServerStatsPageViewModel : PageViewModel
         UserActivitySeries.Add(new PieSeries<int>
         {
             Values = [ServerStats.Users - ServerStats.ActiveUsers],
-            Name = "Inactifs",
+            Name = Localizer.Get("ServerStatsPage.Charts.Inactive"),
             Fill = new SolidColorPaint(SKColors.Gray),
             DataLabelsPaint = new SolidColorPaint(SKColors.White),
             DataLabelsSize = 12,

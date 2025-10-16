@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
@@ -8,6 +9,7 @@ using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData;
 using DynamicData.Binding;
+using Jeek.Avalonia.Localization;
 using ManaxClient.Models.Sources;
 using ManaxClient.ViewModels.Pages.Serie;
 using ManaxLibrary;
@@ -47,7 +49,6 @@ public partial class HomePageViewModel : PageViewModel
         PageChangedRequested?.Invoke(this, seriePageViewModel);
     }
 
-
     public async void UploadSerie()
     {
         try
@@ -59,10 +60,11 @@ public partial class HomePageViewModel : PageViewModel
                 ? desktop.MainWindow
                 : null;
             if (window?.StorageProvider == null) return;
+            
             IReadOnlyList<IStorageFolder> folders = await window.StorageProvider.OpenFolderPickerAsync(
                 new FolderPickerOpenOptions
                 {
-                    Title = "Sélectionnez un dossier à uploader",
+                    Title = Localizer.Get("HomePage.SelectFolder"),
                     AllowMultiple = false
                 });
             IsFolderPickerOpen = false;
@@ -74,16 +76,19 @@ public partial class HomePageViewModel : PageViewModel
             Optional<bool> uploadSerieResponse = await ManaxApiUploadClient.UploadSerieAsync(folderPath);
             if (uploadSerieResponse.Failed)
             {
-                InfoEmitted?.Invoke(this, uploadSerieResponse.Error);
+                InfoEmitted?.Invoke(this, 
+                    string.Format(Localizer.Get("HomePage.UploadFailure"),Path.GetDirectoryName(folderPath)));
+                Logger.LogFailure("Failed to upload series: " + uploadSerieResponse.Error);
+                return;
             }
-            else
-            {
-                InfoEmitted?.Invoke(this, "Serie upload successful");
-                Logger.LogInfo("Serie upload successful");
-            }
+            InfoEmitted?.Invoke(this, 
+                string.Format(Localizer.Get("HomePage.UploadSuccess"), Path.GetDirectoryName(folderPath)));
+            Logger.LogInfo("Serie upload successful");
         }
         catch (Exception e)
         {
+            IsFolderPickerOpen = false;
+            InfoEmitted?.Invoke(this, Localizer.Get("HomePage.UploadError"));
             Logger.LogError("Error uploading series", e);
         }
     }

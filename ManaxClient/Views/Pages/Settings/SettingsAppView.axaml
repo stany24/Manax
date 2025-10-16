@@ -4,6 +4,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:page="clr-namespace:ManaxClient.ViewModels.Pages.Settings"
+    xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Pages.Settings.SettingsAppView"
     x:DataType="page:SettingsAppViewModel">
@@ -12,8 +13,8 @@
         <StackPanel Orientation="Vertical" Spacing="24">
 
             <StackPanel Orientation="Vertical">
-                <TextBlock Classes="title" Text="Paramètres d'apparence" />
-                <TextBlock Text="🎨 Personnalisez l'apparence de votre application Manax"
+                <TextBlock Classes="title" Text="{localization:Localize SettingsAppPage.Title}" />
+                <TextBlock Text="{localization:Localize SettingsAppPage.Subtitle}"
                            Foreground="{StaticResource SecondaryBrush}" />
             </StackPanel>
 
@@ -21,12 +22,12 @@
                 <StackPanel Spacing="20">
                     <StackPanel Orientation="Horizontal" Spacing="12">
                         <TextBlock Text="🌙" FontSize="20" />
-                        <TextBlock Classes="subtitle" Text="Mode d'affichage" Margin="0" />
+                        <TextBlock Classes="subtitle" Text="{localization:Localize SettingsAppPage.DisplayMode}" Margin="0" />
                     </StackPanel>
 
                     <Grid ColumnDefinitions="*,*" RowDefinitions="Auto" ColumnSpacing="16" RowSpacing="16">
                         <StackPanel Grid.Column="0" Grid.Row="0" Spacing="6">
-                            <TextBlock Text="Mode sombre" FontWeight="Medium" />
+                            <TextBlock Text="{localization:Localize SettingsAppPage.DarkMode}" FontWeight="Medium" />
                             <ToggleSwitch IsChecked="{Binding IsDarkMode}" />
                         </StackPanel>
                     </Grid>
@@ -37,12 +38,12 @@
                 <StackPanel Spacing="20">
                     <StackPanel Orientation="Horizontal" Spacing="12">
                         <TextBlock Text="🎨" FontSize="20" />
-                        <TextBlock Classes="subtitle" Text="Thème de couleur" Margin="0" />
+                        <TextBlock Classes="subtitle" Text="{localization:Localize SettingsAppPage.ColorTheme}" Margin="0" />
                     </StackPanel>
 
                     <Grid ColumnDefinitions="*" RowDefinitions="Auto,Auto" RowSpacing="16">
                         <StackPanel Grid.Column="0" Grid.Row="0" Spacing="6">
-                            <TextBlock Text="Thème sélectionné" FontWeight="Medium" />
+                            <TextBlock Text="{localization:Localize SettingsAppPage.SelectedTheme}" FontWeight="Medium" />
                             <ComboBox SelectedItem="{Binding SelectedTheme}"
                                       ItemsSource="{Binding AvailableThemes}"
                                       HorizontalAlignment="Stretch">
@@ -59,11 +60,11 @@
                         </StackPanel>
 
                         <StackPanel Grid.Column="0" Grid.Row="1" Spacing="12">
-                            <TextBlock Text="Aperçu des couleurs" FontWeight="Medium" />
+                            <TextBlock Text="{localization:Localize SettingsAppPage.ColorPreview}" FontWeight="Medium" />
                             <WrapPanel Orientation="Horizontal" ItemWidth="150" ItemHeight="80">
                                 <Border Classes="card" Margin="4" Width="140" Height="70">
                                     <StackPanel Spacing="4">
-                                        <TextBlock Text="Primaire" FontSize="12" FontWeight="Medium" />
+                                        <TextBlock Text="{localization:Localize SettingsAppPage.PrimaryColor}" FontSize="12" FontWeight="Medium" />
                                         <Rectangle Height="20" Fill="{Binding SelectedTheme.PrimaryColor}" />
                                         <TextBlock Text="{Binding SelectedTheme.PrimaryColor.Color}" FontSize="10" />
                                     </StackPanel>
@@ -71,7 +72,7 @@
 
                                 <Border Classes="card" Margin="4" Width="140" Height="70">
                                     <StackPanel Spacing="4">
-                                        <TextBlock Text="Secondaire" FontSize="12" FontWeight="Medium" />
+                                        <TextBlock Text="{localization:Localize SettingsAppPage.SecondaryColor}" FontSize="12" FontWeight="Medium" />
                                         <Rectangle Height="20" Fill="{Binding SelectedTheme.SecondaryColor}" />
                                         <TextBlock Text="{Binding SelectedTheme.SecondaryColor.Color}" FontSize="10" />
                                     </StackPanel>
@@ -79,7 +80,7 @@
 
                                 <Border Classes="card" Margin="4" Width="140" Height="70">
                                     <StackPanel Spacing="4">
-                                        <TextBlock Text="Tertiaire" FontSize="12" FontWeight="Medium" />
+                                        <TextBlock Text="{localization:Localize SettingsAppPage.TertiaryColor}" FontSize="12" FontWeight="Medium" />
                                         <Rectangle Height="20" Fill="{Binding SelectedTheme.TertiaryColor}" />
                                         <TextBlock Text="{Binding SelectedTheme.TertiaryColor.Color}" FontSize="10" />
                                     </StackPanel>

@@ -2,6 +2,8 @@ using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
+using Jeek.Avalonia.Localization;
+using ManaxClient.Assets.Localization;
 using ManaxClient.ViewModels;
 using ManaxClient.Views;
 
@@ -16,6 +18,8 @@ public class App : Application
 
     public override void OnFrameworkInitializationCompleted()
     {
+        Localizer.SetLocalizer(new ResXLocalizer());
+        
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
             // Line below is needed to remove Avalonia data validation.

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
+using Jeek.Avalonia.Localization;
 using LiveChartsCore;
 using LiveChartsCore.Measure;
 using LiveChartsCore.SkiaSharpView;
@@ -65,7 +66,7 @@ public partial class UserStatsPageViewModel : PageViewModel
         SeriesSeries.Add(new PieSeries<long>
         {
             Values = [UserStats.SeriesCompleted],
-            Name = "Terminées",
+            Name = Localizer.Get("UserStatsPage.Charts.Completed"),
             Fill = new SolidColorPaint(SKColors.Green),
             DataLabelsPaint = new SolidColorPaint(SKColors.White),
             DataLabelsSize = 12,
@@ -74,7 +75,7 @@ public partial class UserStatsPageViewModel : PageViewModel
         SeriesSeries.Add(new PieSeries<long>
         {
             Values = [UserStats.SeriesInProgress],
-            Name = "En cours",
+            Name = Localizer.Get("UserStatsPage.Charts.InProgress"),
             Fill = new SolidColorPaint(SKColors.Orange),
             DataLabelsPaint = new SolidColorPaint(SKColors.White),
             DataLabelsSize = 12,
@@ -83,7 +84,7 @@ public partial class UserStatsPageViewModel : PageViewModel
         SeriesSeries.Add(new PieSeries<long>
         {
             Values = [UserStats.SeriesRemaining],
-            Name = "Restantes",
+            Name = Localizer.Get("UserStatsPage.Charts.Remaining"),
             Fill = new SolidColorPaint(SKColors.Gray),
             DataLabelsPaint = new SolidColorPaint(SKColors.White),
             DataLabelsSize = 12,
@@ -93,7 +94,7 @@ public partial class UserStatsPageViewModel : PageViewModel
         ChaptersSeries.Add(new PieSeries<long>
         {
             Values = [UserStats.ChaptersRead],
-            Name = "Lus",
+            Name = Localizer.Get("UserStatsPage.Charts.Read"),
             Fill = new SolidColorPaint(SKColors.Green),
             DataLabelsPaint = new SolidColorPaint(SKColors.White),
             DataLabelsSize = 12,
@@ -102,7 +103,7 @@ public partial class UserStatsPageViewModel : PageViewModel
         ChaptersSeries.Add(new PieSeries<long>
         {
             Values = [UserStats.ChaptersRemaining],
-            Name = "Restants",
+            Name = Localizer.Get("UserStatsPage.Charts.RemainingChapters"),
             Fill = new SolidColorPaint(SKColors.Gray),
             DataLabelsPaint = new SolidColorPaint(SKColors.White),
             DataLabelsSize = 12,
@@ -124,7 +125,7 @@ public partial class UserStatsPageViewModel : PageViewModel
             RanksSeries.Add(new ColumnSeries<double>
             {
                 Values = values,
-                Name = "Nombre de séries",
+                Name = Localizer.Get("UserStatsPage.Charts.SeriesCount"),
                 Fill = new SolidColorPaint(SKColors.DodgerBlue)
             });
 
@@ -152,7 +153,7 @@ public partial class UserStatsPageViewModel : PageViewModel
             ReadsPerDaySeries.Add(new LineSeries<double>
             {
                 Values = readCounts,
-                Name = "Lectures par jour",
+                Name = Localizer.Get("UserStatsPage.Charts.DailyReads"),
                 Fill = null,
                 Stroke = new SolidColorPaint(SKColors.Purple) { StrokeThickness = 3 },
                 GeometryFill = new SolidColorPaint(SKColors.Purple),

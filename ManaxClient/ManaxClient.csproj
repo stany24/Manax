@@ -62,6 +62,7 @@
         <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.3.6"/>
         <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0"/>
         <PackageReference Include="DynamicData" Version="9.4.1"/>
+        <PackageReference Include="Jeek.Avalonia.Localization" Version="1.3.1" />
         <PackageReference Include="LiveChartsCore.SkiaSharpView.Avalonia" Version="2.0.0-rc5.4"/>
         <PackageReference Include="nulastudio.NetBeauty" Version="2.1.5"/>
         <PackageReference Include="Xaml.Behaviors.Avalonia" Version="11.3.2"/>
@@ -131,6 +132,16 @@
             <DependentUpon>UserPermissionsEdit.axaml</DependentUpon>
             <SubType>Code</SubType>
         </Compile>
+        <Compile Update="Localization\Resources.Designer.cs">
+          <DesignTime>True</DesignTime>
+          <AutoGen>True</AutoGen>
+          <DependentUpon>Resources.resx</DependentUpon>
+        </Compile>
+        <Compile Update="Localization\Resources.fr.Designer.cs">
+          <DesignTime>True</DesignTime>
+          <AutoGen>True</AutoGen>
+          <DependentUpon>Resources.fr.resx</DependentUpon>
+        </Compile>
     </ItemGroup>
 
     <ItemGroup>
@@ -151,5 +162,16 @@
         <AdditionalFiles Include="Views\Pages\Stats\UserStatsPageView.axaml"/>
         <AdditionalFiles Include="Views\Pages\Tag\TagPageView.axaml"/>
         <AdditionalFiles Include="Views\Pages\User\UsersPageView.axaml"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Update="Localization\Resources.resx">
+        <Generator>PublicResXFileCodeGenerator</Generator>
+        <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Localization\Resources.fr.resx">
+        <Generator>PublicResXFileCodeGenerator</Generator>
+        <LastGenOutput>Resources.fr.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
     </ItemGroup>
 </Project>

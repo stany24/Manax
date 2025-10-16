@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Threading.Tasks;
 using DynamicData;
 using DynamicData.Binding;
+using Jeek.Avalonia.Localization;
 using ManaxClient.Models.Sources;
 using ManaxClient.ViewModels.Popup.ConfirmCancel;
 using ManaxClient.ViewModels.Popup.ConfirmCancel.Content;
@@ -30,7 +31,7 @@ public class TagPageViewModel : PageViewModel
 
     public void CreateTag()
     {
-        TagEditViewModel content = new(new TagUpdateDto { Name = "Nouveau Tag", Color = Color.Blue });
+        TagEditViewModel content = new(new TagUpdateDto { Name = Localizer.Get("TagPage.DefaultName"), Color = Color.Blue });
         ConfirmCancelViewModel viewModel = new(content);
         Controls.Popups.Popup popup = new(viewModel);
         popup.Closed += async void (_, _) =>
@@ -47,11 +48,11 @@ public class TagPageViewModel : PageViewModel
 
                 Optional<bool> request = await ManaxApiTagClient.CreateTagAsync(tagCreate);
                 if (request.Failed)
-                    InfoEmitted?.Invoke(this, "Erreur lors de la création du tag.");
+                    InfoEmitted?.Invoke(this, Localizer.Get("TagPage.CreateError"));
             }
             catch
             {
-                InfoEmitted?.Invoke(this, "Erreur lors de la création du tag.");
+                InfoEmitted?.Invoke(this, Localizer.Get("TagPage.CreateError"));
             }
         };
 
@@ -80,7 +81,7 @@ public class TagPageViewModel : PageViewModel
             }
             catch
             {
-                InfoEmitted?.Invoke(this, "Erreur lors de la mise à jour du tag.");
+                InfoEmitted?.Invoke(this, Localizer.Get("TagPage.UpdateError"));
             }
         };
 
@@ -97,7 +98,7 @@ public class TagPageViewModel : PageViewModel
             }
             catch
             {
-                InfoEmitted?.Invoke(this, "Erreur lors de la suppression du tag.");
+                InfoEmitted?.Invoke(this, Localizer.Get("TagPage.DeleteError"));
             }
         });
     }

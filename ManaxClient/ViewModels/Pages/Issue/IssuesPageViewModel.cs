@@ -7,6 +7,7 @@ using System.Net.Http;
 using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData;
 using DynamicData.Binding;
+using Jeek.Avalonia.Localization;
 using ManaxClient.Models.Issue;
 using ManaxClient.ViewModels.Pages.Serie;
 using ManaxClient.ViewModels.Popup.ConfirmCancel;
@@ -38,6 +39,7 @@ public partial class IssuesPageViewModel : PageViewModel
             SortExpressionComparer<IssueChapterReported>.Descending(t => t.CreatedAt);
         SortExpressionComparer<IssueSerieReported> comparer4 =
             SortExpressionComparer<IssueSerieReported>.Descending(t => t.CreatedAt);
+        
         IssueSource.IssueChapterAutomatic
             .Connect()
             .SortAndBind(out _issueChapterAutomatic, comparer1)
@@ -134,7 +136,10 @@ public partial class IssuesPageViewModel : PageViewModel
             File.Delete(saveFile);
             Directory.Delete(saveFolder, true);
 
-            InfoEmitted?.Invoke(this, request.GetValue() ? "Replacement successful" : "Failed to replace chapter");
+            string message = request.GetValue() 
+                ? Localizer.Get("IssuesPage.ReplacementSuccessful") 
+                : Localizer.Get("IssuesPage.ReplacementFailed");
+            InfoEmitted?.Invoke(this, message);
         }
         catch (Exception e)
         {

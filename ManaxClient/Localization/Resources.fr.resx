@@ -1,0 +1,693 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:element name="root" msdata:IsDataSet="true">
+            
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="LoginPage.Title" xml:space="preserve">
+        <value>Manax</value>
+    </data>
+    <data name="LoginPage.Subtitle" xml:space="preserve">
+        <value>Connectez-vous à votre compte</value>
+    </data>
+    <data name="LoginPage.Username" xml:space="preserve">
+        <value>Nom d'utilisateur</value>
+    </data>
+    <data name="LoginPage.Username.Placeholder" xml:space="preserve">
+        <value>Entrez votre nom d'utilisateur</value>
+    </data>
+    <data name="LoginPage.Password" xml:space="preserve">
+        <value>Mot de passe</value>
+    </data>
+    <data name="LoginPage.Password.Placeholder" xml:space="preserve">
+        <value>Entrez votre mot de passe</value>
+    </data>
+    <data name="LoginPage.Server" xml:space="preserve">
+        <value>Serveur</value>
+    </data>
+    <data name="LoginPage.Server.Placeholder" xml:space="preserve">
+        <value>https://votre-serveur.com</value>
+    </data>
+    <data name="LoginPage.SignIn" xml:space="preserve">
+        <value>Se connecter</value>
+    </data>
+    <data name="LoginPage.Tip.Title" xml:space="preserve">
+        <value>💡 Astuce</value>
+    </data>
+    <data name="LoginPage.Tip.Message" xml:space="preserve">
+        <value>Assurez-vous que votre serveur Manax est démarré et accessible depuis ce réseau.</value>
+    </data>
+    <data name="ChapterPage.Pages" xml:space="preserve">
+        <value>{0} pages</value>
+    </data>
+    <data name="ChapterPage.Back" xml:space="preserve">
+        <value>Retour</value>
+    </data>
+    <data name="ChapterPage.Previous" xml:space="preserve">
+        <value>Précédent</value>
+    </data>
+    <data name="ChapterPage.Chapter" xml:space="preserve">
+        <value>Chapitre</value>
+    </data>
+    <data name="ChapterPage.Next" xml:space="preserve">
+        <value>Suivant</value>
+    </data>
+    <data name="ChapterPage.PreviousPage" xml:space="preserve">
+        <value>Page précédente</value>
+    </data>
+    <data name="ChapterPage.NextPage" xml:space="preserve">
+        <value>Page suivante</value>
+    </data>
+    <data name="HomePage.Welcome" xml:space="preserve">
+        <value>Bienvenue dans Manax</value>
+    </data>
+    <data name="HomePage.Subtitle" xml:space="preserve">
+        <value>Découvrez et gérez vos séries préférées</value>
+    </data>
+    <data name="HomePage.AddSeries" xml:space="preserve">
+        <value>Ajouter une série</value>
+    </data>
+    <data name="HomePage.NoSeries" xml:space="preserve">
+        <value>Aucune série disponible</value>
+    </data>
+    <data name="HomePage.NoSeries.Description" xml:space="preserve">
+        <value>Commencez par ajouter votre première série pour découvrir toutes les fonctionnalités de Manax.</value>
+    </data>
+    <data name="HomePage.AddFirstSeries" xml:space="preserve">
+        <value>Ajouter ma première série</value>
+    </data>
+    <data name="HomePage.RecentSeries" xml:space="preserve">
+        <value>Séries récentes</value>
+    </data>
+    <data name="HomePage.SeriesCount" xml:space="preserve">
+        <value>{0} série(s)</value>
+    </data>
+    <data name="HomePage.SelectFolder" xml:space="preserve">
+        <value>Sélectionnez un dossier à uploader</value>
+    </data>
+    <data name="HomePage.UploadSuccess" xml:space="preserve">
+        <value>Téléchargement de {0} réussi</value>
+    </data>
+    <data name="HomePage.UploadError" xml:space="preserve">
+        <value>Erreur lors du téléchargement de la série</value>
+    </data>
+    <data name="HomePage.UploadFailure" xml:space="preserve">
+        <value>Échec du téléchargement : {0}</value>
+    </data>
+    <data name="IssuesPage.Title" xml:space="preserve">
+        <value>Gestion des Problèmes</value>
+    </data>
+    <data name="IssuesPage.Automatic" xml:space="preserve">
+        <value>Automatiques</value>
+    </data>
+    <data name="IssuesPage.Reported" xml:space="preserve">
+        <value>Signalés</value>
+    </data>
+    <data name="IssuesPage.Chapters" xml:space="preserve">
+        <value>Chapitres</value>
+    </data>
+    <data name="IssuesPage.Series" xml:space="preserve">
+        <value>Séries</value>
+    </data>
+    <data name="IssuesPage.AutomaticChapters" xml:space="preserve">
+        <value>Problèmes Automatiques - Chapitres</value>
+    </data>
+    <data name="IssuesPage.AutomaticSeries" xml:space="preserve">
+        <value>Problèmes Automatiques - Séries</value>
+    </data>
+    <data name="IssuesPage.ReportedChapters" xml:space="preserve">
+        <value>Problèmes Signalés - Chapitres</value>
+    </data>
+    <data name="IssuesPage.ReportedSeries" xml:space="preserve">
+        <value>Problèmes Signalés - Séries</value>
+    </data>
+    <data name="IssuesPage.NoAutomaticChapter" xml:space="preserve">
+        <value>Aucun problème automatique de chapitre trouvé</value>
+    </data>
+    <data name="IssuesPage.NoAutomaticSeries" xml:space="preserve">
+        <value>Aucun problème automatique de série trouvé</value>
+    </data>
+    <data name="IssuesPage.NoReportedChapter" xml:space="preserve">
+        <value>Aucun problème signalé de chapitre trouvé</value>
+    </data>
+    <data name="IssuesPage.NoReportedSeries" xml:space="preserve">
+        <value>Aucun problème signalé de série trouvé</value>
+    </data>
+    <data name="IssuesPage.ChapterInfo" xml:space="preserve">
+        <value>Chapitre: {0} • {1:dd/MM/yyyy HH:mm}</value>
+    </data>
+    <data name="IssuesPage.SeriesInfo" xml:space="preserve">
+        <value>Série: {0} • {1:dd/MM/yyyy HH:mm}</value>
+    </data>
+    <data name="IssuesPage.ChapterUserInfo" xml:space="preserve">
+        <value>Chapitre: {0} • Utilisateur: {1} • {2:dd/MM/yyyy HH:mm}</value>
+    </data>
+    <data name="IssuesPage.SeriesUserInfo" xml:space="preserve">
+        <value>Série: {0} • Utilisateur: {1} • {2:dd/MM/yyyy HH:mm}</value>
+    </data>
+    <data name="IssuesPage.ReplacementSuccessful" xml:space="preserve">
+        <value>Remplacement réussi</value>
+    </data>
+    <data name="IssuesPage.ReplacementFailed" xml:space="preserve">
+        <value>Échec du remplacement du chapitre</value>
+    </data>
+    <data name="LibraryPage.SeriesCount" xml:space="preserve">
+        <value>📚 {0} série(s) dans cette bibliothèque</value>
+    </data>
+    <data name="LibraryPage.Delete" xml:space="preserve">
+        <value>Supprimer</value>
+    </data>
+    <data name="LibraryPage.EmptyLibrary.Title" xml:space="preserve">
+        <value>Bibliothèque vide</value>
+    </data>
+    <data name="LibraryPage.EmptyLibrary.Description" xml:space="preserve">
+        <value>Cette bibliothèque ne contient aucune série pour le moment.</value>
+    </data>
+    <data name="LibraryPage.LibrarySeries.Title" xml:space="preserve">
+        <value>Séries de la bibliothèque</value>
+    </data>
+    <data name="RankPage.Title" xml:space="preserve">
+        <value>Gestion des Rangs</value>
+    </data>
+    <data name="RankPage.RanksCount" xml:space="preserve">
+        <value>🏆 {0} rang(s) configuré(s)</value>
+    </data>
+    <data name="RankPage.NewRank" xml:space="preserve">
+        <value>Nouveau rang</value>
+    </data>
+    <data name="RankPage.NoRanks.Title" xml:space="preserve">
+        <value>Aucun rang configuré</value>
+    </data>
+    <data name="RankPage.NoRanks.Description" xml:space="preserve">
+        <value>Créez des rangs pour organiser vos utilisateurs par niveau.</value>
+    </data>
+    <data name="RankPage.CreateFirstRank" xml:space="preserve">
+        <value>Créer le premier rang</value>
+    </data>
+    <data name="RankPage.RanksList.Title" xml:space="preserve">
+        <value>Liste des rangs</value>
+    </data>
+    <data name="RankPage.Level" xml:space="preserve">
+        <value>Niveau : {0}</value>
+    </data>
+    <data name="SeriePage.ChangeButton" xml:space="preserve">
+        <value>Changer</value>
+    </data>
+    <data name="SeriePage.SerieRating" xml:space="preserve">
+        <value>Note de la série</value>
+    </data>
+    <data name="SeriePage.Chapters" xml:space="preserve">
+        <value>Chapitres</value>
+    </data>
+    <data name="SeriePage.NoChaptersAvailable" xml:space="preserve">
+        <value>Aucun chapitre disponible</value>
+    </data>
+    <data name="SeriePage.NoChaptersDescription" xml:space="preserve">
+        <value>Cette série ne contient pas encore de chapitres.</value>
+    </data>
+    <data name="SeriePage.ChapterCount" xml:space="preserve">
+        <value>{0} chapitre(s)</value>
+    </data>
+    <data name="SeriePage.SelectPosterImage" xml:space="preserve">
+        <value>Sélectionnez une image pour le poster</value>
+    </data>
+    <data name="SeriePage.PosterReplacedSuccess" xml:space="preserve">
+        <value>Poster remplacé avec succès</value>
+    </data>
+    <data name="SeriePage.ErrorReplacingPoster" xml:space="preserve">
+        <value>Erreur lors du remplacement du poster</value>
+    </data>
+    <data name="SeriePage.ErrorUpdatingSerie" xml:space="preserve">
+        <value>Erreur lors de la mise à jour de la série</value>
+    </data>
+    <data name="SeriePage.RankSetCorrectly" xml:space="preserve">
+        <value>Rang défini correctement</value>
+    </data>
+    <data name="SettingsAppPage.Title" xml:space="preserve">
+        <value>Paramètres d'apparence</value>
+    </data>
+    <data name="SettingsAppPage.Subtitle" xml:space="preserve">
+        <value>🎨 Personnalisez l'apparence de votre application Manax</value>
+    </data>
+    <data name="SettingsAppPage.DisplayMode" xml:space="preserve">
+        <value>Mode d'affichage</value>
+    </data>
+    <data name="SettingsAppPage.DarkMode" xml:space="preserve">
+        <value>Mode sombre</value>
+    </data>
+    <data name="SettingsAppPage.ColorTheme" xml:space="preserve">
+        <value>Thème de couleur</value>
+    </data>
+    <data name="SettingsAppPage.SelectedTheme" xml:space="preserve">
+        <value>Thème sélectionné</value>
+    </data>
+    <data name="SettingsAppPage.ColorPreview" xml:space="preserve">
+        <value>Aperçu des couleurs</value>
+    </data>
+    <data name="SettingsAppPage.PrimaryColor" xml:space="preserve">
+        <value>Primaire</value>
+    </data>
+    <data name="SettingsAppPage.SecondaryColor" xml:space="preserve">
+        <value>Secondaire</value>
+    </data>
+    <data name="SettingsAppPage.TertiaryColor" xml:space="preserve">
+        <value>Tertiaire</value>
+    </data>
+    <data name="SettingsServerPage.Title" xml:space="preserve">
+        <value>Paramètres du serveur</value>
+    </data>
+    <data name="SettingsServerPage.Subtitle" xml:space="preserve">
+        <value>⚙️ Configurez les paramètres globaux de votre serveur Manax</value>
+    </data>
+    <data name="SettingsServerPage.AddSavePoint" xml:space="preserve">
+        <value>Ajouter un point de sauvegarde</value>
+    </data>
+    <data name="SettingsServerPage.AddLibrary" xml:space="preserve">
+        <value>Ajouter une bibliothèque</value>
+    </data>
+    <data name="SettingsServerPage.PosterConfig" xml:space="preserve">
+        <value>Configuration des affiches</value>
+    </data>
+    <data name="SettingsServerPage.PosterName" xml:space="preserve">
+        <value>Nom du fichier affiche</value>
+    </data>
+    <data name="SettingsServerPage.ImageFormat" xml:space="preserve">
+        <value>Format d'image</value>
+    </data>
+    <data name="SettingsServerPage.Quality" xml:space="preserve">
+        <value>Qualité (1-100)</value>
+    </data>
+    <data name="SettingsServerPage.MaxWidth" xml:space="preserve">
+        <value>Largeur maximale</value>
+    </data>
+    <data name="SettingsServerPage.MinWidth" xml:space="preserve">
+        <value>Largeur minimale</value>
+    </data>
+    <data name="SettingsServerPage.ChapterConfig" xml:space="preserve">
+        <value>Configuration des chapitres</value>
+    </data>
+    <data name="SettingsServerPage.MaxPageWidth" xml:space="preserve">
+        <value>Largeur max des pages</value>
+    </data>
+    <data name="SettingsServerPage.MinPageWidth" xml:space="preserve">
+        <value>Largeur min des pages</value>
+    </data>
+    <data name="SettingsServerPage.ArchiveFormat" xml:space="preserve">
+        <value>Format d'archive</value>
+    </data>
+    <data name="SettingsServerPage.SeriesConfig" xml:space="preserve">
+        <value>Configuration des séries</value>
+    </data>
+    <data name="SettingsServerPage.MaxDescriptionLength" xml:space="preserve">
+        <value>Longueur max description</value>
+    </data>
+    <data name="SettingsServerPage.MinDescriptionLength" xml:space="preserve">
+        <value>Longueur min description</value>
+    </data>
+    <data name="SettingsServerPage.TipTitle" xml:space="preserve">
+        <value>💡 Conseil</value>
+    </data>
+    <data name="SettingsServerPage.TipMessage" xml:space="preserve">
+        <value>Les modifications seront appliquées après validation. Assurez-vous de tester les paramètres avant de les sauvegarder.</value>
+    </data>
+    <data name="SettingsServerPage.SaveButton" xml:space="preserve">
+        <value>Sauvegarder</value>
+    </data>
+    <data name="SettingsServerPage.SettingsUpdatedSuccess" xml:space="preserve">
+        <value>Paramètres mis à jour avec succès.</value>
+    </data>
+    <data name="SettingsServerPage.ErrorCreatingSavePoint" xml:space="preserve">
+        <value>Erreur lors de la création du point de sauvegarde</value>
+    </data>
+    <data name="SettingsServerPage.ErrorCreatingLibrary" xml:space="preserve">
+        <value>Erreur lors de la création de la bibliothque</value>
+    </data>
+    <data name="ServerStatsPage.Title" xml:space="preserve">
+        <value>Statistiques du serveur</value>
+    </data>
+    <data name="ServerStatsPage.Subtitle" xml:space="preserve">
+        <value>📊 Vue d'ensemble des données et de l'activité du serveur</value>
+    </data>
+    <data name="ServerStatsPage.DiskUsage.Title" xml:space="preserve">
+        <value>Utilisation de l'espace disque</value>
+    </data>
+    <data name="ServerStatsPage.DiskUsage.Used" xml:space="preserve">
+        <value>🔴 Utilisé</value>
+    </data>
+    <data name="ServerStatsPage.DiskUsage.Available" xml:space="preserve">
+        <value>🟢 Disponible</value>
+    </data>
+    <data name="ServerStatsPage.UserActivity.Title" xml:space="preserve">
+        <value>Activité des utilisateurs</value>
+    </data>
+    <data name="ServerStatsPage.UserActivity.Active" xml:space="preserve">
+        <value>🔵 Actifs</value>
+    </data>
+    <data name="ServerStatsPage.UserActivity.Inactive" xml:space="preserve">
+        <value>⚫ Inactifs</value>
+    </data>
+    <data name="ServerStatsPage.Content.Title" xml:space="preserve">
+        <value>Contenu du serveur</value>
+    </data>
+    <data name="ServerStatsPage.Content.Series" xml:space="preserve">
+        <value>📖 Séries</value>
+    </data>
+    <data name="ServerStatsPage.Content.Chapters" xml:space="preserve">
+        <value>📄 Chapitres</value>
+    </data>
+    <data name="ServerStatsPage.LibraryDistribution.Title" xml:space="preserve">
+        <value>Répartition par bibliothèque</value>
+    </data>
+    <data name="ServerStatsPage.NeverRead.Title" xml:space="preserve">
+        <value>Séries non lues</value>
+    </data>
+    <data name="ServerStatsPage.Charts.Used" xml:space="preserve">
+        <value>Utilisé</value>
+    </data>
+    <data name="ServerStatsPage.Charts.Available" xml:space="preserve">
+        <value>Disponible</value>
+    </data>
+    <data name="ServerStatsPage.Charts.Active" xml:space="preserve">
+        <value>Actifs</value>
+    </data>
+    <data name="ServerStatsPage.Charts.Inactive" xml:space="preserve">
+        <value>Inactifs</value>
+    </data>
+    <data name="UserStatsPage.Title" xml:space="preserve">
+        <value>Mes statistiques</value>
+    </data>
+    <data name="UserStatsPage.Subtitle" xml:space="preserve">
+        <value>📊 Votre activité et progression dans Manax</value>
+    </data>
+    <data name="UserStatsPage.SeriesProgress.Title" xml:space="preserve">
+        <value>Progression des séries</value>
+    </data>
+    <data name="UserStatsPage.SeriesProgress.Completed" xml:space="preserve">
+        <value>✅ Terminées</value>
+    </data>
+    <data name="UserStatsPage.SeriesProgress.InProgress" xml:space="preserve">
+        <value>📖 En cours</value>
+    </data>
+    <data name="UserStatsPage.SeriesProgress.Remaining" xml:space="preserve">
+        <value>⏳ Restantes</value>
+    </data>
+    <data name="UserStatsPage.ChaptersProgress.Title" xml:space="preserve">
+        <value>Progression des chapitres</value>
+    </data>
+    <data name="UserStatsPage.ChaptersProgress.Read" xml:space="preserve">
+        <value>✅ Lus</value>
+    </data>
+    <data name="UserStatsPage.ChaptersProgress.Remaining" xml:space="preserve">
+        <value>⏳ Restants</value>
+    </data>
+    <data name="UserStatsPage.RankDistribution.Title" xml:space="preserve">
+        <value>Répartition par rang</value>
+    </data>
+    <data name="UserStatsPage.ReadsPerDay.Title" xml:space="preserve">
+        <value>Lectures par jour</value>
+    </data>
+    <data name="UserStatsPage.Charts.Completed" xml:space="preserve">
+        <value>Terminées</value>
+    </data>
+    <data name="UserStatsPage.Charts.InProgress" xml:space="preserve">
+        <value>En cours</value>
+    </data>
+    <data name="UserStatsPage.Charts.Remaining" xml:space="preserve">
+        <value>Restantes</value>
+    </data>
+    <data name="UserStatsPage.Charts.Read" xml:space="preserve">
+        <value>Lus</value>
+    </data>
+    <data name="UserStatsPage.Charts.RemainingChapters" xml:space="preserve">
+        <value>Restants</value>
+    </data>
+    <data name="UserStatsPage.Charts.SeriesCount" xml:space="preserve">
+        <value>Nombre de séries</value>
+    </data>
+    <data name="UserStatsPage.Charts.DailyReads" xml:space="preserve">
+        <value>Lectures par jour</value>
+    </data>
+    <data name="TagPage.Management" xml:space="preserve">
+        <value>Gestion des tags</value>
+    </data>
+    <data name="TagPage.Count" xml:space="preserve">
+        <value>🏷️ {0} tag(s) configuré(s)</value>
+    </data>
+    <data name="TagPage.NewTag" xml:space="preserve">
+        <value>Nouveau tag</value>
+    </data>
+    <data name="TagPage.NoTags" xml:space="preserve">
+        <value>Aucun tag configuré</value>
+    </data>
+    <data name="TagPage.NoTags.Description" xml:space="preserve">
+        <value>Créez des tags pour organiser et catégoriser vos séries.</value>
+    </data>
+    <data name="TagPage.CreateFirst" xml:space="preserve">
+        <value>Créer le premier tag</value>
+    </data>
+    <data name="TagPage.List" xml:space="preserve">
+        <value>Liste des tags</value>
+    </data>
+    <data name="TagPage.DefaultName" xml:space="preserve">
+        <value>Nouveau Tag</value>
+    </data>
+    <data name="TagPage.CreateError" xml:space="preserve">
+        <value>Erreur lors de la création du tag</value>
+    </data>
+    <data name="TagPage.UpdateError" xml:space="preserve">
+        <value>Erreur lors de la mise à jour du tag</value>
+    </data>
+    <data name="TagPage.DeleteError" xml:space="preserve">
+        <value>Erreur lors de la suppression du tag</value>
+    </data>
+    <data name="UserPage.Management" xml:space="preserve">
+        <value>Gestion des utilisateurs</value>
+    </data>
+    <data name="UserPage.Count" xml:space="preserve">
+        <value>👥 {0} utilisateur(s) enregistré(s)</value>
+    </data>
+    <data name="UserPage.Add" xml:space="preserve">
+        <value>Ajouter</value>
+    </data>
+    <data name="UserPage.NoUsers" xml:space="preserve">
+        <value>Aucun utilisateur</value>
+    </data>
+    <data name="UserPage.NoUsers.Description" xml:space="preserve">
+        <value>Commencez par créer votre premier utilisateur.</value>
+    </data>
+    <data name="UserPage.CreateFirst" xml:space="preserve">
+        <value>Créer un utilisateur</value>
+    </data>
+    <data name="UserPage.List" xml:space="preserve">
+        <value>Liste des utilisateurs</value>
+    </data>
+    <data name="UserPage.Permissions" xml:space="preserve">
+        <value>Permissions</value>
+    </data>
+    <data name="UserPage.CreateError" xml:space="preserve">
+        <value>Erreur lors de la création de l'utilisateur</value>
+    </data>
+    <data name="UserPage.DeleteError" xml:space="preserve">
+        <value>Erreur lors de la suppression de l'utilisateur</value>
+    </data>
+    <data name="UserPage.UpdatePermissionsError" xml:space="preserve">
+        <value>Erreur lors de la mise à jour des permissions</value>
+    </data>
+    <data name="LibraryCreatePopup.NewLibrary" xml:space="preserve">
+        <value>Nouvelle bibliothèque</value>
+    </data>
+    <data name="LibraryCreatePopup.Description" xml:space="preserve">
+        <value>Créez une nouvelle bibliothèque pour organiser vos séries</value>
+    </data>
+    <data name="LibraryCreatePopup.Name" xml:space="preserve">
+        <value>Nom de la bibliothèque</value>
+    </data>
+    <data name="LibraryCreatePopup.Name.Placeholder" xml:space="preserve">
+        <value>Entrez le nom de la bibliothèque...</value>
+    </data>
+    <data name="LibraryCreatePopup.Info" xml:space="preserve">
+        <value>Choisissez un nom descriptif pour votre bibliothèque. Les bibliothèques vous aident à organiser vos livres et à les retrouver facilement.</value>
+    </data>
+    <data name="RankEditPopup.Title" xml:space="preserve">
+        <value>Modifier le rang</value>
+    </data>
+    <data name="RankEditPopup.Description" xml:space="preserve">
+        <value>Modifiez les propriétés du rang</value>
+    </data>
+    <data name="RankEditPopup.Name" xml:space="preserve">
+        <value>Nom du rang</value>
+    </data>
+    <data name="RankEditPopup.Name.Placeholder" xml:space="preserve">
+        <value>Entrez le nom du rang...</value>
+    </data>
+    <data name="RankEditPopup.Value" xml:space="preserve">
+        <value>Valeur</value>
+    </data>
+    <data name="SavePointCreatePopup.Title" xml:space="preserve">
+        <value>Nouveau point de sauvegarde</value>
+    </data>
+    <data name="SavePointCreatePopup.Description" xml:space="preserve">
+        <value>Définissez un répertoire de sauvegarde pour vos séries</value>
+    </data>
+    <data name="SavePointCreatePopup.Path" xml:space="preserve">
+        <value>Chemin de sauvegarde</value>
+    </data>
+    <data name="SavePointCreatePopup.Path.Placeholder" xml:space="preserve">
+        <value>Entrez le chemin du répertoire...</value>
+    </data>
+    <data name="SavePointCreatePopup.Tip" xml:space="preserve">
+        <value>Sélectionnez un répertoire accessible où les séries seront stockées.</value>
+    </data>
+    <data name="SerieUpdatePopup.NoTags" xml:space="preserve">
+        <value>Aucun tag sélectionné</value>
+    </data>
+    <data name="SerieUpdatePopup.Tags.Placeholder" xml:space="preserve">
+        <value>Sélectionner un tag...</value>
+    </data>
+    <data name="SerieUpdatePopup.Tags" xml:space="preserve">
+        <value>Tags</value>
+    </data>
+    <data name="SerieUpdatePopup.Library" xml:space="preserve">
+        <value>Bibliothèque</value>
+    </data>
+    <data name="SerieUpdatePopup.Status" xml:space="preserve">
+        <value>Statut</value>
+    </data>
+    <data name="SerieUpdatePopup.Serie.Description.Placeholder" xml:space="preserve">
+        <value>Entrez la description de la série...</value>
+    </data>
+    <data name="SerieUpdatePopup.Serie.Description" xml:space="preserve">
+        <value>Description</value>
+    </data>
+    <data name="SerieUpdatePopup.Serie.Title.Placeholder" xml:space="preserve">
+        <value>Entrez le titre de la série...</value>
+    </data>
+    <data name="SerieUpdatePopup.Serie.Title" xml:space="preserve">
+        <value>Titre</value>
+    </data>
+    <data name="SerieUpdatePopup.Title" xml:space="preserve">
+        <value>Mettre à jour la série</value>
+    </data>
+    <data name="SerieUpdatePopup.Description" xml:space="preserve">
+        <value>Modifiez les informations de la série</value>
+    </data>
+    <data name="TagEditPopup.Color" xml:space="preserve">
+        <value>Couleur</value>
+    </data>
+    <data name="TagEditPopup.Name.Placeholder" xml:space="preserve">
+        <value>Entrez le nom du tag...</value>
+    </data>
+    <data name="TagEditPopup.Name" xml:space="preserve">
+        <value>Nom</value>
+    </data>
+    <data name="TagEditPopup.Description" xml:space="preserve">
+        <value>Modifiez les propriétés du tag</value>
+    </data>
+    <data name="TagEditPopup.Title" xml:space="preserve">
+        <value>Modifier le tag</value>
+    </data>
+    <data name="UserCreatePopup.Tip" xml:space="preserve">
+        <value>Les roles définissent les permissions par défault de l'utilisateur, ces permissions peuvent être modifiées ultérieurement dans la page utilisateurs.</value>
+    </data>
+    <data name="UserCreatePopup.Role" xml:space="preserve">
+        <value>Rôle utilisateur</value>
+    </data>
+    <data name="UserCreatePopup.Password.Placeholder" xml:space="preserve">
+        <value>Entrez le mot de passe...</value>
+    </data>
+    <data name="UserCreatePopup.Password" xml:space="preserve">
+        <value>Mot de passe</value>
+    </data>
+    <data name="UserCreatePopup.Username.Placeholder" xml:space="preserve">
+        <value>Entrez le nom d'utilisateur...</value>
+    </data>
+    <data name="UserCreatePopup.Username" xml:space="preserve">
+        <value>Nom d'utilisateur</value>
+    </data>
+    <data name="UserCreatePopup.Description" xml:space="preserve">
+        <value>Créez un nouveau compte utilisateur pour accéder à Manax</value>
+    </data>
+    <data name="UserCreatePopup.Title" xml:space="preserve">
+        <value>Nouvel utilisateur</value>
+    </data>
+    <data name="ConfirmCancelPopup.Cancel" xml:space="preserve">
+        <value>Annuler</value>
+    </data>
+    <data name="ConfirmCancelPopup.Confirm" xml:space="preserve">
+        <value>Confirmer</value>
+    </data>
+    <data name="MainWindow.RunningTasks" xml:space="preserve">
+        <value>Tâches en cours</value>
+    </data>
+    <data name="MainWindow.Stats.User" xml:space="preserve">
+        <value>Mes statistiques</value>
+    </data>
+    <data name="MainWindow.Stats" xml:space="preserve">
+        <value>Statistiques</value>
+    </data>
+    <data name="MainWindow.Parameters.UI" xml:space="preserve">
+        <value>Apparence</value>
+    </data>
+    <data name="MainWindow.Parameters.Server" xml:space="preserve">
+        <value>Paramètres serveur</value>
+    </data>
+    <data name="MainWindow.Parameters" xml:space="preserve">
+        <value>Paramètres</value>
+    </data>
+    <data name="MainWindow.Ranks" xml:space="preserve">
+        <value>Rangs</value>
+    </data>
+    <data name="MainWindow.Users" xml:space="preserve">
+        <value>Utilisateurs</value>
+    </data>
+    <data name="MainWindow.Issues" xml:space="preserve">
+        <value>Problèmes</value>
+    </data>
+    <data name="MainWindow.Admin" xml:space="preserve">
+        <value>Administration</value>
+    </data>
+    <data name="MainWindow.Libraries" xml:space="preserve">
+        <value>Bibliothèques</value>
+    </data>
+    <data name="MainWindow.Home" xml:space="preserve">
+        <value>Accueil</value>
+    </data>
+    <data name="MainWindow.Title" xml:space="preserve">
+        <value>Manax</value>
+    </data>
+    <data name="MainWindow.Tags" xml:space="preserve">
+        <value>Tags</value>
+    </data>
+    <data name="MainWindow.Stats.Server" xml:space="preserve">
+        <value>Statistiques serveur</value>
+    </data>
+    <data name="MainWindow.Logout" xml:space="preserve">
+        <value>Déconnection</value>
+    </data>
+    <data name="CreateChapterIssuePopup.Type" xml:space="preserve">
+        <value>Type de problème</value>
+    </data>
+    <data name="CreateChapterIssuePopup.Title" xml:space="preserve">
+        <value>Signaler un problème</value>
+    </data>
+    <data name="CreateChapterIssuePopup.Description" xml:space="preserve">
+        <value>Signaler un nouveau problème pour ce chapitre</value>
+    </data>
+    <data name="CreateChapterIssuePopup.Tip" xml:space="preserve">
+        <value>Signaler les problèmes aide les admins à les résoudres</value>
+    </data>
+</root>

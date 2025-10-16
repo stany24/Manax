@@ -10,6 +10,7 @@ using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData;
 using DynamicData.Binding;
+using Jeek.Avalonia.Localization;
 using ManaxClient.Models.Sources;
 using ManaxClient.ViewModels.Pages.Chapter;
 using ManaxClient.ViewModels.Popup.ConfirmCancel;
@@ -40,29 +41,24 @@ public partial class SeriePageViewModel : PageViewModel
         Serie.LoadInfo();
         Serie.LoadChapters();
         Serie.LoadPoster();
-        BindToRankChange();
+    }
+
+    partial void OnSelectedRankChanged(Models.Rank? value)
+    {
+        if (value == null) return;
+        UserRankCreateDto userRankCreateDto = new()
+        {
+            SerieId = Serie.Id,
+            RankId = value.Id
+        };
+        Task.Run(async () =>
+        {
+            Optional<bool> userRankResponse = await ManaxApiRankClient.SetUserRankAsync(userRankCreateDto);
+            InfoEmitted?.Invoke(this, userRankResponse.Failed ? userRankResponse.Error : Localizer.Get("SeriePage.RankSetCorrectly"));
+        });
     }
 
     public ReadOnlyObservableCollection<Models.Rank> Ranks => _ranks;
-
-    private void BindToRankChange()
-    {
-        PropertyChanged += (_, args) =>
-        {
-            if (args.PropertyName != nameof(SelectedRank)) return;
-            if (SelectedRank == null) return;
-            UserRankCreateDto userRankCreateDto = new()
-            {
-                SerieId = Serie.Id,
-                RankId = SelectedRank.Id
-            };
-            Task.Run(async () =>
-            {
-                Optional<bool> userRankResponse = await ManaxApiRankClient.SetUserRankAsync(userRankCreateDto);
-                InfoEmitted?.Invoke(this, userRankResponse.Failed ? userRankResponse.Error : "Rank set correctly");
-            });
-        };
-    }
 
     public void MoveToChapterPage(Models.Chapter chapter)
     {
@@ -86,7 +82,7 @@ public partial class SeriePageViewModel : PageViewModel
             }
             catch (Exception e)
             {
-                InfoEmitted?.Invoke(this, "Error updating serie");
+                InfoEmitted?.Invoke(this, Localizer.Get("SeriePage.ErrorUpdatingSerie"));
                 Logger.LogError("Failed to update serie with ID: " + Serie.Id, e);
             }
         };
@@ -108,7 +104,7 @@ public partial class SeriePageViewModel : PageViewModel
             IReadOnlyList<IStorageFile> files = await window.StorageProvider.OpenFilePickerAsync(
                 new FilePickerOpenOptions
                 {
-                    Title = "Sélectionnez une image pour le poster",
+                    Title = Localizer.Get("SeriePage.SelectPosterImage"),
                     AllowMultiple = false,
                     FileTypeFilter =
                     [
@@ -135,13 +131,13 @@ public partial class SeriePageViewModel : PageViewModel
             }
             else
             {
-                InfoEmitted?.Invoke(this, "Poster replaced successfully");
+                InfoEmitted?.Invoke(this, Localizer.Get("SeriePage.PosterReplacedSuccess"));
                 Logger.LogInfo("Poster replaced successfully for serie ID: " + Serie.Id);
             }
         }
         catch (Exception e)
         {
-            InfoEmitted?.Invoke(this, "Error replacing poster");
+            InfoEmitted?.Invoke(this, Localizer.Get("SeriePage.ErrorReplacingPoster"));
             Logger.LogError("Error replacing poster for serie ID: " + Serie.Id, e);
         }
     }

@@ -43,7 +43,7 @@ public partial class IssueSerieReported : ObservableObject
             .Subscribe(changes =>
             {
                 using IEnumerator<Change<Serie, long>> enumerator = changes.GetEnumerator();
-                Serie = enumerator.Current.Current;
+                if (enumerator.MoveNext()) Serie = enumerator.Current.Current;
             });
 
         _subscriptionUser?.Dispose();
@@ -54,7 +54,7 @@ public partial class IssueSerieReported : ObservableObject
             .Subscribe(changes =>
             {
                 using IEnumerator<Change<User, long>> enumerator = changes.GetEnumerator();
-                User = enumerator.Current.Current;
+                if (enumerator.MoveNext()) User = enumerator.Current.Current;
             });
 
         _subscriptionProblem?.Dispose();
@@ -65,7 +65,7 @@ public partial class IssueSerieReported : ObservableObject
             .Subscribe(changes =>
             {
                 using IEnumerator<Change<IssueChapterReportedType, long>> enumerator = changes.GetEnumerator();
-                Problem = enumerator.Current.Current;
+                if (enumerator.MoveNext()) Problem = enumerator.Current.Current;
             });
     }
 }

@@ -1,9 +1,12 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
+using Jeek.Avalonia.Localization;
 using ManaxClient.Models;
 using ManaxClient.ViewModels.Pages.Home;
 using ManaxLibrary;
@@ -13,7 +16,7 @@ using Logger = ManaxLibrary.Logging.Logger;
 
 namespace ManaxClient.ViewModels.Pages.Login;
 
-public partial class LoginPageViewModel : PageViewModel
+public sealed partial class LoginPageViewModel : PageViewModel
 {
     private readonly string _saveFile;
     [ObservableProperty] private bool _canLogin = true;
@@ -24,13 +27,39 @@ public partial class LoginPageViewModel : PageViewModel
     [ObservableProperty] private string _password = string.Empty;
     [ObservableProperty] private int? _port;
     [ObservableProperty] private string _username = string.Empty;
+    
+    [ObservableProperty] private List<LanguageItem> _availableLanguages = [];
+    [ObservableProperty] private LanguageItem? _selectedLanguage;
 
     public LoginPageViewModel()
     {
         ManaxApiConfig.ResetToken();
         _saveFile = Path.Combine(Directory.GetCurrentDirectory(), "login.json");
         ControlBarVisible = false;
+        
+        InitializeLanguages();
         TryLoadSavedLogin();
+    }
+
+    private void InitializeLanguages()
+    {
+        AvailableLanguages = 
+        [
+            new LanguageItem { Code = "en", DisplayName = "English" },
+            new LanguageItem { Code = "fr", DisplayName = "Français" }
+        ];
+        
+        string currentLanguage = Localizer.Language;
+        if (string.IsNullOrEmpty(currentLanguage)) {currentLanguage = "en";}
+        SelectedLanguage = AvailableLanguages.FirstOrDefault(l => l.Code == currentLanguage);
+    }
+
+    partial void OnSelectedLanguageChanged(LanguageItem? value)
+    {
+        if (value != null && value.Code != Localizer.Language)
+        {
+            Localizer.Language = value.Code;
+        }
     }
 
     public void Login()

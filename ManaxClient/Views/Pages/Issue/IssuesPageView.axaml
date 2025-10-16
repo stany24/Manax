@@ -7,6 +7,8 @@
     xmlns:issue="clr-namespace:ManaxClient.Models.Issue"
     xmlns:page="clr-namespace:ManaxClient.ViewModels.Pages.Issue"
     xmlns:viewModels="clr-namespace:ManaxClient.ViewModels"
+    xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
+    xmlns:localization1="clr-namespace:ManaxClient.Localization"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Pages.Issue.IssuesPageView"
     x:DataType="page:IssuesPageViewModel"
@@ -15,7 +17,7 @@
     <UserControl.Resources>
         <DataTemplate x:Key="AutomaticChapterIssueTemplate" DataType="issue:IssueChapterAutomatic">
             <previews:IssuePreview IssueColor="#DC3545"
-                                   BadgeText="Automatique"
+                                   BadgeText="{Binding AutomaticBadgeText}"
                                    Closable="False"
                                    Margin="0,0,0,8"
                                    Command="{Binding $parent[UserControl].((page:IssuesPageViewModel)DataContext).OnChapterIssueClicked}"
@@ -26,17 +28,14 @@
                     </MultiBinding>
                 </previews:IssuePreview.Problem>
                 <previews:IssuePreview.Info>
-                    <MultiBinding StringFormat="Chapitre: {0} • {1:dd/MM/yyyy HH:mm}">
-                        <Binding Path="Chapter.FileName" />
-                        <Binding Path="CreatedAt" />
-                    </MultiBinding>
+                    <Binding Path="FormattedInfo" />
                 </previews:IssuePreview.Info>
             </previews:IssuePreview>
         </DataTemplate>
 
         <DataTemplate x:Key="AutomaticSerieIssueTemplate" DataType="issue:IssueSerieAutomatic">
             <previews:IssuePreview IssueColor="#DC3545"
-                                   BadgeText="Automatique"
+                                   BadgeText="{Binding AutomaticBadgeText}"
                                    Closable="False"
                                    Margin="0,0,0,8"
                                    Command="{Binding $parent[UserControl].((page:IssuesPageViewModel)DataContext).OpenSeriePage}"
@@ -47,63 +46,54 @@
                     </MultiBinding>
                 </previews:IssuePreview.Problem>
                 <previews:IssuePreview.Info>
-                    <MultiBinding StringFormat="Série: {0} • {1:dd/MM/yyyy HH:mm}">
-                        <Binding Path="Serie.Title" />
-                        <Binding Path="CreatedAt" />
-                    </MultiBinding>
+                    <Binding Path="FormattedInfo" />
                 </previews:IssuePreview.Info>
             </previews:IssuePreview>
         </DataTemplate>
 
         <DataTemplate x:Key="ReportedChapterIssueTemplate" DataType="issue:IssueChapterReported">
             <previews:IssuePreview IssueColor="#FD7E14"
-                                   BadgeText="Signalé"
+                                   BadgeText="{localization:Localize IssuesPage.Reported}"
                                    Closable="True"
                                    Problem="{Binding Problem.Name}"
                                    Margin="0,0,0,8"
                                    CloseCommand="{Binding Close}"
                                    Command="{Binding $parent[UserControl].((page:IssuesPageViewModel)DataContext).OnChapterIssueClicked}"
-                                   CommandParameter="{Binding Chapter}">
-                <previews:IssuePreview.Info>
-                    <MultiBinding StringFormat="Chapitre: {0} • Utilisateur: {1} • {2:dd/MM/yyyy HH:mm}">
-                        <Binding Path="Chapter.FileName" />
-                        <Binding Path="User.Username" />
-                        <Binding Path="CreatedAt" />
-                    </MultiBinding>
-                </previews:IssuePreview.Info>
+                                   CommandParameter="{Binding Chapter}"
+                                   Info="{localization1:LocalizeFormat IssuesPage.ChapterUserInfo,
+                                   Param1={Binding Chapter.FileName},
+                                   Param2={Binding User.Username},
+                                   Param3={Binding CreatedAt}}">
             </previews:IssuePreview>
         </DataTemplate>
 
         <DataTemplate x:Key="ReportedSerieIssueTemplate" DataType="issue:IssueSerieReported">
             <previews:IssuePreview IssueColor="#FD7E14"
-                                   BadgeText="Signalé"
+                                   BadgeText="{localization:Localize IssuesPage.Reported}"
                                    Closable="True"
                                    Problem="{Binding Problem.Name}"
                                    Margin="0,0,0,8"
                                    CloseCommand="{Binding Close}"
                                    Command="{Binding $parent[UserControl].((page:IssuesPageViewModel)DataContext).OpenSeriePage}"
-                                   CommandParameter="{Binding Serie}">
-                <previews:IssuePreview.Info>
-                    <MultiBinding StringFormat="Série: {0} • Utilisateur: {1} • {2:dd/MM/yyyy HH:mm}">
-                        <Binding Path="Serie.Title" />
-                        <Binding Path="User.Username" />
-                        <Binding Path="CreatedAt" />
-                    </MultiBinding>
-                </previews:IssuePreview.Info>
+                                   CommandParameter="{Binding Serie}"
+                                   Info="{localization1:LocalizeFormat IssuesPage.SerieUserInfo,
+                                   Param1={Binding Serie.Title},
+                                   Param2={Binding User.Username},
+                                   Param3={Binding CreatedAt}}">>
             </previews:IssuePreview>
         </DataTemplate>
     </UserControl.Resources>
 
     <ScrollViewer>
         <StackPanel Margin="24" Spacing="24">
-            <TextBlock Text="Gestion des Problèmes"
+            <TextBlock Text="{localization:Localize IssuesPage.Title}"
                        FontSize="28"
                        FontWeight="Bold"
                        Foreground="#212529" />
 
             <StackPanel Orientation="Horizontal" Spacing="16">
                 <ToggleButton x:Name="AutomaticToggle"
-                              Content="Automatiques"
+                              Content="{localization:Localize IssuesPage.Automatic}"
                               IsChecked="{Binding ShowAutomaticIssues}"
                               Padding="12,8"
                               CornerRadius="8"
@@ -112,7 +102,7 @@
                               BorderThickness="0" />
 
                 <ToggleButton x:Name="ReportedToggle"
-                              Content="Signalés"
+                              Content="{localization:Localize IssuesPage.Reported}"
                               IsChecked="{Binding !ShowAutomaticIssues}"
                               Padding="12,8"
                               CornerRadius="8"
@@ -123,7 +113,7 @@
                 <Border Width="1" Height="24" Background="#DEE2E6" VerticalAlignment="Center" />
 
                 <ToggleButton x:Name="ChapterToggle"
-                              Content="Chapitres"
+                              Content="{localization:Localize IssuesPage.Chapters}"
                               IsChecked="{Binding ShowChapterIssues}"
                               Padding="12,8"
                               CornerRadius="8"
@@ -132,7 +122,7 @@
                               BorderThickness="0" />
 
                 <ToggleButton x:Name="SerieToggle"
-                              Content="Séries"
+                              Content="{localization:Localize IssuesPage.Series}"
                               IsChecked="{Binding !ShowChapterIssues}"
                               Padding="12,8"
                               CornerRadius="8"
@@ -144,7 +134,7 @@
             <StackPanel Spacing="16">
                 <StackPanel IsVisible="{Binding ShowAutomaticIssues}">
                     <StackPanel IsVisible="{Binding ShowChapterIssues}" Spacing="12">
-                        <TextBlock Text="Problèmes Automatiques - Chapitres"
+                        <TextBlock Text="{localization:Localize IssuesPage.AutomaticChapters}"
                                    FontSize="18"
                                    FontWeight="SemiBold"
                                    Foreground="#495057" />
@@ -152,14 +142,14 @@
                         <ItemsControl ItemsSource="{Binding IssueChapterAutomatic}"
                                       ItemTemplate="{StaticResource AutomaticChapterIssueTemplate}" />
 
-                        <TextBlock Text="Aucun problème automatique de chapitre trouvé"
+                        <TextBlock Text="{localization:Localize IssuesPage.NoAutomaticChapter}"
                                    FontStyle="Italic"
                                    Foreground="#6C757D"
                                    IsVisible="{Binding IssueChapterAutomatic.Count, Converter={x:Static StringConverters.IsNullOrEmpty}}" />
                     </StackPanel>
 
                     <StackPanel IsVisible="{Binding !ShowChapterIssues}" Spacing="12">
-                        <TextBlock Text="Problèmes Automatiques - Séries"
+                        <TextBlock Text="{localization:Localize IssuesPage.AutomaticSeries}"
                                    FontSize="18"
                                    FontWeight="SemiBold"
                                    Foreground="#495057" />
@@ -167,7 +157,7 @@
                         <ItemsControl ItemsSource="{Binding IssueSerieAutomatic}"
                                       ItemTemplate="{StaticResource AutomaticSerieIssueTemplate}" />
 
-                        <TextBlock Text="Aucun problème automatique de série trouvé"
+                        <TextBlock Text="{localization:Localize IssuesPage.NoAutomaticSeries}"
                                    FontStyle="Italic"
                                    Foreground="#6C757D"
                                    IsVisible="{Binding IssueSerieAutomatic.Count, Converter={x:Static StringConverters.IsNullOrEmpty}}" />
@@ -176,7 +166,7 @@
 
                 <StackPanel IsVisible="{Binding !ShowAutomaticIssues}">
                     <StackPanel IsVisible="{Binding ShowChapterIssues}" Spacing="12">
-                        <TextBlock Text="Problèmes Signalés - Chapitres"
+                        <TextBlock Text="{localization:Localize IssuesPage.ReportedChapters}"
                                    FontSize="18"
                                    FontWeight="SemiBold"
                                    Foreground="#495057" />
@@ -184,14 +174,14 @@
                         <ItemsControl ItemsSource="{Binding IssueChapterReported}"
                                       ItemTemplate="{StaticResource ReportedChapterIssueTemplate}" />
 
-                        <TextBlock Text="Aucun problème signalé de chapitre trouvé"
+                        <TextBlock Text="{localization:Localize IssuesPage.NoReportedChapter}"
                                    FontStyle="Italic"
                                    Foreground="#6C757D"
                                    IsVisible="{Binding IssueChapterReported.Count, Converter={x:Static StringConverters.IsNullOrEmpty}}" />
                     </StackPanel>
 
                     <StackPanel IsVisible="{Binding !ShowChapterIssues}" Spacing="12">
-                        <TextBlock Text="Problèmes Signalés - Séries"
+                        <TextBlock Text="{localization:Localize IssuesPage.ReportedSeries}"
                                    FontSize="18"
                                    FontWeight="SemiBold"
                                    Foreground="#495057" />
@@ -199,7 +189,7 @@
                         <ItemsControl ItemsSource="{Binding IssueSerieReported}"
                                       ItemTemplate="{StaticResource ReportedSerieIssueTemplate}" />
 
-                        <TextBlock Text="Aucun problème signalé de série trouvé"
+                        <TextBlock Text="{localization:Localize IssuesPage.NoReportedSeries}"
                                    FontStyle="Italic"
                                    Foreground="#6C757D"
                                    IsVisible="{Binding IssueSerieReported.Count, Converter={x:Static StringConverters.IsNullOrEmpty}}" />
