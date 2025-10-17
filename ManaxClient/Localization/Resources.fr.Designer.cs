@@ -1388,5 +1388,11 @@ namespace ManaxClient.Localization {
                 return ResourceManager.GetString("CreateChapterIssuePopup.Tip", resourceCulture);
             }
         }
+        
+        public static string LoginPage_Invalid_Host_Port {
+            get {
+                return ResourceManager.GetString("LoginPage.Invalid.Host.Port", resourceCulture);
+            }
+        }
     }
 }

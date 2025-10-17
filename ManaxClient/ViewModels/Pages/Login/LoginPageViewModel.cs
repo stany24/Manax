@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
-using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Jeek.Avalonia.Localization;
 using ManaxClient.Models;
@@ -12,7 +11,7 @@ using ManaxClient.ViewModels.Pages.Home;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTO.User;
-using Logger = ManaxLibrary.Logging.Logger;
+using ManaxLibrary.Logging;
 
 namespace ManaxClient.ViewModels.Pages.Login;
 
@@ -23,7 +22,6 @@ public sealed partial class LoginPageViewModel : PageViewModel
     [ObservableProperty] private string _emoji = "🔑";
     [ObservableProperty] private string _host = string.Empty;
     private bool _isAdmin;
-    [ObservableProperty] private string _loginError = string.Empty;
     [ObservableProperty] private string _password = string.Empty;
     [ObservableProperty] private int? _port;
     [ObservableProperty] private string _username = string.Empty;
@@ -64,24 +62,42 @@ public sealed partial class LoginPageViewModel : PageViewModel
 
     public void Login()
     {
-        LoginError = string.Empty;
+        Block();
+        Uri hostUri;
+        try
+        {
+            hostUri = Port != null ? new Uri(Host + $":{Port}/") : new Uri(Host);
+        }
+        catch
+        {
+            Release(Localizer.Get("LoginPage.Invalid.Host.Port"));
+            return;
+        }
         Task.Run(async () =>
         {
-            CanLogin = false;
-            Emoji = "⌛";
-            Uri hostUri = Port != null ? new Uri(Host + $":{Port}/") : new Uri(Host);
             ManaxApiConfig.SetHost(hostUri);
             Optional<UserLoginResultDto> loginResponse = await ManaxApiUserClient.LoginAsync(Username, Password);
             if (loginResponse.Failed)
             {
-                InfoEmitted?.Invoke(this, loginResponse.Error);
-                CanLogin = true;
-                Emoji = "🔑";
+                Release(loginResponse.Error);
                 return;
             }
 
             CheckToken(loginResponse.GetValue());
         });
+    }
+
+    private void Block()
+    {
+        CanLogin = false;
+        Emoji = "⌛";
+    }
+
+    private void Release(string errorMessage)
+    {
+        InfoEmitted?.Invoke(this,errorMessage);
+        CanLogin = true;
+        Emoji = "🔑";
     }
 
     private void CheckToken(UserLoginResultDto result)
@@ -99,7 +115,7 @@ public sealed partial class LoginPageViewModel : PageViewModel
         }
         catch (Exception)
         {
-            Dispatcher.UIThread.Post(() => { LoginError = "Unknown error"; });
+            InfoEmitted?.Invoke(this,"Unknown error while checking token");
         }
     }
 

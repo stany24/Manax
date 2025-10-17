@@ -690,4 +690,7 @@
     <data name="CreateChapterIssuePopup.Tip" xml:space="preserve">
         <value>Reporting chapter issue helps the admins to fix them</value>
     </data>
+    <data name="LoginPage.Invalid.Host.Port" xml:space="preserve">
+        <value>Invalid host or port</value>
+    </data>
 </root>
