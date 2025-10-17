@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData;
 using ManaxClient.Models.Sources;
+using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTO.Issue.Reported;
 
@@ -27,7 +28,14 @@ public partial class IssueChapterReported : ObservableObject
 
     public void Close()
     {
-        Task.Run(async () => { await ManaxApiIssueClient.CloseChapterIssueAsync(Id); });
+        Task.Run(async () =>
+        {
+            Optional<bool> response =await ManaxApiIssueClient.CloseChapterIssueAsync(Id);
+            if (response.Failed)
+            {
+                IssueSource.ErrorEmitted?.Invoke(this, response.Error);
+            }
+        });
     }
 
     private void FromDto(IssueChapterReportedDto dto)
