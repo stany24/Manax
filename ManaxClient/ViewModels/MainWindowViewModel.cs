@@ -9,7 +9,6 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData;
 using DynamicData.Binding;
 using ManaxClient.Models;
-using ManaxClient.Models.Collections;
 using ManaxClient.Models.History;
 using ManaxClient.Models.Issue;
 using ManaxClient.Models.Sources;
@@ -41,7 +40,7 @@ public partial class MainWindowViewModel : ObservableObject
     [ObservableProperty] private bool _isAdmin;
     [ObservableProperty] private Thickness _pageMargin = new(0, 0, 0, 0);
     [ObservableProperty] private Controls.Popups.Popup? _popup;
-    [ObservableProperty] private SortedObservableCollection<TaskItem> _runningTasks = new([]);
+    [ObservableProperty] private ObservableCollection<TaskItem> _runningTasks = new([]);
 
     public MainWindowViewModel()
     {
@@ -51,7 +50,6 @@ public partial class MainWindowViewModel : ObservableObject
             .SortAndBind(out _libraries, comparer)
             .Subscribe();
 
-        RunningTasks.SortingSelector = t => t.TaskName;
         _history.OnPageChanged += _ =>
         {
             if (CurrentPageViewModel == null) return;
