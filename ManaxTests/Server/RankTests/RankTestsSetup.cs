@@ -12,6 +12,7 @@ public abstract class RankTestsSetup
 {
     private ManaxMapper _mapper = null!;
     private MockNotificationService _mockNotificationService = null!;
+    private MockFeatureService _mockFeatureService = null!;
     protected ManaxContext Context = null!;
     protected RankController Controller = null!;
 
@@ -22,8 +23,9 @@ public abstract class RankTestsSetup
 
         _mapper = new ManaxMapper(new ManaxMapping());
         _mockNotificationService = new MockNotificationService();
+        _mockFeatureService = new MockFeatureService();
 
-        Controller = new RankController(Context, _mapper, _mockNotificationService);
+        Controller = new RankController(Context, _mapper, _mockNotificationService,_mockFeatureService);
 
         ClaimsPrincipal user = new(new ClaimsIdentity([
             new Claim(ClaimTypes.NameIdentifier, "1"),

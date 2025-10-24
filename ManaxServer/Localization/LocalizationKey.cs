@@ -76,5 +76,7 @@ public enum LocalizationKey
     PasswordNoUppercase,
     PasswordNoSpecialCharacterOrDigit,
 
-    TagNotFound
+    TagNotFound,
+    
+    FeatureDisabled,
 }

@@ -1,3 +1,5 @@
+using ManaxLibrary.DTO.Feature;
+
 namespace ManaxServer.Services.Feature;
 
 public interface IFeatureService

@@ -1,4 +1,4 @@
-namespace ManaxServer.Services.Feature;
+namespace ManaxLibrary.DTO.Feature;
 
 public enum FeatureType
 {
