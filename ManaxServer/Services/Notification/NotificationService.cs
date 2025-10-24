@@ -12,6 +12,7 @@ using ManaxLibrary.DTO.User;
 using ManaxLibrary.Logging;
 using ManaxLibrary.Notifications;
 using ManaxServer.Localization;
+using ManaxServer.Services.Feature;
 using ManaxServer.Services.Permission;
 using Microsoft.AspNetCore.SignalR;
 
@@ -179,6 +180,12 @@ public class NotificationService(IHubContext<NotificationService> hubContext, IP
     {
         TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadTags, NotificationType.TagDeleted,
             tagId);
+    }
+
+    public void NotifyFeatureChanged(FeatureType featureType, bool enabled)
+    {
+        TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadFeatures,
+            NotificationType.FeatureChanged, new { Feature = featureType, Enabled = enabled });
     }
 
     public override async Task OnConnectedAsync()

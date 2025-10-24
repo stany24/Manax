@@ -6,6 +6,7 @@ using ManaxLibrary.DTO.Read;
 using ManaxLibrary.DTO.Serie;
 using ManaxLibrary.DTO.Tag;
 using ManaxLibrary.DTO.User;
+using ManaxServer.Services.Feature;
 using ManaxServer.Services.Notification;
 
 namespace ManaxTests.Server.Mocks;
@@ -131,5 +132,9 @@ public class MockNotificationService : INotificationService
     public void NotifyTagDeletedAsync(long tagId)
     {
         TagDeletedId = tagId;
+    }
+
+    public void NotifyFeatureChanged(FeatureType featureType, bool enabled)
+    {
     }
 }
