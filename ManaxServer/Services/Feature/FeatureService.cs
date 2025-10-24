@@ -7,7 +7,7 @@ namespace ManaxServer.Services.Feature;
 public class FeatureService:Service,IFeatureService
 {
     private readonly HashSet<FeatureType> _enabledFeatures = [];
-    public readonly string FileName = "features.json";
+    private const string FileName = "features.json";
     private readonly INotificationService _notificationService;
     
     public FeatureService(INotificationService notificationService)
@@ -52,9 +52,9 @@ public class FeatureService:Service,IFeatureService
         return Enum.TryParse(featureName, out FeatureType featureType) && IsFeatureEnabled(featureType);
     }
 
-    public List<FeatureType> GetEnabledFeatures()
+    public FeaturesDto GetEnabledFeatures()
     {
-        return _enabledFeatures.ToList();
+        return new FeaturesDto(_enabledFeatures.ToList());
     }
 
     public void SetFeatureEnabled(FeatureType featureType, bool enabled)

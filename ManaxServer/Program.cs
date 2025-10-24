@@ -5,6 +5,7 @@ using ManaxServer.Models;
 using ManaxServer.Models.Issue.Reported;
 using ManaxServer.Models.Rank;
 using ManaxServer.Services.BackgroundTask;
+using ManaxServer.Services.Feature;
 using ManaxServer.Services.Fix;
 using ManaxServer.Services.Hash;
 using ManaxServer.Services.Issue;
@@ -58,6 +59,8 @@ public class Program
                 provider.GetRequiredService<IIssueService>()));
         builder.Services.AddSingleton<IPasswordValidationService>(_ =>
             new PasswordValidationService(builder.Environment.IsProduction()));
+        builder.Services.AddSingleton<IFeatureService>(provider =>
+            new FeatureService(provider.GetRequiredService<INotificationService>()));
         AddRateLimiting(builder);
 
         builder.Services.AddScoped<IMapper>(_ => new ManaxMapper(new ManaxMapping()));

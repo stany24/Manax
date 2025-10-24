@@ -5,6 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
+    xmlns:converters="clr-namespace:ManaxClient.Converters"
     mc:Ignorable="d" d:DesignWidth="1200" d:DesignHeight="800"
     x:Class="ManaxClient.Views.MainWindow"
     x:DataType="vm:MainWindowViewModel"
@@ -73,8 +74,16 @@
                                IsVisible="{Binding IsAdmin}" />
 
                     <Button Classes="sidebar"
-                            IsVisible="{Binding CanReadAllIssues}"
                             Command="{Binding ChangePageIssues}">
+                        <Button.IsVisible>
+                            <MultiBinding Converter="{x:Static BoolConverters.And}">
+                                <Binding Converter="{x:Static BoolConverters.Or}">
+                                    <Binding Path="AutomaticIssuesFeatureEnabled" />
+                                    <Binding Path="ReportedIssuesFeatureEnabled" />
+                                </Binding>
+                                <Binding Path="CanReadRanks" />
+                            </MultiBinding>
+                        </Button.IsVisible>
                         <StackPanel Orientation="Horizontal" Spacing="12">
                             <TextBlock Text="⚙️" FontSize="14" />
                             <TextBlock Text="{localization:Localize MainWindow.Issues}" />
@@ -91,8 +100,13 @@
                     </Button>
 
                     <Button Classes="sidebar"
-                            IsVisible="{Binding CanReadRanks}"
                             Command="{Binding ChangePageRanks}">
+                        <Button.IsVisible>
+                            <MultiBinding Converter="{x:Static BoolConverters.And}">
+                                <Binding Path="RankFeatureEnabled" />
+                                <Binding Path="CanReadRanks" />
+                            </MultiBinding>
+                        </Button.IsVisible>
                         <StackPanel Orientation="Horizontal" Spacing="12">
                             <TextBlock Text="🏆" FontSize="14" />
                             <TextBlock Text="{localization:Localize MainWindow.Ranks}" />

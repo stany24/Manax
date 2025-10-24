@@ -75,7 +75,9 @@ public partial class MainWindowViewModel : ObservableObject
             IsAdmin = login.IsAdmin();
             ServerNotification.OnRunningTasks += OnRunningTasks;
             ServerNotification.OnPermissionModified += OnPermissionModified;
+            ServerNotification.OnFeatureModified += OnFeatureModified;
             Task.Run(LoadPermissions);
+            Task.Run(LoadFeatures);
             LibrarySource.LoadLibraries();
         };
 

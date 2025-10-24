@@ -186,7 +186,7 @@ public class NotificationService(IHubContext<NotificationService> hubContext, IP
     public void NotifyFeatureChanged(FeatureType featureType, bool enabled)
     {
         TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadFeatures,
-            NotificationType.FeatureChanged, new { Feature = featureType, Enabled = enabled });
+            NotificationType.FeatureModified, new { Feature = featureType, Enabled = enabled });
     }
 
     public override async Task OnConnectedAsync()

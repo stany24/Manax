@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ManaxServer.Controllers;
 
-[Route("api/tag")]
+[Route("api/feature")]
 [ApiController]
 public class FeatureController(IFeatureService featureService)
     : ControllerBase
@@ -14,12 +14,12 @@ public class FeatureController(IFeatureService featureService)
     [HttpGet("/api/features")]
     [RequirePermission(Permission.ReadFeatures)]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public IEnumerable<FeatureType> GetFeatures()
+    public FeaturesDto GetFeatures()
     {
         return featureService.GetEnabledFeatures();
     }
     
-    [HttpPost]
+    [HttpPost("{featureName}/{enabled:bool}")]
     [RequirePermission(Permission.WriteFeatures)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public IActionResult SetFeature(string featureName, bool enabled)
@@ -28,7 +28,7 @@ public class FeatureController(IFeatureService featureService)
         return Ok();
     }
     
-    [HttpPost]
+    [HttpPut("/api/features")]
     [RequirePermission(Permission.WriteFeatures)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public IActionResult SetFeatures(FeaturesDto features)

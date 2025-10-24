@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTO.User;
+using ManaxLibrary.Logging;
 
 namespace ManaxClient.ViewModels;
 
@@ -66,27 +68,38 @@ public partial class MainWindowViewModel
     public bool CanWriteTags => _permissions.Contains(Permission.WriteTags);
     public bool CanDeleteTags => _permissions.Contains(Permission.DeleteTags);
     public bool CanSetSerieTags => _permissions.Contains(Permission.SetSerieTags);
+    
+    // Feature permissions
+    public bool CanReadFeatures => _permissions.Contains(Permission.ReadFeatures);
+    public bool CanWriteFeatures => _permissions.Contains(Permission.WriteFeatures);
 
     private async void LoadPermissions()
     {
-        Optional<List<Permission>> myPermissionsAsync = await ManaxApiPermissionClient.GetMyPermissionsAsync();
-        if (myPermissionsAsync.Failed)
+        try
         {
-            ShowInfo(myPermissionsAsync.Error);
-            return;
-        }
+            Optional<List<Permission>> myPermissionsAsync = await ManaxApiPermissionClient.GetMyPermissionsAsync();
+            if (myPermissionsAsync.Failed)
+            {
+                ShowInfo(myPermissionsAsync.Error);
+                return;
+            }
 
-        _permissions = myPermissionsAsync.GetValue();
-        NotifyAll();
+            _permissions = myPermissionsAsync.GetValue();
+            NotifyAllForPermissionChanged();
+        }
+        catch (Exception e)
+        {
+            Logger.LogError("Failed to load permissions", e);
+        }
     }
 
     private void OnPermissionModified(List<Permission> permissions)
     {
         _permissions = permissions;
-        NotifyAll();
+        NotifyAllForPermissionChanged();
     }
 
-    private void NotifyAll()
+    private void NotifyAllForPermissionChanged()
     {
         PropertyInfo[] propertyInfos = GetType().GetProperties();
         foreach (PropertyInfo propertyInfo in propertyInfos)

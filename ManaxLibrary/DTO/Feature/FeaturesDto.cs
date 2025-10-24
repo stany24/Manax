@@ -1,10 +1,8 @@
-using System.Collections.ObjectModel;
-
 namespace ManaxLibrary.DTO.Feature;
 
 public class FeaturesDto
 {
-    public ObservableCollection<KeyValuePair<FeatureType,bool>> Features { get; set;  } = [];
+    public List<KeyValuePair<FeatureType,bool>> Features { get; set;  } = [];
 
     public FeaturesDto(List<FeatureType> enabledFeatures)
     {
@@ -13,5 +11,10 @@ public class FeaturesDto
         {
             Features.Add(new KeyValuePair<FeatureType, bool>(value, enabledFeatures.Contains(value)));
         }
+    }
+
+    public bool IsEnabled(FeatureType feature)
+    {
+        return Features.FirstOrDefault(f => f.Key == feature).Value;
     }
 }
