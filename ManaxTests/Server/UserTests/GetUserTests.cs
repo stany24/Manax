@@ -17,7 +17,7 @@ public class GetUserTests : UserTestsSetup
 
         List<long>? returnedIds = result.Value as List<long>;
         Assert.IsNotNull(returnedIds);
-        Assert.AreEqual(Context.Users.Count(), returnedIds.Count);
+        Assert.HasCount(Context.Users.Count(), returnedIds);
         foreach (User user in Context.Users) Assert.Contains(user.Id, returnedIds);
     }
 

@@ -148,6 +148,6 @@ public class CreateTagTests : TagTestsSetup
 
         Tag? createdTag = await Context.Tags.FirstOrDefaultAsync(t => t.Name == "TestId");
         Assert.IsNotNull(createdTag);
-        Assert.IsTrue(createdTag.Id > 0);
+        Assert.IsGreaterThan(0, createdTag.Id);
     }
 }

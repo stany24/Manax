@@ -19,7 +19,7 @@ public class GetSerieTests : SerieTestsSetup
         List<long>? returnedIds = result.Value as List<long>;
         Assert.IsNotNull(returnedIds);
 
-        Assert.AreEqual(Context.Series.Count(), returnedIds.Count);
+        Assert.HasCount(Context.Series.Count(), returnedIds);
         foreach (Serie serie in Context.Series) Assert.Contains(serie.Id, returnedIds);
     }
 
@@ -59,7 +59,7 @@ public class GetSerieTests : SerieTestsSetup
         Assert.IsNotNull(result.Value);
 
         List<long> returnedIds = result.Value.ToList();
-        Assert.AreEqual(chaptersOfSerie.Count, returnedIds.Count);
+        Assert.HasCount(chaptersOfSerie.Count, returnedIds);
         foreach (Chapter chapter in chaptersOfSerie) Assert.Contains(chapter.Id, returnedIds);
     }
 

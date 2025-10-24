@@ -19,7 +19,7 @@ public class GetRankTests : RankTestsSetup
         Assert.IsNotNull(returnedRanks);
 
         List<UserRank> expectedUserRanks = Context.UserRanks.Where(ur => ur.UserId == 1).ToList();
-        Assert.AreEqual(expectedUserRanks.Count, returnedRanks.Count);
+        Assert.HasCount(expectedUserRanks.Count, returnedRanks);
 
         foreach (UserRank expectedRank in expectedUserRanks)
         {
@@ -40,7 +40,7 @@ public class GetRankTests : RankTestsSetup
 
         List<RankDto>? returnedRanks = result.Value as List<RankDto>;
         Assert.IsNotNull(returnedRanks);
-        Assert.AreEqual(Context.Ranks.Count(), returnedRanks.Count);
+        Assert.HasCount(Context.Ranks.Count(), returnedRanks);
         foreach (Rank rank in Context.Ranks)
         {
             RankDto? returnedRank = returnedRanks.FirstOrDefault(r => r.Id == rank.Id);
