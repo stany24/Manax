@@ -14,6 +14,10 @@
     MinWidth="960"
     MinHeight="500"
     WindowStartupLocation="CenterScreen">
+    
+    <Window.Resources>
+        <converters:IssuePageVisibleConverter x:Key="IssuePageVisibleConverter" />
+    </Window.Resources>
 
     <Panel>
         <Grid
@@ -76,12 +80,10 @@
                     <Button Classes="sidebar"
                             Command="{Binding ChangePageIssues}">
                         <Button.IsVisible>
-                            <MultiBinding Converter="{x:Static BoolConverters.And}">
-                                <Binding Converter="{x:Static BoolConverters.Or}">
-                                    <Binding Path="AutomaticIssuesFeatureEnabled" />
-                                    <Binding Path="ReportedIssuesFeatureEnabled" />
-                                </Binding>
-                                <Binding Path="CanReadRanks" />
+                            <MultiBinding Converter="{StaticResource  IssuePageVisibleConverter}">
+                                <Binding Path="AutomaticIssuesFeatureEnabled" />
+                                <Binding Path="ReportedIssuesFeatureEnabled" />
+                                <Binding Path="CanReadAllIssues" />
                             </MultiBinding>
                         </Button.IsVisible>
                         <StackPanel Orientation="Horizontal" Spacing="12">

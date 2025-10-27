@@ -7,7 +7,6 @@ using ManaxLibrary.DTO.Read;
 using ManaxLibrary.DTO.Serie;
 using ManaxLibrary.DTO.Tag;
 using ManaxLibrary.DTO.User;
-using ManaxServer.Services.Feature;
 
 namespace ManaxServer.Services.Notification;
 

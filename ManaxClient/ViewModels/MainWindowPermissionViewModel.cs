@@ -11,6 +11,8 @@ namespace ManaxClient.ViewModels;
 public partial class MainWindowViewModel
 {
     private List<Permission> _permissions = [];
+    
+    public static EventHandler<List<Permission>>? PermissionsChanged { get; set; }
 
     // Permission permissions
     public bool CanReadPermissions => _permissions.Contains(Permission.ReadPermissions);

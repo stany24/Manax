@@ -11,7 +11,8 @@ namespace ManaxClient.ViewModels;
 
 public partial class MainWindowViewModel
 {
-    private FeaturesDto _features = new([]);
+    private FeaturesManager _features = new(new List<Feature>());
+    public static EventHandler<FeaturesManager>? FeatureChanged { get; set; }
 
     public bool RankFeatureEnabled => _features.IsEnabled(FeatureType.Ranks);
     public bool AutomaticIssuesFeatureEnabled => _features.IsEnabled(FeatureType.AutomaticIssues);
@@ -22,7 +23,7 @@ public partial class MainWindowViewModel
     {
         try
         {
-            Optional<FeaturesDto> featureResponse = await ManaxApiFeatureClient.GetEnabledFeaturesAsync();
+            Optional<FeaturesManager> featureResponse = await ManaxApiFeatureClient.GetEnabledFeaturesAsync();
             if (featureResponse.Failed)
             {
                 ShowInfo(featureResponse.Error);
@@ -43,13 +44,14 @@ public partial class MainWindowViewModel
         Dispatcher.UIThread.Invoke(() =>
         {
             _features.Features.RemoveAll(f => f.Key == featureType);
-            _features.Features.Add(new KeyValuePair<FeatureType, bool>(featureType, enabled));
+            _features.Features.Add(new Feature { Key = featureType, Value = enabled });
             NotifyAllForFeatureChanged();
         });
     }
 
     private void NotifyAllForFeatureChanged()
     {
+        FeatureChanged?.Invoke(this, _features);
         PropertyInfo[] propertyInfos = GetType().GetProperties();
         foreach (PropertyInfo propertyInfo in propertyInfos)
             if (propertyInfo.PropertyType == typeof(bool) && propertyInfo.Name.EndsWith("FeatureEnabled"))

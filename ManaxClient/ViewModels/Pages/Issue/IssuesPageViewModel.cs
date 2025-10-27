@@ -9,6 +9,7 @@ using DynamicData;
 using DynamicData.Binding;
 using Jeek.Avalonia.Localization;
 using ManaxClient.Models.Issue;
+using ManaxClient.Models.Sources;
 using ManaxClient.ViewModels.Pages.Serie;
 using ManaxClient.ViewModels.Popup.ConfirmCancel;
 using ManaxClient.ViewModels.Popup.ConfirmCancel.Content;

@@ -3,14 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DynamicData;
+using ManaxClient.Models.Issue;
+using ManaxClient.ViewModels;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
+using ManaxLibrary.DTO.Feature;
 using ManaxLibrary.DTO.Issue.Automatic;
 using ManaxLibrary.DTO.Issue.Reported;
 using ManaxLibrary.Logging;
 using ManaxLibrary.Notifications;
 
-namespace ManaxClient.Models.Issue;
+namespace ManaxClient.Models.Sources;
 
 public static class IssueSource
 {
@@ -25,7 +28,29 @@ public static class IssueSource
 
     static IssueSource()
     {
-        LoadData();
+        MainWindowViewModel.FeatureChanged += (_, features) =>
+        {
+            if (features.IsEnabled(FeatureType.AutomaticIssues))
+            {
+                LoadAutomaticChapterIssues();
+                LoadAutomaticSerieIssues();
+            }
+            else
+            {
+                IssueChapterAutomatic.Clear();
+                IssueSerieAutomatic.Clear();
+            }
+            if (features.IsEnabled(FeatureType.ReportedIssues))
+            {
+                LoadReportedChapterIssues();
+                LoadReportedSerieIssues();
+            }
+            else
+            {
+                IssueChapterReported.Clear();
+                IssueSerieReported.Clear();
+            }
+        };
         ServerNotification.OnReportedChapterIssueCreated += OnReportedChapterIssueCreated;
         ServerNotification.OnReportedChapterIssueDeleted += OnReportedChapterIssueDeleted;
         ServerNotification.OnReportedSerieIssueCreated += OnReportedSerieIssueCreated;
@@ -65,8 +90,38 @@ public static class IssueSource
             IssueSerieReported.RemoveKey(issueId);
         }
     }
-
-    private static void LoadData()
+    
+    private static void LoadAutomaticChapterIssues()
+    {
+        Task.Run(() =>
+        {
+            try
+            {
+                Optional<List<IssueChapterAutomaticDto>> responseIssueChapterAutomatic =
+                    ManaxApiIssueClient.GetAllAutomaticChapterIssuesAsync().Result;
+                if (responseIssueChapterAutomatic.Failed)
+                {
+                    ErrorEmitted?.Invoke(null, responseIssueChapterAutomatic.Error);
+                }
+                else
+                {
+                    IEnumerable<IssueChapterAutomatic> series = responseIssueChapterAutomatic.GetValue()
+                        .Select(c => new IssueChapterAutomatic(c));
+                    lock (IssueLock)
+                    {
+                        IssueChapterAutomatic.AddOrUpdate(series);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Logger.LogError("Failed to load issues from API", e);
+                throw;
+            }
+        });
+    }
+    
+    private static void LoadAutomaticSerieIssues()
     {
         Task.Run(() =>
         {
@@ -87,23 +142,21 @@ public static class IssueSource
                         IssueSerieAutomatic.AddOrUpdate(series);
                     }
                 }
+            }
+            catch (Exception e)
+            {
+                Logger.LogError("Failed to load issues from API", e);
+                throw;
+            }
+        });
+    }
 
-                Optional<List<IssueChapterAutomaticDto>> responseIssueChapterAutomatic =
-                    ManaxApiIssueClient.GetAllAutomaticChapterIssuesAsync().Result;
-                if (responseIssueChapterAutomatic.Failed)
-                {
-                    ErrorEmitted?.Invoke(null, responseIssueChapterAutomatic.Error);
-                }
-                else
-                {
-                    IEnumerable<IssueChapterAutomatic> series = responseIssueChapterAutomatic.GetValue()
-                        .Select(c => new IssueChapterAutomatic(c));
-                    lock (IssueLock)
-                    {
-                        IssueChapterAutomatic.AddOrUpdate(series);
-                    }
-                }
-
+    private static void LoadReportedChapterIssues()
+    {
+        Task.Run(() =>
+        {
+            try
+            {
                 Optional<List<IssueChapterReportedDto>> responseIssueChapterReported =
                     ManaxApiIssueClient.GetAllReportedChapterIssuesAsync().Result;
                 if (responseIssueChapterReported.Failed)
@@ -119,7 +172,21 @@ public static class IssueSource
                         IssueChapterReported.AddOrUpdate(series);
                     }
                 }
-
+            }
+            catch (Exception e)
+            {
+                Logger.LogError("Failed to load issues from API", e);
+                throw;
+            }
+        });
+    }
+    
+    private static void LoadReportedSerieIssues()
+    {
+        Task.Run(() =>
+        {
+            try
+            {
                 Optional<List<IssueSerieReportedDto>> responseIssueSerieReported =
                     ManaxApiIssueClient.GetAllReportedSerieIssuesAsync().Result;
                 if (responseIssueSerieReported.Failed)

@@ -1,4 +1,4 @@
-namespace ManaxClient.Assets.Localization;
+namespace ManaxClient.Localization;
 
 public class LanguageItem
 {

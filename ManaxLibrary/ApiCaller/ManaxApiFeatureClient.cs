@@ -5,16 +5,16 @@ namespace ManaxLibrary.ApiCaller;
 
 public static class ManaxApiFeatureClient
 {
-    public static async Task<Optional<FeaturesDto>> GetEnabledFeaturesAsync()
+    public static async Task<Optional<FeaturesManager>> GetEnabledFeaturesAsync()
     {
         return await ManaxApiClient.ExecuteWithErrorHandlingAsync(async () =>
         {
             HttpResponseMessage response = await ManaxApiClient.Client.GetAsync("api/features");
-            if (!response.IsSuccessStatusCode) return new Optional<FeaturesDto>(response);
-            FeaturesDto? permissions = await response.Content.ReadFromJsonAsync<FeaturesDto>();
+            if (!response.IsSuccessStatusCode) return new Optional<FeaturesManager>(response);
+            List<Feature>? permissions = await response.Content.ReadFromJsonAsync<List<Feature>>();
             return permissions == null
-                ? new Optional<FeaturesDto>("Failed to read permissions from response.")
-                : new Optional<FeaturesDto>(permissions);
+                ? new Optional<FeaturesManager>("Failed to read permissions from response.")
+                : new Optional<FeaturesManager>(new FeaturesManager(permissions));
         });
     }
     
@@ -36,7 +36,7 @@ public static class ManaxApiFeatureClient
         });
     }
     
-    public static async Task<Optional<bool>> SetFeaturesAsync(FeaturesDto features)
+    public static async Task<Optional<bool>> SetFeaturesAsync(FeaturesManager features)
     {
         return await ManaxApiClient.ExecuteWithErrorHandlingAsync(async () =>
         {

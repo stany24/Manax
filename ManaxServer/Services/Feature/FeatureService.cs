@@ -52,9 +52,9 @@ public class FeatureService:Service,IFeatureService
         return Enum.TryParse(featureName, out FeatureType featureType) && IsFeatureEnabled(featureType);
     }
 
-    public FeaturesDto GetEnabledFeatures()
+    public List<ManaxLibrary.DTO.Feature.Feature> GetEnabledFeatures()
     {
-        return new FeaturesDto(_enabledFeatures.ToList());
+        return _enabledFeatures.Select(f => new ManaxLibrary.DTO.Feature.Feature { Key = f, Value = true }).ToList();
     }
 
     public void SetFeatureEnabled(FeatureType featureType, bool enabled)

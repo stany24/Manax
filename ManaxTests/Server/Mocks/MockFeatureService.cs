@@ -15,10 +15,11 @@ public class MockFeatureService:IFeatureService
         return true;
     }
 
-    public FeaturesDto GetEnabledFeatures()
+    public List<Feature> GetEnabledFeatures()
     {
-        
-        return new FeaturesDto(Enum.GetValues(typeof(FeatureType)).Cast<FeatureType>().ToList());
+        return Enum.GetValues(typeof(FeatureType))
+            .Cast<FeatureType>()
+            .Select( f => new Feature { Key = f, Value = true }).ToList();
     }
 
     public void SetFeatureEnabled(FeatureType featureType, bool enabled)

@@ -13,7 +13,6 @@ using ManaxLibrary.DTO.User;
 using ManaxLibrary.Logging;
 using ManaxLibrary.Notifications;
 using ManaxServer.Localization;
-using ManaxServer.Services.Feature;
 using ManaxServer.Services.Permission;
 using Microsoft.AspNetCore.SignalR;
 

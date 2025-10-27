@@ -10,7 +10,6 @@ using DynamicData;
 using DynamicData.Binding;
 using ManaxClient.Models;
 using ManaxClient.Models.History;
-using ManaxClient.Models.Issue;
 using ManaxClient.Models.Sources;
 using ManaxClient.ViewModels.Pages;
 using ManaxClient.ViewModels.Pages.Home;
