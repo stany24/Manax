@@ -43,7 +43,7 @@ public class DeleteLibraryTests : LibraryTestsSetup
         Assert.IsNull(deletedLibrary);
 
         List<Serie> updatedSeries = Context.Series.Where(s => seriesIds.Contains(s.Id)).ToList();
-        Assert.AreEqual(initialSeriesCount, updatedSeries.Count);
+        Assert.HasCount(initialSeriesCount, updatedSeries);
 
         foreach (Serie serie in updatedSeries) Assert.IsNull(serie.LibraryId);
     }

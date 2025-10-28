@@ -181,6 +181,12 @@ public class NotificationService(IHubContext<NotificationService> hubContext, IP
             tagId);
     }
 
+    public void NotifyFeatureChanged(ManaxLibrary.DTO.Feature.Feature feature)
+    {
+        TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadFeatures,
+            NotificationType.FeatureModified,feature);
+    }
+
     public override async Task OnConnectedAsync()
     {
         try

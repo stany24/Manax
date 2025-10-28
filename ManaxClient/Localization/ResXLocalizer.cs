@@ -1,8 +1,7 @@
 ﻿using System.Globalization;
 using Jeek.Avalonia.Localization;
-using ManaxClient.Localization;
 
-namespace ManaxClient.Assets.Localization;
+namespace ManaxClient.Localization;
 
 public class ResXLocalizer : BaseLocalizer
 {

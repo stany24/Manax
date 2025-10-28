@@ -54,6 +54,7 @@ public class PermissionController(IPermissionService permissionService, INotific
             Permission.ReadLibraries,
             Permission.ReadRanks,
             Permission.ReadTags,
+            Permission.ReadFeatures,
 
             Permission.WriteIssues,
             Permission.SetMyRank,
@@ -77,7 +78,6 @@ public class PermissionController(IPermissionService permissionService, INotific
         Permission[] owner = admin.Concat([
             Permission.ReadPermissions,
             Permission.WritePermissions,
-
             Permission.ReadSavePoints,
             Permission.ReadServerSettings,
 
@@ -86,6 +86,7 @@ public class PermissionController(IPermissionService permissionService, INotific
             Permission.WriteSavePoints,
             Permission.WriteLibraries,
             Permission.WriteTags,
+            Permission.WriteFeatures,
 
             Permission.DeleteTags,
             Permission.DeleteSeries,

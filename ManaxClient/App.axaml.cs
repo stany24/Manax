@@ -3,7 +3,7 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
 using Jeek.Avalonia.Localization;
-using ManaxClient.Assets.Localization;
+using ManaxClient.Localization;
 using ManaxClient.ViewModels;
 using ManaxClient.Views;
 

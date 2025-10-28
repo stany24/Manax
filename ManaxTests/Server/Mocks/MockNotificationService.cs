@@ -1,4 +1,5 @@
 using ManaxLibrary.DTO.Chapter;
+using ManaxLibrary.DTO.Feature;
 using ManaxLibrary.DTO.Issue.Reported;
 using ManaxLibrary.DTO.Library;
 using ManaxLibrary.DTO.Rank;
@@ -18,6 +19,7 @@ public class MockNotificationService : INotificationService
     public TagDto? TagCreated { get; set; }
     public TagDto? TagUpdated { get; set; }
     public long TagDeletedId { get; set; }
+    public Feature? FeatureChanged { get; set; }
 
     public void NotifyPermissionModifiedAsync(long userId, List<Permission> permissions)
     {
@@ -131,5 +133,10 @@ public class MockNotificationService : INotificationService
     public void NotifyTagDeletedAsync(long tagId)
     {
         TagDeletedId = tagId;
+    }
+
+    public void NotifyFeatureChanged(Feature feature)
+    {
+        FeatureChanged = feature;
     }
 }

@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DynamicData;
+using ManaxClient.ViewModels;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
+using ManaxLibrary.DTO.Feature;
 using ManaxLibrary.DTO.Rank;
 using ManaxLibrary.Logging;
 using ManaxLibrary.Notifications;
@@ -19,10 +21,20 @@ public static class RankSource
     private static readonly object RanksLock = new();
 
     static RankSource()
-    {
+    {        
+        MainWindowViewModel.FeatureChanged += (_, features) =>
+        {
+            if (features is { Key: FeatureType.Ranks, Value: true })
+            {
+                LoadRanks();
+            }
+            else
+            {
+                Ranks.Clear();
+            }
+        };
         ServerNotification.OnRankCreated += OnRankCreated;
         ServerNotification.OnRankDeleted += OnRankDeleted;
-        LoadRanks();
     }
 
     public static EventHandler<string>? ErrorEmitted { get; set; }

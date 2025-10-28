@@ -336,6 +336,36 @@
     <data name="SettingsServerPage.ErrorCreatingLibrary" xml:space="preserve">
         <value>Erreur lors de la création de la bibliothque</value>
     </data>
+    <data name="SettingsFeaturesPage.Title" xml:space="preserve">
+        <value>Gestion des Fonctionnalités</value>
+    </data>
+    <data name="SettingsFeaturesPage.Subtitle" xml:space="preserve">
+        <value>🎛️ Activer ou désactiver les fonctionnalités du serveur</value>
+    </data>
+    <data name="SettingsFeaturesPage.Save" xml:space="preserve">
+        <value>Enregistrer les Fonctionnalités</value>
+    </data>
+    <data name="SettingsFeaturesPage.FeaturesUpdatedSuccess" xml:space="preserve">
+        <value>Fonctionnalités mises à jour avec succès.</value>
+    </data>
+    <data name="SettingsFeaturesPage.Feature.Ranks" xml:space="preserve">
+        <value>Système de Rangs</value>
+    </data>
+    <data name="SettingsFeaturesPage.Feature.AutomaticIssues" xml:space="preserve">
+        <value>Détection Automatique des Problèmes</value>
+    </data>
+    <data name="SettingsFeaturesPage.Feature.ReportedIssues" xml:space="preserve">
+        <value>Problèmes Signalés par les Utilisateurs</value>
+    </data>
+    <data name="SettingsFeaturesPage.Description.Ranks" xml:space="preserve">
+        <value>Activer le système de classement des utilisateurs pour suivre les progrès de lecture et les réalisations</value>
+    </data>
+    <data name="SettingsFeaturesPage.Description.AutomaticIssues" xml:space="preserve">
+        <value>Détecter et signaler automatiquement les problèmes avec les chapitres et les séries</value>
+    </data>
+    <data name="SettingsFeaturesPage.Description.ReportedIssues" xml:space="preserve">
+        <value>Permettre aux utilisateurs de signaler les problèmes qu'ils rencontrent avec le contenu</value>
+    </data>
     <data name="ServerStatsPage.Title" xml:space="preserve">
         <value>Statistiques du serveur</value>
     </data>
@@ -645,6 +675,9 @@
     <data name="MainWindow.Parameters.Server" xml:space="preserve">
         <value>Paramètres serveur</value>
     </data>
+    <data name="MainWindow.Parameters.Features" xml:space="preserve">
+        <value>Fonctionnalités</value>
+    </data>
     <data name="MainWindow.Parameters" xml:space="preserve">
         <value>Paramètres</value>
     </data>
@@ -669,11 +702,11 @@
     <data name="MainWindow.Title" xml:space="preserve">
         <value>Manax</value>
     </data>
-    <data name="MainWindow.Tags" xml:space="preserve">
-        <value>Tags</value>
-    </data>
     <data name="MainWindow.Stats.Server" xml:space="preserve">
         <value>Statistiques serveur</value>
+    </data>
+    <data name="MainWindow.Tags" xml:space="preserve">
+        <value>Tags</value>
     </data>
     <data name="MainWindow.Logout" xml:space="preserve">
         <value>Déconnection</value>

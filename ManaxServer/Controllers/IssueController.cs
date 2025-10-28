@@ -1,3 +1,4 @@
+using ManaxLibrary.DTO.Feature;
 using ManaxLibrary.DTO.Issue.Automatic;
 using ManaxLibrary.DTO.Issue.Reported;
 using ManaxLibrary.DTO.User;
@@ -5,6 +6,7 @@ using ManaxServer.Attributes;
 using ManaxServer.Localization;
 using ManaxServer.Models;
 using ManaxServer.Models.Issue.Reported;
+using ManaxServer.Services.Feature;
 using ManaxServer.Services.Mapper;
 using ManaxServer.Services.Notification;
 using Microsoft.AspNetCore.Mvc;
@@ -14,7 +16,7 @@ namespace ManaxServer.Controllers;
 
 [Route("api/issue")]
 [ApiController]
-public class IssueController(ManaxContext context, IMapper mapper, INotificationService notificationService)
+public class IssueController(ManaxContext context, IMapper mapper, INotificationService notificationService, IFeatureService featureService)
     : ControllerBase
 {
     [HttpGet("chapter/automatic")]
@@ -22,6 +24,8 @@ public class IssueController(ManaxContext context, IMapper mapper, INotification
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<IssueChapterAutomaticDto>>> GetAllAutomaticChapterIssues()
     {
+        if (!featureService.IsFeatureEnabled(FeatureType.AutomaticIssues)) { return BadRequest(Localizer.FeatureDisabled(FeatureType.AutomaticIssues)); }
+
         return await context.AutomaticIssuesChapter
             .Select(i => mapper.Map<IssueChapterAutomaticDto>(i))
             .ToListAsync();
@@ -32,6 +36,8 @@ public class IssueController(ManaxContext context, IMapper mapper, INotification
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<IssueSerieAutomaticDto>>> GetAllAutomaticSerieIssues()
     {
+        if (!featureService.IsFeatureEnabled(FeatureType.AutomaticIssues)) { return BadRequest(Localizer.FeatureDisabled(FeatureType.AutomaticIssues)); }
+
         return await context.AutomaticIssuesSerie
             .Select(i => mapper.Map<IssueSerieAutomaticDto>(i))
             .ToListAsync();
@@ -42,6 +48,8 @@ public class IssueController(ManaxContext context, IMapper mapper, INotification
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<IssueChapterReportedDto>>> GetAllReportedChapterIssues()
     {
+        if (!featureService.IsFeatureEnabled(FeatureType.ReportedIssues)) { return BadRequest(Localizer.FeatureDisabled(FeatureType.ReportedIssues)); }
+        
         return await context.ReportedIssuesChapter
             .Select(i => mapper.Map<IssueChapterReportedDto>(i))
             .ToListAsync();
@@ -50,8 +58,10 @@ public class IssueController(ManaxContext context, IMapper mapper, INotification
     [HttpGet("chapter/reported/types")]
     [RequirePermission(Permission.ReadAllIssues)]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<List<IssueChapterReportedTypeDto>> GetAllReportedChapterIssuesTypes()
+    public async Task<ActionResult<IEnumerable<IssueChapterReportedTypeDto>>> GetAllReportedChapterIssuesTypes()
     {
+        if (!featureService.IsFeatureEnabled(FeatureType.ReportedIssues)) { return BadRequest(Localizer.FeatureDisabled(FeatureType.ReportedIssues)); }
+
         return await context.ReportedIssueChapterTypes.Select(i => mapper.Map<IssueChapterReportedTypeDto>(i))
             .ToListAsync();
     }
@@ -61,6 +71,8 @@ public class IssueController(ManaxContext context, IMapper mapper, INotification
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<IssueSerieReportedDto>>> GetAllReportedSerieIssues()
     {
+        if (!featureService.IsFeatureEnabled(FeatureType.ReportedIssues)) { return BadRequest(Localizer.FeatureDisabled(FeatureType.ReportedIssues)); }
+
         return await context.ReportedIssuesSerie
             .Select(i => mapper.Map<IssueSerieReportedDto>(i))
             .ToListAsync();
@@ -71,6 +83,8 @@ public class IssueController(ManaxContext context, IMapper mapper, INotification
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<IssueSerieReportedTypeDto>>> GetAllReportedSerieIssuesTypes()
     {
+        if (!featureService.IsFeatureEnabled(FeatureType.ReportedIssues)) { return BadRequest(Localizer.FeatureDisabled(FeatureType.ReportedIssues)); }
+
         return await context.ReportedIssueSerieTypes.Select(i => mapper.Map<IssueSerieReportedTypeDto>(i))
             .ToListAsync();
     }
@@ -82,6 +96,8 @@ public class IssueController(ManaxContext context, IMapper mapper, INotification
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<ActionResult> CreateChapterIssue(IssueChapterReportedCreateDto issueChapterReportedCreate)
     {
+        if (!featureService.IsFeatureEnabled(FeatureType.ReportedIssues)) { return BadRequest(Localizer.FeatureDisabled(FeatureType.ReportedIssues)); }
+
         long? currentUserId = UserController.GetCurrentUserId(HttpContext);
         if (currentUserId == null) return Unauthorized();
 
@@ -110,6 +126,8 @@ public class IssueController(ManaxContext context, IMapper mapper, INotification
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<ActionResult> CreateSerieIssue(IssueSerieReportedCreateDto issueSerieReportedCreate)
     {
+        if (!featureService.IsFeatureEnabled(FeatureType.ReportedIssues)) { return BadRequest(Localizer.FeatureDisabled(FeatureType.ReportedIssues)); }
+
         long? currentUserId = UserController.GetCurrentUserId(HttpContext);
         if (currentUserId == null) return Unauthorized();
 
@@ -137,6 +155,8 @@ public class IssueController(ManaxContext context, IMapper mapper, INotification
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> CloseChapterIssue(long id)
     {
+        if (!featureService.IsFeatureEnabled(FeatureType.ReportedIssues)) { return BadRequest(Localizer.FeatureDisabled(FeatureType.ReportedIssues)); }
+
         IssueChapterReported? issue = await context.ReportedIssuesChapter.FindAsync(id);
 
         if (issue == null) return NotFound(Localizer.IssueNotFound(id));
@@ -154,6 +174,8 @@ public class IssueController(ManaxContext context, IMapper mapper, INotification
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> CloseSerieIssue(long id)
     {
+        if (!featureService.IsFeatureEnabled(FeatureType.ReportedIssues)) { return BadRequest(Localizer.FeatureDisabled(FeatureType.ReportedIssues)); }
+
         IssueSerieReported? issue = await context.ReportedIssuesSerie.FindAsync(id);
 
         if (issue == null) return NotFound(Localizer.IssueNotFound(id));

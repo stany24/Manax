@@ -10,7 +10,6 @@ using DynamicData;
 using DynamicData.Binding;
 using ManaxClient.Models;
 using ManaxClient.Models.History;
-using ManaxClient.Models.Issue;
 using ManaxClient.Models.Sources;
 using ManaxClient.ViewModels.Pages;
 using ManaxClient.ViewModels.Pages.Home;
@@ -61,10 +60,10 @@ public partial class MainWindowViewModel : ObservableObject
             CurrentPageViewModel.NextRequested += (_, _) => GoForward();
             PageMargin = CurrentPageViewModel.HasMargin ? new Thickness(20) : new Thickness(0);
         };
-
-        _history.OnPageChanging += _ =>
+        
+        LoginPageViewModel loginPage = new();
+        loginPage.PageChangedRequested += (_, _) =>
         {
-            if (CurrentPageViewModel is not LoginPageViewModel login) return;
             Library.ErrorEmitted += (_, e) => ShowInfo(e);
             Serie.ErrorEmitted += (_, e) => ShowInfo(e);
             Chapter.ErrorEmitted += (_, e) => ShowInfo(e);
@@ -72,14 +71,15 @@ public partial class MainWindowViewModel : ObservableObject
             TagSource.ErrorEmitted += (_, e) => ShowInfo(e);
             UserSource.ErrorEmitted += (_, e) => ShowInfo(e);
             IssueSource.ErrorEmitted += (_, e) => ShowInfo(e);
-            IsAdmin = login.IsAdmin();
+            IsAdmin = loginPage.IsAdmin();
             ServerNotification.OnRunningTasks += OnRunningTasks;
             ServerNotification.OnPermissionModified += OnPermissionModified;
+            ServerNotification.OnFeatureModified += OnFeatureModified;
             Task.Run(LoadPermissions);
+            Task.Run(LoadFeatures);
             LibrarySource.LoadLibraries();
         };
-
-        SetPage(new LoginPageViewModel());
+        SetPage(loginPage);
     }
 
     public ReadOnlyObservableCollection<Library> Libraries => _libraries;
@@ -202,6 +202,11 @@ public partial class MainWindowViewModel : ObservableObject
     public void ChangePageAppSettings()
     {
         SetPage(new SettingsAppViewModel());
+    }
+
+    public void ChangePageFeatures()
+    {
+        SetPage(new SettingsFeaturesViewModel());
     }
 
     public void ChangePageUserStats()

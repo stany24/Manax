@@ -1,4 +1,5 @@
 using System.Globalization;
+using ManaxLibrary.DTO.Feature;
 
 namespace ManaxServer.Localization;
 
@@ -321,5 +322,10 @@ public static partial class Localizer
     public static string TagNotFound(long tagId)
     {
         return string.Format(CultureInfo.InvariantCulture, _currentLocalization[LocalizationKey.TagNotFound], tagId);
+    }
+    
+    public static string FeatureDisabled(FeatureType feature)
+    {
+        return string.Format(CultureInfo.InvariantCulture, _currentLocalization[LocalizationKey.FeatureDisabled], feature);
     }
 }
