@@ -30,7 +30,7 @@ public static class IssueSource
     {
         MainWindowViewModel.FeatureChanged += (_, features) =>
         {
-            if (features.IsEnabled(FeatureType.AutomaticIssues))
+            if (features is { Key: FeatureType.AutomaticIssues, Value: true })
             {
                 LoadAutomaticChapterIssues();
                 LoadAutomaticSerieIssues();
@@ -40,7 +40,7 @@ public static class IssueSource
                 IssueChapterAutomatic.Clear();
                 IssueSerieAutomatic.Clear();
             }
-            if (features.IsEnabled(FeatureType.ReportedIssues))
+            if (features is { Key: FeatureType.ReportedIssues, Value: true })
             {
                 LoadReportedChapterIssues();
                 LoadReportedSerieIssues();

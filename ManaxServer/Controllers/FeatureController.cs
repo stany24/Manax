@@ -31,9 +31,9 @@ public class FeatureController(IFeatureService featureService)
     [HttpPut("/api/features")]
     [RequirePermission(Permission.WriteFeatures)]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public IActionResult SetFeatures(FeaturesManager features)
+    public IActionResult SetFeatures(List<Feature> features)
     {
-        foreach (Feature feature in features.Features)
+        foreach (Feature feature in features)
         {
             featureService.SetFeatureEnabled(feature.Key, feature.Value);
         }

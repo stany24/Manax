@@ -49,5 +49,5 @@ public interface INotificationService
     void NotifyTagCreatedAsync(TagDto tag);
     void NotifyTagUpdatedAsync(TagDto tag);
     void NotifyTagDeletedAsync(long tagId);
-    void NotifyFeatureChanged(FeatureType featureType, bool enabled);
+    void NotifyFeatureChanged(ManaxLibrary.DTO.Feature.Feature feature);
 }

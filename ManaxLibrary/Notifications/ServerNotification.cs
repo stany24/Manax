@@ -54,7 +54,7 @@ public static class ServerNotification
     public static event Action<TagDto>? OnTagUpdated;
     public static event Action<long>? OnTagDeleted;
     
-    public static event Action<FeatureType, bool>? OnFeatureModified;
+    public static event Action<Feature>? OnFeatureModified;
 
 
     public static async Task InitializeAsync(Uri host, string token)
@@ -152,8 +152,11 @@ public static class ServerNotification
         _hubConnection.On<long>(nameof(NotificationType.TagDeleted),
             tagId => { OnTagDeleted?.Invoke(tagId); });
         
-        _hubConnection.On<FeatureType,bool>(nameof(NotificationType.FeatureModified),
-            (featureDto,enabled) => { OnFeatureModified?.Invoke(featureDto,enabled); });
+        _hubConnection.On<Feature>(nameof(NotificationType.FeatureModified),
+            feature =>
+            {
+                OnFeatureModified?.Invoke(feature);
+            });
 
         _hubConnection.On<string>(nameof(NotificationType.Connected),
             message => { Logger.LogInfo("SignalR Server: " + message); });

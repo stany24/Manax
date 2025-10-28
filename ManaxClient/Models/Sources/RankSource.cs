@@ -24,7 +24,7 @@ public static class RankSource
     {        
         MainWindowViewModel.FeatureChanged += (_, features) =>
         {
-            if (features.IsEnabled(FeatureType.Ranks))
+            if (features is { Key: FeatureType.Ranks, Value: true })
             {
                 LoadRanks();
             }

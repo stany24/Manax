@@ -2,7 +2,6 @@ using System.Collections.Concurrent;
 using System.Globalization;
 using System.Security.Claims;
 using ManaxLibrary.DTO.Chapter;
-using ManaxLibrary.DTO.Feature;
 using ManaxLibrary.DTO.Issue.Reported;
 using ManaxLibrary.DTO.Library;
 using ManaxLibrary.DTO.Rank;
@@ -182,10 +181,10 @@ public class NotificationService(IHubContext<NotificationService> hubContext, IP
             tagId);
     }
 
-    public void NotifyFeatureChanged(FeatureType featureType, bool enabled)
+    public void NotifyFeatureChanged(ManaxLibrary.DTO.Feature.Feature feature)
     {
         TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadFeatures,
-            NotificationType.FeatureModified, new { Feature = featureType, Enabled = enabled });
+            NotificationType.FeatureModified,feature);
     }
 
     public override async Task OnConnectedAsync()

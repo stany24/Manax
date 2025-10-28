@@ -36,7 +36,7 @@ public static class ManaxApiFeatureClient
         });
     }
     
-    public static async Task<Optional<bool>> SetFeaturesAsync(FeaturesManager features)
+    public static async Task<Optional<bool>> SetFeaturesAsync(List<Feature> features)
     {
         return await ManaxApiClient.ExecuteWithErrorHandlingAsync(async () =>
         {

@@ -59,19 +59,16 @@ public class FeatureService:Service,IFeatureService
 
     public void SetFeatureEnabled(FeatureType featureType, bool enabled)
     {
-        if (enabled)
-            _enabledFeatures.Add(featureType);
-        else
-            _enabledFeatures.Remove(featureType);
+        if (enabled) {if (!_enabledFeatures.Add(featureType)) { return; } }
+        else { if (!_enabledFeatures.Remove(featureType)) { return; } }
+
         Save();
-        _notificationService.NotifyFeatureChanged(featureType,enabled);
+        _notificationService.NotifyFeatureChanged(new ManaxLibrary.DTO.Feature.Feature {Key = featureType, Value = enabled});
     }
 
     public void SetFeatureEnabled(string featureName, bool enabled)
     {
         if (Enum.TryParse(featureName, out FeatureType featureType))
             SetFeatureEnabled(featureType, enabled);
-        Save();
-        _notificationService.NotifyFeatureChanged(featureType,enabled);
     }
 }

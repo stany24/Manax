@@ -336,6 +336,36 @@
     <data name="SettingsServerPage.ErrorCreatingLibrary" xml:space="preserve">
         <value>Error creating library</value>
     </data>
+    <data name="SettingsFeaturesPage.Title" xml:space="preserve">
+        <value>Features Management</value>
+    </data>
+    <data name="SettingsFeaturesPage.Subtitle" xml:space="preserve">
+        <value>🎛️ Enable or disable server features</value>
+    </data>
+    <data name="SettingsFeaturesPage.Save" xml:space="preserve">
+        <value>Save Features</value>
+    </data>
+    <data name="SettingsFeaturesPage.FeaturesUpdatedSuccess" xml:space="preserve">
+        <value>Features updated successfully.</value>
+    </data>
+    <data name="SettingsFeaturesPage.Feature.Ranks" xml:space="preserve">
+        <value>Ranks System</value>
+    </data>
+    <data name="SettingsFeaturesPage.Feature.AutomaticIssues" xml:space="preserve">
+        <value>Automatic Issues Detection</value>
+    </data>
+    <data name="SettingsFeaturesPage.Feature.ReportedIssues" xml:space="preserve">
+        <value>User Reported Issues</value>
+    </data>
+    <data name="SettingsFeaturesPage.Description.Ranks" xml:space="preserve">
+        <value>Enable user ranking system to track reading progress and achievements</value>
+    </data>
+    <data name="SettingsFeaturesPage.Description.AutomaticIssues" xml:space="preserve">
+        <value>Automatically detect and report issues with chapters and series</value>
+    </data>
+    <data name="SettingsFeaturesPage.Description.ReportedIssues" xml:space="preserve">
+        <value>Allow users to report issues with content they encounter</value>
+    </data>
     <data name="ServerStatsPage.Title" xml:space="preserve">
         <value>Server Statistics</value>
     </data>
@@ -668,6 +698,9 @@
     </data>
     <data name="MainWindow.Parameters.UI" xml:space="preserve">
         <value>UI settings</value>
+    </data>
+    <data name="MainWindow.Parameters.Features" xml:space="preserve">
+        <value>Features</value>
     </data>
     <data name="MainWindow.Logout" xml:space="preserve">
         <value>Logout</value>

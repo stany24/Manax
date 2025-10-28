@@ -145,6 +145,15 @@
                         </StackPanel>
                     </Button>
 
+                    <Button Classes="sidebar"
+                            IsVisible="{Binding CanReadFeatures}"
+                            Command="{Binding ChangePageFeatures}">
+                        <StackPanel Orientation="Horizontal" Spacing="12">
+                            <TextBlock Text="🎛️" FontSize="14" />
+                            <TextBlock Text="{localization:Localize MainWindow.Parameters.Features}" />
+                        </StackPanel>
+                    </Button>
+
                     <Separator Margin="8,16" Background="{DynamicResource Background2}" />
 
                     <TextBlock Classes="subtitle"

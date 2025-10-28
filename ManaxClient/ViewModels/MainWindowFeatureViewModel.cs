@@ -12,7 +12,7 @@ namespace ManaxClient.ViewModels;
 public partial class MainWindowViewModel
 {
     private FeaturesManager _features = new(new List<Feature>());
-    public static EventHandler<FeaturesManager>? FeatureChanged { get; set; }
+    public static EventHandler<Feature>? FeatureChanged { get; set; }
 
     public bool RankFeatureEnabled => _features.IsEnabled(FeatureType.Ranks);
     public bool AutomaticIssuesFeatureEnabled => _features.IsEnabled(FeatureType.AutomaticIssues);
@@ -39,19 +39,20 @@ public partial class MainWindowViewModel
         }
     }
 
-    private void OnFeatureModified(FeatureType featureType, bool enabled)
+    private void OnFeatureModified(Feature feature)
     {
         Dispatcher.UIThread.Invoke(() =>
         {
-            _features.Features.RemoveAll(f => f.Key == featureType);
-            _features.Features.Add(new Feature { Key = featureType, Value = enabled });
+            _features.Features.RemoveAll(f => f.Key == feature.Key);
+            _features.Features.Add(feature);
+            
+            FeatureChanged?.Invoke(this, feature);
             NotifyAllForFeatureChanged();
         });
     }
 
     private void NotifyAllForFeatureChanged()
     {
-        FeatureChanged?.Invoke(this, _features);
         PropertyInfo[] propertyInfos = GetType().GetProperties();
         foreach (PropertyInfo propertyInfo in propertyInfos)
             if (propertyInfo.PropertyType == typeof(bool) && propertyInfo.Name.EndsWith("FeatureEnabled"))

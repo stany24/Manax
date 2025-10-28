@@ -134,7 +134,7 @@ public class MockNotificationService : INotificationService
         TagDeletedId = tagId;
     }
 
-    public void NotifyFeatureChanged(FeatureType featureType, bool enabled)
+    public void NotifyFeatureChanged(Feature feature)
     {
     }
 }
