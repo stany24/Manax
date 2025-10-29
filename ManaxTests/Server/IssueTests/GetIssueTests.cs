@@ -19,7 +19,7 @@ public class GetIssueTests : IssueTestsSetup
 
         List<IssueChapterAutomaticDto>? returnedIssues = result.Value as List<IssueChapterAutomaticDto>;
         Assert.IsNotNull(returnedIssues);
-        Assert.AreEqual(Context.AutomaticIssuesChapter.Count(), returnedIssues.Count);
+        Assert.HasCount(Context.AutomaticIssuesChapter.Count(), returnedIssues);
 
         foreach (IssueChapterAutomatic issue in Context.AutomaticIssuesChapter)
         {
@@ -40,7 +40,7 @@ public class GetIssueTests : IssueTestsSetup
 
         List<IssueSerieAutomaticDto>? returnedIssues = result.Value as List<IssueSerieAutomaticDto>;
         Assert.IsNotNull(returnedIssues);
-        Assert.AreEqual(Context.AutomaticIssuesSerie.Count(), returnedIssues.Count);
+        Assert.HasCount(Context.AutomaticIssuesSerie.Count(), returnedIssues);
 
         foreach (AutomaticIssueSerie issue in Context.AutomaticIssuesSerie)
         {
@@ -60,7 +60,7 @@ public class GetIssueTests : IssueTestsSetup
 
         List<IssueChapterReportedDto>? returnedIssues = result.Value as List<IssueChapterReportedDto>;
         Assert.IsNotNull(returnedIssues);
-        Assert.AreEqual(Context.ReportedIssuesChapter.Count(), returnedIssues.Count);
+        Assert.HasCount(Context.ReportedIssuesChapter.Count(), returnedIssues);
 
         foreach (IssueChapterReported issue in Context.ReportedIssuesChapter)
         {
@@ -78,7 +78,7 @@ public class GetIssueTests : IssueTestsSetup
         List<IssueChapterReportedTypeDto> result = await Controller.GetAllReportedChapterIssuesTypes();
 
         Assert.IsNotNull(result);
-        Assert.AreEqual(Context.ReportedIssueChapterTypes.Count(), result.Count);
+        Assert.HasCount(Context.ReportedIssueChapterTypes.Count(), result);
 
         foreach (IssueChapterReportedType type in Context.ReportedIssueChapterTypes)
         {
@@ -98,7 +98,7 @@ public class GetIssueTests : IssueTestsSetup
 
         List<IssueSerieReportedDto>? returnedIssues = result.Value as List<IssueSerieReportedDto>;
         Assert.IsNotNull(returnedIssues);
-        Assert.AreEqual(Context.ReportedIssuesSerie.Count(), returnedIssues.Count);
+        Assert.HasCount(Context.ReportedIssuesSerie.Count(), returnedIssues);
 
         foreach (IssueSerieReported issue in Context.ReportedIssuesSerie)
         {
@@ -120,7 +120,7 @@ public class GetIssueTests : IssueTestsSetup
 
         List<IssueSerieReportedTypeDto>? returnedTypes = result.Value as List<IssueSerieReportedTypeDto>;
         Assert.IsNotNull(returnedTypes);
-        Assert.AreEqual(Context.ReportedIssueSerieTypes.Count(), returnedTypes.Count);
+        Assert.HasCount(Context.ReportedIssueSerieTypes.Count(), returnedTypes);
 
         foreach (IssueSerieReportedType type in Context.ReportedIssueSerieTypes)
         {

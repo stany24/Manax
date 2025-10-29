@@ -17,7 +17,7 @@ public class GetLibraryTests : LibraryTestsSetup
 
         List<long>? returnedIds = result.Value as List<long>;
         Assert.IsNotNull(returnedIds);
-        Assert.AreEqual(Context.Libraries.Count(), returnedIds.Count);
+        Assert.HasCount(Context.Libraries.Count(), returnedIds);
         foreach (Library library in Context.Libraries) Assert.Contains(library.Id, returnedIds);
     }
 
