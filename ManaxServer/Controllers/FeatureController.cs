@@ -16,15 +16,15 @@ public class FeatureController(IFeatureService featureService)
     [ProducesResponseType(StatusCodes.Status200OK)]
     public List<Feature> GetFeatures()
     {
-        return featureService.GetEnabledFeatures();
+        return featureService.GetFeatures();
     }
     
-    [HttpPost("{featureName}/{enabled:bool}")]
+    [HttpPost]
     [RequirePermission(Permission.WriteFeatures)]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public IActionResult SetFeature(string featureName, bool enabled)
+    public IActionResult SetFeature(Feature feature)
     {
-        featureService.SetFeatureEnabled(featureName, enabled);
+        featureService.SetFeatureEnabled(feature);
         return Ok();
     }
     
@@ -35,7 +35,7 @@ public class FeatureController(IFeatureService featureService)
     {
         foreach (Feature feature in features)
         {
-            featureService.SetFeatureEnabled(feature.Key, feature.Value);
+            featureService.SetFeatureEnabled(feature);
         }
         return Ok();
     }

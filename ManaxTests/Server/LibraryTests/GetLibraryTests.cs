@@ -42,6 +42,6 @@ public class GetLibraryTests : LibraryTestsSetup
     {
         ActionResult<LibraryDto> result = await Controller.GetLibrary(999999);
 
-        Assert.IsInstanceOfType(result.Result, typeof(NotFoundObjectResult));
+        Assert.IsInstanceOfType<NotFoundObjectResult>(result.Result);
     }
 }

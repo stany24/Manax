@@ -42,7 +42,7 @@ public class GetUserTests : UserTestsSetup
     {
         ActionResult<UserDto> result = await Controller.GetUser(999999);
 
-        Assert.IsInstanceOfType(result.Result, typeof(NotFoundObjectResult));
+        Assert.IsInstanceOfType<NotFoundObjectResult>(result.Result);
     }
 
     [TestMethod]

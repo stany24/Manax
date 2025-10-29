@@ -12,7 +12,7 @@ public class DeleteRankTests : RankTestsSetup
         Rank rank = Context.Ranks.First();
         IActionResult result = await Controller.DeleteRank(rank.Id);
 
-        Assert.IsInstanceOfType(result, typeof(OkResult));
+        Assert.IsInstanceOfType<OkResult>(result);
 
         Rank? deletedRank = await Context.Ranks.FindAsync(rank.Id);
         Assert.IsNull(deletedRank);
@@ -23,7 +23,7 @@ public class DeleteRankTests : RankTestsSetup
     {
         IActionResult result = await Controller.DeleteRank(999999);
 
-        Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
+        Assert.IsInstanceOfType<NotFoundObjectResult>(result);
     }
 
     [TestMethod]
@@ -34,7 +34,7 @@ public class DeleteRankTests : RankTestsSetup
 
         IActionResult result = await Controller.DeleteRank(rank.Id);
 
-        Assert.IsInstanceOfType(result, typeof(OkResult));
+        Assert.IsInstanceOfType<OkResult>(result);
 
         int finalCount = Context.Ranks.Count();
         Assert.AreEqual(initialCount - 1, finalCount);
@@ -47,7 +47,7 @@ public class DeleteRankTests : RankTestsSetup
 
         IActionResult result = await Controller.DeleteRank(rankWithUserRanks.Id);
 
-        Assert.IsInstanceOfType(result, typeof(OkResult));
+        Assert.IsInstanceOfType<OkResult>(result);
 
         Rank? deletedRank = await Context.Ranks.FindAsync(rankWithUserRanks.Id);
         Assert.IsNull(deletedRank);

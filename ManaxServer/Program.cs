@@ -59,8 +59,9 @@ public class Program
                 provider.GetRequiredService<IIssueService>()));
         builder.Services.AddSingleton<IPasswordValidationService>(_ =>
             new PasswordValidationService(builder.Environment.IsProduction()));
+        FeatureFileManager featureFileManager = new();
         builder.Services.AddSingleton<IFeatureService>(provider =>
-            new FeatureService(provider.GetRequiredService<INotificationService>()));
+            new FeatureService(featureFileManager,featureFileManager,provider.GetRequiredService<INotificationService>()));
         AddRateLimiting(builder);
 
         builder.Services.AddScoped<IMapper>(_ => new ManaxMapper(new ManaxMapping()));

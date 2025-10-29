@@ -14,7 +14,8 @@ public abstract class FeatureTestsSetup
     public void Setup()
     {
         _mockNotificationService = new MockNotificationService();
-        FeatureService = new FeatureService(_mockNotificationService);
+        
+        FeatureService = new FeatureService(new MockFeatureLoader(),new MockFeatureSaver(),_mockNotificationService);
         Controller = new FeatureController(FeatureService);
     }
 }

@@ -6,40 +6,12 @@ namespace ManaxTests.Server.FeatureTests;
 public class GetFeaturesTests : FeatureTestsSetup
 {
     [TestMethod]
-    public void GetFeaturesReturnsEmptyListWhenNoFeaturesEnabled()
+    public void GetFeaturesReturnsAllFeatures()
     {
         List<Feature> result = Controller.GetFeatures();
 
         Assert.IsNotNull(result);
-        Assert.HasCount(0, result);
-    }
-
-    [TestMethod]
-    public void GetFeaturesReturnsAllEnabledFeatures()
-    {
-        FeatureService.SetFeatureEnabled(FeatureType.Ranks, true);
-        FeatureService.SetFeatureEnabled(FeatureType.AutomaticIssues, true);
-
-        List<Feature> result = Controller.GetFeatures();
-
-        Assert.IsNotNull(result);
-        Assert.HasCount(2, result);
-        Assert.Contains(result.First(f => f.Key == FeatureType.Ranks), result);
-        Assert.Contains(result.First(f => f.Key == FeatureType.AutomaticIssues), result);
-    }
-
-    [TestMethod]
-    public void GetFeaturesOnlyReturnsEnabledFeatures()
-    {
-        FeatureService.SetFeatureEnabled(FeatureType.Ranks, true);
-        FeatureService.SetFeatureEnabled(FeatureType.AutomaticIssues, false);
-
-        List<Feature> result = Controller.GetFeatures();
-
-        Assert.IsNotNull(result);
-        Assert.HasCount(1, result);
-        Assert.AreEqual(FeatureType.Ranks, result[0].Key);
-        Assert.IsTrue(result[0].Value);
+        Assert.HasCount(3, result);
     }
 
     [TestMethod]
@@ -60,30 +32,14 @@ public class GetFeaturesTests : FeatureTestsSetup
     }
 
     [TestMethod]
-    public void GetFeaturesVerifyCorrectKeyValuePairs()
+    public void GetFeaturesVerifyCorrectlySet()
     {
         FeatureService.SetFeatureEnabled(FeatureType.Ranks, true);
 
         List<Feature> result = Controller.GetFeatures();
 
         Assert.IsNotNull(result);
-        Assert.HasCount(1, result);
-        Feature feature = result[0];
-        Assert.AreEqual(FeatureType.Ranks, feature.Key);
-        Assert.IsTrue(feature.Value);
-    }
-
-    [TestMethod]
-    public void GetFeaturesMultipleCallsReturnConsistentResults()
-    {
-        FeatureService.SetFeatureEnabled(FeatureType.Ranks, true);
-        FeatureService.SetFeatureEnabled(FeatureType.AutomaticIssues, true);
-
-        List<Feature> result1 = Controller.GetFeatures();
-        List<Feature> result2 = Controller.GetFeatures();
-
-        Assert.HasCount(2, result1);
-        Assert.HasCount(2, result2);
+        Assert.IsTrue(FeatureService.IsFeatureEnabled(FeatureType.Ranks));
     }
 }
 

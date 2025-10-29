@@ -18,20 +18,11 @@ public static class ManaxApiFeatureClient
         });
     }
     
-    public static async Task<Optional<bool>> SetFeatureEnabledAsync(FeatureType featureType, bool enabled)
+    public static async Task<Optional<bool>> SetFeatureEnabledAsync(Feature feature)
     {
         return await ManaxApiClient.ExecuteWithErrorHandlingAsync(async () =>
         {
-            HttpResponseMessage response = await ManaxApiClient.Client.PostAsync($"api/feature/{featureType}/{enabled}", null);
-            return !response.IsSuccessStatusCode ? new Optional<bool>(response) : new Optional<bool>(true);
-        });
-    }
-    
-    public static async Task<Optional<bool>> SetFeatureEnabledAsync(string featureName, bool enabled)
-    {
-        return await ManaxApiClient.ExecuteWithErrorHandlingAsync(async () =>
-        {
-            HttpResponseMessage response = await ManaxApiClient.Client.PostAsync($"api/feature/{featureName}/{enabled}", null);
+            HttpResponseMessage response = await ManaxApiClient.Client.PostAsJsonAsync("api/feature", feature);
             return !response.IsSuccessStatusCode ? new Optional<bool>(response) : new Optional<bool>(true);
         });
     }
