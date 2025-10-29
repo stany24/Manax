@@ -46,7 +46,7 @@ public class LoginUserTests : UserTestsSetup
 
         ActionResult<UserLoginResultDto> result = await Controller.Login(loginDto);
 
-        Assert.IsInstanceOfType(result.Result, typeof(UnauthorizedObjectResult));
+        Assert.IsInstanceOfType<UnauthorizedObjectResult>(result.Result);
 
         LoginAttempt? loginAttempt = Context.LoginAttempts.FirstOrDefault(la => la.Username == "testuser");
         Assert.IsNotNull(loginAttempt);
@@ -65,7 +65,7 @@ public class LoginUserTests : UserTestsSetup
 
         ActionResult<UserLoginResultDto> result = await Controller.Login(loginDto);
 
-        Assert.IsInstanceOfType(result.Result, typeof(UnauthorizedObjectResult));
+        Assert.IsInstanceOfType<UnauthorizedObjectResult>(result.Result);
 
         LoginAttempt? loginAttempt = Context.LoginAttempts.FirstOrDefault(la => la.Username == "nonexistent");
         Assert.IsNotNull(loginAttempt);

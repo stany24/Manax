@@ -20,7 +20,7 @@ public class PutSerieTests : SerieTestsSetup
 
         IActionResult result = await Controller.PutSerie(serie.Id, updateDto);
 
-        Assert.IsInstanceOfType(result, typeof(OkResult));
+        Assert.IsInstanceOfType<OkResult>(result);
 
         Serie? updatedSerie = await Context.Series.FindAsync(serie.Id);
         Assert.IsNotNull(updatedSerie);
@@ -41,7 +41,7 @@ public class PutSerieTests : SerieTestsSetup
 
         IActionResult result = await Controller.PutSerie(999999, updateDto);
 
-        Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
+        Assert.IsInstanceOfType<NotFoundObjectResult>(result);
     }
 
     [TestMethod]
@@ -57,7 +57,7 @@ public class PutSerieTests : SerieTestsSetup
 
         IActionResult result = await Controller.PutSerie(serie.Id, updateDto);
 
-        Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
+        Assert.IsInstanceOfType<BadRequestObjectResult>(result);
     }
 
     [TestMethod]
@@ -77,7 +77,7 @@ public class PutSerieTests : SerieTestsSetup
 
         IActionResult result = await Controller.PutSerie(serie.Id, updateDto);
 
-        Assert.IsInstanceOfType(result, typeof(OkResult));
+        Assert.IsInstanceOfType<OkResult>(result);
 
         Serie? updatedSerie = await Context.Series.FindAsync(serie.Id);
         Assert.IsNotNull(updatedSerie);

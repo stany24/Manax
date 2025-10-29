@@ -23,7 +23,7 @@ public class UpdateTagTests : TagTestsSetup
 
         IActionResult result = await Controller.UpdateTag(tagUpdate);
 
-        Assert.IsInstanceOfType(result, typeof(OkResult));
+        Assert.IsInstanceOfType<OkResult>(result);
 
         Tag? updatedTag = await Context.Tags.FindAsync(tag.Id);
         Assert.IsNotNull(updatedTag);
@@ -43,7 +43,7 @@ public class UpdateTagTests : TagTestsSetup
 
         IActionResult result = await Controller.UpdateTag(tagUpdate);
 
-        Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
+        Assert.IsInstanceOfType<NotFoundObjectResult>(result);
     }
 
     [TestMethod]
@@ -62,7 +62,7 @@ public class UpdateTagTests : TagTestsSetup
 
         IActionResult result = await Controller.UpdateTag(tagUpdate);
 
-        Assert.IsInstanceOfType(result, typeof(OkResult));
+        Assert.IsInstanceOfType<OkResult>(result);
         Assert.IsNotNull(MockNotificationService.TagUpdated);
         Assert.AreEqual("Updated Comedy", MockNotificationService.TagUpdated.Name);
         Assert.AreEqual(-16711681, MockNotificationService.TagUpdated.ColorArgb);
@@ -85,7 +85,7 @@ public class UpdateTagTests : TagTestsSetup
 
         IActionResult result = await Controller.UpdateTag(tagUpdate);
 
-        Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
+        Assert.IsInstanceOfType<BadRequestObjectResult>(result);
     }
 
     [TestMethod]
@@ -104,7 +104,7 @@ public class UpdateTagTests : TagTestsSetup
 
         IActionResult result = await Controller.UpdateTag(tagUpdate);
 
-        Assert.IsInstanceOfType(result, typeof(OkResult));
+        Assert.IsInstanceOfType<OkResult>(result);
 
         Tag? updatedTag = await Context.Tags.FindAsync(tag.Id);
         Assert.IsNotNull(updatedTag);
@@ -128,7 +128,7 @@ public class UpdateTagTests : TagTestsSetup
 
         IActionResult result = await Controller.UpdateTag(tagUpdate);
 
-        Assert.IsInstanceOfType(result, typeof(OkResult));
+        Assert.IsInstanceOfType<OkResult>(result);
 
         Tag? updatedTag = await Context.Tags.FindAsync(tag.Id);
         Assert.IsNotNull(updatedTag);
@@ -154,7 +154,7 @@ public class UpdateTagTests : TagTestsSetup
 
         IActionResult result = await Controller.UpdateTag(tagUpdate);
 
-        Assert.IsInstanceOfType(result, typeof(OkResult));
+        Assert.IsInstanceOfType<OkResult>(result);
 
         int finalCount = Context.Tags.Count();
         Assert.AreEqual(initialCount, finalCount);
@@ -172,7 +172,7 @@ public class UpdateTagTests : TagTestsSetup
 
         IActionResult result = await Controller.UpdateTag(tagUpdate);
 
-        Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
+        Assert.IsInstanceOfType<NotFoundObjectResult>(result);
     }
 
     [TestMethod]
@@ -187,6 +187,6 @@ public class UpdateTagTests : TagTestsSetup
 
         IActionResult result = await Controller.UpdateTag(tagUpdate);
 
-        Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
+        Assert.IsInstanceOfType<NotFoundObjectResult>(result);
     }
 }

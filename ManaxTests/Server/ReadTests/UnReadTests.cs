@@ -30,7 +30,7 @@ public class UnReadTests : ReadTestsSetup
 
         IActionResult result = await Controller.Unread((int)chapter.Id);
 
-        Assert.IsInstanceOfType(result, typeof(OkResult));
+        Assert.IsInstanceOfType<OkResult>(result);
 
         Read? deletedRead = await Context.Reads
             .FirstOrDefaultAsync(r => r.ChapterId == chapter.Id && r.UserId == 1);
@@ -44,7 +44,7 @@ public class UnReadTests : ReadTestsSetup
 
         IActionResult result = await Controller.Unread((int)chapter.Id);
 
-        Assert.IsInstanceOfType(result, typeof(OkResult));
+        Assert.IsInstanceOfType<OkResult>(result);
     }
 
     [TestMethod]
@@ -52,7 +52,7 @@ public class UnReadTests : ReadTestsSetup
     {
         IActionResult result = await Controller.Unread(999999);
 
-        Assert.IsInstanceOfType(result, typeof(OkResult));
+        Assert.IsInstanceOfType<OkResult>(result);
     }
 
     [TestMethod]
@@ -65,7 +65,7 @@ public class UnReadTests : ReadTestsSetup
 
         IActionResult result = await Controller.Unread(1);
 
-        Assert.IsInstanceOfType(result, typeof(UnauthorizedObjectResult));
+        Assert.IsInstanceOfType<UnauthorizedObjectResult>(result);
     }
 
     [TestMethod]
@@ -90,7 +90,7 @@ public class UnReadTests : ReadTestsSetup
 
         IActionResult result = await Controller.Unread((int)chapter.Id);
 
-        Assert.IsInstanceOfType(result, typeof(OkResult));
+        Assert.IsInstanceOfType<OkResult>(result);
 
         int finalCount = Context.Reads.Count();
         Assert.AreEqual(initialCount - 1, finalCount);
@@ -128,7 +128,7 @@ public class UnReadTests : ReadTestsSetup
 
         IActionResult result = await Controller.Unread((int)chapter.Id);
 
-        Assert.IsInstanceOfType(result, typeof(OkResult));
+        Assert.IsInstanceOfType<OkResult>(result);
 
         Read? deletedUserRead = await Context.Reads
             .FirstOrDefaultAsync(r => r.ChapterId == chapter.Id && r.UserId == user.Id);

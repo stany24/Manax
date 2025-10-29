@@ -22,7 +22,7 @@ public class PutUserTests : UserTestsSetup
 
         IActionResult result = await Controller.PutUser(userUpdate);
 
-        Assert.IsInstanceOfType(result, typeof(OkResult));
+        Assert.IsInstanceOfType<OkResult>(result);
 
         User? updatedUser = await Context.Users.FindAsync(2L);
         Assert.IsNotNull(updatedUser);
@@ -42,7 +42,7 @@ public class PutUserTests : UserTestsSetup
 
         IActionResult result = await Controller.PutUser(userUpdate);
 
-        Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
+        Assert.IsInstanceOfType<BadRequestObjectResult>(result);
         MockHashService.VerifyHashPasswordNotCalled();
     }
 
@@ -59,7 +59,7 @@ public class PutUserTests : UserTestsSetup
 
         IActionResult result = await Controller.PutUser(userUpdate);
 
-        Assert.IsInstanceOfType(result, typeof(UnauthorizedObjectResult));
+        Assert.IsInstanceOfType<UnauthorizedObjectResult>(result);
         MockHashService.VerifyHashPasswordNotCalled();
     }
 
@@ -85,7 +85,7 @@ public class PutUserTests : UserTestsSetup
     {
         ActionResult<string> result = await Controller.ResetPassword(999);
 
-        Assert.IsInstanceOfType(result.Result, typeof(NotFoundObjectResult));
+        Assert.IsInstanceOfType<NotFoundObjectResult>(result.Result);
         MockHashService.VerifyHashPasswordNotCalled();
     }
 }

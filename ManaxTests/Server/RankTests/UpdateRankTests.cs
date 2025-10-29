@@ -20,7 +20,7 @@ public class UpdateRankTests : RankTestsSetup
 
         IActionResult result = await Controller.UpdateRank(updateRank);
 
-        Assert.IsInstanceOfType(result, typeof(OkResult));
+        Assert.IsInstanceOfType<OkResult>(result);
 
         Rank? updatedRank = await Context.Ranks.FindAsync(existingRank.Id);
         Assert.IsNotNull(updatedRank);
@@ -40,7 +40,7 @@ public class UpdateRankTests : RankTestsSetup
 
         IActionResult result = await Controller.UpdateRank(updateRank);
 
-        Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
+        Assert.IsInstanceOfType<NotFoundObjectResult>(result);
     }
 
     [TestMethod]
@@ -59,7 +59,7 @@ public class UpdateRankTests : RankTestsSetup
 
         IActionResult result = await Controller.UpdateRank(updateRank);
 
-        Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
+        Assert.IsInstanceOfType<BadRequestObjectResult>(result);
     }
 
     [TestMethod]
@@ -78,6 +78,6 @@ public class UpdateRankTests : RankTestsSetup
 
         IActionResult result = await Controller.UpdateRank(updateRank);
 
-        Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
+        Assert.IsInstanceOfType<BadRequestObjectResult>(result);
     }
 }

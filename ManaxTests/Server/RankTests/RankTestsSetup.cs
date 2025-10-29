@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using ManaxLibrary.DTO.Feature;
 using ManaxServer.Controllers;
 using ManaxServer.Models;
 using ManaxServer.Services.Mapper;
@@ -24,6 +25,7 @@ public abstract class RankTestsSetup
         _mapper = new ManaxMapper(new ManaxMapping());
         _mockNotificationService = new MockNotificationService();
         _mockFeatureService = new MockFeatureService();
+        _mockFeatureService.SetFeatureEnabled(FeatureType.Ranks,true);
 
         Controller = new RankController(Context, _mapper, _mockNotificationService,_mockFeatureService);
 

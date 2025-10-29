@@ -20,7 +20,7 @@ public class CreateIssueTests : IssueTestsSetup
 
         ActionResult result = await Controller.CreateChapterIssue(createDto);
 
-        Assert.IsInstanceOfType(result, typeof(CreatedResult));
+        Assert.IsInstanceOfType<CreatedResult>(result);
 
         IssueChapterReported? createdIssue = Context.ReportedIssuesChapter
             .FirstOrDefault(i =>
@@ -47,7 +47,7 @@ public class CreateIssueTests : IssueTestsSetup
 
         ActionResult result = await Controller.CreateChapterIssue(createDto);
 
-        Assert.IsInstanceOfType(result, typeof(UnauthorizedResult));
+        Assert.IsInstanceOfType<UnauthorizedResult>(result);
     }
 
     [TestMethod]
@@ -63,7 +63,7 @@ public class CreateIssueTests : IssueTestsSetup
         ActionResult result = await Controller.CreateChapterIssue(createDto);
         DateTime after = DateTime.UtcNow;
 
-        Assert.IsInstanceOfType(result, typeof(CreatedResult));
+        Assert.IsInstanceOfType<CreatedResult>(result);
 
         IssueChapterReported? createdIssue = Context.ReportedIssuesChapter
             .FirstOrDefault(i => i.ChapterId == createDto.ChapterId && i.UserId == 1);
@@ -83,7 +83,7 @@ public class CreateIssueTests : IssueTestsSetup
 
         ActionResult result = await Controller.CreateSerieIssue(createDto);
 
-        Assert.IsInstanceOfType(result, typeof(CreatedResult));
+        Assert.IsInstanceOfType<CreatedResult>(result);
 
         IssueSerieReported? createdIssue = Context.ReportedIssuesSerie
             .FirstOrDefault(i => i.SerieId == createDto.SerieId && i.ProblemId == createDto.ProblemId && i.UserId == 1);
@@ -109,7 +109,7 @@ public class CreateIssueTests : IssueTestsSetup
 
         ActionResult result = await Controller.CreateSerieIssue(createDto);
 
-        Assert.IsInstanceOfType(result, typeof(UnauthorizedResult));
+        Assert.IsInstanceOfType<UnauthorizedResult>(result);
     }
 
     [TestMethod]
@@ -125,7 +125,7 @@ public class CreateIssueTests : IssueTestsSetup
         ActionResult result = await Controller.CreateSerieIssue(createDto);
         DateTime after = DateTime.UtcNow;
 
-        Assert.IsInstanceOfType(result, typeof(CreatedResult));
+        Assert.IsInstanceOfType<CreatedResult>(result);
 
         IssueSerieReported? createdIssue = Context.ReportedIssuesSerie
             .FirstOrDefault(i => i.SerieId == createDto.SerieId && i.ProblemId == createDto.ProblemId && i.UserId == 1);
@@ -159,7 +159,7 @@ public class CreateIssueTests : IssueTestsSetup
 
         ActionResult result = await Controller.CreateChapterIssue(createDto);
 
-        Assert.IsInstanceOfType(result, typeof(CreatedResult));
+        Assert.IsInstanceOfType<CreatedResult>(result);
 
         IssueChapterReported? createdIssue = Context.ReportedIssuesChapter
             .FirstOrDefault(i => i.ChapterId == createDto.ChapterId && i.UserId == 2);
@@ -185,8 +185,8 @@ public class CreateIssueTests : IssueTestsSetup
         ActionResult firstResult = await Controller.CreateChapterIssue(firstDto);
         ActionResult secondResult = await Controller.CreateChapterIssue(secondDto);
 
-        Assert.IsInstanceOfType(firstResult, typeof(CreatedResult));
-        Assert.IsInstanceOfType(secondResult, typeof(CreatedResult));
+        Assert.IsInstanceOfType<CreatedResult>(firstResult);
+        Assert.IsInstanceOfType<CreatedResult>(secondResult);
 
         int issueCount = Context.ReportedIssuesChapter.Count(i => i.ChapterId == 3 && i.UserId == 1);
         Assert.AreEqual(2, issueCount);
@@ -210,8 +210,8 @@ public class CreateIssueTests : IssueTestsSetup
         ActionResult firstResult = await Controller.CreateSerieIssue(firstDto);
         ActionResult secondResult = await Controller.CreateSerieIssue(secondDto);
 
-        Assert.IsInstanceOfType(firstResult, typeof(CreatedResult));
-        Assert.IsInstanceOfType(secondResult, typeof(CreatedResult));
+        Assert.IsInstanceOfType<CreatedResult>(firstResult);
+        Assert.IsInstanceOfType<CreatedResult>(secondResult);
 
         int issueCount = Context.ReportedIssuesSerie.Count(i => i.SerieId == 3 && i.UserId == 1);
         Assert.AreEqual(2, issueCount);
@@ -229,8 +229,8 @@ public class CreateIssueTests : IssueTestsSetup
         ActionResult firstResult = await Controller.CreateChapterIssue(createDto);
         ActionResult secondResult = await Controller.CreateChapterIssue(createDto);
 
-        Assert.IsInstanceOfType(firstResult, typeof(CreatedResult));
-        Assert.IsInstanceOfType(secondResult, typeof(ConflictObjectResult));
+        Assert.IsInstanceOfType<CreatedResult>(firstResult);
+        Assert.IsInstanceOfType<ConflictObjectResult>(secondResult);
     }
 
     [TestMethod]
@@ -245,7 +245,7 @@ public class CreateIssueTests : IssueTestsSetup
         ActionResult firstResult = await Controller.CreateSerieIssue(createDto);
         ActionResult secondResult = await Controller.CreateSerieIssue(createDto);
 
-        Assert.IsInstanceOfType(firstResult, typeof(CreatedResult));
-        Assert.IsInstanceOfType(secondResult, typeof(ConflictObjectResult));
+        Assert.IsInstanceOfType<CreatedResult>(firstResult);
+        Assert.IsInstanceOfType<ConflictObjectResult>(secondResult);
     }
 }

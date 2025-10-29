@@ -76,7 +76,6 @@ public class GetIssueTests : IssueTestsSetup
     public async Task GetAllReportedChapterIssuesTypesReturnsAllTypes()
     {
         ActionResult<IEnumerable<IssueChapterReportedTypeDto>> result = await Controller.GetAllReportedChapterIssuesTypes();
-
         OkObjectResult? okResult = result.Result as OkObjectResult;
         Assert.IsNull(okResult);
 

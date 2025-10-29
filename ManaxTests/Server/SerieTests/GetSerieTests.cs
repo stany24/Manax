@@ -43,7 +43,7 @@ public class GetSerieTests : SerieTestsSetup
     {
         ActionResult<SerieDto> result = await Controller.GetSerie(999999);
 
-        Assert.IsInstanceOfType(result.Result, typeof(NotFoundObjectResult));
+        Assert.IsInstanceOfType<NotFoundObjectResult>(result.Result);
     }
 
     [TestMethod]

@@ -15,7 +15,7 @@ public class DeleteTagTests : TagTestsSetup
 
         IActionResult result = await Controller.DeleteTag(tag.Id);
 
-        Assert.IsInstanceOfType(result, typeof(OkResult));
+        Assert.IsInstanceOfType<OkResult>(result);
 
         Tag? deletedTag = await Context.Tags.FindAsync(tag.Id);
         Assert.IsNull(deletedTag);
@@ -26,7 +26,7 @@ public class DeleteTagTests : TagTestsSetup
     {
         IActionResult result = await Controller.DeleteTag(999999);
 
-        Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
+        Assert.IsInstanceOfType<NotFoundObjectResult>(result);
     }
 
     [TestMethod]
@@ -40,7 +40,7 @@ public class DeleteTagTests : TagTestsSetup
 
         IActionResult result = await Controller.DeleteTag(tagId);
 
-        Assert.IsInstanceOfType(result, typeof(OkResult));
+        Assert.IsInstanceOfType<OkResult>(result);
         Assert.AreEqual(tagId, MockNotificationService.TagDeletedId);
     }
 
@@ -55,7 +55,7 @@ public class DeleteTagTests : TagTestsSetup
 
         IActionResult result = await Controller.DeleteTag(tag.Id);
 
-        Assert.IsInstanceOfType(result, typeof(OkResult));
+        Assert.IsInstanceOfType<OkResult>(result);
 
         int finalCount = Context.Tags.Count();
         Assert.AreEqual(initialCount - 1, finalCount);
@@ -66,7 +66,7 @@ public class DeleteTagTests : TagTestsSetup
     {
         IActionResult result = await Controller.DeleteTag(0);
 
-        Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
+        Assert.IsInstanceOfType<NotFoundObjectResult>(result);
     }
 
     [TestMethod]
@@ -74,7 +74,7 @@ public class DeleteTagTests : TagTestsSetup
     {
         IActionResult result = await Controller.DeleteTag(-1);
 
-        Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
+        Assert.IsInstanceOfType<NotFoundObjectResult>(result);
     }
 
     [TestMethod]
@@ -88,7 +88,7 @@ public class DeleteTagTests : TagTestsSetup
 
         IActionResult result = await Controller.DeleteTag(tag2.Id);
 
-        Assert.IsInstanceOfType(result, typeof(OkResult));
+        Assert.IsInstanceOfType<OkResult>(result);
 
         Tag? deletedTag = await Context.Tags.FindAsync(tag2.Id);
         Assert.IsNull(deletedTag);
@@ -110,10 +110,10 @@ public class DeleteTagTests : TagTestsSetup
         long tagId = tag.Id;
 
         IActionResult result1 = await Controller.DeleteTag(tagId);
-        Assert.IsInstanceOfType(result1, typeof(OkResult));
+        Assert.IsInstanceOfType<OkResult>(result1);
 
         IActionResult result2 = await Controller.DeleteTag(tagId);
-        Assert.IsInstanceOfType(result2, typeof(NotFoundObjectResult));
+        Assert.IsInstanceOfType<NotFoundObjectResult>(result2);
     }
 
     [TestMethod]
@@ -126,7 +126,7 @@ public class DeleteTagTests : TagTestsSetup
 
         IActionResult result = await Controller.DeleteTag(tag1.Id);
 
-        Assert.IsInstanceOfType(result, typeof(OkResult));
+        Assert.IsInstanceOfType<OkResult>(result);
 
         Tag? deletedTag = await Context.Tags.FindAsync(tag1.Id);
         Assert.IsNull(deletedTag);

@@ -18,7 +18,7 @@ public class UpdateLibraryTests : LibraryTestsSetup
 
         IActionResult result = await Controller.PutLibrary(library.Id, updateDto);
 
-        Assert.IsInstanceOfType(result, typeof(OkResult));
+        Assert.IsInstanceOfType<OkResult>(result);
 
         Library? updatedLibrary = await Context.Libraries.FindAsync(library.Id);
         Assert.IsNotNull(updatedLibrary);
@@ -35,7 +35,7 @@ public class UpdateLibraryTests : LibraryTestsSetup
 
         IActionResult result = await Controller.PutLibrary(999999, updateDto);
 
-        Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
+        Assert.IsInstanceOfType<NotFoundObjectResult>(result);
     }
 
     [TestMethod]
@@ -51,7 +51,7 @@ public class UpdateLibraryTests : LibraryTestsSetup
 
         IActionResult result = await Controller.PutLibrary(firstLibrary.Id, updateDto);
 
-        Assert.IsInstanceOfType(result, typeof(ConflictObjectResult));
+        Assert.IsInstanceOfType<ConflictObjectResult>(result);
     }
 
     [TestMethod]
@@ -65,6 +65,6 @@ public class UpdateLibraryTests : LibraryTestsSetup
 
         IActionResult result = await Controller.PutLibrary(library.Id, updateDto);
 
-        Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
+        Assert.IsInstanceOfType<BadRequestObjectResult>(result);
     }
 }

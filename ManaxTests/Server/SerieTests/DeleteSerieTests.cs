@@ -13,7 +13,7 @@ public class DeleteSerieTests : SerieTestsSetup
         Serie serie = Context.Series.First();
         IActionResult result = await Controller.DeleteSerie(serie.Id);
 
-        Assert.IsInstanceOfType(result, typeof(OkResult));
+        Assert.IsInstanceOfType<OkResult>(result);
 
         Serie? deletedSerie = await Context.Series.FindAsync(serie.Id);
         Assert.IsNull(deletedSerie);
@@ -24,7 +24,7 @@ public class DeleteSerieTests : SerieTestsSetup
     {
         IActionResult result = await Controller.DeleteSerie(999999);
 
-        Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
+        Assert.IsInstanceOfType<NotFoundObjectResult>(result);
     }
 
     [TestMethod]
@@ -36,7 +36,7 @@ public class DeleteSerieTests : SerieTestsSetup
 
         IActionResult result = await Controller.DeleteSerie(serie.Id);
 
-        Assert.IsInstanceOfType(result, typeof(OkResult));
+        Assert.IsInstanceOfType<OkResult>(result);
 
         Serie? deletedSerie = await Context.Series.FindAsync(serie.Id);
         Assert.IsNull(deletedSerie);
@@ -53,7 +53,7 @@ public class DeleteSerieTests : SerieTestsSetup
 
         IActionResult result = await Controller.DeleteSerie(serie.Id);
 
-        Assert.IsInstanceOfType(result, typeof(OkResult));
+        Assert.IsInstanceOfType<OkResult>(result);
 
         int finalCount = Context.Series.Count();
         Assert.AreEqual(initialCount - 1, finalCount);

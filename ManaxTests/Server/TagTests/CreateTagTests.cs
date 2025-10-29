@@ -19,7 +19,7 @@ public class CreateTagTests : TagTestsSetup
 
         IActionResult result = await Controller.CreateTag(tagCreate);
 
-        Assert.IsInstanceOfType(result, typeof(OkResult));
+        Assert.IsInstanceOfType<OkResult>(result);
 
         Tag? createdTag = await Context.Tags.FirstOrDefaultAsync(t => t.Name == "Adventure");
         Assert.IsNotNull(createdTag);
@@ -38,7 +38,7 @@ public class CreateTagTests : TagTestsSetup
 
         IActionResult result = await Controller.CreateTag(tagCreate);
 
-        Assert.IsInstanceOfType(result, typeof(OkResult));
+        Assert.IsInstanceOfType<OkResult>(result);
         Assert.IsNotNull(MockNotificationService.TagCreated);
         Assert.AreEqual("Horror", MockNotificationService.TagCreated.Name);
         Assert.AreEqual(-65536, MockNotificationService.TagCreated.ColorArgb);
@@ -71,7 +71,7 @@ public class CreateTagTests : TagTestsSetup
 
         IActionResult result = await Controller.CreateTag(tagCreate);
 
-        Assert.IsInstanceOfType(result, typeof(OkResult));
+        Assert.IsInstanceOfType<OkResult>(result);
 
         Tag? createdTag = await Context.Tags.FirstOrDefaultAsync(t => t.Name == "Neutral");
         Assert.IsNotNull(createdTag);
@@ -89,7 +89,7 @@ public class CreateTagTests : TagTestsSetup
 
         IActionResult result = await Controller.CreateTag(tagCreate);
 
-        Assert.IsInstanceOfType(result, typeof(OkResult));
+        Assert.IsInstanceOfType<OkResult>(result);
 
         Tag? createdTag = await Context.Tags.FirstOrDefaultAsync(t => t.Name == "Dark");
         Assert.IsNotNull(createdTag);
@@ -109,7 +109,7 @@ public class CreateTagTests : TagTestsSetup
 
         IActionResult result = await Controller.CreateTag(tagCreate);
 
-        Assert.IsInstanceOfType(result, typeof(OkResult));
+        Assert.IsInstanceOfType<OkResult>(result);
 
         int finalCount = Context.Tags.Count();
         Assert.AreEqual(initialCount + 1, finalCount);
@@ -126,7 +126,7 @@ public class CreateTagTests : TagTestsSetup
 
         IActionResult result = await Controller.CreateTag(tagCreate);
 
-        Assert.IsInstanceOfType(result, typeof(OkResult));
+        Assert.IsInstanceOfType<OkResult>(result);
 
         Tag? createdTag =
             await Context.Tags.FirstOrDefaultAsync(t => t.Name == "Very Long Tag Name That Should Still Be Valid");
@@ -144,7 +144,7 @@ public class CreateTagTests : TagTestsSetup
 
         IActionResult result = await Controller.CreateTag(tagCreate);
 
-        Assert.IsInstanceOfType(result, typeof(OkResult));
+        Assert.IsInstanceOfType<OkResult>(result);
 
         Tag? createdTag = await Context.Tags.FirstOrDefaultAsync(t => t.Name == "TestId");
         Assert.IsNotNull(createdTag);

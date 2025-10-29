@@ -15,7 +15,7 @@ public class DeleteUserTests : UserTestsSetup
         User user = Context.Users.First();
         IActionResult result = await Controller.DeleteUser(user.Id);
 
-        Assert.IsInstanceOfType(result, typeof(OkResult));
+        Assert.IsInstanceOfType<OkResult>(result);
 
         User? deletedUser = await Context.Users.FindAsync(user.Id);
         Assert.IsNull(deletedUser);
@@ -26,7 +26,7 @@ public class DeleteUserTests : UserTestsSetup
     {
         IActionResult result = await Controller.DeleteUser(999999);
 
-        Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
+        Assert.IsInstanceOfType<NotFoundObjectResult>(result);
     }
 
     [TestMethod]
@@ -48,7 +48,7 @@ public class DeleteUserTests : UserTestsSetup
 
         IActionResult result = await Controller.DeleteUser(1);
 
-        Assert.IsInstanceOfType(result, typeof(ForbidResult));
+        Assert.IsInstanceOfType<ForbidResult>(result);
     }
 
     [TestMethod]
@@ -66,7 +66,7 @@ public class DeleteUserTests : UserTestsSetup
 
         IActionResult result = await Controller.DeleteUser(100);
 
-        Assert.IsInstanceOfType(result, typeof(ForbidResult));
+        Assert.IsInstanceOfType<ForbidResult>(result);
     }
 
     [TestMethod]
@@ -84,7 +84,7 @@ public class DeleteUserTests : UserTestsSetup
 
         IActionResult result = await Controller.DeleteUser(101);
 
-        Assert.IsInstanceOfType(result, typeof(ForbidResult));
+        Assert.IsInstanceOfType<ForbidResult>(result);
     }
 
     [TestMethod]
@@ -97,7 +97,7 @@ public class DeleteUserTests : UserTestsSetup
 
         IActionResult result = await Controller.DeleteUser(1);
 
-        Assert.IsInstanceOfType(result, typeof(UnauthorizedObjectResult));
+        Assert.IsInstanceOfType<UnauthorizedObjectResult>(result);
     }
 
     [TestMethod]
@@ -108,7 +108,7 @@ public class DeleteUserTests : UserTestsSetup
 
         IActionResult result = await Controller.DeleteUser(user.Id);
 
-        Assert.IsInstanceOfType(result, typeof(OkResult));
+        Assert.IsInstanceOfType<OkResult>(result);
 
         int finalCount = Context.Users.Count();
         Assert.AreEqual(initialCount - 1, finalCount);
@@ -133,7 +133,7 @@ public class DeleteUserTests : UserTestsSetup
 
         IActionResult result = await Controller.DeleteUser(1);
 
-        Assert.IsInstanceOfType(result, typeof(UnauthorizedObjectResult));
+        Assert.IsInstanceOfType<UnauthorizedObjectResult>(result);
     }
 
     [TestMethod]
@@ -166,6 +166,6 @@ public class DeleteUserTests : UserTestsSetup
         User adminUser = Context.Users.First(u => u.Role == UserRole.Admin);
         IActionResult result = await Controller.DeleteUser(adminUser.Id);
 
-        Assert.IsInstanceOfType(result, typeof(OkResult));
+        Assert.IsInstanceOfType<OkResult>(result);
     }
 }

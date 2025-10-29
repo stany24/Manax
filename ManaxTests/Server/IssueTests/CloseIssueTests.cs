@@ -12,7 +12,7 @@ public class CloseIssueTests : IssueTestsSetup
         IssueChapterReported issue = Context.ReportedIssuesChapter.First();
         IActionResult result = await Controller.CloseChapterIssue(issue.Id);
 
-        Assert.IsInstanceOfType(result, typeof(OkResult));
+        Assert.IsInstanceOfType<OkResult>(result);
 
         IssueChapterReported? deletedIssue = await Context.ReportedIssuesChapter.FindAsync(issue.Id);
         Assert.IsNull(deletedIssue);
@@ -23,7 +23,7 @@ public class CloseIssueTests : IssueTestsSetup
     {
         IActionResult result = await Controller.CloseChapterIssue(999999);
 
-        Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
+        Assert.IsInstanceOfType<NotFoundObjectResult>(result);
     }
 
     [TestMethod]
@@ -34,7 +34,7 @@ public class CloseIssueTests : IssueTestsSetup
 
         IActionResult result = await Controller.CloseChapterIssue(issue.Id);
 
-        Assert.IsInstanceOfType(result, typeof(OkResult));
+        Assert.IsInstanceOfType<OkResult>(result);
 
         int finalCount = Context.ReportedIssuesChapter.Count();
         Assert.AreEqual(initialCount - 1, finalCount);
@@ -46,7 +46,7 @@ public class CloseIssueTests : IssueTestsSetup
         IssueSerieReported issue = Context.ReportedIssuesSerie.First();
         IActionResult result = await Controller.CloseSerieIssue(issue.Id);
 
-        Assert.IsInstanceOfType(result, typeof(OkResult));
+        Assert.IsInstanceOfType<OkResult>(result);
 
         IssueSerieReported? deletedIssue = await Context.ReportedIssuesSerie.FindAsync(issue.Id);
         Assert.IsNull(deletedIssue);
@@ -57,7 +57,7 @@ public class CloseIssueTests : IssueTestsSetup
     {
         IActionResult result = await Controller.CloseSerieIssue(999999);
 
-        Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
+        Assert.IsInstanceOfType<NotFoundObjectResult>(result);
     }
 
     [TestMethod]
@@ -68,7 +68,7 @@ public class CloseIssueTests : IssueTestsSetup
 
         IActionResult result = await Controller.CloseSerieIssue(issue.Id);
 
-        Assert.IsInstanceOfType(result, typeof(OkResult));
+        Assert.IsInstanceOfType<OkResult>(result);
 
         int finalCount = Context.ReportedIssuesSerie.Count();
         Assert.AreEqual(initialCount - 1, finalCount);
@@ -82,7 +82,7 @@ public class CloseIssueTests : IssueTestsSetup
 
         IActionResult result = await Controller.CloseChapterIssue(issueToDelete.Id);
 
-        Assert.IsInstanceOfType(result, typeof(OkResult));
+        Assert.IsInstanceOfType<OkResult>(result);
 
         IssueChapterReported? deletedIssue = await Context.ReportedIssuesChapter.FindAsync(issueToDelete.Id);
         Assert.IsNull(deletedIssue);
@@ -99,7 +99,7 @@ public class CloseIssueTests : IssueTestsSetup
 
         IActionResult result = await Controller.CloseSerieIssue(issueToDelete.Id);
 
-        Assert.IsInstanceOfType(result, typeof(OkResult));
+        Assert.IsInstanceOfType<OkResult>(result);
 
         IssueSerieReported? deletedIssue = await Context.ReportedIssuesSerie.FindAsync(issueToDelete.Id);
         Assert.IsNull(deletedIssue);

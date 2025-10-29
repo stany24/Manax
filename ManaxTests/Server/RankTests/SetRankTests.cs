@@ -18,7 +18,7 @@ public class SetRankTests : RankTestsSetup
 
         IActionResult result = await Controller.SetUserRank(createDto);
 
-        Assert.IsInstanceOfType(result, typeof(OkResult));
+        Assert.IsInstanceOfType<OkResult>(result);
 
         UserRank? userRank =
             Context.UserRanks.FirstOrDefault(ur => ur.SerieId == createDto.SerieId && ur.RankId == createDto.RankId);
@@ -38,7 +38,7 @@ public class SetRankTests : RankTestsSetup
 
         IActionResult result = await Controller.SetUserRank(updateDto);
 
-        Assert.IsInstanceOfType(result, typeof(OkResult));
+        Assert.IsInstanceOfType<OkResult>(result);
 
         UserRank? userRank = Context.UserRanks.FirstOrDefault(ur => ur.SerieId == updateDto.SerieId);
         Assert.IsNotNull(userRank);
@@ -57,7 +57,7 @@ public class SetRankTests : RankTestsSetup
 
         IActionResult result = await Controller.SetUserRank(createDto);
 
-        Assert.IsInstanceOfType(result, typeof(OkResult));
+        Assert.IsInstanceOfType<OkResult>(result);
 
         int finalCount = Context.UserRanks.Count();
         Assert.AreEqual(initialCount + 1, finalCount);

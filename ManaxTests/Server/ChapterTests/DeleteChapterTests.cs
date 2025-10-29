@@ -12,7 +12,7 @@ public class DeleteChapterTests : ChapterTestsSetup
         Chapter chapter = Context.Chapters.First();
         IActionResult result = await Controller.DeleteChapter(chapter.Id);
 
-        Assert.IsInstanceOfType(result, typeof(OkResult));
+        Assert.IsInstanceOfType<OkResult>(result);
 
         Chapter? deletedChapter = await Context.Chapters.FindAsync(chapter.Id);
         Assert.IsNull(deletedChapter);
@@ -23,7 +23,7 @@ public class DeleteChapterTests : ChapterTestsSetup
     {
         IActionResult result = await Controller.DeleteChapter(999999);
 
-        Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
+        Assert.IsInstanceOfType<NotFoundObjectResult>(result);
     }
 
     [TestMethod]
@@ -34,7 +34,7 @@ public class DeleteChapterTests : ChapterTestsSetup
 
         IActionResult result = await Controller.DeleteChapter(chapter.Id);
 
-        Assert.IsInstanceOfType(result, typeof(OkResult));
+        Assert.IsInstanceOfType<OkResult>(result);
 
         int finalCount = Context.Chapters.Count();
         Assert.AreEqual(initialCount - 1, finalCount);
@@ -48,7 +48,7 @@ public class DeleteChapterTests : ChapterTestsSetup
 
         IActionResult result = await Controller.DeleteChapter(chapter.Id);
 
-        Assert.IsInstanceOfType(result, typeof(OkResult));
+        Assert.IsInstanceOfType<OkResult>(result);
 
         int finalSerieChaptersCount = Context.Chapters.Count(c => c.SerieId == 1);
         Assert.AreEqual(initialSerieChaptersCount - 1, finalSerieChaptersCount);

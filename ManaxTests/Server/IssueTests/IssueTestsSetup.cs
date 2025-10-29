@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using ManaxLibrary.DTO.Feature;
 using ManaxServer.Controllers;
 using ManaxServer.Models;
 using ManaxServer.Services.Mapper;
@@ -24,6 +25,8 @@ public abstract class IssueTestsSetup
         _mapper = new ManaxMapper(new ManaxMapping());
         _mockNotificationService = new MockNotificationService();
         _mockFeatureService = new MockFeatureService();
+        _mockFeatureService.SetFeatureEnabled(FeatureType.AutomaticIssues,true);
+        _mockFeatureService.SetFeatureEnabled(FeatureType.ReportedIssues,true);
 
         Controller = new IssueController(Context, _mapper, _mockNotificationService, _mockFeatureService);
 

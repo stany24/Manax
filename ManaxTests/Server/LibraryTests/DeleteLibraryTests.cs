@@ -13,7 +13,7 @@ public class DeleteLibraryTests : LibraryTestsSetup
         Library library = Context.Libraries.First();
         IActionResult result = await Controller.DeleteLibrary(library.Id);
 
-        Assert.IsInstanceOfType(result, typeof(OkResult));
+        Assert.IsInstanceOfType<OkResult>(result);
 
         Library? deletedLibrary = await Context.Libraries.FindAsync(library.Id);
         Assert.IsNull(deletedLibrary);
@@ -24,7 +24,7 @@ public class DeleteLibraryTests : LibraryTestsSetup
     {
         IActionResult result = await Controller.DeleteLibrary(999999);
 
-        Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
+        Assert.IsInstanceOfType<NotFoundObjectResult>(result);
     }
 
     [TestMethod]
@@ -37,7 +37,7 @@ public class DeleteLibraryTests : LibraryTestsSetup
 
         IActionResult result = await Controller.DeleteLibrary(library.Id);
 
-        Assert.IsInstanceOfType(result, typeof(OkResult));
+        Assert.IsInstanceOfType<OkResult>(result);
 
         Library? deletedLibrary = await Context.Libraries.FindAsync(library.Id);
         Assert.IsNull(deletedLibrary);

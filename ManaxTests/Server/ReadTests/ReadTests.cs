@@ -23,7 +23,7 @@ public class TestReadController : ReadTestsSetup
 
         IActionResult result = await Controller.Read(readCreateDto);
 
-        Assert.IsInstanceOfType(result, typeof(OkResult));
+        Assert.IsInstanceOfType<OkResult>(result);
 
         Read? createdRead = await Context.Reads
             .FirstOrDefaultAsync(r => r.ChapterId == chapter.Id && r.UserId == 1);
@@ -60,7 +60,7 @@ public class TestReadController : ReadTestsSetup
 
         IActionResult result = await Controller.Read(readCreateDto);
 
-        Assert.IsInstanceOfType(result, typeof(OkResult));
+        Assert.IsInstanceOfType<OkResult>(result);
 
         Read? updatedRead = await Context.Reads
             .FirstOrDefaultAsync(r => r.ChapterId == chapter.Id && r.UserId == user.Id);
@@ -80,7 +80,7 @@ public class TestReadController : ReadTestsSetup
 
         IActionResult result = await Controller.Read(readCreateDto);
 
-        Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
+        Assert.IsInstanceOfType<NotFoundObjectResult>(result);
     }
 
     [TestMethod]
@@ -99,7 +99,7 @@ public class TestReadController : ReadTestsSetup
 
         IActionResult result = await Controller.Read(readCreateDto);
 
-        Assert.IsInstanceOfType(result, typeof(UnauthorizedObjectResult));
+        Assert.IsInstanceOfType<UnauthorizedObjectResult>(result);
     }
 
     [TestMethod]
@@ -116,7 +116,7 @@ public class TestReadController : ReadTestsSetup
         IActionResult result = await Controller.Read(readCreateDto);
         DateTime afterRead = DateTime.UtcNow;
 
-        Assert.IsInstanceOfType(result, typeof(OkResult));
+        Assert.IsInstanceOfType<OkResult>(result);
 
         Read? createdRead = await Context.Reads
             .FirstOrDefaultAsync(r => r.ChapterId == chapter.Id && r.UserId == 1);
@@ -137,7 +137,7 @@ public class TestReadController : ReadTestsSetup
 
         IActionResult result = await Controller.Read(readCreateDto);
 
-        Assert.IsInstanceOfType(result, typeof(OkResult));
+        Assert.IsInstanceOfType<OkResult>(result);
         Assert.IsNotNull(MockNotificationService.ReadCreated);
     }
 
@@ -153,7 +153,7 @@ public class TestReadController : ReadTestsSetup
 
         IActionResult result = await Controller.Read(readCreateDto);
 
-        Assert.IsInstanceOfType(result, typeof(OkResult));
+        Assert.IsInstanceOfType<OkResult>(result);
 
         Read? createdRead = await Context.Reads
             .FirstOrDefaultAsync(r => r.ChapterId == chapter.Id && r.UserId == 1);
@@ -173,7 +173,7 @@ public class TestReadController : ReadTestsSetup
 
         IActionResult result = await Controller.Read(readCreateDto);
 
-        Assert.IsInstanceOfType(result, typeof(OkResult));
+        Assert.IsInstanceOfType<OkResult>(result);
 
         Read? createdRead = await Context.Reads
             .FirstOrDefaultAsync(r => r.ChapterId == chapter.Id && r.UserId == 1);
@@ -207,7 +207,7 @@ public class TestReadController : ReadTestsSetup
 
         IActionResult result = await Controller.Read(readCreateDto);
 
-        Assert.IsInstanceOfType(result, typeof(OkResult));
+        Assert.IsInstanceOfType<OkResult>(result);
 
         int readCount = Context.Reads.Count(r => r.ChapterId == chapter.Id && r.UserId == 1);
         Assert.AreEqual(1, readCount);
@@ -239,7 +239,7 @@ public class TestReadController : ReadTestsSetup
 
         IActionResult result = await Controller.Read(readCreateDto);
 
-        Assert.IsInstanceOfType(result, typeof(OkResult));
+        Assert.IsInstanceOfType<OkResult>(result);
 
         Read? otherUserReadAfter = await Context.Reads
             .FirstOrDefaultAsync(r => r.ChapterId == chapter.Id && r.UserId == otherUser.Id);
@@ -264,7 +264,7 @@ public class TestReadController : ReadTestsSetup
 
         IActionResult result = await Controller.Read(readCreateDto);
 
-        Assert.IsInstanceOfType(result, typeof(OkResult));
+        Assert.IsInstanceOfType<OkResult>(result);
 
         ReadDto? readCreated = MockNotificationService.ReadCreated;
         Assert.IsNotNull(readCreated);
@@ -285,7 +285,7 @@ public class TestReadController : ReadTestsSetup
 
         IActionResult result = await Controller.Read(readCreateDto);
 
-        Assert.IsInstanceOfType(result, typeof(OkResult));
+        Assert.IsInstanceOfType<OkResult>(result);
 
         Read? createdRead = await Context.Reads
             .FirstOrDefaultAsync(r => r.ChapterId == chapter.Id && r.UserId == 1);
@@ -307,7 +307,7 @@ public class TestReadController : ReadTestsSetup
             };
 
             IActionResult result = await Controller.Read(readCreateDto);
-            Assert.IsInstanceOfType(result, typeof(OkResult));
+            Assert.IsInstanceOfType<OkResult>(result);
         }
 
         int totalReads = Context.Reads.Count(r => r.UserId == 1);
