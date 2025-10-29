@@ -85,7 +85,8 @@ public class FrenchLocalization : ILocalization
                 LocalizationKey.PasswordNoSpecialCharacterOrDigit,
                 "Le mot de passe doit contenir au moins un caractère spécial ou un chiffre."
             },
-            { LocalizationKey.TagNotFound, "Le tag avec l'ID {0} n'existe pas." }
+            { LocalizationKey.TagNotFound, "Le tag avec l'ID {0} n'existe pas." },
+            { LocalizationKey.FeatureDisabled, "La fonctionnalité '{0}' est désactivée." }
         };
     }
 }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using DynamicData;
+using ManaxClient.ViewModels;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTO.User;
@@ -19,7 +20,17 @@ public static class UserSource
     {
         ServerNotification.OnUserCreated += OnUserCreated;
         ServerNotification.OnUserDeleted += OnUserDeleted;
-        LoadUsers();
+        MainWindowViewModel.PermissionsChanged += (_, permissions) =>
+        {
+            if (permissions.Contains(Permission.ReadUsers))
+            {
+                LoadUsers();
+            }
+            else
+            {
+                Users.Clear();
+            }
+        };
     }
 
     public static EventHandler<string>? ErrorEmitted { get; set; }

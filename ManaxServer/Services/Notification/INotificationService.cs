@@ -1,4 +1,5 @@
 using ManaxLibrary.DTO.Chapter;
+using ManaxLibrary.DTO.Feature;
 using ManaxLibrary.DTO.Issue.Reported;
 using ManaxLibrary.DTO.Library;
 using ManaxLibrary.DTO.Rank;
@@ -48,4 +49,5 @@ public interface INotificationService
     void NotifyTagCreatedAsync(TagDto tag);
     void NotifyTagUpdatedAsync(TagDto tag);
     void NotifyTagDeletedAsync(long tagId);
+    void NotifyFeatureChanged(ManaxLibrary.DTO.Feature.Feature feature);
 }

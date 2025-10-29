@@ -1,9 +1,11 @@
+using ManaxLibrary.DTO.Feature;
 using ManaxLibrary.DTO.Rank;
 using ManaxLibrary.DTO.User;
 using ManaxServer.Attributes;
 using ManaxServer.Localization;
 using ManaxServer.Models;
 using ManaxServer.Models.Rank;
+using ManaxServer.Services.Feature;
 using ManaxServer.Services.Mapper;
 using ManaxServer.Services.Notification;
 using Microsoft.AspNetCore.Mvc;
@@ -13,24 +15,26 @@ namespace ManaxServer.Controllers;
 
 [Route("api/rank")]
 [ApiController]
-public class RankController(ManaxContext context, IMapper mapper, INotificationService notificationService)
+public class RankController(ManaxContext context, IMapper mapper, INotificationService notificationService,IFeatureService featureService)
     : ControllerBase
 {
-    // GET: api/rank
     [HttpGet("/api/ranks")]
     [RequirePermission(Permission.ReadRanks)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<RankDto>>> GetRanks()
     {
+        if (!featureService.IsFeatureEnabled(FeatureType.Ranks)) { return BadRequest(Localizer.FeatureDisabled(FeatureType.Ranks)); }
+
         return await context.Ranks.Select(r => mapper.Map<RankDto>(r)).ToListAsync();
     }
 
-    // POST: api/rank
     [HttpPost]
     [RequirePermission(Permission.WriteRanks)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<long>> CreateRank(RankCreateDto rankCreate)
     {
+        if (!featureService.IsFeatureEnabled(FeatureType.Ranks)) { return BadRequest(Localizer.FeatureDisabled(FeatureType.Ranks)); }
+
         Rank rank = mapper.Map<Rank>(rankCreate);
         context.Ranks.Add(rank);
         await context.SaveChangesAsync();
@@ -38,7 +42,6 @@ public class RankController(ManaxContext context, IMapper mapper, INotificationS
         return rank.Id;
     }
 
-    // PUT: api/rank
     [HttpPut]
     [RequirePermission(Permission.WriteRanks)]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -46,6 +49,8 @@ public class RankController(ManaxContext context, IMapper mapper, INotificationS
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> UpdateRank(RankUpdateDto rank)
     {
+        if (!featureService.IsFeatureEnabled(FeatureType.Ranks)) { return BadRequest(Localizer.FeatureDisabled(FeatureType.Ranks)); }
+
         Rank? found = context.Ranks.FirstOrDefault(r => r.Id == rank.Id);
         if (found == null) return NotFound(Localizer.RankNotFound(rank.Id));
         mapper.Map(rank, found);
@@ -62,13 +67,14 @@ public class RankController(ManaxContext context, IMapper mapper, INotificationS
         return Ok();
     }
 
-    // DELETE: api/rank/5
     [HttpDelete("{id:long}")]
     [RequirePermission(Permission.DeleteRanks)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteRank(long id)
     {
+        if (!featureService.IsFeatureEnabled(FeatureType.Ranks)) { return BadRequest(Localizer.FeatureDisabled(FeatureType.Ranks)); }
+        
         Rank? rank = await context.Ranks.FindAsync(id);
         if (rank == null) return NotFound(Localizer.RankNotFound(id));
         context.Ranks.Remove(rank);
@@ -83,6 +89,8 @@ public class RankController(ManaxContext context, IMapper mapper, INotificationS
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> SetUserRank(UserRankCreateDto rank)
     {
+        if (!featureService.IsFeatureEnabled(FeatureType.Ranks)) { return BadRequest(Localizer.FeatureDisabled(FeatureType.Ranks)); }
+
         long? userId = UserController.GetCurrentUserId(HttpContext);
         if (userId == null) return Unauthorized(Localizer.MustBeLoggedInSetRank());
 
@@ -106,14 +114,15 @@ public class RankController(ManaxContext context, IMapper mapper, INotificationS
         await context.SaveChangesAsync();
         return Ok();
     }
-
-    // GET: api/rank
+    
     [HttpGet("/api/ranking")]
     [RequirePermission(Permission.ReadRanks)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult<IEnumerable<UserRankDto>>> GetRanking()
     {
+        if (!featureService.IsFeatureEnabled(FeatureType.Ranks)) { return BadRequest(Localizer.FeatureDisabled(FeatureType.Ranks)); }
+
         long? currentUserId = UserController.GetCurrentUserId(HttpContext);
         if (currentUserId == null) return Unauthorized(Localizer.MustBeLoggedInGetRanking());
         return await context.UserRanks

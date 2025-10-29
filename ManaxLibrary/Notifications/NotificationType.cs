@@ -39,5 +39,7 @@ public enum NotificationType
 
     TagCreated,
     TagUpdated,
-    TagDeleted
+    TagDeleted,
+    
+    FeatureModified
 }

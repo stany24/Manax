@@ -681,6 +681,66 @@ namespace ManaxClient.Localization {
             }
         }
         
+        public static string SettingsFeaturesPage_Title {
+            get {
+                return ResourceManager.GetString("SettingsFeaturesPage.Title", resourceCulture);
+            }
+        }
+        
+        public static string SettingsFeaturesPage_Subtitle {
+            get {
+                return ResourceManager.GetString("SettingsFeaturesPage.Subtitle", resourceCulture);
+            }
+        }
+        
+        public static string SettingsFeaturesPage_Save {
+            get {
+                return ResourceManager.GetString("SettingsFeaturesPage.Save", resourceCulture);
+            }
+        }
+        
+        public static string SettingsFeaturesPage_FeaturesUpdatedSuccess {
+            get {
+                return ResourceManager.GetString("SettingsFeaturesPage.FeaturesUpdatedSuccess", resourceCulture);
+            }
+        }
+        
+        public static string SettingsFeaturesPage_Feature_Ranks {
+            get {
+                return ResourceManager.GetString("SettingsFeaturesPage.Feature.Ranks", resourceCulture);
+            }
+        }
+        
+        public static string SettingsFeaturesPage_Feature_AutomaticIssues {
+            get {
+                return ResourceManager.GetString("SettingsFeaturesPage.Feature.AutomaticIssues", resourceCulture);
+            }
+        }
+        
+        public static string SettingsFeaturesPage_Feature_ReportedIssues {
+            get {
+                return ResourceManager.GetString("SettingsFeaturesPage.Feature.ReportedIssues", resourceCulture);
+            }
+        }
+        
+        public static string SettingsFeaturesPage_Description_Ranks {
+            get {
+                return ResourceManager.GetString("SettingsFeaturesPage.Description.Ranks", resourceCulture);
+            }
+        }
+        
+        public static string SettingsFeaturesPage_Description_AutomaticIssues {
+            get {
+                return ResourceManager.GetString("SettingsFeaturesPage.Description.AutomaticIssues", resourceCulture);
+            }
+        }
+        
+        public static string SettingsFeaturesPage_Description_ReportedIssues {
+            get {
+                return ResourceManager.GetString("SettingsFeaturesPage.Description.ReportedIssues", resourceCulture);
+            }
+        }
+        
         public static string ServerStatsPage_Title {
             get {
                 return ResourceManager.GetString("ServerStatsPage.Title", resourceCulture);
@@ -1299,6 +1359,12 @@ namespace ManaxClient.Localization {
             }
         }
         
+        public static string MainWindow_Parameters_Features {
+            get {
+                return ResourceManager.GetString("MainWindow.Parameters.Features", resourceCulture);
+            }
+        }
+        
         public static string MainWindow_Parameters {
             get {
                 return ResourceManager.GetString("MainWindow.Parameters", resourceCulture);
@@ -1347,15 +1413,15 @@ namespace ManaxClient.Localization {
             }
         }
         
-        public static string MainWindow_Tags {
-            get {
-                return ResourceManager.GetString("MainWindow.Tags", resourceCulture);
-            }
-        }
-        
         public static string MainWindow_Stats_Server {
             get {
                 return ResourceManager.GetString("MainWindow.Stats.Server", resourceCulture);
+            }
+        }
+        
+        public static string MainWindow_Tags {
+            get {
+                return ResourceManager.GetString("MainWindow.Tags", resourceCulture);
             }
         }
         
