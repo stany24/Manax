@@ -1,0 +1,36 @@
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:tag="clr-namespace:ManaxClient.ViewModels.Pages.Upload"
+    xmlns:viewModels="clr-namespace:ManaxClient.ViewModels"
+    xmlns:models="clr-namespace:ManaxClient.Models"
+    mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+    x:Class="ManaxClient.Views.Pages.Upload.UploadPageView"
+    x:DataType="tag:UploadPageViewModel"
+    IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).CanUploadChapter}">
+    
+    <Grid
+        RowDefinitions="Auto,*">
+        <ScrollViewer Grid.Row="0"
+                      VerticalScrollBarVisibility="Disabled"
+                      HorizontalScrollBarVisibility="Auto">
+            <TabStrip
+                ItemsSource="{Binding Tabs}" 
+                SelectedItem="{Binding SelectedTab}">
+                <TabStrip.ItemTemplate>
+                    <DataTemplate x:DataType="models:UploadTab">
+                        <TextBlock Foreground="{DynamicResource TextColor2}" 
+                                   Text="{Binding Title}"/>
+                    </DataTemplate>
+                </TabStrip.ItemTemplate>
+            </TabStrip>
+        </ScrollViewer>
+        
+        <ContentControl 
+            Content="{Binding SelectedTab.Content}" 
+            Grid.Row="1"/>
+    </Grid>
+
+</UserControl>
