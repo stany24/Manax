@@ -23,6 +23,7 @@ using Microsoft.EntityFrameworkCore;
 namespace ManaxServer;
 
 public class Program
+    
 {
     public static void Main(string[] args)
     {
@@ -33,6 +34,16 @@ public class Program
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
         builder.Services.AddHttpContextAccessor();
+
+        builder.Services.AddCors(options =>
+        {
+            options.AddPolicy("StrictNoCrossOrigin", policy =>
+            {
+                policy.SetIsOriginAllowed(_ => false);
+                policy.AllowAnyHeader();
+                policy.AllowAnyMethod();
+            });
+        });
 
         // SignalR configuration
         builder.Services.AddSignalR();
@@ -87,6 +98,8 @@ public class Program
         app.UseMiddleware<GlobalExceptionMiddleware>();
         app.UseRateLimiter();
         app.UseMiddleware<BearerAuthenticationMiddleware>();
+
+        app.UseCors("StrictNoCrossOrigin");
 
         if (app.Environment.IsDevelopment())
         {
