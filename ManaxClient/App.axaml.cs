@@ -4,6 +4,7 @@ using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
 using Jeek.Avalonia.Localization;
 using ManaxClient.Localization;
+using ManaxClient.Models.Theme;
 using ManaxClient.ViewModels;
 using ManaxClient.Views;
 
@@ -32,5 +33,6 @@ public class App : Application
         }
 
         base.OnFrameworkInitializationCompleted();
+        ThemeService.UpdateTheme(ThemePresets.GetPresets()[1],true);
     }
 }

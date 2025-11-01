@@ -6,10 +6,10 @@ namespace ManaxClient.ViewModels.Pages.Settings;
 
 public partial class SettingsAppViewModel : PageViewModel
 {
-    [ObservableProperty] private List<Theme> _availableThemes;
+    [ObservableProperty] private List<ManaxTheme> _availableThemes;
 
     private bool _isDarkMode;
-    private Theme _selectedTheme;
+    private ManaxTheme _selectedTheme;
 
     public SettingsAppViewModel()
     {
@@ -18,7 +18,7 @@ public partial class SettingsAppViewModel : PageViewModel
         _isDarkMode = false;
     }
 
-    public Theme SelectedTheme
+    public ManaxTheme SelectedTheme
     {
         get => _selectedTheme;
         set
