@@ -1020,4 +1020,91 @@
     <data name="RoleEditPopup.Name.Placeholder" xml:space="preserve">
         <value>Entrez le nom du rôle</value>
     </data>
+    <data name="FetchFromSourcePage.Title" xml:space="preserve">
+        <value>Récupération depuis la source</value>
+    </data>
+    <data name="FetchFromSourcePage.Sources" xml:space="preserve">
+        <value>Sources</value>
+    </data>
+    <data name="FetchFromSourcePage.AddSource" xml:space="preserve">
+        <value>Ajouter une source</value>
+    </data>
+    <data name="FetchFromSourcePage.FetchAll" xml:space="preserve">
+        <value>Tout récupérer</value>
+    </data>
+    <data name="FetchFromSourcePage.ClearAll" xml:space="preserve">
+        <value>Tout effacer</value>
+    </data>
+    <data name="FetchFromSourcePage.ProgressOverview" xml:space="preserve">
+        <value>Aperçu de la progression</value>
+    </data>
+    <data name="FetchFromSourcePage.OverallProgress" xml:space="preserve">
+        <value>Progression globale</value>
+    </data>
+    <data name="FetchFromSourcePage.TotalSources" xml:space="preserve">
+        <value>Sources totales</value>
+    </data>
+    <data name="FetchFromSourcePage.Completed" xml:space="preserve">
+        <value>Terminé</value>
+    </data>
+    <data name="FetchFromSourcePage.InProgress" xml:space="preserve">
+        <value>En cours</value>
+    </data>
+    <data name="FetchFromSourcePage.SourceDetails" xml:space="preserve">
+        <value>Détails de la source</value>
+    </data>
+    <data name="FetchFromSourcePage.Active" xml:space="preserve">
+        <value>Actif</value>
+    </data>
+    <data name="FetchFromSourcePage.FilesProcessed" xml:space="preserve">
+        <value>Fichiers traités</value>
+    </data>
+    <data name="FetchFromSourcePage.Progress" xml:space="preserve">
+        <value>Progression</value>
+    </data>
+    <data name="FetchFromSourcePage.ProcessingFolder" xml:space="preserve">
+        <value>Dossier de traitement</value>
+    </data>
+    <data name="FetchFromSourcePage.DestinationPath" xml:space="preserve">
+        <value>Chemin de destination</value>
+    </data>
+    <data name="FetchFromSourcePage.DestinationPath.Placeholder" xml:space="preserve">
+        <value>Sélectionnez le dossier de traitement...</value>
+    </data>
+    <data name="FetchFromSourcePage.Browse" xml:space="preserve">
+        <value>Parcourir...</value>
+    </data>
+    <data name="FetchFromSourcePage.FolderInformation" xml:space="preserve">
+        <value>Informations du dossier</value>
+    </data>
+    <data name="FetchFromSourcePage.Status" xml:space="preserve">
+        <value>Statut:</value>
+    </data>
+    <data name="FetchFromSourcePage.Status.Ready" xml:space="preserve">
+        <value>Prêt</value>
+    </data>
+    <data name="FetchFromSourcePage.Files" xml:space="preserve">
+        <value>Fichiers:</value>
+    </data>
+    <data name="FetchFromSourcePage.Size" xml:space="preserve">
+        <value>Taille:</value>
+    </data>
+    <data name="FetchFromSourcePage.Tip" xml:space="preserve">
+        <value>💡 Les fichiers seront copiés des dossiers sources vers cet emplacement de traitement.</value>
+    </data>
+    <data name="FetchFromSourcePage.OpenFolder" xml:space="preserve">
+        <value>Ouvrir le dossier</value>
+    </data>
+    <data name="FetchFromSourcePage.ClearFolder" xml:space="preserve">
+        <value>Effacer le dossier</value>
+    </data>
+    <data name="FetchFromSourcePage.SelectSourceFolder" xml:space="preserve">
+        <value>Sélectionner le dossier source</value>
+    </data>
+    <data name="FetchFromSourcePage.SelectProcessingFolder" xml:space="preserve">
+        <value>Sélectionner le dossier de traitement</value>
+    </data>
+    <data name="FetchFromSourcePage.FilesFormat" xml:space="preserve">
+        <value>{0} / {1} fichiers</value>
+    </data>
 </root>

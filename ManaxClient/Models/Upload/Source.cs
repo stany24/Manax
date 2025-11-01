@@ -60,11 +60,13 @@ public partial class Source:ObservableObject
     {
         string[] dirs = Directory.GetDirectories(Path, "*", SearchOption.AllDirectories);
         FileNumber = dirs.Length;
+        Current = 0;
 
         foreach (string dir in dirs)
         {
             string dest = dir.Replace(Path, processingFolder);
             Directory.CreateDirectory(dest);
+            Current++;
         }
     }
 }
