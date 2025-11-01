@@ -726,4 +726,91 @@
     <data name="LoginPage.Invalid.Host.Port" xml:space="preserve">
         <value>Invalid host or port</value>
     </data>
+    <data name="FetchFromSourcePage.Title" xml:space="preserve">
+        <value>Fetch From Source</value>
+    </data>
+    <data name="FetchFromSourcePage.Sources" xml:space="preserve">
+        <value>Sources</value>
+    </data>
+    <data name="FetchFromSourcePage.AddSource" xml:space="preserve">
+        <value>Add Source</value>
+    </data>
+    <data name="FetchFromSourcePage.FetchAll" xml:space="preserve">
+        <value>Fetch All</value>
+    </data>
+    <data name="FetchFromSourcePage.ClearAll" xml:space="preserve">
+        <value>Clear All</value>
+    </data>
+    <data name="FetchFromSourcePage.ProgressOverview" xml:space="preserve">
+        <value>Progress Overview</value>
+    </data>
+    <data name="FetchFromSourcePage.OverallProgress" xml:space="preserve">
+        <value>Overall Progress</value>
+    </data>
+    <data name="FetchFromSourcePage.TotalSources" xml:space="preserve">
+        <value>Total Sources</value>
+    </data>
+    <data name="FetchFromSourcePage.Completed" xml:space="preserve">
+        <value>Completed</value>
+    </data>
+    <data name="FetchFromSourcePage.InProgress" xml:space="preserve">
+        <value>In Progress</value>
+    </data>
+    <data name="FetchFromSourcePage.SourceDetails" xml:space="preserve">
+        <value>Source Details</value>
+    </data>
+    <data name="FetchFromSourcePage.Active" xml:space="preserve">
+        <value>Active</value>
+    </data>
+    <data name="FetchFromSourcePage.FilesProcessed" xml:space="preserve">
+        <value>Files Processed</value>
+    </data>
+    <data name="FetchFromSourcePage.Progress" xml:space="preserve">
+        <value>Progress</value>
+    </data>
+    <data name="FetchFromSourcePage.ProcessingFolder" xml:space="preserve">
+        <value>Processing Folder</value>
+    </data>
+    <data name="FetchFromSourcePage.DestinationPath" xml:space="preserve">
+        <value>Destination Path</value>
+    </data>
+    <data name="FetchFromSourcePage.DestinationPath.Placeholder" xml:space="preserve">
+        <value>Select processing folder...</value>
+    </data>
+    <data name="FetchFromSourcePage.Browse" xml:space="preserve">
+        <value>Browse...</value>
+    </data>
+    <data name="FetchFromSourcePage.FolderInformation" xml:space="preserve">
+        <value>Folder Information</value>
+    </data>
+    <data name="FetchFromSourcePage.Status" xml:space="preserve">
+        <value>Status:</value>
+    </data>
+    <data name="FetchFromSourcePage.Status.Ready" xml:space="preserve">
+        <value>Ready</value>
+    </data>
+    <data name="FetchFromSourcePage.Files" xml:space="preserve">
+        <value>Files:</value>
+    </data>
+    <data name="FetchFromSourcePage.Size" xml:space="preserve">
+        <value>Size:</value>
+    </data>
+    <data name="FetchFromSourcePage.Tip" xml:space="preserve">
+        <value>💡 Files will be copied from source folders to this processing location.</value>
+    </data>
+    <data name="FetchFromSourcePage.OpenFolder" xml:space="preserve">
+        <value>Open Folder</value>
+    </data>
+    <data name="FetchFromSourcePage.ClearFolder" xml:space="preserve">
+        <value>Clear Folder</value>
+    </data>
+    <data name="FetchFromSourcePage.SelectSourceFolder" xml:space="preserve">
+        <value>Select Source Folder</value>
+    </data>
+    <data name="FetchFromSourcePage.SelectProcessingFolder" xml:space="preserve">
+        <value>Select Processing Folder</value>
+    </data>
+    <data name="FetchFromSourcePage.FilesFormat" xml:space="preserve">
+        <value>{0} / {1} files</value>
+    </data>
 </root>

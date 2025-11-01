@@ -5,9 +5,283 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewModels="clr-namespace:ManaxClient.ViewModels"
     xmlns:tab="clr-namespace:ManaxClient.ViewModels.Pages.Upload.Tab"
+    xmlns:upload="clr-namespace:ManaxClient.Models.Upload"
+    xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Pages.Upload.Tab.FetchFromSourceTabView"
     x:DataType="tab:FetchFromSourceTabViewModel"
     IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).CanUploadChapter}">
-    <TextBlock>FetchFromSource</TextBlock>
+    
+    <Grid ColumnDefinitions="250,*,280" RowDefinitions="Auto,*" Margin="16">
+        
+        <!-- Header -->
+        <TextBlock Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3" 
+                   Classes="title" 
+                   Text="{localization:Localize FetchFromSourcePage.Title}" 
+                   Margin="0,0,0,16"/>
+        
+        <!-- Left Panel: Sources List -->
+        <Border Grid.Column="0" Grid.Row="1" 
+                Classes="card" 
+                Margin="0,0,8,0">
+            <Grid RowDefinitions="Auto,*,Auto">
+                
+                <!-- Sources Header -->
+                <StackPanel Grid.Row="0" Spacing="8" Margin="0,0,0,12">
+                    <TextBlock Classes="subtitle"
+                               Foreground="{DynamicResource TextColor1}"
+                               Text="{localization:Localize FetchFromSourcePage.Sources}"
+                               Margin="0"/>
+                    <Button Classes="primary" 
+                            Content="{localization:Localize FetchFromSourcePage.AddSource}" 
+                            HorizontalAlignment="Stretch"
+                            Padding="8,6"
+                            Command="{Binding AddSource}"/>
+                </StackPanel>
+                
+                <!-- Sources List -->
+                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                    <ItemsControl ItemsSource="{Binding SourcesFolders}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="upload:Source">
+                                <Border Classes="task-item" Margin="0,4">
+                                    <Grid RowDefinitions="Auto,Auto,Auto">
+                                        
+                                        <!-- Path -->
+                                        <TextBlock Grid.Row="0" 
+                                                   Text="{Binding Path}" 
+                                                   FontWeight="Medium"
+                                                   TextWrapping="Wrap"
+                                                   Margin="0,0,0,4"/>
+                                        
+                                        <!-- Progress Bar -->
+                                        <ProgressBar Grid.Row="1" 
+                                                     Minimum="0" 
+                                                     Maximum="{Binding FileNumber}" 
+                                                     Value="{Binding Current}"
+                                                     Height="6"
+                                                     Margin="0,4"/>
+                                        
+                                        <!-- Progress Text -->
+                                        <TextBlock Grid.Row="2" 
+                                                   FontSize="11"
+                                                   Foreground="{DynamicResource SecondaryBrush}"
+                                                   Margin="0,4,0,0">
+                                            <TextBlock.Text>
+                                                <MultiBinding StringFormat="{}{0} / {1} files">
+                                                    <Binding Path="Current"/>
+                                                    <Binding Path="FileNumber"/>
+                                                </MultiBinding>
+                                            </TextBlock.Text>
+                                        </TextBlock>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+                
+                <!-- Action Buttons -->
+                <StackPanel Grid.Row="2" Spacing="8" Margin="0,12,0,0">
+                    <Button Classes="primary" 
+                            Content="{localization:Localize FetchFromSourcePage.FetchAll}" 
+                            HorizontalAlignment="Stretch"
+                            IsEnabled="{Binding CanFetch}"
+                            Command="{Binding Fetch}"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+        
+        <!-- Middle Panel: Progress Visualization -->
+        <Border Grid.Column="1" Grid.Row="1" 
+                Classes="card" 
+                Margin="8,0">
+            <Grid RowDefinitions="Auto,*">
+                
+                <!-- Progress Header -->
+                <TextBlock Grid.Row="0"
+                           Foreground="{DynamicResource TextColor1}"
+                           Classes="subtitle" 
+                           Text="{localization:Localize FetchFromSourcePage.ProgressOverview}" 
+                           Margin="0,0,0,12"/>
+                
+                <!-- Progress Content -->
+                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                    <StackPanel Spacing="16">
+                        
+                        <!-- Overall Progress -->
+                        <Border Background="{DynamicResource Background3}" 
+                                CornerRadius="8" 
+                                Padding="16">
+                            <Grid RowDefinitions="Auto,Auto,Auto">
+                                <TextBlock Grid.Row="0" 
+                                           Foreground="{DynamicResource TextColor1}"
+                                           Text="{localization:Localize FetchFromSourcePage.OverallProgress}" 
+                                           FontWeight="SemiBold"
+                                           FontSize="16"
+                                           Margin="0,0,0,12"/>
+                                
+                                <ProgressBar Grid.Row="1" 
+                                             IsIndeterminate="False"
+                                             Height="24"
+                                             Margin="0,0,0,8"/>
+                                
+                                <Grid Grid.Row="2" ColumnDefinitions="*,*,*">
+                                    <StackPanel Grid.Column="0" Spacing="4">
+                                        <TextBlock Text="{localization:Localize FetchFromSourcePage.TotalSources}" 
+                                                   FontSize="12" 
+                                                   Foreground="{DynamicResource TextColor1}"/>
+                                        <TextBlock Text="{Binding SourcesFolders.Count}" 
+                                                   FontSize="20" 
+                                                   FontWeight="Bold"
+                                                   Foreground="{DynamicResource PrimaryBrush}"/>
+                                    </StackPanel>
+                                    
+                                    <StackPanel Grid.Column="1" Spacing="4">
+                                        <TextBlock Text="{localization:Localize FetchFromSourcePage.Completed}" 
+                                                   FontSize="12" 
+                                                   Foreground="{DynamicResource TextColor1}"/>
+                                        <TextBlock Text="0" 
+                                                   FontSize="20" 
+                                                   FontWeight="Bold"
+                                                   Foreground="{DynamicResource SuccessBrush}"/>
+                                    </StackPanel>
+                                    
+                                    <StackPanel Grid.Column="2" Spacing="4">
+                                        <TextBlock Text="{localization:Localize FetchFromSourcePage.InProgress}" 
+                                                   FontSize="12" 
+                                                   Foreground="{DynamicResource TextColor1}"/>
+                                        <TextBlock Text="0" 
+                                                   FontSize="20" 
+                                                   FontWeight="Bold"
+                                                   Foreground="{DynamicResource InfoBrush}"/>
+                                    </StackPanel>
+                                </Grid>
+                            </Grid>
+                        </Border>
+                        
+                        <!-- Detailed Progress per Source -->
+                        <StackPanel Spacing="12">
+                            <TextBlock Text="{localization:Localize FetchFromSourcePage.SourceDetails}"
+                                       Foreground="{DynamicResource TextColor1}"
+                                       FontWeight="SemiBold"
+                                       FontSize="14"
+                                       Margin="0,8,0,0"/>
+                            
+                            <ItemsControl ItemsSource="{Binding SourcesFolders}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate x:DataType="upload:Source">
+                                        <Border Background="{DynamicResource Background3}" 
+                                                CornerRadius="6" 
+                                                Padding="12"
+                                                Margin="0,4">
+                                            <Grid RowDefinitions="Auto,Auto,Auto,Auto" ColumnDefinitions="*,Auto">
+                                                
+                                                <!-- Source Name -->
+                                                <TextBlock Grid.Row="0" Grid.Column="0"
+                                                           Text="{Binding Path}" 
+                                                           FontWeight="Medium"
+                                                           TextTrimming="CharacterEllipsis"
+                                                           ToolTip.Tip="{Binding Path}"/>
+                                                
+                                                <!-- Status Badge -->
+                                                <Border Grid.Row="0" Grid.Column="1"
+                                                        Background="{DynamicResource InfoBrush}"
+                                                        CornerRadius="4"
+                                                        Padding="8,4"
+                                                        Margin="8,0,0,0">
+                                                    <TextBlock Text="{localization:Localize FetchFromSourcePage.Active}" 
+                                                               FontSize="11"
+                                                               Foreground="White"
+                                                               FontWeight="Medium"/>
+                                                </Border>
+                                                
+                                                <!-- Progress Bar -->
+                                                <ProgressBar Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+                                                             Minimum="0" 
+                                                             Maximum="{Binding FileNumber}" 
+                                                             Value="{Binding Current}"
+                                                             Height="8"
+                                                             Margin="0,8"/>
+                                                
+                                                <!-- Statistics -->
+                                                <Grid Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
+                                                      ColumnDefinitions="*,*" 
+                                                      Margin="0,8,0,0">
+                                                    <StackPanel Grid.Column="0">
+                                                        <TextBlock Text="{localization:Localize FetchFromSourcePage.FilesProcessed}" 
+                                                                   FontSize="11" 
+                                                                   Foreground="{DynamicResource SecondaryBrush}"/>
+                                                        <TextBlock FontSize="14" FontWeight="SemiBold">
+                                                            <TextBlock.Text>
+                                                                <MultiBinding StringFormat="{}{0} / {1}">
+                                                                    <Binding Path="Current"/>
+                                                                    <Binding Path="FileNumber"/>
+                                                                </MultiBinding>
+                                                            </TextBlock.Text>
+                                                        </TextBlock>
+                                                    </StackPanel>
+                                                    
+                                                    <StackPanel Grid.Column="1">
+                                                        <TextBlock Text="{localization:Localize FetchFromSourcePage.Progress}" 
+                                                                   FontSize="11" 
+                                                                   Foreground="{DynamicResource SecondaryBrush}"/>
+                                                        <TextBlock Text="0%" 
+                                                                   FontSize="14" 
+                                                                   FontWeight="SemiBold"/>
+                                                    </StackPanel>
+                                                </Grid>
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </StackPanel>
+                </ScrollViewer>
+            </Grid>
+        </Border>
+        
+        <!-- Right Panel: Processing Folder -->
+        <Border Grid.Column="2" Grid.Row="1" 
+                Classes="card" 
+                Margin="8,0,0,0">
+            <Grid RowDefinitions="Auto,Auto,*,Auto">
+                
+                <!-- Processing Folder Header -->
+                <TextBlock Grid.Row="0" 
+                           Classes="subtitle"
+                           Foreground="{DynamicResource TextColor1}"
+                           Text="{localization:Localize FetchFromSourcePage.ProcessingFolder}" 
+                           Margin="0,0,0,12"/>
+                
+                <!-- Folder Path Input -->
+                <StackPanel Grid.Row="1" Spacing="8">
+                    <TextBlock Text="{localization:Localize FetchFromSourcePage.DestinationPath}" 
+                               FontWeight="Medium"
+                               FontSize="12"
+                               Foreground="{DynamicResource TextColor1}"/>
+                    <TextBox Text="{Binding ProcessingFolder}" 
+                             Foreground="{DynamicResource TextColor1}"
+                             Background="{DynamicResource Background2}"
+                             Watermark="{localization:Localize FetchFromSourcePage.DestinationPath.Placeholder}"
+                             Padding="8"/>
+                    <Button Classes="secondary" 
+                            Foreground="{DynamicResource TextColor2}"
+                            Content="{localization:Localize FetchFromSourcePage.Browse}" 
+                            Command="{Binding BrowseProcessingFolder}"
+                            HorizontalAlignment="Stretch"
+                            Padding="8,6"/>
+                </StackPanel>
+                
+                <!-- Action Buttons -->
+                <StackPanel Grid.Row="3" Spacing="8" Margin="0,16,0,0">
+                    <Button Classes="secondary" 
+                            Content="{localization:Localize FetchFromSourcePage.OpenFolder}" 
+                            HorizontalAlignment="Stretch"
+                            Padding="8,6"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
 </UserControl>
