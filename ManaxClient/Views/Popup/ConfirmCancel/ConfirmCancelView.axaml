@@ -7,7 +7,9 @@
     xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Popup.ConfirmCancel.ConfirmCancelView"
-    x:DataType="confirmCancel:ConfirmCancelViewModel">
+    x:DataType="confirmCancel:ConfirmCancelViewModel"
+    Background="{DynamicResource MaterialCardBackgroundBrush}"
+    CornerRadius="5">
     <Grid
         HorizontalAlignment="Center"
         VerticalAlignment="Center"

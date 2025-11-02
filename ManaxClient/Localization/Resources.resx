@@ -813,4 +813,7 @@
     <data name="FetchFromSourcePage.FilesFormat" xml:space="preserve">
         <value>{0} / {1} files</value>
     </data>
+    <data name="MainWindow.Upload" xml:space="preserve">
+        <value>Upload pipeline</value>
+    </data>
 </root>

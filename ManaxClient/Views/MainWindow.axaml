@@ -42,9 +42,8 @@
                         </StackPanel>
                     </Button>
 
-                    <Separator Margin="8,16" />
-
                     <TextBlock Classes="subtitle"
+                               IsVisible="{Binding Libraries.Count}"
                                Text="{localization:Localize MainWindow.Libraries}"
                                Margin="16,8" />
 
@@ -69,9 +68,7 @@
                             </ItemsControl.ItemsPanel>
                         </ItemsControl>
                     </ScrollViewer>
-
-                    <Separator Margin="8,16" IsVisible="{Binding IsAdmin}" />
-
+                    
                     <TextBlock Classes="subtitle"
                                Text="{localization:Localize MainWindow.Admin}"
                                Margin="16,8"
@@ -163,8 +160,6 @@
                         </StackPanel>
                     </Button>
 
-                    <Separator Margin="8,16"/>
-
                     <TextBlock Classes="subtitle"
                                Text="{localization:Localize MainWindow.Stats}"
                                Margin="16,8" />
@@ -250,8 +245,15 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Border Classes="notification">
-                            <TextBlock Text="{Binding .}"
-                                       FontWeight="Medium" />
+                            <Border Background="{DynamicResource MaterialCardBackgroundBrush}"
+                                    CornerRadius="5"
+                                    BorderThickness="2"
+                                    BorderBrush="{DynamicResource MaterialPrimaryMidBrush}">
+                                <TextBlock Text="{Binding .}"
+                                           Padding="5"
+                                           Background="{DynamicResource MaterialCardBackgroundBrush}"
+                                           FontWeight="Medium" />
+                            </Border>
                         </Border>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>

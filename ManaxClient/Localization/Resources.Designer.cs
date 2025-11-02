@@ -1634,5 +1634,11 @@ namespace ManaxClient.Localization {
                 return ResourceManager.GetString("FetchFromSourcePage.FilesFormat", resourceCulture);
             }
         }
+        
+        public static string MainWindow_Upload {
+            get {
+                return ResourceManager.GetString("MainWindow.Upload", resourceCulture);
+            }
+        }
     }
 }
