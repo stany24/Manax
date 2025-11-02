@@ -29,8 +29,8 @@ public partial class SettingsServerPageViewModel : PageViewModel
 
     public SettingsServerPageViewModel()
     {
-        AllImageFormats = new List<ImageFormat>(Enum.GetValues(typeof(ImageFormat)).Cast<ImageFormat>());
-        AllArchiveFormats = new List<ArchiveFormat>(Enum.GetValues(typeof(ArchiveFormat)).Cast<ArchiveFormat>());
+        AllImageFormats = new List<ImageFormat>(Enum.GetValues<ImageFormat>());
+        AllArchiveFormats = new List<ArchiveFormat>(Enum.GetValues<ArchiveFormat>());
         
         Task.Run(LoadSettings);
         InitializeLanguages();
