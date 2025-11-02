@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using ManaxClient.Models.Theme;
 
@@ -6,24 +7,25 @@ namespace ManaxClient.ViewModels.Pages.Settings;
 
 public partial class SettingsAppViewModel : PageViewModel
 {
-    [ObservableProperty] private List<ManaxTheme> _availableThemes;
+    [ObservableProperty] private List<ThemeSettingsData> _availableThemes;
 
     private bool _isDarkMode;
-    private ManaxTheme _selectedTheme;
+    private ThemeSettingsData _selectedThemeSettingsData;
 
     public SettingsAppViewModel()
     {
-        _availableThemes = ThemePresets.GetPresets();
-        _selectedTheme = _availableThemes[0];
-        _isDarkMode = false;
+        _availableThemes = ThemeSettings.GetPresets();
+        _selectedThemeSettingsData = AvailableThemes
+            .FirstOrDefault(t => t.Name == ThemeSettings.Current.Name) ?? AvailableThemes[0];
+        IsDarkMode = ThemeSettings.Current.IsDark;
     }
 
-    public ManaxTheme SelectedTheme
+    public ThemeSettingsData SelectedThemeSettingsData
     {
-        get => _selectedTheme;
+        get => _selectedThemeSettingsData;
         set
         {
-            if (SetProperty(ref _selectedTheme, value)) UpdateTheme();
+            if (SetProperty(ref _selectedThemeSettingsData, value)) UpdateTheme();
         }
     }
 
@@ -38,6 +40,7 @@ public partial class SettingsAppViewModel : PageViewModel
 
     private void UpdateTheme()
     {
-        ThemeService.UpdateTheme(SelectedTheme, IsDarkMode);
+        SelectedThemeSettingsData.IsDark = IsDarkMode;
+        ThemeSettings.UpdateTheme(SelectedThemeSettingsData);
     }
 }

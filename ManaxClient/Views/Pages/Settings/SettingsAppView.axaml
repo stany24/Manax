@@ -43,7 +43,7 @@
                     <Grid ColumnDefinitions="*" RowDefinitions="Auto,Auto" RowSpacing="16">
                         <StackPanel Grid.Column="0" Grid.Row="0" Spacing="6">
                             <TextBlock Text="{localization:Localize SettingsAppPage.SelectedTheme}" FontWeight="Medium" />
-                            <ComboBox SelectedItem="{Binding SelectedTheme}"
+                            <ComboBox SelectedItem="{Binding SelectedThemeSettingsData}"
                                       ItemsSource="{Binding AvailableThemes}"
                                       HorizontalAlignment="Stretch">
                                 <ComboBox.ItemTemplate>
@@ -63,16 +63,16 @@
                                 <Border Classes="card" Margin="4" Width="140" Height="70">
                                     <StackPanel Spacing="4">
                                         <TextBlock Text="{localization:Localize SettingsAppPage.PrimaryColor}" FontSize="12" FontWeight="Medium" />
-                                        <Rectangle Height="20" Fill="{Binding SelectedTheme.PrimaryColor}" />
-                                        <TextBlock Text="{Binding SelectedTheme.PrimaryColor.Color}" FontSize="10" />
+                                        <Rectangle Height="20" Fill="{Binding SelectedThemeSettingsData.PrimaryColor}" />
+                                        <TextBlock Text="{Binding SelectedThemeSettingsData.PrimaryColor.Color}" FontSize="10" />
                                     </StackPanel>
                                 </Border>
 
                                 <Border Classes="card" Margin="4" Width="140" Height="70">
                                     <StackPanel Spacing="4">
                                         <TextBlock Text="{localization:Localize SettingsAppPage.SecondaryColor}" FontSize="12" FontWeight="Medium" />
-                                        <Rectangle Height="20" Fill="{Binding SelectedTheme.SecondaryColor}" />
-                                        <TextBlock Text="{Binding SelectedTheme.SecondaryColor.Color}" FontSize="10" />
+                                        <Rectangle Height="20" Fill="{Binding SelectedThemeSettingsData.SecondaryColor}" />
+                                        <TextBlock Text="{Binding SelectedThemeSettingsData.SecondaryColor.Color}" FontSize="10" />
                                     </StackPanel>
                                 </Border>
                             </WrapPanel>

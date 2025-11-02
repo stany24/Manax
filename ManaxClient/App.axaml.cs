@@ -33,6 +33,6 @@ public class App : Application
         }
 
         base.OnFrameworkInitializationCompleted();
-        ThemeService.UpdateTheme(ThemePresets.GetPresets()[1],true);
+        ThemeSettings.Load();
     }
 }
