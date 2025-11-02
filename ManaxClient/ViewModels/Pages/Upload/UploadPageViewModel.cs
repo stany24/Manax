@@ -12,6 +12,7 @@ public partial class UploadPageViewModel:PageViewModel
 
     public UploadPageViewModel()
     {
+        Tabs.Add(new UploadTab("Configure upload", new ConfigureUploadTabViewModel()));
         Tabs.Add(new UploadTab("Fetch from source", new FetchFromSourceTabViewModel()));
         Tabs.Add(new UploadTab("Auto cleanup", new AutoCleanupTabViewModel()));
         Tabs.Add(new UploadTab("User edit", new UserEditTabViewModel()));

@@ -816,4 +816,46 @@
     <data name="MainWindow.Upload" xml:space="preserve">
         <value>Upload pipeline</value>
     </data>
+    <data name="ConfigureUploadPage.Title" xml:space="preserve">
+        <value>Configure Upload</value>
+    </data>
+    <data name="ConfigureUploadPage.SourceFolders" xml:space="preserve">
+        <value>Source Folders</value>
+    </data>
+    <data name="ConfigureUploadPage.SourceFolders.Description" xml:space="preserve">
+        <value>Folders where manga/chapter files are located</value>
+    </data>
+    <data name="ConfigureUploadPage.AddSource" xml:space="preserve">
+        <value>Add Source</value>
+    </data>
+    <data name="ConfigureUploadPage.RemoveSource" xml:space="preserve">
+        <value>Remove</value>
+    </data>
+    <data name="ConfigureUploadPage.NoSources" xml:space="preserve">
+        <value>No source folders configured. Click "Add Source" to get started.</value>
+    </data>
+    <data name="ConfigureUploadPage.ProcessingFolder" xml:space="preserve">
+        <value>Processing Folder</value>
+    </data>
+    <data name="ConfigureUploadPage.ProcessingFolder.Description" xml:space="preserve">
+        <value>Working directory for processing files before upload</value>
+    </data>
+    <data name="ConfigureUploadPage.Browse" xml:space="preserve">
+        <value>Browse...</value>
+    </data>
+    <data name="ConfigureUploadPage.OpenFolder" xml:space="preserve">
+        <value>Open Folder</value>
+    </data>
+    <data name="ConfigureUploadPage.CurrentPath" xml:space="preserve">
+        <value>Current Path</value>
+    </data>
+    <data name="ConfigureUploadPage.SelectFolder" xml:space="preserve">
+        <value>Select Folder</value>
+    </data>
+    <data name="ConfigureUploadPage.Settings" xml:space="preserve">
+        <value>Upload Settings</value>
+    </data>
+    <data name="ConfigureUploadPage.SaveSettings" xml:space="preserve">
+        <value>Settings are saved automatically</value>
+    </data>
 </root>

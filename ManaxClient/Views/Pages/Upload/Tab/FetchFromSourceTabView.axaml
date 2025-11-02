@@ -31,16 +31,11 @@
                     <TextBlock Classes="subtitle"
                                Text="{localization:Localize FetchFromSourcePage.Sources}"
                                Margin="0"/>
-                    <Button Classes="primary" 
-                            Content="{localization:Localize FetchFromSourcePage.AddSource}" 
-                            HorizontalAlignment="Stretch"
-                            Padding="8,6"
-                            Command="{Binding AddSource}"/>
                 </StackPanel>
                 
                 <!-- Sources List -->
                 <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
-                    <ItemsControl ItemsSource="{Binding SourcesFolders}">
+                    <ItemsControl ItemsSource="{Binding SourceFolders}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate x:DataType="upload:Source">
                                 <Border Classes="task-item" Margin="0,4">
@@ -125,7 +120,7 @@
                                     <StackPanel Grid.Column="0" Spacing="4">
                                         <TextBlock Text="{localization:Localize FetchFromSourcePage.TotalSources}" 
                                                    FontSize="12"/>
-                                        <TextBlock Text="{Binding SourcesFolders.Count}" 
+                                        <TextBlock Text="{Binding SourceFolders.Count}" 
                                                    FontSize="20" 
                                                    FontWeight="Bold"/>
                                     </StackPanel>
@@ -156,7 +151,7 @@
                                        FontSize="14"
                                        Margin="0,8,0,0"/>
                             
-                            <ItemsControl ItemsSource="{Binding SourcesFolders}">
+                            <ItemsControl ItemsSource="{Binding SourceFolders}">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate x:DataType="upload:Source">
                                         <Border CornerRadius="6" 
@@ -242,14 +237,9 @@
                     <TextBlock Text="{localization:Localize FetchFromSourcePage.DestinationPath}" 
                                FontWeight="Medium"
                                FontSize="12"/>
-                    <TextBox Text="{Binding ProcessingFolder}"
-                             Watermark="{localization:Localize FetchFromSourcePage.DestinationPath.Placeholder}"
+                    <TextBlock Text="{Binding ProcessingFolder}"
                              Padding="8"/>
-                    <Button Classes="secondary"
-                            Content="{localization:Localize FetchFromSourcePage.Browse}" 
-                            Command="{Binding BrowseProcessingFolder}"
-                            HorizontalAlignment="Stretch"
-                            Padding="8,6"/>
+
                 </StackPanel>
                 
                 <!-- Action Buttons -->

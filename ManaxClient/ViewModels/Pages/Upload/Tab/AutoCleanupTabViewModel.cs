@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Aspose.Zip.Rar;
 using CommunityToolkit.Mvvm.ComponentModel;
 using ImageMagick;
+using ManaxClient.Models.Upload;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTO.Setting;
@@ -17,7 +18,7 @@ namespace ManaxClient.ViewModels.Pages.Upload.Tab;
 
 public partial class AutoCleanupTabViewModel:PageViewModel
 {
-    [ObservableProperty] private string _folderToProcess = string.Empty;
+    [ObservableProperty] private string _processingFolder = string.Empty;
     [ObservableProperty] private int _nbArchive;
     [ObservableProperty] private int _currentArchive;
     [ObservableProperty] private int _nbImage;
@@ -30,6 +31,12 @@ public partial class AutoCleanupTabViewModel:PageViewModel
     public ObservableCollection<string> Errors { get; } = [];
     private SettingsData? _settings;
 
+    public AutoCleanupTabViewModel()
+    {
+        ProcessingFolder = UploadSettings.ProcessingFolder;
+        UploadSettings.SettingsChanged += (_, _) => {ProcessingFolder = UploadSettings.ProcessingFolder;};
+    }
+    
     public void Clean()
     {
         MoveSeriesToRoot();
@@ -42,7 +49,7 @@ public partial class AutoCleanupTabViewModel:PageViewModel
     private void MoveSeriesToRoot()
     {
         IEnumerable<string> sourcesFolders = _sourceFormats.SelectMany(pattern =>
-            Directory.GetDirectories(FolderToProcess, "*" + pattern, SearchOption.TopDirectoryOnly));
+            Directory.GetDirectories(ProcessingFolder, "*" + pattern, SearchOption.TopDirectoryOnly));
         foreach (string source in sourcesFolders)
         {
             MoveMangaOutOfSource(source);
@@ -55,15 +62,15 @@ public partial class AutoCleanupTabViewModel:PageViewModel
         foreach (string manga in Directory.GetDirectories(source, "*", SearchOption.TopDirectoryOnly))
         {
             string mangaName = manga.Replace(source, "");
-            if (!Directory.Exists(FolderToProcess + mangaName))
+            if (!Directory.Exists(ProcessingFolder + mangaName))
             {
-                Directory.Move(manga, FolderToProcess + mangaName);
+                Directory.Move(manga, ProcessingFolder + mangaName);
                 continue;
             }
 
             foreach (string file in Directory.GetFiles(manga))
             {
-                string fileName = FolderToProcess + mangaName + file.Replace(manga, "");
+                string fileName = ProcessingFolder + mangaName + file.Replace(manga, "");
                 File.Move(file, fileName);
             }
             Directory.Delete(manga);
@@ -73,7 +80,7 @@ public partial class AutoCleanupTabViewModel:PageViewModel
     private void DecompressFiles()
     {
         string[] compressedFiles = _archivesFormats
-            .SelectMany(ext => Directory.GetFiles(FolderToProcess, "*." + ext, SearchOption.AllDirectories))
+            .SelectMany(ext => Directory.GetFiles(ProcessingFolder, "*." + ext, SearchOption.AllDirectories))
             .ToArray();
         NbArchive = compressedFiles.Length;
         Parallel.ForEach(compressedFiles, file =>
@@ -124,7 +131,7 @@ public partial class AutoCleanupTabViewModel:PageViewModel
     private void ScaleAndConvertImages()
     {
         string[] imagesToConvert = _imagesFormats.AsParallel().SelectMany(ext =>
-            Directory.GetFiles(FolderToProcess, "*." + ext, SearchOption.AllDirectories)).ToArray();
+            Directory.GetFiles(ProcessingFolder, "*." + ext, SearchOption.AllDirectories)).ToArray();
         LoadSettings();
         NbImage = imagesToConvert.Length;
         Parallel.ForEach(imagesToConvert, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount },
@@ -179,9 +186,9 @@ public partial class AutoCleanupTabViewModel:PageViewModel
     private void RemoveUnwantedFiles()
     {
         List<string> uselessFiles = _formatToDelete.SelectMany(ext =>
-            Directory.EnumerateFiles(FolderToProcess, "*." + ext, SearchOption.AllDirectories)).ToList();
+            Directory.EnumerateFiles(ProcessingFolder, "*." + ext, SearchOption.AllDirectories)).ToList();
         uselessFiles.ForEach(File.Delete);
-        RemoveEmptyFolders(FolderToProcess);
+        RemoveEmptyFolders(ProcessingFolder);
     }
     
     private static void RemoveEmptyFolders(string folders)

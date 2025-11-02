@@ -1640,5 +1640,89 @@ namespace ManaxClient.Localization {
                 return ResourceManager.GetString("MainWindow.Upload", resourceCulture);
             }
         }
+        
+        public static string ConfigureUploadPage_Title {
+            get {
+                return ResourceManager.GetString("ConfigureUploadPage.Title", resourceCulture);
+            }
+        }
+        
+        public static string ConfigureUploadPage_SourceFolders {
+            get {
+                return ResourceManager.GetString("ConfigureUploadPage.SourceFolders", resourceCulture);
+            }
+        }
+        
+        public static string ConfigureUploadPage_SourceFolders_Description {
+            get {
+                return ResourceManager.GetString("ConfigureUploadPage.SourceFolders.Description", resourceCulture);
+            }
+        }
+        
+        public static string ConfigureUploadPage_AddSource {
+            get {
+                return ResourceManager.GetString("ConfigureUploadPage.AddSource", resourceCulture);
+            }
+        }
+        
+        public static string ConfigureUploadPage_RemoveSource {
+            get {
+                return ResourceManager.GetString("ConfigureUploadPage.RemoveSource", resourceCulture);
+            }
+        }
+        
+        public static string ConfigureUploadPage_NoSources {
+            get {
+                return ResourceManager.GetString("ConfigureUploadPage.NoSources", resourceCulture);
+            }
+        }
+        
+        public static string ConfigureUploadPage_ProcessingFolder {
+            get {
+                return ResourceManager.GetString("ConfigureUploadPage.ProcessingFolder", resourceCulture);
+            }
+        }
+        
+        public static string ConfigureUploadPage_ProcessingFolder_Description {
+            get {
+                return ResourceManager.GetString("ConfigureUploadPage.ProcessingFolder.Description", resourceCulture);
+            }
+        }
+        
+        public static string ConfigureUploadPage_Browse {
+            get {
+                return ResourceManager.GetString("ConfigureUploadPage.Browse", resourceCulture);
+            }
+        }
+        
+        public static string ConfigureUploadPage_OpenFolder {
+            get {
+                return ResourceManager.GetString("ConfigureUploadPage.OpenFolder", resourceCulture);
+            }
+        }
+        
+        public static string ConfigureUploadPage_CurrentPath {
+            get {
+                return ResourceManager.GetString("ConfigureUploadPage.CurrentPath", resourceCulture);
+            }
+        }
+        
+        public static string ConfigureUploadPage_SelectFolder {
+            get {
+                return ResourceManager.GetString("ConfigureUploadPage.SelectFolder", resourceCulture);
+            }
+        }
+        
+        public static string ConfigureUploadPage_Settings {
+            get {
+                return ResourceManager.GetString("ConfigureUploadPage.Settings", resourceCulture);
+            }
+        }
+        
+        public static string ConfigureUploadPage_SaveSettings {
+            get {
+                return ResourceManager.GetString("ConfigureUploadPage.SaveSettings", resourceCulture);
+            }
+        }
     }
 }

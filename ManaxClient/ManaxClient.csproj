@@ -168,6 +168,10 @@
           <DependentUpon>ManualUploadPageView.axaml</DependentUpon>
           <SubType>Code</SubType>
         </Compile>
+        <Compile Update="Views\Pages\Upload\Tab\ConfigureUploadTabView.axaml.cs">
+          <DependentUpon>ConfigureUploadTabView.axaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
     </ItemGroup>
 
     <ItemGroup>
