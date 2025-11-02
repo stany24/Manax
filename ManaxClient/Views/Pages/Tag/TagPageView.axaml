@@ -23,8 +23,7 @@
                 <StackPanel Grid.Column="0" Orientation="Vertical">
                     <TextBlock Classes="title" Text="{localization:Localize TagPage.Management}" />
                     <TextBlock Text="{localization1:LocalizeFormat LibraryPage.SeriesCount,
-                                   Param1={Binding $parent[UserControl].((tag:TagPageViewModel)DataContext).Tags.Count}}"
-                               Foreground="{StaticResource SecondaryBrush}" />
+                                   Param1={Binding $parent[UserControl].((tag:TagPageViewModel)DataContext).Tags.Count}}"/>
                 </StackPanel>
 
                 <Button Grid.Column="1"
@@ -49,8 +48,7 @@
                                FontWeight="Medium"
                                HorizontalAlignment="Center" />
                     <TextBlock Text="{localization:Localize TagPage.NoTags.Description}"
-                               TextAlignment="Center"
-                               Foreground="{StaticResource SecondaryBrush}" />
+                               TextAlignment="Center"/>
                     <Button Classes="primary"
                             IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).CanWriteTags}"
                             Command="{Binding CreateTag}"
@@ -70,9 +68,7 @@
                     <ItemsControl ItemsSource="{Binding Tags}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <Border Background="{DynamicResource Background1}"
-                                        BorderBrush="{DynamicResource Background2}"
-                                        BorderThickness="1"
+                                <Border BorderThickness="1"
                                         CornerRadius="8"
                                         Padding="16"
                                         Margin="0,4">

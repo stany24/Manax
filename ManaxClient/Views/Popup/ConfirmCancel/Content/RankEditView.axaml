@@ -15,44 +15,31 @@
                 <TextBlock
                     Text="{localization:Localize RankEditPopup.Title}"
                     FontSize="18"
-                    FontWeight="Bold"
-                    Foreground="#212529" />
+                    FontWeight="Bold"/>
                 <TextBlock
                     Text="{localization:Localize RankEditPopup.Description}"
-                    FontSize="12"
-                    Foreground="#6C757D" />
+                    FontSize="12"/>
             </StackPanel>
         </StackPanel>
 
         <StackPanel Grid.Row="1" Spacing="8">
             <TextBlock
                 Text="{localization:Localize RankEditPopup.Name}"
-                FontWeight="Medium"
-                Foreground="#495057" />
+                FontWeight="Medium"/>
             <TextBox
                 Text="{Binding Name}"
                 Watermark="{localization:Localize RankEditPopup.Name.Placeholder}"
                 Padding="12"
                 CornerRadius="8"
                 BorderThickness="1"
-                BorderBrush="#DEE2E6"
                 FontSize="14">
-                <TextBox.Styles>
-                    <Style Selector="TextBox:pointerover">
-                        <Setter Property="BorderBrush" Value="#007ACC" />
-                    </Style>
-                    <Style Selector="TextBox:focus">
-                        <Setter Property="BorderBrush" Value="#007ACC" />
-                    </Style>
-                </TextBox.Styles>
             </TextBox>
         </StackPanel>
 
         <StackPanel Grid.Row="2" Spacing="8">
             <TextBlock
                 Text="{localization:Localize RankEditPopup.Value}"
-                FontWeight="Medium"
-                Foreground="#495057" />
+                FontWeight="Medium"/>
             <NumericUpDown
                 Value="{Binding Value}"
                 Minimum="0"
@@ -60,16 +47,7 @@
                 Increment="1"
                 Padding="12"
                 CornerRadius="8"
-                BorderThickness="1"
-                BorderBrush="#DEE2E6">
-                <NumericUpDown.Styles>
-                    <Style Selector="NumericUpDown:pointerover">
-                        <Setter Property="BorderBrush" Value="#007ACC" />
-                    </Style>
-                    <Style Selector="NumericUpDown:focus">
-                        <Setter Property="BorderBrush" Value="#007ACC" />
-                    </Style>
-                </NumericUpDown.Styles>
+                BorderThickness="1">
             </NumericUpDown>
         </StackPanel>
     </Grid>

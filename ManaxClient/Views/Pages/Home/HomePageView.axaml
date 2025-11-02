@@ -19,8 +19,7 @@
                 <StackPanel Grid.Column="0" Orientation="Vertical">
                     <TextBlock Classes="title" Text="{localization:Localize HomePage.Welcome}" />
                     <TextBlock Classes="subtitle"
-                               Text="{localization:Localize HomePage.Subtitle}"
-                               Foreground="{StaticResource SecondaryBrush}" />
+                               Text="{localization:Localize HomePage.Subtitle}"/>
                 </StackPanel>
 
                 <Button Grid.Column="1"
@@ -48,7 +47,6 @@
                         Text="{localization:Localize HomePage.NoSeries.Description}"
                         TextAlignment="Center"
                         TextWrapping="Wrap"
-                        Foreground="{StaticResource SecondaryBrush}"
                         MaxWidth="400" />
                     <Button Classes="primary"
                             IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).CanWriteSeries}"
@@ -73,7 +71,6 @@
                         <TextBlock Grid.Column="1"
                                    Text="{localization1:LocalizeFormat HomePage.SeriesCount,
                                        Param1={Binding $parent[UserControl].((page:HomePageViewModel)DataContext).Series.Count}}"
-                                   Foreground="{StaticResource SecondaryBrush}"
                                    VerticalAlignment="Center" />
                     </Grid>
 
@@ -86,15 +83,8 @@
                                             Padding="8"
                                             CornerRadius="12"
                                             Margin="4">
-                                        <Border.Styles>
-                                            <Style Selector="Border:pointerover">
-                                                <Setter Property="Background" Value="{DynamicResource Background1}" />
-                                            </Style>
-                                        </Border.Styles>
                                         <previews:SeriePreview
                                             Serie="{Binding .}"
-                                            TextColor="{DynamicResource TextColor1}"
-                                            BackGroundColor="{DynamicResource Background1}"
                                             Command="{Binding $parent[UserControl].((page:HomePageViewModel)DataContext).MoveToSeriePage}"
                                             CommandParameter="{Binding .}" />
                                     </Border>

@@ -28,7 +28,6 @@ public class SeriePreview : Button
         Width = 150;
         Height = Width * 1.6;
         Padding = new Thickness(0);
-        Background = Brushes.White;
         BorderThickness = new Thickness(0);
         CornerRadius = new CornerRadius(12);
 

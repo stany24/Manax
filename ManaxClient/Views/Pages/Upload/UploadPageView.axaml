@@ -21,8 +21,7 @@
                 SelectedItem="{Binding SelectedTab}">
                 <TabStrip.ItemTemplate>
                     <DataTemplate x:DataType="models:UploadTab">
-                        <TextBlock Foreground="{DynamicResource TextColor2}" 
-                                   Text="{Binding Title}"/>
+                        <TextBlock Text="{Binding Title}"/>
                     </DataTemplate>
                 </TabStrip.ItemTemplate>
             </TabStrip>

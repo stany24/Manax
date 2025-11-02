@@ -120,19 +120,16 @@ public class IssuePreview : Button
         _problemText = new TextBlock
         {
             FontWeight = FontWeight.Medium,
-            FontSize = 14,
-            Foreground = new SolidColorBrush(Color.Parse("#212529"))
+            FontSize = 14
         };
 
         _infoText = new TextBlock
         {
-            FontSize = 12,
-            Foreground = new SolidColorBrush(Color.Parse("#6C757D"))
+            FontSize = 12
         };
 
         Border typeBadge = new()
         {
-            Background = new SolidColorBrush(Color.Parse("#FFF3CD")),
             CornerRadius = new CornerRadius(12),
             Padding = new Thickness(8, 4),
             VerticalAlignment = VerticalAlignment.Center
@@ -142,15 +139,13 @@ public class IssuePreview : Button
         TextBlock typeText = new()
         {
             FontSize = 11,
-            FontWeight = FontWeight.Medium,
-            Foreground = new SolidColorBrush(Color.Parse("#856404"))
+            FontWeight = FontWeight.Medium
         };
         typeText.Bind(TextBlock.TextProperty, new Binding(nameof(BadgeText)) { Source = this });
 
         _closeButton = new Button
         {
             Content = "×",
-            Foreground = Brushes.White,
             BorderThickness = new Thickness(0),
             Padding = new Thickness(8),
             FontSize = 16,

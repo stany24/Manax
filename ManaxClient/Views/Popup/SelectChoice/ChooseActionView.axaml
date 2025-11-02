@@ -26,11 +26,6 @@
                         Padding="12,8"
                         Command="{Binding $parent[UserControl].((selectChoice:ChooseActionViewModel)DataContext).SelectAction}"
                         CommandParameter="{Binding}">
-                        <Button.Styles>
-                            <Style Selector="Button:pointerover">
-                                <Setter Property="Background" Value="#F8F9FA" />
-                            </Style>
-                        </Button.Styles>
                     </Button>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>

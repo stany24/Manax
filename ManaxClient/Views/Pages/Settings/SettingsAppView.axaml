@@ -14,8 +14,7 @@
 
             <StackPanel Orientation="Vertical">
                 <TextBlock Classes="title" Text="{localization:Localize SettingsAppPage.Title}" />
-                <TextBlock Text="{localization:Localize SettingsAppPage.Subtitle}"
-                           Foreground="{StaticResource SecondaryBrush}" />
+                <TextBlock Text="{localization:Localize SettingsAppPage.Subtitle}" />
             </StackPanel>
 
             <Border Classes="card">
@@ -50,8 +49,7 @@
                                 <ComboBox.ItemTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal" Spacing="8">
-                                            <Border Width="16" Height="16" CornerRadius="8"
-                                                    Background="{Binding PrimaryColor}" />
+                                            <Border Width="16" Height="16" CornerRadius="8"/>
                                             <TextBlock Text="{Binding Name}" />
                                         </StackPanel>
                                     </DataTemplate>

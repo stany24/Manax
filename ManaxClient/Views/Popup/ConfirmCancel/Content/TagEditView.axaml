@@ -15,52 +15,38 @@
                 <TextBlock
                     Text="{localization:Localize TagEditPopup.Title}"
                     FontSize="18"
-                    FontWeight="Bold"
-                    Foreground="#212529" />
+                    FontWeight="Bold"/>
                 <TextBlock
                     Text="{localization:Localize TagEditPopup.Description}"
-                    FontSize="12"
-                    Foreground="#6C757D" />
+                    FontSize="12"/>
             </StackPanel>
         </StackPanel>
 
         <StackPanel Grid.Row="1" Spacing="8">
             <TextBlock
                 Text="{localization:Localize TagEditPopup.Name}"
-                FontWeight="Medium"
-                Foreground="#495057" />
+                FontWeight="Medium"/>
             <TextBox
                 Text="{Binding Name}"
                 Watermark="{localization:Localize TagEditPopup.Name.Placeholder}"
                 Padding="12"
                 CornerRadius="8"
                 BorderThickness="1"
-                BorderBrush="#DEE2E6"
                 FontSize="14">
-                <TextBox.Styles>
-                    <Style Selector="TextBox:pointerover">
-                        <Setter Property="BorderBrush" Value="#007ACC" />
-                    </Style>
-                    <Style Selector="TextBox:focus">
-                        <Setter Property="BorderBrush" Value="#007ACC" />
-                    </Style>
-                </TextBox.Styles>
             </TextBox>
         </StackPanel>
 
         <StackPanel Grid.Row="2" Spacing="8">
             <TextBlock
                 Text="{localization:Localize TagEditPopup.Color}"
-                FontWeight="Medium"
-                Foreground="#495057" />
+                FontWeight="Medium"/>
             <ColorPicker
                 Color="{Binding Color,Mode=TwoWay}" />
         </StackPanel>
         <Border
             Grid.Row="3"
             HorizontalAlignment="Left"
-            CornerRadius="5"
-            Background="{Binding ColorBrush}">
+            CornerRadius="5">
             <TextBlock
                 Margin="5"
                 Text="{Binding Name}" />

@@ -52,7 +52,6 @@ public class ChapterPreview : Button
         Border border = new()
         {
             Background = _backgroundColor,
-            BorderBrush = new SolidColorBrush(Color.Parse("#E9ECEF")),
             BorderThickness = new Thickness(1),
             CornerRadius = new CornerRadius(8),
             Padding = new Thickness(16, 12)
@@ -103,8 +102,7 @@ public class ChapterPreview : Button
 
         TextBlock chapterDetails = new()
         {
-            FontSize = 12,
-            Foreground = new SolidColorBrush(Color.Parse("#6C757D"))
+            FontSize = 12
         };
 
         chapterName.Bind(TextBlock.TextProperty, new Binding(nameof(Chapter) + "." + nameof(Chapter.FileName))
@@ -135,7 +133,6 @@ public class ChapterPreview : Button
 
         Border progressBadge = new()
         {
-            Background = new SolidColorBrush(Color.Parse("#E9ECEF")),
             CornerRadius = new CornerRadius(12),
             Padding = new Thickness(8, 4),
             VerticalAlignment = VerticalAlignment.Center
@@ -146,7 +143,6 @@ public class ChapterPreview : Button
         {
             FontSize = 11,
             FontWeight = FontWeight.Medium,
-            Foreground = new SolidColorBrush(Color.Parse("#495057"))
         };
 
         progressText.Bind(TextBlock.TextProperty, new Binding(nameof(Chapter) + "." + nameof(Chapter.Read))
@@ -194,7 +190,6 @@ public class ChapterPreview : Button
         {
             Text = "›",
             FontSize = 16,
-            Foreground = new SolidColorBrush(Color.Parse("#6C757D")),
             VerticalAlignment = VerticalAlignment.Center
         };
         chevron.SetValue(Grid.ColumnProperty, 3);

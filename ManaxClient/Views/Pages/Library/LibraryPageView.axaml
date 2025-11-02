@@ -11,7 +11,6 @@
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Pages.Library.LibraryPageView"
     x:DataType="page:LibraryPageViewModel"
-    Background="{DynamicResource Background1}"
     IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).CanReadLibraries}">
 
     <ScrollViewer VerticalScrollBarVisibility="Auto">
@@ -23,7 +22,6 @@
                     <TextBlock
                         Text="{localization1:LocalizeFormat LibraryPage.SeriesCount,
                                    Param1={Binding $parent[UserControl].((page:LibraryPageViewModel)DataContext).Library.Series.Count}}"
-                        Foreground="{StaticResource SecondaryBrush}"
                         FontSize="14" />
                 </StackPanel>
 
@@ -52,7 +50,6 @@
                     <TextBlock Text="{localization:Localize LibraryPage.EmptyLibrary.Description}"
                                TextAlignment="Center"
                                TextWrapping="Wrap"
-                               Foreground="{StaticResource SecondaryBrush}"
                                MaxWidth="400" />
                 </StackPanel>
             </Border>
@@ -71,11 +68,6 @@
                                         Padding="12"
                                         CornerRadius="12"
                                         Margin="8">
-                                    <Border.Styles>
-                                        <Style Selector="Border:pointerover">
-                                            <Setter Property="Background" Value="{DynamicResource Background1}" />
-                                        </Style>
-                                    </Border.Styles>
                                     <Border.Transitions>
                                         <Transitions>
                                             <TransformOperationsTransition Property="RenderTransform"
@@ -85,8 +77,6 @@
                                     </Border.Transitions>
                                     <previews:SeriePreview
                                         Serie="{Binding .}"
-                                        TextColor="{DynamicResource TextColor1}"
-                                        BackGroundColor="{DynamicResource Background1}"
                                         Command="{Binding $parent[UserControl].((page:LibraryPageViewModel)DataContext).MoveToSeriePage}"
                                         CommandParameter="{Binding .}" />
                                 </Border>

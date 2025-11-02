@@ -34,7 +34,7 @@
                                HorizontalAlignment="Center"
                                Margin="0,0,0,24" />
 
-                    <Button Classes="sidebar primary"
+                    <Button Classes="sidebar"
                             Command="{Binding ChangePageHome}">
                         <StackPanel Orientation="Horizontal" Spacing="12">
                             <TextBlock Text="🏠" FontSize="16" />
@@ -42,7 +42,7 @@
                         </StackPanel>
                     </Button>
 
-                    <Separator Margin="8,16" Background="{DynamicResource Background2}" />
+                    <Separator Margin="8,16" />
 
                     <TextBlock Classes="subtitle"
                                Text="{localization:Localize MainWindow.Libraries}"
@@ -70,7 +70,7 @@
                         </ItemsControl>
                     </ScrollViewer>
 
-                    <Separator Margin="8,16" Background="{DynamicResource Background2}" IsVisible="{Binding IsAdmin}" />
+                    <Separator Margin="8,16" IsVisible="{Binding IsAdmin}" />
 
                     <TextBlock Classes="subtitle"
                                Text="{localization:Localize MainWindow.Admin}"
@@ -163,7 +163,7 @@
                         </StackPanel>
                     </Button>
 
-                    <Separator Margin="8,16" Background="{DynamicResource Background2}" />
+                    <Separator Margin="8,16"/>
 
                     <TextBlock Classes="subtitle"
                                Text="{localization:Localize MainWindow.Stats}"
@@ -211,12 +211,10 @@
                                                                TextWrapping="Wrap"
                                                                VerticalAlignment="Center" />
                                                     <Border Grid.Column="1"
-                                                            Background="{StaticResource InfoBrush}"
                                                             CornerRadius="12"
                                                             Padding="8,4"
                                                             Margin="8,0,0,0">
                                                         <TextBlock Text="{Binding Number}"
-                                                                   Foreground="{StaticResource TextColor1}"
                                                                    FontSize="12"
                                                                    FontWeight="Bold" />
                                                     </Border>
@@ -231,8 +229,7 @@
                 </StackPanel>
             </ScrollViewer>
 
-            <Border Grid.Column="1"
-                    Background="{DynamicResource Background1}">
+            <Border Grid.Column="1">
                 <ContentControl Content="{Binding CurrentPageViewModel}"
                                 Margin="{Binding PageMargin}" />
             </Border>
@@ -254,7 +251,6 @@
                     <DataTemplate>
                         <Border Classes="notification">
                             <TextBlock Text="{Binding .}"
-                                       Foreground="{StaticResource PrimaryBrush}"
                                        FontWeight="Medium" />
                         </Border>
                     </DataTemplate>

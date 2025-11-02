@@ -18,8 +18,7 @@
 
             <StackPanel Orientation="Vertical">
                 <TextBlock Classes="title" Text="{localization:Localize ServerStatsPage.Title}" />
-                <TextBlock Text="{localization:Localize ServerStatsPage.Subtitle}"
-                           Foreground="{StaticResource SecondaryBrush}" />
+                <TextBlock Text="{localization:Localize ServerStatsPage.Subtitle}"/>
             </StackPanel>
 
             <Grid ColumnDefinitions="*,*" ColumnSpacing="24">
@@ -33,23 +32,22 @@
                         <avalonia:PieChart Series="{Binding DiskUsageSeries}"
                                            Width="300"
                                            Height="300"
-                                           HorizontalAlignment="Center" />
+                                           HorizontalAlignment="Center"
+                                           Background="{DynamicResource MaterialPaperBrush}"/>
 
                         <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
                             <StackPanel Grid.Column="0" Spacing="4">
                                 <TextBlock Text="{localization:Localize ServerStatsPage.DiskUsage.Used}" FontSize="12" FontWeight="Medium" />
                                 <TextBlock Text="{Binding DiskSizeInGb, StringFormat={}{0:F1} GB}"
                                            FontSize="16"
-                                           FontWeight="Bold"
-                                           Foreground="{StaticResource ErrorBrush}" />
+                                           FontWeight="Bold"/>
                             </StackPanel>
 
                             <StackPanel Grid.Column="1" Spacing="4">
                                 <TextBlock Text="{localization:Localize ServerStatsPage.DiskUsage.Available}" FontSize="12" FontWeight="Medium" />
                                 <TextBlock Text="{Binding AvailableDiskSizeInGb, StringFormat={}{0:F1} GB}"
                                            FontSize="16"
-                                           FontWeight="Bold"
-                                           Foreground="{StaticResource SuccessBrush}" />
+                                           FontWeight="Bold"/>
                             </StackPanel>
                         </Grid>
                     </StackPanel>
@@ -65,23 +63,22 @@
                         <avalonia:PieChart Series="{Binding UserActivitySeries}"
                                            Width="300"
                                            Height="300"
-                                           HorizontalAlignment="Center" />
+                                           HorizontalAlignment="Center"
+                                           Background="{DynamicResource MaterialPaperBrush}"/>
 
                         <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
                             <StackPanel Grid.Column="0" Spacing="4">
                                 <TextBlock Text="{localization:Localize ServerStatsPage.UserActivity.Active}" FontSize="12" FontWeight="Medium" />
                                 <TextBlock Text="{Binding ServerStats.ActiveUsers}"
                                            FontSize="16"
-                                           FontWeight="Bold"
-                                           Foreground="{StaticResource InfoBrush}" />
+                                           FontWeight="Bold"/>
                             </StackPanel>
 
                             <StackPanel Grid.Column="1" Spacing="4">
                                 <TextBlock Text="{localization:Localize ServerStatsPage.UserActivity.Inactive}" FontSize="12" FontWeight="Medium" />
                                 <TextBlock Text="{Binding ServerStats.InactiveUsers}"
                                            FontSize="16"
-                                           FontWeight="Bold"
-                                           Foreground="{StaticResource SecondaryBrush}" />
+                                           FontWeight="Bold"/>
                             </StackPanel>
                         </Grid>
                     </StackPanel>
@@ -102,8 +99,7 @@
                                 <TextBlock Text="{Binding ServerStats.Series}"
                                            FontSize="32"
                                            FontWeight="Bold"
-                                           HorizontalAlignment="Center"
-                                           Foreground="{StaticResource PrimaryBrush}" />
+                                           HorizontalAlignment="Center"/>
                             </StackPanel>
 
                             <StackPanel Grid.Row="1" Spacing="4" HorizontalAlignment="Center">
@@ -111,8 +107,7 @@
                                 <TextBlock Text="{Binding ServerStats.Chapters}"
                                            FontSize="32"
                                            FontWeight="Bold"
-                                           HorizontalAlignment="Center"
-                                           Foreground="{StaticResource SuccessBrush}" />
+                                           HorizontalAlignment="Center"/>
                             </StackPanel>
                         </Grid>
                     </StackPanel>
@@ -128,7 +123,8 @@
                         <avalonia:PieChart Series="{Binding LibraryDistributionSeries}"
                                            Width="300"
                                            Height="300"
-                                           HorizontalAlignment="Center" />
+                                           HorizontalAlignment="Center"
+                                           Background="{DynamicResource MaterialPaperBrush}"/>
                     </StackPanel>
                 </Border>
             </Grid>
@@ -149,9 +145,7 @@
                             </ItemsControl.ItemsPanel>
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <previews:SeriePreview Serie="{Binding}"
-                                                         TextColor="{DynamicResource TextColor1}"
-                                                         BackGroundColor="{DynamicResource Background1}" />
+                                    <previews:SeriePreview Serie="{Binding}"/>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>

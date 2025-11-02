@@ -21,7 +21,6 @@ public class Popup : Panel
     {
         HorizontalAlignment = HorizontalAlignment.Center,
         VerticalAlignment = VerticalAlignment.Center,
-        Background = Brushes.White,
         CornerRadius = new CornerRadius(12),
         Margin = new Thickness(20)
     };
