@@ -1,4 +1,5 @@
 using System.IO;
+using System.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace ManaxClient.Models.Upload;
@@ -8,6 +9,7 @@ public partial class Source:ObservableObject
     [ObservableProperty] private string _path = string.Empty;
     [ObservableProperty] private int _fileNumber;
     [ObservableProperty] private int _current;
+    [ObservableProperty] private int _percentage;
 
     public void Fetch(string processingFolder)
     {
@@ -20,13 +22,19 @@ public partial class Source:ObservableObject
 
     private void DeleteAllEmptyFolders()
     {
-        string[] dirs = Directory.GetDirectories(Path, "*", SearchOption.AllDirectories);
-        foreach (string dir in dirs)
+        DeleteEmptyFolder(Path);
+    }
+    
+    private static void DeleteEmptyFolder(string folder)
+    {
+        foreach (string subFolder in Directory.GetDirectories(folder))
         {
-            if (Directory.GetFiles(dir).Length == 0 && Directory.GetDirectories(dir).Length == 0)
-            {
-                Directory.Delete(dir, false);
-            }
+            DeleteEmptyFolder(subFolder);
+        }
+
+        if (Directory.GetFiles(folder).Length == 0 && Directory.GetDirectories(folder).Length == 0)
+        {
+            Directory.Delete(folder, false);
         }
     }
 
@@ -34,14 +42,15 @@ public partial class Source:ObservableObject
     {
         string[] files = Directory.GetFiles(Path, "*", SearchOption.AllDirectories);
         FileNumber = files.Length;
-        Current = 0;
 
         foreach (string file in files)
         {
+            Thread.Sleep(10); //TODO remove after testing
             string dest = file.Replace(Path, processingFolder);
             File.Copy(file, dest, true);
             File.Delete(file);
             Current++;
+            Percentage = (int)(Current / (float)FileNumber * 100);        
         }
     }
 

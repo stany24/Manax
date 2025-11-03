@@ -12,10 +12,10 @@
     x:DataType="tab:FetchFromSourceTabViewModel"
     IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).CanUploadChapter}">
     
-    <Grid ColumnDefinitions="250,*,280" RowDefinitions="Auto,*" Margin="16">
+    <Grid ColumnDefinitions="250,*" RowDefinitions="Auto,*" Margin="16">
         
         <!-- Header -->
-        <TextBlock Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3" 
+        <TextBlock Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" 
                    Classes="title" 
                    Text="{localization:Localize FetchFromSourcePage.Title}" 
                    Margin="0,0,0,16"/>
@@ -128,7 +128,7 @@
                                     <StackPanel Grid.Column="1" Spacing="4">
                                         <TextBlock Text="{localization:Localize FetchFromSourcePage.Completed}" 
                                                    FontSize="12"/>
-                                        <TextBlock Text="0" 
+                                        <TextBlock Text="{Binding SourceCompletedCount}"
                                                    FontSize="20" 
                                                    FontWeight="Bold"/>
                                     </StackPanel>
@@ -136,7 +136,7 @@
                                     <StackPanel Grid.Column="2" Spacing="4">
                                         <TextBlock Text="{localization:Localize FetchFromSourcePage.InProgress}" 
                                                    FontSize="12"/>
-                                        <TextBlock Text="0" 
+                                        <TextBlock Text="{Binding SourceInProgressCount}"
                                                    FontSize="20" 
                                                    FontWeight="Bold"/>
                                     </StackPanel>
@@ -204,7 +204,7 @@
                                                     <StackPanel Grid.Column="1">
                                                         <TextBlock Text="{localization:Localize FetchFromSourcePage.Progress}" 
                                                                    FontSize="11"/>
-                                                        <TextBlock Text="0%" 
+                                                        <TextBlock Text="{Binding Percentage, StringFormat={}{0:F2}%}" 
                                                                    FontSize="14" 
                                                                    FontWeight="SemiBold"/>
                                                     </StackPanel>
@@ -217,38 +217,6 @@
                         </StackPanel>
                     </StackPanel>
                 </ScrollViewer>
-            </Grid>
-        </Border>
-        
-        <!-- Right Panel: Processing Folder -->
-        <Border Grid.Column="2" Grid.Row="1" 
-                Classes="card" 
-                Margin="8,0,0,0">
-            <Grid RowDefinitions="Auto,Auto,*,Auto">
-                
-                <!-- Processing Folder Header -->
-                <TextBlock Grid.Row="0" 
-                           Classes="subtitle"
-                           Text="{localization:Localize FetchFromSourcePage.ProcessingFolder}" 
-                           Margin="0,0,0,12"/>
-                
-                <!-- Folder Path Input -->
-                <StackPanel Grid.Row="1" Spacing="8">
-                    <TextBlock Text="{localization:Localize FetchFromSourcePage.DestinationPath}" 
-                               FontWeight="Medium"
-                               FontSize="12"/>
-                    <TextBlock Text="{Binding ProcessingFolder}"
-                             Padding="8"/>
-
-                </StackPanel>
-                
-                <!-- Action Buttons -->
-                <StackPanel Grid.Row="3" Spacing="8" Margin="0,16,0,0">
-                    <Button Classes="secondary" 
-                            Content="{localization:Localize FetchFromSourcePage.OpenFolder}" 
-                            HorizontalAlignment="Stretch"
-                            Padding="8,6"/>
-                </StackPanel>
             </Grid>
         </Border>
     </Grid>

@@ -12,6 +12,8 @@ public partial class FetchFromSourceTabViewModel:PageViewModel
     public ObservableCollection<Source> SourceFolders { get; set; } = [];
     [ObservableProperty] private string _processingFolder = string.Empty;
     [ObservableProperty] private bool _canFetch = true;
+    [ObservableProperty] private int _sourceInProgressCount;
+    [ObservableProperty] private int _sourceCompletedCount;
 
     public FetchFromSourceTabViewModel()
     {
@@ -33,7 +35,10 @@ public partial class FetchFromSourceTabViewModel:PageViewModel
         {
             foreach (Source source in SourceFolders)
             {
+                SourceInProgressCount++;
                 source.Fetch(ProcessingFolder);
+                SourceCompletedCount++;
+                SourceInProgressCount--;
             }
             CanFetch = true;
         });
