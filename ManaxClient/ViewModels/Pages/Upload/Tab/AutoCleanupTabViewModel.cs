@@ -18,11 +18,12 @@ namespace ManaxClient.ViewModels.Pages.Upload.Tab;
 
 public partial class AutoCleanupTabViewModel:PageViewModel
 {
-    [ObservableProperty] private string _processingFolder = string.Empty;
+    private string _processingFolder;
     [ObservableProperty] private int _nbArchive;
     [ObservableProperty] private int _currentArchive;
     [ObservableProperty] private int _nbImage;
     [ObservableProperty] private int _currentImage;
+    [ObservableProperty] private bool _isProcessing;
     
     private readonly string[] _formatToDelete = ["xml", "gif", "bin", "js", "css", "html"];
     private readonly List<string> _archivesFormats = ["cbr", "cbz","zip"];
@@ -33,23 +34,32 @@ public partial class AutoCleanupTabViewModel:PageViewModel
 
     public AutoCleanupTabViewModel()
     {
-        ProcessingFolder = UploadSettings.ProcessingFolder;
-        UploadSettings.SettingsChanged += (_, _) => {ProcessingFolder = UploadSettings.ProcessingFolder;};
+        _processingFolder = UploadSettings.ProcessingFolder;
+        UploadSettings.SettingsChanged += (_, _) => {_processingFolder = UploadSettings.ProcessingFolder;};
     }
     
     public void Clean()
     {
-        MoveSeriesToRoot();
-        DecompressFiles();
-        ScaleAndConvertImages();
-        RemoveUnwantedFiles();
-        Task.Run(LoadSettings);
+        IsProcessing = true;
+        CurrentArchive = 0;
+        CurrentImage = 0;
+        Errors.Clear();
+        
+        Task.Run(() =>
+        {
+            MoveSeriesToRoot();
+            DecompressFiles();
+            ScaleAndConvertImages();
+            RemoveUnwantedFiles();
+            LoadSettings();
+            IsProcessing = false;
+        });
     }
 
     private void MoveSeriesToRoot()
     {
         IEnumerable<string> sourcesFolders = _sourceFormats.SelectMany(pattern =>
-            Directory.GetDirectories(ProcessingFolder, "*" + pattern, SearchOption.TopDirectoryOnly));
+            Directory.GetDirectories(_processingFolder, "*" + pattern, SearchOption.TopDirectoryOnly));
         foreach (string source in sourcesFolders)
         {
             MoveMangaOutOfSource(source);
@@ -62,15 +72,15 @@ public partial class AutoCleanupTabViewModel:PageViewModel
         foreach (string manga in Directory.GetDirectories(source, "*", SearchOption.TopDirectoryOnly))
         {
             string mangaName = manga.Replace(source, "");
-            if (!Directory.Exists(ProcessingFolder + mangaName))
+            if (!Directory.Exists(_processingFolder + mangaName))
             {
-                Directory.Move(manga, ProcessingFolder + mangaName);
+                Directory.Move(manga, _processingFolder + mangaName);
                 continue;
             }
 
             foreach (string file in Directory.GetFiles(manga))
             {
-                string fileName = ProcessingFolder + mangaName + file.Replace(manga, "");
+                string fileName = _processingFolder + mangaName + file.Replace(manga, "");
                 File.Move(file, fileName);
             }
             Directory.Delete(manga);
@@ -80,13 +90,14 @@ public partial class AutoCleanupTabViewModel:PageViewModel
     private void DecompressFiles()
     {
         string[] compressedFiles = _archivesFormats
-            .SelectMany(ext => Directory.GetFiles(ProcessingFolder, "*." + ext, SearchOption.AllDirectories))
+            .SelectMany(ext => Directory.GetFiles(_processingFolder, "*." + ext, SearchOption.AllDirectories))
             .ToArray();
         NbArchive = compressedFiles.Length;
         Parallel.ForEach(compressedFiles, file =>
         {
             switch (Path.GetExtension(file))
             {
+                case ".rar":
                 case ".cbr":
                     ExtractRarInPlace(file);
                     break;
@@ -130,19 +141,22 @@ public partial class AutoCleanupTabViewModel:PageViewModel
 
     private void ScaleAndConvertImages()
     {
-        string[] imagesToConvert = _imagesFormats.AsParallel().SelectMany(ext =>
-            Directory.GetFiles(ProcessingFolder, "*." + ext, SearchOption.AllDirectories)).ToArray();
         LoadSettings();
+        string[] imagesToConvert = _imagesFormats.AsParallel().SelectMany(ext =>
+            Directory.GetFiles(_processingFolder, "*." + ext, SearchOption.AllDirectories)).ToArray();
         NbImage = imagesToConvert.Length;
         Parallel.ForEach(imagesToConvert, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount },
             file =>
             {
-                try { ConvertImage(file); }
+                try
+                {
+                    ConvertImage(file);
+                    CurrentImage++;
+                }
                 catch (Exception e)
                 {
                     Errors.Add("Failed to convert image: " + file + "Error: " + e.Message);
                 }
-                CurrentImage++;
             });
     }
 
@@ -186,9 +200,9 @@ public partial class AutoCleanupTabViewModel:PageViewModel
     private void RemoveUnwantedFiles()
     {
         List<string> uselessFiles = _formatToDelete.SelectMany(ext =>
-            Directory.EnumerateFiles(ProcessingFolder, "*." + ext, SearchOption.AllDirectories)).ToList();
+            Directory.EnumerateFiles(_processingFolder, "*." + ext, SearchOption.AllDirectories)).ToList();
         uselessFiles.ForEach(File.Delete);
-        RemoveEmptyFolders(ProcessingFolder);
+        RemoveEmptyFolders(_processingFolder);
     }
     
     private static void RemoveEmptyFolders(string folders)

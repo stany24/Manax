@@ -1,5 +1,5 @@
 using System.IO;
-using System.Threading;
+using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace ManaxClient.Models.Upload;
@@ -9,7 +9,7 @@ public partial class Source:ObservableObject
     [ObservableProperty] private string _path = string.Empty;
     [ObservableProperty] private int _fileNumber;
     [ObservableProperty] private int _current;
-    [ObservableProperty] private int _percentage;
+    [ObservableProperty] private double _percentage;
 
     public void Fetch(string processingFolder)
     {
@@ -45,12 +45,14 @@ public partial class Source:ObservableObject
 
         foreach (string file in files)
         {
-            Thread.Sleep(10); //TODO remove after testing
             string dest = file.Replace(Path, processingFolder);
             File.Copy(file, dest, true);
             File.Delete(file);
-            Current++;
-            Percentage = (int)(Current / (float)FileNumber * 100);        
+            Dispatcher.UIThread.Invoke(() =>
+            {
+                Current++;
+                Percentage = Current / (double)FileNumber * 100;
+            });
         }
     }
 
@@ -58,13 +60,11 @@ public partial class Source:ObservableObject
     {
         string[] dirs = Directory.GetDirectories(Path, "*", SearchOption.AllDirectories);
         FileNumber = dirs.Length;
-        Current = 0;
 
         foreach (string dir in dirs)
         {
             string dest = dir.Replace(Path, processingFolder);
             Directory.CreateDirectory(dest);
-            Current++;
         }
     }
 }
