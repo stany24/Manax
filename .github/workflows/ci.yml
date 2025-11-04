@@ -25,7 +25,7 @@ jobs:
       run: dotnet restore Manax.sln
     
     - name: Build solution
-      run: dotnet build Manax.sln --configuration Release --no-restore
+      run: dotnet build Manax.sln --configuration Release --no-restore /p:TreatWarningsAsErrors=true
     
     - name: Run tests
       run: dotnet test Manax.sln --configuration Release --no-build --verbosity normal
