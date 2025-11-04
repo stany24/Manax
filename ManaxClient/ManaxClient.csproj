@@ -156,7 +156,7 @@
           <DependentUpon>FetchFromSourcePageView.axaml</DependentUpon>
           <SubType>Code</SubType>
         </Compile>
-        <Compile Update="Views\Pages\Upload\Tab\UserEditTabView.axaml.cs">
+        <Compile Update="Views\Pages\Upload\Tab\ManualCleanupTabView.axaml.cs">
           <DependentUpon>UserEditPageView.axaml</DependentUpon>
           <SubType>Code</SubType>
         </Compile>

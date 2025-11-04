@@ -2,9 +2,9 @@ using Avalonia.Controls;
 
 namespace ManaxClient.Views.Pages.Upload.Tab;
 
-public partial class UserEditTabView : UserControl
+public partial class ManualCleanupTabView : UserControl
 {
-    public UserEditTabView()
+    public ManualCleanupTabView()
     {
         InitializeComponent();
     }
