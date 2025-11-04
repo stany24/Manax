@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using DynamicData;
 using ManaxClient.ViewModels;
@@ -17,8 +18,8 @@ public static class RankSource
 {
     public static readonly SourceCache<Rank, long> Ranks = new(x => x.Id);
     private static bool _loaded;
-    private static readonly object LoadLock = new();
-    private static readonly object RanksLock = new();
+    private static readonly Lock LoadLock = new();
+    private static readonly Lock RanksLock = new();
 
     static RankSource()
     {        

@@ -14,10 +14,10 @@ public class IssueChapterReportedType : ObservableObject
         FromDto(dto);
     }
 
-    public long Id { get; set; }
+    public long Id { get; private set; }
     public string Name { get; set; }
 
-    public void FromDto(IssueChapterReportedTypeDto dto)
+    private void FromDto(IssueChapterReportedTypeDto dto)
     {
         Id = dto.Id;
         Name = dto.Name;

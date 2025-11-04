@@ -14,7 +14,10 @@ public static class ThemeSettings
         Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
         "ManaxClient",
         "themesettings.json");
-    public static ThemeSettingsData Current { get; private set; }
+
+    private static readonly JsonSerializerOptions Settings = new() { WriteIndented = true };
+
+    public static ThemeSettingsData Current { get; private set; } = new("Last default", Color.Parse("#007ACC"), Color.Parse("#6C757D"));
     
     public static void UpdateTheme(ThemeSettingsData themeSettingsData)
     {
@@ -58,10 +61,7 @@ public static class ThemeSettings
             System.IO.Directory.CreateDirectory(directory);
         }
 
-        string json = JsonSerializer.Serialize(themeSettingsData, new JsonSerializerOptions
-        {
-            WriteIndented = true
-        });
+        string json = JsonSerializer.Serialize(themeSettingsData, Settings);
         System.IO.File.WriteAllText(SavePath, json);
     }
 }

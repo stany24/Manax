@@ -142,7 +142,7 @@ public class ChapterPreview : Button
         TextBlock progressText = new()
         {
             FontSize = 11,
-            FontWeight = FontWeight.Medium,
+            FontWeight = FontWeight.Medium
         };
 
         progressText.Bind(TextBlock.TextProperty, new Binding(nameof(Chapter) + "." + nameof(Chapter.Read))

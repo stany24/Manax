@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using DynamicData;
 using ManaxLibrary;
@@ -15,8 +16,8 @@ public static class SerieSource
 {
     public static readonly SourceCache<Serie, long> Series = new(serie => serie.Id);
     private static bool _isLoaded;
-    private static readonly object SeriesLock = new();
-    private static readonly object LoadLock = new();
+    private static readonly Lock SeriesLock = new();
+    private static readonly Lock LoadLock = new();
 
     static SerieSource()
     {

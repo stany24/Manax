@@ -17,7 +17,7 @@ public class LocalizeFormatMultiConverter(string key) : IMultiValueConverter
         {
             string localizedText = Localizer.Get(key);
             object?[] formatArgs = new object[LocalizeFormatExtension.NbParameters];
-            if (values == null) return string.Format(localizedText, formatArgs);
+            if (values == null) return string.Format(CultureInfo.InvariantCulture, localizedText, formatArgs);
             
             for (int i = 0; i < 4; i++)
             {
@@ -31,7 +31,7 @@ public class LocalizeFormatMultiConverter(string key) : IMultiValueConverter
                 }
             }
 
-            return string.Format(localizedText, formatArgs);
+            return string.Format(CultureInfo.InvariantCulture, localizedText, formatArgs);
         }
         catch (Exception)
         {

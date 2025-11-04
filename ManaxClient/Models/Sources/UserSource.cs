@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using DynamicData;
 using ManaxClient.ViewModels;
@@ -14,7 +15,7 @@ namespace ManaxClient.Models.Sources;
 public static class UserSource
 {
     public static readonly SourceCache<User, long> Users = new(x => x.Id);
-    private static readonly object UsersLock = new();
+    private static readonly Lock UsersLock = new();
 
     static UserSource()
     {

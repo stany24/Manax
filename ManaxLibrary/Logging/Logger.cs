@@ -3,8 +3,8 @@ namespace ManaxLibrary.Logging;
 public static class Logger
 {
     private static readonly string Path;
-    private static readonly object FileLock = new();
-    private static readonly object ConsoleLock = new();
+    private static readonly Lock FileLock = new();
+    private static readonly Lock ConsoleLock = new();
 
     static Logger()
     {

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -164,14 +165,14 @@ public partial class AutoCleanupTabViewModel:PageViewModel
     {
         if(_settings == null){return;}
         using MagickImage image = new(file);
-        if (file.EndsWith("." + _settings.ImageFormat) &&
+        if (file.EndsWith("." + _settings.ImageFormat,StringComparison.InvariantCulture) &&
             image.Quality <= _settings.ImageQuality && image.Width <= _settings.MaxChapterWidth) return;
         if (image.Quality >= _settings.ImageQuality) image.Quality = _settings.ImageQuality;
         if (image.Width > _settings.MaxChapterWidth) image.Resize(_settings.MaxChapterWidth, 0);
 
         image.HasAlpha = false;
         image.Strip();
-        string newFileName = Path.ChangeExtension(file, _settings.ImageFormat.ToString().ToLower());
+        string newFileName = Path.ChangeExtension(file, _settings.ImageFormat.ToString().ToLower(CultureInfo.InvariantCulture));
         File.Delete(file);
         image.Write(newFileName);
     }

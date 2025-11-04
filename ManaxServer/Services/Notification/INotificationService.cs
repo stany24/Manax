@@ -1,5 +1,4 @@
 using ManaxLibrary.DTO.Chapter;
-using ManaxLibrary.DTO.Feature;
 using ManaxLibrary.DTO.Issue.Reported;
 using ManaxLibrary.DTO.Library;
 using ManaxLibrary.DTO.Rank;

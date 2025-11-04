@@ -15,10 +15,10 @@ public class IssueSerieReportedType : ObservableObject
         FromDto(dto);
     }
 
-    public long Id { get; set; }
+    public long Id { get; private set; }
     public string Name { get; set; }
 
-    public void FromDto(IssueSerieReportedTypeDto dto)
+    private void FromDto(IssueSerieReportedTypeDto dto)
     {
         Id = dto.Id;
         Name = dto.Name;

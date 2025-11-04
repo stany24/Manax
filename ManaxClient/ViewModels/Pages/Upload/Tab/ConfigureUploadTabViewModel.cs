@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -8,6 +9,7 @@ using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData;
 using ManaxClient.Models.Upload;
+using ManaxLibrary.Logging;
 
 namespace ManaxClient.ViewModels.Pages.Upload.Tab;
 
@@ -33,28 +35,36 @@ public partial class ConfigureUploadTabViewModel:PageViewModel
     
     public async void AddSource()
     {
-        Window? window = Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop
-            ? desktop.MainWindow
-            : null;
-        if (window?.StorageProvider == null) return;
-        
-        IReadOnlyList<IStorageFolder> folders = await window.StorageProvider.OpenFolderPickerAsync(
-            new FolderPickerOpenOptions
-            {
-                Title = "Select Source Folder",
-                AllowMultiple = true
-            });
-
-        if (folders.Count == 0) return;
-
-        foreach (IStorageFolder folder in folders)
+        try
         {
-            string folderPath = folder.Path.LocalPath;
-            if (string.IsNullOrEmpty(folderPath)) continue;
+            Window? window = Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop
+                ? desktop.MainWindow
+                : null;
+            if (window?.StorageProvider == null) return;
+        
+            IReadOnlyList<IStorageFolder> folders = await window.StorageProvider.OpenFolderPickerAsync(
+                new FolderPickerOpenOptions
+                {
+                    Title = "Select Source Folder",
+                    AllowMultiple = true
+                });
+
+            if (folders.Count == 0) return;
+
+            foreach (IStorageFolder folder in folders)
+            {
+                string folderPath = folder.Path.LocalPath;
+                if (string.IsNullOrEmpty(folderPath)) continue;
             
-            if (SourceFolders.Any(s => s.Path == folderPath)) continue;
+                if (SourceFolders.Any(s => s.Path == folderPath)) continue;
             
-            UploadSettings.AddSourceFolder(folderPath);
+                UploadSettings.AddSourceFolder(folderPath);
+            }
+        }
+        catch (Exception e)
+        {
+            Logger.LogError("Error adding source folder", e);
+            InfoEmitted?.Invoke(this, "Error adding source folder: " + e.Message);
         }
     }
     
@@ -63,26 +73,34 @@ public partial class ConfigureUploadTabViewModel:PageViewModel
         UploadSettings.RemoveSourceFolder(source.Path);
     }
     
-    public async void BrowseProcessingFolder()
+    public async void UpdateProcessingFolder()
     {
-        Window? window = Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop
-            ? desktop.MainWindow
-            : null;
-        if (window?.StorageProvider == null) return;
-        
-        IReadOnlyList<IStorageFolder> folders = await window.StorageProvider.OpenFolderPickerAsync(
-            new FolderPickerOpenOptions
-            {
-                Title = "Select Processing Folder",
-                AllowMultiple = false
-            });
-
-        if (folders.Count == 0) return;
-        
-        string folderPath = folders[0].Path.LocalPath;
-        if (!string.IsNullOrEmpty(folderPath))
+        try
         {
-            UploadSettings.SetProcessingFolder(folderPath);
+            Window? window = Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop
+                ? desktop.MainWindow
+                : null;
+            if (window?.StorageProvider == null) return;
+        
+            IReadOnlyList<IStorageFolder> folders = await window.StorageProvider.OpenFolderPickerAsync(
+                new FolderPickerOpenOptions
+                {
+                    Title = "Select Processing Folder",
+                    AllowMultiple = false
+                });
+
+            if (folders.Count == 0) return;
+        
+            string folderPath = folders[0].Path.LocalPath;
+            if (!string.IsNullOrEmpty(folderPath))
+            {
+                UploadSettings.SetProcessingFolder(folderPath);
+            }
+        }
+        catch (Exception e)
+        {
+            Logger.LogError("Error updating processing folder", e);
+            InfoEmitted?.Invoke(this, "Error updating processing folder: " + e.Message);
         }
     }
 }

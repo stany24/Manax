@@ -48,5 +48,5 @@ public enum Permission
     SetSerieTags = 114,
     
     ReadFeatures = 121,
-    WriteFeatures = 122,
+    WriteFeatures = 122
 }

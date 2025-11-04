@@ -12,6 +12,8 @@ public static class UploadSettings
         "ManaxClient",
         "uploadsettings.json");
 
+    private static readonly JsonSerializerOptions JsonSettings = new() { WriteIndented = true };
+
     static UploadSettings()
     {
         Load();
@@ -58,10 +60,7 @@ public static class UploadSettings
             System.IO.Directory.CreateDirectory(directory);
         }
 
-        string json = JsonSerializer.Serialize(_settings, new JsonSerializerOptions
-        {
-            WriteIndented = true
-        });
+        string json = JsonSerializer.Serialize(_settings, JsonSettings);
         System.IO.File.WriteAllText(SavePath, json);
         SettingsChanged?.Invoke(null, EventArgs.Empty);
     }

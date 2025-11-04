@@ -164,7 +164,7 @@
                 <Button Grid.Row="2"
                         Classes="primary"
                         Content="{localization:Localize ConfigureUploadPage.Browse}"
-                        Command="{Binding BrowseProcessingFolder}"
+                        Command="{Binding UpdateProcessingFolder}"
                         HorizontalAlignment="Stretch"
                         Padding="12,8"
                         Margin="0,0,0,16"/>
