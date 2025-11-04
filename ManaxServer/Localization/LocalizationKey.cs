@@ -13,12 +13,8 @@ public enum LocalizationKey
     HubDisconnected,
     HubDisconnectedError,
     HubMessageError,
-    HubMessageErrorAdmins,
-    HubMessageErrorOwner,
     HubMessageErrorSingle,
     HubMessageSent,
-    HubMessageSentAdmins,
-    HubMessageSentOwner,
     HubMessageSentSingle,
 
     InvalidImageFile,
