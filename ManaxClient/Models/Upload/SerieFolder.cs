@@ -10,7 +10,6 @@ public partial class SerieFolder: ObservableObject
 {
     [ObservableProperty] private string _name;
     public ObservableCollection<ChapterFolder> Chapters { get; set; }
-    public EventHandler<string>? NewImageToEdit;
 
     public SerieFolder(string path)
     {
@@ -18,14 +17,5 @@ public partial class SerieFolder: ObservableObject
         Chapters = new ObservableCollection<ChapterFolder>(
             Directory.GetDirectories(path)
                 .Select(d => new ChapterFolder(d)));
-        foreach (ChapterFolder chapterFolder in Chapters)
-        {
-            chapterFolder.NewImageToEdit = NewImageToEdit;
-        }
-    }
-
-    public void ToEdit(string image)
-    {
-        NewImageToEdit?.Invoke(this, image);
     }
 }

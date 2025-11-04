@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
@@ -11,7 +12,6 @@ public partial class ChapterFolder: ObservableObject
     [ObservableProperty] private string _name;
     public ObservableCollection<ImageFile> Images { get; set; }
     [ObservableProperty] private ImageFile? _selectedImage;
-    public EventHandler<string>? NewImageToEdit;
     
     private static readonly string TrashPath = Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
@@ -21,30 +21,21 @@ public partial class ChapterFolder: ObservableObject
     public ChapterFolder(string path)
     {
         Name = Path.GetFileName(path);
-        Images = new ObservableCollection<ImageFile>(
-            Directory.GetFiles(path)
-                .Select(f => new ImageFile(f)));
-    }
-
-    public void SetSelectedImage(ImageFile image)
-    {
-        if (SelectedImage == image)
-        {
-            ToEdit(image);
-            return;
-        }
-        SelectedImage = image;
+        List<ImageFile> images = Directory.GetFiles(path)
+            .Select(f => new ImageFile(f))
+            .OrderBy(i => i.FileName, new NaturalSortComparer())
+            .ToList();
+        Images = new ObservableCollection<ImageFile>(images);
     }
     
-    private void DeleteImage(ImageFile image)
+    public void DeleteImage(ImageFile image)
     {
         Images.Remove(image);
+        if (!Directory.Exists(Path.Combine(TrashPath,Name)))
+        {
+            Directory.CreateDirectory(Path.Combine(TrashPath,Name));
+        }
         File.Move(image.Path, Path.Combine(TrashPath,Name, Path.GetFileName(image.Path)));
         OnPropertyChanged(nameof(Images));
-    }
-
-    private void ToEdit(ImageFile image)
-    {
-        NewImageToEdit?.Invoke(this, image.Path);
     }
 }

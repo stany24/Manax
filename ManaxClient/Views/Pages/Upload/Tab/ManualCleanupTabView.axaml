@@ -10,10 +10,10 @@
     x:Class="ManaxClient.Views.Pages.Upload.Tab.ManualCleanupTabView"
     x:DataType="tab:ManualCleanupTabViewModel"
     IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).CanUploadChapter}">
-    <Grid ColumnDefinitions="200,*,200" Margin="8">
+    <Grid ColumnDefinitions="200,*,200" RowDefinitions="*" Margin="8">
         
         <!-- Left Panel: Serie Folders with Chapters -->
-        <Border Grid.Column="0" Classes="card" Margin="0,0,4,0">
+        <Border Grid.Column="0" Grid.Row="0" Classes="card" Margin="0,0,4,0">
             <StackPanel Orientation="Vertical" Spacing="8">
                 <TextBlock Text="Serie Folders" 
                            FontWeight="SemiBold" 
@@ -76,9 +76,9 @@
         </Border>
         
         <!-- Middle Panel: Images in Selected Chapter -->
-        <Border Grid.Column="1" Classes="card" Margin="4,0">
-            <StackPanel Orientation="Vertical" Spacing="8">
-                <StackPanel Orientation="Horizontal" Spacing="8" Margin="8,8,8,0">
+        <Border Grid.Column="1" Grid.Row="0" Classes="card" Margin="4,0">
+            <DockPanel>
+                <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Spacing="8" Margin="8,8,8,8">
                     <TextBlock Text="Images" 
                                FontWeight="SemiBold" 
                                FontSize="14"
@@ -88,8 +88,10 @@
                                VerticalAlignment="Center"
                                IsVisible="{Binding SelectedChapterFolder, Converter={x:Static ObjectConverters.IsNotNull}}"/>
                 </StackPanel>
-                <ScrollViewer VerticalScrollBarVisibility="Auto">
-                    <ItemsControl ItemsSource="{Binding SelectedChapterFolder.Images}">
+                <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+                              VerticalScrollBarVisibility="Auto">
+                    <ItemsControl ItemsSource="{Binding SelectedChapterFolder.Images}"
+                                  VerticalAlignment="Top">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <Border Margin="4" 
@@ -99,7 +101,8 @@
                                         ClipToBounds="True"
                                         Cursor="Hand">
                                     <Button Classes="sidebar"
-                                            Command="{Binding $parent[UserControl].((tab:ManualCleanupTabViewModel)DataContext).SelectedChapterFolder.SetSelectedImage}"
+                                            PointerPressed="PointerPressedHandler"
+                                            Command="{Binding $parent[UserControl].((tab:ManualCleanupTabViewModel)DataContext).AddImageToEdit}"
                                             CommandParameter="{Binding Path}"
                                             HorizontalAlignment="Stretch"
                                             HorizontalContentAlignment="Stretch"
@@ -107,7 +110,6 @@
                                         <StackPanel Orientation="Vertical" Spacing="4">
                                             <Image Source="{Binding Preview}"
                                                    Stretch="Uniform"
-                                                   MaxHeight="150"
                                                    HorizontalAlignment="Center"/>
                                             <TextBlock Text="{Binding FileName}"
                                                        FontSize="10"
@@ -123,22 +125,24 @@
                         </ItemsControl.ItemTemplate>
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
-                                <UniformGrid Columns="4" />
+                                <UniformGrid Columns="{Binding $parent[UserControl].((tab:ManualCleanupTabViewModel)DataContext).NbColumns}"
+                                             VerticalAlignment="Top" />
                             </ItemsPanelTemplate>
                         </ItemsControl.ItemsPanel>
                     </ItemsControl>
                 </ScrollViewer>
-            </StackPanel>
+            </DockPanel>
         </Border>
         
         <!-- Right Panel: Images to Edit -->
-        <Border Grid.Column="2" Classes="card" Margin="4,0,0,0">
+        <Border Grid.Column="2" Grid.Row="0" Classes="card" Margin="4,0,0,0">
             <StackPanel Orientation="Vertical" Spacing="8">
                 <TextBlock Text="To Edit" 
                            FontWeight="SemiBold" 
                            FontSize="14"
                            Margin="8,8,8,0"/>
-                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+                              VerticalScrollBarVisibility="Auto">
                     <ItemsControl ItemsSource="{Binding ImagesToEdit}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate x:DataType="x:String">
