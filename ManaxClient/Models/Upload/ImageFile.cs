@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using System.Threading.Tasks;
 using Avalonia.Media.Imaging;
@@ -16,17 +15,17 @@ public partial class ImageFile: ObservableObject
     {
         Path = path;
         FileName = System.IO.Path.GetFileName(path);
-        try
+        Task.Run(() =>
         {
-            Task.Run(() =>
+            try
             {
                 using FileStream stream = File.OpenRead(path);
                 Preview = new Bitmap(stream);
-            });
-        }
-        catch (Exception)
-        {
-            // ignored
-        }
+            }
+            catch
+            {
+                // ignored
+            }
+        });
     }
 }

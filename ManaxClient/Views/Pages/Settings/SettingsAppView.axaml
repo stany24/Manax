@@ -16,6 +16,29 @@
                 <TextBlock Classes="title" Text="{localization:Localize SettingsAppPage.Title}" />
                 <TextBlock Text="{localization:Localize SettingsAppPage.Subtitle}" />
             </StackPanel>
+            
+            <Border Classes="card">
+                <StackPanel Spacing="20">
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <TextBlock Text="🌍" FontSize="20" />
+                        <TextBlock Classes="subtitle" Text="{localization:Localize SettingsAppPage.Language}" Margin="0" />
+                    </StackPanel>
+
+                    <Grid ColumnDefinitions="*" RowDefinitions="Auto" RowSpacing="16">
+                        <StackPanel Grid.Column="0" Grid.Row="0" Spacing="6">
+                            <TextBlock Text="{localization:Localize SettingsAppPage.SelectedLanguage}" FontWeight="Medium" />
+                            <ComboBox ItemsSource="{Binding AvailableLanguages}"
+                                      SelectedItem="{Binding SelectedLanguage}"
+                                      DisplayMemberBinding="{Binding DisplayName}"
+                                      HorizontalAlignment="Stretch"
+                                      MinWidth="200"
+                                      Padding="8,6"
+                                      CornerRadius="6"
+                                      BorderThickness="1"/>
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+            </Border>
 
             <Border Classes="card">
                 <StackPanel Spacing="20">

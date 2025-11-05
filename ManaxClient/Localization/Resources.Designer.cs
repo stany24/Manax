@@ -543,6 +543,18 @@ namespace ManaxClient.Localization {
             }
         }
         
+        public static string SettingsAppPage_Language {
+            get {
+                return ResourceManager.GetString("SettingsAppPage.Language", resourceCulture);
+            }
+        }
+        
+        public static string SettingsAppPage_SelectedLanguage {
+            get {
+                return ResourceManager.GetString("SettingsAppPage.SelectedLanguage", resourceCulture);
+            }
+        }
+        
         public static string SettingsServerPage_Title {
             get {
                 return ResourceManager.GetString("SettingsServerPage.Title", resourceCulture);
@@ -1722,6 +1734,96 @@ namespace ManaxClient.Localization {
         public static string ConfigureUploadPage_SaveSettings {
             get {
                 return ResourceManager.GetString("ConfigureUploadPage.SaveSettings", resourceCulture);
+            }
+        }
+        
+        public static string ConfigureUploadPage_NoFolderSelected {
+            get {
+                return ResourceManager.GetString("ConfigureUploadPage.NoFolderSelected", resourceCulture);
+            }
+        }
+        
+        public static string ConfigureUploadPage_Information {
+            get {
+                return ResourceManager.GetString("ConfigureUploadPage.Information", resourceCulture);
+            }
+        }
+        
+        public static string ConfigureUploadPage_Information_Text1 {
+            get {
+                return ResourceManager.GetString("ConfigureUploadPage.Information.Text1", resourceCulture);
+            }
+        }
+        
+        public static string ConfigureUploadPage_Information_Text2 {
+            get {
+                return ResourceManager.GetString("ConfigureUploadPage.Information.Text2", resourceCulture);
+            }
+        }
+        
+        public static string AutoCleanupPage_Title {
+            get {
+                return ResourceManager.GetString("AutoCleanupPage.Title", resourceCulture);
+            }
+        }
+        
+        public static string AutoCleanupPage_Subtitle {
+            get {
+                return ResourceManager.GetString("AutoCleanupPage.Subtitle", resourceCulture);
+            }
+        }
+        
+        public static string AutoCleanupPage_ArchiveProcessing {
+            get {
+                return ResourceManager.GetString("AutoCleanupPage.ArchiveProcessing", resourceCulture);
+            }
+        }
+        
+        public static string AutoCleanupPage_ImageProcessing {
+            get {
+                return ResourceManager.GetString("AutoCleanupPage.ImageProcessing", resourceCulture);
+            }
+        }
+        
+        public static string AutoCleanupPage_StartCleanup {
+            get {
+                return ResourceManager.GetString("AutoCleanupPage.StartCleanup", resourceCulture);
+            }
+        }
+        
+        public static string AutoCleanupPage_Processing {
+            get {
+                return ResourceManager.GetString("AutoCleanupPage.Processing", resourceCulture);
+            }
+        }
+        
+        public static string AutoCleanupPage_Errors {
+            get {
+                return ResourceManager.GetString("AutoCleanupPage.Errors", resourceCulture);
+            }
+        }
+        
+        public static string ManualCleanupPage_SerieFolders {
+            get {
+                return ResourceManager.GetString("ManualCleanupPage.SerieFolders", resourceCulture);
+            }
+        }
+        
+        public static string ManualCleanupPage_Images {
+            get {
+                return ResourceManager.GetString("ManualCleanupPage.Images", resourceCulture);
+            }
+        }
+        
+        public static string ManualCleanupPage_ToEdit {
+            get {
+                return ResourceManager.GetString("ManualCleanupPage.ToEdit", resourceCulture);
+            }
+        }
+        
+        public static string ManualCleanupPage_EditSelected {
+            get {
+                return ResourceManager.GetString("ManualCleanupPage.EditSelected", resourceCulture);
             }
         }
     }

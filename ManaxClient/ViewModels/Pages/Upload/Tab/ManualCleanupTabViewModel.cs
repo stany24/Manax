@@ -45,4 +45,11 @@ public partial class ManualCleanupTabViewModel:PageViewModel
         }
         OnPropertyChanged(nameof(ImagesToEdit));
     }
+
+    public void Edit()
+    {
+        if (ImagesToEdit.Count == 0) return;
+        string args = ImagesToEdit.Aggregate("", (current, image) => current + $"\"{image}\" ");
+        System.Diagnostics.Process.Start("gimp",args);
+    }
 }

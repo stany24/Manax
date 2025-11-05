@@ -116,16 +116,16 @@
                             IsVisible="{Binding CanReadTags}"
                             Command="{Binding ChangePageTags}">
                         <StackPanel Orientation="Horizontal" Spacing="12">
-                            <TextBlock Text="🏆" FontSize="14" />
+                            <TextBlock Text="🏷️" FontSize="14" />
                             <TextBlock Text="{localization:Localize MainWindow.Tags}" />
                         </StackPanel>
                     </Button>
-                    
+
                     <Button Classes="sidebar"
                             IsVisible="{Binding CanUploadChapter}"
                             Command="{Binding ChangeUploadPage}">
                         <StackPanel Orientation="Horizontal" Spacing="12">
-                            <TextBlock Text="🏆" FontSize="14" />
+                            <TextBlock Text="📤" FontSize="14" />
                             <TextBlock Text="{localization:Localize MainWindow.Upload}" />
                         </StackPanel>
                     </Button>

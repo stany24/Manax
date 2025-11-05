@@ -150,7 +150,7 @@
                                        FontSize="12">
                                 <TextBlock.Styles>
                                     <Style Selector="TextBlock:empty">
-                                        <Setter Property="Text" Value="No folder selected"/>
+                                        <Setter Property="Text" Value="{localization:Localize ConfigureUploadPage.NoFolderSelected}"/>
                                         <Setter Property="Opacity" Value="0.5"/>
                                         <Setter Property="FontStyle" Value="Italic"/>
                                     </Style>
@@ -175,17 +175,17 @@
                         Padding="16"
                         Margin="0,8,0,0">
                     <StackPanel Spacing="12">
-                        <TextBlock Text="ℹ️ Information" 
+                        <TextBlock Text="{localization:Localize ConfigureUploadPage.Information}" 
                                    FontWeight="SemiBold"
                                    FontSize="14"/>
                         <TextBlock TextWrapping="Wrap"
                                    FontSize="12"
                                    Opacity="0.8"
                                    LineHeight="18">
-                            <Run Text="The processing folder is where files from source folders will be copied for processing."/>
+                            <Run Text="{localization:Localize ConfigureUploadPage.Information.Text1}"/>
                             <LineBreak/>
                             <LineBreak/>
-                            <Run Text="Make sure you have sufficient disk space and write permissions."/>
+                            <Run Text="{localization:Localize ConfigureUploadPage.Information.Text2}"/>
                         </TextBlock>
                     </StackPanel>
                 </Border>

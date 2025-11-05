@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
+using Jeek.Avalonia.Localization;
+using ManaxClient.Models;
 using ManaxClient.Models.Theme;
 
 namespace ManaxClient.ViewModels.Pages.Settings;
@@ -8,6 +10,8 @@ namespace ManaxClient.ViewModels.Pages.Settings;
 public partial class SettingsAppViewModel : PageViewModel
 {
     [ObservableProperty] private List<ThemeSettingsData> _availableThemes;
+    [ObservableProperty] private List<LanguageItem> _availableLanguages = [];
+    [ObservableProperty] private LanguageItem? _selectedLanguage;
 
     private bool _isDarkMode;
     private ThemeSettingsData _selectedThemeSettingsData;
@@ -18,6 +22,28 @@ public partial class SettingsAppViewModel : PageViewModel
         _selectedThemeSettingsData = AvailableThemes
             .FirstOrDefault(t => t.Name == ThemeSettings.Current.Name) ?? AvailableThemes[0];
         IsDarkMode = ThemeSettings.Current.IsDark;
+        InitializeLanguages();
+    }
+
+    private void InitializeLanguages()
+    {
+        AvailableLanguages = 
+        [
+            new LanguageItem { Code = "en", DisplayName = "English" },
+            new LanguageItem { Code = "fr", DisplayName = "Français" }
+        ];
+        
+        string currentLanguage = Localizer.Language;
+        if (string.IsNullOrEmpty(currentLanguage)) {currentLanguage = "en";}
+        SelectedLanguage = AvailableLanguages.FirstOrDefault(l => l.Code == currentLanguage);
+    }
+
+    partial void OnSelectedLanguageChanged(LanguageItem? value)
+    {
+        if (value != null && value.Code != Localizer.Language)
+        {
+            Localizer.Language = value.Code;
+        }
     }
 
     public ThemeSettingsData SelectedThemeSettingsData

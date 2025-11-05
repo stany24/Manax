@@ -5,6 +5,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewModels="clr-namespace:ManaxClient.ViewModels"
     xmlns:tab="clr-namespace:ManaxClient.ViewModels.Pages.Upload.Tab"
+    xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Pages.Upload.Tab.AutoCleanupTabView"
     x:DataType="tab:AutoCleanupTabViewModel"
@@ -20,8 +21,8 @@
                     <!-- Header -->
                     <StackPanel Spacing="8" HorizontalAlignment="Center">
                         <TextBlock Text="🧹" FontSize="48" HorizontalAlignment="Center" />
-                        <TextBlock Classes="title" Text="Auto Cleanup" HorizontalAlignment="Center" />
-                        <TextBlock Text="Automatically process and optimize manga archives"
+                        <TextBlock Classes="title" Text="{localization:Localize AutoCleanupPage.Title}" HorizontalAlignment="Center" />
+                        <TextBlock Text="{localization:Localize AutoCleanupPage.Subtitle}"
                                    HorizontalAlignment="Center"
                                    Opacity="0.7"
                                    TextWrapping="Wrap"
@@ -32,7 +33,7 @@
                     <StackPanel Spacing="8">
                         <Grid ColumnDefinitions="*,Auto">
                             <TextBlock Grid.Column="0" 
-                                       Text="Archive Processing" 
+                                       Text="{localization:Localize AutoCleanupPage.ArchiveProcessing}" 
                                        FontWeight="SemiBold"
                                        FontSize="14"/>
                             <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="2">
@@ -52,7 +53,7 @@
                     <StackPanel Spacing="8">
                         <Grid ColumnDefinitions="*,Auto">
                             <TextBlock Grid.Column="0" 
-                                       Text="Image Processing" 
+                                       Text="{localization:Localize AutoCleanupPage.ImageProcessing}" 
                                        FontWeight="SemiBold"
                                        FontSize="14"/>
                             <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="2">
@@ -79,8 +80,8 @@
                         <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center">
                             <TextBlock Text="▶️" IsVisible="{Binding !IsProcessing}"/>
                             <TextBlock Text="⏳" IsVisible="{Binding IsProcessing}"/>
-                            <TextBlock Text="Start Cleanup" FontWeight="Medium" IsVisible="{Binding !IsProcessing}"/>
-                            <TextBlock Text="Processing..." FontWeight="Medium" IsVisible="{Binding IsProcessing}"/>
+                            <TextBlock Text="{localization:Localize AutoCleanupPage.StartCleanup}" FontWeight="Medium" IsVisible="{Binding !IsProcessing}"/>
+                            <TextBlock Text="{localization:Localize AutoCleanupPage.Processing}" FontWeight="Medium" IsVisible="{Binding IsProcessing}"/>
                         </StackPanel>
                     </Button>
                     
@@ -96,7 +97,7 @@
                 <StackPanel Spacing="12">
                     <StackPanel Orientation="Horizontal" Spacing="8">
                         <TextBlock Text="⚠️" FontSize="20" VerticalAlignment="Center"/>
-                        <TextBlock Text="Errors" 
+                        <TextBlock Text="{localization:Localize AutoCleanupPage.Errors}" 
                                    FontWeight="SemiBold"
                                    FontSize="16"
                                    VerticalAlignment="Center"/>
