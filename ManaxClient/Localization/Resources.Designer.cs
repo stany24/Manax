@@ -1826,5 +1826,11 @@ namespace ManaxClient.Localization {
                 return ResourceManager.GetString("ManualCleanupPage.EditSelected", resourceCulture);
             }
         }
+        
+        public static string ManualCleanupPage_RestoreLastImage {
+            get {
+                return ResourceManager.GetString("ManualCleanupPage.RestoreLastImage", resourceCulture);
+            }
+        }
     }
 }

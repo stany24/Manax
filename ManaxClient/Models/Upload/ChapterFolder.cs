@@ -12,6 +12,7 @@ public partial class ChapterFolder: ObservableObject
     [ObservableProperty] private string _name;
     public ObservableCollection<ImageFile> Images { get; set; }
     [ObservableProperty] private ImageFile? _selectedImage;
+    private readonly List<KeyValuePair<string,string>> _deletedImages = [];
     
     private static readonly string TrashPath = Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
@@ -35,7 +36,21 @@ public partial class ChapterFolder: ObservableObject
         {
             Directory.CreateDirectory(Path.Combine(TrashPath,Name));
         }
-        File.Move(image.Path, Path.Combine(TrashPath,Name, Path.GetFileName(image.Path)));
+
+        string trashImagePath = Path.Combine(TrashPath, Name, Path.GetFileName(image.Path)+Guid.NewGuid());
+        File.Move(image.Path, trashImagePath);
+        _deletedImages.Add(new KeyValuePair<string, string>(image.Path, trashImagePath));
+        OnPropertyChanged(nameof(Images));
+    }
+    
+    public void RestoreLastImage()
+    {
+        if (_deletedImages.Count == 0) return;
+        KeyValuePair<string, string> lastDeletedImage = _deletedImages[^1];
+        File.Move(lastDeletedImage.Value, lastDeletedImage.Key);
+        Images.Add(new ImageFile(lastDeletedImage.Key));
+        Images = new ObservableCollection<ImageFile>(Images.OrderBy(i => i.FileName, new NaturalSortComparer()));
+        _deletedImages.RemoveAt(_deletedImages.Count - 1);
         OnPropertyChanged(nameof(Images));
     }
 }

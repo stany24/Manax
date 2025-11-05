@@ -909,4 +909,7 @@
     <data name="ManualCleanupPage.EditSelected" xml:space="preserve">
         <value>Edit Selected</value>
     </data>
+    <data name="ManualCleanupPage.RestoreLastImage" xml:space="preserve">
+        <value>Restore the last image</value>
+    </data>
 </root>

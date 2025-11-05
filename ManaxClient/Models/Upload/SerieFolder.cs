@@ -15,6 +15,7 @@ public partial class SerieFolder: ObservableObject
         Name = Path.GetFileName(path);
         Chapters = new ObservableCollection<ChapterFolder>(
             Directory.GetDirectories(path)
+                .OrderBy(i => i, new NaturalSortComparer())
                 .Select(d => new ChapterFolder(d)));
     }
 }

@@ -20,7 +20,7 @@ public partial class ImageFile: ObservableObject
             try
             {
                 using FileStream stream = File.OpenRead(path);
-                Preview = new Bitmap(stream);
+                Preview = Bitmap.DecodeToWidth(stream, 300);
             }
             catch
             {

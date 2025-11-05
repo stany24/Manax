@@ -90,7 +90,8 @@
                                IsVisible="{Binding SelectedChapterFolder, Converter={x:Static ObjectConverters.IsNotNull}}"/>
                 </StackPanel>
                 <ScrollViewer HorizontalScrollBarVisibility="Disabled"
-                              VerticalScrollBarVisibility="Auto">
+                              VerticalScrollBarVisibility="Auto"
+                              Offset="{Binding ImagesOffset, Mode=TwoWay}">
                     <ItemsControl ItemsSource="{Binding SelectedChapterFolder.Images}"
                                   VerticalAlignment="Top">
                         <ItemsControl.ItemTemplate>
@@ -177,6 +178,21 @@
                 <Button
                     Content="{localization:Localize ManualCleanupPage.EditSelected}"
                     Command="{Binding Edit}"></Button>
+                <Button
+                    Content="{localization:Localize ManualCleanupPage.RestoreLastImage}"
+                    IsVisible="False"
+                    Command="{Binding SelectedChapterFolder.RestoreLastImage}"
+                    HotKey="Ctrl+z"></Button>
+                <Button
+                    Content="{localization:Localize ManualCleanupPage.RestoreLastImage}"
+                    IsVisible="False"
+                    Command="{Binding NextChapter}"
+                    HotKey="Right"></Button>
+                <Button
+                    Content="{localization:Localize ManualCleanupPage.RestoreLastImage}"
+                    IsVisible="False"
+                    Command="{Binding PreviousChapter}"
+                    HotKey="Left"></Button>
             </StackPanel>
         </Border>
     </Grid>

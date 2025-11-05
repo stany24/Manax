@@ -2,6 +2,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using Avalonia;
 using CommunityToolkit.Mvvm.ComponentModel;
 using ManaxClient.Models.Upload;
 
@@ -12,6 +13,7 @@ public partial class ManualCleanupTabViewModel:PageViewModel
     public ObservableCollection<SerieFolder> SerieFolders { get; set; }
     [ObservableProperty] private ChapterFolder? _selectedChapterFolder;
     [ObservableProperty] private int _nbColumns = 4;
+    [ObservableProperty] private Vector _imagesOffset = new(0,0);
     public ObservableCollection<string> ImagesToEdit { get; set; }= [];
     
     public ManualCleanupTabViewModel()
@@ -23,6 +25,13 @@ public partial class ManualCleanupTabViewModel:PageViewModel
             Directory.GetDirectories(processingFolder)
                 .Select(f =>new SerieFolder(f)));
         SelectedChapterFolder = SerieFolders.FirstOrDefault()?.Chapters.FirstOrDefault();
+        PropertyChanged += (_, args) =>
+        {
+            if (args.PropertyName == nameof(SelectedChapterFolder))
+            {
+                ImagesOffset = new Vector(0,0);
+            }
+        };
     }
     
     public void ChangeRowCount(bool increase)
@@ -51,5 +60,41 @@ public partial class ManualCleanupTabViewModel:PageViewModel
         if (ImagesToEdit.Count == 0) return;
         string args = ImagesToEdit.Aggregate("", (current, image) => current + $"\"{image}\" ");
         System.Diagnostics.Process.Start("gimp",args);
+    }
+    
+    public void NextChapter()
+    {
+        if (SelectedChapterFolder == null) return;
+        SerieFolder? parentSerie = SerieFolders.FirstOrDefault(s => s.Chapters.Contains(SelectedChapterFolder));
+        if (parentSerie == null) return;
+        int currentIndex = parentSerie.Chapters.IndexOf(SelectedChapterFolder);
+        if (currentIndex < parentSerie.Chapters.Count - 1)
+        {
+            SelectedChapterFolder = parentSerie.Chapters[currentIndex + 1];
+            return;
+        }
+        int parentSerieIndex = SerieFolders.IndexOf(parentSerie);
+        if (parentSerieIndex < SerieFolders.Count - 1)
+        {
+            SelectedChapterFolder = SerieFolders[parentSerieIndex + 1].Chapters.FirstOrDefault();
+        }
+    }
+    
+    public void PreviousChapter()
+    {
+        if (SelectedChapterFolder == null) return;
+        SerieFolder? parentSerie = SerieFolders.FirstOrDefault(s => s.Chapters.Contains(SelectedChapterFolder));
+        if (parentSerie == null) return;
+        int currentIndex = parentSerie.Chapters.IndexOf(SelectedChapterFolder);
+        if (currentIndex > 0)
+        {
+            SelectedChapterFolder = parentSerie.Chapters[currentIndex - 1];
+            return;
+        }
+        int parentSerieIndex = SerieFolders.IndexOf(parentSerie);
+        if (parentSerieIndex > 0)
+        {
+            SelectedChapterFolder = SerieFolders[parentSerieIndex - 1].Chapters.LastOrDefault();
+        }
     }
 }
