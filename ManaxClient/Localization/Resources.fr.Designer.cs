@@ -1832,5 +1832,17 @@ namespace ManaxClient.Localization {
                 return ResourceManager.GetString("ManualCleanupPage.RestoreLastImage", resourceCulture);
             }
         }
+        
+        public static string ConfigureUploadPage_Next {
+            get {
+                return ResourceManager.GetString("ConfigureUploadPage.Next", resourceCulture);
+            }
+        }
+        
+        public static string ManualCleanupPage_Next {
+            get {
+                return ResourceManager.GetString("ManualCleanupPage.Next", resourceCulture);
+            }
+        }
     }
 }

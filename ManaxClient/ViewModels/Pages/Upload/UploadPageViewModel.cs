@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using ManaxClient.Models;
@@ -7,17 +8,29 @@ namespace ManaxClient.ViewModels.Pages.Upload;
 
 public partial class UploadPageViewModel:PageViewModel
 {
-    public ObservableCollection<UploadTab> Tabs { get; } = [];
-    [ObservableProperty] private UploadTab _selectedTab;
+    private List<TabViewModel> Tabs { get; } = [];
+    [ObservableProperty] private TabViewModel _selectedTabViewModel;
 
     public UploadPageViewModel()
     {
-        Tabs.Add(new UploadTab("Configure upload", new ConfigureUploadTabViewModel()));
-        Tabs.Add(new UploadTab("Fetch from source", new FetchFromSourceTabViewModel()));
-        Tabs.Add(new UploadTab("Auto cleanup", new AutoCleanupTabViewModel()));
-        Tabs.Add(new UploadTab("User edit", new ManualCleanupTabViewModel()));
-        Tabs.Add(new UploadTab("Auto upload", new AutoUploadTabViewModel()));
-        Tabs.Add(new UploadTab("Manual upload", new ManualUploadTabViewModel()));
-        SelectedTab = Tabs[0];
+        Tabs.Add(new ConfigureUploadTabViewModel());
+        Tabs.Add(new FetchFromSourceTabViewModel());
+        Tabs.Add(new AutoCleanupTabViewModel());
+        Tabs.Add(new ManualCleanupTabViewModel());
+        Tabs.Add(new AutoUploadTabViewModel());
+        Tabs.Add(new ManualUploadTabViewModel());
+        SelectedTabViewModel = Tabs[0];
+        
+        foreach (TabViewModel tabViewModel in Tabs)
+        {
+            tabViewModel.NextRequested += (_, _) =>
+            {
+                int currentIndex = Tabs.IndexOf(SelectedTabViewModel);
+                if (currentIndex < Tabs.Count - 1)
+                {
+                    SelectedTabViewModel = Tabs[currentIndex + 1];
+                }
+            };
+        }
     }
 }

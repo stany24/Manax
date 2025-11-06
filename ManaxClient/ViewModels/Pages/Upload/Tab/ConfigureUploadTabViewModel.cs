@@ -8,12 +8,13 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData;
+using ManaxClient.Models;
 using ManaxClient.Models.Upload;
 using ManaxLibrary.Logging;
 
 namespace ManaxClient.ViewModels.Pages.Upload.Tab;
 
-public partial class ConfigureUploadTabViewModel:PageViewModel
+public partial class ConfigureUploadTabViewModel:TabViewModel
 {
     public ObservableCollection<Source> SourceFolders { get; set; } = [];
     [ObservableProperty] private string _processingFolder = string.Empty;
@@ -64,13 +65,17 @@ public partial class ConfigureUploadTabViewModel:PageViewModel
         catch (Exception e)
         {
             Logger.LogError("Error adding source folder", e);
-            InfoEmitted?.Invoke(this, "Error adding source folder: " + e.Message);
         }
     }
     
     public void RemoveSource(Source source)
     {
         UploadSettings.RemoveSourceFolder(source.Path);
+    }
+
+    public void Next()
+    {
+        NextRequested?.Invoke(this, EventArgs.Empty);
     }
     
     public async void UpdateProcessingFolder()
@@ -100,7 +105,6 @@ public partial class ConfigureUploadTabViewModel:PageViewModel
         catch (Exception e)
         {
             Logger.LogError("Error updating processing folder", e);
-            InfoEmitted?.Invoke(this, "Error updating processing folder: " + e.Message);
         }
     }
 }

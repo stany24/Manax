@@ -912,4 +912,10 @@
     <data name="ManualCleanupPage.RestoreLastImage" xml:space="preserve">
         <value>Restaurer la dernière image</value>
     </data>
+    <data name="ConfigureUploadPage.Next" xml:space="preserve">
+        <value>Continuer</value>
+    </data>
+    <data name="ManualCleanupPage.Next" xml:space="preserve">
+        <value>Continuer</value>
+    </data>
 </root>

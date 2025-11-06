@@ -4,11 +4,12 @@ using System.IO;
 using System.Linq;
 using Avalonia;
 using CommunityToolkit.Mvvm.ComponentModel;
+using ManaxClient.Models;
 using ManaxClient.Models.Upload;
 
 namespace ManaxClient.ViewModels.Pages.Upload.Tab;
 
-public partial class ManualCleanupTabViewModel:PageViewModel
+public partial class ManualCleanupTabViewModel:TabViewModel
 {
     public ObservableCollection<string> ImagesToEdit { get; set; }= [];
     public ObservableCollection<SerieFolder> SerieFolders { get; set; }
@@ -61,6 +62,11 @@ public partial class ManualCleanupTabViewModel:PageViewModel
         if (ImagesToEdit.Count == 0) return;
         string args = ImagesToEdit.Aggregate("", (current, image) => current + $"\"{image}\" ");
         System.Diagnostics.Process.Start("gimp",args);
+    }
+    
+    public void Next()
+    {
+        NextRequested?.Invoke(this, EventArgs.Empty);
     }
     
     public void NextChapter()

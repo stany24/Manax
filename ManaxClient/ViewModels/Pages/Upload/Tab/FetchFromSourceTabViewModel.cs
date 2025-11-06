@@ -1,13 +1,15 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
+using ManaxClient.Models;
 using ManaxClient.Models.Upload;
 
 namespace ManaxClient.ViewModels.Pages.Upload.Tab;
 
-public partial class FetchFromSourceTabViewModel:PageViewModel
+public partial class FetchFromSourceTabViewModel:TabViewModel
 {
     public ObservableCollection<Source> SourceFolders { get; set; } = [];
     [ObservableProperty] private string _processingFolder = string.Empty;
@@ -40,7 +42,7 @@ public partial class FetchFromSourceTabViewModel:PageViewModel
                 SourceCompletedCount++;
                 SourceInProgressCount--;
             }
-            CanFetch = true;
+            NextRequested?.Invoke(this, EventArgs.Empty);
         });
     }
 }

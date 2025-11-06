@@ -190,17 +190,15 @@
                     </StackPanel>
                 </Border>
                 
-                <!-- Auto-save Notice -->
-                <Border Grid.Row="4"
-                        Padding="12,8"
-                        Margin="0,16,0,0"
-                        CornerRadius="6">
-                    <TextBlock Text="{localization:Localize ConfigureUploadPage.SaveSettings}"
-                               FontSize="11"
-                               TextAlignment="Center"
-                               Opacity="0.6"
-                               FontStyle="Italic"/>
-                </Border>
+                <!-- Add Source Button -->
+                <Button Grid.Row="3"
+                        VerticalAlignment="Bottom"
+                        Classes="primary" 
+                        Content="{localization:Localize ConfigureUploadPage.Next}" 
+                        HorizontalAlignment="Stretch"
+                        Command="{Binding Next}"
+                        Margin="0,12,0,0"
+                        Padding="12,8"/>
             </Grid>
         </Border>
     </Grid>

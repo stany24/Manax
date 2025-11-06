@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Aspose.Zip.Rar;
 using CommunityToolkit.Mvvm.ComponentModel;
 using ImageMagick;
+using ManaxClient.Models;
 using ManaxClient.Models.Upload;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
@@ -17,7 +18,7 @@ using ManaxLibrary.Logging;
 
 namespace ManaxClient.ViewModels.Pages.Upload.Tab;
 
-public partial class AutoCleanupTabViewModel:PageViewModel
+public partial class AutoCleanupTabViewModel:TabViewModel
 {
     private string _processingFolder;
     [ObservableProperty] private int _nbArchive;
@@ -53,7 +54,7 @@ public partial class AutoCleanupTabViewModel:PageViewModel
             ScaleAndConvertImages();
             RemoveUnwantedFiles();
             LoadSettings();
-            IsProcessing = false;
+            NextRequested?.Invoke(this, EventArgs.Empty);
         });
     }
 
@@ -184,7 +185,6 @@ public partial class AutoCleanupTabViewModel:PageViewModel
             Optional<SettingsData> settingsAsync = ManaxApiSettingsClient.GetSettingsAsync().Result;
             if (settingsAsync.Failed)
             {
-                InfoEmitted?.Invoke(this, "Failed to load settings: " + settingsAsync.Error);
                 Logger.LogFailure("Failed to load settings");
                 return;
             }
@@ -193,7 +193,6 @@ public partial class AutoCleanupTabViewModel:PageViewModel
         }
         catch (Exception e)
         {
-            InfoEmitted?.Invoke(this, "Error when fetching settings: " + e.Message);
             Logger.LogError("Error when fetching settings", e);
         }
     }

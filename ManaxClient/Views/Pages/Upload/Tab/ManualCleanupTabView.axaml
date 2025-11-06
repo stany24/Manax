@@ -182,6 +182,9 @@
                         Content="{localization:Localize ManualCleanupPage.EditSelected}"
                         Command="{Binding Edit}"></Button>
                     <Button
+                        Content="{localization:Localize ManualCleanupPage.Next}"
+                        Command="{Binding Next}"></Button>
+                    <Button
                         Content="{localization:Localize ManualCleanupPage.RestoreLastImage}"
                         IsVisible="False"
                         Command="{Binding SelectedChapterFolder.RestoreLastImage}"
