@@ -12,6 +12,8 @@ namespace ManaxServer.Models.Serie;
 public class Serie
 {
     public long Id { get; set; }
+    
+    public List<Person.Person> Peoples { get; set; }
     public long? LibraryId { get; set; }
 
     [ForeignKey(nameof(LibraryId))] public Library.Library? Library { get; set; }
