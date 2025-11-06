@@ -10,11 +10,14 @@ namespace ManaxClient.ViewModels.Pages.Upload.Tab;
 
 public partial class ManualCleanupTabViewModel:PageViewModel
 {
+    public ObservableCollection<string> ImagesToEdit { get; set; }= [];
     public ObservableCollection<SerieFolder> SerieFolders { get; set; }
     [ObservableProperty] private ChapterFolder? _selectedChapterFolder;
     [ObservableProperty] private int _nbColumns = 4;
     [ObservableProperty] private Vector _imagesOffset = new(0,0);
-    public ObservableCollection<string> ImagesToEdit { get; set; }= [];
+
+    private const int MinColumns = 1;
+    private const int MaxColumns = 20;
     
     public ManualCleanupTabViewModel()
     {
@@ -36,9 +39,7 @@ public partial class ManualCleanupTabViewModel:PageViewModel
     
     public void ChangeRowCount(bool increase)
     {
-        const int minColumns = 1;
-        const int maxColumns = 20;
-        NbColumns = increase ? Math.Max(minColumns, NbColumns - 1) : Math.Min(maxColumns, NbColumns + 1);
+        NbColumns = increase ? Math.Max(MinColumns, NbColumns - 1) : Math.Min(MaxColumns, NbColumns + 1);
     }
     
     public void SetSelectedChapterFolder(ChapterFolder? selectedChapterFolder)

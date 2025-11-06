@@ -10,8 +10,8 @@ namespace ManaxClient.Models.Upload;
 public partial class ChapterFolder: ObservableObject
 {
     [ObservableProperty] private string _name;
-    public ObservableCollection<ImageFile> Images { get; set; }
     [ObservableProperty] private ImageFile? _selectedImage;
+    public ObservableCollection<ImageFile> Images { get; set; }
     private readonly List<KeyValuePair<string,string>> _deletedImages = [];
     
     private static readonly string TrashPath = Path.Combine(

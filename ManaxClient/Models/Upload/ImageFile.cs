@@ -15,11 +15,16 @@ public partial class ImageFile: ObservableObject
     {
         Path = path;
         FileName = System.IO.Path.GetFileName(path);
+        LoadPreview();
+    }
+
+    private void LoadPreview()
+    {
         Task.Run(() =>
         {
             try
             {
-                using FileStream stream = File.OpenRead(path);
+                using FileStream stream = File.OpenRead(Path);
                 Preview = Bitmap.DecodeToWidth(stream, 300);
             }
             catch
