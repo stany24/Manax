@@ -12,7 +12,7 @@ public class VerificationTests
     {
         Type type = typeof(MainWindowViewModel);
         List<PropertyInfo> propertyInfos = type.GetProperties().ToList();
-        List<Permission> allPermissions = Enum.GetValues<Permission>().Cast<Permission>().ToList();
+        List<Permission> allPermissions = Enum.GetValues<Permission>().ToList();
         foreach (Permission permission in allPermissions)
         {
             string propertyName = "Can" + permission;

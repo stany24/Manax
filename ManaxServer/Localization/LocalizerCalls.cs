@@ -328,4 +328,9 @@ public static partial class Localizer
     {
         return string.Format(CultureInfo.InvariantCulture, _currentLocalization[LocalizationKey.FeatureDisabled], feature);
     }
+    
+    public static string PersonNotFound(long personId)
+    {
+        return string.Format(CultureInfo.InvariantCulture, _currentLocalization[LocalizationKey.PersonNotFound], personId);
+    }
 }

@@ -2,6 +2,7 @@ using ManaxLibrary.DTO.Chapter;
 using ManaxLibrary.DTO.Feature;
 using ManaxLibrary.DTO.Issue.Reported;
 using ManaxLibrary.DTO.Library;
+using ManaxLibrary.DTO.Person;
 using ManaxLibrary.DTO.Rank;
 using ManaxLibrary.DTO.Read;
 using ManaxLibrary.DTO.Serie;
@@ -138,5 +139,17 @@ public class MockNotificationService : INotificationService
     public void NotifyFeatureChanged(Feature feature)
     {
         FeatureChanged = feature;
+    }
+
+    public void NotifyPersonCreatedAsync(PersonDto person)
+    {
+    }
+
+    public void NotifyPersonUpdatedAsync(PersonDto person)
+    {
+    }
+
+    public void NotifyPersonDeletedAsync(long personId)
+    {
     }
 }

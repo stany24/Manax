@@ -4,6 +4,7 @@ using System.Security.Claims;
 using ManaxLibrary.DTO.Chapter;
 using ManaxLibrary.DTO.Issue.Reported;
 using ManaxLibrary.DTO.Library;
+using ManaxLibrary.DTO.Person;
 using ManaxLibrary.DTO.Rank;
 using ManaxLibrary.DTO.Read;
 using ManaxLibrary.DTO.Serie;
@@ -185,6 +186,24 @@ public class NotificationService(IHubContext<NotificationService> hubContext, IP
     {
         TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadFeatures,
             NotificationType.FeatureModified,feature);
+    }
+    
+    public void NotifyPersonCreatedAsync(PersonDto tag)
+    {
+        TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadPeople, NotificationType.PersonCreated,
+            tag);
+    }
+
+    public void NotifyPersonUpdatedAsync(PersonDto tag)
+    {
+        TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadPeople, NotificationType.PersonUpdated,
+            tag);
+    }
+
+    public void NotifyPersonDeletedAsync(long tagId)
+    {
+        TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadPeople, NotificationType.PersonDeleted,
+            tagId);
     }
 
     public override async Task OnConnectedAsync()

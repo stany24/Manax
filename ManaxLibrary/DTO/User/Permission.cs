@@ -49,4 +49,8 @@ public enum Permission
     
     ReadFeatures = 121,
     WriteFeatures = 122,
+    
+    ReadPeople = 131,
+    WritePeople = 132,
+    DeletePeople = 133,
 }

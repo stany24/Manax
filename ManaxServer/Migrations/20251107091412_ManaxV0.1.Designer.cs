@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ManaxServer.Migrations
 {
     [DbContext(typeof(ManaxContext))]
-    [Migration("20251106125246_ManaxV0.1")]
+    [Migration("20251107091412_ManaxV0.1")]
     partial class ManaxV01
     {
         /// <inheritdoc />
@@ -226,7 +226,7 @@ namespace ManaxServer.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("Person");
+                    b.ToTable("People");
                 });
 
             modelBuilder.Entity("ManaxServer.Models.Person.Role", b =>
@@ -241,7 +241,7 @@ namespace ManaxServer.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Role");
+                    b.ToTable("Roles");
                 });
 
             modelBuilder.Entity("ManaxServer.Models.Rank.Rank", b =>

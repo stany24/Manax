@@ -17,7 +17,7 @@ public class VerificationTests
 
     private static void VerifyLocalizationKeys(Dictionary<LocalizationKey, string> localization)
     {
-        List<LocalizationKey> keys = Enum.GetValues<LocalizationKey>().Cast<LocalizationKey>().ToList();
+        List<LocalizationKey> keys = Enum.GetValues<LocalizationKey>().ToList();
         foreach (LocalizationKey key in keys.Where(key => !localization.ContainsKey(key)))
             throw new Exception($"Missing localization for key: {key}");
 
@@ -28,7 +28,7 @@ public class VerificationTests
     public void VerifyPermissions()
     {
         Permission[] ownerPermissions = PermissionController.GetDefaultPermissionsForRole(UserRole.Owner);
-        List<Permission> allPermissions = Enum.GetValues<Permission>().Cast<Permission>().ToList();
+        List<Permission> allPermissions = Enum.GetValues<Permission>().ToList();
         foreach (Permission permission in allPermissions.Where(permission => !ownerPermissions.Contains(permission)))
             Assert.Fail($"Owner role is missing permission: {permission}");
     }

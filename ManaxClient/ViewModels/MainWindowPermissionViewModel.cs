@@ -74,6 +74,11 @@ public partial class MainWindowViewModel
     // Feature permissions
     public bool CanReadFeatures => _permissions.Contains(Permission.ReadFeatures);
     public bool CanWriteFeatures => _permissions.Contains(Permission.WriteFeatures);
+    
+    // People permissions
+    public bool CanReadPeople => _permissions.Contains(Permission.ReadPeople);
+    public bool CanWritePeople => _permissions.Contains(Permission.WritePeople);
+    public bool CanDeletePeople => _permissions.Contains(Permission.DeletePeople);
 
     private async void LoadPermissions()
     {

@@ -223,7 +223,7 @@ namespace ManaxServer.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("Person");
+                    b.ToTable("People");
                 });
 
             modelBuilder.Entity("ManaxServer.Models.Person.Role", b =>
@@ -238,7 +238,7 @@ namespace ManaxServer.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Role");
+                    b.ToTable("Roles");
                 });
 
             modelBuilder.Entity("ManaxServer.Models.Rank.Rank", b =>
