@@ -2,6 +2,7 @@ using ManaxLibrary.DTO.Chapter;
 using ManaxLibrary.DTO.Issue.Automatic;
 using ManaxLibrary.DTO.Issue.Reported;
 using ManaxLibrary.DTO.Library;
+using ManaxLibrary.DTO.Person;
 using ManaxLibrary.DTO.Rank;
 using ManaxLibrary.DTO.Read;
 using ManaxLibrary.DTO.SavePoint;
@@ -12,6 +13,7 @@ using ManaxServer.Models.Chapter;
 using ManaxServer.Models.Issue.Automatic;
 using ManaxServer.Models.Issue.Reported;
 using ManaxServer.Models.Library;
+using ManaxServer.Models.Person;
 using ManaxServer.Models.Rank;
 using ManaxServer.Models.Read;
 using ManaxServer.Models.SavePoint;
@@ -63,5 +65,9 @@ public class ManaxMapping : Mapping
         CreateMap<TagUpdateDto, Tag>();
         CreateMap<Tag, TagDto>();
         CreateMap<TagDto, Tag>();
+        
+        CreateMap<Person,PersonDto>();
+        CreateMap<PersonCreateDto,Person>();
+        CreateMap<PersonUpdateDto,Person>();
     }
 }

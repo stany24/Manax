@@ -13,8 +13,12 @@ public enum LocalizationKey
     HubDisconnected,
     HubDisconnectedError,
     HubMessageError,
+    HubMessageErrorAdmins,
+    HubMessageErrorOwner,
     HubMessageErrorSingle,
     HubMessageSent,
+    HubMessageSentAdmins,
+    HubMessageSentOwner,
     HubMessageSentSingle,
 
     InvalidImageFile,
@@ -74,5 +78,7 @@ public enum LocalizationKey
 
     TagNotFound,
     
-    FeatureDisabled
+    FeatureDisabled,
+    
+    PersonNotFound
 }

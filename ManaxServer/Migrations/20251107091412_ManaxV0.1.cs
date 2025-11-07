@@ -83,7 +83,7 @@ namespace ManaxServer.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Role",
+                name: "Roles",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "INTEGER", nullable: false)
@@ -92,7 +92,7 @@ namespace ManaxServer.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Role", x => x.Id);
+                    table.PrimaryKey("PK_Roles", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -141,7 +141,7 @@ namespace ManaxServer.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Person",
+                name: "People",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "INTEGER", nullable: false)
@@ -153,11 +153,11 @@ namespace ManaxServer.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Person", x => x.Id);
+                    table.PrimaryKey("PK_People", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Person_Role_RoleId",
+                        name: "FK_People_Roles_RoleId",
                         column: x => x.RoleId,
-                        principalTable: "Role",
+                        principalTable: "Roles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -268,9 +268,9 @@ namespace ManaxServer.Migrations
                 {
                     table.PrimaryKey("PK_PersonSerie", x => new { x.PeoplesId, x.SeriesId });
                     table.ForeignKey(
-                        name: "FK_PersonSerie_Person_PeoplesId",
+                        name: "FK_PersonSerie_People_PeoplesId",
                         column: x => x.PeoplesId,
-                        principalTable: "Person",
+                        principalTable: "People",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -459,8 +459,8 @@ namespace ManaxServer.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Person_RoleId",
-                table: "Person",
+                name: "IX_People_RoleId",
+                table: "People",
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
@@ -600,7 +600,7 @@ namespace ManaxServer.Migrations
                 name: "UserRanks");
 
             migrationBuilder.DropTable(
-                name: "Person");
+                name: "People");
 
             migrationBuilder.DropTable(
                 name: "Chapters");
@@ -621,7 +621,7 @@ namespace ManaxServer.Migrations
                 name: "Users");
 
             migrationBuilder.DropTable(
-                name: "Role");
+                name: "Roles");
 
             migrationBuilder.DropTable(
                 name: "Series");
