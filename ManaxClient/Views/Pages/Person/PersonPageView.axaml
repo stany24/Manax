@@ -1,0 +1,143 @@
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:page="clr-namespace:ManaxClient.ViewModels.Pages.Person"
+    xmlns:viewModels="clr-namespace:ManaxClient.ViewModels"
+    xmlns:models="clr-namespace:ManaxClient.Models"
+    xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
+    xmlns:localization1="clr-namespace:ManaxClient.Localization"
+    mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+    x:Class="ManaxClient.Views.Pages.Person.PersonPageView"
+    x:DataType="page:PersonPageViewModel">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Orientation="Vertical" Spacing="24">
+
+            <Grid ColumnDefinitions="*,Auto">
+                <StackPanel Grid.Column="0" Orientation="Vertical">
+                    <TextBlock Classes="title" Text="{localization:Localize PersonPage.Title}" />
+                    <TextBlock Text="{localization1:LocalizeFormat PersonPage.PersonsCount,
+                                   Param1={Binding $parent[UserControl].((page:PersonPageViewModel)DataContext).Persons.Count}}"
+                               Foreground="{StaticResource SecondaryBrush}" />
+                </StackPanel>
+
+                <Button Grid.Column="1"
+                        IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).CanWritePeople}"
+                        Classes="primary"
+                        Command="{Binding CreatePerson}"
+                        VerticalAlignment="Center">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <TextBlock Text="➕" />
+                        <TextBlock Text="{localization:Localize PersonPage.NewPerson}" />
+                    </StackPanel>
+                </Button>
+            </Grid>
+
+            <Border Classes="card" IsVisible="{Binding !Persons.Count}">
+                <StackPanel Orientation="Vertical"
+                            Spacing="16"
+                            HorizontalAlignment="Center">
+                    <TextBlock Text="👤" FontSize="48" HorizontalAlignment="Center" />
+                    <TextBlock Text="{localization:Localize PersonPage.NoPersons.Title}"
+                               FontSize="18"
+                               FontWeight="Medium"
+                               HorizontalAlignment="Center" />
+                    <TextBlock Text="{localization:Localize PersonPage.NoPersons.Description}"
+                               TextAlignment="Center"
+                               Foreground="{StaticResource SecondaryBrush}" />
+                    <Button Classes="primary"
+                            IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).CanWritePeople}"
+                            Command="{Binding CreatePerson}"
+                            HorizontalAlignment="Center">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <TextBlock Text="➕" />
+                            <TextBlock Text="{localization:Localize PersonPage.CreateFirstPerson}" />
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </Border>
+
+            <Border Classes="card" IsVisible="{Binding Persons.Count}">
+                <StackPanel Spacing="16">
+                    <TextBlock Classes="subtitle" Text="{localization:Localize PersonPage.PersonsList.Title}" />
+
+                    <ItemsControl ItemsSource="{Binding Persons}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="models:Person">
+                                <Border Background="{DynamicResource Background1}"
+                                        BorderBrush="{DynamicResource Background2}"
+                                        BorderThickness="1"
+                                        CornerRadius="8"
+                                        Padding="16"
+                                        Margin="0,4">
+                                    <Grid ColumnDefinitions="Auto,*,Auto,Auto,Auto" ColumnSpacing="16">
+
+                                        <Border Grid.Column="0"
+                                                Background="{StaticResource WarningBrush}"
+                                                CornerRadius="20"
+                                                Width="40"
+                                                Height="40">
+                                            <TextBlock Text="👤"
+                                                       FontSize="16"
+                                                       HorizontalAlignment="Center"
+                                                       VerticalAlignment="Center" />
+                                        </Border>
+
+                                        <StackPanel Grid.Column="1" Orientation="Vertical" VerticalAlignment="Center">
+                                            <TextBlock FontWeight="Bold" FontSize="16">
+                                                <TextBlock.Text>
+                                                    <MultiBinding StringFormat="{}{0} {1}">
+                                                        <Binding Path="FirstName" />
+                                                        <Binding Path="LastName" />
+                                                    </MultiBinding>
+                                                </TextBlock.Text>
+                                            </TextBlock>
+                                            <TextBlock Text="{Binding Pseudonym}"
+                                                       IsVisible="{Binding Pseudonym, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                                                       Foreground="{StaticResource SecondaryBrush}"
+                                                       FontSize="12"
+                                                       FontStyle="Italic" />
+                                        </StackPanel>
+
+                                        <Border Grid.Column="2"
+                                                Background="{StaticResource SuccessBrush}"
+                                                CornerRadius="12"
+                                                Padding="8,4"
+                                                VerticalAlignment="Center">
+                                            <TextBlock Text="{Binding Role.Name}"
+                                                       Foreground="{DynamicResource TextColor1}"
+                                                       FontSize="12"
+                                                       FontWeight="Bold" />
+                                        </Border>
+
+                                        <Button Grid.Column="3"
+                                                IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).CanWritePeople}"
+                                                Classes="secondary"
+                                                Command="{Binding $parent[UserControl].((page:PersonPageViewModel)DataContext).UpdatePerson}"
+                                                CommandParameter="{Binding .}"
+                                                Padding="8"
+                                                VerticalAlignment="Center">
+                                            <TextBlock Text="✏️" />
+                                        </Button>
+
+                                        <Button Grid.Column="4"
+                                                IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).CanDeletePeople}"
+                                                Classes="danger"
+                                                Command="{Binding $parent[UserControl].((page:PersonPageViewModel)DataContext).DeletePerson}"
+                                                CommandParameter="{Binding .}"
+                                                Padding="8"
+                                                VerticalAlignment="Center">
+                                            <TextBlock Text="🗑️" />
+                                        </Button>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

@@ -204,6 +204,27 @@
     <data name="RankPage.Level" xml:space="preserve">
         <value>Niveau : {0}</value>
     </data>
+    <data name="PersonPage.Title" xml:space="preserve">
+        <value>Gestion des Personnes</value>
+    </data>
+    <data name="PersonPage.PersonsCount" xml:space="preserve">
+        <value>👤 {0} personne(s) configurée(s)</value>
+    </data>
+    <data name="PersonPage.NewPerson" xml:space="preserve">
+        <value>Nouvelle personne</value>
+    </data>
+    <data name="PersonPage.NoPersons.Title" xml:space="preserve">
+        <value>Aucune personne configurée</value>
+    </data>
+    <data name="PersonPage.NoPersons.Description" xml:space="preserve">
+        <value>Créez des personnes pour gérer les auteurs, artistes et contributeurs.</value>
+    </data>
+    <data name="PersonPage.CreateFirstPerson" xml:space="preserve">
+        <value>Créer la première personne</value>
+    </data>
+    <data name="PersonPage.PersonsList.Title" xml:space="preserve">
+        <value>Liste des personnes</value>
+    </data>
     <data name="SeriePage.ChangeButton" xml:space="preserve">
         <value>Changer</value>
     </data>
@@ -572,6 +593,33 @@
     </data>
     <data name="RankEditPopup.Value" xml:space="preserve">
         <value>Valeur</value>
+    </data>
+    <data name="PersonEditPopup.Title" xml:space="preserve">
+        <value>Modifier la personne</value>
+    </data>
+    <data name="PersonEditPopup.Description" xml:space="preserve">
+        <value>Modifiez les propriétés de la personne</value>
+    </data>
+    <data name="PersonEditPopup.FirstName" xml:space="preserve">
+        <value>Prénom</value>
+    </data>
+    <data name="PersonEditPopup.FirstName.Placeholder" xml:space="preserve">
+        <value>Entrez le prénom...</value>
+    </data>
+    <data name="PersonEditPopup.LastName" xml:space="preserve">
+        <value>Nom</value>
+    </data>
+    <data name="PersonEditPopup.LastName.Placeholder" xml:space="preserve">
+        <value>Entrez le nom...</value>
+    </data>
+    <data name="PersonEditPopup.Pseudonym" xml:space="preserve">
+        <value>Pseudonyme (optionnel)</value>
+    </data>
+    <data name="PersonEditPopup.Pseudonym.Placeholder" xml:space="preserve">
+        <value>Entrez le pseudonyme...</value>
+    </data>
+    <data name="PersonEditPopup.Role" xml:space="preserve">
+        <value>Rôle</value>
     </data>
     <data name="SavePointCreatePopup.Title" xml:space="preserve">
         <value>Nouveau point de sauvegarde</value>

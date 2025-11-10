@@ -144,6 +144,10 @@
           <AutoGen>True</AutoGen>
           <DependentUpon>Resources.fr.resx</DependentUpon>
         </Compile>
+        <Compile Update="Views\Pages\Person\PersonPageView.axaml.cs">
+          <DependentUpon>RankPageView.axaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
         <Compile Update="Views\Pages\Upload\UploadPageView.axaml.cs">
           <DependentUpon>TagPageView.axaml</DependentUpon>
           <SubType>Code</SubType>
