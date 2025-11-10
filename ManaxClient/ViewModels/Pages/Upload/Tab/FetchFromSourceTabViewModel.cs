@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -42,7 +41,7 @@ public partial class FetchFromSourceTabViewModel:TabViewModel
                 SourceCompletedCount++;
                 SourceInProgressCount--;
             }
-            NextRequested?.Invoke(this, EventArgs.Empty);
+            NextRequested?.Invoke(this, new AutoCleanupTabViewModel());
         });
     }
 }

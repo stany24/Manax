@@ -66,7 +66,7 @@ public partial class ManualCleanupTabViewModel:TabViewModel
     
     public void Next()
     {
-        NextRequested?.Invoke(this, EventArgs.Empty);
+        NextRequested?.Invoke(this, new AutoUploadTabViewModel());
     }
     
     public void NextChapter()

@@ -54,7 +54,7 @@ public partial class AutoCleanupTabViewModel:TabViewModel
             ScaleAndConvertImages();
             RemoveUnwantedFiles();
             LoadSettings();
-            NextRequested?.Invoke(this, EventArgs.Empty);
+            NextRequested?.Invoke(this, new ManualCleanupTabViewModel());
         });
     }
 

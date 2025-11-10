@@ -75,7 +75,7 @@ public partial class ConfigureUploadTabViewModel:TabViewModel
 
     public void Next()
     {
-        NextRequested?.Invoke(this, EventArgs.Empty);
+        NextRequested?.Invoke(this, new FetchFromSourceTabViewModel());
     }
     
     public async void UpdateProcessingFolder()
