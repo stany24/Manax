@@ -7,6 +7,7 @@ using ManaxLibrary.DTO.Library;
 using ManaxLibrary.DTO.Person;
 using ManaxLibrary.DTO.Rank;
 using ManaxLibrary.DTO.Read;
+using ManaxLibrary.DTO.Role;
 using ManaxLibrary.DTO.Serie;
 using ManaxLibrary.DTO.Tag;
 using ManaxLibrary.DTO.User;
@@ -188,22 +189,40 @@ public class NotificationService(IHubContext<NotificationService> hubContext, IP
             NotificationType.FeatureModified,feature);
     }
     
-    public void NotifyPersonCreatedAsync(PersonDto tag)
+    public void NotifyPersonCreatedAsync(PersonDto person)
     {
         TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadPeople, NotificationType.PersonCreated,
-            tag);
+            person);
     }
 
-    public void NotifyPersonUpdatedAsync(PersonDto tag)
+    public void NotifyPersonUpdatedAsync(PersonDto person)
     {
         TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadPeople, NotificationType.PersonUpdated,
-            tag);
+            person);
     }
 
-    public void NotifyPersonDeletedAsync(long tagId)
+    public void NotifyPersonDeletedAsync(long personId)
     {
         TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadPeople, NotificationType.PersonDeleted,
-            tagId);
+            personId);
+    }
+    
+    public void NotifyRoleCreatedAsync(RoleDto role)
+    {
+        TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadPeople, NotificationType.RoleCreated,
+            role);
+    }
+
+    public void NotifyRoleUpdatedAsync(RoleDto role)
+    {
+        TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadPeople, NotificationType.RoleUpdated,
+            role);
+    }
+
+    public void NotifyRoleDeletedAsync(long roleId)
+    {
+        TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadPeople, NotificationType.RoleDeleted,
+            roleId);
     }
 
     public override async Task OnConnectedAsync()

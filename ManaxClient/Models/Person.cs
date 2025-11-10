@@ -1,6 +1,6 @@
-using System;
 using CommunityToolkit.Mvvm.ComponentModel;
 using ManaxLibrary.DTO.Person;
+using ManaxLibrary.DTO.Role;
 using ManaxLibrary.Notifications;
 
 namespace ManaxClient.Models;

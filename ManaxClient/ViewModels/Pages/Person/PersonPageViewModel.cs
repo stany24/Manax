@@ -9,6 +9,7 @@ using ManaxClient.ViewModels.Popup.ConfirmCancel.Content;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTO.Person;
+using ManaxLibrary.DTO.Role;
 using ManaxLibrary.Logging;
 
 namespace ManaxClient.ViewModels.Pages.Person;

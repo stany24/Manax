@@ -46,4 +46,8 @@ public enum NotificationType
     PersonCreated,
     PersonUpdated,
     PersonDeleted,
+    
+    RoleCreated,
+    RoleUpdated,
+    RoleDeleted
 }

@@ -1,3 +1,5 @@
+using ManaxLibrary.DTO.Role;
+
 namespace ManaxLibrary.DTO.Person;
 
 public class PersonCreateDto

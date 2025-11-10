@@ -1,6 +1,7 @@
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using ManaxLibrary.DTO.Person;
+using ManaxLibrary.DTO.Role;
 
 namespace ManaxClient.ViewModels.Popup.ConfirmCancel.Content;
 
