@@ -104,4 +104,14 @@ public partial class ManualCleanupTabViewModel:TabViewModel
             SelectedChapterFolder = SerieFolders[parentSerieIndex - 1].Chapters.LastOrDefault();
         }
     }
+
+    public void MoveUp()
+    {
+        ImagesOffset = new Vector(0, 0);
+    }
+    
+    public void MoveDown()
+    {
+        ImagesOffset = new Vector(double.MaxValue,double.MaxValue);
+    }
 }

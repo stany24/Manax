@@ -7,6 +7,7 @@
     xmlns:tab="clr-namespace:ManaxClient.ViewModels.Pages.Upload.Tab"
     xmlns:upload="clr-namespace:ManaxClient.Models.Upload"
     xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
+    xmlns:controls="clr-namespace:ManaxClient.Controls"
     mc:Ignorable="d" d:DesignWidth="1200" d:DesignHeight="600"
     x:Class="ManaxClient.Views.Pages.Upload.Tab.ManualCleanupTabView"
     x:DataType="tab:ManualCleanupTabViewModel"
@@ -103,6 +104,7 @@
                                         ClipToBounds="True"
                                         Cursor="Hand">
                                     <Button Classes="sidebar"
+                                            Background="Transparent"
                                             PointerPressed="PointerPressedHandler"
                                             Command="{Binding $parent[UserControl].((tab:ManualCleanupTabViewModel)DataContext).AddImageToEdit}"
                                             CommandParameter="{Binding Path}"
@@ -127,7 +129,7 @@
                         </ItemsControl.ItemTemplate>
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
-                                <UniformGrid Columns="{Binding $parent[UserControl].((tab:ManualCleanupTabViewModel)DataContext).NbColumns}"
+                                <controls:BestFitGrid Columns="{Binding $parent[UserControl].((tab:ManualCleanupTabViewModel)DataContext).NbColumns}"
                                              VerticalAlignment="Top" />
                             </ItemsPanelTemplate>
                         </ItemsControl.ItemsPanel>
@@ -195,10 +197,17 @@
                         Command="{Binding NextChapter}"
                         HotKey="Right"></Button>
                     <Button
-                        Content="{localization:Localize ManualCleanupPage.RestoreLastImage}"
                         IsVisible="False"
                         Command="{Binding PreviousChapter}"
                         HotKey="Left"></Button>
+                    <Button
+                        IsVisible="False"
+                        Command="{Binding MoveDown}"
+                        HotKey="Down"></Button>
+                    <Button
+                        IsVisible="False"
+                        Command="{Binding MoveUp}"
+                        HotKey="Up"></Button>
                 </StackPanel>
             </Grid>
         </Border>
