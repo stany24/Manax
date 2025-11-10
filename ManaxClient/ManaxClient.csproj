@@ -49,7 +49,6 @@
 
     <ItemGroup>
         <AvaloniaResource Include="Assets\**"/>
-        <Folder Include="Views\Pages\"/>
     </ItemGroup>
 
     <ItemGroup>
@@ -141,6 +140,10 @@
           <DesignTime>True</DesignTime>
           <AutoGen>True</AutoGen>
           <DependentUpon>Resources.fr.resx</DependentUpon>
+        </Compile>
+        <Compile Update="Views\Pages\Person\PersonPageView.axaml.cs">
+          <DependentUpon>RankPageView.axaml</DependentUpon>
+          <SubType>Code</SubType>
         </Compile>
     </ItemGroup>
 

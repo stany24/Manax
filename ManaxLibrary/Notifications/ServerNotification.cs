@@ -2,6 +2,7 @@ using ManaxLibrary.DTO.Chapter;
 using ManaxLibrary.DTO.Feature;
 using ManaxLibrary.DTO.Issue.Reported;
 using ManaxLibrary.DTO.Library;
+using ManaxLibrary.DTO.Person;
 using ManaxLibrary.DTO.Rank;
 using ManaxLibrary.DTO.Read;
 using ManaxLibrary.DTO.Serie;
@@ -53,6 +54,10 @@ public static class ServerNotification
     public static event Action<TagDto>? OnTagCreated;
     public static event Action<TagDto>? OnTagUpdated;
     public static event Action<long>? OnTagDeleted;
+    
+    public static event Action<PersonDto>? OnPersonCreated;
+    public static event Action<PersonDto>? OnPersonUpdated;
+    public static event Action<long>? OnPersonDeleted;
     
     public static event Action<Feature>? OnFeatureModified;
 
@@ -151,6 +156,15 @@ public static class ServerNotification
 
         _hubConnection.On<long>(nameof(NotificationType.TagDeleted),
             tagId => { OnTagDeleted?.Invoke(tagId); });
+        
+        _hubConnection.On<PersonDto>(nameof(NotificationType.PersonCreated),
+            personData => { OnPersonCreated?.Invoke(personData); });
+
+        _hubConnection.On<PersonDto>(nameof(NotificationType.PersonUpdated),
+            personData => { OnPersonUpdated?.Invoke(personData); });
+
+        _hubConnection.On<long>(nameof(NotificationType.PersonDeleted),
+            personId => { OnPersonDeleted?.Invoke(personId); });
         
         _hubConnection.On<Feature>(nameof(NotificationType.FeatureModified),
             feature =>

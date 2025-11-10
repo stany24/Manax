@@ -3,6 +3,7 @@ using System.Threading.RateLimiting;
 using ManaxServer.Middleware;
 using ManaxServer.Models;
 using ManaxServer.Models.Issue.Reported;
+using ManaxServer.Models.Person;
 using ManaxServer.Models.Rank;
 using ManaxServer.Services.BackgroundTask;
 using ManaxServer.Services.Feature;
@@ -153,6 +154,15 @@ public class Program
                 new IssueSerieReportedType { Name = "Wrong description" },
                 new IssueSerieReportedType { Name = "Wrong poster" },
                 new IssueSerieReportedType { Name = "Wrong name" });
+            manaxContext.SaveChanges();
+        }
+        
+        if (!manaxContext.Roles.Any())
+        {
+            manaxContext.Roles.AddRange(
+                new Role { Name = "Author" },
+                new Role { Name = "Writer" },
+                new Role { Name = "Artist" });
             manaxContext.SaveChanges();
         }
     }

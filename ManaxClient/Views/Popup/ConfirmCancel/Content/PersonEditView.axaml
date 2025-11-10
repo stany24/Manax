@@ -1,0 +1,111 @@
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:content="clr-namespace:ManaxClient.ViewModels.Popup.ConfirmCancel.Content"
+    xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
+    mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="400"
+    x:Class="ManaxClient.Views.Popup.ConfirmCancel.Content.PersonEditView"
+    x:DataType="content:PersonEditViewModel">
+    <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" RowSpacing="16" Margin="16">
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="12" Margin="0,0,0,8">
+            <TextBlock Text="👤" FontSize="24" VerticalAlignment="Center" />
+            <StackPanel Spacing="4">
+                <TextBlock
+                    Text="{localization:Localize PersonEditPopup.Title}"
+                    FontSize="18"
+                    FontWeight="Bold"
+                    Foreground="#212529" />
+                <TextBlock
+                    Text="{localization:Localize PersonEditPopup.Description}"
+                    FontSize="12"
+                    Foreground="#6C757D" />
+            </StackPanel>
+        </StackPanel>
+
+        <StackPanel Grid.Row="1" Spacing="8">
+            <TextBlock
+                Text="{localization:Localize PersonEditPopup.FirstName}"
+                FontWeight="Medium"
+                Foreground="#495057" />
+            <TextBox
+                Text="{Binding FirstName}"
+                Watermark="{localization:Localize PersonEditPopup.FirstName.Placeholder}"
+                Padding="12"
+                CornerRadius="8"
+                BorderThickness="1"
+                BorderBrush="#DEE2E6"
+                FontSize="14">
+                <TextBox.Styles>
+                    <Style Selector="TextBox:pointerover">
+                        <Setter Property="BorderBrush" Value="#007ACC" />
+                    </Style>
+                    <Style Selector="TextBox:focus">
+                        <Setter Property="BorderBrush" Value="#007ACC" />
+                    </Style>
+                </TextBox.Styles>
+            </TextBox>
+        </StackPanel>
+
+        <StackPanel Grid.Row="2" Spacing="8">
+            <TextBlock
+                Text="{localization:Localize PersonEditPopup.LastName}"
+                FontWeight="Medium"
+                Foreground="#495057" />
+            <TextBox
+                Text="{Binding LastName}"
+                Watermark="{localization:Localize PersonEditPopup.LastName.Placeholder}"
+                Padding="12"
+                CornerRadius="8"
+                BorderThickness="1"
+                BorderBrush="#DEE2E6"
+                FontSize="14">
+                <TextBox.Styles>
+                    <Style Selector="TextBox:pointerover">
+                        <Setter Property="BorderBrush" Value="#007ACC" />
+                    </Style>
+                    <Style Selector="TextBox:focus">
+                        <Setter Property="BorderBrush" Value="#007ACC" />
+                    </Style>
+                </TextBox.Styles>
+            </TextBox>
+        </StackPanel>
+
+        <StackPanel Grid.Row="3" Spacing="8">
+            <TextBlock
+                Text="{localization:Localize PersonEditPopup.Pseudonym}"
+                FontWeight="Medium"
+                Foreground="#495057" />
+            <TextBox
+                Text="{Binding Pseudonym}"
+                Watermark="{localization:Localize PersonEditPopup.Pseudonym.Placeholder}"
+                Padding="12"
+                CornerRadius="8"
+                BorderThickness="1"
+                BorderBrush="#DEE2E6"
+                FontSize="14">
+                <TextBox.Styles>
+                    <Style Selector="TextBox:pointerover">
+                        <Setter Property="BorderBrush" Value="#007ACC" />
+                    </Style>
+                    <Style Selector="TextBox:focus">
+                        <Setter Property="BorderBrush" Value="#007ACC" />
+                    </Style>
+                </TextBox.Styles>
+            </TextBox>
+        </StackPanel>
+
+        <StackPanel Grid.Row="4" Spacing="8">
+            <TextBlock
+                Text="{localization:Localize PersonEditPopup.Role}"
+                FontWeight="Medium"
+                Foreground="#495057" />
+            <ComboBox
+                SelectedItem="{Binding Role}"
+                Items="{Binding Roles}">
+            </ComboBox>
+        </StackPanel>
+    </Grid>
+</UserControl>
+

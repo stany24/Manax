@@ -4,59 +4,47 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using DynamicData;
-using ManaxClient.ViewModels;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
-using ManaxLibrary.DTO.Feature;
-using ManaxLibrary.DTO.Rank;
+using ManaxLibrary.DTO.Person;
 using ManaxLibrary.Logging;
 using ManaxLibrary.Notifications;
 
 namespace ManaxClient.Models.Sources;
 
-public static class RankSource
+public static class PersonSource
 {
-    public static readonly SourceCache<Rank, long> Ranks = new(x => x.Id);
+    public static readonly SourceCache<Person, long> Persons = new(x => x.Id);
     private static bool _loaded;
     private static readonly Lock LoadLock = new();
-    private static readonly Lock RanksLock = new();
+    private static readonly Lock PersonsLock = new();
 
-    static RankSource()
+    static PersonSource()
     {        
-        MainWindowViewModel.FeatureChanged += (_, features) =>
-        {
-            if (features is { Key: FeatureType.Ranks, Value: true })
-            {
-                LoadRanks();
-            }
-            else
-            {
-                Ranks.Clear();
-            }
-        };
-        ServerNotification.OnRankCreated += OnRankCreated;
-        ServerNotification.OnRankDeleted += OnRankDeleted;
+        ServerNotification.OnPersonCreated += OnPersonCreated;
+        ServerNotification.OnPersonDeleted += OnPersonDeleted;
+        LoadPersons();
     }
 
     public static EventHandler<string>? ErrorEmitted { get; set; }
 
-    private static void OnRankDeleted(long id)
+    private static void OnPersonDeleted(long id)
     {
-        lock (RanksLock)
+        lock (PersonsLock)
         {
-            Ranks.RemoveKey(id);
+            Persons.RemoveKey(id);
         }
     }
 
-    private static void OnRankCreated(RankDto dto)
+    private static void OnPersonCreated(PersonDto dto)
     {
-        lock (RanksLock)
+        lock (PersonsLock)
         {
-            Ranks.AddOrUpdate(new Rank(dto));
+            Persons.AddOrUpdate(new Person(dto));
         }
     }
 
-    private static void LoadRanks()
+    private static void LoadPersons()
     {
         Task.Run(() =>
         {
@@ -65,7 +53,7 @@ public static class RankSource
                 if (_loaded) return;
                 try
                 {
-                    Optional<List<RankDto>> ranksResponse = ManaxApiRankClient.GetRanksAsync().Result;
+                    Optional<List<PersonDto>> ranksResponse = ManaxApiPersonClient.GetPersonsAsync().Result;
                     if (ranksResponse.Failed)
                     {
                         Logger.LogFailure(ranksResponse.Error);
@@ -73,12 +61,12 @@ public static class RankSource
                         return;
                     }
 
-                    lock (RanksLock)
+                    lock (PersonsLock)
                     {
-                        Ranks.Edit(updater =>
+                        Persons.Edit(updater =>
                         {
                             updater.Clear();
-                            List<Rank> ranks = ranksResponse.GetValue().Select(dto => new Rank(dto)).ToList();
+                            List<Person> ranks = ranksResponse.GetValue().Select(dto => new Person(dto)).ToList();
                             updater.AddOrUpdate(ranks);
                         });
                     }
