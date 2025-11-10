@@ -62,6 +62,26 @@ public class ManaxMapper(Mapping mapping) : IMapper
                 }
             }
 
+            // Check if the property types are different and need mapping
+            if (prop.PropertyType != targetProp.PropertyType && 
+                mapping.Allowed(prop.PropertyType, targetProp.PropertyType))
+            {
+                try
+                {
+                    object? mappedValue = Activator.CreateInstance(targetProp.PropertyType);
+                    if (mappedValue != null)
+                    {
+                        Map(value, mappedValue);
+                        targetProp.SetValue(target, mappedValue);
+                        continue;
+                    }
+                }
+                catch
+                {
+                    // If mapping fails, try direct assignment
+                }
+            }
+
             targetProp.SetValue(target, value);
         }
     }

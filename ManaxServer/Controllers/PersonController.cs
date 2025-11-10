@@ -46,7 +46,14 @@ public class PersonController(ManaxContext context, IMapper mapper, INotificatio
     [ProducesResponseType(StatusCodes.Status201Created)]
     public async Task<ActionResult<PersonDto>> CreatePerson(PersonCreateDto personCreateDto)
     {
+        Role? role = await context.Roles.FindAsync(personCreateDto.RoleId);
+        if (role == null)
+        {
+            return BadRequest(Localizer.RoleNotFound(personCreateDto.RoleId));
+        }
+
         Person person = mapper.Map<Person>(personCreateDto);
+        person.Role = role;
         context.People.Add(person);
         await context.SaveChangesAsync();
         PersonDto personDto = mapper.Map<PersonDto>(person);
@@ -63,7 +70,15 @@ public class PersonController(ManaxContext context, IMapper mapper, INotificatio
     {
         Person? person = await context.People.FindAsync(id);
         if (person == null) return NotFound(Localizer.PersonNotFound(id));
+
+        Role? role = await context.Roles.FindAsync(personUpdateDto.RoleId);
+        if (role == null)
+        {
+            return BadRequest(Localizer.RoleNotFound(personUpdateDto.RoleId));
+        }
+
         mapper.Map(personUpdateDto, person);
+        person.Role = role;
         await context.SaveChangesAsync();
         PersonDto personDto = mapper.Map<PersonDto>(person);
         notificationService.NotifyPersonUpdatedAsync(personDto);

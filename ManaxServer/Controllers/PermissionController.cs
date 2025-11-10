@@ -71,7 +71,9 @@ public class PermissionController(IPermissionService permissionService, INotific
             Permission.UploadChapter,
             Permission.WriteRanks,
             Permission.SetSerieTags,
+            Permission.WriteRole,
 
+            Permission.DeleteRole,
             Permission.DeleteIssues,
             Permission.DeleteRanks
         ]).ToArray();

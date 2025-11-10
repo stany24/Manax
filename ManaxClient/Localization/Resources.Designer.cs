@@ -1556,5 +1556,71 @@ namespace ManaxClient.Localization {
                 return ResourceManager.GetString("LoginPage.Invalid.Host.Port", resourceCulture);
             }
         }
+        
+        public static string RolePage_Title {
+            get {
+                return ResourceManager.GetString("RolePage.Title", resourceCulture);
+            }
+        }
+        
+        public static string RolePage_RolesCount {
+            get {
+                return ResourceManager.GetString("RolePage.RolesCount", resourceCulture);
+            }
+        }
+        
+        public static string RolePage_NewRole {
+            get {
+                return ResourceManager.GetString("RolePage.NewRole", resourceCulture);
+            }
+        }
+        
+        public static string RolePage_NoRoles_Title {
+            get {
+                return ResourceManager.GetString("RolePage.NoRoles.Title", resourceCulture);
+            }
+        }
+        
+        public static string RolePage_NoRoles_Description {
+            get {
+                return ResourceManager.GetString("RolePage.NoRoles.Description", resourceCulture);
+            }
+        }
+        
+        public static string RolePage_CreateFirstRole {
+            get {
+                return ResourceManager.GetString("RolePage.CreateFirstRole", resourceCulture);
+            }
+        }
+        
+        public static string RolePage_RolesList_Title {
+            get {
+                return ResourceManager.GetString("RolePage.RolesList.Title", resourceCulture);
+            }
+        }
+        
+        public static string RoleEditPopup_Title {
+            get {
+                return ResourceManager.GetString("RoleEditPopup.Title", resourceCulture);
+            }
+        }
+        
+        public static string RoleEditPopup_Description {
+            get {
+                return ResourceManager.GetString("RoleEditPopup.Description", resourceCulture);
+            }
+        }
+        
+        public static string RoleEditPopup_Name {
+            get {
+                return ResourceManager.GetString("RoleEditPopup.Name", resourceCulture);
+            }
+        }
+        
+        public static string RoleEditPopup_Name_Placeholder {
+            get {
+                return ResourceManager.GetString("RoleEditPopup.Name.Placeholder", resourceCulture);
+            }
+        }
     }
 }

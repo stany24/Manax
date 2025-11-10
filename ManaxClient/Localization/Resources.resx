@@ -774,4 +774,37 @@
     <data name="LoginPage.Invalid.Host.Port" xml:space="preserve">
         <value>Invalid host or port</value>
     </data>
+    <data name="RolePage.Title" xml:space="preserve">
+        <value>Role Management</value>
+    </data>
+    <data name="RolePage.RolesCount" xml:space="preserve">
+        <value>👔 {0} role(s) configured</value>
+    </data>
+    <data name="RolePage.NewRole" xml:space="preserve">
+        <value>New role</value>
+    </data>
+    <data name="RolePage.NoRoles.Title" xml:space="preserve">
+        <value>No roles configured</value>
+    </data>
+    <data name="RolePage.NoRoles.Description" xml:space="preserve">
+        <value>Create roles to organize people by their function (author, artist, etc.).</value>
+    </data>
+    <data name="RolePage.CreateFirstRole" xml:space="preserve">
+        <value>Create the first role</value>
+    </data>
+    <data name="RolePage.RolesList.Title" xml:space="preserve">
+        <value>Roles list</value>
+    </data>
+    <data name="RoleEditPopup.Title" xml:space="preserve">
+        <value>Edit Role</value>
+    </data>
+    <data name="RoleEditPopup.Description" xml:space="preserve">
+        <value>Modify role information</value>
+    </data>
+    <data name="RoleEditPopup.Name" xml:space="preserve">
+        <value>Role name</value>
+    </data>
+    <data name="RoleEditPopup.Name.Placeholder" xml:space="preserve">
+        <value>Enter role name</value>
+    </data>
 </root>
