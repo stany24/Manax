@@ -4,6 +4,7 @@ using ManaxLibrary.DTO.Library;
 using ManaxLibrary.DTO.Person;
 using ManaxLibrary.DTO.Rank;
 using ManaxLibrary.DTO.Read;
+using ManaxLibrary.DTO.Role;
 using ManaxLibrary.DTO.Serie;
 using ManaxLibrary.DTO.Tag;
 using ManaxLibrary.DTO.User;
@@ -55,4 +56,8 @@ public interface INotificationService
     void NotifyPersonCreatedAsync(PersonDto person);
     void NotifyPersonUpdatedAsync(PersonDto person);
     void NotifyPersonDeletedAsync(long personId);
+    
+    void NotifyRoleCreatedAsync(RoleDto role);
+    void NotifyRoleUpdatedAsync(RoleDto role);
+    void NotifyRoleDeletedAsync(long roleId);
 }

@@ -1,4 +1,4 @@
-namespace ManaxLibrary.DTO.Person;
+namespace ManaxLibrary.DTO.Role;
 
 public class RoleDto
 {

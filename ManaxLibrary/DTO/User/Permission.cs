@@ -53,4 +53,7 @@ public enum Permission
     ReadPeople = 131,
     WritePeople = 132,
     DeletePeople = 133,
+    
+    WriteRole = 141,
+    DeleteRole = 142,
 }

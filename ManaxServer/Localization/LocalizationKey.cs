@@ -80,5 +80,7 @@ public enum LocalizationKey
     
     FeatureDisabled,
     
-    PersonNotFound
+    PersonNotFound,
+    
+    RoleNotFound
 }

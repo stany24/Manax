@@ -5,6 +5,7 @@ using ManaxLibrary.DTO.Library;
 using ManaxLibrary.DTO.Person;
 using ManaxLibrary.DTO.Rank;
 using ManaxLibrary.DTO.Read;
+using ManaxLibrary.DTO.Role;
 using ManaxLibrary.DTO.Serie;
 using ManaxLibrary.DTO.Tag;
 using ManaxLibrary.DTO.User;
@@ -14,12 +15,12 @@ namespace ManaxTests.Server.Mocks;
 
 public class MockNotificationService : INotificationService
 {
-    public UserDto? UserCreated { get; set; }
-    public DateTime UserCreatedAt { get; set; }
-    public ReadDto? ReadCreated { get; set; }
-    public TagDto? TagCreated { get; set; }
-    public TagDto? TagUpdated { get; set; }
-    public long TagDeletedId { get; set; }
+    public UserDto? UserCreated { get; private set; }
+    public DateTime UserCreatedAt { get; private set; }
+    public ReadDto? ReadCreated { get; private set; }
+    public TagDto? TagCreated { get; private set; }
+    public TagDto? TagUpdated { get; private set; }
+    public long TagDeletedId { get; private set; }
     public Feature? FeatureChanged { get; set; }
 
     public void NotifyPermissionModifiedAsync(long userId, List<Permission> permissions)
@@ -150,6 +151,18 @@ public class MockNotificationService : INotificationService
     }
 
     public void NotifyPersonDeletedAsync(long personId)
+    {
+    }
+
+    public void NotifyRoleCreatedAsync(RoleDto role)
+    {
+    }
+
+    public void NotifyRoleUpdatedAsync(RoleDto role)
+    {
+    }
+
+    public void NotifyRoleDeletedAsync(long roleId)
     {
     }
 }
