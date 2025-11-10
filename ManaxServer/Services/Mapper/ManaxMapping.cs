@@ -5,6 +5,7 @@ using ManaxLibrary.DTO.Library;
 using ManaxLibrary.DTO.Person;
 using ManaxLibrary.DTO.Rank;
 using ManaxLibrary.DTO.Read;
+using ManaxLibrary.DTO.Role;
 using ManaxLibrary.DTO.SavePoint;
 using ManaxLibrary.DTO.Serie;
 using ManaxLibrary.DTO.Tag;
@@ -69,5 +70,10 @@ public class ManaxMapping : Mapping
         CreateMap<Person,PersonDto>();
         CreateMap<PersonCreateDto,Person>();
         CreateMap<PersonUpdateDto,Person>();
+        
+        CreateMap<RoleDto,Role>();
+        CreateMap<Role, RoleDto>();
+        CreateMap<RoleCreateDto, Role>();
+        CreateMap<RoleUpdateDto, Role>();
     }
 }

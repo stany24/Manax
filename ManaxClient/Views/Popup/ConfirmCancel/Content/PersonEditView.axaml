@@ -103,7 +103,8 @@
                 Foreground="#495057" />
             <ComboBox
                 SelectedItem="{Binding Role}"
-                Items="{Binding Roles}">
+                ItemsSource="{Binding Roles}"
+                DisplayMemberBinding="{Binding Name}">
             </ComboBox>
         </StackPanel>
     </Grid>

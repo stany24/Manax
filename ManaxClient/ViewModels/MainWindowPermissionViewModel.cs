@@ -80,6 +80,10 @@ public partial class MainWindowViewModel
     public bool CanWritePeople => _permissions.Contains(Permission.WritePeople);
     public bool CanDeletePeople => _permissions.Contains(Permission.DeletePeople);
 
+    // Role permissions
+    public bool CanWriteRoles => _permissions.Contains(Permission.WriteRole);
+    public bool CanDeleteRoles => _permissions.Contains(Permission.DeleteRole);
+
     private async void LoadPermissions()
     {
         try

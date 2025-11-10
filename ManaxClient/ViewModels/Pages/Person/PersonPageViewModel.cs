@@ -16,7 +16,10 @@ namespace ManaxClient.ViewModels.Pages.Person;
 
 public class PersonPageViewModel : PageViewModel
 {
+    public ReadOnlyObservableCollection<Models.Person> Persons => _persons;
     private readonly ReadOnlyObservableCollection<Models.Person> _persons;
+    public ReadOnlyObservableCollection<Models.Role> Roles => _roles;
+    private readonly ReadOnlyObservableCollection<Models.Role> _roles;
 
     public PersonPageViewModel()
     {
@@ -26,9 +29,13 @@ public class PersonPageViewModel : PageViewModel
         PersonSource.Persons.Connect()
             .SortAndBind(out _persons, comparer)
             .Subscribe();
-    }
 
-    public ReadOnlyObservableCollection<Models.Person> Persons => _persons;
+        SortExpressionComparer<Models.Role> roleComparer = SortExpressionComparer<Models.Role>
+            .Ascending(r => r.Name);
+        RoleSource.Roles.Connect()
+            .SortAndBind(out _roles, roleComparer)
+            .Subscribe();
+    }
 
     public void UpdatePerson(Models.Person person)
     {
@@ -37,7 +44,7 @@ public class PersonPageViewModel : PageViewModel
             FirstName = person.FirstName,
             LastName = person.LastName,
             Pseudonym = person.Pseudonym,
-            Role = person.Role
+            RoleId = person.Role.Id
         };
         PersonEditViewModel content = new(person.Id, update);
         ConfirmCancelViewModel viewModel = new(content);
@@ -86,7 +93,7 @@ public class PersonPageViewModel : PageViewModel
             FirstName = "New",
             LastName = "Person",
             Pseudonym = string.Empty,
-            Role = new RoleDto { Id = 0, Name = "Unknown" }
+            RoleId = 0
         };
         PersonEditViewModel content = new(0, initialData);
         ConfirmCancelViewModel viewModel = new(content);
@@ -106,6 +113,78 @@ public class PersonPageViewModel : PageViewModel
             {
                 InfoEmitted?.Invoke(this, "Failed to create person on server");
                 Logger.LogError("Failed to create person on server", e);
+            }
+        };
+        PopupRequested?.Invoke(this, popup);
+    }
+
+    public void UpdateRole(Models.Role role)
+    {
+        RoleUpdateDto update = new()
+        {
+            Id = role.Id,
+            Name = role.Name
+        };
+        RoleEditViewModel content = new(update);
+        ConfirmCancelViewModel viewModel = new(content);
+        Controls.Popups.Popup popup = new(viewModel);
+        popup.Closed += async void (_, _) =>
+        {
+            try
+            {
+                if (viewModel.Canceled()) return;
+                RoleUpdateDto result = content.GetResult();
+                Optional<bool> updateRoleAsync = await ManaxApiRoleClient.UpdateRoleAsync(result);
+                if (updateRoleAsync.Failed)
+                    InfoEmitted?.Invoke(this, updateRoleAsync.Error);
+            }
+            catch (Exception e)
+            {
+                InfoEmitted?.Invoke(this, "Failed to update role on server");
+                Logger.LogError("Failed to update role on server", e);
+            }
+        };
+        PopupRequested?.Invoke(this, popup);
+    }
+
+    public void DeleteRole(Models.Role role)
+    {
+        Task.Run(async () =>
+        {
+            try
+            {
+                Optional<bool> deleteRoleResponse = await ManaxApiRoleClient.DeleteRoleAsync(role.Id);
+                if (deleteRoleResponse.Failed) InfoEmitted?.Invoke(this, deleteRoleResponse.Error);
+            }
+            catch (Exception e)
+            {
+                InfoEmitted?.Invoke(this, "Failed to delete role on server");
+                Logger.LogError("Failed to delete role on server", e);
+            }
+        });
+    }
+
+    public void CreateRole()
+    {
+        RoleEditViewModel content = new(new RoleUpdateDto { Name = "New Role" });
+        ConfirmCancelViewModel viewModel = new(content);
+        Controls.Popups.Popup popup = new(viewModel);
+        popup.Closed += async void (_, _) =>
+        {
+            try
+            {
+                if (viewModel.Canceled()) return;
+                RoleUpdateDto result = content.GetResult();
+                Optional<bool> roleResponse = await ManaxApiRoleClient.CreateRoleAsync(new RoleCreateDto
+                    { Name = result.Name });
+
+                if (roleResponse.Failed)
+                    InfoEmitted?.Invoke(this, roleResponse.Error);
+            }
+            catch (Exception e)
+            {
+                InfoEmitted?.Invoke(this, "Failed to create role on server");
+                Logger.LogError("Failed to create role on server", e);
             }
         };
         PopupRequested?.Invoke(this, popup);

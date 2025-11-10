@@ -966,4 +966,37 @@
     <data name="ManualCleanupPage.Next" xml:space="preserve">
         <value>Continuer</value>
     </data>
+    <data name="RolePage.Title" xml:space="preserve">
+        <value>Gestion des rôles</value>
+    </data>
+    <data name="RolePage.RolesCount" xml:space="preserve">
+        <value>👔 {0} rôle(s) configuré(s)</value>
+    </data>
+    <data name="RolePage.NewRole" xml:space="preserve">
+        <value>Nouveau rôle</value>
+    </data>
+    <data name="RolePage.NoRoles.Title" xml:space="preserve">
+        <value>Aucun rôle configuré</value>
+    </data>
+    <data name="RolePage.NoRoles.Description" xml:space="preserve">
+        <value>Créez des rôles pour organiser les personnes par leur fonction (auteur, artiste, etc.).</value>
+    </data>
+    <data name="RolePage.CreateFirstRole" xml:space="preserve">
+        <value>Créer le premier rôle</value>
+    </data>
+    <data name="RolePage.RolesList.Title" xml:space="preserve">
+        <value>Liste des rôles</value>
+    </data>
+    <data name="RoleEditPopup.Title" xml:space="preserve">
+        <value>Modifier le rôle</value>
+    </data>
+    <data name="RoleEditPopup.Description" xml:space="preserve">
+        <value>Modifier les informations du rôle</value>
+    </data>
+    <data name="RoleEditPopup.Name" xml:space="preserve">
+        <value>Nom du rôle</value>
+    </data>
+    <data name="RoleEditPopup.Name.Placeholder" xml:space="preserve">
+        <value>Entrez le nom du rôle</value>
+    </data>
 </root>

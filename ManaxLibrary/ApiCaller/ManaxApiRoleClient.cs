@@ -33,7 +33,7 @@ public static class ManaxApiRoleClient
     {
         return await ManaxApiClient.ExecuteWithErrorHandlingAsync(async () =>
         {
-            HttpResponseMessage response = await ManaxApiClient.Client.PutAsJsonAsync("api/role", role);
+            HttpResponseMessage response = await ManaxApiClient.Client.PutAsJsonAsync($"api/role/{role.Id}", role);
             return response.IsSuccessStatusCode
                 ? new Optional<bool>(true)
                 : new Optional<bool>(response);

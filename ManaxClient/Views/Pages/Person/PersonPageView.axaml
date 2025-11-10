@@ -138,6 +138,111 @@
                     </ItemsControl>
                 </StackPanel>
             </Border>
+
+            <!-- Roles Section -->
+            <Grid ColumnDefinitions="*,Auto">
+                <StackPanel Grid.Column="0" Orientation="Vertical">
+                    <TextBlock Classes="title" Text="{localization:Localize RolePage.Title}" />
+                    <TextBlock Text="{localization1:LocalizeFormat RolePage.RolesCount,
+                                   Param1={Binding $parent[UserControl].((page:PersonPageViewModel)DataContext).Roles.Count}}"
+                               Foreground="{StaticResource SecondaryBrush}" />
+                </StackPanel>
+
+                <Button Grid.Column="1"
+                        IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).CanWriteRoles}"
+                        Classes="primary"
+                        Command="{Binding CreateRole}"
+                        VerticalAlignment="Center">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <TextBlock Text="➕" />
+                        <TextBlock Text="{localization:Localize RolePage.NewRole}" />
+                    </StackPanel>
+                </Button>
+            </Grid>
+
+            <Border Classes="card" IsVisible="{Binding !Roles.Count}">
+                <StackPanel Orientation="Vertical"
+                            Spacing="16"
+                            HorizontalAlignment="Center">
+                    <TextBlock Text="👔" FontSize="48" HorizontalAlignment="Center" />
+                    <TextBlock Text="{localization:Localize RolePage.NoRoles.Title}"
+                               FontSize="18"
+                               FontWeight="Medium"
+                               HorizontalAlignment="Center" />
+                    <TextBlock Text="{localization:Localize RolePage.NoRoles.Description}"
+                               TextAlignment="Center"
+                               Foreground="{StaticResource SecondaryBrush}" />
+                    <Button Classes="primary"
+                            IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).CanWriteRoles}"
+                            Command="{Binding CreateRole}"
+                            HorizontalAlignment="Center">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <TextBlock Text="➕" />
+                            <TextBlock Text="{localization:Localize RolePage.CreateFirstRole}" />
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </Border>
+
+            <Border Classes="card" IsVisible="{Binding Roles.Count}">
+                <StackPanel Spacing="16">
+                    <TextBlock Classes="subtitle" Text="{localization:Localize RolePage.RolesList.Title}" />
+
+                    <ItemsControl ItemsSource="{Binding Roles}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="models:Role">
+                                <Border Background="{DynamicResource Background1}"
+                                        BorderBrush="{DynamicResource Background2}"
+                                        BorderThickness="1"
+                                        CornerRadius="8"
+                                        Padding="16"
+                                        Margin="0,4">
+                                    <Grid ColumnDefinitions="Auto,*,Auto,Auto" ColumnSpacing="16">
+
+                                        <Border Grid.Column="0"
+                                                Background="{StaticResource WarningBrush}"
+                                                CornerRadius="20"
+                                                Width="40"
+                                                Height="40">
+                                            <TextBlock Text="👔"
+                                                       FontSize="16"
+                                                       HorizontalAlignment="Center"
+                                                       VerticalAlignment="Center" />
+                                        </Border>
+
+                                        <StackPanel Grid.Column="1" Orientation="Vertical" VerticalAlignment="Center">
+                                            <TextBlock Text="{Binding Name}"
+                                                       Foreground="{DynamicResource TextColor1}"
+                                                       FontWeight="Bold"
+                                                       FontSize="16" />
+                                        </StackPanel>
+
+                                        <Button Grid.Column="2"
+                                                IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).CanWriteRoles}"
+                                                Classes="secondary"
+                                                Command="{Binding $parent[UserControl].((page:PersonPageViewModel)DataContext).UpdateRole}"
+                                                CommandParameter="{Binding .}"
+                                                Padding="8"
+                                                VerticalAlignment="Center">
+                                            <TextBlock Text="✏️" />
+                                        </Button>
+
+                                        <Button Grid.Column="3"
+                                                IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).CanDeleteRoles}"
+                                                Classes="danger"
+                                                Command="{Binding $parent[UserControl].((page:PersonPageViewModel)DataContext).DeleteRole}"
+                                                CommandParameter="{Binding .}"
+                                                Padding="8"
+                                                VerticalAlignment="Center">
+                                            <TextBlock Text="🗑️" />
+                                        </Button>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Border>
         </StackPanel>
     </ScrollViewer>
 </UserControl>

@@ -1,5 +1,3 @@
-using ManaxLibrary.DTO.Role;
-
 namespace ManaxLibrary.DTO.Person;
 
 public class PersonCreateDto
@@ -7,5 +5,5 @@ public class PersonCreateDto
     public string FirstName { get; set; }
     public string LastName { get; set; }
     public string Pseudonym { get; set; }
-    public RoleDto Role { get; set; }
+    public long RoleId { get; set; }
 }

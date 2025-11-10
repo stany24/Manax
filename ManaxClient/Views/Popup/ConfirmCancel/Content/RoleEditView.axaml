@@ -1,0 +1,52 @@
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:content="clr-namespace:ManaxClient.ViewModels.Popup.ConfirmCancel.Content"
+    xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
+    mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="250"
+    x:Class="ManaxClient.Views.Popup.ConfirmCancel.Content.RoleEditView"
+    x:DataType="content:RoleEditViewModel">
+    <Grid RowDefinitions="Auto,Auto" RowSpacing="16" Margin="16">
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="12" Margin="0,0,0,8">
+            <TextBlock Text="👔" FontSize="24" VerticalAlignment="Center" />
+            <StackPanel Spacing="4">
+                <TextBlock
+                    Text="{localization:Localize RoleEditPopup.Title}"
+                    FontSize="18"
+                    FontWeight="Bold"
+                    Foreground="#212529" />
+                <TextBlock
+                    Text="{localization:Localize RoleEditPopup.Description}"
+                    FontSize="12"
+                    Foreground="#6C757D" />
+            </StackPanel>
+        </StackPanel>
+
+        <StackPanel Grid.Row="1" Spacing="8">
+            <TextBlock
+                Text="{localization:Localize RoleEditPopup.Name}"
+                FontWeight="Medium"
+                Foreground="#495057" />
+            <TextBox
+                Text="{Binding Name}"
+                Watermark="{localization:Localize RoleEditPopup.Name.Placeholder}"
+                Padding="12"
+                CornerRadius="8"
+                BorderThickness="1"
+                BorderBrush="#DEE2E6"
+                FontSize="14">
+                <TextBox.Styles>
+                    <Style Selector="TextBox:pointerover">
+                        <Setter Property="BorderBrush" Value="#007ACC" />
+                    </Style>
+                    <Style Selector="TextBox:focus">
+                        <Setter Property="BorderBrush" Value="#007ACC" />
+                    </Style>
+                </TextBox.Styles>
+            </TextBox>
+        </StackPanel>
+    </Grid>
+</UserControl>
+
