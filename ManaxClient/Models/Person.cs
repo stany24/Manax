@@ -11,7 +11,7 @@ public partial class Person : ObservableObject
     [ObservableProperty] private string _firstName = string.Empty;
     [ObservableProperty] private string _lastName = string.Empty;
     [ObservableProperty] private string _pseudonym = string.Empty;
-    [ObservableProperty] private RoleDto _role;
+    [ObservableProperty] private RoleDto _role = null!;
 
     public Person(PersonDto dto)
     {

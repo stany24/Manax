@@ -80,7 +80,8 @@ public class FrenchLocalization : ILocalization
             },
             { LocalizationKey.TagNotFound, "Le tag avec l'ID {0} n'existe pas." },
             { LocalizationKey.FeatureDisabled, "La fonctionnalité '{0}' est désactivée." },
-            { LocalizationKey.PersonNotFound, "La personne avec l'ID {0} n'existe pas." }
+            { LocalizationKey.PersonNotFound, "La personne avec l'ID {0} n'existe pas." },
+            { LocalizationKey.RoleNotFound, "Le rôle avec l'ID {0} n'existe pas." }
         };
     }
 }
