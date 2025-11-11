@@ -27,7 +27,7 @@ public class RoleController(ManaxContext context, IMapper mapper, INotificationS
     
     // DELETE: api/role/5
     [HttpDelete("{id:long}")]
-    [RequirePermission(Permission.DeleteRole)]
+    [RequirePermission(Permission.DeleteRoles)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteRole(long id)
@@ -42,7 +42,7 @@ public class RoleController(ManaxContext context, IMapper mapper, INotificationS
     
     // POST: api/role
     [HttpPost]
-    [RequirePermission(Permission.WriteRole)]
+    [RequirePermission(Permission.WriteRoles)]
     [ProducesResponseType(StatusCodes.Status201Created)]
     public async Task<ActionResult<RoleDto>> CreateRole(RoleCreateDto roleCreateDto)
     {
@@ -56,7 +56,7 @@ public class RoleController(ManaxContext context, IMapper mapper, INotificationS
     
     // PUT: api/role/5
     [HttpPut("{id:long}")]
-    [RequirePermission(Permission.WriteRole)]
+    [RequirePermission(Permission.WriteRoles)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> UpdateRole(long id, RoleUpdateDto roleUpdateDto)

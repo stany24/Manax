@@ -128,7 +128,7 @@
                             IsVisible="{Binding CanReadPeople}"
                             Command="{Binding ChangePagePeople}">
                         <StackPanel Orientation="Horizontal" Spacing="12">
-                            <TextBlock Text="🏆" FontSize="14" />
+                            <TextBlock Text="👥" FontSize="14" />
                             <TextBlock Text="People" />
                         </StackPanel>
                     </Button>
