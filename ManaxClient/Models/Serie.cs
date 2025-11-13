@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
@@ -21,19 +20,20 @@ namespace ManaxClient.Models;
 public partial class Serie : ObservableObject
 {
     private readonly ReadOnlyObservableCollection<Chapter> _chapters;
+    private readonly ReadOnlyObservableCollection<Tag> _tags;
+    private readonly ReadOnlyObservableCollection<Person> _persons;
+    
     [ObservableProperty] private DateTime _creation;
     [ObservableProperty] private string _description = string.Empty;
     [ObservableProperty] private long _id;
-
-    private bool _infoLoaded;
     [ObservableProperty] private DateTime _lastModification;
     [ObservableProperty] private long? _libraryId;
     [ObservableProperty] private Bitmap? _poster;
-    private bool _posterLoaded;
     [ObservableProperty] private Status _status;
-    [ObservableProperty] private List<Tag> _tags = [];
-    [ObservableProperty] private List<Person> _persons = [];
     [ObservableProperty] private string _title = string.Empty;
+    
+    private bool _posterLoaded;
+    private bool _infoLoaded;
 
     public Serie(long id) : this(new SerieDto { Id = id })
     {
@@ -41,20 +41,32 @@ public partial class Serie : ObservableObject
 
     public Serie(SerieDto dto)
     {
-        FromSerieDto(dto);
         ServerNotification.OnSerieUpdated += OnSerieUpdated;
         ServerNotification.OnPosterModified += OnPosterModified;
         ServerNotification.OnReadCreated += OnReadCreated;
         ServerNotification.OnReadDeleted += OnReadDeleted;
-        SortExpressionComparer<Chapter> comparer = SortExpressionComparer<Chapter>.Ascending(chapter => chapter.Number);
+        
+        FromSerieDto(dto);
         ChapterSource.Chapters
             .Connect()
             .Filter(chapter => chapter.SerieId == Id)
-            .SortAndBind(out _chapters, comparer)
+            .SortAndBind(out _chapters, SortExpressionComparer<Chapter>.Ascending(chapter => chapter.Number))
+            .Subscribe();
+        TagSource.Tags
+            .Connect()
+            .Filter(tag => dto.TagIds.Contains(tag.Id))
+            .SortAndBind(out _tags, SortExpressionComparer<Tag>.Ascending(tag => tag.Name))
+            .Subscribe();
+        PersonSource.Persons
+            .Connect()
+            .Filter(person => dto.PersonIds.Contains(person.Id))
+            .SortAndBind(out _persons, SortExpressionComparer<Person>.Ascending(person => person.LastName))
             .Subscribe();
     }
 
     public ReadOnlyObservableCollection<Chapter> Chapters => _chapters;
+    public ReadOnlyObservableCollection<Tag> Tags => _tags;
+    public ReadOnlyObservableCollection<Person> Persons => _persons;
 
     public static EventHandler<string>? ErrorEmitted { get; set; }
 
@@ -74,7 +86,6 @@ public partial class Serie : ObservableObject
         Status = dto.Status;
         Creation = dto.Creation;
         LastModification = dto.LastModification;
-        Tags = dto.Tags.Select(t => new Tag(t)).ToList();
         LibraryId = dto.LibraryId;
     }
 

@@ -2,7 +2,6 @@ using System.Globalization;
 using System.IO.Compression;
 using System.Text.RegularExpressions;
 using ImageMagick;
-using ManaxLibrary.DTO.Chapter;
 using ManaxLibrary.DTO.Setting;
 using ManaxLibrary.DTO.User;
 using ManaxServer.Attributes;
@@ -12,7 +11,6 @@ using ManaxServer.Models.Chapter;
 using ManaxServer.Models.Serie;
 using ManaxServer.Services.BackgroundTask;
 using ManaxServer.Services.Fix;
-using ManaxServer.Services.Mapper;
 using ManaxServer.Services.Notification;
 using ManaxServer.Settings;
 using ManaxServer.Tasks;
@@ -25,7 +23,6 @@ namespace ManaxServer.Controllers;
 [ApiController]
 public partial class UploadController(
     ManaxContext context,
-    IMapper mapper,
     INotificationService notificationService,
     IBackgroundTaskService backgroundTaskService,
     IFixService fixService) : ControllerBase
@@ -77,7 +74,7 @@ public partial class UploadController(
         serie.LastModification = DateTime.UtcNow;
         await context.SaveChangesAsync();
 
-        notificationService.NotifyChapterAddedAsync(mapper.Map<ChapterDto>(chapter));
+        notificationService.NotifyChapterAddedAsync(chapter.ToDto());
 
         _ = backgroundTaskService.AddTaskAsync(new FixChapterBackGroundTask(fixService, chapter.Id));
         _ = backgroundTaskService.AddTaskAsync(new FixSerieBackGroundTask(fixService, chapter.SerieId));
@@ -125,7 +122,7 @@ public partial class UploadController(
         await SaveFileAsync(file, filePath);
         await context.SaveChangesAsync();
 
-        notificationService.NotifyChapterModifiedAsync(mapper.Map<ChapterDto>(chapter));
+        notificationService.NotifyChapterModifiedAsync(chapter.ToDto());
 
         _ = backgroundTaskService.AddTaskAsync(new FixChapterBackGroundTask(fixService, chapter.Id));
         _ = backgroundTaskService.AddTaskAsync(new FixSerieBackGroundTask(fixService, chapter.SerieId));

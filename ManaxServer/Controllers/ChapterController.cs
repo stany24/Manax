@@ -5,7 +5,6 @@ using ManaxServer.Attributes;
 using ManaxServer.Localization;
 using ManaxServer.Models;
 using ManaxServer.Models.Chapter;
-using ManaxServer.Services.Mapper;
 using ManaxServer.Services.Notification;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -14,7 +13,7 @@ namespace ManaxServer.Controllers;
 
 [Route("api/chapter")]
 [ApiController]
-public class ChapterController(ManaxContext context, IMapper mapper, INotificationService notificationService)
+public class ChapterController(ManaxContext context, INotificationService notificationService)
     : ControllerBase
 {
     // GET: api/Chapter
@@ -37,7 +36,7 @@ public class ChapterController(ManaxContext context, IMapper mapper, INotificati
 
         if (chapter == null) return NotFound(Localizer.ChapterNotFound(id));
 
-        return mapper.Map<ChapterDto>(chapter);
+        return chapter.ToDto();
     }
 
     // DELETE: api/Chapter/5

@@ -1,6 +1,7 @@
 using ManaxServer.Models.Library;
 using ManaxServer.Models.Serie;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace ManaxTests.Server.LibraryTests;
 
@@ -31,7 +32,7 @@ public class DeleteLibraryTests : LibraryTestsSetup
     public async Task DeleteLibraryWithAssociatedSeriesRemovesLibraryButKeepsSeries()
     {
         Library library = Context.Libraries.First();
-        List<Serie> associatedSeries = Context.Series.Where(s => s.LibraryId == library.Id).ToList();
+        List<Serie> associatedSeries = Context.Series.Where(s => s.Library != null && s.Library.Id == library.Id).ToList();
         int initialSeriesCount = associatedSeries.Count;
         List<long> seriesIds = associatedSeries.Select(s => s.Id).ToList();
 
@@ -42,9 +43,10 @@ public class DeleteLibraryTests : LibraryTestsSetup
         Library? deletedLibrary = await Context.Libraries.FindAsync(library.Id);
         Assert.IsNull(deletedLibrary);
 
-        List<Serie> updatedSeries = Context.Series.Where(s => seriesIds.Contains(s.Id)).ToList();
+        List<Serie> updatedSeries = Context.Series.Where(s => seriesIds.Contains(s.Id))
+            .Include(serie => serie.Library).ToList();
         Assert.HasCount(initialSeriesCount, updatedSeries);
 
-        foreach (Serie serie in updatedSeries) Assert.IsNull(serie.LibraryId);
+        foreach (Serie serie in updatedSeries) Assert.IsNull(serie.Library?.Id);
     }
 }

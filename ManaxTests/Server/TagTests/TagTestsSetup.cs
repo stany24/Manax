@@ -1,7 +1,6 @@
 using System.Security.Claims;
 using ManaxServer.Controllers;
 using ManaxServer.Models;
-using ManaxServer.Services.Mapper;
 using ManaxTests.Server.Mocks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -10,7 +9,6 @@ namespace ManaxTests.Server.TagTests;
 
 public abstract class TagTestsSetup
 {
-    private ManaxMapper _mapper = null!;
     protected ManaxContext Context = null!;
     protected TagController Controller = null!;
     protected MockNotificationService MockNotificationService = null!;
@@ -20,10 +18,9 @@ public abstract class TagTestsSetup
     {
         Context = SqliteTestDbContextFactory.CreateTestContext();
 
-        _mapper = new ManaxMapper(new ManaxMapping());
         MockNotificationService = new MockNotificationService();
 
-        Controller = new TagController(Context, _mapper, MockNotificationService);
+        Controller = new TagController(Context, MockNotificationService);
 
         ClaimsPrincipal user = new(new ClaimsIdentity([
             new Claim(ClaimTypes.NameIdentifier, "1"),

@@ -4,7 +4,6 @@ using ManaxServer.Attributes;
 using ManaxServer.Localization;
 using ManaxServer.Models;
 using ManaxServer.Models.Tag;
-using ManaxServer.Services.Mapper;
 using ManaxServer.Services.Notification;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -13,7 +12,7 @@ namespace ManaxServer.Controllers;
 
 [Route("api/tag")]
 [ApiController]
-public class TagController(ManaxContext context, IMapper mapper, INotificationService notificationService)
+public class TagController(ManaxContext context, INotificationService notificationService)
     : ControllerBase
 {
     // GET: api/tag
@@ -22,7 +21,7 @@ public class TagController(ManaxContext context, IMapper mapper, INotificationSe
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<TagDto>>> GetTags()
     {
-        return await context.Tags.Select(r => mapper.Map<TagDto>(r)).ToListAsync();
+        return await context.Tags.Select(t => t.ToDto()).ToListAsync();
     }
 
     // POST: api/tag
@@ -31,10 +30,10 @@ public class TagController(ManaxContext context, IMapper mapper, INotificationSe
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> CreateTag(TagCreateDto tagCreate)
     {
-        Tag tag = mapper.Map<Tag>(tagCreate);
+        Tag tag = Tag.Create(tagCreate);
         context.Tags.Add(tag);
         await context.SaveChangesAsync();
-        notificationService.NotifyTagCreatedAsync(mapper.Map<TagDto>(tag));
+        notificationService.NotifyTagCreatedAsync(tag.ToDto());
         return Ok();
     }
 
@@ -44,11 +43,11 @@ public class TagController(ManaxContext context, IMapper mapper, INotificationSe
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> UpdateTag(TagUpdateDto tag)
+    public async Task<IActionResult> UpdateTag(TagUpdateDto tagUpdate)
     {
-        Tag? found = context.Tags.FirstOrDefault(r => r.Id == tag.Id);
-        if (found == null) return NotFound(Localizer.TagNotFound(tag.Id));
-        mapper.Map(tag, found);
+        Tag? tag = context.Tags.FirstOrDefault(r => r.Id == tagUpdate.Id);
+        if (tag == null) return NotFound(Localizer.TagNotFound(tagUpdate.Id));
+        tag.Update(tagUpdate);
         try
         {
             await context.SaveChangesAsync();
@@ -58,7 +57,7 @@ public class TagController(ManaxContext context, IMapper mapper, INotificationSe
             return BadRequest(e.Message);
         }
 
-        notificationService.NotifyTagUpdatedAsync(mapper.Map<TagDto>(found));
+        notificationService.NotifyTagUpdatedAsync(tag.ToDto());
         return Ok();
     }
 

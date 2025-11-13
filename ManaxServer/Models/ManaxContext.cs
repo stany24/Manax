@@ -31,4 +31,11 @@ public class ManaxContext(DbContextOptions<ManaxContext> options) : DbContext(op
     
     public virtual DbSet<Person.Person> People { get; set; } = null!;
     public virtual DbSet<Person.Role> Roles { get; set; } = null!;
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+
+
+    }
 }

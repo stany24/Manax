@@ -2,6 +2,7 @@ using ManaxLibrary.DTO.Serie;
 using ManaxServer.Models.Chapter;
 using ManaxServer.Models.Serie;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace ManaxTests.Server.SerieTests;
 
@@ -26,13 +27,13 @@ public class GetSerieTests : SerieTestsSetup
     [TestMethod]
     public async Task GetSerieWithValidIdReturnsSerie()
     {
-        Serie serie = Context.Series.First();
+        Serie serie = Context.Series.Include(serie => serie.Library).First();
         ActionResult<SerieDto> result = await Controller.GetSerie(serie.Id);
 
         SerieDto? returnedSerie = result.Value;
         Assert.IsNotNull(returnedSerie);
         Assert.AreEqual(serie.Id, returnedSerie.Id);
-        Assert.AreEqual(serie.LibraryId, returnedSerie.LibraryId);
+        Assert.AreEqual(serie.Library?.Id, returnedSerie.LibraryId);
         Assert.AreEqual(serie.Title, returnedSerie.Title);
         Assert.AreEqual(serie.Description, returnedSerie.Description);
         Assert.AreEqual(serie.Status, returnedSerie.Status);
@@ -77,13 +78,13 @@ public class GetSerieTests : SerieTestsSetup
     [TestMethod]
     public async Task GetSerieVerifyAllPropertiesMapping()
     {
-        Serie serie = Context.Series.First();
+        Serie serie = Context.Series.Include(serie => serie.Library).First();
         ActionResult<SerieDto> result = await Controller.GetSerie(serie.Id);
 
         SerieDto? returnedSerie = result.Value;
         Assert.IsNotNull(returnedSerie);
         Assert.AreEqual(serie.Id, returnedSerie.Id);
-        Assert.AreEqual(serie.LibraryId, returnedSerie.LibraryId);
+        Assert.AreEqual(serie.Library?.Id, returnedSerie.LibraryId);
         Assert.AreEqual(serie.Title, returnedSerie.Title);
         Assert.AreEqual(serie.Description, returnedSerie.Description);
         Assert.AreEqual(serie.Status, returnedSerie.Status);

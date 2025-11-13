@@ -6,7 +6,6 @@ using ManaxServer.Models;
 using ManaxServer.Models.Chapter;
 using ManaxServer.Models.Read;
 using ManaxServer.Models.User;
-using ManaxServer.Services.Mapper;
 using ManaxServer.Services.Notification;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -15,7 +14,7 @@ namespace ManaxServer.Controllers;
 
 [Route("api/read")]
 [ApiController]
-public class ReadController(ManaxContext context, IMapper mapper, INotificationService notification) : ControllerBase
+public class ReadController(ManaxContext context, INotificationService notification) : ControllerBase
 {
     [HttpPut("read")]
     [RequirePermission(Permission.MarkChapterAsRead)]
@@ -40,18 +39,14 @@ public class ReadController(ManaxContext context, IMapper mapper, INotificationS
             existingRead.Date = DateTime.UtcNow;
             existingRead.Page = readCreate.Page;
             await context.SaveChangesAsync();
-            notification.NotifyReadCreated(mapper.Map<ReadDto>(existingRead));
+            notification.NotifyReadCreated(existingRead.ToDto());
         }
         else
         {
-            Read read = mapper.Map<Read>(readCreate);
-            read.User = user;
-            read.Chapter = chapter;
-            read.Date = DateTime.UtcNow;
-
+            Read read = Models.Read.Read.Create(readCreate,user.Id);
             await context.Reads.AddAsync(read);
             await context.SaveChangesAsync();
-            notification.NotifyReadCreated(mapper.Map<ReadDto>(read));
+            notification.NotifyReadCreated(read.ToDto());
         }
 
 

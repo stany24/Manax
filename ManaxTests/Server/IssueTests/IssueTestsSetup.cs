@@ -2,7 +2,6 @@ using System.Security.Claims;
 using ManaxLibrary.DTO.Feature;
 using ManaxServer.Controllers;
 using ManaxServer.Models;
-using ManaxServer.Services.Mapper;
 using ManaxTests.Server.Mocks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -11,7 +10,6 @@ namespace ManaxTests.Server.IssueTests;
 
 public abstract class IssueTestsSetup
 {
-    private ManaxMapper _mapper = null!;
     private MockNotificationService _mockNotificationService = null!;
     private MockFeatureService _mockFeatureService = null!;
     protected ManaxContext Context = null!;
@@ -22,13 +20,12 @@ public abstract class IssueTestsSetup
     {
         Context = SqliteTestDbContextFactory.CreateTestContext();
 
-        _mapper = new ManaxMapper(new ManaxMapping());
         _mockNotificationService = new MockNotificationService();
         _mockFeatureService = new MockFeatureService();
         _mockFeatureService.SetFeatureEnabled(FeatureType.AutomaticIssues,true);
         _mockFeatureService.SetFeatureEnabled(FeatureType.ReportedIssues,true);
 
-        Controller = new IssueController(Context, _mapper, _mockNotificationService, _mockFeatureService);
+        Controller = new IssueController(Context, _mockNotificationService, _mockFeatureService);
 
         ClaimsPrincipal user = new(new ClaimsIdentity([
             new Claim(ClaimTypes.NameIdentifier, "1"),
