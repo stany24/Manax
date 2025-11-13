@@ -4,7 +4,6 @@ using ManaxServer.Attributes;
 using ManaxServer.Localization;
 using ManaxServer.Models;
 using ManaxServer.Models.Person;
-using ManaxServer.Services.Mapper;
 using ManaxServer.Services.Notification;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -13,7 +12,7 @@ namespace ManaxServer.Controllers;
 
 [Route("api/person")]
 [ApiController]
-public class PersonController(ManaxContext context, IMapper mapper, INotificationService notificationService)
+public class PersonController(ManaxContext context, INotificationService notificationService)
     : ControllerBase
 {
     // GET: api/people
@@ -22,7 +21,7 @@ public class PersonController(ManaxContext context, IMapper mapper, INotificatio
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<PersonDto>>> GetPeople()
     {
-        return await context.People.Include(p=> p.Role).Select(person => mapper.Map<PersonDto>(person)).ToListAsync();
+        return await context.People.Include(p=> p.Role).Select(person => person.ToDto()).ToListAsync();
     }
     
     // DELETE: api/person/5
@@ -52,12 +51,11 @@ public class PersonController(ManaxContext context, IMapper mapper, INotificatio
             return BadRequest(Localizer.RoleNotFound(personCreateDto.RoleId));
         }
 
-        Person person = mapper.Map<Person>(personCreateDto);
+        Person person = Person.Create(personCreateDto,context);
         person.Role = role;
         context.People.Add(person);
         await context.SaveChangesAsync();
-        PersonDto personDto = mapper.Map<PersonDto>(person);
-        notificationService.NotifyPersonCreatedAsync(personDto);
+        notificationService.NotifyPersonCreatedAsync(person.ToDto());
         return Ok();
     }
     
@@ -77,11 +75,9 @@ public class PersonController(ManaxContext context, IMapper mapper, INotificatio
             return BadRequest(Localizer.RoleNotFound(personUpdateDto.RoleId));
         }
 
-        mapper.Map(personUpdateDto, person);
-        person.Role = role;
+        person.Update(personUpdateDto,role);
         await context.SaveChangesAsync();
-        PersonDto personDto = mapper.Map<PersonDto>(person);
-        notificationService.NotifyPersonUpdatedAsync(personDto);
+        notificationService.NotifyPersonUpdatedAsync(person.ToDto());
         return Ok();
     }
 }

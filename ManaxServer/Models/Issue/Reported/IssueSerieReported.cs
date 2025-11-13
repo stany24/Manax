@@ -2,6 +2,7 @@
 // ReSharper disable UnusedMember.Global
 
 using System.ComponentModel.DataAnnotations.Schema;
+using ManaxLibrary.DTO.Issue.Reported;
 using Microsoft.EntityFrameworkCore;
 
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
@@ -21,4 +22,27 @@ public class IssueSerieReported
     [ForeignKey(nameof(SerieId))] public Serie.Serie Serie { get; set; } = null!;
     public long ProblemId { get; set; }
     [ForeignKey(nameof(ProblemId))] public IssueSerieReportedType Problem { get; set; } = null!;
+    
+    public IssueSerieReportedDto ToDto()
+    {
+        return new IssueSerieReportedDto
+        {
+            Id = Id,
+            CreatedAt = CreatedAt,
+            UserId = UserId,
+            SerieId = SerieId,
+            ProblemId = Problem.Id
+        };
+    }
+
+    public static IssueSerieReported Create(IssueSerieReportedCreateDto issueSerieReportedCreate, long currentUserId)
+    {
+        return new IssueSerieReported
+        {
+            CreatedAt = DateTime.UtcNow,
+            UserId = currentUserId,
+            SerieId = issueSerieReportedCreate.SerieId,
+            ProblemId = issueSerieReportedCreate.ProblemId
+        };
+    }
 }

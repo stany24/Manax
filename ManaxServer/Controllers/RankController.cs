@@ -6,7 +6,6 @@ using ManaxServer.Localization;
 using ManaxServer.Models;
 using ManaxServer.Models.Rank;
 using ManaxServer.Services.Feature;
-using ManaxServer.Services.Mapper;
 using ManaxServer.Services.Notification;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -15,7 +14,7 @@ namespace ManaxServer.Controllers;
 
 [Route("api/rank")]
 [ApiController]
-public class RankController(ManaxContext context, IMapper mapper, INotificationService notificationService,IFeatureService featureService)
+public class RankController(ManaxContext context, INotificationService notificationService,IFeatureService featureService)
     : ControllerBase
 {
     [HttpGet("/api/ranks")]
@@ -25,7 +24,7 @@ public class RankController(ManaxContext context, IMapper mapper, INotificationS
     {
         if (!featureService.IsFeatureEnabled(FeatureType.Ranks)) { return BadRequest(Localizer.FeatureDisabled(FeatureType.Ranks)); }
 
-        return await context.Ranks.Select(r => mapper.Map<RankDto>(r)).ToListAsync();
+        return await context.Ranks.Select(rank => rank.ToDto()).ToListAsync();
     }
 
     [HttpPost]
@@ -35,10 +34,10 @@ public class RankController(ManaxContext context, IMapper mapper, INotificationS
     {
         if (!featureService.IsFeatureEnabled(FeatureType.Ranks)) { return BadRequest(Localizer.FeatureDisabled(FeatureType.Ranks)); }
 
-        Rank rank = mapper.Map<Rank>(rankCreate);
+        Rank rank = Rank.Create(rankCreate);
         context.Ranks.Add(rank);
         await context.SaveChangesAsync();
-        notificationService.NotifyRankCreatedAsync(mapper.Map<RankDto>(rank));
+        notificationService.NotifyRankCreatedAsync(rank.ToDto());
         return rank.Id;
     }
 
@@ -47,13 +46,13 @@ public class RankController(ManaxContext context, IMapper mapper, INotificationS
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> UpdateRank(RankUpdateDto rank)
+    public async Task<IActionResult> UpdateRank(RankUpdateDto rankUpdate)
     {
         if (!featureService.IsFeatureEnabled(FeatureType.Ranks)) { return BadRequest(Localizer.FeatureDisabled(FeatureType.Ranks)); }
 
-        Rank? found = context.Ranks.FirstOrDefault(r => r.Id == rank.Id);
-        if (found == null) return NotFound(Localizer.RankNotFound(rank.Id));
-        mapper.Map(rank, found);
+        Rank? rank = context.Ranks.FirstOrDefault(r => r.Id == rankUpdate.Id);
+        if (rank == null) return NotFound(Localizer.RankNotFound(rankUpdate.Id));
+        rank.Update(rankUpdate);
         try
         {
             await context.SaveChangesAsync();
@@ -63,7 +62,7 @@ public class RankController(ManaxContext context, IMapper mapper, INotificationS
             return BadRequest(e.Message);
         }
 
-        notificationService.NotifyRankUpdatedAsync(mapper.Map<RankDto>(found));
+        notificationService.NotifyRankUpdatedAsync(rank.ToDto());
         return Ok();
     }
 
@@ -127,6 +126,6 @@ public class RankController(ManaxContext context, IMapper mapper, INotificationS
         if (currentUserId == null) return Unauthorized(Localizer.MustBeLoggedInGetRanking());
         return await context.UserRanks
             .Where(r => r.UserId == currentUserId)
-            .Select(r => mapper.Map<UserRankDto>(r)).ToListAsync();
+            .Select(r => r.ToDto()).ToListAsync();
     }
 }

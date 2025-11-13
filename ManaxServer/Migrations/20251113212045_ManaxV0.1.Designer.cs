@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ManaxServer.Migrations
 {
     [DbContext(typeof(ManaxContext))]
-    [Migration("20251107091412_ManaxV0.1")]
+    [Migration("20251113212045_ManaxV0.1")]
     partial class ManaxV01
     {
         /// <inheritdoc />
@@ -222,9 +222,18 @@ namespace ManaxServer.Migrations
                     b.Property<long>("RoleId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<long?>("SerieId")
+                        .HasColumnType("INTEGER");
+
+                    b.PrimitiveCollection<string>("SerieIds")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
                     b.HasIndex("RoleId");
+
+                    b.HasIndex("SerieId");
 
                     b.ToTable("People");
                 });
@@ -386,10 +395,19 @@ namespace ManaxServer.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<long?>("SerieId")
+                        .HasColumnType("INTEGER");
+
+                    b.PrimitiveCollection<string>("SerieIds")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
                     b.HasIndex("Name")
                         .IsUnique();
+
+                    b.HasIndex("SerieId");
 
                     b.ToTable("Tags");
                 });
@@ -476,36 +494,6 @@ namespace ManaxServer.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("UserPermissions");
-                });
-
-            modelBuilder.Entity("PersonSerie", b =>
-                {
-                    b.Property<long>("PeoplesId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<long>("SeriesId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("PeoplesId", "SeriesId");
-
-                    b.HasIndex("SeriesId");
-
-                    b.ToTable("PersonSerie");
-                });
-
-            modelBuilder.Entity("SerieTag", b =>
-                {
-                    b.Property<long>("SeriesId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<long>("TagsId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("SeriesId", "TagsId");
-
-                    b.HasIndex("TagsId");
-
-                    b.ToTable("SerieTag");
                 });
 
             modelBuilder.Entity("ManaxServer.Models.Chapter.Chapter", b =>
@@ -603,6 +591,10 @@ namespace ManaxServer.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("ManaxServer.Models.Serie.Serie", null)
+                        .WithMany("Persons")
+                        .HasForeignKey("SerieId");
+
                     b.Navigation("Role");
                 });
 
@@ -669,6 +661,13 @@ namespace ManaxServer.Migrations
                     b.Navigation("SavePoint");
                 });
 
+            modelBuilder.Entity("ManaxServer.Models.Tag.Tag", b =>
+                {
+                    b.HasOne("ManaxServer.Models.Serie.Serie", null)
+                        .WithMany("Tags")
+                        .HasForeignKey("SerieId");
+                });
+
             modelBuilder.Entity("ManaxServer.Models.User.UserPermission", b =>
                 {
                     b.HasOne("ManaxServer.Models.User.User", "User")
@@ -680,34 +679,11 @@ namespace ManaxServer.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("PersonSerie", b =>
+            modelBuilder.Entity("ManaxServer.Models.Serie.Serie", b =>
                 {
-                    b.HasOne("ManaxServer.Models.Person.Person", null)
-                        .WithMany()
-                        .HasForeignKey("PeoplesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Persons");
 
-                    b.HasOne("ManaxServer.Models.Serie.Serie", null)
-                        .WithMany()
-                        .HasForeignKey("SeriesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("SerieTag", b =>
-                {
-                    b.HasOne("ManaxServer.Models.Serie.Serie", null)
-                        .WithMany()
-                        .HasForeignKey("SeriesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ManaxServer.Models.Tag.Tag", null)
-                        .WithMany()
-                        .HasForeignKey("TagsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Tags");
                 });
 
             modelBuilder.Entity("ManaxServer.Models.User.User", b =>

@@ -10,7 +10,6 @@ using ManaxServer.Services.Feature;
 using ManaxServer.Services.Fix;
 using ManaxServer.Services.Hash;
 using ManaxServer.Services.Issue;
-using ManaxServer.Services.Mapper;
 using ManaxServer.Services.Notification;
 using ManaxServer.Services.Permission;
 using ManaxServer.Services.Renaming;
@@ -75,8 +74,6 @@ public class Program
         builder.Services.AddSingleton<IFeatureService>(provider =>
             new FeatureService(featureFileManager,featureFileManager,provider.GetRequiredService<INotificationService>()));
         AddRateLimiting(builder);
-
-        builder.Services.AddScoped<IMapper>(_ => new ManaxMapper(new ManaxMapping()));
 
         builder.Services.Configure<KestrelServerOptions>(options =>
         {

@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations.Schema;
+using ManaxLibrary.DTO.Rank;
 using Microsoft.EntityFrameworkCore;
 
 // ReSharper disable PropertyCanBeMadeInitOnly.Global
@@ -19,4 +20,14 @@ public class UserRank
     public long RankId { get; set; }
 
     [ForeignKey(nameof(RankId))] public Rank Rank { get; set; } = null!;
+    
+    public UserRankDto ToDto()
+    {
+        return new UserRankDto
+        {
+            UserId = UserId,
+            SerieId = SerieId,
+            RankId = RankId
+        };
+    }
 }

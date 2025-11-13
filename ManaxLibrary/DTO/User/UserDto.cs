@@ -14,5 +14,6 @@ public class UserDto
     public long Id { get; set; }
     [MaxLength(50)] public string Username { get; set; } = string.Empty;
     public UserRole Role { get; set; }
+    public DateTime Creation { get; set; }
     public DateTime LastLogin { get; set; }
 }

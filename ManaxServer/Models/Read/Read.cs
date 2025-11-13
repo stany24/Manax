@@ -3,6 +3,7 @@
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
 
 using System.ComponentModel.DataAnnotations.Schema;
+using ManaxLibrary.DTO.Read;
 using Microsoft.EntityFrameworkCore;
 
 namespace ManaxServer.Models.Read;
@@ -25,4 +26,26 @@ public class Read
     [ForeignKey(nameof(UserId))]
     [DeleteBehavior(DeleteBehavior.NoAction)]
     public User.User User { get; set; }
+    
+    public ReadDto ToDto()
+    {
+        return new ReadDto
+        {
+            Date = Date,
+            Page = Page,
+            ChapterId = ChapterId,
+            UserId = UserId
+        };
+    }
+
+    public static Read Create(ReadCreateDto readCreate, long userId)
+    {
+        return new Read
+        {
+            Date = DateTime.UtcNow,
+            Page = readCreate.Page,
+            ChapterId = readCreate.ChapterId,
+            UserId = userId
+        };
+    }
 }

@@ -5,7 +5,6 @@ using ManaxServer.Localization;
 using ManaxServer.Models;
 using ManaxServer.Models.Library;
 using ManaxServer.Models.Serie;
-using ManaxServer.Services.Mapper;
 using ManaxServer.Services.Notification;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -14,7 +13,7 @@ namespace ManaxServer.Controllers;
 
 [Route("api/library")]
 [ApiController]
-public class LibraryController(ManaxContext context, IMapper mapper, INotificationService notificationService)
+public class LibraryController(ManaxContext context, INotificationService notificationService)
     : ControllerBase
 {
     // GET: api/Library
@@ -39,7 +38,7 @@ public class LibraryController(ManaxContext context, IMapper mapper, INotificati
 
         if (library == null) return NotFound(Localizer.LibraryNotFound(id));
 
-        return mapper.Map<LibraryDto>(library);
+        return library.ToDto();
     }
 
     // PUT: api/Library/5
@@ -60,7 +59,7 @@ public class LibraryController(ManaxContext context, IMapper mapper, INotificati
         if (await context.Libraries.AnyAsync(l => l.Name == libraryUpdate.Name && l.Id != id))
             return Conflict(Localizer.LibraryNameExists(libraryUpdate.Name));
 
-        mapper.Map(libraryUpdate, library);
+        library.Update(libraryUpdate);
 
         try
         {
@@ -76,7 +75,7 @@ public class LibraryController(ManaxContext context, IMapper mapper, INotificati
             return Conflict(Localizer.LibraryNameOrPathNotUnique());
         }
 
-        notificationService.NotifyLibraryUpdatedAsync(mapper.Map<LibraryDto>(library));
+        notificationService.NotifyLibraryUpdatedAsync(library.ToDto());
         return Ok();
     }
 
@@ -92,7 +91,7 @@ public class LibraryController(ManaxContext context, IMapper mapper, INotificati
         if (await context.Libraries.AnyAsync(l => l.Name == libraryCreate.Name))
             return Conflict(Localizer.LibraryNameExists(libraryCreate.Name));
 
-        Library library = mapper.Map<Library>(libraryCreate);
+        Library library = Library.Create(libraryCreate);
         library.Creation = DateTime.UtcNow;
 
         context.Libraries.Add(library);
@@ -106,7 +105,7 @@ public class LibraryController(ManaxContext context, IMapper mapper, INotificati
             return Conflict(Localizer.LibraryNameExists(libraryCreate.Name));
         }
 
-        notificationService.NotifyLibraryCreatedAsync(mapper.Map<LibraryDto>(library));
+        notificationService.NotifyLibraryCreatedAsync(library.ToDto());
         return library.Id;
     }
 
@@ -121,10 +120,10 @@ public class LibraryController(ManaxContext context, IMapper mapper, INotificati
         if (library == null) return NotFound(Localizer.LibraryNotFound(id));
 
         List<Serie> seriesToUpdate = await context.Series
-            .Where(s => s.LibraryId == id)
+            .Where(s => s.Library != null && s.Library.Id == id)
             .ToListAsync();
 
-        foreach (Serie serie in seriesToUpdate) serie.LibraryId = null;
+        foreach (Serie serie in seriesToUpdate) serie.Library = null;
 
         context.Libraries.Remove(library);
         await context.SaveChangesAsync();

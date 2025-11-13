@@ -7,7 +7,6 @@ using ManaxServer.Localization;
 using ManaxServer.Models;
 using ManaxServer.Models.Issue.Reported;
 using ManaxServer.Services.Feature;
-using ManaxServer.Services.Mapper;
 using ManaxServer.Services.Notification;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -16,7 +15,7 @@ namespace ManaxServer.Controllers;
 
 [Route("api/issue")]
 [ApiController]
-public class IssueController(ManaxContext context, IMapper mapper, INotificationService notificationService, IFeatureService featureService)
+public class IssueController(ManaxContext context, INotificationService notificationService, IFeatureService featureService)
     : ControllerBase
 {
     [HttpGet("chapter/automatic")]
@@ -27,7 +26,7 @@ public class IssueController(ManaxContext context, IMapper mapper, INotification
         if (!featureService.IsFeatureEnabled(FeatureType.AutomaticIssues)) { return BadRequest(Localizer.FeatureDisabled(FeatureType.AutomaticIssues)); }
 
         return await context.AutomaticIssuesChapter
-            .Select(i => mapper.Map<IssueChapterAutomaticDto>(i))
+            .Select(i => i.ToDto())
             .ToListAsync();
     }
 
@@ -39,7 +38,7 @@ public class IssueController(ManaxContext context, IMapper mapper, INotification
         if (!featureService.IsFeatureEnabled(FeatureType.AutomaticIssues)) { return BadRequest(Localizer.FeatureDisabled(FeatureType.AutomaticIssues)); }
 
         return await context.AutomaticIssuesSerie
-            .Select(i => mapper.Map<IssueSerieAutomaticDto>(i))
+            .Select(i => i.ToDto())
             .ToListAsync();
     }
 
@@ -51,7 +50,7 @@ public class IssueController(ManaxContext context, IMapper mapper, INotification
         if (!featureService.IsFeatureEnabled(FeatureType.ReportedIssues)) { return BadRequest(Localizer.FeatureDisabled(FeatureType.ReportedIssues)); }
         
         return await context.ReportedIssuesChapter
-            .Select(i => mapper.Map<IssueChapterReportedDto>(i))
+            .Select(i => i.ToDto())
             .ToListAsync();
     }
 
@@ -62,7 +61,7 @@ public class IssueController(ManaxContext context, IMapper mapper, INotification
     {
         if (!featureService.IsFeatureEnabled(FeatureType.ReportedIssues)) { return BadRequest(Localizer.FeatureDisabled(FeatureType.ReportedIssues)); }
 
-        return await context.ReportedIssueChapterTypes.Select(i => mapper.Map<IssueChapterReportedTypeDto>(i))
+        return await context.ReportedIssueChapterTypes.Select(i => i.ToDto())
             .ToListAsync();
     }
 
@@ -74,7 +73,7 @@ public class IssueController(ManaxContext context, IMapper mapper, INotification
         if (!featureService.IsFeatureEnabled(FeatureType.ReportedIssues)) { return BadRequest(Localizer.FeatureDisabled(FeatureType.ReportedIssues)); }
 
         return await context.ReportedIssuesSerie
-            .Select(i => mapper.Map<IssueSerieReportedDto>(i))
+            .Select(i => i.ToDto())
             .ToListAsync();
     }
 
@@ -85,7 +84,7 @@ public class IssueController(ManaxContext context, IMapper mapper, INotification
     {
         if (!featureService.IsFeatureEnabled(FeatureType.ReportedIssues)) { return BadRequest(Localizer.FeatureDisabled(FeatureType.ReportedIssues)); }
 
-        return await context.ReportedIssueSerieTypes.Select(i => mapper.Map<IssueSerieReportedTypeDto>(i))
+        return await context.ReportedIssueSerieTypes.Select(i => i.ToDto())
             .ToListAsync();
     }
 
@@ -108,13 +107,13 @@ public class IssueController(ManaxContext context, IMapper mapper, INotification
 
         if (issueExists) return Conflict("Issue already reported for this chapter and problem type.");
 
-        IssueChapterReported issue = mapper.Map<IssueChapterReported>(issueChapterReportedCreate);
+        IssueChapterReported issue = IssueChapterReported.Create(issueChapterReportedCreate,(long)currentUserId);
         issue.UserId = (long)currentUserId;
         issue.CreatedAt = DateTime.UtcNow;
 
         context.ReportedIssuesChapter.Add(issue);
         await context.SaveChangesAsync();
-        notificationService.NotifyChapterIssueCreatedAsync(mapper.Map<IssueChapterReportedDto>(issue));
+        notificationService.NotifyChapterIssueCreatedAsync(issue.ToDto());
 
         return Created();
     }
@@ -138,13 +137,11 @@ public class IssueController(ManaxContext context, IMapper mapper, INotification
 
         if (issueExists) return Conflict("Issue already reported for this series and problem type.");
 
-        IssueSerieReported issue = mapper.Map<IssueSerieReported>(issueSerieReportedCreate);
-        issue.UserId = (long)currentUserId;
-        issue.CreatedAt = DateTime.UtcNow;
+        IssueSerieReported issue = IssueSerieReported.Create(issueSerieReportedCreate,(long)currentUserId);
 
         context.ReportedIssuesSerie.Add(issue);
         await context.SaveChangesAsync();
-        notificationService.NotifySerieIssueCreatedAsync(mapper.Map<IssueSerieReportedDto>(issue));
+        notificationService.NotifySerieIssueCreatedAsync(issue.ToDto());
 
         return Created();
     }

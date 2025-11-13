@@ -20,4 +20,25 @@ public class User
     public DateTime LastLogin { get; set; }
 
     public ICollection<UserPermission> UserPermissions { get; set; } = new List<UserPermission>();
+    
+    public static User Create(UserCreateDto dto)
+    {
+        return new User
+        {
+            Username = dto.Username,
+            Role = dto.Role
+        };
+    }
+    
+    public UserDto ToDto()
+    {
+        return new UserDto
+        {
+            Id = Id,
+            Username = Username,
+            Role = Role,
+            Creation = Creation,
+            LastLogin = LastLogin,
+        };
+    }
 }

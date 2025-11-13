@@ -11,7 +11,6 @@ using ManaxServer.Models.SavePoint;
 using ManaxServer.Models.Serie;
 using ManaxServer.Services.BackgroundTask;
 using ManaxServer.Services.Fix;
-using ManaxServer.Services.Mapper;
 using ManaxServer.Services.Notification;
 using ManaxServer.Settings;
 using ManaxServer.Tasks;
@@ -24,7 +23,6 @@ namespace ManaxServer.Controllers;
 [ApiController]
 public class SerieController(
     ManaxContext context,
-    IMapper mapper,
     INotificationService notificationService,
     IFixService fixService,
     IBackgroundTaskService backgroundTaskService)
@@ -47,12 +45,11 @@ public class SerieController(
     public async Task<ActionResult<SerieDto>> GetSerie(long id)
     {
         Serie? serie = await context.Series
-            .Include(s => s.Tags)
             .FirstOrDefaultAsync(l => l.Id == id);
 
         if (serie == null) return NotFound(Localizer.SerieNotFound(id));
 
-        return mapper.Map<SerieDto>(serie);
+        return serie.ToDto();
     }
 
     // GET: api/series/{id}/chapters
@@ -83,7 +80,7 @@ public class SerieController(
         List<ReadDto> reads = context.Reads
             .Where(r => r.Chapter.SerieId == id)
             .Where(r => r.UserId == UserController.GetCurrentUserId(HttpContext))
-            .Select(r => mapper.Map<ReadDto>(r))
+            .Select(r => r.ToDto())
             .ToList();
 
         return reads;
@@ -124,14 +121,13 @@ public class SerieController(
         if (string.IsNullOrWhiteSpace(serieUpdate.Title))
             return BadRequest(Localizer.SerieTitleRequired());
 
-        mapper.Map(serieUpdate, serie);
-        serie.LastModification = DateTime.UtcNow;
+        serie.Update(serieUpdate,context);
 
         try
         {
             await context.SaveChangesAsync();
             _ = backgroundTaskService.AddTaskAsync(new FixSerieBackGroundTask(fixService, serie.Id));
-            notificationService.NotifySerieUpdatedAsync(mapper.Map<SerieDto>(serie));
+            notificationService.NotifySerieUpdatedAsync(serie.ToDto());
         }
         catch (DbUpdateConcurrencyException)
         {
@@ -159,7 +155,7 @@ public class SerieController(
             if (System.IO.File.Exists(folderPath)) return BadRequest(Localizer.SerieAlreadyExists());
             Serie serie = new()
             {
-                SavePointId = savePoint.Id,
+                SavePoint = savePoint,
                 Title = serieCreate.Title,
                 FolderName = serieCreate.Title,
                 Description = "",
@@ -170,7 +166,7 @@ public class SerieController(
             context.Series.Add(serie);
             await context.SaveChangesAsync();
             Directory.CreateDirectory(folderPath);
-            notificationService.NotifySerieCreatedAsync(mapper.Map<SerieDto>(serie));
+            notificationService.NotifySerieCreatedAsync(serie.ToDto());
             _ = backgroundTaskService.AddTaskAsync(new FixSerieBackGroundTask(fixService, serie.Id));
             return serie.Id;
         }
@@ -240,11 +236,11 @@ public class SerieController(
             .Select(g => new { SerieId = g.Key, ChapterCount = g.Count() })
             .ToDictionary(x => x.SerieId, x => x.ChapterCount);
 
-        List<Serie> series = context.Series.ToList();
+        List<Serie> series = context.Series.Include(serie => serie.Library).ToList();
 
         if (search.IncludedLibraries.Count > 0)
-            series = series.Where(s => search.IncludedLibraries.Contains(s.LibraryId ?? -1)).ToList();
-        series = series.Where(s => !search.ExcludedLibraries.Contains(s.LibraryId ?? -1)).ToList();
+            series = series.Where(s => search.IncludedLibraries.Contains(s.Library?.Id ?? -1)).ToList();
+        series = series.Where(s => !search.ExcludedLibraries.Contains(s.Library?.Id ?? -1)).ToList();
 
         if (search.IncludedStatuses.Count > 0)
             series = series.Where(s => search.IncludedStatuses.Contains(s.Status)).ToList();

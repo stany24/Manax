@@ -32,7 +32,7 @@ public partial class Person : ObservableObject
         FirstName = dto.FirstName;
         LastName = dto.LastName;
         Pseudonym = dto.Pseudonym;
-        Role = RoleSource.Roles.Items.First(r => r.Id == dto.Role.Id);
+        Role = RoleSource.Roles.Items.First(r => r.Id == dto.RoleId);
     }
 
     private void OnPersonUpdated(PersonDto dto)
@@ -49,7 +49,7 @@ public partial class Person : ObservableObject
             FirstName = FirstName,
             LastName = LastName,
             Pseudonym = Pseudonym,
-            Role = Role.ToRoleDto()
+            RoleId = Role.Id
         };
     }
 }

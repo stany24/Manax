@@ -7,7 +7,6 @@ using ManaxServer.Models;
 using ManaxServer.Models.Claim;
 using ManaxServer.Models.User;
 using ManaxServer.Services.Hash;
-using ManaxServer.Services.Mapper;
 using ManaxServer.Services.Notification;
 using ManaxServer.Services.Permission;
 using ManaxServer.Services.Token;
@@ -22,7 +21,6 @@ namespace ManaxServer.Controllers;
 [ApiController]
 public class UserController(
     ManaxContext context,
-    IMapper mapper,
     IHashService hashService,
     ITokenService tokenService,
     INotificationService notificationService,
@@ -51,7 +49,7 @@ public class UserController(
 
         if (user == null) return NotFound(Localizer.UserNotFound(id));
 
-        return mapper.Map<UserDto>(user);
+        return user.ToDto();
     }
 
     [HttpPut("update")]
@@ -70,7 +68,7 @@ public class UserController(
             return BadRequest(errorMessage);
 
         user.PasswordHash = hashService.HashPassword(userUpdate.Password);
-        notificationService.NotifyUserUpdatedAsync(mapper.Map<UserDto>(user));
+        notificationService.NotifyUserUpdatedAsync(user.ToDto());
         await context.SaveChangesAsync();
         return Ok();
     }
@@ -100,7 +98,7 @@ public class UserController(
     {
         if (!passwordValidationService.IsPasswordValid(userCreate.Password, out string? errorMessage))
             return BadRequest(errorMessage);
-        User user = mapper.Map<User>(userCreate);
+        User user = Models.User.User.Create(userCreate);
         user.Creation = DateTime.UtcNow;
         user.PasswordHash = hashService.HashPassword(userCreate.Password);
 
@@ -110,7 +108,7 @@ public class UserController(
         await permissionService.SetUserPermissionsAsync(user.Id,
             PermissionController.GetDefaultPermissionsForRole(user.Role));
 
-        notificationService.NotifyUserCreatedAsync(mapper.Map<UserDto>(user));
+        notificationService.NotifyUserCreatedAsync(user.ToDto());
 
         return Ok();
     }
@@ -182,11 +180,10 @@ public class UserController(
         await context.SaveChangesAsync();
 
         string token = tokenService.GenerateToken(user);
-        UserDto userDto = mapper.Map<UserDto>(user);
         UserLoginResultDto loginResult = new()
         {
             Token = token,
-            User = userDto
+            User = user.ToDto()
         };
         return loginResult;
     }
@@ -233,11 +230,10 @@ public class UserController(
             permissionService.SetUserPermissions(user.Id, PermissionController.GetDefaultPermissionsForRole(user.Role));
 
             string token = tokenService.GenerateToken(user);
-            UserDto userDto = mapper.Map<UserDto>(user);
             UserLoginResultDto loginResult = new()
             {
                 Token = token,
-                User = userDto
+                User = user.ToDto()
             };
             return loginResult;
         }
