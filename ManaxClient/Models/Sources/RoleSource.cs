@@ -23,7 +23,6 @@ public static class RoleSource
     {        
         ServerNotification.OnRoleCreated += OnRoleCreated;
         ServerNotification.OnRoleDeleted += OnRoleDeleted;
-        LoadRoles();
     }
 
     public static EventHandler<string>? ErrorEmitted { get; set; }
@@ -44,7 +43,7 @@ public static class RoleSource
         }
     }
 
-    private static void LoadRoles()
+    public static void LoadRoles()
     {
         Task.Run(() =>
         {

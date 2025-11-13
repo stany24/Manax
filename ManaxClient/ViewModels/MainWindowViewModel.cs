@@ -78,6 +78,7 @@ public partial class MainWindowViewModel : ObservableObject
             ServerNotification.OnFeatureModified += OnFeatureModified;
             Task.Run(LoadPermissions);
             Task.Run(LoadFeatures);
+            RoleSource.LoadRoles();
             LibrarySource.LoadLibraries();
             PersonSource.LoadPersons();
         };
