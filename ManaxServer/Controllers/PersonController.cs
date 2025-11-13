@@ -22,7 +22,7 @@ public class PersonController(ManaxContext context, IMapper mapper, INotificatio
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<PersonDto>>> GetPeople()
     {
-        return await context.People.Select(person => mapper.Map<PersonDto>(person)).ToListAsync();
+        return await context.People.Include(p=> p.Role).Select(person => mapper.Map<PersonDto>(person)).ToListAsync();
     }
     
     // DELETE: api/person/5

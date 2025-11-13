@@ -31,4 +31,13 @@ public partial class Role : ObservableObject
         if (Id != dto.Id) return;
         FromDto(dto);
     }
+
+    public RoleDto ToRoleDto()
+    {
+        return new RoleDto
+        {
+            Id = Id,
+            Name = Name
+        };
+    }
 }

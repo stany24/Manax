@@ -1,6 +1,7 @@
+using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
+using ManaxClient.Models.Sources;
 using ManaxLibrary.DTO.Person;
-using ManaxLibrary.DTO.Role;
 using ManaxLibrary.Notifications;
 
 namespace ManaxClient.Models;
@@ -11,7 +12,7 @@ public partial class Person : ObservableObject
     [ObservableProperty] private string _firstName = string.Empty;
     [ObservableProperty] private string _lastName = string.Empty;
     [ObservableProperty] private string _pseudonym = string.Empty;
-    [ObservableProperty] private RoleDto _role = null!;
+    [ObservableProperty] private Role _role = null!;
     public string FullName => $"{FirstName} ({Pseudonym}) {LastName}";
 
     public Person(PersonDto dto)
@@ -31,7 +32,7 @@ public partial class Person : ObservableObject
         FirstName = dto.FirstName;
         LastName = dto.LastName;
         Pseudonym = dto.Pseudonym;
-        Role = dto.Role;
+        Role = RoleSource.Roles.Items.First(r => r.Id == dto.Role.Id);
     }
 
     private void OnPersonUpdated(PersonDto dto)
@@ -48,7 +49,7 @@ public partial class Person : ObservableObject
             FirstName = FirstName,
             LastName = LastName,
             Pseudonym = Pseudonym,
-            Role = Role
+            Role = Role.ToRoleDto()
         };
     }
 }
