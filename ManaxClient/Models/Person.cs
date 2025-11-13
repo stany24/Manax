@@ -12,6 +12,7 @@ public partial class Person : ObservableObject
     [ObservableProperty] private string _lastName = string.Empty;
     [ObservableProperty] private string _pseudonym = string.Empty;
     [ObservableProperty] private RoleDto _role = null!;
+    public string FullName => $"{FirstName} ({Pseudonym}) {LastName}";
 
     public Person(PersonDto dto)
     {
@@ -37,5 +38,17 @@ public partial class Person : ObservableObject
     {
         if (Id != dto.Id) return;
         FromDto(dto);
+    }
+    
+    public PersonDto ToPersonDto()
+    {
+        return new PersonDto
+        {
+            Id = Id,
+            FirstName = FirstName,
+            LastName = LastName,
+            Pseudonym = Pseudonym,
+            Role = Role
+        };
     }
 }

@@ -32,6 +32,7 @@ public partial class Serie : ObservableObject
     private bool _posterLoaded;
     [ObservableProperty] private Status _status;
     [ObservableProperty] private List<Tag> _tags = [];
+    [ObservableProperty] private List<Person> _persons = [];
     [ObservableProperty] private string _title = string.Empty;
 
     public Serie(long id) : this(new SerieDto { Id = id })

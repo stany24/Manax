@@ -1287,6 +1287,24 @@ namespace ManaxClient.Localization {
             }
         }
         
+        public static string SerieUpdatePopup_NoPersons {
+            get {
+                return ResourceManager.GetString("SerieUpdatePopup.NoPersons", resourceCulture);
+            }
+        }
+        
+        public static string SerieUpdatePopup_Persons_Placeholder {
+            get {
+                return ResourceManager.GetString("SerieUpdatePopup.Persons.Placeholder", resourceCulture);
+            }
+        }
+        
+        public static string SerieUpdatePopup_Persons {
+            get {
+                return ResourceManager.GetString("SerieUpdatePopup.Persons", resourceCulture);
+            }
+        }
+        
         public static string SerieUpdatePopup_Library {
             get {
                 return ResourceManager.GetString("SerieUpdatePopup.Library", resourceCulture);
