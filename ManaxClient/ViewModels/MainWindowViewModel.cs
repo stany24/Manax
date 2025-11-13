@@ -80,6 +80,7 @@ public partial class MainWindowViewModel : ObservableObject
             Task.Run(LoadPermissions);
             Task.Run(LoadFeatures);
             LibrarySource.LoadLibraries();
+            PersonSource.LoadPersons();
         };
         SetPage(loginPage);
     }

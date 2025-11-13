@@ -17,7 +17,7 @@ public class PersonController(ManaxContext context, IMapper mapper, INotificatio
     : ControllerBase
 {
     // GET: api/people
-    [HttpGet("/api/people")]
+    [HttpGet("/api/persons")]
     [RequirePermission(Permission.ReadPeople)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<PersonDto>>> GetPeople()

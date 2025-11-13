@@ -645,6 +645,15 @@
     <data name="SerieUpdatePopup.Tags" xml:space="preserve">
         <value>Tags</value>
     </data>
+    <data name="SerieUpdatePopup.NoPersons" xml:space="preserve">
+        <value>Aucune personne sélectionné</value>
+    </data>
+    <data name="SerieUpdatePopup.Persons.Placeholder" xml:space="preserve">
+        <value>Sélectionner un personne...</value>
+    </data>
+    <data name="SerieUpdatePopup.Persons" xml:space="preserve">
+        <value>Personnes</value>
+    </data>
     <data name="SerieUpdatePopup.Library" xml:space="preserve">
         <value>Bibliothèque</value>
     </data>

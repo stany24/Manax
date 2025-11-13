@@ -663,6 +663,15 @@
     <data name="SerieUpdatePopup.NoTags" xml:space="preserve">
         <value>No tag selected</value>
     </data>
+    <data name="SerieUpdatePopup.Persons" xml:space="preserve">
+        <value>Persons</value>
+    </data>
+    <data name="SerieUpdatePopup.Persons.Placeholder" xml:space="preserve">
+        <value>Select a person</value>
+    </data>
+    <data name="SerieUpdatePopup.NoPersons" xml:space="preserve">
+        <value>No person selected</value>
+    </data>
     <data name="SerieUpdatePopup.Title" xml:space="preserve">
         <value>Update serie</value>
     </data>

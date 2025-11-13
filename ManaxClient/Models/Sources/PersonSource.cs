@@ -23,7 +23,6 @@ public static class PersonSource
     {        
         ServerNotification.OnPersonCreated += OnPersonCreated;
         ServerNotification.OnPersonDeleted += OnPersonDeleted;
-        LoadPersons();
     }
 
     public static EventHandler<string>? ErrorEmitted { get; set; }
@@ -44,7 +43,7 @@ public static class PersonSource
         }
     }
 
-    private static void LoadPersons()
+    public static void LoadPersons()
     {
         Task.Run(() =>
         {
@@ -53,11 +52,11 @@ public static class PersonSource
                 if (_loaded) return;
                 try
                 {
-                    Optional<List<PersonDto>> ranksResponse = ManaxApiPersonClient.GetPersonsAsync().Result;
-                    if (ranksResponse.Failed)
+                    Optional<List<PersonDto>> personsResponse = ManaxApiPersonClient.GetPersonsAsync().Result;
+                    if (personsResponse.Failed)
                     {
-                        Logger.LogFailure(ranksResponse.Error);
-                        ErrorEmitted?.Invoke(null, ranksResponse.Error);
+                        Logger.LogFailure(personsResponse.Error);
+                        ErrorEmitted?.Invoke(null, personsResponse.Error);
                         return;
                     }
 
@@ -66,8 +65,8 @@ public static class PersonSource
                         Persons.Edit(updater =>
                         {
                             updater.Clear();
-                            List<Person> ranks = ranksResponse.GetValue().Select(dto => new Person(dto)).ToList();
-                            updater.AddOrUpdate(ranks);
+                            List<Person> persons = personsResponse.GetValue().Select(dto => new Person(dto)).ToList();
+                            updater.AddOrUpdate(persons);
                         });
                     }
 
