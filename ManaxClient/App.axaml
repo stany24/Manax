@@ -11,6 +11,7 @@
 
     <Application.Styles>
         <themes:MaterialTheme BaseTheme="Dark" PrimaryColor="Purple" SecondaryColor="Lime" />
+        <StyleInclude Source="avares://Avalonia.Controls.ColorPicker/Themes/Fluent/Fluent.xaml" />
         
         <Style Selector="Window">
             <Setter Property="FontFamily" Value="Segoe UI, Arial, sans-serif" />

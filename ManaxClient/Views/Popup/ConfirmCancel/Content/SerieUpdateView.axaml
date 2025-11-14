@@ -180,7 +180,6 @@
             <TextBlock
                 Text="{localization:Localize SerieUpdatePopup.Persons}"
                 FontWeight="Medium"
-                Foreground="#495057"
                 VerticalAlignment="Center" />
             <ComboBox
                 Width="200"
@@ -190,7 +189,6 @@
                 Padding="8"
                 CornerRadius="6"
                 BorderThickness="1"
-                BorderBrush="#DEE2E6"
                 FontSize="12">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
@@ -209,7 +207,6 @@
         </StackPanel>
 
         <Border Grid.Row="7"
-                BorderBrush="#DEE2E6"
                 BorderThickness="1"
                 CornerRadius="8"
                 Padding="8"
@@ -224,7 +221,6 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Border
-                            Background="#E7F3FF"
                             BorderThickness="2"
                             CornerRadius="16"
                             Margin="2"
@@ -243,7 +239,6 @@
                                     Padding="0"
                                     Background="Transparent"
                                     BorderThickness="0"
-                                    Foreground="#007ACC"
                                     Command="{Binding $parent[UserControl].((content:SerieUpdateViewModel)DataContext).RemovePerson}"
                                     CommandParameter="{Binding}">
                                     <Button.Styles>
@@ -262,7 +257,6 @@
             Grid.Row="7"
             Text="{localization:Localize SerieUpdatePopup.NoPersons}"
             FontSize="12"
-            Foreground="#6C757D"
             HorizontalAlignment="Center"
             Margin="0,8,0,0"
             IsVisible="{Binding !SelectedPersons.Count}" />
