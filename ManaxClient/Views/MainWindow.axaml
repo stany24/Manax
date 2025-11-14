@@ -34,7 +34,7 @@
                                HorizontalAlignment="Center"
                                Margin="0,0,0,24" />
 
-                    <Button Classes="sidebar primary"
+                    <Button Classes="sidebar"
                             Command="{Binding ChangePageHome}">
                         <StackPanel Orientation="Horizontal" Spacing="12">
                             <TextBlock Text="🏠" FontSize="16" />
@@ -42,9 +42,8 @@
                         </StackPanel>
                     </Button>
 
-                    <Separator Margin="8,16" Background="{DynamicResource Background2}" />
-
                     <TextBlock Classes="subtitle"
+                               IsVisible="{Binding Libraries.Count}"
                                Text="{localization:Localize MainWindow.Libraries}"
                                Margin="16,8" />
 
@@ -69,9 +68,7 @@
                             </ItemsControl.ItemsPanel>
                         </ItemsControl>
                     </ScrollViewer>
-
-                    <Separator Margin="8,16" Background="{DynamicResource Background2}" IsVisible="{Binding IsAdmin}" />
-
+                    
                     <TextBlock Classes="subtitle"
                                Text="{localization:Localize MainWindow.Admin}"
                                Margin="16,8"
@@ -119,8 +116,26 @@
                             IsVisible="{Binding CanReadTags}"
                             Command="{Binding ChangePageTags}">
                         <StackPanel Orientation="Horizontal" Spacing="12">
-                            <TextBlock Text="🏆" FontSize="14" />
-                            <TextBlock Text="Tags" />
+                            <TextBlock Text="🏷️" FontSize="14" />
+                            <TextBlock Text="{localization:Localize MainWindow.Tags}" />
+                        </StackPanel>
+                    </Button>
+
+                    <Button Classes="sidebar"
+                            IsVisible="{Binding CanUploadChapter}"
+                            Command="{Binding ChangeUploadPage}">
+                        <StackPanel Orientation="Horizontal" Spacing="12">
+                            <TextBlock Text="📤" FontSize="14" />
+                            <TextBlock Text="{localization:Localize MainWindow.Upload}" />
+                        </StackPanel>
+                    </Button>
+                    
+                    <Button Classes="sidebar"
+                            IsVisible="{Binding CanReadPeople}"
+                            Command="{Binding ChangePagePeople}">
+                        <StackPanel Orientation="Horizontal" Spacing="12">
+                            <TextBlock Text="👥" FontSize="14" />
+                            <TextBlock Text="People" />
                         </StackPanel>
                     </Button>
                     
@@ -162,8 +177,6 @@
                             <TextBlock Text="{localization:Localize MainWindow.Parameters.Features}" />
                         </StackPanel>
                     </Button>
-
-                    <Separator Margin="8,16" Background="{DynamicResource Background2}" />
 
                     <TextBlock Classes="subtitle"
                                Text="{localization:Localize MainWindow.Stats}"
@@ -211,12 +224,10 @@
                                                                TextWrapping="Wrap"
                                                                VerticalAlignment="Center" />
                                                     <Border Grid.Column="1"
-                                                            Background="{StaticResource InfoBrush}"
                                                             CornerRadius="12"
                                                             Padding="8,4"
                                                             Margin="8,0,0,0">
                                                         <TextBlock Text="{Binding Number}"
-                                                                   Foreground="{StaticResource TextColor1}"
                                                                    FontSize="12"
                                                                    FontWeight="Bold" />
                                                     </Border>
@@ -231,8 +242,7 @@
                 </StackPanel>
             </ScrollViewer>
 
-            <Border Grid.Column="1"
-                    Background="{DynamicResource Background1}">
+            <Border Grid.Column="1">
                 <ContentControl Content="{Binding CurrentPageViewModel}"
                                 Margin="{Binding PageMargin}" />
             </Border>
@@ -253,9 +263,15 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Border Classes="notification">
-                            <TextBlock Text="{Binding .}"
-                                       Foreground="{StaticResource PrimaryBrush}"
-                                       FontWeight="Medium" />
+                            <Border Background="{DynamicResource MaterialCardBackgroundBrush}"
+                                    CornerRadius="5"
+                                    BorderThickness="2"
+                                    BorderBrush="{DynamicResource MaterialPrimaryMidBrush}">
+                                <TextBlock Text="{Binding .}"
+                                           Padding="5"
+                                           Background="{DynamicResource MaterialCardBackgroundBrush}"
+                                           FontWeight="Medium" />
+                            </Border>
                         </Border>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>

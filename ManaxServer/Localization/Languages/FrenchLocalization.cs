@@ -57,16 +57,10 @@ public class FrenchLocalization : ILocalization
                 "Les paramètres donnée on un problème, corriger le ou forcez le changement."
             },
             { LocalizationKey.ServiceInitialized, "Le service {0} à été initializé." },
-            { LocalizationKey.HubMessageSentAdmins, "Message envoyé à tous les administrateurs:  {0}" },
-            { LocalizationKey.HubMessageSentOwner, "Message envoyé au propriétaire:  {0}" },
             { LocalizationKey.HubMessageSentSingle, "Message envoyé a {0}: {1}" },
             { LocalizationKey.TaskChapterFix, "Vérification du chapitre" },
             { LocalizationKey.TaskPosterFix, "Vérification du poster" },
             { LocalizationKey.TaskSerieFix, "Vérification de la série" },
-            {
-                LocalizationKey.HubMessageErrorAdmins,
-                "Erreur lors de l'envoi de la notification pendant l'envoi de {0} aux administrateurs"
-            },
             { LocalizationKey.SavePointNameExists, "Un point de sauvegarde avec ce chemin '{0}' existe déjà." },
             { LocalizationKey.SavePointPathNotExists, "Le chemin du point de sauvegarde '{0}' n'existe pas." },
             { LocalizationKey.LibraryNameRequired, "Le nom de la librairie est requis." },
@@ -75,7 +69,6 @@ public class FrenchLocalization : ILocalization
             { LocalizationKey.SavePointNone, "Aucun point de sauvegarde disponible." },
             { LocalizationKey.SerieCreationFailed, "La création de la série a échoué." },
             { LocalizationKey.Unauthorized, "Accès non autorisé." },
-            { LocalizationKey.HubMessageErrorOwner, "Erreur lors de l'envoi de la notification au propriétaire {0}" },
             { LocalizationKey.HubMessageErrorSingle, "Erreur lors de l'envoi de la notification a {0} : {1}" },
             { LocalizationKey.PasswordEmpty, "Le mot de passe est requis." },
             { LocalizationKey.PasswordTooShort, "Le mot de passe doit contenir au moins 14 caractères." },

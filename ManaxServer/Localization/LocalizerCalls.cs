@@ -200,18 +200,6 @@ public static partial class Localizer
             serviceName);
     }
 
-    public static string HubMessageSentAdmins(string message)
-    {
-        return string.Format(CultureInfo.InvariantCulture, _currentLocalization[LocalizationKey.HubMessageSentAdmins],
-            message);
-    }
-
-    public static string HubMessageSentOwner(string message)
-    {
-        return string.Format(CultureInfo.InvariantCulture, _currentLocalization[LocalizationKey.HubMessageSentOwner],
-            message);
-    }
-
     public static string HubMessageSentSingle(long user, string message)
     {
         return string.Format(CultureInfo.InvariantCulture, _currentLocalization[LocalizationKey.HubMessageSentSingle],
@@ -232,13 +220,6 @@ public static partial class Localizer
     {
         return _currentLocalization[LocalizationKey.TaskSerieFix];
     }
-
-    public static string HubMessageErrorAdmins(string message)
-    {
-        return string.Format(CultureInfo.InvariantCulture, _currentLocalization[LocalizationKey.HubMessageErrorAdmins],
-            message);
-    }
-
 
     public static string SavePointNameExists(string path)
     {
@@ -280,12 +261,6 @@ public static partial class Localizer
     public static string Unauthorized()
     {
         return _currentLocalization[LocalizationKey.Unauthorized];
-    }
-
-    public static string HubMessageErrorOwner(string methodName)
-    {
-        return string.Format(CultureInfo.InvariantCulture, _currentLocalization[LocalizationKey.HubMessageErrorOwner],
-            methodName);
     }
 
     public static string HubMessageErrorSingle(long user, string methodName)

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using DynamicData;
 using ManaxLibrary;
@@ -15,8 +16,8 @@ public static class TagSource
 {
     public static readonly SourceCache<Tag, long> Tags = new(x => x.Id);
     private static bool _loaded;
-    private static readonly object LoadLock = new();
-    private static readonly object TagLock = new();
+    private static readonly Lock LoadLock = new();
+    private static readonly Lock TagLock = new();
 
     static TagSource()
     {

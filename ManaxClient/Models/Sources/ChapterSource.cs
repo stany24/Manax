@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Threading;
 using DynamicData;
@@ -16,7 +17,7 @@ namespace ManaxClient.Models.Sources;
 public static class ChapterSource
 {
     public static readonly SourceCache<Chapter, long> Chapters = new(x => x.Id);
-    private static readonly object ChaptersLock = new();
+    private static readonly Lock ChaptersLock = new();
 
     static ChapterSource()
     {

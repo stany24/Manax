@@ -12,11 +12,6 @@ public class MockFeatureService:IFeatureService
         return _enabledFeatures.Contains(featureType);
     }
 
-    public bool IsFeatureEnabled(string featureName)
-    {
-        return Enum.TryParse(featureName, out FeatureType featureType) && IsFeatureEnabled(featureType);
-    }
-
     public List<Feature> GetFeatures()
     {
         return _enabledFeatures.Select(f => new Feature { Key = f, Value = true }).ToList();
@@ -33,11 +28,5 @@ public class MockFeatureService:IFeatureService
             _enabledFeatures.Add(featureType);
         else
             _enabledFeatures.Remove(featureType);
-    }
-
-    public void SetFeatureEnabled(string featureName, bool enabled)
-    {
-        if (Enum.TryParse(featureName, out FeatureType featureType))
-            SetFeatureEnabled(featureType, enabled);
     }
 }

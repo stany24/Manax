@@ -300,6 +300,12 @@
     <data name="SettingsAppPage.TertiaryColor" xml:space="preserve">
         <value>Tertiary</value>
     </data>
+    <data name="SettingsAppPage.Language" xml:space="preserve">
+        <value>Language</value>
+    </data>
+    <data name="SettingsAppPage.SelectedLanguage" xml:space="preserve">
+        <value>Selected language</value>
+    </data>
     <data name="SettingsServerPage.Title" xml:space="preserve">
         <value>Server Settings</value>
     </data>
@@ -795,6 +801,60 @@
     <data name="LoginPage.Invalid.Host.Port" xml:space="preserve">
         <value>Invalid host or port</value>
     </data>
+    <data name="ConfigureUploadPage.NoFolderSelected" xml:space="preserve">
+        <value>No folder selected</value>
+    </data>
+    <data name="ConfigureUploadPage.Information" xml:space="preserve">
+        <value>ℹ️ Information</value>
+    </data>
+    <data name="ConfigureUploadPage.Information.Text1" xml:space="preserve">
+        <value>The processing folder is where files from source folders will be copied for processing.</value>
+    </data>
+    <data name="ConfigureUploadPage.Information.Text2" xml:space="preserve">
+        <value>Make sure you have sufficient disk space and write permissions.</value>
+    </data>
+    <data name="AutoCleanupPage.Title" xml:space="preserve">
+        <value>Auto Cleanup</value>
+    </data>
+    <data name="AutoCleanupPage.Subtitle" xml:space="preserve">
+        <value>Automatically process and optimize manga archives</value>
+    </data>
+    <data name="AutoCleanupPage.ArchiveProcessing" xml:space="preserve">
+        <value>Archive Processing</value>
+    </data>
+    <data name="AutoCleanupPage.ImageProcessing" xml:space="preserve">
+        <value>Image Processing</value>
+    </data>
+    <data name="AutoCleanupPage.StartCleanup" xml:space="preserve">
+        <value>Start Cleanup</value>
+    </data>
+    <data name="AutoCleanupPage.Processing" xml:space="preserve">
+        <value>Processing...</value>
+    </data>
+    <data name="AutoCleanupPage.Errors" xml:space="preserve">
+        <value>Errors</value>
+    </data>
+    <data name="ManualCleanupPage.SerieFolders" xml:space="preserve">
+        <value>Serie Folders</value>
+    </data>
+    <data name="ManualCleanupPage.Images" xml:space="preserve">
+        <value>Images</value>
+    </data>
+    <data name="ManualCleanupPage.ToEdit" xml:space="preserve">
+        <value>To Edit</value>
+    </data>
+    <data name="ManualCleanupPage.EditSelected" xml:space="preserve">
+        <value>Edit Selected</value>
+    </data>
+    <data name="ManualCleanupPage.RestoreLastImage" xml:space="preserve">
+        <value>Restore the last image</value>
+    </data>
+    <data name="ConfigureUploadPage.Next" xml:space="preserve">
+        <value>Next</value>
+    </data>
+    <data name="ManualCleanupPage.Next" xml:space="preserve">
+        <value>Next</value>
+    </data>
     <data name="RolePage.Title" xml:space="preserve">
         <value>Role Management</value>
     </data>
@@ -827,5 +887,134 @@
     </data>
     <data name="RoleEditPopup.Name.Placeholder" xml:space="preserve">
         <value>Enter role name</value>
+    </data>
+    <data name="FetchFromSourcePage.Title" xml:space="preserve">
+        <value>Fetch From Source</value>
+    </data>
+    <data name="FetchFromSourcePage.Sources" xml:space="preserve">
+        <value>Sources</value>
+    </data>
+    <data name="FetchFromSourcePage.AddSource" xml:space="preserve">
+        <value>Add Source</value>
+    </data>
+    <data name="FetchFromSourcePage.FetchAll" xml:space="preserve">
+        <value>Fetch All</value>
+    </data>
+    <data name="FetchFromSourcePage.ClearAll" xml:space="preserve">
+        <value>Clear All</value>
+    </data>
+    <data name="FetchFromSourcePage.ProgressOverview" xml:space="preserve">
+        <value>Progress Overview</value>
+    </data>
+    <data name="FetchFromSourcePage.OverallProgress" xml:space="preserve">
+        <value>Overall Progress</value>
+    </data>
+    <data name="FetchFromSourcePage.TotalSources" xml:space="preserve">
+        <value>Total Sources</value>
+    </data>
+    <data name="FetchFromSourcePage.Completed" xml:space="preserve">
+        <value>Completed</value>
+    </data>
+    <data name="FetchFromSourcePage.InProgress" xml:space="preserve">
+        <value>In Progress</value>
+    </data>
+    <data name="FetchFromSourcePage.SourceDetails" xml:space="preserve">
+        <value>Source Details</value>
+    </data>
+    <data name="FetchFromSourcePage.Active" xml:space="preserve">
+        <value>Active</value>
+    </data>
+    <data name="FetchFromSourcePage.FilesProcessed" xml:space="preserve">
+        <value>Files Processed</value>
+    </data>
+    <data name="FetchFromSourcePage.Progress" xml:space="preserve">
+        <value>Progress</value>
+    </data>
+    <data name="FetchFromSourcePage.ProcessingFolder" xml:space="preserve">
+        <value>Processing Folder</value>
+    </data>
+    <data name="FetchFromSourcePage.DestinationPath" xml:space="preserve">
+        <value>Destination Path</value>
+    </data>
+    <data name="FetchFromSourcePage.DestinationPath.Placeholder" xml:space="preserve">
+        <value>Select processing folder...</value>
+    </data>
+    <data name="FetchFromSourcePage.Browse" xml:space="preserve">
+        <value>Browse...</value>
+    </data>
+    <data name="FetchFromSourcePage.FolderInformation" xml:space="preserve">
+        <value>Folder Information</value>
+    </data>
+    <data name="FetchFromSourcePage.Status" xml:space="preserve">
+        <value>Status:</value>
+    </data>
+    <data name="FetchFromSourcePage.Status.Ready" xml:space="preserve">
+        <value>Ready</value>
+    </data>
+    <data name="FetchFromSourcePage.Files" xml:space="preserve">
+        <value>Files:</value>
+    </data>
+    <data name="FetchFromSourcePage.Size" xml:space="preserve">
+        <value>Size:</value>
+    </data>
+    <data name="FetchFromSourcePage.Tip" xml:space="preserve">
+        <value>💡 Files will be copied from source folders to this processing location.</value>
+    </data>
+    <data name="FetchFromSourcePage.OpenFolder" xml:space="preserve">
+        <value>Open Folder</value>
+    </data>
+    <data name="FetchFromSourcePage.ClearFolder" xml:space="preserve">
+        <value>Clear Folder</value>
+    </data>
+    <data name="FetchFromSourcePage.SelectSourceFolder" xml:space="preserve">
+        <value>Select Source Folder</value>
+    </data>
+    <data name="FetchFromSourcePage.SelectProcessingFolder" xml:space="preserve">
+        <value>Select Processing Folder</value>
+    </data>
+    <data name="FetchFromSourcePage.FilesFormat" xml:space="preserve">
+        <value>{0} / {1} files</value>
+    </data>
+    <data name="ConfigureUploadPage.Title" xml:space="preserve">
+        <value>Configure Upload</value>
+    </data>
+    <data name="ConfigureUploadPage.SourceFolders" xml:space="preserve">
+        <value>Source Folders</value>
+    </data>
+    <data name="ConfigureUploadPage.SourceFolders.Description" xml:space="preserve">
+        <value>Folders where manga/chapter files are located</value>
+    </data>
+    <data name="ConfigureUploadPage.AddSource" xml:space="preserve">
+        <value>Add Source</value>
+    </data>
+    <data name="ConfigureUploadPage.RemoveSource" xml:space="preserve">
+        <value>Remove</value>
+    </data>
+    <data name="ConfigureUploadPage.NoSources" xml:space="preserve">
+        <value>No source folders configured. Click "Add Source" to get started.</value>
+    </data>
+    <data name="ConfigureUploadPage.ProcessingFolder" xml:space="preserve">
+        <value>Processing Folder</value>
+    </data>
+    <data name="ConfigureUploadPage.ProcessingFolder.Description" xml:space="preserve">
+        <value>Working directory for processing files before upload</value>
+    </data>
+    <data name="ConfigureUploadPage.Browse" xml:space="preserve">
+        <value>Browse...</value>
+    </data>
+    <data name="ConfigureUploadPage.OpenFolder" xml:space="preserve">
+        <value>Open Folder</value>
+    </data>
+    <data name="ConfigureUploadPage.CurrentPath" xml:space="preserve">
+        <value>Current Path</value>
+    </data>
+    <data name="ConfigureUploadPage.SelectFolder" xml:space="preserve">
+        <value>Select Folder</value>
+    </data>
+    <data name="ConfigureUploadPage.Settings" xml:space="preserve">
+        <value>Upload Settings</value>
+    </data>
+    <data name="ConfigureUploadPage.SaveSettings" xml:space="preserve">
+        <value>Settings are saved automatically</value>
     </data>
 </root>

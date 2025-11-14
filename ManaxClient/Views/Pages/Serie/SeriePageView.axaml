@@ -65,19 +65,16 @@
 
                         <Grid ColumnDefinitions="*,Auto" ColumnSpacing="16">
                             <StackPanel Grid.Column="0" Spacing="8">
-                                <Border Background="{StaticResource InfoBrush}"
-                                        CornerRadius="12"
+                                <Border CornerRadius="12"
                                         Padding="8,4"
                                         HorizontalAlignment="Left">
                                     <TextBlock Text="{Binding Serie.Status}"
-                                               Foreground="{DynamicResource TextColor1}"
                                                FontSize="12"
                                                FontWeight="Medium" />
                                 </Border>
 
                                 <TextBlock Text="{localization1:LocalizeFormat SeriePage.ChapterCount,
-                                               Param1={Binding $parent[UserControl].((page:SeriePageViewModel)DataContext).Serie.Chapters.Count}}"
-                                           Foreground="{StaticResource SecondaryBrush}" />
+                                               Param1={Binding $parent[UserControl].((page:SeriePageViewModel)DataContext).Serie.Chapters.Count}}"/>
                             </StackPanel>
 
                         </Grid>
@@ -89,8 +86,89 @@
 
                     <Border Classes="card">
                         <TextBlock Text="{Binding Serie.Description}"
-                                   TextWrapping="Wrap"
-                                   Foreground="{DynamicResource TextColor1}" />
+                                   TextWrapping="Wrap"/>
+                    </Border>
+
+                    <Border Classes="card">
+                        <StackPanel Spacing="12">
+                            <TextBlock Classes="subtitle" Text="{localization:Localize SeriePage.Tags}" Margin="0" />
+                            
+                            <Border CornerRadius="8"
+                                    Padding="12"
+                                    IsVisible="{Binding !Serie.Tags.Count}">
+                                <StackPanel Spacing="8" HorizontalAlignment="Center">
+                                    <TextBlock Text="🏷️" FontSize="32" HorizontalAlignment="Center" />
+                                    <TextBlock Text="{localization:Localize SeriePage.NoTags}"
+                                               FontWeight="Medium"
+                                               HorizontalAlignment="Center" />
+                                </StackPanel>
+                            </Border>
+
+                            <ItemsControl ItemsSource="{Binding Serie.Tags}"
+                                          IsVisible="{Binding Serie.Tags.Count}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel Orientation="Horizontal" />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border
+                                            BorderBrush="{Binding Color, Converter={StaticResource ColorToBrushConverter}}"
+                                            BorderThickness="2"
+                                            CornerRadius="16"
+                                            Margin="4"
+                                            Padding="12,6">
+                                            <TextBlock Text="{Binding Name}"
+                                                       FontSize="13"
+                                                       FontWeight="Medium" />
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Classes="card">
+                        <StackPanel Spacing="12">
+                            <TextBlock Classes="subtitle" Text="{localization:Localize SeriePage.Persons}" Margin="0" />
+                            
+                            <Border CornerRadius="8"
+                                    Padding="12"
+                                    IsVisible="{Binding !Serie.Persons.Count}">
+                                <StackPanel Spacing="8" HorizontalAlignment="Center">
+                                    <TextBlock Text="👤" FontSize="32" HorizontalAlignment="Center" />
+                                    <TextBlock Text="{localization:Localize SeriePage.NoPersons}"
+                                               FontWeight="Medium"
+                                               HorizontalAlignment="Center" />
+                                </StackPanel>
+                            </Border>
+
+                            <ItemsControl ItemsSource="{Binding Serie.Persons}"
+                                          IsVisible="{Binding Serie.Persons.Count}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel Orientation="Horizontal" />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border BorderThickness="2"
+                                                CornerRadius="16"
+                                                Margin="4"
+                                                Padding="12,6">
+                                            <StackPanel Spacing="4">
+                                                <TextBlock Text="{Binding FullName}"
+                                                           FontSize="13"
+                                                           FontWeight="Medium" />
+                                                <TextBlock Text="{Binding Role.Name}"
+                                                           FontSize="11"/>
+                                            </StackPanel>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
                     </Border>
 
                     <Border Classes="card">
@@ -186,8 +264,7 @@
                         <StackPanel Spacing="16">
                             <TextBlock Classes="subtitle" Text="{localization:Localize SeriePage.Chapters}" Margin="0" />
 
-                            <Border Background="{DynamicResource Background2}"
-                                    CornerRadius="8"
+                            <Border CornerRadius="8"
                                     Padding="12"
                                     IsVisible="{Binding !Serie.Chapters.Count}">
                                 <StackPanel Spacing="8" HorizontalAlignment="Center">
@@ -195,8 +272,7 @@
                                     <TextBlock Text="{localization:Localize SeriePage.NoChaptersAvailable}"
                                                FontWeight="Medium" />
                                     <TextBlock Text="{localization:Localize SeriePage.NoChaptersDescription}"
-                                               FontSize="12"
-                                               Foreground="{StaticResource SecondaryBrush}" />
+                                               FontSize="12"/>
                                 </StackPanel>
                             </Border>
 
@@ -208,11 +284,6 @@
                                                 Padding="8"
                                                 CornerRadius="8"
                                                 Margin="0,2">
-                                            <Border.Styles>
-                                                <Style Selector="Border:pointerover">
-                                                    <Setter Property="Background" Value="{DynamicResource Background1}" />
-                                                </Style>
-                                            </Border.Styles>
                                             <previews:ChapterPreview
                                                 Command="{Binding $parent[UserControl].((page:SeriePageViewModel)DataContext).MoveToChapterPage}"
                                                 CommandParameter="{Binding .}"

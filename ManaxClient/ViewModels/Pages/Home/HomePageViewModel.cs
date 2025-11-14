@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.IO;
 using Avalonia;
 using Avalonia.Controls;
@@ -77,12 +78,12 @@ public partial class HomePageViewModel : PageViewModel
             if (uploadSerieResponse.Failed)
             {
                 InfoEmitted?.Invoke(this, 
-                    string.Format(Localizer.Get("HomePage.UploadFailure"),Path.GetDirectoryName(folderPath)));
+                    string.Format(CultureInfo.InvariantCulture, Localizer.Get("HomePage.UploadFailure"),Path.GetDirectoryName(folderPath)));
                 Logger.LogFailure("Failed to upload series: " + uploadSerieResponse.Error);
                 return;
             }
             InfoEmitted?.Invoke(this, 
-                string.Format(Localizer.Get("HomePage.UploadSuccess"), Path.GetDirectoryName(folderPath)));
+                string.Format(CultureInfo.InvariantCulture, Localizer.Get("HomePage.UploadSuccess"), Path.GetDirectoryName(folderPath)));
             Logger.LogInfo("Serie upload successful");
         }
         catch (Exception e)

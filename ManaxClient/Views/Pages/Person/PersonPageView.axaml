@@ -19,8 +19,7 @@
                 <StackPanel Grid.Column="0" Orientation="Vertical">
                     <TextBlock Classes="title" Text="{localization:Localize PersonPage.Title}" />
                     <TextBlock Text="{localization1:LocalizeFormat PersonPage.PersonsCount,
-                                   Param1={Binding $parent[UserControl].((page:PersonPageViewModel)DataContext).Persons.Count}}"
-                               Foreground="{StaticResource SecondaryBrush}" />
+                                   Param1={Binding $parent[UserControl].((page:PersonPageViewModel)DataContext).Persons.Count}}"/>
                 </StackPanel>
 
                 <Button Grid.Column="1"
@@ -45,8 +44,7 @@
                                FontWeight="Medium"
                                HorizontalAlignment="Center" />
                     <TextBlock Text="{localization:Localize PersonPage.NoPersons.Description}"
-                               TextAlignment="Center"
-                               Foreground="{StaticResource SecondaryBrush}" />
+                               TextAlignment="Center"/>
                     <Button Classes="primary"
                             IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).CanWritePeople}"
                             Command="{Binding CreatePerson}"
@@ -66,16 +64,13 @@
                     <ItemsControl ItemsSource="{Binding Persons}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate x:DataType="models:Person">
-                                <Border Background="{DynamicResource Background1}"
-                                        BorderBrush="{DynamicResource Background2}"
-                                        BorderThickness="1"
+                                <Border BorderThickness="1"
                                         CornerRadius="8"
                                         Padding="16"
                                         Margin="0,4">
                                     <Grid ColumnDefinitions="Auto,*,Auto,Auto,Auto" ColumnSpacing="16">
 
                                         <Border Grid.Column="0"
-                                                Background="{StaticResource WarningBrush}"
                                                 CornerRadius="20"
                                                 Width="40"
                                                 Height="40">
@@ -96,18 +91,15 @@
                                             </TextBlock>
                                             <TextBlock Text="{Binding Pseudonym}"
                                                        IsVisible="{Binding Pseudonym, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
-                                                       Foreground="{StaticResource SecondaryBrush}"
                                                        FontSize="12"
                                                        FontStyle="Italic" />
                                         </StackPanel>
 
                                         <Border Grid.Column="2"
-                                                Background="{StaticResource SuccessBrush}"
                                                 CornerRadius="12"
                                                 Padding="8,4"
                                                 VerticalAlignment="Center">
                                             <TextBlock Text="{Binding Role.Name}"
-                                                       Foreground="{DynamicResource TextColor1}"
                                                        FontSize="12"
                                                        FontWeight="Bold" />
                                         </Border>
@@ -144,8 +136,7 @@
                 <StackPanel Grid.Column="0" Orientation="Vertical">
                     <TextBlock Classes="title" Text="{localization:Localize RolePage.Title}" />
                     <TextBlock Text="{localization1:LocalizeFormat RolePage.RolesCount,
-                                   Param1={Binding $parent[UserControl].((page:PersonPageViewModel)DataContext).Roles.Count}}"
-                               Foreground="{StaticResource SecondaryBrush}" />
+                                   Param1={Binding $parent[UserControl].((page:PersonPageViewModel)DataContext).Roles.Count}}"/>
                 </StackPanel>
 
                 <Button Grid.Column="1"
@@ -170,8 +161,7 @@
                                FontWeight="Medium"
                                HorizontalAlignment="Center" />
                     <TextBlock Text="{localization:Localize RolePage.NoRoles.Description}"
-                               TextAlignment="Center"
-                               Foreground="{StaticResource SecondaryBrush}" />
+                               TextAlignment="Center"/>
                     <Button Classes="primary"
                             IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).CanWriteRoles}"
                             Command="{Binding CreateRole}"
@@ -191,16 +181,13 @@
                     <ItemsControl ItemsSource="{Binding Roles}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate x:DataType="models:Role">
-                                <Border Background="{DynamicResource Background1}"
-                                        BorderBrush="{DynamicResource Background2}"
-                                        BorderThickness="1"
+                                <Border BorderThickness="1"
                                         CornerRadius="8"
                                         Padding="16"
                                         Margin="0,4">
                                     <Grid ColumnDefinitions="Auto,*,Auto,Auto" ColumnSpacing="16">
 
                                         <Border Grid.Column="0"
-                                                Background="{StaticResource WarningBrush}"
                                                 CornerRadius="20"
                                                 Width="40"
                                                 Height="40">
@@ -212,7 +199,6 @@
 
                                         <StackPanel Grid.Column="1" Orientation="Vertical" VerticalAlignment="Center">
                                             <TextBlock Text="{Binding Name}"
-                                                       Foreground="{DynamicResource TextColor1}"
                                                        FontWeight="Bold"
                                                        FontSize="16" />
                                         </StackPanel>

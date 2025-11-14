@@ -14,9 +14,31 @@
 
             <StackPanel Orientation="Vertical">
                 <TextBlock Classes="title" Text="{localization:Localize SettingsAppPage.Title}" />
-                <TextBlock Text="{localization:Localize SettingsAppPage.Subtitle}"
-                           Foreground="{StaticResource SecondaryBrush}" />
+                <TextBlock Text="{localization:Localize SettingsAppPage.Subtitle}" />
             </StackPanel>
+            
+            <Border Classes="card">
+                <StackPanel Spacing="20">
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <TextBlock Text="🌍" FontSize="20" />
+                        <TextBlock Classes="subtitle" Text="{localization:Localize SettingsAppPage.Language}" Margin="0" />
+                    </StackPanel>
+
+                    <Grid ColumnDefinitions="*" RowDefinitions="Auto" RowSpacing="16">
+                        <StackPanel Grid.Column="0" Grid.Row="0" Spacing="6">
+                            <TextBlock Text="{localization:Localize SettingsAppPage.SelectedLanguage}" FontWeight="Medium" />
+                            <ComboBox ItemsSource="{Binding AvailableLanguages}"
+                                      SelectedItem="{Binding SelectedLanguage}"
+                                      DisplayMemberBinding="{Binding DisplayName}"
+                                      HorizontalAlignment="Stretch"
+                                      MinWidth="200"
+                                      Padding="8,6"
+                                      CornerRadius="6"
+                                      BorderThickness="1"/>
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+            </Border>
 
             <Border Classes="card">
                 <StackPanel Spacing="20">
@@ -44,14 +66,13 @@
                     <Grid ColumnDefinitions="*" RowDefinitions="Auto,Auto" RowSpacing="16">
                         <StackPanel Grid.Column="0" Grid.Row="0" Spacing="6">
                             <TextBlock Text="{localization:Localize SettingsAppPage.SelectedTheme}" FontWeight="Medium" />
-                            <ComboBox SelectedItem="{Binding SelectedTheme}"
+                            <ComboBox SelectedItem="{Binding SelectedThemeSettingsData}"
                                       ItemsSource="{Binding AvailableThemes}"
                                       HorizontalAlignment="Stretch">
                                 <ComboBox.ItemTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal" Spacing="8">
-                                            <Border Width="16" Height="16" CornerRadius="8"
-                                                    Background="{Binding PrimaryColor}" />
+                                            <Border Width="16" Height="16" CornerRadius="8"/>
                                             <TextBlock Text="{Binding Name}" />
                                         </StackPanel>
                                     </DataTemplate>
@@ -65,24 +86,16 @@
                                 <Border Classes="card" Margin="4" Width="140" Height="70">
                                     <StackPanel Spacing="4">
                                         <TextBlock Text="{localization:Localize SettingsAppPage.PrimaryColor}" FontSize="12" FontWeight="Medium" />
-                                        <Rectangle Height="20" Fill="{Binding SelectedTheme.PrimaryColor}" />
-                                        <TextBlock Text="{Binding SelectedTheme.PrimaryColor.Color}" FontSize="10" />
+                                        <Rectangle Height="20" Fill="{Binding SelectedThemeSettingsData.PrimaryColor}" />
+                                        <TextBlock Text="{Binding SelectedThemeSettingsData.PrimaryColor.Color}" FontSize="10" />
                                     </StackPanel>
                                 </Border>
 
                                 <Border Classes="card" Margin="4" Width="140" Height="70">
                                     <StackPanel Spacing="4">
                                         <TextBlock Text="{localization:Localize SettingsAppPage.SecondaryColor}" FontSize="12" FontWeight="Medium" />
-                                        <Rectangle Height="20" Fill="{Binding SelectedTheme.SecondaryColor}" />
-                                        <TextBlock Text="{Binding SelectedTheme.SecondaryColor.Color}" FontSize="10" />
-                                    </StackPanel>
-                                </Border>
-
-                                <Border Classes="card" Margin="4" Width="140" Height="70">
-                                    <StackPanel Spacing="4">
-                                        <TextBlock Text="{localization:Localize SettingsAppPage.TertiaryColor}" FontSize="12" FontWeight="Medium" />
-                                        <Rectangle Height="20" Fill="{Binding SelectedTheme.TertiaryColor}" />
-                                        <TextBlock Text="{Binding SelectedTheme.TertiaryColor.Color}" FontSize="10" />
+                                        <Rectangle Height="20" Fill="{Binding SelectedThemeSettingsData.SecondaryColor}" />
+                                        <TextBlock Text="{Binding SelectedThemeSettingsData.SecondaryColor.Color}" FontSize="10" />
                                     </StackPanel>
                                 </Border>
                             </WrapPanel>

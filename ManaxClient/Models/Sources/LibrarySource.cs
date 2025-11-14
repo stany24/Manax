@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using DynamicData;
 using ManaxLibrary;
@@ -14,8 +15,8 @@ public static class LibrarySource
 {
     public static readonly SourceCache<Library, long> Libraries = new(x => x.Id);
     private static bool _loaded;
-    private static readonly object LoadLock = new();
-    private static readonly object LibrariesLock = new();
+    private static readonly Lock LoadLock = new();
+    private static readonly Lock LibrariesLock = new();
 
     static LibrarySource()
     {

@@ -52,6 +52,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <PackageReference Include="Aspose.Zip" Version="25.11.0" />
         <PackageReference Include="Avalonia" Version="11.3.8" />
         <PackageReference Include="Avalonia.Controls.ColorPicker" Version="11.3.8" />
         <PackageReference Include="Avalonia.Desktop" Version="11.3.8" />
@@ -63,8 +64,10 @@
         <PackageReference Include="DynamicData" Version="9.4.1"/>
         <PackageReference Include="Jeek.Avalonia.Localization" Version="1.3.1" />
         <PackageReference Include="LiveChartsCore.SkiaSharpView.Avalonia" Version="2.0.0-rc6.1" />
+        <PackageReference Include="Magick.NET-Q8-AnyCPU" Version="14.9.1" />
+        <PackageReference Include="Material.Avalonia" Version="3.13.3" />
         <PackageReference Include="nulastudio.NetBeauty" Version="2.1.5"/>
-        <PackageReference Include="Xaml.Behaviors.Avalonia" Version="11.3.6.6" />
+        <PackageReference Include="Xaml.Behaviors.Avalonia" Version="11.3.8.1" />
     </ItemGroup>
 
     <ItemGroup>
@@ -141,8 +144,64 @@
           <AutoGen>True</AutoGen>
           <DependentUpon>Resources.fr.resx</DependentUpon>
         </Compile>
+        <Compile Update="Views\Pages\Upload\UploadPageView.axaml.cs">
+          <DependentUpon>TagPageView.axaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\Pages\Upload\Tab\AutoCleanupTabView.axaml.cs">
+          <DependentUpon>UploadPageView.axaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\Pages\Upload\Tab\FetchFromSourceTabView.axaml.cs">
+          <DependentUpon>FetchFromSourcePageView.axaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\Pages\Upload\Tab\UserEditTabView.axaml.cs">
+          <DependentUpon>UserEditPageView.axaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\Pages\Upload\Tab\AutoUploadTabView.axaml.cs">
+          <DependentUpon>AutoUploadPageView.axaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\Pages\Upload\Tab\ManualUploadTabView.axaml.cs">
+          <DependentUpon>ManualUploadPageView.axaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\Pages\Upload\Tab\ConfigureUploadTabView.axaml.cs">
+          <DependentUpon>ConfigureUploadTabView.axaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
         <Compile Update="Views\Pages\Person\PersonPageView.axaml.cs">
           <DependentUpon>RankPageView.axaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\Pages\Upload\UploadPageView.axaml.cs">
+          <DependentUpon>TagPageView.axaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\Pages\Upload\Tab\AutoCleanupTabView.axaml.cs">
+          <DependentUpon>UploadPageView.axaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\Pages\Upload\Tab\FetchFromSourceTabView.axaml.cs">
+          <DependentUpon>FetchFromSourcePageView.axaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\Pages\Upload\Tab\ManualCleanupTabView.axaml.cs">
+          <DependentUpon>UserEditPageView.axaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\Pages\Upload\Tab\AutoUploadTabView.axaml.cs">
+          <DependentUpon>AutoUploadPageView.axaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\Pages\Upload\Tab\ManualUploadTabView.axaml.cs">
+          <DependentUpon>ManualUploadPageView.axaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\Pages\Upload\Tab\ConfigureUploadTabView.axaml.cs">
+          <DependentUpon>ConfigureUploadTabView.axaml</DependentUpon>
           <SubType>Code</SubType>
         </Compile>
     </ItemGroup>

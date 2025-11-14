@@ -16,27 +16,24 @@
 
             <StackPanel Orientation="Vertical">
                 <TextBlock Classes="title" Text="{localization:Localize SettingsFeaturesPage.Title}" />
-                <TextBlock Text="{localization:Localize SettingsFeaturesPage.Subtitle}"
-                           Foreground="{StaticResource SecondaryBrush}" />
+                <TextBlock Text="{localization:Localize SettingsFeaturesPage.Subtitle}"/>
             </StackPanel>
 
             <!-- Success/Error Messages -->
-            <Border Classes="card" Background="{StaticResource SuccessBrush}" 
+            <Border Classes="card"
                     IsVisible="{Binding Success, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
                 <StackPanel Orientation="Horizontal" Spacing="12">
                     <TextBlock Text="✅" FontSize="20" />
-                    <TextBlock Text="{Binding Success}" 
-                               Foreground="White"
+                    <TextBlock Text="{Binding Success}"
                                FontWeight="Medium" />
                 </StackPanel>
             </Border>
 
-            <Border Classes="card" Background="{StaticResource ErrorBrush}"
+            <Border Classes="card"
                     IsVisible="{Binding Problem, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
                 <StackPanel Orientation="Horizontal" Spacing="12">
                     <TextBlock Text="❌" FontSize="20" />
                     <TextBlock Text="{Binding Problem}" 
-                               Foreground="White"
                                FontWeight="Medium" />
                 </StackPanel>
             </Border>
@@ -78,7 +75,6 @@
                                 <!-- Feature Description -->
                                 <TextBlock Grid.Column="0" Grid.Row="1"
                                            Text="{Binding Description}"
-                                           Foreground="{StaticResource SecondaryBrush}"
                                            TextWrapping="Wrap"
                                            FontSize="14" />
                             </Grid>

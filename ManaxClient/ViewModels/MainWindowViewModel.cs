@@ -21,6 +21,7 @@ using ManaxClient.ViewModels.Pages.Rank;
 using ManaxClient.ViewModels.Pages.Settings;
 using ManaxClient.ViewModels.Pages.Stats;
 using ManaxClient.ViewModels.Pages.Tag;
+using ManaxClient.ViewModels.Pages.Upload;
 using ManaxClient.ViewModels.Pages.User;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
@@ -228,5 +229,10 @@ public partial class MainWindowViewModel : ObservableObject
     public void ChangePageServerStats()
     {
         SetPage(new ServerStatsPageViewModel());
+    }
+    
+    public void ChangeUploadPage()
+    {
+        SetPage(new UploadPageViewModel());
     }
 }

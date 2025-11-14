@@ -15,27 +15,23 @@
                 <TextBlock
                     Text="{localization:Localize PersonEditPopup.Title}"
                     FontSize="18"
-                    FontWeight="Bold"
-                    Foreground="#212529" />
+                    FontWeight="Bold"/>
                 <TextBlock
                     Text="{localization:Localize PersonEditPopup.Description}"
-                    FontSize="12"
-                    Foreground="#6C757D" />
+                    FontSize="12"/>
             </StackPanel>
         </StackPanel>
 
         <StackPanel Grid.Row="1" Spacing="8">
             <TextBlock
                 Text="{localization:Localize PersonEditPopup.FirstName}"
-                FontWeight="Medium"
-                Foreground="#495057" />
+                FontWeight="Medium"/>
             <TextBox
                 Text="{Binding FirstName}"
                 Watermark="{localization:Localize PersonEditPopup.FirstName.Placeholder}"
                 Padding="12"
                 CornerRadius="8"
                 BorderThickness="1"
-                BorderBrush="#DEE2E6"
                 FontSize="14">
                 <TextBox.Styles>
                     <Style Selector="TextBox:pointerover">
@@ -51,15 +47,13 @@
         <StackPanel Grid.Row="2" Spacing="8">
             <TextBlock
                 Text="{localization:Localize PersonEditPopup.LastName}"
-                FontWeight="Medium"
-                Foreground="#495057" />
+                FontWeight="Medium"/>
             <TextBox
                 Text="{Binding LastName}"
                 Watermark="{localization:Localize PersonEditPopup.LastName.Placeholder}"
                 Padding="12"
                 CornerRadius="8"
                 BorderThickness="1"
-                BorderBrush="#DEE2E6"
                 FontSize="14">
                 <TextBox.Styles>
                     <Style Selector="TextBox:pointerover">
@@ -75,8 +69,7 @@
         <StackPanel Grid.Row="3" Spacing="8">
             <TextBlock
                 Text="{localization:Localize PersonEditPopup.Pseudonym}"
-                FontWeight="Medium"
-                Foreground="#495057" />
+                FontWeight="Medium"/>
             <TextBox
                 Text="{Binding Pseudonym}"
                 Watermark="{localization:Localize PersonEditPopup.Pseudonym.Placeholder}"
@@ -99,8 +92,7 @@
         <StackPanel Grid.Row="4" Spacing="8">
             <TextBlock
                 Text="{localization:Localize PersonEditPopup.Role}"
-                FontWeight="Medium"
-                Foreground="#495057" />
+                FontWeight="Medium"/>
             <ComboBox
                 SelectedItem="{Binding Role}"
                 ItemsSource="{Binding Roles}"

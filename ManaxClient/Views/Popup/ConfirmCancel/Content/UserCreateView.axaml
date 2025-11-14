@@ -15,44 +15,31 @@
                 <TextBlock
                     Text="{localization:Localize UserCreatePopup.Title}"
                     FontSize="18"
-                    FontWeight="Bold"
-                    Foreground="#212529" />
+                    FontWeight="Bold"/>
                 <TextBlock
                     Text="{localization:Localize UserCreatePopup.Description}"
-                    FontSize="12"
-                    Foreground="#6C757D" />
+                    FontSize="12"/>
             </StackPanel>
         </StackPanel>
 
         <StackPanel Grid.Row="1" Spacing="8">
             <TextBlock
                 Text="{localization:Localize UserCreatePopup.Username}"
-                FontWeight="Medium"
-                Foreground="#495057" />
+                FontWeight="Medium"/>
             <TextBox
                 Text="{Binding Username}"
                 Watermark="{localization:Localize UserCreatePopup.Username.Placeholder}"
                 Padding="12"
                 CornerRadius="8"
                 BorderThickness="1"
-                BorderBrush="#DEE2E6"
                 FontSize="14">
-                <TextBox.Styles>
-                    <Style Selector="TextBox:pointerover">
-                        <Setter Property="BorderBrush" Value="#007ACC" />
-                    </Style>
-                    <Style Selector="TextBox:focus">
-                        <Setter Property="BorderBrush" Value="#007ACC" />
-                    </Style>
-                </TextBox.Styles>
             </TextBox>
         </StackPanel>
 
         <StackPanel Grid.Row="2" Spacing="8">
             <TextBlock
                 Text="{localization:Localize UserCreatePopup.Password}"
-                FontWeight="Medium"
-                Foreground="#495057" />
+                FontWeight="Medium"/>
             <TextBox
                 Text="{Binding Password}"
                 Watermark="{localization:Localize UserCreatePopup.Password.Placeholder}"
@@ -60,47 +47,26 @@
                 Padding="12"
                 CornerRadius="8"
                 BorderThickness="1"
-                BorderBrush="#DEE2E6"
                 FontSize="14">
-                <TextBox.Styles>
-                    <Style Selector="TextBox:pointerover">
-                        <Setter Property="BorderBrush" Value="#007ACC" />
-                    </Style>
-                    <Style Selector="TextBox:focus">
-                        <Setter Property="BorderBrush" Value="#007ACC" />
-                    </Style>
-                </TextBox.Styles>
             </TextBox>
         </StackPanel>
 
         <StackPanel Grid.Row="3" Spacing="8">
             <TextBlock
                 Text="{localization:Localize UserCreatePopup.Role}"
-                FontWeight="Medium"
-                Foreground="#495057" />
+                FontWeight="Medium"/>
             <ComboBox
                 ItemsSource="{Binding Roles}"
                 SelectedItem="{Binding SelectedRole}"
                 HorizontalAlignment="Stretch"
                 Padding="12"
                 CornerRadius="8"
-                BorderThickness="1"
-                BorderBrush="#DEE2E6">
-                <ComboBox.Styles>
-                    <Style Selector="ComboBox:pointerover">
-                        <Setter Property="BorderBrush" Value="#007ACC" />
-                    </Style>
-                    <Style Selector="ComboBox:focus">
-                        <Setter Property="BorderBrush" Value="#007ACC" />
-                    </Style>
-                </ComboBox.Styles>
+                BorderThickness="1">
             </ComboBox>
         </StackPanel>
 
         <Border
             Grid.Row="4"
-            Background="#FFF3CD"
-            BorderBrush="#FFC107"
             BorderThickness="1"
             CornerRadius="8"
             Padding="12">
@@ -109,8 +75,7 @@
                 <TextBlock
                     Text="{localization:Localize UserCreatePopup.Tip}"
                     TextWrapping="Wrap"
-                    FontSize="12"
-                    Foreground="#495057" />
+                    FontSize="12"/>
             </StackPanel>
         </Border>
     </Grid>

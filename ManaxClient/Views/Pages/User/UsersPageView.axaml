@@ -19,8 +19,7 @@
                 <StackPanel Grid.Column="0" Orientation="Vertical">
                     <TextBlock Classes="title" Text="{localization:Localize UserPage.Management}" />
                     <TextBlock Text="{localization1:LocalizeFormat UserPage.Count,
-                                   Param1={Binding $parent[UserControl].((page:UsersPageViewModel)DataContext).Users.Count}}"
-                               Foreground="{StaticResource SecondaryBrush}" />
+                                   Param1={Binding $parent[UserControl].((page:UsersPageViewModel)DataContext).Users.Count}}"/>
                 </StackPanel>
 
                 <Button Grid.Column="1"
@@ -45,8 +44,7 @@
                                FontWeight="Medium"
                                HorizontalAlignment="Center" />
                     <TextBlock Text="{localization:Localize UserPage.NoUsers.Description}"
-                               TextAlignment="Center"
-                               Foreground="{StaticResource SecondaryBrush}" />
+                               TextAlignment="Center"/>
                     <Button Classes="primary"
                             IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).CanWriteUsers}"
                             Command="{Binding CreateUser}"
@@ -66,16 +64,13 @@
                     <ItemsControl ItemsSource="{Binding Users}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <Border Background="{DynamicResource Background1}"
-                                        BorderBrush="{DynamicResource Background2}"
-                                        BorderThickness="1"
+                                <Border BorderThickness="1"
                                         CornerRadius="8"
                                         Padding="16"
                                         Margin="0,4">
                                     <Grid ColumnDefinitions="Auto,*,Auto,Auto,Auto,Auto" ColumnSpacing="16">
 
                                         <Border Grid.Column="0"
-                                                Background="{StaticResource PrimaryBrush}"
                                                 CornerRadius="20"
                                                 Width="40"
                                                 Height="40">
@@ -90,17 +85,14 @@
                                                        FontWeight="Bold"
                                                        FontSize="16" />
                                             <TextBlock Text="{Binding Id, StringFormat='ID: {0}'}"
-                                                       Foreground="{StaticResource SecondaryBrush}"
                                                        FontSize="12" />
                                         </StackPanel>
 
                                         <Border Grid.Column="2"
-                                                Background="{StaticResource InfoBrush}"
                                                 CornerRadius="12"
                                                 Padding="8,4"
                                                 VerticalAlignment="Center">
                                             <TextBlock Text="{Binding Role}"
-                                                       Foreground="{DynamicResource TextColor1}"
                                                        FontSize="12"
                                                        FontWeight="Medium" />
                                         </Border>

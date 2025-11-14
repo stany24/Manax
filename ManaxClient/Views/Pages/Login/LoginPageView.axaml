@@ -7,8 +7,7 @@
     xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Pages.Login.LoginPageView"
-    x:DataType="page:LoginPageViewModel"
-    Background="{DynamicResource Background1}">
+    x:DataType="page:LoginPageViewModel">
 
     <Grid>
         <ComboBox HorizontalAlignment="Right" 
@@ -20,9 +19,7 @@
                   DisplayMemberBinding="{Binding DisplayName}"
                   Padding="8,6"
                   CornerRadius="6"
-                  BorderThickness="1"
-                  BorderBrush="{DynamicResource Background3}"
-                  Background="{DynamicResource Background2}" />
+                  BorderThickness="1"/>
         
         <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
             <Border Classes="card" MaxWidth="400" MinWidth="350">
@@ -35,42 +32,36 @@
                             <TextBlock Text="📺" FontSize="48" HorizontalAlignment="Center" />
                             <TextBlock Classes="title" Text="{localization:Localize LoginPage.Title}" HorizontalAlignment="Center" />
                             <TextBlock Text="{localization:Localize LoginPage.Subtitle}"
-                                       HorizontalAlignment="Center"
-                                       Foreground="{DynamicResource SecondaryBrush}" />
+                                       HorizontalAlignment="Center"/>
                         </StackPanel>
 
                         <StackPanel Spacing="16">
                             <StackPanel Spacing="6">
                                 <TextBlock Text="{localization:Localize LoginPage.Username}"
-                                           FontWeight="Medium"
-                                           Foreground="{DynamicResource SecondaryBrush}" />
+                                           FontWeight="Medium"/>
                                 <TextBox Name="TbxUsername"
                                          Loaded="TbxUsername_OnLoaded"
                                          Text="{Binding Username}"
                                          Watermark="{localization:Localize LoginPage.Username.Placeholder}"
                                          Padding="12"
                                          CornerRadius="8"
-                                         BorderThickness="1"
-                                         BorderBrush="{DynamicResource Background3}" />
+                                         BorderThickness="1"/>
                             </StackPanel>
 
                             <StackPanel Spacing="6">
                                 <TextBlock Text="{localization:Localize LoginPage.Password}"
-                                           FontWeight="Medium"
-                                           Foreground="{DynamicResource SecondaryBrush}" />
+                                           FontWeight="Medium"/>
                                 <TextBox Text="{Binding Password}"
                                          PasswordChar="•"
                                          Watermark="{localization:Localize LoginPage.Password.Placeholder}"
                                          Padding="12"
                                          CornerRadius="8"
-                                         BorderThickness="1"
-                                         BorderBrush="{DynamicResource Background3}" />
+                                         BorderThickness="1"/>
                             </StackPanel>
 
                             <StackPanel Spacing="6">
                                 <TextBlock Text="{localization:Localize LoginPage.Server}"
-                                           FontWeight="Medium"
-                                           Foreground="{DynamicResource SecondaryBrush}" />
+                                           FontWeight="Medium"/>
                                 <Grid
                                     ColumnDefinitions="*,Auto,Auto">
                                     <TextBox Text="{Binding Host}"
@@ -78,8 +69,7 @@
                                              Watermark="{localization:Localize LoginPage.Server.Placeholder}"
                                              Padding="12"
                                              CornerRadius="8"
-                                             BorderThickness="1"
-                                             BorderBrush="{DynamicResource Background3}" />
+                                             BorderThickness="1"/>
                                     <Label Content=":"
                                            Grid.Column="1"
                                            VerticalAlignment="Center" />
@@ -91,8 +81,7 @@
                                                    Watermark="8080"
                                                    Padding="12"
                                                    CornerRadius="8"
-                                                   BorderThickness="1"
-                                                   BorderBrush="{DynamicResource Background3}" />
+                                                   BorderThickness="1"/>
                                 </Grid>
                             </StackPanel>
                         </StackPanel>
@@ -111,18 +100,15 @@
                             </StackPanel>
                         </Button>
 
-                        <Border Background="{DynamicResource Background2}"
-                                CornerRadius="8"
+                        <Border CornerRadius="8"
                                 Padding="12">
                             <StackPanel Spacing="8">
                                 <TextBlock Text="{localization:Localize LoginPage.Tip.Title}"
-                                           FontWeight="Bold"
-                                           Foreground="{DynamicResource InfoBrush}" />
+                                           FontWeight="Bold"/>
                                 <TextBlock
                                     Text="{localization:Localize LoginPage.Tip.Message}"
                                     TextWrapping="Wrap"
-                                    FontSize="12"
-                                    Foreground="{DynamicResource SecondaryBrush}" />
+                                    FontSize="12"/>
                             </StackPanel>
                         </Border>
                     </StackPanel>

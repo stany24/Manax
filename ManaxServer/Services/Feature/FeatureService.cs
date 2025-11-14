@@ -22,11 +22,6 @@ public class FeatureService
         return _features.TryGetValue(featureType, out bool enabled) && enabled;
     }
 
-    public bool IsFeatureEnabled(string featureName)
-    {
-        return Enum.TryParse(featureName, out FeatureType featureType) && IsFeatureEnabled(featureType);
-    }
-
     public List<ManaxLibrary.DTO.Feature.Feature> GetFeatures()
     {
         return _features
@@ -63,16 +58,10 @@ public class FeatureService
 
     public void SetFeatureEnabled(FeatureType featureType, bool enabled)
     {
-        SetFeatureEnabled(new ManaxLibrary.DTO.Feature.Feature()
+        SetFeatureEnabled(new ManaxLibrary.DTO.Feature.Feature
         {
             Key = featureType,
             Value = enabled
         });
-    }
-
-    public void SetFeatureEnabled(string featureName, bool enabled)
-    {
-        if (Enum.TryParse(featureName, out FeatureType featureType))
-            SetFeatureEnabled(featureType, enabled);
     }
 }

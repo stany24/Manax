@@ -1,0 +1,132 @@
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewModels="clr-namespace:ManaxClient.ViewModels"
+    xmlns:tab="clr-namespace:ManaxClient.ViewModels.Pages.Upload.Tab"
+    xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
+    mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+    x:Class="ManaxClient.Views.Pages.Upload.Tab.AutoCleanupTabView"
+    x:DataType="tab:AutoCleanupTabViewModel"
+    IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).CanUploadChapter}">
+    
+    <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+        <Grid RowDefinitions="Auto,*" Margin="16">
+            
+            <!-- Main Content Area -->
+            <Border Grid.Row="0" Classes="card" MaxWidth="600" HorizontalAlignment="Center" Margin="0,0,0,16">
+                <StackPanel Spacing="24" Margin="8">
+                    
+                    <!-- Header -->
+                    <StackPanel Spacing="8" HorizontalAlignment="Center">
+                        <TextBlock Text="🧹" FontSize="48" HorizontalAlignment="Center" />
+                        <TextBlock Classes="title" Text="{localization:Localize AutoCleanupPage.Title}" HorizontalAlignment="Center" />
+                        <TextBlock Text="{localization:Localize AutoCleanupPage.Subtitle}"
+                                   HorizontalAlignment="Center"
+                                   Opacity="0.7"
+                                   TextWrapping="Wrap"
+                                   TextAlignment="Center"/>
+                    </StackPanel>
+                    
+                    <!-- Archive Progress -->
+                    <StackPanel Spacing="8">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <TextBlock Grid.Column="0" 
+                                       Text="{localization:Localize AutoCleanupPage.ArchiveProcessing}" 
+                                       FontWeight="SemiBold"
+                                       FontSize="14"/>
+                            <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="2">
+                                <TextBlock Text="{Binding CurrentArchive}" Opacity="0.7"/>
+                                <TextBlock Text="/" Opacity="0.7"/>
+                                <TextBlock Text="{Binding NbArchive}" Opacity="0.7"/>
+                            </StackPanel>
+                        </Grid>
+                        <ProgressBar Value="{Binding CurrentArchive}" 
+                                     Maximum="{Binding NbArchive}"
+                                     Height="8"
+                                     CornerRadius="4"
+                                     ShowProgressText="False"/>
+                    </StackPanel>
+                    
+                    <!-- Image Progress -->
+                    <StackPanel Spacing="8">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <TextBlock Grid.Column="0" 
+                                       Text="{localization:Localize AutoCleanupPage.ImageProcessing}" 
+                                       FontWeight="SemiBold"
+                                       FontSize="14"/>
+                            <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="2">
+                                <TextBlock Text="{Binding CurrentImage}" Opacity="0.7"/>
+                                <TextBlock Text="/" Opacity="0.7"/>
+                                <TextBlock Text="{Binding NbImage}" Opacity="0.7"/>
+                            </StackPanel>
+                        </Grid>
+                        <ProgressBar Value="{Binding CurrentImage}" 
+                                     Maximum="{Binding NbImage}"
+                                     Height="8"
+                                     CornerRadius="4"
+                                     ShowProgressText="False"/>
+                    </StackPanel>
+                    
+                    <!-- Start Button -->
+                    <Button Classes="primary"
+                            Command="{Binding Clean}"
+                            IsEnabled="{Binding !IsProcessing}"
+                            HorizontalAlignment="Stretch"
+                            Padding="16"
+                            FontSize="16"
+                            CornerRadius="8">
+                        <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center">
+                            <TextBlock Text="▶️" IsVisible="{Binding !IsProcessing}"/>
+                            <TextBlock Text="⏳" IsVisible="{Binding IsProcessing}"/>
+                            <TextBlock Text="{localization:Localize AutoCleanupPage.StartCleanup}" FontWeight="Medium" IsVisible="{Binding !IsProcessing}"/>
+                            <TextBlock Text="{localization:Localize AutoCleanupPage.Processing}" FontWeight="Medium" IsVisible="{Binding IsProcessing}"/>
+                        </StackPanel>
+                    </Button>
+                    
+                </StackPanel>
+            </Border>
+            
+            <!-- Errors Section -->
+            <Border Grid.Row="1" 
+                    Classes="card" 
+                    MaxWidth="600" 
+                    HorizontalAlignment="Center"
+                    IsVisible="{Binding Errors.Count}">
+                <StackPanel Spacing="12">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <TextBlock Text="⚠️" FontSize="20" VerticalAlignment="Center"/>
+                        <TextBlock Text="{localization:Localize AutoCleanupPage.Errors}" 
+                                   FontWeight="SemiBold"
+                                   FontSize="16"
+                                   VerticalAlignment="Center"/>
+                        <TextBlock Text="{Binding Errors.Count, StringFormat='({0})'}"
+                                   Opacity="0.7"
+                                   VerticalAlignment="Center"/>
+                    </StackPanel>
+                    
+                    <ScrollViewer MaxHeight="300" HorizontalScrollBarVisibility="Auto">
+                        <ItemsControl ItemsSource="{Binding Errors}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border BorderBrush="{DynamicResource SystemControlErrorTextForegroundBrush}"
+                                            BorderThickness="1"
+                                            CornerRadius="4"
+                                            Padding="8"
+                                            Margin="0,4">
+                                        <TextBlock Text="{Binding}"
+                                                   TextWrapping="Wrap"
+                                                   FontSize="12"
+                                                   Foreground="{DynamicResource SystemControlErrorTextForegroundBrush}"/>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </StackPanel>
+            </Border>
+            
+        </Grid>
+    </ScrollViewer>
+</UserControl>

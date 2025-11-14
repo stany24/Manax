@@ -6,7 +6,10 @@
     xmlns:selectChoice="clr-namespace:ManaxClient.ViewModels.Popup.SelectChoice"
     mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="300"
     x:Class="ManaxClient.Views.Popup.SelectChoice.ChooseActionView"
-    x:DataType="selectChoice:ChooseActionViewModel">
+    x:DataType="selectChoice:ChooseActionViewModel"
+    Background="{DynamicResource MaterialCardBackgroundBrush}"
+    CornerRadius="5">
+    
     <StackPanel Spacing="16" Margin="16">
         <TextBlock
             Text="Actions"
@@ -26,11 +29,6 @@
                         Padding="12,8"
                         Command="{Binding $parent[UserControl].((selectChoice:ChooseActionViewModel)DataContext).SelectAction}"
                         CommandParameter="{Binding}">
-                        <Button.Styles>
-                            <Style Selector="Button:pointerover">
-                                <Setter Property="Background" Value="#F8F9FA" />
-                            </Style>
-                        </Button.Styles>
                     </Button>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>

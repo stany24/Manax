@@ -2,6 +2,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="ManaxClient.App"
              xmlns:local="using:ManaxClient"
+             xmlns:themes="clr-namespace:Material.Styles.Themes;assembly=Material.Styles"
              RequestedThemeVariant="Default">
 
     <Application.DataTemplates>
@@ -9,12 +10,10 @@
     </Application.DataTemplates>
 
     <Application.Styles>
-
+        <themes:MaterialTheme BaseTheme="Dark" PrimaryColor="Purple" SecondaryColor="Lime" />
         <StyleInclude Source="avares://Avalonia.Controls.ColorPicker/Themes/Fluent/Fluent.xaml" />
-        <FluentTheme />
-
+        
         <Style Selector="Window">
-            <Setter Property="Background" Value="{DynamicResource Background1}" />
             <Setter Property="FontFamily" Value="Segoe UI, Arial, sans-serif" />
         </Style>
 
@@ -24,6 +23,7 @@
             <Setter Property="CornerRadius" Value="6" />
             <Setter Property="BorderThickness" Value="0" />
             <Setter Property="FontWeight" Value="Medium" />
+            <Setter Property="Foreground" Value="{DynamicResource MaterialBodyBrush}"></Setter>
             <Setter Property="Transitions">
                 <Transitions>
                     <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.15" />
@@ -31,41 +31,20 @@
                 </Transitions>
             </Setter>
         </Style>
+        
+        <Style Selector="Button.primary">
+            <Setter Property="FontWeight" Value="Bold"></Setter>
+        </Style>
+        
+        <Style Selector="Button.secondary">
+            <Setter Property="FontWeight" Value="SemiBold"></Setter>
+        </Style>
 
         <Style Selector="Button:pointerover">
             <Setter Property="RenderTransform" Value="scale(1.02)" />
         </Style>
 
-        <Style Selector="Button.primary">
-            <Setter Property="Background" Value="{DynamicResource PrimaryBrush}" />
-            <Setter Property="Foreground" Value="White" />
-        </Style>
-
-        <Style Selector="Button.primary:pointerover">
-            <Setter Property="Background" Value="{DynamicResource PrimaryBrush}" />
-        </Style>
-
-        <Style Selector="Button.secondary">
-            <Setter Property="Background" Value="{DynamicResource Background2}" />
-            <Setter Property="Foreground" Value="{DynamicResource SecondaryBrush}" />
-        </Style>
-
-        <Style Selector="Button.secondary:pointerover">
-            <Setter Property="Background" Value="{DynamicResource Background3}" />
-        </Style>
-
-        <Style Selector="Button.danger">
-            <Setter Property="Background" Value="{DynamicResource DangerBrush}" />
-            <Setter Property="Foreground" Value="White" />
-        </Style>
-
-        <Style Selector="Button.danger:pointerover">
-            <Setter Property="Background" Value="{DynamicResource DangerBrush}" />
-        </Style>
-
         <Style Selector="Button.sidebar">
-            <Setter Property="Background" Value="Transparent" />
-            <Setter Property="Foreground" Value="{DynamicResource TextColor1}" />
             <Setter Property="HorizontalAlignment" Value="Stretch" />
             <Setter Property="HorizontalContentAlignment" Value="Left" />
             <Setter Property="Padding" Value="16,12" />
@@ -74,78 +53,41 @@
             <Setter Property="CornerRadius" Value="8" />
         </Style>
 
-        <Style Selector="Button.sidebar:pointerover">
-            <Setter Property="Background" Value="{DynamicResource Background2}" />
-        </Style>
-
-        <Style Selector="Button.sidebar.active">
-            <Setter Property="Background" Value="{DynamicResource PrimaryBrush}" />
-            <Setter Property="Foreground" Value="White" />
-        </Style>
-
         <Style Selector="TextBlock.title">
             <Setter Property="FontSize" Value="24" />
             <Setter Property="FontWeight" Value="Bold" />
-            <Setter Property="Foreground" Value="{DynamicResource TextColor1}" />
             <Setter Property="Margin" Value="0,0,0,16" />
         </Style>
 
         <Style Selector="TextBlock.subtitle">
             <Setter Property="FontSize" Value="18" />
             <Setter Property="FontWeight" Value="SemiBold" />
-            <Setter Property="Foreground" Value="{DynamicResource SecondaryBrush}" />
             <Setter Property="Margin" Value="0,0,0,12" />
         </Style>
 
         <Style Selector="Border.card">
-            <Setter Property="Background" Value="{DynamicResource Background2}" />
             <Setter Property="CornerRadius" Value="12" />
             <Setter Property="BorderThickness" Value="1" />
-            <Setter Property="BorderBrush" Value="{DynamicResource TertiaryBrush}" />
             <Setter Property="Padding" Value="20" />
             <Setter Property="Margin" Value="8" />
         </Style>
 
         <Style Selector="StackPanel.sidebar">
-            <Setter Property="Background" Value="{DynamicResource Background2}" />
             <Setter Property="Margin" Value="0,0,4,0" />
             <Setter Property="MinWidth" Value="240" />
         </Style>
 
         <Style Selector="Border.task-item">
-            <Setter Property="Background" Value="{DynamicResource Background2}" />
             <Setter Property="CornerRadius" Value="8" />
             <Setter Property="BorderThickness" Value="1" />
-            <Setter Property="BorderBrush" Value="{DynamicResource TertiaryBrush}" />
             <Setter Property="Padding" Value="12" />
             <Setter Property="Margin" Value="4,2" />
         </Style>
 
         <Style Selector="Border.notification">
-            <Setter Property="Background" Value="{DynamicResource Background2}" />
-            <Setter Property="BorderBrush" Value="{DynamicResource PrimaryBrush}" />
             <Setter Property="BorderThickness" Value="2" />
             <Setter Property="CornerRadius" Value="8" />
             <Setter Property="Padding" Value="12,8" />
         </Style>
     </Application.Styles>
-
-    <Application.Resources>
-        <SolidColorBrush x:Key="PrimaryBrush" Color="#007ACC" />
-        <SolidColorBrush x:Key="SecondaryBrush" Color="#6C757D" />
-        <SolidColorBrush x:Key="TertiaryBrush" Color="#6C757D" />
-
-        <SolidColorBrush x:Key="SuccessBrush" Color="#28A745" />
-        <SolidColorBrush x:Key="DangerBrush" Color="#DC3545" />
-        <SolidColorBrush x:Key="WarningBrush" Color="#FFC107" />
-        <SolidColorBrush x:Key="InfoBrush" Color="#17A2B8" />
-
-        <SolidColorBrush x:Key="Background1" Color="#F8F9FA" />
-        <SolidColorBrush x:Key="Background2" Color="#E9ECEF" />
-        <SolidColorBrush x:Key="Background3" Color="#DEE2E6" />
-
-        <SolidColorBrush x:Key="TextColor1" Color="#000000" />
-        <SolidColorBrush x:Key="TextColor2" Color="#000000" />
-        <SolidColorBrush x:Key="TextColor3" Color="#000000" />
-    </Application.Resources>
 </Application>

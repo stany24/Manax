@@ -16,8 +16,7 @@
 
             <StackPanel Orientation="Vertical">
                 <TextBlock Classes="title" Text="{localization:Localize SettingsServerPage.Title}" />
-                <TextBlock Text="{localization:Localize SettingsServerPage.Subtitle}"
-                           Foreground="{StaticResource SecondaryBrush}" />
+                <TextBlock Text="{localization:Localize SettingsServerPage.Subtitle}"/>
             </StackPanel>
 
             <Border Classes="card">
@@ -45,19 +44,6 @@
                             <TextBlock Text="{localization:Localize SettingsServerPage.AddLibrary}" FontWeight="Medium" />
                         </StackPanel>
                     </Button>
-                    
-                    <ComboBox HorizontalAlignment="Right" 
-                              VerticalAlignment="Top"
-                              Margin="20"
-                              MinWidth="120"
-                              ItemsSource="{Binding AvailableLanguages}"
-                              SelectedItem="{Binding SelectedLanguage}"
-                              DisplayMemberBinding="{Binding DisplayName}"
-                              Padding="8,6"
-                              CornerRadius="6"
-                              BorderThickness="1"
-                              BorderBrush="{DynamicResource Background3}"
-                              Background="{DynamicResource Background2}" />
                 </StackPanel>
             </Border>
 
@@ -182,18 +168,15 @@
             <Grid ColumnDefinitions="*,Auto,Auto">
 
                 <Border Grid.Column="0"
-                        Background="{DynamicResource Background2}"
                         CornerRadius="8"
                         Padding="12">
                     <StackPanel Spacing="8">
                         <TextBlock Text="{localization:Localize SettingsServerPage.TipTitle}"
-                                   FontWeight="Bold"
-                                   Foreground="{StaticResource InfoBrush}" />
+                                   FontWeight="Bold"/>
                         <TextBlock
                             Text="{localization:Localize SettingsServerPage.TipMessage}"
                             TextWrapping="Wrap"
-                            FontSize="12"
-                            Foreground="{StaticResource SecondaryBrush}" />
+                            FontSize="12"/>
                     </StackPanel>
                 </Border>
 

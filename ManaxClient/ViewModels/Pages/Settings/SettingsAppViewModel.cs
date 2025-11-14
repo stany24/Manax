@@ -1,29 +1,57 @@
 using System.Collections.Generic;
+using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
+using Jeek.Avalonia.Localization;
+using ManaxClient.Models;
 using ManaxClient.Models.Theme;
 
 namespace ManaxClient.ViewModels.Pages.Settings;
 
 public partial class SettingsAppViewModel : PageViewModel
 {
-    [ObservableProperty] private List<Theme> _availableThemes;
+    [ObservableProperty] private List<ThemeSettingsData> _availableThemes;
+    [ObservableProperty] private List<LanguageItem> _availableLanguages = [];
+    [ObservableProperty] private LanguageItem? _selectedLanguage;
 
     private bool _isDarkMode;
-    private Theme _selectedTheme;
+    private ThemeSettingsData _selectedThemeSettingsData;
 
     public SettingsAppViewModel()
     {
-        _availableThemes = ThemePresets.GetPresets();
-        _selectedTheme = _availableThemes[0];
-        _isDarkMode = false;
+        _availableThemes = ThemeSettings.GetPresets();
+        _selectedThemeSettingsData = AvailableThemes
+            .FirstOrDefault(t => t.Name == ThemeSettings.Current.Name) ?? AvailableThemes[0];
+        IsDarkMode = ThemeSettings.Current.IsDark;
+        InitializeLanguages();
     }
 
-    public Theme SelectedTheme
+    private void InitializeLanguages()
     {
-        get => _selectedTheme;
+        AvailableLanguages = 
+        [
+            new LanguageItem { Code = "en", DisplayName = "English" },
+            new LanguageItem { Code = "fr", DisplayName = "Français" }
+        ];
+        
+        string currentLanguage = Localizer.Language;
+        if (string.IsNullOrEmpty(currentLanguage)) {currentLanguage = "en";}
+        SelectedLanguage = AvailableLanguages.FirstOrDefault(l => l.Code == currentLanguage);
+    }
+
+    partial void OnSelectedLanguageChanged(LanguageItem? value)
+    {
+        if (value != null && value.Code != Localizer.Language)
+        {
+            Localizer.Language = value.Code;
+        }
+    }
+
+    public ThemeSettingsData SelectedThemeSettingsData
+    {
+        get => _selectedThemeSettingsData;
         set
         {
-            if (SetProperty(ref _selectedTheme, value)) UpdateTheme();
+            if (SetProperty(ref _selectedThemeSettingsData, value)) UpdateTheme();
         }
     }
 
@@ -38,6 +66,7 @@ public partial class SettingsAppViewModel : PageViewModel
 
     private void UpdateTheme()
     {
-        ThemeService.UpdateTheme(SelectedTheme, IsDarkMode);
+        SelectedThemeSettingsData.IsDark = IsDarkMode;
+        ThemeSettings.UpdateTheme(SelectedThemeSettingsData);
     }
 }

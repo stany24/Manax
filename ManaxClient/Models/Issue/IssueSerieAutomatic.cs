@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData;
 using Jeek.Avalonia.Localization;
@@ -15,7 +16,7 @@ public partial class IssueSerieAutomatic : ObservableObject
     private IDisposable? _subscription;
 
     public static string AutomaticBadgeText => Localizer.Get("IssuesPage.Automatic");
-    public string FormattedInfo => string.Format(Localizer.Get("IssuesPage.SeriesInfo"), Serie?.Title ?? "", CreatedAt);
+    public string FormattedInfo => string.Format(CultureInfo.InvariantCulture, Localizer.Get("IssuesPage.SeriesInfo"), Serie?.Title ?? "", CreatedAt);
 
     public IssueSerieAutomatic(IssueSerieAutomaticDto dto)
     {

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Reflection;
 using Avalonia.Threading;
 using ManaxLibrary;
@@ -11,7 +10,7 @@ namespace ManaxClient.ViewModels;
 
 public partial class MainWindowViewModel
 {
-    private FeaturesManager _features = new(new List<Feature>());
+    private FeaturesManager _features = new([]);
     public static EventHandler<Feature>? FeatureChanged { get; set; }
 
     public bool RankFeatureEnabled => _features.IsEnabled(FeatureType.Ranks);
@@ -55,7 +54,7 @@ public partial class MainWindowViewModel
     {
         PropertyInfo[] propertyInfos = GetType().GetProperties();
         foreach (PropertyInfo propertyInfo in propertyInfos)
-            if (propertyInfo.PropertyType == typeof(bool) && propertyInfo.Name.EndsWith("FeatureEnabled"))
+            if (propertyInfo.PropertyType == typeof(bool) && propertyInfo.Name.EndsWith("FeatureEnabled",StringComparison.InvariantCulture))
                 OnPropertyChanged(propertyInfo.Name);
     }
 }

@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Jeek.Avalonia.Localization;
-using ManaxClient.Models;
 using ManaxClient.ViewModels.Popup.ConfirmCancel;
 using ManaxClient.ViewModels.Popup.ConfirmCancel.Content;
 using ManaxLibrary;
@@ -23,38 +21,13 @@ public partial class SettingsServerPageViewModel : PageViewModel
     [ObservableProperty] private string _problem = string.Empty;
     [ObservableProperty] private SettingsData _settings = null!;
     [ObservableProperty] private string _success = string.Empty;
-    
-    [ObservableProperty] private List<LanguageItem> _availableLanguages = [];
-    [ObservableProperty] private LanguageItem? _selectedLanguage;
 
     public SettingsServerPageViewModel()
     {
-        AllImageFormats = new List<ImageFormat>(Enum.GetValues(typeof(ImageFormat)).Cast<ImageFormat>());
-        AllArchiveFormats = new List<ArchiveFormat>(Enum.GetValues(typeof(ArchiveFormat)).Cast<ArchiveFormat>());
+        AllImageFormats = new List<ImageFormat>(Enum.GetValues<ImageFormat>());
+        AllArchiveFormats = new List<ArchiveFormat>(Enum.GetValues<ArchiveFormat>());
         
         Task.Run(LoadSettings);
-        InitializeLanguages();
-    }
-
-    private void InitializeLanguages()
-    {
-        AvailableLanguages = 
-        [
-            new LanguageItem { Code = "en", DisplayName = "English" },
-            new LanguageItem { Code = "fr", DisplayName = "Français" }
-        ];
-        
-        string currentLanguage = Localizer.Language;
-        if (string.IsNullOrEmpty(currentLanguage)) {currentLanguage = "en";}
-        SelectedLanguage = AvailableLanguages.FirstOrDefault(l => l.Code == currentLanguage);
-    }
-
-    partial void OnSelectedLanguageChanged(LanguageItem? value)
-    {
-        if (value != null && value.Code != Localizer.Language)
-        {
-            Localizer.Language = value.Code;
-        }
     }
 
     public async void Update()
