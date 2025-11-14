@@ -9,7 +9,7 @@ namespace ManaxServer.Models.Person;
 public class Person
 {
     public long Id { get; set; }
-    public List<long> SerieIds { get; set; } = [];
+    public List<Serie.Serie> Series { get; set; } = [];
     public string FirstName { get; set; }
     public string LastName { get; set; }
     public string Pseudonym { get; set; }
@@ -20,7 +20,7 @@ public class Person
         return new PersonDto
         {
             Id = Id,
-            SerieIds = SerieIds,
+            SerieIds = Series.Select(serie => serie.Id).ToList(),
             FirstName = FirstName,
             LastName = LastName,
             Pseudonym = Pseudonym,

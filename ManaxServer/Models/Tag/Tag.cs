@@ -9,7 +9,7 @@ namespace ManaxServer.Models.Tag;
 public class Tag
 {
     public long Id { get; set; }
-    public List<long> SerieIds { get; set; } = [];
+    public List<Serie.Serie> Series { get; set; } = [];
     public string Name { get; set; } = null!;
     public int ColorArgb { get; set; }
     
@@ -18,7 +18,7 @@ public class Tag
         return new TagDto
         {
             Id = Id,
-            SerieIds = SerieIds,
+            SerieIds = Series.Select(serie => serie.Id).ToList(),
             Name = Name,
             ColorArgb = ColorArgb
         };

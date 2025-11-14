@@ -45,6 +45,8 @@ public class SerieController(
     public async Task<ActionResult<SerieDto>> GetSerie(long id)
     {
         Serie? serie = await context.Series
+            .Include(s => s.Tags)
+            .Include(s => s.Persons)
             .FirstOrDefaultAsync(l => l.Id == id);
 
         if (serie == null) return NotFound(Localizer.SerieNotFound(id));

@@ -110,6 +110,20 @@ namespace ManaxServer.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Tags",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", nullable: false),
+                    ColorArgb = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Tags", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
@@ -124,6 +138,28 @@ namespace ManaxServer.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "People",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    FirstName = table.Column<string>(type: "TEXT", nullable: false),
+                    LastName = table.Column<string>(type: "TEXT", nullable: false),
+                    Pseudonym = table.Column<string>(type: "TEXT", nullable: false),
+                    RoleId = table.Column<long>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_People", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_People_Roles_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "Roles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -222,32 +258,27 @@ namespace ManaxServer.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "People",
+                name: "PersonSerie",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    SerieIds = table.Column<string>(type: "TEXT", nullable: false),
-                    FirstName = table.Column<string>(type: "TEXT", nullable: false),
-                    LastName = table.Column<string>(type: "TEXT", nullable: false),
-                    Pseudonym = table.Column<string>(type: "TEXT", nullable: false),
-                    RoleId = table.Column<long>(type: "INTEGER", nullable: false),
-                    SerieId = table.Column<long>(type: "INTEGER", nullable: true)
+                    PersonsId = table.Column<long>(type: "INTEGER", nullable: false),
+                    SeriesId = table.Column<long>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_People", x => x.Id);
+                    table.PrimaryKey("PK_PersonSerie", x => new { x.PersonsId, x.SeriesId });
                     table.ForeignKey(
-                        name: "FK_People_Roles_RoleId",
-                        column: x => x.RoleId,
-                        principalTable: "Roles",
+                        name: "FK_PersonSerie_People_PersonsId",
+                        column: x => x.PersonsId,
+                        principalTable: "People",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_People_Series_SerieId",
-                        column: x => x.SerieId,
+                        name: "FK_PersonSerie_Series_SeriesId",
+                        column: x => x.SeriesId,
                         principalTable: "Series",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -285,24 +316,27 @@ namespace ManaxServer.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Tags",
+                name: "SerieTag",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    SerieIds = table.Column<string>(type: "TEXT", nullable: false),
-                    Name = table.Column<string>(type: "TEXT", nullable: false),
-                    ColorArgb = table.Column<int>(type: "INTEGER", nullable: false),
-                    SerieId = table.Column<long>(type: "INTEGER", nullable: true)
+                    SeriesId = table.Column<long>(type: "INTEGER", nullable: false),
+                    TagsId = table.Column<long>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Tags", x => x.Id);
+                    table.PrimaryKey("PK_SerieTag", x => new { x.SeriesId, x.TagsId });
                     table.ForeignKey(
-                        name: "FK_Tags_Series_SerieId",
-                        column: x => x.SerieId,
+                        name: "FK_SerieTag_Series_SeriesId",
+                        column: x => x.SeriesId,
                         principalTable: "Series",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_SerieTag_Tags_TagsId",
+                        column: x => x.TagsId,
+                        principalTable: "Tags",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -430,9 +464,9 @@ namespace ManaxServer.Migrations
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_People_SerieId",
-                table: "People",
-                column: "SerieId");
+                name: "IX_PersonSerie_SeriesId",
+                table: "PersonSerie",
+                column: "SeriesId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Ranks_Name",
@@ -500,15 +534,15 @@ namespace ManaxServer.Migrations
                 column: "SavePointId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_SerieTag_TagsId",
+                table: "SerieTag",
+                column: "TagsId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Tags_Name",
                 table: "Tags",
                 column: "Name",
                 unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Tags_SerieId",
-                table: "Tags",
-                column: "SerieId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserPermissions_UserId",
@@ -545,7 +579,7 @@ namespace ManaxServer.Migrations
                 name: "LoginAttempts");
 
             migrationBuilder.DropTable(
-                name: "People");
+                name: "PersonSerie");
 
             migrationBuilder.DropTable(
                 name: "Reads");
@@ -557,7 +591,7 @@ namespace ManaxServer.Migrations
                 name: "ReportedIssuesSerie");
 
             migrationBuilder.DropTable(
-                name: "Tags");
+                name: "SerieTag");
 
             migrationBuilder.DropTable(
                 name: "UserPermissions");
@@ -566,7 +600,7 @@ namespace ManaxServer.Migrations
                 name: "UserRanks");
 
             migrationBuilder.DropTable(
-                name: "Roles");
+                name: "People");
 
             migrationBuilder.DropTable(
                 name: "Chapters");
@@ -578,10 +612,16 @@ namespace ManaxServer.Migrations
                 name: "ReportedIssueSerieTypes");
 
             migrationBuilder.DropTable(
+                name: "Tags");
+
+            migrationBuilder.DropTable(
                 name: "Ranks");
 
             migrationBuilder.DropTable(
                 name: "Users");
+
+            migrationBuilder.DropTable(
+                name: "Roles");
 
             migrationBuilder.DropTable(
                 name: "Series");

@@ -2,6 +2,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -22,6 +23,9 @@ public partial class Serie : ObservableObject
     private readonly ReadOnlyObservableCollection<Chapter> _chapters;
     private readonly ReadOnlyObservableCollection<Tag> _tags;
     private readonly ReadOnlyObservableCollection<Person> _persons;
+    
+    private SourceList<long> _tagIds = new();
+    private SourceList<long> _personIds = new();
     
     [ObservableProperty] private DateTime _creation;
     [ObservableProperty] private string _description = string.Empty;
@@ -54,12 +58,13 @@ public partial class Serie : ObservableObject
             .Subscribe();
         TagSource.Tags
             .Connect()
-            .Filter(tag => dto.TagIds.Contains(tag.Id))
+            .Filter(_tagIds.Connect().Select(_ => (Func<Tag, bool>)(tag => _tagIds.Items.Contains(tag.Id))))
             .SortAndBind(out _tags, SortExpressionComparer<Tag>.Ascending(tag => tag.Name))
             .Subscribe();
+
         PersonSource.Persons
             .Connect()
-            .Filter(person => dto.PersonIds.Contains(person.Id))
+            .Filter(_personIds.Connect().Select(_ => (Func<Person, bool>)(person => _personIds.Items.Contains(person.Id))))
             .SortAndBind(out _persons, SortExpressionComparer<Person>.Ascending(person => person.LastName))
             .Subscribe();
     }
@@ -87,6 +92,10 @@ public partial class Serie : ObservableObject
         Creation = dto.Creation;
         LastModification = dto.LastModification;
         LibraryId = dto.LibraryId;
+        _tagIds.Clear();
+        _tagIds.AddRange(dto.TagIds);
+        _personIds.Clear();
+        _personIds.AddRange(dto.PersonIds);
     }
 
     public void LoadInfo()
