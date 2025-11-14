@@ -20,7 +20,7 @@ public static class PersonSource
     private static readonly Lock PersonsLock = new();
 
     static PersonSource()
-    {        
+    {
         ServerNotification.OnPersonCreated += OnPersonCreated;
         ServerNotification.OnPersonDeleted += OnPersonDeleted;
     }

@@ -258,6 +258,18 @@
     <data name="SeriePage.RankSetCorrectly" xml:space="preserve">
         <value>Rank set correctly</value>
     </data>
+    <data name="SeriePage.Tags" xml:space="preserve">
+        <value>Tags</value>
+    </data>
+    <data name="SeriePage.NoTags" xml:space="preserve">
+        <value>No tags assigned</value>
+    </data>
+    <data name="SeriePage.Persons" xml:space="preserve">
+        <value>Persons</value>
+    </data>
+    <data name="SeriePage.NoPersons" xml:space="preserve">
+        <value>No persons assigned</value>
+    </data>
     <data name="SettingsAppPage.Title" xml:space="preserve">
         <value>Appearance Settings</value>
     </data>

@@ -9,9 +9,14 @@
     xmlns:models="clr-namespace:ManaxClient.Models"
     xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
     xmlns:localization1="clr-namespace:ManaxClient.Localization"
+    xmlns:converters="clr-namespace:ManaxClient.Converters"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Pages.Serie.SeriePageView"
     x:DataType="page:SeriePageViewModel">
+
+    <UserControl.Resources>
+        <converters:ColorToSolidBrushConverter x:Key="ColorToBrushConverter" />
+    </UserControl.Resources>
 
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel Orientation="Vertical" Spacing="24">
@@ -82,6 +87,95 @@
                     <Border Classes="card">
                         <TextBlock Text="{Binding Serie.Description}"
                                    TextWrapping="Wrap"/>
+                    </Border>
+
+                    <Border Classes="card">
+                        <StackPanel Spacing="12">
+                            <TextBlock Classes="subtitle" Text="{localization:Localize SeriePage.Tags}" Margin="0" />
+                            
+                            <Border Background="{DynamicResource Background2}"
+                                    CornerRadius="8"
+                                    Padding="12"
+                                    IsVisible="{Binding !Serie.Tags.Count}">
+                                <StackPanel Spacing="8" HorizontalAlignment="Center">
+                                    <TextBlock Text="🏷️" FontSize="32" HorizontalAlignment="Center" />
+                                    <TextBlock Text="{localization:Localize SeriePage.NoTags}"
+                                               FontWeight="Medium"
+                                               HorizontalAlignment="Center" />
+                                </StackPanel>
+                            </Border>
+
+                            <ItemsControl ItemsSource="{Binding Serie.Tags}"
+                                          IsVisible="{Binding Serie.Tags.Count}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel Orientation="Horizontal" />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border
+                                            Background="{DynamicResource Background2}"
+                                            BorderBrush="{Binding Color, Converter={StaticResource ColorToBrushConverter}}"
+                                            BorderThickness="2"
+                                            CornerRadius="16"
+                                            Margin="4"
+                                            Padding="12,6">
+                                            <TextBlock Text="{Binding Name}"
+                                                       FontSize="13"
+                                                       FontWeight="Medium" />
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Classes="card">
+                        <StackPanel Spacing="12">
+                            <TextBlock Classes="subtitle" Text="{localization:Localize SeriePage.Persons}" Margin="0" />
+                            
+                            <Border Background="{DynamicResource Background2}"
+                                    CornerRadius="8"
+                                    Padding="12"
+                                    IsVisible="{Binding !Serie.Persons.Count}">
+                                <StackPanel Spacing="8" HorizontalAlignment="Center">
+                                    <TextBlock Text="👤" FontSize="32" HorizontalAlignment="Center" />
+                                    <TextBlock Text="{localization:Localize SeriePage.NoPersons}"
+                                               FontWeight="Medium"
+                                               HorizontalAlignment="Center" />
+                                </StackPanel>
+                            </Border>
+
+                            <ItemsControl ItemsSource="{Binding Serie.Persons}"
+                                          IsVisible="{Binding Serie.Persons.Count}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel Orientation="Horizontal" />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border
+                                            Background="{DynamicResource Background2}"
+                                            BorderBrush="{DynamicResource Background1}"
+                                            BorderThickness="2"
+                                            CornerRadius="16"
+                                            Margin="4"
+                                            Padding="12,6">
+                                            <StackPanel Spacing="4">
+                                                <TextBlock Text="{Binding FullName}"
+                                                           FontSize="13"
+                                                           FontWeight="Medium" />
+                                                <TextBlock Text="{Binding Role.Name}"
+                                                           FontSize="11"
+                                                           Foreground="{StaticResource SecondaryBrush}" />
+                                            </StackPanel>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
                     </Border>
 
                     <Border Classes="card">
