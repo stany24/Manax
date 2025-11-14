@@ -3,15 +3,18 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
+using ManaxClient.Models;
 using ManaxClient.Models.Upload;
 
 namespace ManaxClient.ViewModels.Pages.Upload.Tab;
 
-public partial class FetchFromSourceTabViewModel:PageViewModel
+public partial class FetchFromSourceTabViewModel:TabViewModel
 {
     public ObservableCollection<Source> SourceFolders { get; set; } = [];
     [ObservableProperty] private string _processingFolder = string.Empty;
     [ObservableProperty] private bool _canFetch = true;
+    [ObservableProperty] private int _sourceCompletedCount;
+    [ObservableProperty] private int _sourceInProgressCount;
 
     public FetchFromSourceTabViewModel()
     {
@@ -33,7 +36,10 @@ public partial class FetchFromSourceTabViewModel:PageViewModel
         {
             foreach (Source source in SourceFolders)
             {
+                SourceInProgressCount++;
                 source.Fetch(ProcessingFolder);
+                SourceCompletedCount++;
+                SourceInProgressCount--;
             }
             CanFetch = true;
         });

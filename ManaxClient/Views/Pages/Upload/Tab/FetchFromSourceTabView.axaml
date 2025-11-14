@@ -5,6 +5,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewModels="clr-namespace:ManaxClient.ViewModels"
     xmlns:tab="clr-namespace:ManaxClient.ViewModels.Pages.Upload.Tab"
+    xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
+    xmlns:upload="clr-namespace:ManaxClient.Models.Upload"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Pages.Upload.Tab.FetchFromSourceTabView"
     x:DataType="tab:FetchFromSourceTabViewModel"
