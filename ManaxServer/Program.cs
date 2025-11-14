@@ -3,13 +3,13 @@ using System.Threading.RateLimiting;
 using ManaxServer.Middleware;
 using ManaxServer.Models;
 using ManaxServer.Models.Issue.Reported;
+using ManaxServer.Models.Person;
 using ManaxServer.Models.Rank;
 using ManaxServer.Services.BackgroundTask;
 using ManaxServer.Services.Feature;
 using ManaxServer.Services.Fix;
 using ManaxServer.Services.Hash;
 using ManaxServer.Services.Issue;
-using ManaxServer.Services.Mapper;
 using ManaxServer.Services.Notification;
 using ManaxServer.Services.Permission;
 using ManaxServer.Services.Renaming;
@@ -23,6 +23,7 @@ using Microsoft.EntityFrameworkCore;
 namespace ManaxServer;
 
 public class Program
+    
 {
     public static void Main(string[] args)
     {
@@ -33,6 +34,16 @@ public class Program
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
         builder.Services.AddHttpContextAccessor();
+
+        builder.Services.AddCors(options =>
+        {
+            options.AddPolicy("StrictNoCrossOrigin", policy =>
+            {
+                policy.SetIsOriginAllowed(_ => false);
+                policy.AllowAnyHeader();
+                policy.AllowAnyMethod();
+            });
+        });
 
         // SignalR configuration
         builder.Services.AddSignalR();
@@ -64,8 +75,6 @@ public class Program
             new FeatureService(featureFileManager,featureFileManager,provider.GetRequiredService<INotificationService>()));
         AddRateLimiting(builder);
 
-        builder.Services.AddScoped<IMapper>(_ => new ManaxMapper(new ManaxMapping()));
-
         builder.Services.Configure<KestrelServerOptions>(options =>
         {
             options.Limits.MaxRequestBodySize = int.MaxValue;
@@ -87,6 +96,8 @@ public class Program
         app.UseMiddleware<GlobalExceptionMiddleware>();
         app.UseRateLimiter();
         app.UseMiddleware<BearerAuthenticationMiddleware>();
+
+        app.UseCors("StrictNoCrossOrigin");
 
         if (app.Environment.IsDevelopment())
         {
@@ -140,6 +151,15 @@ public class Program
                 new IssueSerieReportedType { Name = "Wrong description" },
                 new IssueSerieReportedType { Name = "Wrong poster" },
                 new IssueSerieReportedType { Name = "Wrong name" });
+            manaxContext.SaveChanges();
+        }
+        
+        if (!manaxContext.Roles.Any())
+        {
+            manaxContext.Roles.AddRange(
+                new Role { Name = "Author" },
+                new Role { Name = "Writer" },
+                new Role { Name = "Artist" });
             manaxContext.SaveChanges();
         }
     }

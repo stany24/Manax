@@ -7,4 +7,5 @@ public class TagDto
     public long Id { get; set; }
     public string Name { get; set; } = null!;
     public int ColorArgb { get; set; }
+    public List<long> SerieIds { get; set; } = [];
 }

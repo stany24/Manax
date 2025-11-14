@@ -16,9 +16,16 @@ public class ViewLocator : IDataTemplate
         Type? type = Type.GetType(name);
 
         if (type == null) return new TextBlock { Text = "Not Found: " + name };
-        Control control = (Control)Activator.CreateInstance(type)!;
-        control.DataContext = param;
-        return control;
+        try
+        {
+            Control control = (Control)Activator.CreateInstance(type)!;
+            control.DataContext = param;
+            return control;
+        }
+        catch (Exception e)
+        {
+            return new TextBlock { Text = "Failed to create control: "+e };
+        }
     }
 
     public bool Match(object? data)

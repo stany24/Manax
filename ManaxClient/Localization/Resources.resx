@@ -204,6 +204,27 @@
     <data name="RankPage.Level" xml:space="preserve">
         <value>Level: {0}</value>
     </data>
+    <data name="PersonPage.Title" xml:space="preserve">
+        <value>Person Management</value>
+    </data>
+    <data name="PersonPage.PersonsCount" xml:space="preserve">
+        <value>👤 {0} person(s) configured</value>
+    </data>
+    <data name="PersonPage.NewPerson" xml:space="preserve">
+        <value>New person</value>
+    </data>
+    <data name="PersonPage.NoPersons.Title" xml:space="preserve">
+        <value>No persons configured</value>
+    </data>
+    <data name="PersonPage.NoPersons.Description" xml:space="preserve">
+        <value>Create persons to manage authors, artists, and contributors.</value>
+    </data>
+    <data name="PersonPage.CreateFirstPerson" xml:space="preserve">
+        <value>Create the first person</value>
+    </data>
+    <data name="PersonPage.PersonsList.Title" xml:space="preserve">
+        <value>Persons list</value>
+    </data>
     <data name="SeriePage.ChangeButton" xml:space="preserve">
         <value>Change</value>
     </data>
@@ -236,6 +257,18 @@
     </data>
     <data name="SeriePage.RankSetCorrectly" xml:space="preserve">
         <value>Rank set correctly</value>
+    </data>
+    <data name="SeriePage.Tags" xml:space="preserve">
+        <value>Tags</value>
+    </data>
+    <data name="SeriePage.NoTags" xml:space="preserve">
+        <value>No tags assigned</value>
+    </data>
+    <data name="SeriePage.Persons" xml:space="preserve">
+        <value>Persons</value>
+    </data>
+    <data name="SeriePage.NoPersons" xml:space="preserve">
+        <value>No persons assigned</value>
     </data>
     <data name="SettingsAppPage.Title" xml:space="preserve">
         <value>Appearance Settings</value>
@@ -567,6 +600,33 @@
     <data name="RankEditPopup.Value" xml:space="preserve">
         <value>Value</value>
     </data>
+    <data name="PersonEditPopup.Title" xml:space="preserve">
+        <value>Modify the person</value>
+    </data>
+    <data name="PersonEditPopup.Description" xml:space="preserve">
+        <value>Modify the properties of the person</value>
+    </data>
+    <data name="PersonEditPopup.FirstName" xml:space="preserve">
+        <value>First name</value>
+    </data>
+    <data name="PersonEditPopup.FirstName.Placeholder" xml:space="preserve">
+        <value>Enter the first name...</value>
+    </data>
+    <data name="PersonEditPopup.LastName" xml:space="preserve">
+        <value>Last name</value>
+    </data>
+    <data name="PersonEditPopup.LastName.Placeholder" xml:space="preserve">
+        <value>Enter the last name...</value>
+    </data>
+    <data name="PersonEditPopup.Pseudonym" xml:space="preserve">
+        <value>Pseudonym (optional)</value>
+    </data>
+    <data name="PersonEditPopup.Pseudonym.Placeholder" xml:space="preserve">
+        <value>Enter the pseudonym...</value>
+    </data>
+    <data name="PersonEditPopup.Role" xml:space="preserve">
+        <value>Role</value>
+    </data>
     <data name="SavePointCreatePopup.Title" xml:space="preserve">
         <value>New save point</value>
     </data>
@@ -608,6 +668,15 @@
     </data>
     <data name="SerieUpdatePopup.NoTags" xml:space="preserve">
         <value>No tag selected</value>
+    </data>
+    <data name="SerieUpdatePopup.Persons" xml:space="preserve">
+        <value>Persons</value>
+    </data>
+    <data name="SerieUpdatePopup.Persons.Placeholder" xml:space="preserve">
+        <value>Select a person</value>
+    </data>
+    <data name="SerieUpdatePopup.NoPersons" xml:space="preserve">
+        <value>No person selected</value>
     </data>
     <data name="SerieUpdatePopup.Title" xml:space="preserve">
         <value>Update serie</value>
@@ -725,5 +794,38 @@
     </data>
     <data name="LoginPage.Invalid.Host.Port" xml:space="preserve">
         <value>Invalid host or port</value>
+    </data>
+    <data name="RolePage.Title" xml:space="preserve">
+        <value>Role Management</value>
+    </data>
+    <data name="RolePage.RolesCount" xml:space="preserve">
+        <value>👔 {0} role(s) configured</value>
+    </data>
+    <data name="RolePage.NewRole" xml:space="preserve">
+        <value>New role</value>
+    </data>
+    <data name="RolePage.NoRoles.Title" xml:space="preserve">
+        <value>No roles configured</value>
+    </data>
+    <data name="RolePage.NoRoles.Description" xml:space="preserve">
+        <value>Create roles to organize people by their function (author, artist, etc.).</value>
+    </data>
+    <data name="RolePage.CreateFirstRole" xml:space="preserve">
+        <value>Create the first role</value>
+    </data>
+    <data name="RolePage.RolesList.Title" xml:space="preserve">
+        <value>Roles list</value>
+    </data>
+    <data name="RoleEditPopup.Title" xml:space="preserve">
+        <value>Edit Role</value>
+    </data>
+    <data name="RoleEditPopup.Description" xml:space="preserve">
+        <value>Modify role information</value>
+    </data>
+    <data name="RoleEditPopup.Name" xml:space="preserve">
+        <value>Role name</value>
+    </data>
+    <data name="RoleEditPopup.Name.Placeholder" xml:space="preserve">
+        <value>Enter role name</value>
     </data>
 </root>

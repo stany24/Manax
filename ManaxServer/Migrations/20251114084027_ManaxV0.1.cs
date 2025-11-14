@@ -83,6 +83,19 @@ namespace ManaxServer.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Roles",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Roles", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "SavePoints",
                 columns: table => new
                 {
@@ -125,6 +138,28 @@ namespace ManaxServer.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "People",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    FirstName = table.Column<string>(type: "TEXT", nullable: false),
+                    LastName = table.Column<string>(type: "TEXT", nullable: false),
+                    Pseudonym = table.Column<string>(type: "TEXT", nullable: false),
+                    RoleId = table.Column<long>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_People", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_People_Roles_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "Roles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -217,6 +252,30 @@ namespace ManaxServer.Migrations
                     table.ForeignKey(
                         name: "FK_Chapters_Series_SerieId",
                         column: x => x.SerieId,
+                        principalTable: "Series",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PersonSerie",
+                columns: table => new
+                {
+                    PersonsId = table.Column<long>(type: "INTEGER", nullable: false),
+                    SeriesId = table.Column<long>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PersonSerie", x => new { x.PersonsId, x.SeriesId });
+                    table.ForeignKey(
+                        name: "FK_PersonSerie_People_PersonsId",
+                        column: x => x.PersonsId,
+                        principalTable: "People",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_PersonSerie_Series_SeriesId",
+                        column: x => x.SeriesId,
                         principalTable: "Series",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -400,6 +459,16 @@ namespace ManaxServer.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_People_RoleId",
+                table: "People",
+                column: "RoleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PersonSerie_SeriesId",
+                table: "PersonSerie",
+                column: "SeriesId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Ranks_Name",
                 table: "Ranks",
                 column: "Name",
@@ -510,6 +579,9 @@ namespace ManaxServer.Migrations
                 name: "LoginAttempts");
 
             migrationBuilder.DropTable(
+                name: "PersonSerie");
+
+            migrationBuilder.DropTable(
                 name: "Reads");
 
             migrationBuilder.DropTable(
@@ -528,6 +600,9 @@ namespace ManaxServer.Migrations
                 name: "UserRanks");
 
             migrationBuilder.DropTable(
+                name: "People");
+
+            migrationBuilder.DropTable(
                 name: "Chapters");
 
             migrationBuilder.DropTable(
@@ -544,6 +619,9 @@ namespace ManaxServer.Migrations
 
             migrationBuilder.DropTable(
                 name: "Users");
+
+            migrationBuilder.DropTable(
+                name: "Roles");
 
             migrationBuilder.DropTable(
                 name: "Series");

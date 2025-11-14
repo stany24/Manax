@@ -55,6 +55,7 @@ public class PermissionController(IPermissionService permissionService, INotific
             Permission.ReadRanks,
             Permission.ReadTags,
             Permission.ReadFeatures,
+            Permission.ReadPeople,
 
             Permission.WriteIssues,
             Permission.SetMyRank,
@@ -70,7 +71,9 @@ public class PermissionController(IPermissionService permissionService, INotific
             Permission.UploadChapter,
             Permission.WriteRanks,
             Permission.SetSerieTags,
+            Permission.WriteRoles,
 
+            Permission.DeleteRoles,
             Permission.DeleteIssues,
             Permission.DeleteRanks
         ]).ToArray();
@@ -87,13 +90,15 @@ public class PermissionController(IPermissionService permissionService, INotific
             Permission.WriteLibraries,
             Permission.WriteTags,
             Permission.WriteFeatures,
+            Permission.WritePeople,
 
             Permission.DeleteTags,
             Permission.DeleteSeries,
             Permission.DeleteChapters,
             Permission.DeleteLibraries,
             Permission.DeleteUsers,
-            Permission.ResetPasswords
+            Permission.ResetPasswords,
+            Permission.DeletePeople
         ]).ToArray();
 
         return role switch

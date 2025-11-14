@@ -79,4 +79,8 @@ public enum LocalizationKey
     TagNotFound,
     
     FeatureDisabled,
+    
+    PersonNotFound,
+    
+    RoleNotFound
 }

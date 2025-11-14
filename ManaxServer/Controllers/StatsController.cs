@@ -1,4 +1,3 @@
-using ManaxLibrary.DTO.Rank;
 using ManaxLibrary.DTO.Read;
 using ManaxLibrary.DTO.Serie;
 using ManaxLibrary.DTO.Stats;
@@ -7,7 +6,6 @@ using ManaxServer.Attributes;
 using ManaxServer.Localization;
 using ManaxServer.Models;
 using ManaxServer.Models.SavePoint;
-using ManaxServer.Services.Mapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,7 +13,7 @@ namespace ManaxServer.Controllers;
 
 [Route("api/stats")]
 [ApiController]
-public class StatsController(ManaxContext context, IMapper mapper) : ControllerBase
+public class StatsController(ManaxContext context) : ControllerBase
 {
     // GET: api/Chapter
     [HttpGet("self")]
@@ -35,12 +33,12 @@ public class StatsController(ManaxContext context, IMapper mapper) : ControllerB
         List<RankCount> ranks = context.UserRanks
             .Where(r => r.UserId == currentUserId.Value)
             .GroupBy(r => r.Rank)
-            .Select(rankPair => new RankCount { Rank = mapper.Map<RankDto>(rankPair.Key), Count = rankPair.Count() })
+            .Select(rankPair => new RankCount { Rank = rankPair.Key.ToDto(), Count = rankPair.Count() })
             .ToList();
 
         List<ReadDto> reads = context.Reads
             .Where(r => r.UserId == currentUserId.Value)
-            .Select(r => mapper.Map<ReadDto>(r))
+            .Select(r => r.ToDto())
             .ToList();
 
         int seriesCompleted = await context.Series
@@ -89,7 +87,7 @@ public class StatsController(ManaxContext context, IMapper mapper) : ControllerB
 
         List<SerieDto> neverReadSeries = await context.Series
             .Where(s => !context.Reads.Any(r => context.Chapters.Any(c => c.SerieId == s.Id && c.Id == r.ChapterId)))
-            .Select(s => mapper.Map<SerieDto>(s))
+            .Select(s => s.ToDto())
             .ToListAsync();
 
         ServerStats stats = new()

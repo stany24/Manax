@@ -70,7 +70,9 @@ public class EnglishLocalization : ILocalization
                 "Password must contain at least one special character or digit."
             },
             { LocalizationKey.TagNotFound, "Tag with ID {0} does not exist." },
-            { LocalizationKey.FeatureDisabled,"The feature {0} is disabled." }
+            { LocalizationKey.FeatureDisabled,"The feature {0} is disabled." },
+            { LocalizationKey.PersonNotFound, "The person with ID {0} does not exist." },
+            { LocalizationKey.RoleNotFound, "The role with ID {0} does not exist." }
         };
     }
 }

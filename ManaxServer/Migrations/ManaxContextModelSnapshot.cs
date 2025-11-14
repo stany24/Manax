@@ -15,7 +15,7 @@ namespace ManaxServer.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "9.0.9");
+            modelBuilder.HasAnnotation("ProductVersion", "9.0.10");
 
             modelBuilder.Entity("ManaxServer.Models.Chapter.Chapter", b =>
                 {
@@ -196,6 +196,49 @@ namespace ManaxServer.Migrations
                         .IsUnique();
 
                     b.ToTable("Libraries");
+                });
+
+            modelBuilder.Entity("ManaxServer.Models.Person.Person", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Pseudonym")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<long>("RoleId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("People");
+                });
+
+            modelBuilder.Entity("ManaxServer.Models.Person.Role", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Roles");
                 });
 
             modelBuilder.Entity("ManaxServer.Models.Rank.Rank", b =>
@@ -432,6 +475,21 @@ namespace ManaxServer.Migrations
                     b.ToTable("UserPermissions");
                 });
 
+            modelBuilder.Entity("PersonSerie", b =>
+                {
+                    b.Property<long>("PersonsId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<long>("SeriesId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("PersonsId", "SeriesId");
+
+                    b.HasIndex("SeriesId");
+
+                    b.ToTable("PersonSerie");
+                });
+
             modelBuilder.Entity("SerieTag", b =>
                 {
                     b.Property<long>("SeriesId")
@@ -534,6 +592,17 @@ namespace ManaxServer.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("ManaxServer.Models.Person.Person", b =>
+                {
+                    b.HasOne("ManaxServer.Models.Person.Role", "Role")
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Role");
+                });
+
             modelBuilder.Entity("ManaxServer.Models.Rank.UserRank", b =>
                 {
                     b.HasOne("ManaxServer.Models.Rank.Rank", "Rank")
@@ -606,6 +675,21 @@ namespace ManaxServer.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("PersonSerie", b =>
+                {
+                    b.HasOne("ManaxServer.Models.Person.Person", null)
+                        .WithMany()
+                        .HasForeignKey("PersonsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ManaxServer.Models.Serie.Serie", null)
+                        .WithMany()
+                        .HasForeignKey("SeriesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("SerieTag", b =>

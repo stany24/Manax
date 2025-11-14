@@ -16,6 +16,7 @@ using ManaxClient.ViewModels.Pages.Home;
 using ManaxClient.ViewModels.Pages.Issue;
 using ManaxClient.ViewModels.Pages.Library;
 using ManaxClient.ViewModels.Pages.Login;
+using ManaxClient.ViewModels.Pages.Person;
 using ManaxClient.ViewModels.Pages.Rank;
 using ManaxClient.ViewModels.Pages.Settings;
 using ManaxClient.ViewModels.Pages.Stats;
@@ -77,7 +78,12 @@ public partial class MainWindowViewModel : ObservableObject
             ServerNotification.OnFeatureModified += OnFeatureModified;
             Task.Run(LoadPermissions);
             Task.Run(LoadFeatures);
+            
+            RoleSource.LoadRoles();
             LibrarySource.LoadLibraries();
+            PersonSource.LoadPersons();
+            TagSource.LoadTags();
+            RankSource.LoadRanks();
         };
         SetPage(loginPage);
     }
@@ -192,6 +198,11 @@ public partial class MainWindowViewModel : ObservableObject
     public void ChangePageTags()
     {
         SetPage(new TagPageViewModel());
+    }
+
+    public void ChangePagePeople()
+    {
+        SetPage(new PersonPageViewModel());
     }
 
     public void ChangePageSettings()

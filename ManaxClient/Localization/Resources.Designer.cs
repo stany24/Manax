@@ -417,6 +417,48 @@ namespace ManaxClient.Localization {
             }
         }
         
+        public static string PersonPage_Title {
+            get {
+                return ResourceManager.GetString("PersonPage.Title", resourceCulture);
+            }
+        }
+        
+        public static string PersonPage_PersonsCount {
+            get {
+                return ResourceManager.GetString("PersonPage.PersonsCount", resourceCulture);
+            }
+        }
+        
+        public static string PersonPage_NewPerson {
+            get {
+                return ResourceManager.GetString("PersonPage.NewPerson", resourceCulture);
+            }
+        }
+        
+        public static string PersonPage_NoPersons_Title {
+            get {
+                return ResourceManager.GetString("PersonPage.NoPersons.Title", resourceCulture);
+            }
+        }
+        
+        public static string PersonPage_NoPersons_Description {
+            get {
+                return ResourceManager.GetString("PersonPage.NoPersons.Description", resourceCulture);
+            }
+        }
+        
+        public static string PersonPage_CreateFirstPerson {
+            get {
+                return ResourceManager.GetString("PersonPage.CreateFirstPerson", resourceCulture);
+            }
+        }
+        
+        public static string PersonPage_PersonsList_Title {
+            get {
+                return ResourceManager.GetString("PersonPage.PersonsList.Title", resourceCulture);
+            }
+        }
+        
         public static string SeriePage_ChangeButton {
             get {
                 return ResourceManager.GetString("SeriePage.ChangeButton", resourceCulture);
@@ -480,6 +522,30 @@ namespace ManaxClient.Localization {
         public static string SeriePage_RankSetCorrectly {
             get {
                 return ResourceManager.GetString("SeriePage.RankSetCorrectly", resourceCulture);
+            }
+        }
+        
+        public static string SeriePage_Tags {
+            get {
+                return ResourceManager.GetString("SeriePage.Tags", resourceCulture);
+            }
+        }
+        
+        public static string SeriePage_NoTags {
+            get {
+                return ResourceManager.GetString("SeriePage.NoTags", resourceCulture);
+            }
+        }
+        
+        public static string SeriePage_Persons {
+            get {
+                return ResourceManager.GetString("SeriePage.Persons", resourceCulture);
+            }
+        }
+        
+        public static string SeriePage_NoPersons {
+            get {
+                return ResourceManager.GetString("SeriePage.NoPersons", resourceCulture);
             }
         }
         
@@ -1143,6 +1209,60 @@ namespace ManaxClient.Localization {
             }
         }
         
+        public static string PersonEditPopup_Title {
+            get {
+                return ResourceManager.GetString("PersonEditPopup.Title", resourceCulture);
+            }
+        }
+        
+        public static string PersonEditPopup_Description {
+            get {
+                return ResourceManager.GetString("PersonEditPopup.Description", resourceCulture);
+            }
+        }
+        
+        public static string PersonEditPopup_FirstName {
+            get {
+                return ResourceManager.GetString("PersonEditPopup.FirstName", resourceCulture);
+            }
+        }
+        
+        public static string PersonEditPopup_FirstName_Placeholder {
+            get {
+                return ResourceManager.GetString("PersonEditPopup.FirstName.Placeholder", resourceCulture);
+            }
+        }
+        
+        public static string PersonEditPopup_LastName {
+            get {
+                return ResourceManager.GetString("PersonEditPopup.LastName", resourceCulture);
+            }
+        }
+        
+        public static string PersonEditPopup_LastName_Placeholder {
+            get {
+                return ResourceManager.GetString("PersonEditPopup.LastName.Placeholder", resourceCulture);
+            }
+        }
+        
+        public static string PersonEditPopup_Pseudonym {
+            get {
+                return ResourceManager.GetString("PersonEditPopup.Pseudonym", resourceCulture);
+            }
+        }
+        
+        public static string PersonEditPopup_Pseudonym_Placeholder {
+            get {
+                return ResourceManager.GetString("PersonEditPopup.Pseudonym.Placeholder", resourceCulture);
+            }
+        }
+        
+        public static string PersonEditPopup_Role {
+            get {
+                return ResourceManager.GetString("PersonEditPopup.Role", resourceCulture);
+            }
+        }
+        
         public static string SavePointCreatePopup_Title {
             get {
                 return ResourceManager.GetString("SavePointCreatePopup.Title", resourceCulture);
@@ -1224,6 +1344,24 @@ namespace ManaxClient.Localization {
         public static string SerieUpdatePopup_NoTags {
             get {
                 return ResourceManager.GetString("SerieUpdatePopup.NoTags", resourceCulture);
+            }
+        }
+        
+        public static string SerieUpdatePopup_Persons {
+            get {
+                return ResourceManager.GetString("SerieUpdatePopup.Persons", resourceCulture);
+            }
+        }
+        
+        public static string SerieUpdatePopup_Persons_Placeholder {
+            get {
+                return ResourceManager.GetString("SerieUpdatePopup.Persons.Placeholder", resourceCulture);
+            }
+        }
+        
+        public static string SerieUpdatePopup_NoPersons {
+            get {
+                return ResourceManager.GetString("SerieUpdatePopup.NoPersons", resourceCulture);
             }
         }
         
@@ -1458,6 +1596,72 @@ namespace ManaxClient.Localization {
         public static string LoginPage_Invalid_Host_Port {
             get {
                 return ResourceManager.GetString("LoginPage.Invalid.Host.Port", resourceCulture);
+            }
+        }
+        
+        public static string RolePage_Title {
+            get {
+                return ResourceManager.GetString("RolePage.Title", resourceCulture);
+            }
+        }
+        
+        public static string RolePage_RolesCount {
+            get {
+                return ResourceManager.GetString("RolePage.RolesCount", resourceCulture);
+            }
+        }
+        
+        public static string RolePage_NewRole {
+            get {
+                return ResourceManager.GetString("RolePage.NewRole", resourceCulture);
+            }
+        }
+        
+        public static string RolePage_NoRoles_Title {
+            get {
+                return ResourceManager.GetString("RolePage.NoRoles.Title", resourceCulture);
+            }
+        }
+        
+        public static string RolePage_NoRoles_Description {
+            get {
+                return ResourceManager.GetString("RolePage.NoRoles.Description", resourceCulture);
+            }
+        }
+        
+        public static string RolePage_CreateFirstRole {
+            get {
+                return ResourceManager.GetString("RolePage.CreateFirstRole", resourceCulture);
+            }
+        }
+        
+        public static string RolePage_RolesList_Title {
+            get {
+                return ResourceManager.GetString("RolePage.RolesList.Title", resourceCulture);
+            }
+        }
+        
+        public static string RoleEditPopup_Title {
+            get {
+                return ResourceManager.GetString("RoleEditPopup.Title", resourceCulture);
+            }
+        }
+        
+        public static string RoleEditPopup_Description {
+            get {
+                return ResourceManager.GetString("RoleEditPopup.Description", resourceCulture);
+            }
+        }
+        
+        public static string RoleEditPopup_Name {
+            get {
+                return ResourceManager.GetString("RoleEditPopup.Name", resourceCulture);
+            }
+        }
+        
+        public static string RoleEditPopup_Name_Placeholder {
+            get {
+                return ResourceManager.GetString("RoleEditPopup.Name.Placeholder", resourceCulture);
             }
         }
     }

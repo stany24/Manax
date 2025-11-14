@@ -24,6 +24,19 @@ public static class SqliteTestDbContextFactory
         DbContextOptions<ManaxContext> options = new DbContextOptionsBuilder<ManaxContext>()
             .UseSqlite($"Data Source={dbPath}")
             .Options;
+        
+        string savePointPath = Path.Combine(Directory.GetCurrentDirectory(), "savepoint");
+        if (Directory.Exists(savePointPath)) Directory.Delete(savePointPath, true);
+        Directory.CreateDirectory(savePointPath);
+        List<SavePoint> savePoints =
+        [
+            new()
+            {
+                Id = 1,
+                Path = savePointPath,
+                Creation = DateTime.UtcNow
+            }
+        ];
 
         List<Library> libraries =
         [
@@ -47,11 +60,11 @@ public static class SqliteTestDbContextFactory
             new()
             {
                 Id = 1,
-                LibraryId = 1,
+                Library = libraries[0],
                 FolderName = "serie1",
                 Title = "Serie 1",
                 Description = "Description for Serie 1",
-                SavePointId = 1,
+                SavePoint = savePoints[0],
                 Status = Status.Ongoing,
                 Creation = DateTime.UtcNow,
                 LastModification = DateTime.UtcNow
@@ -60,11 +73,11 @@ public static class SqliteTestDbContextFactory
             new()
             {
                 Id = 2,
-                LibraryId = 1,
+                Library = libraries[0],
                 FolderName = "serie2",
                 Title = "Serie 2",
                 Description = "Description for Serie 2",
-                SavePointId = 1,
+                SavePoint = savePoints[0],
                 Status = Status.Completed,
                 Creation = DateTime.UtcNow,
                 LastModification = DateTime.UtcNow
@@ -73,11 +86,11 @@ public static class SqliteTestDbContextFactory
             new()
             {
                 Id = 3,
-                LibraryId = 1,
+                Library = libraries[0],
                 FolderName = "serie3",
                 Title = "Serie 3",
                 Description = "Description for Serie 3",
-                SavePointId = 1,
+                SavePoint = savePoints[0],
                 Status = Status.Completed,
                 Creation = DateTime.UtcNow,
                 LastModification = DateTime.UtcNow
@@ -120,19 +133,6 @@ public static class SqliteTestDbContextFactory
                 Path = "/test_path/serie2/chapter1.cbz",
                 Creation = DateTime.UtcNow,
                 LastModification = DateTime.UtcNow
-            }
-        ];
-
-        string savePointPath = Path.Combine(Directory.GetCurrentDirectory(), "savepoint");
-        if (Directory.Exists(savePointPath)) Directory.Delete(savePointPath, true);
-        Directory.CreateDirectory(savePointPath);
-        List<SavePoint> savePoints =
-        [
-            new()
-            {
-                Id = 1,
-                Path = savePointPath,
-                Creation = DateTime.UtcNow
             }
         ];
 

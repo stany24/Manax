@@ -4,7 +4,6 @@ using ManaxServer.Attributes;
 using ManaxServer.Localization;
 using ManaxServer.Models;
 using ManaxServer.Models.SavePoint;
-using ManaxServer.Services.Mapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,7 +11,7 @@ namespace ManaxServer.Controllers;
 
 [Route("api/save-point")]
 [ApiController]
-public class SavePointController(ManaxContext context, IMapper mapper) : ControllerBase
+public class SavePointController(ManaxContext context) : ControllerBase
 {
     // POST: api/SavePoint
     [HttpPost("create")]
@@ -27,10 +26,8 @@ public class SavePointController(ManaxContext context, IMapper mapper) : Control
         if (!Directory.Exists(savePointCreate.Path))
             return Conflict(Localizer.SavePointPathNotExists(savePointCreate.Path));
 
-        SavePoint library = mapper.Map<SavePoint>(savePointCreate);
-        library.Creation = DateTime.UtcNow;
-
-        context.SavePoints.Add(library);
+        SavePoint savePoint = SavePoint.Create(savePointCreate);
+        context.SavePoints.Add(savePoint);
 
         try
         {
@@ -41,6 +38,6 @@ public class SavePointController(ManaxContext context, IMapper mapper) : Control
             return Conflict(Localizer.SavePointNameExists(savePointCreate.Path));
         }
 
-        return library.Id;
+        return savePoint.Id;
     }
 }

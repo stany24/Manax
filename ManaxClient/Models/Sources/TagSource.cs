@@ -22,12 +22,11 @@ public static class TagSource
     {
         ServerNotification.OnTagCreated += OnTagCreated;
         ServerNotification.OnTagDeleted += OnTagDeleted;
-        LoadTags();
     }
 
     public static EventHandler<string>? ErrorEmitted { get; set; }
 
-    private static void LoadTags()
+    public static void LoadTags()
     {
         Task.Run(() =>
         {
