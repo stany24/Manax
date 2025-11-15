@@ -8,7 +8,7 @@ using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData;
 using DynamicData.Binding;
-using ManaxClient.Models.Sources;
+using ManaxClient.Models.Server.Sources;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTO.Read;
@@ -16,7 +16,7 @@ using ManaxLibrary.DTO.Serie;
 using ManaxLibrary.Logging;
 using ManaxLibrary.Notifications;
 
-namespace ManaxClient.Models;
+namespace ManaxClient.Models.Server.Data;
 
 public partial class Serie : ObservableObject, IDisposable
 {

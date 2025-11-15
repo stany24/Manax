@@ -3,14 +3,14 @@ using System.Globalization;
 using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData;
 using Jeek.Avalonia.Localization;
-using ManaxClient.Models.Sources;
+using ManaxClient.Models.Server.Sources;
 using ManaxLibrary.DTO.Issue.Automatic;
 
 namespace ManaxClient.Models.Issue;
 
 public partial class IssueChapterAutomatic : ObservableObject
 {
-    [ObservableProperty] private Chapter _chapter = null!;
+    [ObservableProperty] private Server.Data.Chapter _chapter = null!;
     [ObservableProperty] private DateTime _createdAt;
     [ObservableProperty] private IssueChapterAutomaticType _problem;
     private IDisposable? _subscription;
@@ -36,7 +36,7 @@ public partial class IssueChapterAutomatic : ObservableObject
             .Filter(o => o.Id == dto.ChapterId)
             .Subscribe(changes =>
             {
-                foreach (Change<Chapter, long> change in changes)
+                foreach (Change<Server.Data.Chapter, long> change in changes)
                 {
                     if (change.Reason is not (ChangeReason.Add or ChangeReason.Update)) continue;
                     Chapter = change.Current;
@@ -45,7 +45,7 @@ public partial class IssueChapterAutomatic : ObservableObject
             });
     }
 
-    partial void OnChapterChanged(Chapter value)
+    partial void OnChapterChanged(Server.Data.Chapter value)
     {
         OnPropertyChanged(nameof(FormattedInfo));
     }

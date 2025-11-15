@@ -9,7 +9,7 @@ using DynamicData;
 using DynamicData.Binding;
 using Jeek.Avalonia.Localization;
 using ManaxClient.Models.Issue;
-using ManaxClient.Models.Sources;
+using ManaxClient.Models.Server.Sources;
 using ManaxClient.ViewModels.Pages.Serie;
 using ManaxClient.ViewModels.Popup.ConfirmCancel;
 using ManaxClient.ViewModels.Popup.ConfirmCancel.Content;
@@ -64,7 +64,7 @@ public partial class IssuesPageViewModel : PageViewModel
     public ReadOnlyObservableCollection<IssueChapterReported> IssueChapterReported => _issueChapterReported;
     public ReadOnlyObservableCollection<IssueSerieReported> IssueSerieReported => _issueSerieReported;
 
-    public void OpenSeriePage(Models.Serie serie)
+    public void OpenSeriePage(Models.Server.Data.Serie serie)
     {
         PageChangedRequested?.Invoke(this, new SeriePageViewModel(serie));
     }

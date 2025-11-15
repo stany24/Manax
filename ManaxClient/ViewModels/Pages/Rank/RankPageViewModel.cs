@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using DynamicData;
 using DynamicData.Binding;
-using ManaxClient.Models.Sources;
+using ManaxClient.Models.Server.Sources;
 using ManaxClient.ViewModels.Popup.ConfirmCancel;
 using ManaxClient.ViewModels.Popup.ConfirmCancel.Content;
 using ManaxLibrary;
@@ -15,19 +15,19 @@ namespace ManaxClient.ViewModels.Pages.Rank;
 
 public class RankPageViewModel : PageViewModel
 {
-    private readonly ReadOnlyObservableCollection<Models.Rank> _ranks;
+    private readonly ReadOnlyObservableCollection<Models.Server.Data.Rank> _ranks;
 
     public RankPageViewModel()
     {
-        SortExpressionComparer<Models.Rank> comparer = SortExpressionComparer<Models.Rank>.Descending(t => t.Value);
+        SortExpressionComparer<Models.Server.Data.Rank> comparer = SortExpressionComparer<Models.Server.Data.Rank>.Descending(t => t.Value);
         RankSource.Ranks.Connect()
             .SortAndBind(out _ranks, comparer)
             .Subscribe();
     }
 
-    public ReadOnlyObservableCollection<Models.Rank> Ranks => _ranks;
+    public ReadOnlyObservableCollection<Models.Server.Data.Rank> Ranks => _ranks;
 
-    public void UpdateRank(Models.Rank rank)
+    public void UpdateRank(Models.Server.Data.Rank rank)
     {
         RankUpdateDto update = new()
         {
@@ -57,7 +57,7 @@ public class RankPageViewModel : PageViewModel
         PopupRequested?.Invoke(this, popup);
     }
 
-    public void DeleteRank(Models.Rank rank)
+    public void DeleteRank(Models.Server.Data.Rank rank)
     {
         Task.Run(async () =>
         {

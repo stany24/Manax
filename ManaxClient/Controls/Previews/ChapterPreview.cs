@@ -12,7 +12,6 @@ using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Threading;
 using ManaxClient.Controls.Popups;
-using ManaxClient.Models;
 using ManaxClient.ViewModels.Popup.ConfirmCancel;
 using ManaxClient.ViewModels.Popup.ConfirmCancel.Content;
 using ManaxClient.ViewModels.Popup.SelectChoice;
@@ -20,6 +19,7 @@ using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTO.Issue.Reported;
 using ManaxLibrary.DTO.Read;
 using ManaxLibrary.Logging;
+using Chapter = ManaxClient.Models.Server.Data.Chapter;
 
 namespace ManaxClient.Controls.Previews;
 

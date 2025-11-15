@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 using Aspose.Zip.Rar;
 using CommunityToolkit.Mvvm.ComponentModel;
 using ImageMagick;
-using ManaxClient.Models;
 using ManaxClient.Models.Upload;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;

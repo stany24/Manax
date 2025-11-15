@@ -9,13 +9,13 @@ namespace ManaxClient.ViewModels.Pages.Chapter;
 
 public partial class ChapterPageViewModel : PageViewModel
 {
-    private readonly List<Models.Chapter> _chapters;
-    [ObservableProperty] private Models.Chapter _chapter = new();
+    private readonly List<Models.Server.Data.Chapter> _chapters;
+    [ObservableProperty] private Models.Server.Data.Chapter _chapter = new();
     [ObservableProperty] private bool _controlBordersVisible;
     [ObservableProperty] private int _currentPage;
     [ObservableProperty] private Vector _scrollOffset = new(0, 0);
 
-    public ChapterPageViewModel(List<Models.Chapter> chapters, Models.Chapter chapter)
+    public ChapterPageViewModel(List<Models.Server.Data.Chapter> chapters, Models.Server.Data.Chapter chapter)
     {
         _chapters = chapters;
         ControlBarVisible = false;

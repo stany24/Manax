@@ -10,11 +10,11 @@ using ManaxLibrary.DTO.Library;
 using ManaxLibrary.Logging;
 using ManaxLibrary.Notifications;
 
-namespace ManaxClient.Models.Sources;
+namespace ManaxClient.Models.Server.Sources;
 
 public static class LibrarySource
 {
-    public static readonly SourceCache<Library, long> Libraries = new(x => x.Id);
+    public static readonly SourceCache<Data.Library, long> Libraries = new(x => x.Id);
     private static bool _loaded;
     private static readonly Lock LoadLock = new();
     private static readonly Lock LibrariesLock = new();
@@ -39,7 +39,7 @@ public static class LibrarySource
     {
         lock (LibrariesLock)
         {
-            Libraries.AddOrUpdate(new Library(dto));
+            Libraries.AddOrUpdate(new Data.Library(dto));
         }
     }
 
@@ -71,7 +71,7 @@ public static class LibrarySource
 
                         lock (LibrariesLock)
                         {
-                            Libraries.AddOrUpdate(new Library(libraryResponse.GetValue()));
+                            Libraries.AddOrUpdate(new Data.Library(libraryResponse.GetValue()));
                         }
                     }
 

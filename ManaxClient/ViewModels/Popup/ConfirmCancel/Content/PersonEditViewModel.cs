@@ -4,9 +4,9 @@ using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData;
 using DynamicData.Binding;
-using ManaxClient.Models;
-using ManaxClient.Models.Sources;
+using ManaxClient.Models.Server.Sources;
 using ManaxLibrary.DTO.Person;
+using Role = ManaxClient.Models.Server.Data.Role;
 
 namespace ManaxClient.ViewModels.Popup.ConfirmCancel.Content;
 

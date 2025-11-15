@@ -4,55 +4,46 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using DynamicData;
-using ManaxClient.ViewModels;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
-using ManaxLibrary.DTO.Feature;
-using ManaxLibrary.DTO.Rank;
+using ManaxLibrary.DTO.Role;
 using ManaxLibrary.Logging;
 using ManaxLibrary.Notifications;
 
-namespace ManaxClient.Models.Sources;
+namespace ManaxClient.Models.Server.Sources;
 
-public static class RankSource
+public static class RoleSource
 {
-    public static readonly SourceCache<Rank, long> Ranks = new(x => x.Id);
+    public static readonly SourceCache<Data.Role, long> Roles = new(x => x.Id);
     private static bool _loaded;
     private static readonly Lock LoadLock = new();
-    private static readonly Lock RanksLock = new();
+    private static readonly Lock RolesLock = new();
 
-    static RankSource()
+    static RoleSource()
     {
-        MainWindowViewModel.FeatureChanged += (_, features) =>
-        {
-            if (features is { Key: FeatureType.Ranks, Value: true })
-                LoadRanks();
-            else
-                Ranks.Clear();
-        };
-        ServerNotification.OnRankCreated += OnRankCreated;
-        ServerNotification.OnRankDeleted += OnRankDeleted;
+        ServerNotification.OnRoleCreated += OnRoleCreated;
+        ServerNotification.OnRoleDeleted += OnRoleDeleted;
     }
 
     public static EventHandler<string>? ErrorEmitted { get; set; }
 
-    private static void OnRankDeleted(long id)
+    private static void OnRoleDeleted(long id)
     {
-        lock (RanksLock)
+        lock (RolesLock)
         {
-            Ranks.RemoveKey(id);
+            Roles.RemoveKey(id);
         }
     }
 
-    private static void OnRankCreated(RankDto dto)
+    private static void OnRoleCreated(RoleDto dto)
     {
-        lock (RanksLock)
+        lock (RolesLock)
         {
-            Ranks.AddOrUpdate(new Rank(dto));
+            Roles.AddOrUpdate(new Data.Role(dto));
         }
     }
 
-    public static void LoadRanks()
+    public static void LoadRoles()
     {
         Task.Run(() =>
         {
@@ -61,7 +52,7 @@ public static class RankSource
                 if (_loaded) return;
                 try
                 {
-                    Optional<List<RankDto>> ranksResponse = ManaxApiRankClient.GetRanksAsync().Result;
+                    Optional<List<RoleDto>> ranksResponse = ManaxApiRoleClient.GetRolesAsync().Result;
                     if (ranksResponse.Failed)
                     {
                         Logger.LogFailure(ranksResponse.Error);
@@ -69,12 +60,12 @@ public static class RankSource
                         return;
                     }
 
-                    lock (RanksLock)
+                    lock (RolesLock)
                     {
-                        Ranks.Edit(updater =>
+                        Roles.Edit(updater =>
                         {
                             updater.Clear();
-                            List<Rank> ranks = ranksResponse.GetValue().Select(dto => new Rank(dto)).ToList();
+                            List<Data.Role> ranks = ranksResponse.GetValue().Select(dto => new Data.Role(dto)).ToList();
                             updater.AddOrUpdate(ranks);
                         });
                     }

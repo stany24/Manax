@@ -12,7 +12,7 @@ using ManaxLibrary.DTO.Read;
 using ManaxLibrary.Logging;
 using ManaxLibrary.Notifications;
 
-namespace ManaxClient.Models;
+namespace ManaxClient.Models.Server.Data;
 
 public partial class Chapter : ObservableObject, IDisposable
 {
@@ -74,7 +74,7 @@ public partial class Chapter : ObservableObject, IDisposable
         _loadPagesCts = new CancellationTokenSource();
         CancellationToken token = _loadPagesCts.Token;
 
-        Task.Run(async () =>
+        Task.Run((Func<Task?>)(async () =>
         {
             Pages = new ObservableCollection<Bitmap>(new Bitmap[PageNumber]);
             for (int i = 0; i < PageNumber; i++)
@@ -101,7 +101,7 @@ public partial class Chapter : ObservableObject, IDisposable
                     Logger.LogError("Échec du chargement de la page " + index + " pour le chapitre " + Id, e);
                 }
             }
-        }, token);
+        }), token);
     }
 
     public void MarkAsRead(int page)

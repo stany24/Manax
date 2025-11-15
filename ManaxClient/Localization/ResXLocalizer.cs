@@ -1,16 +1,18 @@
-﻿using System.Globalization;
+﻿using System.Collections.Generic;
+using System.Globalization;
 using Jeek.Avalonia.Localization;
 
 namespace ManaxClient.Localization;
 
 public class ResXLocalizer : BaseLocalizer
 {
+    private readonly List<string> _languagesKeys = ["en", "fr"];
+    
     public override void Reload()
     {
         if (_languages.Count == 0)
         {
-            _languages.Add("en");
-            _languages.Add("fr");
+            _languages.AddRange(_languagesKeys);
         }
 
         ValidateLanguage();

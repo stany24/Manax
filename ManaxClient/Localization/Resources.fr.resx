@@ -1031,4 +1031,10 @@
     <data name="AutoCleanupPage.Skip" xml:space="preserve">
         <value>Passer</value>
     </data>
+    <data name="en" xml:space="preserve">
+        <value>Anglais</value>
+    </data>
+    <data name="fr" xml:space="preserve">
+        <value>Français</value>
+    </data>
 </root>

@@ -10,6 +10,7 @@
     xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
     xmlns:localization1="clr-namespace:ManaxClient.Localization"
     xmlns:converters="clr-namespace:ManaxClient.Converters"
+    xmlns:data="clr-namespace:ManaxClient.Models.Server.Data"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Pages.Serie.SeriePageView"
     x:DataType="page:SeriePageViewModel">
@@ -56,7 +57,7 @@
                                       SelectedItem="{Binding SelectedRank}"
                                       HorizontalAlignment="Stretch">
                                 <ComboBox.ItemTemplate>
-                                    <DataTemplate x:DataType="models:Rank">
+                                    <DataTemplate x:DataType="data:Rank">
                                         <TextBlock Text="{Binding Name}" />
                                     </DataTemplate>
                                 </ComboBox.ItemTemplate>

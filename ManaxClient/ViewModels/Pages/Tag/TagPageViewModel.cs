@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using DynamicData;
 using DynamicData.Binding;
 using Jeek.Avalonia.Localization;
-using ManaxClient.Models.Sources;
+using ManaxClient.Models.Server.Sources;
 using ManaxClient.ViewModels.Popup.ConfirmCancel;
 using ManaxClient.ViewModels.Popup.ConfirmCancel.Content;
 using ManaxLibrary;
@@ -16,18 +16,18 @@ namespace ManaxClient.ViewModels.Pages.Tag;
 
 public class TagPageViewModel : PageViewModel
 {
-    private readonly ReadOnlyObservableCollection<Models.Tag> _tags;
+    private readonly ReadOnlyObservableCollection<Models.Server.Data.Tag> _tags;
 
     public TagPageViewModel()
     {
-        SortExpressionComparer<Models.Tag> comparer = SortExpressionComparer<Models.Tag>.Descending(tag => tag.Name);
+        SortExpressionComparer<Models.Server.Data.Tag> comparer = SortExpressionComparer<Models.Server.Data.Tag>.Descending(tag => tag.Name);
         TagSource.Tags
             .Connect()
             .SortAndBind(out _tags, comparer)
             .Subscribe();
     }
 
-    public ReadOnlyObservableCollection<Models.Tag> Tags => _tags;
+    public ReadOnlyObservableCollection<Models.Server.Data.Tag> Tags => _tags;
 
     public void CreateTag()
     {
@@ -60,7 +60,7 @@ public class TagPageViewModel : PageViewModel
         PopupRequested?.Invoke(this, popup);
     }
 
-    public void UpdateTag(Models.Tag tag)
+    public void UpdateTag(Models.Server.Data.Tag tag)
     {
         TagUpdateDto update = new()
         {
@@ -91,7 +91,7 @@ public class TagPageViewModel : PageViewModel
         PopupRequested?.Invoke(this, popup);
     }
 
-    public void DeleteTag(Models.Tag tag)
+    public void DeleteTag(Models.Server.Data.Tag tag)
     {
         Task.Run(async () =>
         {

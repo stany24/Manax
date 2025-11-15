@@ -10,11 +10,11 @@ using ManaxLibrary.DTO.Serie;
 using ManaxLibrary.Logging;
 using ManaxLibrary.Notifications;
 
-namespace ManaxClient.Models.Sources;
+namespace ManaxClient.Models.Server.Sources;
 
 public static class SerieSource
 {
-    public static readonly SourceCache<Serie, long> Series = new(serie => serie.Id);
+    public static readonly SourceCache<Data.Serie, long> Series = new(serie => serie.Id);
     private static bool _isLoaded;
     private static readonly Lock SeriesLock = new();
     private static readonly Lock LoadLock = new();
@@ -28,7 +28,7 @@ public static class SerieSource
 
     private static void OnSerieCreated(SerieDto dto)
     {
-        Serie serie = new(dto);
+        Data.Serie serie = new(dto);
         serie.LoadInfo();
         serie.LoadPoster();
         lock (SeriesLock)
@@ -64,7 +64,7 @@ public static class SerieSource
                     List<long> seriesIds = seriesIdsResponse.GetValue();
                     lock (SeriesLock)
                     {
-                        Series.AddOrUpdate(seriesIds.Select(serieId => new Serie(serieId)));
+                        Series.AddOrUpdate(seriesIds.Select(serieId => new Data.Serie(serieId)));
                         _isLoaded = true;
                     }
                 }

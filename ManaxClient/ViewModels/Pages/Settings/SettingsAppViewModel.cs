@@ -1,19 +1,24 @@
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
+using DynamicData;
+using DynamicData.Binding;
 using Jeek.Avalonia.Localization;
-using ManaxClient.Models;
+using ManaxClient.Localization;
 using ManaxClient.Models.Theme;
 
 namespace ManaxClient.ViewModels.Pages.Settings;
 
 public partial class SettingsAppViewModel : PageViewModel
 {
-    [ObservableProperty] private List<LanguageItem> _availableLanguages = [];
     [ObservableProperty] private List<ThemeSettingsData> _availableThemes;
-
-    [ObservableProperty] private LanguageItem? _selectedLanguage;
+    [ObservableProperty] private Language? _selectedLanguage;
     private ThemeSettingsData _selectedThemeSettingsData;
+    private readonly ReadOnlyObservableCollection<Language> _languages;
+    
+    public ReadOnlyObservableCollection<Language> Languages => _languages;
 
     public SettingsAppViewModel()
     {
@@ -21,7 +26,14 @@ public partial class SettingsAppViewModel : PageViewModel
         _selectedThemeSettingsData = AvailableThemes
             .FirstOrDefault(t => t.Name == ThemeSettings.Current.Name) ?? AvailableThemes[0];
         IsDarkMode = ThemeSettings.Current.IsDark;
-        InitializeLanguages();
+        
+        LanguageSource.Languages
+            .Connect()
+            .SortAndBind(out _languages, SortExpressionComparer<Language>.Ascending(lang => lang.Code))
+            .Subscribe();
+        string currentLanguage = Localizer.Language;
+        if (string.IsNullOrEmpty(currentLanguage)) currentLanguage = "en";
+        SelectedLanguage = Languages.FirstOrDefault(l => l.Code == currentLanguage) ?? Languages.First();
     }
 
     public ThemeSettingsData SelectedThemeSettingsData
@@ -42,20 +54,7 @@ public partial class SettingsAppViewModel : PageViewModel
         }
     }
 
-    private void InitializeLanguages()
-    {
-        AvailableLanguages =
-        [
-            new LanguageItem { Code = "en", DisplayName = "English" },
-            new LanguageItem { Code = "fr", DisplayName = "Français" }
-        ];
-
-        string currentLanguage = Localizer.Language;
-        if (string.IsNullOrEmpty(currentLanguage)) currentLanguage = "en";
-        SelectedLanguage = AvailableLanguages.FirstOrDefault(l => l.Code == currentLanguage);
-    }
-
-    partial void OnSelectedLanguageChanged(LanguageItem? value)
+    partial void OnSelectedLanguageChanged(Language? value)
     {
         if (value != null && value.Code != Localizer.Language) Localizer.Language = value.Code;
     }

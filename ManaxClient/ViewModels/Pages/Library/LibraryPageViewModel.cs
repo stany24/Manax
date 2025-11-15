@@ -8,14 +8,14 @@ namespace ManaxClient.ViewModels.Pages.Library;
 
 public partial class LibraryPageViewModel : PageViewModel
 {
-    [ObservableProperty] private Models.Library _library;
+    [ObservableProperty] private Models.Server.Data.Library _library;
 
-    public LibraryPageViewModel(Models.Library library)
+    public LibraryPageViewModel(Models.Server.Data.Library library)
     {
         Library = library;
     }
 
-    public void MoveToSeriePage(Models.Serie serie)
+    public void MoveToSeriePage(Models.Server.Data.Serie serie)
     {
         SeriePageViewModel seriePageViewModel = new(serie);
         PageChangedRequested?.Invoke(this, seriePageViewModel);

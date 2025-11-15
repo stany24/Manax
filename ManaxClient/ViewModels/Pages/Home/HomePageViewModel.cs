@@ -11,7 +11,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData;
 using DynamicData.Binding;
 using Jeek.Avalonia.Localization;
-using ManaxClient.Models.Sources;
+using ManaxClient.Models.Server.Sources;
 using ManaxClient.ViewModels.Pages.Serie;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
@@ -21,19 +21,19 @@ namespace ManaxClient.ViewModels.Pages.Home;
 
 public partial class HomePageViewModel : PageViewModel
 {
-    private readonly ReadOnlyObservableCollection<Models.Serie> _series;
+    private readonly ReadOnlyObservableCollection<Models.Server.Data.Serie> _series;
     [ObservableProperty] private bool _isFolderPickerOpen;
 
     public HomePageViewModel()
     {
-        SortExpressionComparer<Models.Serie> comparer =
-            SortExpressionComparer<Models.Serie>.Descending(serie => serie.Title);
+        SortExpressionComparer<Models.Server.Data.Serie> comparer =
+            SortExpressionComparer<Models.Server.Data.Serie>.Descending(serie => serie.Title);
         SerieSource.Series
             .Connect()
             .SortAndBind(out _series, comparer)
             .Subscribe(changes =>
             {
-                foreach (Change<Models.Serie, long> change in changes)
+                foreach (Change<Models.Server.Data.Serie, long> change in changes)
                 {
                     if (change.Reason != ChangeReason.Add) continue;
                     change.Current.LoadInfo();
@@ -42,9 +42,9 @@ public partial class HomePageViewModel : PageViewModel
             });
     }
 
-    public ReadOnlyObservableCollection<Models.Serie> Series => _series;
+    public ReadOnlyObservableCollection<Models.Server.Data.Serie> Series => _series;
 
-    public void MoveToSeriePage(Models.Serie serie)
+    public void MoveToSeriePage(Models.Server.Data.Serie serie)
     {
         SeriePageViewModel seriePageViewModel = new(serie);
         PageChangedRequested?.Invoke(this, seriePageViewModel);

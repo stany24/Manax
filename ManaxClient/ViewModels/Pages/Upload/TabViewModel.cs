@@ -1,7 +1,7 @@
 using System;
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace ManaxClient.Models;
+namespace ManaxClient.ViewModels.Pages.Upload;
 
 public class TabViewModel : ObservableObject
 {

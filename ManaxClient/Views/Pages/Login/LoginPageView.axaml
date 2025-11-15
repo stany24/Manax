@@ -14,7 +14,7 @@
                   VerticalAlignment="Top"
                   Margin="20"
                   MinWidth="120"
-                  ItemsSource="{Binding AvailableLanguages}"
+                  ItemsSource="{Binding Languages}"
                   SelectedItem="{Binding SelectedLanguage}"
                   DisplayMemberBinding="{Binding DisplayName}"
                   Padding="8,6"

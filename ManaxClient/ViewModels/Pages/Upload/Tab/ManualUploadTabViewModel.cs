@@ -1,5 +1,4 @@
 using CommunityToolkit.Mvvm.ComponentModel;
-using ManaxClient.Models;
 
 namespace ManaxClient.ViewModels.Pages.Upload.Tab;
 

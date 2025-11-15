@@ -3,11 +3,11 @@ using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData;
 using DynamicData.Binding;
-using ManaxClient.Models.Sources;
+using ManaxClient.Models.Server.Sources;
 using ManaxLibrary.DTO.Library;
 using ManaxLibrary.Notifications;
 
-namespace ManaxClient.Models;
+namespace ManaxClient.Models.Server.Data;
 
 public partial class Library : ObservableObject
 {

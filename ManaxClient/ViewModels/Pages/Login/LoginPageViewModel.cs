@@ -1,11 +1,14 @@
 using System;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
+using DynamicData;
+using DynamicData.Binding;
 using Jeek.Avalonia.Localization;
+using ManaxClient.Localization;
 using ManaxClient.Models;
 using ManaxClient.ViewModels.Pages.Home;
 using ManaxLibrary;
@@ -17,42 +20,37 @@ namespace ManaxClient.ViewModels.Pages.Login;
 
 public sealed partial class LoginPageViewModel : PageViewModel
 {
+    private bool _isAdmin;
     private readonly string _saveFile;
-
-    [ObservableProperty] private List<LanguageItem> _availableLanguages = [];
     [ObservableProperty] private bool _canLogin = true;
     [ObservableProperty] private string _emoji = "🔑";
     [ObservableProperty] private string _host = string.Empty;
-    private bool _isAdmin;
     [ObservableProperty] private string _password = string.Empty;
     [ObservableProperty] private int? _port;
-    [ObservableProperty] private LanguageItem? _selectedLanguage;
+    [ObservableProperty] private Language _selectedLanguage;
     [ObservableProperty] private string _username = string.Empty;
 
+    private readonly ReadOnlyObservableCollection<Language> _languages;
+    
+    public ReadOnlyObservableCollection<Language> Languages => _languages;
     public LoginPageViewModel()
     {
         ManaxApiConfig.ResetToken();
         _saveFile = Path.Combine(Directory.GetCurrentDirectory(), "login.json");
         ControlBarVisible = false;
-
-        InitializeLanguages();
+        
+        LanguageSource.Languages
+            .Connect()
+            .SortAndBind(out _languages, SortExpressionComparer<Language>.Ascending(lang => lang.Code))
+            .Subscribe();
+        string currentLanguage = Localizer.Language;
+        if (string.IsNullOrEmpty(currentLanguage)) currentLanguage = "en";
+        SelectedLanguage = Languages.FirstOrDefault(l => l.Code == currentLanguage) ?? Languages.First();
+        
         TryLoadSavedLogin();
     }
 
-    private void InitializeLanguages()
-    {
-        AvailableLanguages =
-        [
-            new LanguageItem { Code = "en", DisplayName = "English" },
-            new LanguageItem { Code = "fr", DisplayName = "Français" }
-        ];
-
-        string currentLanguage = Localizer.Language;
-        if (string.IsNullOrEmpty(currentLanguage)) currentLanguage = "en";
-        SelectedLanguage = AvailableLanguages.FirstOrDefault(l => l.Code == currentLanguage);
-    }
-
-    partial void OnSelectedLanguageChanged(LanguageItem? value)
+    partial void OnSelectedLanguageChanged(Language? value)
     {
         if (value != null && value.Code != Localizer.Language) Localizer.Language = value.Code;
     }

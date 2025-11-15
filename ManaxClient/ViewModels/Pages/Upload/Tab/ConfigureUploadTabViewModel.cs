@@ -8,7 +8,6 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData;
-using ManaxClient.Models;
 using ManaxClient.Models.Upload;
 using ManaxLibrary.Logging;
 

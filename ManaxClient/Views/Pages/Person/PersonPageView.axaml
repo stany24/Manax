@@ -8,6 +8,7 @@
     xmlns:models="clr-namespace:ManaxClient.Models"
     xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
     xmlns:localization1="clr-namespace:ManaxClient.Localization"
+    xmlns:data="clr-namespace:ManaxClient.Models.Server.Data"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Pages.Person.PersonPageView"
     x:DataType="page:PersonPageViewModel">
@@ -64,7 +65,7 @@
 
                     <ItemsControl ItemsSource="{Binding Persons}">
                         <ItemsControl.ItemTemplate>
-                            <DataTemplate x:DataType="models:Person">
+                            <DataTemplate x:DataType="data:Person">
                                 <Border BorderThickness="1"
                                         CornerRadius="8"
                                         Padding="16"
@@ -182,7 +183,7 @@
 
                     <ItemsControl ItemsSource="{Binding Roles}">
                         <ItemsControl.ItemTemplate>
-                            <DataTemplate x:DataType="models:Role">
+                            <DataTemplate x:DataType="data:Role">
                                 <Border BorderThickness="1"
                                         CornerRadius="8"
                                         Padding="16"

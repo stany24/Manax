@@ -3,8 +3,7 @@ using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using DynamicData;
 using DynamicData.Binding;
-using ManaxClient.Models;
-using ManaxClient.Models.Sources;
+using ManaxClient.Models.Server.Sources;
 using ManaxClient.ViewModels.Popup.ConfirmCancel;
 using ManaxClient.ViewModels.Popup.ConfirmCancel.Content;
 using ManaxLibrary;
@@ -12,17 +11,18 @@ using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTO.Person;
 using ManaxLibrary.DTO.Role;
 using ManaxLibrary.Logging;
+using Role = ManaxClient.Models.Server.Data.Role;
 
 namespace ManaxClient.ViewModels.Pages.Person;
 
 public class PersonPageViewModel : PageViewModel
 {
-    private readonly ReadOnlyObservableCollection<Models.Person> _persons;
+    private readonly ReadOnlyObservableCollection<Models.Server.Data.Person> _persons;
     private readonly ReadOnlyObservableCollection<Role> _roles;
 
     public PersonPageViewModel()
     {
-        SortExpressionComparer<Models.Person> comparer = SortExpressionComparer<Models.Person>
+        SortExpressionComparer<Models.Server.Data.Person> comparer = SortExpressionComparer<Models.Server.Data.Person>
             .Ascending(p => p.LastName)
             .ThenByAscending(p => p.FirstName);
         PersonSource.Persons.Connect()
@@ -36,10 +36,10 @@ public class PersonPageViewModel : PageViewModel
             .Subscribe();
     }
 
-    public ReadOnlyObservableCollection<Models.Person> Persons => _persons;
+    public ReadOnlyObservableCollection<Models.Server.Data.Person> Persons => _persons;
     public ReadOnlyObservableCollection<Role> Roles => _roles;
 
-    public void UpdatePerson(Models.Person person)
+    public void UpdatePerson(Models.Server.Data.Person person)
     {
         PersonUpdateDto update = new()
         {
@@ -71,7 +71,7 @@ public class PersonPageViewModel : PageViewModel
         PopupRequested?.Invoke(this, popup);
     }
 
-    public void DeletePerson(Models.Person person)
+    public void DeletePerson(Models.Server.Data.Person person)
     {
         Task.Run(async () =>
         {

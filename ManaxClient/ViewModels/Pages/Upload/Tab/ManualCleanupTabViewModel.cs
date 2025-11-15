@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using Avalonia;
 using CommunityToolkit.Mvvm.ComponentModel;
-using ManaxClient.Models;
 using ManaxClient.Models.Upload;
 
 namespace ManaxClient.ViewModels.Pages.Upload.Tab;

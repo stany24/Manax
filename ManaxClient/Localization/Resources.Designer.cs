@@ -2060,5 +2060,17 @@ namespace ManaxClient.Localization {
                 return ResourceManager.GetString("AutoCleanupPage.Skip", resourceCulture);
             }
         }
+        
+        public static string en {
+            get {
+                return ResourceManager.GetString("en", resourceCulture);
+            }
+        }
+        
+        public static string fr {
+            get {
+                return ResourceManager.GetString("fr", resourceCulture);
+            }
+        }
     }
 }

@@ -11,7 +11,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData;
 using DynamicData.Binding;
 using Jeek.Avalonia.Localization;
-using ManaxClient.Models.Sources;
+using ManaxClient.Models.Server.Sources;
 using ManaxClient.ViewModels.Pages.Chapter;
 using ManaxClient.ViewModels.Popup.ConfirmCancel;
 using ManaxClient.ViewModels.Popup.ConfirmCancel.Content;
@@ -25,14 +25,14 @@ namespace ManaxClient.ViewModels.Pages.Serie;
 
 public partial class SeriePageViewModel : PageViewModel
 {
-    private readonly ReadOnlyObservableCollection<Models.Rank> _ranks;
+    private readonly ReadOnlyObservableCollection<Models.Server.Data.Rank> _ranks;
     [ObservableProperty] private bool _isFilePickerOpen;
-    [ObservableProperty] private Models.Rank? _selectedRank;
-    [ObservableProperty] private Models.Serie _serie;
+    [ObservableProperty] private Models.Server.Data.Rank? _selectedRank;
+    [ObservableProperty] private Models.Server.Data.Serie _serie;
 
-    public SeriePageViewModel(Models.Serie serie)
+    public SeriePageViewModel(Models.Server.Data.Serie serie)
     {
-        SortExpressionComparer<Models.Rank> comparer = SortExpressionComparer<Models.Rank>.Descending(t => t.Value);
+        SortExpressionComparer<Models.Server.Data.Rank> comparer = SortExpressionComparer<Models.Server.Data.Rank>.Descending(t => t.Value);
         RankSource.Ranks
             .Connect()
             .SortAndBind(out _ranks, comparer)
@@ -43,9 +43,9 @@ public partial class SeriePageViewModel : PageViewModel
         Serie.LoadPoster();
     }
 
-    public ReadOnlyObservableCollection<Models.Rank> Ranks => _ranks;
+    public ReadOnlyObservableCollection<Models.Server.Data.Rank> Ranks => _ranks;
 
-    partial void OnSelectedRankChanged(Models.Rank? value)
+    partial void OnSelectedRankChanged(Models.Server.Data.Rank? value)
     {
         if (value == null) return;
         UserRankCreateDto userRankCreateDto = new()
@@ -61,7 +61,7 @@ public partial class SeriePageViewModel : PageViewModel
         });
     }
 
-    public void MoveToChapterPage(Models.Chapter chapter)
+    public void MoveToChapterPage(Models.Server.Data.Chapter chapter)
     {
         ChapterPageViewModel chapterPageViewModel = new(Serie.Chapters.ToList(), chapter);
         PageChangedRequested?.Invoke(this, chapterPageViewModel);

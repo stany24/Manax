@@ -10,11 +10,11 @@ using ManaxLibrary.DTO.Person;
 using ManaxLibrary.Logging;
 using ManaxLibrary.Notifications;
 
-namespace ManaxClient.Models.Sources;
+namespace ManaxClient.Models.Server.Sources;
 
 public static class PersonSource
 {
-    public static readonly SourceCache<Person, long> Persons = new(x => x.Id);
+    public static readonly SourceCache<Data.Person, long> Persons = new(x => x.Id);
     private static bool _loaded;
     private static readonly Lock LoadLock = new();
     private static readonly Lock PersonsLock = new();
@@ -39,7 +39,7 @@ public static class PersonSource
     {
         lock (PersonsLock)
         {
-            Persons.AddOrUpdate(new Person(dto));
+            Persons.AddOrUpdate(new Data.Person(dto));
         }
     }
 
@@ -65,7 +65,7 @@ public static class PersonSource
                         Persons.Edit(updater =>
                         {
                             updater.Clear();
-                            List<Person> persons = personsResponse.GetValue().Select(dto => new Person(dto)).ToList();
+                            List<Data.Person> persons = personsResponse.GetValue().Select(dto => new Data.Person(dto)).ToList();
                             updater.AddOrUpdate(persons);
                         });
                     }

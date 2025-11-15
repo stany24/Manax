@@ -10,11 +10,11 @@ using ManaxLibrary.DTO.Tag;
 using ManaxLibrary.Logging;
 using ManaxLibrary.Notifications;
 
-namespace ManaxClient.Models.Sources;
+namespace ManaxClient.Models.Server.Sources;
 
 public static class TagSource
 {
-    public static readonly SourceCache<Tag, long> Tags = new(x => x.Id);
+    public static readonly SourceCache<Data.Tag, long> Tags = new(x => x.Id);
     private static bool _loaded;
     private static readonly Lock LoadLock = new();
     private static readonly Lock TagLock = new();
@@ -47,7 +47,7 @@ public static class TagSource
 
                     lock (TagLock)
                     {
-                        Tags.AddOrUpdate(response.GetValue().Select(dto => new Tag(dto)));
+                        Tags.AddOrUpdate(response.GetValue().Select(dto => new Data.Tag(dto)));
                     }
 
                     _loaded = true;
@@ -74,7 +74,7 @@ public static class TagSource
     {
         lock (TagLock)
         {
-            Tags.AddOrUpdate(new Tag(tag));
+            Tags.AddOrUpdate(new Data.Tag(tag));
         }
     }
 }

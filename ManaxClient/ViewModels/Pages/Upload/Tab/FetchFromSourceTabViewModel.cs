@@ -3,7 +3,6 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
-using ManaxClient.Models;
 using ManaxClient.Models.Upload;
 
 namespace ManaxClient.ViewModels.Pages.Upload.Tab;

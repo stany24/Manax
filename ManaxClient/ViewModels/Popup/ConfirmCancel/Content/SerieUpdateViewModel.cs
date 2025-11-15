@@ -4,9 +4,12 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
-using ManaxClient.Models;
-using ManaxClient.Models.Sources;
+using ManaxClient.Models.Server.Sources;
 using ManaxLibrary.DTO.Serie;
+using Library = ManaxClient.Models.Server.Data.Library;
+using Person = ManaxClient.Models.Server.Data.Person;
+using Serie = ManaxClient.Models.Server.Data.Serie;
+using Tag = ManaxClient.Models.Server.Data.Tag;
 
 namespace ManaxClient.ViewModels.Popup.ConfirmCancel.Content;
 

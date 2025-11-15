@@ -12,11 +12,11 @@ using ManaxLibrary.DTO.Read;
 using ManaxLibrary.Logging;
 using ManaxLibrary.Notifications;
 
-namespace ManaxClient.Models.Sources;
+namespace ManaxClient.Models.Server.Sources;
 
 public static class ChapterSource
 {
-    public static readonly SourceCache<Chapter, long> Chapters = new(x => x.Id);
+    public static readonly SourceCache<Data.Chapter, long> Chapters = new(x => x.Id);
     private static readonly Lock ChaptersLock = new();
 
     static ChapterSource()
@@ -39,7 +39,7 @@ public static class ChapterSource
     {
         lock (ChaptersLock)
         {
-            Chapters.AddOrUpdate(new Chapter(dto));
+            Chapters.AddOrUpdate(new Data.Chapter(dto));
         }
     }
 
@@ -88,7 +88,7 @@ public static class ChapterSource
 
             lock (ChaptersLock)
             {
-                Chapters.AddOrUpdate(new Chapter(response.GetValue()));
+                Chapters.AddOrUpdate(new Data.Chapter(response.GetValue()));
             }
         }
         catch (Exception e)
@@ -116,7 +116,7 @@ public static class ChapterSource
                 foreach (ReadDto read in reads)
                     lock (ChaptersLock)
                     {
-                        Chapter? chapter = Chapters.Items.FirstOrDefault(c => c.Id == read.ChapterId);
+                        Data.Chapter? chapter = Chapters.Items.FirstOrDefault(c => c.Id == read.ChapterId);
                         if (chapter == null) continue;
                         chapter.Read = read;
                     }

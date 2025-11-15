@@ -5,7 +5,7 @@ using Avalonia.Data.Converters;
 using Avalonia.Input;
 using Avalonia.Layout;
 using Avalonia.Media;
-using ManaxClient.Models;
+using Serie = ManaxClient.Models.Server.Data.Serie;
 
 namespace ManaxClient.Controls.Previews;
 

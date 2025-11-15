@@ -10,11 +10,11 @@ using ManaxLibrary.DTO.User;
 using ManaxLibrary.Logging;
 using ManaxLibrary.Notifications;
 
-namespace ManaxClient.Models.Sources;
+namespace ManaxClient.Models.Server.Sources;
 
 public static class UserSource
 {
-    public static readonly SourceCache<User, long> Users = new(x => x.Id);
+    public static readonly SourceCache<Data.User, long> Users = new(x => x.Id);
     private static readonly Lock UsersLock = new();
 
     static UserSource()
@@ -60,7 +60,7 @@ public static class UserSource
                     UserDto dto = userResponse.GetValue();
                     lock (UsersLock)
                     {
-                        Users.AddOrUpdate(new User(dto));
+                        Users.AddOrUpdate(new Data.User(dto));
                     }
                 }
             }
@@ -84,7 +84,7 @@ public static class UserSource
     {
         lock (UsersLock)
         {
-            Users.AddOrUpdate(new User(user));
+            Users.AddOrUpdate(new Data.User(user));
         }
     }
 }

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using DynamicData;
 using DynamicData.Binding;
 using Jeek.Avalonia.Localization;
-using ManaxClient.Models.Sources;
+using ManaxClient.Models.Server.Sources;
 using ManaxClient.ViewModels.Popup.ConfirmCancel;
 using ManaxClient.ViewModels.Popup.ConfirmCancel.Content;
 using ManaxLibrary;
@@ -17,21 +17,21 @@ namespace ManaxClient.ViewModels.Pages.User;
 
 public class UsersPageViewModel : PageViewModel
 {
-    private readonly ReadOnlyObservableCollection<Models.User> _users;
+    private readonly ReadOnlyObservableCollection<Models.Server.Data.User> _users;
 
     public UsersPageViewModel()
     {
-        SortExpressionComparer<Models.User> comparer =
-            SortExpressionComparer<Models.User>.Descending(user => user.Username);
+        SortExpressionComparer<Models.Server.Data.User> comparer =
+            SortExpressionComparer<Models.Server.Data.User>.Descending(user => user.Username);
         UserSource.Users
             .Connect()
             .SortAndBind(out _users, comparer)
             .Subscribe();
     }
 
-    public ReadOnlyObservableCollection<Models.User> Users => _users;
+    public ReadOnlyObservableCollection<Models.Server.Data.User> Users => _users;
 
-    public void DeleteUser(Models.User user)
+    public void DeleteUser(Models.Server.Data.User user)
     {
         Task.Run(async () =>
         {

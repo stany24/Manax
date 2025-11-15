@@ -9,7 +9,7 @@ using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTO.Issue.Reported;
 using ManaxLibrary.Logging;
 
-namespace ManaxClient.Models.Sources;
+namespace ManaxClient.Models.Server.Sources;
 
 public static class ProblemSource
 {

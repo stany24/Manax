@@ -2,7 +2,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using ManaxLibrary.DTO.Role;
 using ManaxLibrary.Notifications;
 
-namespace ManaxClient.Models;
+namespace ManaxClient.Models.Server.Data;
 
 public partial class Role : ObservableObject
 {

@@ -1,10 +1,10 @@
 using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
-using ManaxClient.Models.Sources;
+using ManaxClient.Models.Server.Sources;
 using ManaxLibrary.DTO.Person;
 using ManaxLibrary.Notifications;
 
-namespace ManaxClient.Models;
+namespace ManaxClient.Models.Server.Data;
 
 public partial class Person : ObservableObject
 {

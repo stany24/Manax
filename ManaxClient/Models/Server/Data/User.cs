@@ -3,7 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using ManaxLibrary.DTO.User;
 using ManaxLibrary.Notifications;
 
-namespace ManaxClient.Models;
+namespace ManaxClient.Models.Server.Data;
 
 public partial class User : ObservableObject
 {

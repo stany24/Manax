@@ -29,7 +29,7 @@
                         <StackPanel Grid.Column="0" Grid.Row="0" Spacing="6">
                             <TextBlock Text="{localization:Localize SettingsAppPage.SelectedLanguage}"
                                        FontWeight="Medium" />
-                            <ComboBox ItemsSource="{Binding AvailableLanguages}"
+                            <ComboBox ItemsSource="{Binding Languages}"
                                       SelectedItem="{Binding SelectedLanguage}"
                                       DisplayMemberBinding="{Binding DisplayName}"
                                       HorizontalAlignment="Stretch"

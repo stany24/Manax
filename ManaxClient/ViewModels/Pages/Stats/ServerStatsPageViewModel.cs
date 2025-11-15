@@ -29,7 +29,7 @@ public partial class ServerStatsPageViewModel : PageViewModel
     }
 
 
-    public ObservableCollection<Models.Serie> NeverReadSeries { get; set; } = new([]);
+    public ObservableCollection<Models.Server.Data.Serie> NeverReadSeries { get; set; } = new([]);
     public ObservableCollection<ISeries> UserActivitySeries { get; set; } = new([]);
     public ObservableCollection<ISeries> LibraryDistributionSeries { get; set; } = new([]);
     public ObservableCollection<ISeries> DiskUsageSeries { get; set; } = new([]);
@@ -128,7 +128,7 @@ public partial class ServerStatsPageViewModel : PageViewModel
             colorIndex++;
         }
 
-        foreach (Models.Serie serie in ServerStats.NeverReadSeries.ConvertAll(s => new Models.Serie(s)))
+        foreach (Models.Server.Data.Serie serie in ServerStats.NeverReadSeries.ConvertAll(s => new Models.Server.Data.Serie(s)))
             NeverReadSeries.Add(serie);
     }
 }

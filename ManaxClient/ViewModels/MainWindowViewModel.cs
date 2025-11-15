@@ -10,7 +10,7 @@ using DynamicData;
 using DynamicData.Binding;
 using ManaxClient.Models;
 using ManaxClient.Models.History;
-using ManaxClient.Models.Sources;
+using ManaxClient.Models.Server.Sources;
 using ManaxClient.ViewModels.Pages;
 using ManaxClient.ViewModels.Pages.Home;
 using ManaxClient.ViewModels.Pages.Issue;
@@ -27,6 +27,9 @@ using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.Logging;
 using ManaxLibrary.Notifications;
+using Chapter = ManaxClient.Models.Server.Data.Chapter;
+using Library = ManaxClient.Models.Server.Data.Library;
+using Serie = ManaxClient.Models.Server.Data.Serie;
 
 namespace ManaxClient.ViewModels;
 

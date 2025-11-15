@@ -8,6 +8,7 @@
     xmlns:models="clr-namespace:ManaxClient.Models"
     xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
     xmlns:localization1="clr-namespace:ManaxClient.Localization"
+    xmlns:data="clr-namespace:ManaxClient.Models.Server.Data"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Pages.Rank.RankPageView"
     x:DataType="page:RankPageViewModel">
@@ -64,7 +65,7 @@
 
                     <ItemsControl ItemsSource="{Binding Ranks}">
                         <ItemsControl.ItemTemplate>
-                            <DataTemplate x:DataType="models:Rank">
+                            <DataTemplate x:DataType="data:Rank">
                                 <Border BorderThickness="1"
                                         CornerRadius="8"
                                         Padding="16"
