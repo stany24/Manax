@@ -10,6 +10,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ManaxServer.Controllers;
 
+[Route("api/issue")]
+[ApiController]
 public class IssueTypeController(ManaxContext context, IFeatureService featureService): ControllerBase
 {
     [HttpGet("chapter/reported/types")]

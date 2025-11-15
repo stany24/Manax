@@ -58,7 +58,7 @@ public class ReadController(ManaxContext context, INotificationService notificat
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<IActionResult> Unread(int chapterId)
+    public async Task<IActionResult> Unread(long chapterId)
     {
         long? currentUserId = UserController.GetCurrentUserId(HttpContext);
         if (currentUserId == null) return Unauthorized(Localizer.UserMustBeLoggedInRead());

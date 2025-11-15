@@ -78,7 +78,9 @@ public class TagPageViewModel : PageViewModel
             {
                 if (viewModel.Canceled()) return;
                 TagUpdateDto result = content.GetResult();
-                await ManaxApiTagClient.UpdateTagAsync(result);
+                Optional<bool> response = await ManaxApiTagClient.UpdateTagAsync(result);
+                if (response.Failed)
+                    InfoEmitted?.Invoke(this, response.Error);
             }
             catch
             {
@@ -95,7 +97,9 @@ public class TagPageViewModel : PageViewModel
         {
             try
             {
-                await ManaxApiTagClient.DeleteTagAsync(tag.Id);
+                Optional<bool> response = await ManaxApiTagClient.DeleteTagAsync(tag.Id);
+                if (response.Failed)
+                    InfoEmitted?.Invoke(this, response.Error);
             }
             catch
             {
