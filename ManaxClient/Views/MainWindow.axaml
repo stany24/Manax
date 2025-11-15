@@ -138,15 +138,6 @@
                             <TextBlock Text="People" />
                         </StackPanel>
                     </Button>
-                    
-                    <Button Classes="sidebar"
-                            IsVisible="{Binding CanReadPeople}"
-                            Command="{Binding ChangePagePeople}">
-                        <StackPanel Orientation="Horizontal" Spacing="12">
-                            <TextBlock Text="👥" FontSize="14" />
-                            <TextBlock Text="People" />
-                        </StackPanel>
-                    </Button>
 
                     <TextBlock Classes="subtitle"
                                Text="{localization:Localize MainWindow.Parameters}"

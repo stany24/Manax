@@ -2042,5 +2042,23 @@ namespace ManaxClient.Localization {
                 return ResourceManager.GetString("ConfigureUploadPage.SaveSettings", resourceCulture);
             }
         }
+        
+        public static string MainWindow_Upload {
+            get {
+                return ResourceManager.GetString("MainWindow.Upload", resourceCulture);
+            }
+        }
+        
+        public static string FetchFromSourcePage_Skip {
+            get {
+                return ResourceManager.GetString("FetchFromSourcePage.Skip", resourceCulture);
+            }
+        }
+        
+        public static string AutoCleanupPage_Skip {
+            get {
+                return ResourceManager.GetString("AutoCleanupPage.Skip", resourceCulture);
+            }
+        }
     }
 }

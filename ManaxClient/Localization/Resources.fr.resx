@@ -1017,4 +1017,13 @@
     <data name="FetchFromSourcePage.FilesFormat" xml:space="preserve">
         <value>{0} / {1} fichiers</value>
     </data>
+    <data name="MainWindow.Upload" xml:space="preserve">
+        <value>Téléchargement</value>
+    </data>
+    <data name="FetchFromSourcePage.Skip" xml:space="preserve">
+        <value>Passer</value>
+    </data>
+    <data name="AutoCleanupPage.Skip" xml:space="preserve">
+        <value>Passer</value>
+    </data>
 </root>

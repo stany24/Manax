@@ -1611,6 +1611,198 @@ namespace ManaxClient.Localization {
             }
         }
         
+        public static string ConfigureUploadPage_Title {
+            get {
+                return ResourceManager.GetString("ConfigureUploadPage.Title", resourceCulture);
+            }
+        }
+        
+        public static string ConfigureUploadPage_SourceFolders {
+            get {
+                return ResourceManager.GetString("ConfigureUploadPage.SourceFolders", resourceCulture);
+            }
+        }
+        
+        public static string ConfigureUploadPage_SourceFolders_Description {
+            get {
+                return ResourceManager.GetString("ConfigureUploadPage.SourceFolders.Description", resourceCulture);
+            }
+        }
+        
+        public static string ConfigureUploadPage_AddSource {
+            get {
+                return ResourceManager.GetString("ConfigureUploadPage.AddSource", resourceCulture);
+            }
+        }
+        
+        public static string ConfigureUploadPage_RemoveSource {
+            get {
+                return ResourceManager.GetString("ConfigureUploadPage.RemoveSource", resourceCulture);
+            }
+        }
+        
+        public static string ConfigureUploadPage_NoSources {
+            get {
+                return ResourceManager.GetString("ConfigureUploadPage.NoSources", resourceCulture);
+            }
+        }
+        
+        public static string ConfigureUploadPage_ProcessingFolder {
+            get {
+                return ResourceManager.GetString("ConfigureUploadPage.ProcessingFolder", resourceCulture);
+            }
+        }
+        
+        public static string ConfigureUploadPage_ProcessingFolder_Description {
+            get {
+                return ResourceManager.GetString("ConfigureUploadPage.ProcessingFolder.Description", resourceCulture);
+            }
+        }
+        
+        public static string ConfigureUploadPage_Browse {
+            get {
+                return ResourceManager.GetString("ConfigureUploadPage.Browse", resourceCulture);
+            }
+        }
+        
+        public static string ConfigureUploadPage_OpenFolder {
+            get {
+                return ResourceManager.GetString("ConfigureUploadPage.OpenFolder", resourceCulture);
+            }
+        }
+        
+        public static string ConfigureUploadPage_CurrentPath {
+            get {
+                return ResourceManager.GetString("ConfigureUploadPage.CurrentPath", resourceCulture);
+            }
+        }
+        
+        public static string ConfigureUploadPage_SelectFolder {
+            get {
+                return ResourceManager.GetString("ConfigureUploadPage.SelectFolder", resourceCulture);
+            }
+        }
+        
+        public static string ConfigureUploadPage_Settings {
+            get {
+                return ResourceManager.GetString("ConfigureUploadPage.Settings", resourceCulture);
+            }
+        }
+        
+        public static string ConfigureUploadPage_SaveSettings {
+            get {
+                return ResourceManager.GetString("ConfigureUploadPage.SaveSettings", resourceCulture);
+            }
+        }
+        
+        public static string ConfigureUploadPage_NoFolderSelected {
+            get {
+                return ResourceManager.GetString("ConfigureUploadPage.NoFolderSelected", resourceCulture);
+            }
+        }
+        
+        public static string ConfigureUploadPage_Information {
+            get {
+                return ResourceManager.GetString("ConfigureUploadPage.Information", resourceCulture);
+            }
+        }
+        
+        public static string ConfigureUploadPage_Information_Text1 {
+            get {
+                return ResourceManager.GetString("ConfigureUploadPage.Information.Text1", resourceCulture);
+            }
+        }
+        
+        public static string ConfigureUploadPage_Information_Text2 {
+            get {
+                return ResourceManager.GetString("ConfigureUploadPage.Information.Text2", resourceCulture);
+            }
+        }
+        
+        public static string AutoCleanupPage_Title {
+            get {
+                return ResourceManager.GetString("AutoCleanupPage.Title", resourceCulture);
+            }
+        }
+        
+        public static string AutoCleanupPage_Subtitle {
+            get {
+                return ResourceManager.GetString("AutoCleanupPage.Subtitle", resourceCulture);
+            }
+        }
+        
+        public static string AutoCleanupPage_ArchiveProcessing {
+            get {
+                return ResourceManager.GetString("AutoCleanupPage.ArchiveProcessing", resourceCulture);
+            }
+        }
+        
+        public static string AutoCleanupPage_ImageProcessing {
+            get {
+                return ResourceManager.GetString("AutoCleanupPage.ImageProcessing", resourceCulture);
+            }
+        }
+        
+        public static string AutoCleanupPage_StartCleanup {
+            get {
+                return ResourceManager.GetString("AutoCleanupPage.StartCleanup", resourceCulture);
+            }
+        }
+        
+        public static string AutoCleanupPage_Processing {
+            get {
+                return ResourceManager.GetString("AutoCleanupPage.Processing", resourceCulture);
+            }
+        }
+        
+        public static string AutoCleanupPage_Errors {
+            get {
+                return ResourceManager.GetString("AutoCleanupPage.Errors", resourceCulture);
+            }
+        }
+        
+        public static string ManualCleanupPage_SerieFolders {
+            get {
+                return ResourceManager.GetString("ManualCleanupPage.SerieFolders", resourceCulture);
+            }
+        }
+        
+        public static string ManualCleanupPage_Images {
+            get {
+                return ResourceManager.GetString("ManualCleanupPage.Images", resourceCulture);
+            }
+        }
+        
+        public static string ManualCleanupPage_ToEdit {
+            get {
+                return ResourceManager.GetString("ManualCleanupPage.ToEdit", resourceCulture);
+            }
+        }
+        
+        public static string ManualCleanupPage_EditSelected {
+            get {
+                return ResourceManager.GetString("ManualCleanupPage.EditSelected", resourceCulture);
+            }
+        }
+        
+        public static string ManualCleanupPage_RestoreLastImage {
+            get {
+                return ResourceManager.GetString("ManualCleanupPage.RestoreLastImage", resourceCulture);
+            }
+        }
+        
+        public static string ConfigureUploadPage_Next {
+            get {
+                return ResourceManager.GetString("ConfigureUploadPage.Next", resourceCulture);
+            }
+        }
+        
+        public static string ManualCleanupPage_Next {
+            get {
+                return ResourceManager.GetString("ManualCleanupPage.Next", resourceCulture);
+            }
+        }
+        
         public static string RolePage_Title {
             get {
                 return ResourceManager.GetString("RolePage.Title", resourceCulture);
@@ -1857,87 +2049,15 @@ namespace ManaxClient.Localization {
             }
         }
         
-        public static string ConfigureUploadPage_Title {
+        public static string FetchFromSourcePage_Skip {
             get {
-                return ResourceManager.GetString("ConfigureUploadPage.Title", resourceCulture);
+                return ResourceManager.GetString("FetchFromSourcePage.Skip", resourceCulture);
             }
         }
         
-        public static string ConfigureUploadPage_SourceFolders {
+        public static string AutoCleanupPage_Skip {
             get {
-                return ResourceManager.GetString("ConfigureUploadPage.SourceFolders", resourceCulture);
-            }
-        }
-        
-        public static string ConfigureUploadPage_SourceFolders_Description {
-            get {
-                return ResourceManager.GetString("ConfigureUploadPage.SourceFolders.Description", resourceCulture);
-            }
-        }
-        
-        public static string ConfigureUploadPage_AddSource {
-            get {
-                return ResourceManager.GetString("ConfigureUploadPage.AddSource", resourceCulture);
-            }
-        }
-        
-        public static string ConfigureUploadPage_RemoveSource {
-            get {
-                return ResourceManager.GetString("ConfigureUploadPage.RemoveSource", resourceCulture);
-            }
-        }
-        
-        public static string ConfigureUploadPage_NoSources {
-            get {
-                return ResourceManager.GetString("ConfigureUploadPage.NoSources", resourceCulture);
-            }
-        }
-        
-        public static string ConfigureUploadPage_ProcessingFolder {
-            get {
-                return ResourceManager.GetString("ConfigureUploadPage.ProcessingFolder", resourceCulture);
-            }
-        }
-        
-        public static string ConfigureUploadPage_ProcessingFolder_Description {
-            get {
-                return ResourceManager.GetString("ConfigureUploadPage.ProcessingFolder.Description", resourceCulture);
-            }
-        }
-        
-        public static string ConfigureUploadPage_Browse {
-            get {
-                return ResourceManager.GetString("ConfigureUploadPage.Browse", resourceCulture);
-            }
-        }
-        
-        public static string ConfigureUploadPage_OpenFolder {
-            get {
-                return ResourceManager.GetString("ConfigureUploadPage.OpenFolder", resourceCulture);
-            }
-        }
-        
-        public static string ConfigureUploadPage_CurrentPath {
-            get {
-                return ResourceManager.GetString("ConfigureUploadPage.CurrentPath", resourceCulture);
-            }
-        }
-        
-        public static string ConfigureUploadPage_SelectFolder {
-            get {
-                return ResourceManager.GetString("ConfigureUploadPage.SelectFolder", resourceCulture);
-            }
-        }
-        
-        public static string ConfigureUploadPage_Settings {
-            get {
-                return ResourceManager.GetString("ConfigureUploadPage.Settings", resourceCulture);
-            }
-        }
-        
-        public static string ConfigureUploadPage_SaveSettings {
-            get {
-                return ResourceManager.GetString("ConfigureUploadPage.SaveSettings", resourceCulture);
+                return ResourceManager.GetString("AutoCleanupPage.Skip", resourceCulture);
             }
         }
     }

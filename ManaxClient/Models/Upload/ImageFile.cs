@@ -15,10 +15,9 @@ public partial class ImageFile: ObservableObject
     {
         Path = path;
         FileName = System.IO.Path.GetFileName(path);
-        LoadPreview();
     }
 
-    private void LoadPreview()
+    public void LoadPreview()
     {
         Task.Run(() =>
         {
@@ -32,5 +31,10 @@ public partial class ImageFile: ObservableObject
                 // ignored
             }
         });
+    }
+
+    public void UnloadPreview()
+    {
+        Preview = null;
     }
 }

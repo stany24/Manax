@@ -1017,4 +1017,13 @@
     <data name="ConfigureUploadPage.SaveSettings" xml:space="preserve">
         <value>Settings are saved automatically</value>
     </data>
+    <data name="MainWindow.Upload" xml:space="preserve">
+        <value>Upload pipeline</value>
+    </data>
+    <data name="FetchFromSourcePage.Skip" xml:space="preserve">
+        <value>Skip</value>
+    </data>
+    <data name="AutoCleanupPage.Skip" xml:space="preserve">
+        <value>Skip</value>
+    </data>
 </root>

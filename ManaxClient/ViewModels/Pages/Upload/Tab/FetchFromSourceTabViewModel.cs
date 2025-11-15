@@ -42,6 +42,12 @@ public partial class FetchFromSourceTabViewModel:TabViewModel
                 SourceInProgressCount--;
             }
             CanFetch = true;
+            NextRequested?.Invoke(this, new AutoCleanupTabViewModel());
         });
+    }
+
+    public void Skip()
+    {
+        NextRequested?.Invoke(this, new AutoCleanupTabViewModel());
     }
 }

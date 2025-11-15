@@ -24,18 +24,21 @@ public partial class ManualCleanupTabViewModel:TabViewModel
     {
         string processingFolder = UploadSettings.ProcessingFolder;
         UploadSettings.SettingsChanged += (_, _) => {processingFolder = UploadSettings.ProcessingFolder;};
-        
         SerieFolders = new ObservableCollection<SerieFolder>(
             Directory.GetDirectories(processingFolder)
                 .Select(f =>new SerieFolder(f)));
-        SelectedChapterFolder = SerieFolders.FirstOrDefault()?.Chapters.FirstOrDefault();
         PropertyChanged += (_, args) =>
         {
-            if (args.PropertyName == nameof(SelectedChapterFolder))
-            {
-                ImagesOffset = new Vector(0,0);
-            }
+            if (args.PropertyName != nameof(SelectedChapterFolder)) return;
+            ImagesOffset = new Vector(0,0);
+            SelectedChapterFolder?.LoadImages();
         };
+        PropertyChanging += (_, args) =>
+        {
+            if (args.PropertyName != nameof(SelectedChapterFolder)){return;}
+            SelectedChapterFolder?.UnloadImages();
+        };
+        SelectedChapterFolder = SerieFolders.FirstOrDefault()?.Chapters.FirstOrDefault();
     }
     
     public void ChangeRowCount(bool increase)

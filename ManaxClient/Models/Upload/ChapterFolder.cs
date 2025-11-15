@@ -48,9 +48,27 @@ public partial class ChapterFolder: ObservableObject
         if (_deletedImages.Count == 0) return;
         KeyValuePair<string, string> lastDeletedImage = _deletedImages[^1];
         File.Move(lastDeletedImage.Value, lastDeletedImage.Key);
-        Images.Add(new ImageFile(lastDeletedImage.Key));
+        ImageFile imageFile = new(lastDeletedImage.Key);
+        imageFile.LoadPreview();
+        Images.Add(imageFile);
         Images = new ObservableCollection<ImageFile>(Images.OrderBy(i => i.FileName, new NaturalSortComparer()));
         _deletedImages.RemoveAt(_deletedImages.Count - 1);
         OnPropertyChanged(nameof(Images));
+    }
+
+    public void LoadImages()
+    {
+        foreach (ImageFile imageFile in Images)
+        {
+            imageFile.LoadPreview();
+        }
+    }
+
+    public void UnloadImages()
+    {
+        foreach (ImageFile imageFile in Images)
+        {
+            imageFile.UnloadPreview();
+        }
     }
 }

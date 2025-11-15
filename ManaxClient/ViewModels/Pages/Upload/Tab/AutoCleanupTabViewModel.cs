@@ -57,6 +57,11 @@ public partial class AutoCleanupTabViewModel:TabViewModel
             NextRequested?.Invoke(this, new ManualCleanupTabViewModel());
         });
     }
+    
+    public void Skip()
+    {
+        NextRequested?.Invoke(this, new ManualCleanupTabViewModel());
+    }
 
     private void MoveSeriesToRoot()
     {
