@@ -5,5 +5,5 @@ namespace ManaxClient.Models;
 
 public class TabViewModel : ObservableObject
 {
-    public EventHandler<TabViewModel?>? NextRequested;
+    public EventHandler<TabViewModel?>? NextRequested { get; set; }
 }

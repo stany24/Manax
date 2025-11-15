@@ -38,7 +38,7 @@ public partial class PersonEditViewModel : ConfirmCancelContentViewModel
 
         PropertyChanged += (_, args) =>
         {
-            if (args.PropertyName == nameof(FirstName) || args.PropertyName == nameof(LastName))
+            if (args.PropertyName is nameof(FirstName) or nameof(LastName))
                 CanConfirm = !string.IsNullOrWhiteSpace(FirstName) && !string.IsNullOrWhiteSpace(LastName);
         };
     }

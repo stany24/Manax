@@ -18,7 +18,7 @@ using ManaxLibrary.Notifications;
 
 namespace ManaxClient.Models;
 
-public partial class Serie : ObservableObject
+public partial class Serie : ObservableObject, IDisposable
 {
     private readonly ReadOnlyObservableCollection<Chapter> _chapters;
     private readonly SourceList<long> _personIds = new();
@@ -78,10 +78,7 @@ public partial class Serie : ObservableObject
 
     ~Serie()
     {
-        ServerNotification.OnSerieUpdated -= OnSerieUpdated;
-        ServerNotification.OnPosterModified -= OnPosterModified;
-        ServerNotification.OnReadCreated -= OnReadCreated;
-        ServerNotification.OnReadDeleted -= OnReadDeleted;
+        Dispose(false);
     }
 
     private void FromSerieDto(SerieDto dto)
@@ -177,5 +174,28 @@ public partial class Serie : ObservableObject
     {
         if (id != Id) return;
         LoadPoster();
+    }
+
+    private void ReleaseUnmanagedResources()
+    {
+        ServerNotification.OnSerieUpdated -= OnSerieUpdated;
+        ServerNotification.OnPosterModified -= OnPosterModified;
+        ServerNotification.OnReadCreated -= OnReadCreated;
+        ServerNotification.OnReadDeleted -= OnReadDeleted;
+    }
+
+    private void Dispose(bool disposing)
+    {
+        ReleaseUnmanagedResources();
+        if (!disposing) return;
+        _personIds.Dispose();
+        _tagIds.Dispose();
+        Poster?.Dispose();
+    }
+
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
     }
 }

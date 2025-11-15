@@ -31,7 +31,11 @@
                 </Transitions>
             </Setter>
         </Style>
-
+        
+        <Style Selector="Button.danger">
+            <Setter Property="Foreground" Value="Red"></Setter>
+        </Style>
+        
         <Style Selector="Button.primary">
             <Setter Property="FontWeight" Value="Bold" />
         </Style>

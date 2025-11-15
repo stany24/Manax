@@ -102,7 +102,7 @@ public partial class IssuesPageViewModel : PageViewModel
             await fileStream.WriteAsync(chapterPagesAsync.GetValue());
             await fileStream.DisposeAsync();
             fileStream.Close();
-            ZipFile.ExtractToDirectory(saveFile, saveFolder);
+            await ZipFile.ExtractToDirectoryAsync(saveFile, saveFolder);
             File.Delete(saveFile);
             content.CanConfirm = true;
         }
@@ -121,7 +121,7 @@ public partial class IssuesPageViewModel : PageViewModel
             if (viewModel.Canceled()) return;
 
             if (File.Exists(saveFile)) File.Delete(saveFile);
-            ZipFile.CreateFromDirectory(saveFolder, saveFile);
+            await ZipFile.CreateFromDirectoryAsync(saveFolder, saveFile);
             byte[] data = await File.ReadAllBytesAsync(saveFile);
 
             Optional<bool> request =

@@ -11,7 +11,6 @@ namespace ManaxClient.ViewModels.Popup.ConfirmCancel.Content;
 public class CreateChapterIssueViewModel : ConfirmCancelContentViewModel
 {
     private readonly long _chapterId;
-    private IssueChapterReportedTypeDto? _selectedIssue;
 
     public CreateChapterIssueViewModel(long chapterId)
     {
@@ -24,10 +23,10 @@ public class CreateChapterIssueViewModel : ConfirmCancelContentViewModel
 
     public IssueChapterReportedTypeDto? SelectedIssue
     {
-        get => _selectedIssue;
+        get;
         set
         {
-            SetProperty(ref _selectedIssue, value);
+            SetProperty(ref field, value);
             CanConfirm = value != null;
         }
     }

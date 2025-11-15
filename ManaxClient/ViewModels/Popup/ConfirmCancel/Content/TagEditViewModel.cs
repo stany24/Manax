@@ -8,7 +8,6 @@ namespace ManaxClient.ViewModels.Popup.ConfirmCancel.Content;
 public partial class TagEditViewModel : ConfirmCancelContentViewModel
 {
     private readonly TagUpdateDto _originalTag;
-    private Avalonia.Media.Color _color;
     [ObservableProperty] private SolidColorBrush _colorBrush;
     [ObservableProperty] private string _name;
 
@@ -28,10 +27,10 @@ public partial class TagEditViewModel : ConfirmCancelContentViewModel
 
     public Avalonia.Media.Color Color
     {
-        get => _color;
+        get;
         set
         {
-            SetProperty(ref _color, value);
+            SetProperty(ref field, value);
             ColorBrush = new SolidColorBrush(value);
         }
     }

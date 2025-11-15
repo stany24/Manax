@@ -249,7 +249,7 @@ public class SerieController(
         series = series.Where(s => !search.ExcludedStatuses.Contains(s.Status)).ToList();
 
         return series
-            .Where(s => regex.Match(s.Title).Success || regex.Match(s.Description).Success)
+            .Where(s => regex.IsMatch(s.Title) || regex.IsMatch(s.Description))
             .Where(s =>
             {
                 int chapterCount = seriesWithChapterCount.TryGetValue(s.Id, out int value) ? value : 0;

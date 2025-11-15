@@ -13,10 +13,10 @@ public abstract class UserTestsSetup
     private IPasswordValidationService _mockPasswordValidationService = null!;
     private MockPermissionService _mockPermissionService = null!;
     private MockTokenService _mockTokenService = null!;
-    protected ManaxContext Context = null!;
-    protected UserController Controller = null!;
-    protected MockHashService MockHashService = null!;
-    protected MockNotificationService MockNotificationService = null!;
+    protected ManaxContext Context { get; private set; } = null!;
+    protected UserController Controller { get; private set; } = null!;
+    protected MockHashService MockHashService { get; private set; } = null!;
+    protected MockNotificationService MockNotificationService { get; private set; } = null!;
 
     [TestInitialize]
     public void Setup()

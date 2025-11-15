@@ -20,7 +20,7 @@ public class SettingsController(
     IFixService fixService,
     IRenamingService renamingService) : ControllerBase
 {
-    private readonly object _lock = new();
+    private readonly Lock _lock = new();
 
     [HttpGet]
     [RequirePermission(Permission.ReadServerSettings)]

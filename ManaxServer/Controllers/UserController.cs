@@ -27,7 +27,7 @@ public class UserController(
     IPermissionService permissionService,
     IPasswordValidationService passwordValidationService) : ControllerBase
 {
-    private readonly object _claimLock = new();
+    private readonly Lock _claimLock = new();
 
     // GET: api/Users
     [HttpGet("/api/users")]

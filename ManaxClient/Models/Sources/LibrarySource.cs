@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using DynamicData;
@@ -59,9 +60,8 @@ public static class LibrarySource
                         return;
                     }
 
-                    foreach (long id in response.GetValue())
+                    foreach (Optional<LibraryDto> libraryResponse in response.GetValue().Select(id => ManaxApiLibraryClient.GetLibraryAsync(id).Result))
                     {
-                        Optional<LibraryDto> libraryResponse = ManaxApiLibraryClient.GetLibraryAsync(id).Result;
                         if (libraryResponse.Failed)
                         {
                             Logger.LogFailure(libraryResponse.Error);

@@ -1,3 +1,4 @@
+using DynamicData;
 using ManaxLibrary.DTO.User;
 using ManaxServer.Controllers;
 using ManaxServer.Localization;
@@ -19,9 +20,9 @@ public class VerificationTests
     {
         List<LocalizationKey> keys = Enum.GetValues<LocalizationKey>().ToList();
         foreach (LocalizationKey key in keys.Where(key => !localization.ContainsKey(key)))
-            throw new Exception($"Missing localization for key: {key}");
+            throw new MissingKeyException($"Missing localization for key: {key}");
 
-        if (localization.Count != keys.Count) throw new Exception("Localization contains extra keys");
+        if (localization.Count != keys.Count) throw new MissingKeyException("Localization contains extra keys");
     }
 
     [TestMethod]

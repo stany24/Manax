@@ -5,199 +5,171 @@ namespace ManaxLibrary.DTO.Setting;
 
 public class SettingsData : INotifyPropertyChanged
 {
-    private ArchiveFormat _archiveFormat = ArchiveFormat.Cbz;
-
-    private ImageFormat _imageFormat = ImageFormat.Webp;
-
-    private uint _imageQuality = 94;
-
-    private string _issue = string.Empty;
-
-    private bool _isValid;
-
-    private uint _maxChapterWidth = 800;
-
-    private uint _maxDescriptionLength = 1000;
-
-    private uint _maxPosterWidth = 800;
-
-    private uint _minChapterWidth = 720;
-
-    private uint _minDescriptionLength = 100;
-
-    private uint _minPosterWidth = 720;
-
-    private ImageFormat _posterFormat = ImageFormat.Webp;
-
-    private string _posterName = "poster";
-
-    private uint _posterQuality = 94;
-
     public bool IsValid
     {
-        get => _isValid;
+        get;
         set
         {
-            if (_isValid == value) return;
-            _isValid = value;
+            if (field == value) return;
+            field = value;
             OnPropertyChanged();
         }
     }
 
     public string Issue
     {
-        get => _issue;
+        get;
         set
         {
-            if (_issue == value) return;
-            _issue = value;
+            if (field == value) return;
+            field = value;
             OnPropertyChanged();
         }
-    }
+    } = string.Empty;
 
     public uint MaxPosterWidth
     {
-        get => _maxPosterWidth;
+        get;
         set
         {
-            if (_maxPosterWidth == value) return;
-            _maxPosterWidth = value;
+            if (field == value) return;
+            field = value;
             UpdateIssues();
             OnPropertyChanged();
         }
-    }
+    } = 800;
 
     public uint MinPosterWidth
     {
-        get => _minPosterWidth;
+        get;
         set
         {
-            if (_minPosterWidth == value) return;
-            _minPosterWidth = value;
+            if (field == value) return;
+            field = value;
             UpdateIssues();
             OnPropertyChanged();
         }
-    }
+    } = 720;
 
     public uint MaxChapterWidth
     {
-        get => _maxChapterWidth;
+        get;
         set
         {
-            if (_maxChapterWidth == value) return;
-            _maxChapterWidth = value;
+            if (field == value) return;
+            field = value;
             UpdateIssues();
             OnPropertyChanged();
         }
-    }
+    } = 800;
 
     public uint MinChapterWidth
     {
-        get => _minChapterWidth;
+        get;
         set
         {
-            if (_minChapterWidth == value) return;
-            _minChapterWidth = value;
+            if (field == value) return;
+            field = value;
             UpdateIssues();
             OnPropertyChanged();
         }
-    }
+    } = 720;
 
     public uint MaxDescriptionLength
     {
-        get => _maxDescriptionLength;
+        get;
         set
         {
-            if (_maxDescriptionLength == value) return;
-            _maxDescriptionLength = value;
+            if (field == value) return;
+            field = value;
             UpdateIssues();
             OnPropertyChanged();
         }
-    }
+    } = 1000;
 
     public uint MinDescriptionLength
     {
-        get => _minDescriptionLength;
+        get;
         set
         {
-            if (_minDescriptionLength == value) return;
-            _minDescriptionLength = value;
+            if (field == value) return;
+            field = value;
             UpdateIssues();
             OnPropertyChanged();
         }
-    }
+    } = 100;
 
     public uint ImageQuality
     {
-        get => _imageQuality;
+        get;
         set
         {
-            if (_imageQuality == value) return;
-            _imageQuality = value;
+            if (field == value) return;
+            field = value;
             UpdateIssues();
             OnPropertyChanged();
         }
-    }
+    } = 94;
 
     public string PosterName
     {
-        get => _posterName;
+        get;
         set
         {
-            if (_posterName == value) return;
-            _posterName = value;
+            if (field == value) return;
+            field = value;
             UpdateIssues();
             OnPropertyChanged();
         }
-    }
+    } = "poster";
 
     public uint PosterQuality
     {
-        get => _posterQuality;
+        get;
         set
         {
-            if (_posterQuality == value) return;
-            _posterQuality = value;
+            if (field == value) return;
+            field = value;
             UpdateIssues();
             OnPropertyChanged();
         }
-    }
+    } = 94;
 
     public ImageFormat PosterFormat
     {
-        get => _posterFormat;
+        get;
         set
         {
-            if (_posterFormat == value) return;
-            _posterFormat = value;
+            if (field == value) return;
+            field = value;
             UpdateIssues();
             OnPropertyChanged();
         }
-    }
+    } = ImageFormat.Webp;
 
     public ImageFormat ImageFormat
     {
-        get => _imageFormat;
+        get;
         set
         {
-            if (_imageFormat == value) return;
-            _imageFormat = value;
+            if (field == value) return;
+            field = value;
             UpdateIssues();
             OnPropertyChanged();
         }
-    }
+    } = ImageFormat.Webp;
 
     public ArchiveFormat ArchiveFormat
     {
-        get => _archiveFormat;
+        get;
         set
         {
-            if (_archiveFormat == value) return;
-            _archiveFormat = value;
+            if (field == value) return;
+            field = value;
             UpdateIssues();
             OnPropertyChanged();
         }
-    }
+    } = ArchiveFormat.Cbz;
 
     public event PropertyChangedEventHandler? PropertyChanged;
 

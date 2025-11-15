@@ -24,12 +24,10 @@ public static partial class Localizer
 
     public static void SetLanguage(Language language)
     {
-        List<Language> languages = Enum.GetValues(typeof(Language)).Cast<Language>().ToList();
-        if (languages.Contains(language))
-        {
-            _language = language;
-            LoadLanguage(_language);
-        }
+        List<Language> languages = Enum.GetValues<Language>().ToList();
+        if (!languages.Contains(language)) return;
+        _language = language;
+        LoadLanguage(_language);
     }
 
     public static Language GetCurrentLanguage()
@@ -39,6 +37,6 @@ public static partial class Localizer
 
     public static List<Language> GetAvailableLanguages()
     {
-        return Enum.GetValues(typeof(Language)).Cast<Language>().ToList();
+        return Enum.GetValues<Language>().ToList();
     }
 }

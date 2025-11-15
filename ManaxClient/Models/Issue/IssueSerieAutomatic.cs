@@ -23,7 +23,7 @@ public partial class IssueSerieAutomatic : ObservableObject
     public static string AutomaticBadgeText => Localizer.Get("IssuesPage.Automatic");
 
     public string FormattedInfo => string.Format(CultureInfo.InvariantCulture, Localizer.Get("IssuesPage.SeriesInfo"),
-        Serie?.Title ?? "", CreatedAt);
+        Serie.Title, CreatedAt);
 
     private void FromDto(IssueSerieAutomaticDto dto)
     {

@@ -251,8 +251,7 @@
                                                            FontSize="13"
                                                            FontWeight="Medium" />
                                                 <TextBlock Text="{Binding Role.Name}"
-                                                           FontSize="11"
-                                                           Foreground="{StaticResource SecondaryBrush}" />
+                                                           FontSize="11"/>
                                             </StackPanel>
                                         </Border>
                                     </DataTemplate>

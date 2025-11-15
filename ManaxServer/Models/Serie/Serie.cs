@@ -52,17 +52,15 @@ public class Serie
         LastModification = DateTime.UtcNow;
 
         Tags.Clear();
-        foreach (TagDto tagDto in serieUpdate.Tags)
+        foreach (Tag.Tag tag in serieUpdate.Tags.Select(tagDto => context.Tags.Find(tagDto.Id)).OfType<Tag.Tag>())
         {
-            Tag.Tag? tag = context.Tags.Find(tagDto.Id);
-            if (tag != null) Tags.Add(tag);
+            Tags.Add(tag);
         }
 
         Persons.Clear();
-        foreach (PersonDto personDto in serieUpdate.Persons)
+        foreach (Person.Person person in serieUpdate.Persons.Select(personDto => context.People.Find(personDto.Id)).OfType<Person.Person>())
         {
-            Person.Person? person = context.People.Find(personDto.Id);
-            if (person != null) Persons.Add(person);
+            Persons.Add(person);
         }
     }
 }

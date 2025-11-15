@@ -12,7 +12,6 @@ public partial class SettingsAppViewModel : PageViewModel
     [ObservableProperty] private List<LanguageItem> _availableLanguages = [];
     [ObservableProperty] private List<ThemeSettingsData> _availableThemes;
 
-    private bool _isDarkMode;
     [ObservableProperty] private LanguageItem? _selectedLanguage;
     private ThemeSettingsData _selectedThemeSettingsData;
 
@@ -36,10 +35,10 @@ public partial class SettingsAppViewModel : PageViewModel
 
     public bool IsDarkMode
     {
-        get => _isDarkMode;
+        get;
         set
         {
-            if (SetProperty(ref _isDarkMode, value)) UpdateTheme();
+            if (SetProperty(ref field, value)) UpdateTheme();
         }
     }
 

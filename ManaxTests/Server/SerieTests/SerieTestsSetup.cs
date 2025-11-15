@@ -9,8 +9,8 @@ public abstract class SerieTestsSetup
     private MockFixService _mockFixService = null!;
     private MockNotificationService _mockNotificationService = null!;
     private MockBackgroundTaskService _mockTaskService = null!;
-    protected ManaxContext Context = null!;
-    protected SerieController Controller = null!;
+    protected ManaxContext Context { get; private set; } = null!;
+    protected SerieController Controller { get; private set; } = null!;
 
     [TestInitialize]
     public void Setup()

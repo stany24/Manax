@@ -12,8 +12,8 @@ public abstract class RankTestsSetup
 {
     private MockFeatureService _mockFeatureService = null!;
     private MockNotificationService _mockNotificationService = null!;
-    protected ManaxContext Context = null!;
-    protected RankController Controller = null!;
+    protected ManaxContext Context { get; private set; } = null!;
+    protected RankController Controller { get; private set; } = null!;
 
     [TestInitialize]
     public void Setup()

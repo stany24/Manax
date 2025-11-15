@@ -114,7 +114,7 @@ public partial class MainWindowViewModel
     {
         PropertyInfo[] propertyInfos = GetType().GetProperties();
         foreach (PropertyInfo propertyInfo in propertyInfos)
-            if (propertyInfo.PropertyType == typeof(bool) && propertyInfo.Name.StartsWith("Can"))
+            if (propertyInfo.PropertyType == typeof(bool) && propertyInfo.Name.StartsWith("Can", StringComparison.InvariantCulture))
                 OnPropertyChanged(propertyInfo.Name);
     }
 }

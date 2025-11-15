@@ -6,9 +6,9 @@ namespace ManaxTests.Server.SavePointTests;
 
 public abstract class SavePointTestsSetup
 {
-    protected ManaxContext Context = null!;
-    protected SavePointController Controller = null!;
-    protected string TestDirectory = null!;
+    protected ManaxContext Context { get; private set; } = null!;
+    protected SavePointController Controller { get; private set; } = null!;
+    protected string TestDirectory { get; private set; } = null!;
 
     [TestInitialize]
     public void Setup()

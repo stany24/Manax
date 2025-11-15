@@ -23,7 +23,7 @@ public partial class ManualCleanupTabView : UserControl
         viewModel.ChangeRowCount(e.Delta.Y > 0);
     }
 
-    private void PointerPressedHandler(object sender, PointerPressedEventArgs args)
+    public void PointerPressedHandler(object sender, PointerPressedEventArgs args)
     {
         if (sender is not Button button) return;
         if (button.CommandParameter is not string imagePath) return;

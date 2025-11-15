@@ -140,7 +140,7 @@ public partial class MainWindowViewModel : ObservableObject
         Dispatcher.UIThread.Invoke(() =>
         {
             Popup = popup;
-            if (Popup is not null) Popup.Closed += (_, _) => Popup = null;
+            Popup?.Closed += (_, _) => Popup = null;
         });
     }
 

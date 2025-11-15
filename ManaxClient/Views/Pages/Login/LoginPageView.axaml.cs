@@ -11,7 +11,7 @@ public partial class LoginPageView : UserControl
         InitializeComponent();
     }
 
-    private void TbxUsername_OnLoaded(object? sender, RoutedEventArgs e)
+    public void TbxUsername_OnLoaded(object? sender, RoutedEventArgs e)
     {
         TbxUsername.Focus();
     }

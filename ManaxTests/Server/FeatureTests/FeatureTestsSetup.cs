@@ -7,8 +7,8 @@ namespace ManaxTests.Server.FeatureTests;
 public abstract class FeatureTestsSetup
 {
     private MockNotificationService _mockNotificationService = null!;
-    protected FeatureController Controller = null!;
-    protected IFeatureService FeatureService = null!;
+    protected FeatureController Controller { get; private set; } = null!;
+    protected IFeatureService FeatureService { get; private set; } = null!;
 
     [TestInitialize]
     public void Setup()

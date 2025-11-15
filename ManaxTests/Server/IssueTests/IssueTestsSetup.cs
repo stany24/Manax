@@ -12,8 +12,8 @@ public abstract class IssueTestsSetup
 {
     private MockFeatureService _mockFeatureService = null!;
     private MockNotificationService _mockNotificationService = null!;
-    protected ManaxContext Context = null!;
-    protected IssueController Controller = null!;
+    protected ManaxContext Context { get; private set; } = null!;
+    protected IssueController Controller { get; private set; } = null!;
 
     [TestInitialize]
     public void Setup()

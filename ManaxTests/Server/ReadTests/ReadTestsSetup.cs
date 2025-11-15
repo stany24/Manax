@@ -9,9 +9,9 @@ namespace ManaxTests.Server.ReadTests;
 
 public abstract class ReadTestsSetup
 {
-    protected ManaxContext Context = null!;
-    protected ReadController Controller = null!;
-    protected MockNotificationService MockNotificationService = null!;
+    protected ManaxContext Context { get; private set; } = null!;
+    protected ReadController Controller { get; private set; } = null!;
+    protected MockNotificationService MockNotificationService { get; private set; } = null!;
 
     [TestInitialize]
     public void Setup()

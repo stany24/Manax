@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using DynamicData;
 using ManaxClient.Models.Issue;
@@ -24,7 +25,7 @@ public static class IssueSource
     public static readonly SourceCache<IssueChapterReported, long> IssueChapterReported = new(issue => issue.Id);
     public static readonly SourceCache<IssueSerieReported, long> IssueSerieReported = new(serie => serie.Id);
 
-    private static readonly object IssueLock = new();
+    private static readonly Lock IssueLock = new();
 
     static IssueSource()
     {

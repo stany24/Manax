@@ -7,8 +7,8 @@ namespace ManaxTests.Server.ChapterTests;
 public abstract class ChapterTestsSetup
 {
     private MockNotificationService _mockNotificationService = null!;
-    protected ManaxContext Context = null!;
-    protected ChapterController Controller = null!;
+    protected ManaxContext Context { get; private set; } = null!;
+    protected ChapterController Controller { get; private set; } = null!;
 
     [TestInitialize]
     public void Setup()

@@ -14,7 +14,7 @@ using ManaxLibrary.Notifications;
 
 namespace ManaxClient.Models;
 
-public partial class Chapter : ObservableObject
+public partial class Chapter : ObservableObject, IDisposable
 {
     [ObservableProperty] private DateTime _creation;
     [ObservableProperty] private string _fileName = string.Empty;
@@ -42,7 +42,7 @@ public partial class Chapter : ObservableObject
 
     ~Chapter()
     {
-        ServerNotification.OnChapterModified -= OnChapterModified;
+        Dispose(false);
     }
 
     private void OnChapterModified(ChapterDto chapter)
@@ -117,5 +117,25 @@ public partial class Chapter : ObservableObject
             Optional<bool> response = await ManaxApiReadClient.MarkAsRead(readCreateDto);
             if (response.Failed) ErrorEmitted?.Invoke(this, response.Error);
         });
+    }
+
+    private void ReleaseUnmanagedResources()
+    {
+        ServerNotification.OnChapterModified -= OnChapterModified;
+    }
+
+    private void Dispose(bool disposing)
+    {
+        ReleaseUnmanagedResources();
+        if (disposing)
+        {
+            _loadPagesCts?.Dispose();
+        }
+    }
+
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
     }
 }
