@@ -8,11 +8,4 @@ public class TagCreateDto
 {
     [Required] public string Name { get; init; } = null!;
     [Required] public int ColorArgb { get; init; }
-
-    [JsonIgnore]
-    public Color Color
-    {
-        get => Color.FromArgb(ColorArgb);
-        init => ColorArgb = value.ToArgb();
-    }
 }

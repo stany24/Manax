@@ -44,7 +44,7 @@ public class TagPageViewModel : PageViewModel
                 TagCreateDto tagCreate = new()
                 {
                     Name = result.Name,
-                    Color = result.Color
+                    ColorArgb = result.Color.ToArgb()
                 };
 
                 Optional<bool> request = await ManaxApiTagClient.CreateTagAsync(tagCreate);

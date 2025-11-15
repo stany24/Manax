@@ -166,8 +166,8 @@ public partial class SerieUpdateViewModel : ConfirmCancelContentViewModel
             Description = Description.Trim(),
             Status = SelectedStatus,
             LibraryId = SelectedLibrary?.Id ?? _originalSerie.LibraryId,
-            Tags = SelectedTags.Select(t => t.ToTagDto()).ToList(),
-            Persons = SelectedPersons.Select(p => p.ToPersonDto()).ToList()
+            TagIds = SelectedTags.Select(t => t.Id).ToList(),
+            PersonIds = SelectedPersons.Select(p => p.Id).ToList()
         };
     }
 }

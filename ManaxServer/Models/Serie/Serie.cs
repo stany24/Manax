@@ -1,12 +1,7 @@
 // ReSharper disable PropertyCanBeMadeInitOnly.Global
-// ReSharper disable PropertyCanBeMadeInitOnly.Global
-// ReSharper disable UnusedAutoPropertyAccessor.Global
-// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
-// ReSharper disable MemberCanBePrivate.Global
 
-using ManaxLibrary.DTO.Person;
+using System.ComponentModel.DataAnnotations;
 using ManaxLibrary.DTO.Serie;
-using ManaxLibrary.DTO.Tag;
 
 namespace ManaxServer.Models.Serie;
 
@@ -18,7 +13,7 @@ public class Serie
     public Library.Library? Library { get; set; }
     public SavePoint.SavePoint SavePoint { get; set; } = null!;
 
-    public string FolderName { get; set; } = string.Empty;
+    [MaxLength(255)] public string FolderName { get; set; } = string.Empty;
     public string Title { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
     public Status Status { get; set; }
@@ -52,13 +47,13 @@ public class Serie
         LastModification = DateTime.UtcNow;
 
         Tags.Clear();
-        foreach (Tag.Tag tag in serieUpdate.Tags.Select(tagDto => context.Tags.Find(tagDto.Id)).OfType<Tag.Tag>())
+        foreach (Tag.Tag tag in serieUpdate.TagIds.Select(tagId => context.Tags.Find(tagId)).OfType<Tag.Tag>())
         {
             Tags.Add(tag);
         }
 
         Persons.Clear();
-        foreach (Person.Person person in serieUpdate.Persons.Select(personDto => context.Persons.Find(personDto.Id)).OfType<Person.Person>())
+        foreach (Person.Person person in serieUpdate.PersonIds.Select(personId => context.Persons.Find(personId)).OfType<Person.Person>())
         {
             Persons.Add(person);
         }

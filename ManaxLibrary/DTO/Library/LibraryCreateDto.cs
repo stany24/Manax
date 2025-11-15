@@ -4,5 +4,5 @@ namespace ManaxLibrary.DTO.Library;
 
 public class LibraryCreateDto
 {
-    [Required] public string Name { get; init; }
+    [Required] public string Name { get; init; } = string.Empty;
 }
