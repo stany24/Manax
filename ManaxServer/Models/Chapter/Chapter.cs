@@ -21,7 +21,7 @@ public class Chapter
     public string Path { get; set; } = string.Empty;
     public DateTime Creation { get; set; }
     public DateTime LastModification { get; set; }
-    
+
     public ChapterDto ToDto()
     {
         return new ChapterDto

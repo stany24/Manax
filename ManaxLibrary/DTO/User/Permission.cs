@@ -46,14 +46,14 @@ public enum Permission
     WriteTags = 112,
     DeleteTags = 113,
     SetSerieTags = 114,
-    
+
     ReadFeatures = 121,
     WriteFeatures = 122,
-    
+
     ReadPeople = 131,
     WritePeople = 132,
     DeletePeople = 133,
-    
+
     WriteRoles = 141,
-    DeleteRoles = 142,
+    DeleteRoles = 142
 }

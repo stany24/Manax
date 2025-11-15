@@ -9,8 +9,8 @@
     x:Class="ManaxClient.Views.Pages.Upload.UploadPageView"
     x:DataType="tag:UploadPageViewModel"
     IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).CanUploadChapter}">
-    
-    <ContentControl 
+
+    <ContentControl
         Content="{Binding SelectedTabViewModel}" />
 
 </UserControl>

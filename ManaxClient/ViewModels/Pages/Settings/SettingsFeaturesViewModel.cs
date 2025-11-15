@@ -10,12 +10,13 @@ using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTO.Feature;
 using ManaxLibrary.Logging;
+using Feature = ManaxClient.Models.Feature;
 
 namespace ManaxClient.ViewModels.Pages.Settings;
 
 public partial class SettingsFeaturesViewModel : PageViewModel
 {
-    [ObservableProperty] private ObservableCollection<Models.Feature> _features = [];
+    [ObservableProperty] private ObservableCollection<Feature> _features = [];
     [ObservableProperty] private string _problem = string.Empty;
     [ObservableProperty] private string _success = string.Empty;
 
@@ -43,15 +44,13 @@ public partial class SettingsFeaturesViewModel : PageViewModel
             {
                 Features.Clear();
                 foreach (FeatureType type in allFeatures)
-                {
-                    Features.Add(new Models.Feature
+                    Features.Add(new Feature
                     {
                         Key = type,
                         Value = featuresManager.IsEnabled(type),
-                        Name = Models.Feature.GetFeatureName(type),
-                        Description = Models.Feature.GetFeatureDescription(type)
+                        Name = Feature.GetFeatureName(type),
+                        Description = Feature.GetFeatureDescription(type)
                     });
-                }
             });
         }
         catch (Exception e)
@@ -66,10 +65,10 @@ public partial class SettingsFeaturesViewModel : PageViewModel
         {
             Problem = string.Empty;
             Success = string.Empty;
-            List<Feature> features = Features
-                .Select(f => new Feature { Key = f.Key, Value = f.Value })
+            List<ManaxLibrary.DTO.Feature.Feature> features = Features
+                .Select(f => new ManaxLibrary.DTO.Feature.Feature { Key = f.Key, Value = f.Value })
                 .ToList();
-            
+
             Optional<bool> response = await ManaxApiFeatureClient.SetFeaturesAsync(features);
             if (response.Failed)
             {

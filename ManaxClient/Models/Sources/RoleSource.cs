@@ -20,7 +20,7 @@ public static class RoleSource
     private static readonly Lock RolesLock = new();
 
     static RoleSource()
-    {        
+    {
         ServerNotification.OnRoleCreated += OnRoleCreated;
         ServerNotification.OnRoleDeleted += OnRoleDeleted;
     }

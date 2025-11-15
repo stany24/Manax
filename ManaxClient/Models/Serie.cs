@@ -21,23 +21,23 @@ namespace ManaxClient.Models;
 public partial class Serie : ObservableObject
 {
     private readonly ReadOnlyObservableCollection<Chapter> _chapters;
-    private readonly ReadOnlyObservableCollection<Tag> _tags;
+    private readonly SourceList<long> _personIds = new();
     private readonly ReadOnlyObservableCollection<Person> _persons;
-    
-    private SourceList<long> _tagIds = new();
-    private SourceList<long> _personIds = new();
-    
+
+    private readonly SourceList<long> _tagIds = new();
+    private readonly ReadOnlyObservableCollection<Tag> _tags;
+
     [ObservableProperty] private DateTime _creation;
     [ObservableProperty] private string _description = string.Empty;
     [ObservableProperty] private long _id;
+    private bool _infoLoaded;
     [ObservableProperty] private DateTime _lastModification;
     [ObservableProperty] private long? _libraryId;
     [ObservableProperty] private Bitmap? _poster;
+
+    private bool _posterLoaded;
     [ObservableProperty] private Status _status;
     [ObservableProperty] private string _title = string.Empty;
-    
-    private bool _posterLoaded;
-    private bool _infoLoaded;
 
     public Serie(long id) : this(new SerieDto { Id = id })
     {
@@ -49,7 +49,7 @@ public partial class Serie : ObservableObject
         ServerNotification.OnPosterModified += OnPosterModified;
         ServerNotification.OnReadCreated += OnReadCreated;
         ServerNotification.OnReadDeleted += OnReadDeleted;
-        
+
         FromSerieDto(dto);
         ChapterSource.Chapters
             .Connect()
@@ -64,7 +64,8 @@ public partial class Serie : ObservableObject
 
         PersonSource.Persons
             .Connect()
-            .Filter(_personIds.Connect().Select(_ => (Func<Person, bool>)(person => _personIds.Items.Contains(person.Id))))
+            .Filter(_personIds.Connect()
+                .Select(_ => (Func<Person, bool>)(person => _personIds.Items.Contains(person.Id))))
             .SortAndBind(out _persons, SortExpressionComparer<Person>.Ascending(person => person.LastName))
             .Subscribe();
     }

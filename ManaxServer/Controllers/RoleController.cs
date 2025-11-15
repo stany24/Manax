@@ -23,7 +23,7 @@ public class RoleController(ManaxContext context, INotificationService notificat
     {
         return await context.Roles.Select(role => role.ToDto()).ToListAsync();
     }
-    
+
     // DELETE: api/role/5
     [HttpDelete("{id:long}")]
     [RequirePermission(Permission.DeleteRoles)]
@@ -38,7 +38,7 @@ public class RoleController(ManaxContext context, INotificationService notificat
         notificationService.NotifyRoleDeletedAsync(id);
         return Ok();
     }
-    
+
     // POST: api/role
     [HttpPost]
     [RequirePermission(Permission.WriteRoles)]
@@ -51,7 +51,7 @@ public class RoleController(ManaxContext context, INotificationService notificat
         notificationService.NotifyRoleCreatedAsync(role.ToDto());
         return Ok();
     }
-    
+
     // PUT: api/role/5
     [HttpPut("{id:long}")]
     [RequirePermission(Permission.WriteRoles)]

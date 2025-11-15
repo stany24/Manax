@@ -43,7 +43,7 @@ public class ReadController(ManaxContext context, INotificationService notificat
         }
         else
         {
-            Read read = Models.Read.Read.Create(readCreate,user.Id);
+            Read read = Models.Read.Read.Create(readCreate, user.Id);
             await context.Reads.AddAsync(read);
             await context.SaveChangesAsync();
             notification.NotifyReadCreated(read.ToDto());

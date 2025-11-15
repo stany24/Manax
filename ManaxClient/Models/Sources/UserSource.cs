@@ -24,13 +24,9 @@ public static class UserSource
         MainWindowViewModel.PermissionsChanged += (_, permissions) =>
         {
             if (permissions.Contains(Permission.ReadUsers))
-            {
                 LoadUsers();
-            }
             else
-            {
                 Users.Clear();
-            }
         };
     }
 

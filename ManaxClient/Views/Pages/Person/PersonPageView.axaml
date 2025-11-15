@@ -18,8 +18,9 @@
             <Grid ColumnDefinitions="*,Auto">
                 <StackPanel Grid.Column="0" Orientation="Vertical">
                     <TextBlock Classes="title" Text="{localization:Localize PersonPage.Title}" />
-                    <TextBlock Text="{localization1:LocalizeFormat PersonPage.PersonsCount,
-                                   Param1={Binding $parent[UserControl].((page:PersonPageViewModel)DataContext).Persons.Count}}"/>
+                    <TextBlock
+                        Text="{localization1:LocalizeFormat PersonPage.PersonsCount,
+                                   Param1={Binding $parent[UserControl].((page:PersonPageViewModel)DataContext).Persons.Count}}" />
                 </StackPanel>
 
                 <Button Grid.Column="1"
@@ -44,7 +45,7 @@
                                FontWeight="Medium"
                                HorizontalAlignment="Center" />
                     <TextBlock Text="{localization:Localize PersonPage.NoPersons.Description}"
-                               TextAlignment="Center"/>
+                               TextAlignment="Center" />
                     <Button Classes="primary"
                             IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).CanWritePeople}"
                             Command="{Binding CreatePerson}"
@@ -135,8 +136,9 @@
             <Grid ColumnDefinitions="*,Auto">
                 <StackPanel Grid.Column="0" Orientation="Vertical">
                     <TextBlock Classes="title" Text="{localization:Localize RolePage.Title}" />
-                    <TextBlock Text="{localization1:LocalizeFormat RolePage.RolesCount,
-                                   Param1={Binding $parent[UserControl].((page:PersonPageViewModel)DataContext).Roles.Count}}"/>
+                    <TextBlock
+                        Text="{localization1:LocalizeFormat RolePage.RolesCount,
+                                   Param1={Binding $parent[UserControl].((page:PersonPageViewModel)DataContext).Roles.Count}}" />
                 </StackPanel>
 
                 <Button Grid.Column="1"
@@ -161,7 +163,7 @@
                                FontWeight="Medium"
                                HorizontalAlignment="Center" />
                     <TextBlock Text="{localization:Localize RolePage.NoRoles.Description}"
-                               TextAlignment="Center"/>
+                               TextAlignment="Center" />
                     <Button Classes="primary"
                             IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).CanWriteRoles}"
                             Command="{Binding CreateRole}"

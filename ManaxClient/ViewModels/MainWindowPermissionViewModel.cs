@@ -11,7 +11,7 @@ namespace ManaxClient.ViewModels;
 public partial class MainWindowViewModel
 {
     private List<Permission> _permissions = [];
-    
+
     public static EventHandler<List<Permission>>? PermissionsChanged { get; set; }
 
     // Permission permissions
@@ -70,11 +70,11 @@ public partial class MainWindowViewModel
     public bool CanWriteTags => _permissions.Contains(Permission.WriteTags);
     public bool CanDeleteTags => _permissions.Contains(Permission.DeleteTags);
     public bool CanSetSerieTags => _permissions.Contains(Permission.SetSerieTags);
-    
+
     // Feature permissions
     public bool CanReadFeatures => _permissions.Contains(Permission.ReadFeatures);
     public bool CanWriteFeatures => _permissions.Contains(Permission.WriteFeatures);
-    
+
     // People permissions
     public bool CanReadPeople => _permissions.Contains(Permission.ReadPeople);
     public bool CanWritePeople => _permissions.Contains(Permission.WritePeople);

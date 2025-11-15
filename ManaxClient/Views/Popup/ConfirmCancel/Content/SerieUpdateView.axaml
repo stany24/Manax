@@ -29,31 +29,30 @@
                 <TextBlock
                     Text="{localization:Localize SerieUpdatePopup.Title}"
                     FontSize="18"
-                    FontWeight="Bold"/>
+                    FontWeight="Bold" />
                 <TextBlock
                     Text="{localization:Localize SerieUpdatePopup.Description}"
-                    FontSize="12"/>
+                    FontSize="12" />
             </StackPanel>
         </StackPanel>
 
         <StackPanel Grid.Row="1" Spacing="8">
             <TextBlock
                 Text="{localization:Localize SerieUpdatePopup.Serie.Title}"
-                FontWeight="Medium"/>
+                FontWeight="Medium" />
             <TextBox
                 Text="{Binding Title}"
                 Watermark="{localization:Localize SerieUpdatePopup.Serie.Title.Placeholder}"
                 Padding="12"
                 CornerRadius="8"
                 BorderThickness="1"
-                FontSize="14">
-            </TextBox>
+                FontSize="14" />
         </StackPanel>
 
         <StackPanel Grid.Row="2" Spacing="8">
             <TextBlock
                 Text="{localization:Localize SerieUpdatePopup.Serie.Description}"
-                FontWeight="Medium"/>
+                FontWeight="Medium" />
             <TextBox
                 Text="{Binding Description}"
                 Watermark="{localization:Localize SerieUpdatePopup.Serie.Description.Placeholder}"
@@ -63,29 +62,27 @@
                 Padding="12"
                 CornerRadius="8"
                 BorderThickness="1"
-                FontSize="14">
-            </TextBox>
+                FontSize="14" />
         </StackPanel>
 
         <StackPanel Grid.Row="3" Orientation="Horizontal" Spacing="16">
             <StackPanel Spacing="8" HorizontalAlignment="Left" Width="240">
                 <TextBlock
                     Text="{localization:Localize SerieUpdatePopup.Status}"
-                    FontWeight="Medium"/>
+                    FontWeight="Medium" />
                 <ComboBox
                     ItemsSource="{Binding StatusOptions}"
                     SelectedItem="{Binding SelectedStatus}"
                     HorizontalAlignment="Stretch"
                     Padding="12"
                     CornerRadius="8"
-                    BorderThickness="1">
-                </ComboBox>
+                    BorderThickness="1" />
             </StackPanel>
 
             <StackPanel Spacing="8" HorizontalAlignment="Left" Width="240">
                 <TextBlock
                     Text="{localization:Localize SerieUpdatePopup.Library}"
-                    FontWeight="Medium"/>
+                    FontWeight="Medium" />
                 <ComboBox
                     ItemsSource="{Binding Libraries}"
                     SelectedItem="{Binding SelectedLibrary}"
@@ -160,8 +157,7 @@
                                     Background="Transparent"
                                     BorderThickness="0"
                                     Command="{Binding $parent[UserControl].((content:SerieUpdateViewModel)DataContext).RemoveTag}"
-                                    CommandParameter="{Binding}">
-                                </Button>
+                                    CommandParameter="{Binding}" />
                             </StackPanel>
                         </Border>
                     </DataTemplate>
@@ -175,7 +171,7 @@
             HorizontalAlignment="Center"
             Margin="0,8,0,0"
             IsVisible="{Binding !SelectedTags.Count}" />
-        
+
         <StackPanel Grid.Row="6" Spacing="8">
             <TextBlock
                 Text="{localization:Localize SerieUpdatePopup.Persons}"
@@ -228,7 +224,7 @@
                             <StackPanel Orientation="Horizontal" Spacing="4">
                                 <TextBlock
                                     Text="{Binding FullName}"
-                                    FontSize="12"/>
+                                    FontSize="12" />
                                 <Button
                                     Content="✕"
                                     VerticalContentAlignment="Center"

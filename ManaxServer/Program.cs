@@ -23,7 +23,7 @@ using Microsoft.EntityFrameworkCore;
 namespace ManaxServer;
 
 public class Program
-    
+
 {
     public static void Main(string[] args)
     {
@@ -72,7 +72,8 @@ public class Program
             new PasswordValidationService(builder.Environment.IsProduction()));
         FeatureFileManager featureFileManager = new();
         builder.Services.AddSingleton<IFeatureService>(provider =>
-            new FeatureService(featureFileManager,featureFileManager,provider.GetRequiredService<INotificationService>()));
+            new FeatureService(featureFileManager, featureFileManager,
+                provider.GetRequiredService<INotificationService>()));
         AddRateLimiting(builder);
 
         builder.Services.Configure<KestrelServerOptions>(options =>
@@ -153,7 +154,7 @@ public class Program
                 new IssueSerieReportedType { Name = "Wrong name" });
             manaxContext.SaveChanges();
         }
-        
+
         if (!manaxContext.Roles.Any())
         {
             manaxContext.Roles.AddRange(

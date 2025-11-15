@@ -42,8 +42,7 @@
                 FontWeight="Medium"
                 MinWidth="100"
                 IsEnabled="{Binding Content.CanCancel}"
-                Command="{Binding Cancel}">
-            </Button>
+                Command="{Binding Cancel}" />
             <Button
                 Grid.Column="2"
                 Content="{localization:Localize ConfirmCancelPopup.Confirm}"
@@ -56,8 +55,7 @@
                 MinWidth="100"
                 IsEnabled="{Binding Content.CanConfirm}"
                 Command="{Binding Confirm}"
-                HotKey="Enter">
-            </Button>
+                HotKey="Enter" />
         </Grid>
     </Grid>
 </UserControl>

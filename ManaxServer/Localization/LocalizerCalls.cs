@@ -298,17 +298,19 @@ public static partial class Localizer
     {
         return string.Format(CultureInfo.InvariantCulture, _currentLocalization[LocalizationKey.TagNotFound], tagId);
     }
-    
+
     public static string FeatureDisabled(FeatureType feature)
     {
-        return string.Format(CultureInfo.InvariantCulture, _currentLocalization[LocalizationKey.FeatureDisabled], feature);
+        return string.Format(CultureInfo.InvariantCulture, _currentLocalization[LocalizationKey.FeatureDisabled],
+            feature);
     }
-    
+
     public static string PersonNotFound(long personId)
     {
-        return string.Format(CultureInfo.InvariantCulture, _currentLocalization[LocalizationKey.PersonNotFound], personId);
+        return string.Format(CultureInfo.InvariantCulture, _currentLocalization[LocalizationKey.PersonNotFound],
+            personId);
     }
-    
+
     public static string RoleNotFound(long roleId)
     {
         return string.Format(CultureInfo.InvariantCulture, _currentLocalization[LocalizationKey.RoleNotFound], roleId);

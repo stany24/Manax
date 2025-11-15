@@ -75,7 +75,8 @@ public class GetIssueTests : IssueTestsSetup
     [TestMethod]
     public async Task GetAllReportedChapterIssuesTypesReturnsAllTypes()
     {
-        ActionResult<IEnumerable<IssueChapterReportedTypeDto>> result = await Controller.GetAllReportedChapterIssuesTypes();
+        ActionResult<IEnumerable<IssueChapterReportedTypeDto>> result =
+            await Controller.GetAllReportedChapterIssuesTypes();
         OkObjectResult? okResult = result.Result as OkObjectResult;
         Assert.IsNull(okResult);
 
@@ -169,7 +170,8 @@ public class GetIssueTests : IssueTestsSetup
     [TestMethod]
     public async Task GetAllReportedChapterIssuesTypesVerifyCorrectCount()
     {
-        ActionResult<IEnumerable<IssueChapterReportedTypeDto>> result = await Controller.GetAllReportedChapterIssuesTypes();
+        ActionResult<IEnumerable<IssueChapterReportedTypeDto>> result =
+            await Controller.GetAllReportedChapterIssuesTypes();
 
         List<IssueChapterReportedTypeDto>? returnedTypes = result.Value as List<IssueChapterReportedTypeDto>;
         Assert.IsNotNull(returnedTypes);

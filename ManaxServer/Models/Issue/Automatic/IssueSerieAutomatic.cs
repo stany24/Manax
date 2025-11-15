@@ -17,7 +17,7 @@ public class AutomaticIssueSerie
 
     [ForeignKey(nameof(SerieId))] public Serie.Serie Serie { get; set; } = null!;
     public IssueSerieAutomaticType Problem { get; set; }
-    
+
     public IssueSerieAutomaticDto ToDto()
     {
         return new IssueSerieAutomaticDto

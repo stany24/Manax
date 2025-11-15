@@ -1,4 +1,6 @@
 using System;
+using System.Collections.ObjectModel;
+using System.IO;
 using System.Text.Json;
 
 namespace ManaxClient.Models.Upload;
@@ -7,7 +9,8 @@ public static class UploadSettings
 {
     public static EventHandler? SettingsChanged;
     private static UploadSettingsData _settings = new();
-    private static readonly string SavePath = System.IO.Path.Combine(
+
+    private static readonly string SavePath = Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
         "ManaxClient",
         "uploadsettings.json");
@@ -18,17 +21,17 @@ public static class UploadSettings
     {
         Load();
     }
-    
+
     public static string ProcessingFolder => _settings.ProcessingFolder;
-    public static System.Collections.ObjectModel.ObservableCollection<string> SourceFolders => _settings.SourceFolders;
-    
+    public static ObservableCollection<string> SourceFolders => _settings.SourceFolders;
+
     public static void SetProcessingFolder(string folder)
     {
         _settings.ProcessingFolder = folder;
         Save();
         SettingsChanged?.Invoke(null, EventArgs.Empty);
     }
-    
+
     public static void AddSourceFolder(string folder)
     {
         if (_settings.SourceFolders.Contains(folder)) return;
@@ -44,24 +47,21 @@ public static class UploadSettings
         Save();
         SettingsChanged?.Invoke(null, EventArgs.Empty);
     }
-    
+
     private static void Load()
     {
-        if (!System.IO.File.Exists(SavePath)) return;
-        string json = System.IO.File.ReadAllText(SavePath);
+        if (!File.Exists(SavePath)) return;
+        string json = File.ReadAllText(SavePath);
         _settings = JsonSerializer.Deserialize<UploadSettingsData>(json) ?? new UploadSettingsData();
     }
 
     private static void Save()
     {
-        string directory = System.IO.Path.GetDirectoryName(SavePath) ?? string.Empty;
-        if (!System.IO.Directory.Exists(directory))
-        {
-            System.IO.Directory.CreateDirectory(directory);
-        }
+        string directory = Path.GetDirectoryName(SavePath) ?? string.Empty;
+        if (!Directory.Exists(directory)) Directory.CreateDirectory(directory);
 
         string json = JsonSerializer.Serialize(_settings, JsonSettings);
-        System.IO.File.WriteAllText(SavePath, json);
+        File.WriteAllText(SavePath, json);
         SettingsChanged?.Invoke(null, EventArgs.Empty);
     }
 }

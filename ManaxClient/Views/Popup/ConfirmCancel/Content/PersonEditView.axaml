@@ -15,17 +15,17 @@
                 <TextBlock
                     Text="{localization:Localize PersonEditPopup.Title}"
                     FontSize="18"
-                    FontWeight="Bold"/>
+                    FontWeight="Bold" />
                 <TextBlock
                     Text="{localization:Localize PersonEditPopup.Description}"
-                    FontSize="12"/>
+                    FontSize="12" />
             </StackPanel>
         </StackPanel>
 
         <StackPanel Grid.Row="1" Spacing="8">
             <TextBlock
                 Text="{localization:Localize PersonEditPopup.FirstName}"
-                FontWeight="Medium"/>
+                FontWeight="Medium" />
             <TextBox
                 Text="{Binding FirstName}"
                 Watermark="{localization:Localize PersonEditPopup.FirstName.Placeholder}"
@@ -47,7 +47,7 @@
         <StackPanel Grid.Row="2" Spacing="8">
             <TextBlock
                 Text="{localization:Localize PersonEditPopup.LastName}"
-                FontWeight="Medium"/>
+                FontWeight="Medium" />
             <TextBox
                 Text="{Binding LastName}"
                 Watermark="{localization:Localize PersonEditPopup.LastName.Placeholder}"
@@ -69,7 +69,7 @@
         <StackPanel Grid.Row="3" Spacing="8">
             <TextBlock
                 Text="{localization:Localize PersonEditPopup.Pseudonym}"
-                FontWeight="Medium"/>
+                FontWeight="Medium" />
             <TextBox
                 Text="{Binding Pseudonym}"
                 Watermark="{localization:Localize PersonEditPopup.Pseudonym.Placeholder}"
@@ -92,13 +92,11 @@
         <StackPanel Grid.Row="4" Spacing="8">
             <TextBlock
                 Text="{localization:Localize PersonEditPopup.Role}"
-                FontWeight="Medium"/>
+                FontWeight="Medium" />
             <ComboBox
                 SelectedItem="{Binding Role}"
                 ItemsSource="{Binding Roles}"
-                DisplayMemberBinding="{Binding Name}">
-            </ComboBox>
+                DisplayMemberBinding="{Binding Name}" />
         </StackPanel>
     </Grid>
 </UserControl>
-

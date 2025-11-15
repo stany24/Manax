@@ -40,13 +40,13 @@ public enum NotificationType
     TagCreated,
     TagUpdated,
     TagDeleted,
-    
+
     FeatureModified,
-    
+
     PersonCreated,
     PersonUpdated,
     PersonDeleted,
-    
+
     RoleCreated,
     RoleUpdated,
     RoleDeleted

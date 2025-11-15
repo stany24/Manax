@@ -1,6 +1,7 @@
 using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Input;
+using Avalonia.Interactivity;
 using ManaxClient.Models.Upload;
 using ManaxClient.ViewModels.Pages.Upload.Tab;
 
@@ -11,7 +12,7 @@ public partial class ManualCleanupTabView : UserControl
     public ManualCleanupTabView()
     {
         InitializeComponent();
-        AddHandler(PointerWheelChangedEvent, PointerWheelChangedHandler, Avalonia.Interactivity.RoutingStrategies.Tunnel);
+        AddHandler(PointerWheelChangedEvent, PointerWheelChangedHandler, RoutingStrategies.Tunnel);
     }
 
     private void PointerWheelChangedHandler(object? sender, PointerWheelEventArgs e)
@@ -31,13 +32,10 @@ public partial class ManualCleanupTabView : UserControl
 
         PointerPoint point = args.GetCurrentPoint(button);
         if (!point.Properties.IsRightButtonPressed) return;
-        
+
         ImageFile? imageFile = viewModel.SelectedChapterFolder.Images
             .FirstOrDefault(img => img.Path == imagePath);
-            
-        if (imageFile != null)
-        {
-            viewModel.SelectedChapterFolder.DeleteImage(imageFile);
-        }
+
+        if (imageFile != null) viewModel.SelectedChapterFolder.DeleteImage(imageFile);
     }
 }

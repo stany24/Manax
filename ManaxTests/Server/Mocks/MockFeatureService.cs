@@ -3,10 +3,10 @@ using ManaxServer.Services.Feature;
 
 namespace ManaxTests.Server.Mocks;
 
-public class MockFeatureService:IFeatureService
+public class MockFeatureService : IFeatureService
 {
     private readonly HashSet<FeatureType> _enabledFeatures = [];
-    
+
     public bool IsFeatureEnabled(FeatureType featureType)
     {
         return _enabledFeatures.Contains(featureType);

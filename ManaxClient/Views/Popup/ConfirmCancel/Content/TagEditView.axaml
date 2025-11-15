@@ -15,31 +15,30 @@
                 <TextBlock
                     Text="{localization:Localize TagEditPopup.Title}"
                     FontSize="18"
-                    FontWeight="Bold"/>
+                    FontWeight="Bold" />
                 <TextBlock
                     Text="{localization:Localize TagEditPopup.Description}"
-                    FontSize="12"/>
+                    FontSize="12" />
             </StackPanel>
         </StackPanel>
 
         <StackPanel Grid.Row="1" Spacing="8">
             <TextBlock
                 Text="{localization:Localize TagEditPopup.Name}"
-                FontWeight="Medium"/>
+                FontWeight="Medium" />
             <TextBox
                 Text="{Binding Name}"
                 Watermark="{localization:Localize TagEditPopup.Name.Placeholder}"
                 Padding="12"
                 CornerRadius="8"
                 BorderThickness="1"
-                FontSize="14">
-            </TextBox>
+                FontSize="14" />
         </StackPanel>
 
         <StackPanel Grid.Row="2" Spacing="8">
             <TextBlock
                 Text="{localization:Localize TagEditPopup.Color}"
-                FontWeight="Medium"/>
+                FontWeight="Medium" />
             <ColorPicker
                 Color="{Binding Color,Mode=TwoWay}" />
         </StackPanel>

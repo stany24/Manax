@@ -43,6 +43,8 @@ public partial class SeriePageViewModel : PageViewModel
         Serie.LoadPoster();
     }
 
+    public ReadOnlyObservableCollection<Models.Rank> Ranks => _ranks;
+
     partial void OnSelectedRankChanged(Models.Rank? value)
     {
         if (value == null) return;
@@ -54,11 +56,10 @@ public partial class SeriePageViewModel : PageViewModel
         Task.Run(async () =>
         {
             Optional<bool> userRankResponse = await ManaxApiRankClient.SetUserRankAsync(userRankCreateDto);
-            InfoEmitted?.Invoke(this, userRankResponse.Failed ? userRankResponse.Error : Localizer.Get("SeriePage.RankSetCorrectly"));
+            InfoEmitted?.Invoke(this,
+                userRankResponse.Failed ? userRankResponse.Error : Localizer.Get("SeriePage.RankSetCorrectly"));
         });
     }
-
-    public ReadOnlyObservableCollection<Models.Rank> Ranks => _ranks;
 
     public void MoveToChapterPage(Models.Chapter chapter)
     {

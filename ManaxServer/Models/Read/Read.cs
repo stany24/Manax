@@ -26,7 +26,7 @@ public class Read
     [ForeignKey(nameof(UserId))]
     [DeleteBehavior(DeleteBehavior.NoAction)]
     public User.User User { get; set; }
-    
+
     public ReadDto ToDto()
     {
         return new ReadDto

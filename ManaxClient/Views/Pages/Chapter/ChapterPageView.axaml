@@ -31,10 +31,11 @@
                         <TextBlock Text="{Binding Chapter.FileName}"
                                    FontWeight="Medium"
                                    VerticalAlignment="Center" />
-                        <TextBlock Text="{localization1:LocalizeFormat ChapterPage.Pages,
+                        <TextBlock
+                            Text="{localization1:LocalizeFormat ChapterPage.Pages,
                                    Param1={Binding $parent[UserControl].((chapter1:ChapterPageViewModel)DataContext).Chapter.Pages.Count}}"
-                                   FontSize="12"
-                                   VerticalAlignment="Center" />
+                            FontSize="12"
+                            VerticalAlignment="Center" />
                     </StackPanel>
                 </Border>
 

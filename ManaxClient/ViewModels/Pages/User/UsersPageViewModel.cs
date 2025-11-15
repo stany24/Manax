@@ -55,7 +55,8 @@ public class UsersPageViewModel : PageViewModel
                 if (context.Canceled()) return;
                 List<Permission> perms = content.GetSelectedPermissions();
                 Optional<bool> postUserResponse = await ManaxApiPermissionClient.SetPermissionsAsync(userId, perms);
-                if (postUserResponse.Failed) InfoEmitted?.Invoke(this, Localizer.Get("UserPage.UpdatePermissionsError"));
+                if (postUserResponse.Failed)
+                    InfoEmitted?.Invoke(this, Localizer.Get("UserPage.UpdatePermissionsError"));
             }
             catch (Exception e)
             {

@@ -17,7 +17,7 @@ public static class ManaxApiFeatureClient
                 : new Optional<FeaturesManager>(new FeaturesManager(permissions));
         });
     }
-    
+
     public static async Task<Optional<bool>> SetFeatureEnabledAsync(Feature feature)
     {
         return await ManaxApiClient.ExecuteWithErrorHandlingAsync(async () =>
@@ -26,7 +26,7 @@ public static class ManaxApiFeatureClient
             return !response.IsSuccessStatusCode ? new Optional<bool>(response) : new Optional<bool>(true);
         });
     }
-    
+
     public static async Task<Optional<bool>> SetFeaturesAsync(List<Feature> features)
     {
         return await ManaxApiClient.ExecuteWithErrorHandlingAsync(async () =>

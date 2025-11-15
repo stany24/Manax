@@ -18,46 +18,43 @@ namespace ManaxClient.ViewModels.Pages.Login;
 public sealed partial class LoginPageViewModel : PageViewModel
 {
     private readonly string _saveFile;
+
+    [ObservableProperty] private List<LanguageItem> _availableLanguages = [];
     [ObservableProperty] private bool _canLogin = true;
     [ObservableProperty] private string _emoji = "🔑";
     [ObservableProperty] private string _host = string.Empty;
     private bool _isAdmin;
     [ObservableProperty] private string _password = string.Empty;
     [ObservableProperty] private int? _port;
-    [ObservableProperty] private string _username = string.Empty;
-    
-    [ObservableProperty] private List<LanguageItem> _availableLanguages = [];
     [ObservableProperty] private LanguageItem? _selectedLanguage;
+    [ObservableProperty] private string _username = string.Empty;
 
     public LoginPageViewModel()
     {
         ManaxApiConfig.ResetToken();
         _saveFile = Path.Combine(Directory.GetCurrentDirectory(), "login.json");
         ControlBarVisible = false;
-        
+
         InitializeLanguages();
         TryLoadSavedLogin();
     }
 
     private void InitializeLanguages()
     {
-        AvailableLanguages = 
+        AvailableLanguages =
         [
             new LanguageItem { Code = "en", DisplayName = "English" },
             new LanguageItem { Code = "fr", DisplayName = "Français" }
         ];
-        
+
         string currentLanguage = Localizer.Language;
-        if (string.IsNullOrEmpty(currentLanguage)) {currentLanguage = "en";}
+        if (string.IsNullOrEmpty(currentLanguage)) currentLanguage = "en";
         SelectedLanguage = AvailableLanguages.FirstOrDefault(l => l.Code == currentLanguage);
     }
 
     partial void OnSelectedLanguageChanged(LanguageItem? value)
     {
-        if (value != null && value.Code != Localizer.Language)
-        {
-            Localizer.Language = value.Code;
-        }
+        if (value != null && value.Code != Localizer.Language) Localizer.Language = value.Code;
     }
 
     public void Login()
@@ -73,6 +70,7 @@ public sealed partial class LoginPageViewModel : PageViewModel
             Release(Localizer.Get("LoginPage.Invalid.Host.Port"));
             return;
         }
+
         Task.Run(async () =>
         {
             ManaxApiConfig.SetHost(hostUri);
@@ -95,7 +93,7 @@ public sealed partial class LoginPageViewModel : PageViewModel
 
     private void Release(string errorMessage)
     {
-        InfoEmitted?.Invoke(this,errorMessage);
+        InfoEmitted?.Invoke(this, errorMessage);
         CanLogin = true;
         Emoji = "🔑";
     }
@@ -115,7 +113,7 @@ public sealed partial class LoginPageViewModel : PageViewModel
         }
         catch (Exception)
         {
-            InfoEmitted?.Invoke(this,"Unknown error while checking token");
+            InfoEmitted?.Invoke(this, "Unknown error while checking token");
         }
     }
 

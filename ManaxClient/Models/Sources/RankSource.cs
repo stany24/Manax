@@ -22,17 +22,13 @@ public static class RankSource
     private static readonly Lock RanksLock = new();
 
     static RankSource()
-    {        
+    {
         MainWindowViewModel.FeatureChanged += (_, features) =>
         {
             if (features is { Key: FeatureType.Ranks, Value: true })
-            {
                 LoadRanks();
-            }
             else
-            {
                 Ranks.Clear();
-            }
         };
         ServerNotification.OnRankCreated += OnRankCreated;
         ServerNotification.OnRankDeleted += OnRankDeleted;

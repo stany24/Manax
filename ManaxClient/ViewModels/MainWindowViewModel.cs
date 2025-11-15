@@ -62,7 +62,7 @@ public partial class MainWindowViewModel : ObservableObject
             CurrentPageViewModel.NextRequested += (_, _) => GoForward();
             PageMargin = CurrentPageViewModel.HasMargin ? new Thickness(20) : new Thickness(0);
         };
-        
+
         LoginPageViewModel loginPage = new();
         loginPage.PageChangedRequested += (_, _) =>
         {
@@ -79,7 +79,7 @@ public partial class MainWindowViewModel : ObservableObject
             ServerNotification.OnFeatureModified += OnFeatureModified;
             Task.Run(LoadPermissions);
             Task.Run(LoadFeatures);
-            
+
             RoleSource.LoadRoles();
             LibrarySource.LoadLibraries();
             PersonSource.LoadPersons();
@@ -124,6 +124,7 @@ public partial class MainWindowViewModel : ObservableObject
                 ShowInfo(logoutAsync.Error);
                 return;
             }
+
             SetPage(new LoginPageViewModel());
         }
         catch (Exception e)
@@ -230,7 +231,7 @@ public partial class MainWindowViewModel : ObservableObject
     {
         SetPage(new ServerStatsPageViewModel());
     }
-    
+
     public void ChangeUploadPage()
     {
         SetPage(new UploadPageViewModel());

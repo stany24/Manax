@@ -15,25 +15,24 @@
                 <TextBlock
                     Text="{localization:Localize LibraryCreatePopup.NewLibrary}"
                     FontSize="18"
-                    FontWeight="Bold"/>
+                    FontWeight="Bold" />
                 <TextBlock
                     Text="{localization:Localize LibraryCreatePopup.Description}"
-                    FontSize="12"/>
+                    FontSize="12" />
             </StackPanel>
         </StackPanel>
 
         <StackPanel Grid.Row="1" Spacing="8">
             <TextBlock
                 Text="{localization:Localize LibraryCreatePopup.Name}"
-                FontWeight="Medium"/>
+                FontWeight="Medium" />
             <TextBox
-                Text="{Binding Name}" 
+                Text="{Binding Name}"
                 Watermark="{localization:Localize LibraryCreatePopup.Name.Placeholder}"
                 Padding="12"
                 CornerRadius="8"
                 BorderThickness="1"
-                FontSize="14">
-            </TextBox>
+                FontSize="14" />
         </StackPanel>
 
         <Border
@@ -46,7 +45,7 @@
                 <TextBlock
                     Text="{localization:Localize LibraryCreatePopup.Info}"
                     TextWrapping="Wrap"
-                    FontSize="12"/>
+                    FontSize="12" />
             </StackPanel>
         </Border>
     </Grid>

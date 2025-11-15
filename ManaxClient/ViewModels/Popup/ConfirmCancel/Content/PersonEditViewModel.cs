@@ -4,6 +4,7 @@ using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData;
 using DynamicData.Binding;
+using ManaxClient.Models;
 using ManaxClient.Models.Sources;
 using ManaxLibrary.DTO.Person;
 
@@ -12,13 +13,11 @@ namespace ManaxClient.ViewModels.Popup.ConfirmCancel.Content;
 public partial class PersonEditViewModel : ConfirmCancelContentViewModel
 {
     private readonly long _personId;
+    private readonly ReadOnlyObservableCollection<Role> _roles;
     [ObservableProperty] private string _firstName;
     [ObservableProperty] private string _lastName;
     [ObservableProperty] private string _pseudonym;
-    [ObservableProperty] private Models.Role? _role;
-    
-    public ReadOnlyObservableCollection<Models.Role> Roles => _roles;
-    private readonly ReadOnlyObservableCollection<Models.Role> _roles;
+    [ObservableProperty] private Role? _role;
 
     public PersonEditViewModel(long personId, PersonUpdateDto person)
     {
@@ -28,7 +27,7 @@ public partial class PersonEditViewModel : ConfirmCancelContentViewModel
         _pseudonym = person.Pseudonym;
         CanConfirm = true;
 
-        SortExpressionComparer<Models.Role> roleComparer = SortExpressionComparer<Models.Role>
+        SortExpressionComparer<Role> roleComparer = SortExpressionComparer<Role>
             .Ascending(r => r.Name);
         RoleSource.Roles.Connect()
             .SortAndBind(out _roles, roleComparer)
@@ -40,13 +39,16 @@ public partial class PersonEditViewModel : ConfirmCancelContentViewModel
         PropertyChanged += (_, args) =>
         {
             if (args.PropertyName == nameof(FirstName) || args.PropertyName == nameof(LastName))
-            {
                 CanConfirm = !string.IsNullOrWhiteSpace(FirstName) && !string.IsNullOrWhiteSpace(LastName);
-            }
         };
     }
 
-    public long GetPersonId() => _personId;
+    public ReadOnlyObservableCollection<Role> Roles => _roles;
+
+    public long GetPersonId()
+    {
+        return _personId;
+    }
 
     public PersonUpdateDto GetResult()
     {
@@ -70,4 +72,3 @@ public partial class PersonEditViewModel : ConfirmCancelContentViewModel
         };
     }
 }
-

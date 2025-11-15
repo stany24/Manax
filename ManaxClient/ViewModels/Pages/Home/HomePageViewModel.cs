@@ -61,7 +61,7 @@ public partial class HomePageViewModel : PageViewModel
                 ? desktop.MainWindow
                 : null;
             if (window?.StorageProvider == null) return;
-            
+
             IReadOnlyList<IStorageFolder> folders = await window.StorageProvider.OpenFolderPickerAsync(
                 new FolderPickerOpenOptions
                 {
@@ -77,13 +77,16 @@ public partial class HomePageViewModel : PageViewModel
             Optional<bool> uploadSerieResponse = await ManaxApiUploadClient.UploadSerieAsync(folderPath);
             if (uploadSerieResponse.Failed)
             {
-                InfoEmitted?.Invoke(this, 
-                    string.Format(CultureInfo.InvariantCulture, Localizer.Get("HomePage.UploadFailure"),Path.GetDirectoryName(folderPath)));
+                InfoEmitted?.Invoke(this,
+                    string.Format(CultureInfo.InvariantCulture, Localizer.Get("HomePage.UploadFailure"),
+                        Path.GetDirectoryName(folderPath)));
                 Logger.LogFailure("Failed to upload series: " + uploadSerieResponse.Error);
                 return;
             }
-            InfoEmitted?.Invoke(this, 
-                string.Format(CultureInfo.InvariantCulture, Localizer.Get("HomePage.UploadSuccess"), Path.GetDirectoryName(folderPath)));
+
+            InfoEmitted?.Invoke(this,
+                string.Format(CultureInfo.InvariantCulture, Localizer.Get("HomePage.UploadSuccess"),
+                    Path.GetDirectoryName(folderPath)));
             Logger.LogInfo("Serie upload successful");
         }
         catch (Exception e)

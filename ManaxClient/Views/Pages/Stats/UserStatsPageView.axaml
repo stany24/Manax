@@ -17,7 +17,7 @@
 
             <StackPanel Orientation="Vertical">
                 <TextBlock Classes="title" Text="{localization:Localize UserStatsPage.Title}" />
-                <TextBlock Text="{localization:Localize UserStatsPage.Subtitle}"/>
+                <TextBlock Text="{localization:Localize UserStatsPage.Subtitle}" />
             </StackPanel>
 
             <Grid ColumnDefinitions="*,*" ColumnSpacing="24">
@@ -25,35 +25,39 @@
                     <StackPanel Spacing="20">
                         <StackPanel Orientation="Horizontal" Spacing="12">
                             <TextBlock Text="📚" FontSize="20" />
-                            <TextBlock Classes="subtitle" Text="{localization:Localize UserStatsPage.SeriesProgress.Title}" Margin="0" />
+                            <TextBlock Classes="subtitle"
+                                       Text="{localization:Localize UserStatsPage.SeriesProgress.Title}" Margin="0" />
                         </StackPanel>
 
                         <avalonia:PieChart Series="{Binding SeriesSeries}"
                                            Width="300"
                                            Height="300"
                                            HorizontalAlignment="Center"
-                                           Background="{DynamicResource MaterialPaperBrush}"/>
+                                           Background="{DynamicResource MaterialPaperBrush}" />
 
                         <Grid ColumnDefinitions="*,*,*" ColumnSpacing="8">
                             <StackPanel Grid.Column="0" Spacing="4">
-                                <TextBlock Text="{localization:Localize UserStatsPage.SeriesProgress.Completed}" FontSize="12" FontWeight="Medium" />
+                                <TextBlock Text="{localization:Localize UserStatsPage.SeriesProgress.Completed}"
+                                           FontSize="12" FontWeight="Medium" />
                                 <TextBlock Text="{Binding UserStats.SeriesCompleted}"
                                            FontSize="16"
-                                           FontWeight="Bold"/>
+                                           FontWeight="Bold" />
                             </StackPanel>
 
                             <StackPanel Grid.Column="1" Spacing="4">
-                                <TextBlock Text="{localization:Localize UserStatsPage.SeriesProgress.InProgress}" FontSize="12" FontWeight="Medium" />
+                                <TextBlock Text="{localization:Localize UserStatsPage.SeriesProgress.InProgress}"
+                                           FontSize="12" FontWeight="Medium" />
                                 <TextBlock Text="{Binding UserStats.SeriesInProgress}"
                                            FontSize="16"
-                                           FontWeight="Bold"/>
+                                           FontWeight="Bold" />
                             </StackPanel>
 
                             <StackPanel Grid.Column="2" Spacing="4">
-                                <TextBlock Text="{localization:Localize UserStatsPage.SeriesProgress.Remaining}" FontSize="12" FontWeight="Medium" />
+                                <TextBlock Text="{localization:Localize UserStatsPage.SeriesProgress.Remaining}"
+                                           FontSize="12" FontWeight="Medium" />
                                 <TextBlock Text="{Binding UserStats.SeriesRemaining}"
                                            FontSize="16"
-                                           FontWeight="Bold"/>
+                                           FontWeight="Bold" />
                             </StackPanel>
                         </Grid>
                     </StackPanel>
@@ -63,28 +67,31 @@
                     <StackPanel Spacing="20">
                         <StackPanel Orientation="Horizontal" Spacing="12">
                             <TextBlock Text="📖" FontSize="20" />
-                            <TextBlock Classes="subtitle" Text="{localization:Localize UserStatsPage.ChaptersProgress.Title}" Margin="0" />
+                            <TextBlock Classes="subtitle"
+                                       Text="{localization:Localize UserStatsPage.ChaptersProgress.Title}" Margin="0" />
                         </StackPanel>
 
                         <avalonia:PieChart Series="{Binding ChaptersSeries}"
                                            Width="300"
                                            Height="300"
                                            HorizontalAlignment="Center"
-                                           Background="{DynamicResource MaterialPaperBrush}"/>
+                                           Background="{DynamicResource MaterialPaperBrush}" />
 
                         <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
                             <StackPanel Grid.Column="0" Spacing="4">
-                                <TextBlock Text="{localization:Localize UserStatsPage.ChaptersProgress.Read}" FontSize="12" FontWeight="Medium" />
+                                <TextBlock Text="{localization:Localize UserStatsPage.ChaptersProgress.Read}"
+                                           FontSize="12" FontWeight="Medium" />
                                 <TextBlock Text="{Binding UserStats.ChaptersRead}"
                                            FontSize="16"
-                                           FontWeight="Bold"/>
+                                           FontWeight="Bold" />
                             </StackPanel>
 
                             <StackPanel Grid.Column="1" Spacing="4">
-                                <TextBlock Text="{localization:Localize UserStatsPage.ChaptersProgress.Remaining}" FontSize="12" FontWeight="Medium" />
+                                <TextBlock Text="{localization:Localize UserStatsPage.ChaptersProgress.Remaining}"
+                                           FontSize="12" FontWeight="Medium" />
                                 <TextBlock Text="{Binding UserStats.ChaptersRemaining}"
                                            FontSize="16"
-                                           FontWeight="Bold"/>
+                                           FontWeight="Bold" />
                             </StackPanel>
                         </Grid>
                     </StackPanel>
@@ -95,7 +102,8 @@
                 <StackPanel Spacing="20">
                     <StackPanel Orientation="Horizontal" Spacing="12">
                         <TextBlock Text="🏆" FontSize="20" />
-                        <TextBlock Classes="subtitle" Text="{localization:Localize UserStatsPage.RankDistribution.Title}" Margin="0" />
+                        <TextBlock Classes="subtitle"
+                                   Text="{localization:Localize UserStatsPage.RankDistribution.Title}" Margin="0" />
                     </StackPanel>
 
                     <avalonia:CartesianChart Series="{Binding RanksSeries}"
@@ -103,7 +111,7 @@
                                              Width="600"
                                              Height="300"
                                              HorizontalAlignment="Center"
-                                             Background="{DynamicResource MaterialPaperBrush}"/>
+                                             Background="{DynamicResource MaterialPaperBrush}" />
                 </StackPanel>
             </Border>
 
@@ -111,7 +119,8 @@
                 <StackPanel Spacing="20">
                     <StackPanel Orientation="Horizontal" Spacing="12">
                         <TextBlock Text="📊" FontSize="20" />
-                        <TextBlock Classes="subtitle" Text="{localization:Localize UserStatsPage.ReadsPerDay.Title}" Margin="0" />
+                        <TextBlock Classes="subtitle" Text="{localization:Localize UserStatsPage.ReadsPerDay.Title}"
+                                   Margin="0" />
                     </StackPanel>
 
                     <avalonia:CartesianChart Series="{Binding ReadsPerDaySeries}"
@@ -119,7 +128,7 @@
                                              Width="800"
                                              Height="300"
                                              HorizontalAlignment="Center"
-                                             Background="{DynamicResource MaterialPaperBrush}"/>
+                                             Background="{DynamicResource MaterialPaperBrush}" />
                 </StackPanel>
             </Border>
         </StackPanel>

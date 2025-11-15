@@ -31,10 +31,7 @@ public partial class IssueSerieReported : ObservableObject
         Task.Run(async () =>
         {
             Optional<bool> response = await ManaxApiIssueClient.CloseSerieIssueAsync(Id);
-            if (response.Failed)
-            {
-                IssueSource.ErrorEmitted?.Invoke(this, response.Error);
-            }
+            if (response.Failed) IssueSource.ErrorEmitted?.Invoke(this, response.Error);
         });
     }
 

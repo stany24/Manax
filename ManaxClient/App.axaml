@@ -12,7 +12,7 @@
     <Application.Styles>
         <themes:MaterialTheme BaseTheme="Dark" PrimaryColor="Purple" SecondaryColor="Lime" />
         <StyleInclude Source="avares://Avalonia.Controls.ColorPicker/Themes/Fluent/Fluent.xaml" />
-        
+
         <Style Selector="Window">
             <Setter Property="FontFamily" Value="Segoe UI, Arial, sans-serif" />
         </Style>
@@ -23,7 +23,7 @@
             <Setter Property="CornerRadius" Value="6" />
             <Setter Property="BorderThickness" Value="0" />
             <Setter Property="FontWeight" Value="Medium" />
-            <Setter Property="Foreground" Value="{DynamicResource MaterialBodyBrush}"></Setter>
+            <Setter Property="Foreground" Value="{DynamicResource MaterialBodyBrush}" />
             <Setter Property="Transitions">
                 <Transitions>
                     <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.15" />
@@ -31,13 +31,13 @@
                 </Transitions>
             </Setter>
         </Style>
-        
+
         <Style Selector="Button.primary">
-            <Setter Property="FontWeight" Value="Bold"></Setter>
+            <Setter Property="FontWeight" Value="Bold" />
         </Style>
-        
+
         <Style Selector="Button.secondary">
-            <Setter Property="FontWeight" Value="SemiBold"></Setter>
+            <Setter Property="FontWeight" Value="SemiBold" />
         </Style>
 
         <Style Selector="Button:pointerover">

@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using DynamicData;
 using DynamicData.Binding;
+using ManaxClient.Models;
 using ManaxClient.Models.Sources;
 using ManaxClient.ViewModels.Popup.ConfirmCancel;
 using ManaxClient.ViewModels.Popup.ConfirmCancel.Content;
@@ -16,10 +17,8 @@ namespace ManaxClient.ViewModels.Pages.Person;
 
 public class PersonPageViewModel : PageViewModel
 {
-    public ReadOnlyObservableCollection<Models.Person> Persons => _persons;
     private readonly ReadOnlyObservableCollection<Models.Person> _persons;
-    public ReadOnlyObservableCollection<Models.Role> Roles => _roles;
-    private readonly ReadOnlyObservableCollection<Models.Role> _roles;
+    private readonly ReadOnlyObservableCollection<Role> _roles;
 
     public PersonPageViewModel()
     {
@@ -30,12 +29,15 @@ public class PersonPageViewModel : PageViewModel
             .SortAndBind(out _persons, comparer)
             .Subscribe();
 
-        SortExpressionComparer<Models.Role> roleComparer = SortExpressionComparer<Models.Role>
+        SortExpressionComparer<Role> roleComparer = SortExpressionComparer<Role>
             .Ascending(r => r.Name);
         RoleSource.Roles.Connect()
             .SortAndBind(out _roles, roleComparer)
             .Subscribe();
     }
+
+    public ReadOnlyObservableCollection<Models.Person> Persons => _persons;
+    public ReadOnlyObservableCollection<Role> Roles => _roles;
 
     public void UpdatePerson(Models.Person person)
     {
@@ -118,7 +120,7 @@ public class PersonPageViewModel : PageViewModel
         PopupRequested?.Invoke(this, popup);
     }
 
-    public void UpdateRole(Models.Role role)
+    public void UpdateRole(Role role)
     {
         RoleUpdateDto update = new()
         {
@@ -147,7 +149,7 @@ public class PersonPageViewModel : PageViewModel
         PopupRequested?.Invoke(this, popup);
     }
 
-    public void DeleteRole(Models.Role role)
+    public void DeleteRole(Role role)
     {
         Task.Run(async () =>
         {

@@ -15,17 +15,17 @@
                 <TextBlock
                     Text="{localization:Localize RoleEditPopup.Title}"
                     FontSize="18"
-                    FontWeight="Bold"/>
+                    FontWeight="Bold" />
                 <TextBlock
                     Text="{localization:Localize RoleEditPopup.Description}"
-                    FontSize="12"/>
+                    FontSize="12" />
             </StackPanel>
         </StackPanel>
 
         <StackPanel Grid.Row="1" Spacing="8">
             <TextBlock
                 Text="{localization:Localize RoleEditPopup.Name}"
-                FontWeight="Medium"/>
+                FontWeight="Medium" />
             <TextBox
                 Text="{Binding Name}"
                 Watermark="{localization:Localize RoleEditPopup.Name.Placeholder}"
@@ -45,4 +45,3 @@
         </StackPanel>
     </Grid>
 </UserControl>
-

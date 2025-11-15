@@ -40,7 +40,7 @@ public partial class IssuesPageViewModel : PageViewModel
             SortExpressionComparer<IssueChapterReported>.Descending(t => t.CreatedAt);
         SortExpressionComparer<IssueSerieReported> comparer4 =
             SortExpressionComparer<IssueSerieReported>.Descending(t => t.CreatedAt);
-        
+
         IssueSource.IssueChapterAutomatic
             .Connect()
             .SortAndBind(out _issueChapterAutomatic, comparer1)
@@ -137,8 +137,8 @@ public partial class IssuesPageViewModel : PageViewModel
             File.Delete(saveFile);
             Directory.Delete(saveFolder, true);
 
-            string message = request.GetValue() 
-                ? Localizer.Get("IssuesPage.ReplacementSuccessful") 
+            string message = request.GetValue()
+                ? Localizer.Get("IssuesPage.ReplacementSuccessful")
                 : Localizer.Get("IssuesPage.ReplacementFailed");
             InfoEmitted?.Invoke(this, message);
         }

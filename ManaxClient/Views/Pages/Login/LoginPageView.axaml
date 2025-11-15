@@ -10,7 +10,7 @@
     x:DataType="page:LoginPageViewModel">
 
     <Grid>
-        <ComboBox HorizontalAlignment="Right" 
+        <ComboBox HorizontalAlignment="Right"
                   VerticalAlignment="Top"
                   Margin="20"
                   MinWidth="120"
@@ -19,8 +19,8 @@
                   DisplayMemberBinding="{Binding DisplayName}"
                   Padding="8,6"
                   CornerRadius="6"
-                  BorderThickness="1"/>
-        
+                  BorderThickness="1" />
+
         <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
             <Border Classes="card" MaxWidth="400" MinWidth="350">
                 <ScrollViewer
@@ -30,38 +30,39 @@
 
                         <StackPanel Spacing="8" HorizontalAlignment="Center">
                             <TextBlock Text="📺" FontSize="48" HorizontalAlignment="Center" />
-                            <TextBlock Classes="title" Text="{localization:Localize LoginPage.Title}" HorizontalAlignment="Center" />
+                            <TextBlock Classes="title" Text="{localization:Localize LoginPage.Title}"
+                                       HorizontalAlignment="Center" />
                             <TextBlock Text="{localization:Localize LoginPage.Subtitle}"
-                                       HorizontalAlignment="Center"/>
+                                       HorizontalAlignment="Center" />
                         </StackPanel>
 
                         <StackPanel Spacing="16">
                             <StackPanel Spacing="6">
                                 <TextBlock Text="{localization:Localize LoginPage.Username}"
-                                           FontWeight="Medium"/>
+                                           FontWeight="Medium" />
                                 <TextBox Name="TbxUsername"
                                          Loaded="TbxUsername_OnLoaded"
                                          Text="{Binding Username}"
                                          Watermark="{localization:Localize LoginPage.Username.Placeholder}"
                                          Padding="12"
                                          CornerRadius="8"
-                                         BorderThickness="1"/>
+                                         BorderThickness="1" />
                             </StackPanel>
 
                             <StackPanel Spacing="6">
                                 <TextBlock Text="{localization:Localize LoginPage.Password}"
-                                           FontWeight="Medium"/>
+                                           FontWeight="Medium" />
                                 <TextBox Text="{Binding Password}"
                                          PasswordChar="•"
                                          Watermark="{localization:Localize LoginPage.Password.Placeholder}"
                                          Padding="12"
                                          CornerRadius="8"
-                                         BorderThickness="1"/>
+                                         BorderThickness="1" />
                             </StackPanel>
 
                             <StackPanel Spacing="6">
                                 <TextBlock Text="{localization:Localize LoginPage.Server}"
-                                           FontWeight="Medium"/>
+                                           FontWeight="Medium" />
                                 <Grid
                                     ColumnDefinitions="*,Auto,Auto">
                                     <TextBox Text="{Binding Host}"
@@ -69,7 +70,7 @@
                                              Watermark="{localization:Localize LoginPage.Server.Placeholder}"
                                              Padding="12"
                                              CornerRadius="8"
-                                             BorderThickness="1"/>
+                                             BorderThickness="1" />
                                     <Label Content=":"
                                            Grid.Column="1"
                                            VerticalAlignment="Center" />
@@ -81,7 +82,7 @@
                                                    Watermark="8080"
                                                    Padding="12"
                                                    CornerRadius="8"
-                                                   BorderThickness="1"/>
+                                                   BorderThickness="1" />
                                 </Grid>
                             </StackPanel>
                         </StackPanel>
@@ -104,11 +105,11 @@
                                 Padding="12">
                             <StackPanel Spacing="8">
                                 <TextBlock Text="{localization:Localize LoginPage.Tip.Title}"
-                                           FontWeight="Bold"/>
+                                           FontWeight="Bold" />
                                 <TextBlock
                                     Text="{localization:Localize LoginPage.Tip.Message}"
                                     TextWrapping="Wrap"
-                                    FontSize="12"/>
+                                    FontSize="12" />
                             </StackPanel>
                         </Border>
                     </StackPanel>

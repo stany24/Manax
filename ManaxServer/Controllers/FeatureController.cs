@@ -18,7 +18,7 @@ public class FeatureController(IFeatureService featureService)
     {
         return featureService.GetFeatures();
     }
-    
+
     [HttpPost]
     [RequirePermission(Permission.WriteFeatures)]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -27,16 +27,13 @@ public class FeatureController(IFeatureService featureService)
         featureService.SetFeatureEnabled(feature);
         return Ok();
     }
-    
+
     [HttpPut("/api/features")]
     [RequirePermission(Permission.WriteFeatures)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public IActionResult SetFeatures(List<Feature> features)
     {
-        foreach (Feature feature in features)
-        {
-            featureService.SetFeatureEnabled(feature);
-        }
+        foreach (Feature feature in features) featureService.SetFeatureEnabled(feature);
         return Ok();
     }
 }

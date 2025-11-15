@@ -1,5 +1,6 @@
 using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using Avalonia;
@@ -9,54 +10,51 @@ using ManaxClient.Models.Upload;
 
 namespace ManaxClient.ViewModels.Pages.Upload.Tab;
 
-public partial class ManualCleanupTabViewModel:TabViewModel
+public partial class ManualCleanupTabViewModel : TabViewModel
 {
-    public ObservableCollection<string> ImagesToEdit { get; set; }= [];
-    public ObservableCollection<SerieFolder> SerieFolders { get; set; }
-    [ObservableProperty] private ChapterFolder? _selectedChapterFolder;
-    [ObservableProperty] private int _nbColumns = 4;
-    [ObservableProperty] private Vector _imagesOffset = new(0,0);
-
     private const int MinColumns = 1;
     private const int MaxColumns = 20;
-    
+    [ObservableProperty] private Vector _imagesOffset = new(0, 0);
+    [ObservableProperty] private int _nbColumns = 4;
+    [ObservableProperty] private ChapterFolder? _selectedChapterFolder;
+
     public ManualCleanupTabViewModel()
     {
         string processingFolder = UploadSettings.ProcessingFolder;
-        UploadSettings.SettingsChanged += (_, _) => {processingFolder = UploadSettings.ProcessingFolder;};
+        UploadSettings.SettingsChanged += (_, _) => { processingFolder = UploadSettings.ProcessingFolder; };
         SerieFolders = new ObservableCollection<SerieFolder>(
             Directory.GetDirectories(processingFolder)
-                .Select(f =>new SerieFolder(f)));
+                .Select(f => new SerieFolder(f)));
         PropertyChanged += (_, args) =>
         {
             if (args.PropertyName != nameof(SelectedChapterFolder)) return;
-            ImagesOffset = new Vector(0,0);
+            ImagesOffset = new Vector(0, 0);
             SelectedChapterFolder?.LoadImages();
         };
         PropertyChanging += (_, args) =>
         {
-            if (args.PropertyName != nameof(SelectedChapterFolder)){return;}
+            if (args.PropertyName != nameof(SelectedChapterFolder)) return;
             SelectedChapterFolder?.UnloadImages();
         };
         SelectedChapterFolder = SerieFolders.FirstOrDefault()?.Chapters.FirstOrDefault();
     }
-    
+
+    public ObservableCollection<string> ImagesToEdit { get; set; } = [];
+    public ObservableCollection<SerieFolder> SerieFolders { get; set; }
+
     public void ChangeRowCount(bool increase)
     {
         NbColumns = increase ? Math.Max(MinColumns, NbColumns - 1) : Math.Min(MaxColumns, NbColumns + 1);
     }
-    
+
     public void SetSelectedChapterFolder(ChapterFolder? selectedChapterFolder)
     {
         SelectedChapterFolder = selectedChapterFolder;
     }
-    
+
     public void AddImageToEdit(string imagePath)
     {
-        if (!ImagesToEdit.Contains(imagePath))
-        {
-            ImagesToEdit.Add(imagePath);
-        }
+        if (!ImagesToEdit.Contains(imagePath)) ImagesToEdit.Add(imagePath);
         OnPropertyChanged(nameof(ImagesToEdit));
     }
 
@@ -64,14 +62,14 @@ public partial class ManualCleanupTabViewModel:TabViewModel
     {
         if (ImagesToEdit.Count == 0) return;
         string args = ImagesToEdit.Aggregate("", (current, image) => current + $"\"{image}\" ");
-        System.Diagnostics.Process.Start("gimp",args);
+        Process.Start("gimp", args);
     }
-    
+
     public void Next()
     {
         NextRequested?.Invoke(this, new AutoUploadTabViewModel());
     }
-    
+
     public void NextChapter()
     {
         if (SelectedChapterFolder == null) return;
@@ -83,13 +81,12 @@ public partial class ManualCleanupTabViewModel:TabViewModel
             SelectedChapterFolder = parentSerie.Chapters[currentIndex + 1];
             return;
         }
+
         int parentSerieIndex = SerieFolders.IndexOf(parentSerie);
         if (parentSerieIndex < SerieFolders.Count - 1)
-        {
             SelectedChapterFolder = SerieFolders[parentSerieIndex + 1].Chapters.FirstOrDefault();
-        }
     }
-    
+
     public void PreviousChapter()
     {
         if (SelectedChapterFolder == null) return;
@@ -101,20 +98,18 @@ public partial class ManualCleanupTabViewModel:TabViewModel
             SelectedChapterFolder = parentSerie.Chapters[currentIndex - 1];
             return;
         }
+
         int parentSerieIndex = SerieFolders.IndexOf(parentSerie);
-        if (parentSerieIndex > 0)
-        {
-            SelectedChapterFolder = SerieFolders[parentSerieIndex - 1].Chapters.LastOrDefault();
-        }
+        if (parentSerieIndex > 0) SelectedChapterFolder = SerieFolders[parentSerieIndex - 1].Chapters.LastOrDefault();
     }
 
     public void MoveUp()
     {
         ImagesOffset = new Vector(0, 0);
     }
-    
+
     public void MoveDown()
     {
-        ImagesOffset = new Vector(double.MaxValue,double.MaxValue);
+        ImagesOffset = new Vector(double.MaxValue, double.MaxValue);
     }
 }

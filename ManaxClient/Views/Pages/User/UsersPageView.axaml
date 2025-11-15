@@ -18,8 +18,9 @@
             <Grid ColumnDefinitions="*,Auto">
                 <StackPanel Grid.Column="0" Orientation="Vertical">
                     <TextBlock Classes="title" Text="{localization:Localize UserPage.Management}" />
-                    <TextBlock Text="{localization1:LocalizeFormat UserPage.Count,
-                                   Param1={Binding $parent[UserControl].((page:UsersPageViewModel)DataContext).Users.Count}}"/>
+                    <TextBlock
+                        Text="{localization1:LocalizeFormat UserPage.Count,
+                                   Param1={Binding $parent[UserControl].((page:UsersPageViewModel)DataContext).Users.Count}}" />
                 </StackPanel>
 
                 <Button Grid.Column="1"
@@ -44,7 +45,7 @@
                                FontWeight="Medium"
                                HorizontalAlignment="Center" />
                     <TextBlock Text="{localization:Localize UserPage.NoUsers.Description}"
-                               TextAlignment="Center"/>
+                               TextAlignment="Center" />
                     <Button Classes="primary"
                             IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).CanWriteUsers}"
                             Command="{Binding CreateUser}"

@@ -32,7 +32,8 @@ public class DeleteLibraryTests : LibraryTestsSetup
     public async Task DeleteLibraryWithAssociatedSeriesRemovesLibraryButKeepsSeries()
     {
         Library library = Context.Libraries.First();
-        List<Serie> associatedSeries = Context.Series.Where(s => s.Library != null && s.Library.Id == library.Id).ToList();
+        List<Serie> associatedSeries =
+            Context.Series.Where(s => s.Library != null && s.Library.Id == library.Id).ToList();
         int initialSeriesCount = associatedSeries.Count;
         List<long> seriesIds = associatedSeries.Select(s => s.Id).ToList();
 

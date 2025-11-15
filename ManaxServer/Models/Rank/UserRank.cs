@@ -20,7 +20,7 @@ public class UserRank
     public long RankId { get; set; }
 
     [ForeignKey(nameof(RankId))] public Rank Rank { get; set; } = null!;
-    
+
     public UserRankDto ToDto()
     {
         return new UserRankDto

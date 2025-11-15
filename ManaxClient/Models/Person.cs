@@ -8,18 +8,19 @@ namespace ManaxClient.Models;
 
 public partial class Person : ObservableObject
 {
-    [ObservableProperty] private long _id ;
     [ObservableProperty] private string _firstName = string.Empty;
+    [ObservableProperty] private long _id;
     [ObservableProperty] private string _lastName = string.Empty;
     [ObservableProperty] private string _pseudonym = string.Empty;
     [ObservableProperty] private Role _role = null!;
-    public string FullName => $"{FirstName} ({Pseudonym}) {LastName}";
 
     public Person(PersonDto dto)
     {
         ServerNotification.OnPersonUpdated += OnPersonUpdated;
         FromDto(dto);
     }
+
+    public string FullName => $"{FirstName} ({Pseudonym}) {LastName}";
 
     ~Person()
     {
@@ -40,7 +41,7 @@ public partial class Person : ObservableObject
         if (Id != dto.Id) return;
         FromDto(dto);
     }
-    
+
     public PersonDto ToPersonDto()
     {
         return new PersonDto

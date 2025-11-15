@@ -123,7 +123,7 @@ public class SerieController(
         if (string.IsNullOrWhiteSpace(serieUpdate.Title))
             return BadRequest(Localizer.SerieTitleRequired());
 
-        serie.Update(serieUpdate,context);
+        serie.Update(serieUpdate, context);
 
         try
         {

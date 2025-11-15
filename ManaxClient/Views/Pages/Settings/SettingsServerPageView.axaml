@@ -16,7 +16,7 @@
 
             <StackPanel Orientation="Vertical">
                 <TextBlock Classes="title" Text="{localization:Localize SettingsServerPage.Title}" />
-                <TextBlock Text="{localization:Localize SettingsServerPage.Subtitle}"/>
+                <TextBlock Text="{localization:Localize SettingsServerPage.Subtitle}" />
             </StackPanel>
 
             <Border Classes="card">
@@ -29,7 +29,8 @@
                             VerticalAlignment="Center">
                         <StackPanel Orientation="Horizontal" Spacing="8">
                             <TextBlock Text="💾" />
-                            <TextBlock Text="{localization:Localize SettingsServerPage.AddSavePoint}" FontWeight="Medium" />
+                            <TextBlock Text="{localization:Localize SettingsServerPage.AddSavePoint}"
+                                       FontWeight="Medium" />
                         </StackPanel>
                     </Button>
 
@@ -51,7 +52,8 @@
                 <StackPanel Spacing="20">
                     <StackPanel Orientation="Horizontal" Spacing="12">
                         <TextBlock Text="🖼️" FontSize="20" />
-                        <TextBlock Classes="subtitle" Text="{localization:Localize SettingsServerPage.PosterConfig}" Margin="0" />
+                        <TextBlock Classes="subtitle" Text="{localization:Localize SettingsServerPage.PosterConfig}"
+                                   Margin="0" />
                     </StackPanel>
 
                     <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto"
@@ -64,7 +66,8 @@
                         </StackPanel>
 
                         <StackPanel Grid.Column="1" Grid.Row="0" Spacing="6">
-                            <TextBlock Text="{localization:Localize SettingsServerPage.ImageFormat}" FontWeight="Medium" />
+                            <TextBlock Text="{localization:Localize SettingsServerPage.ImageFormat}"
+                                       FontWeight="Medium" />
                             <ComboBox SelectedItem="{Binding Settings.PosterFormat}"
                                       ItemsSource="{Binding AllImageFormats}"
                                       HorizontalAlignment="Stretch" />
@@ -100,35 +103,40 @@
                 <StackPanel Spacing="20">
                     <StackPanel Orientation="Horizontal" Spacing="12">
                         <TextBlock Text="📖" FontSize="20" />
-                        <TextBlock Classes="subtitle" Text="{localization:Localize SettingsServerPage.ChapterConfig}" Margin="0" />
+                        <TextBlock Classes="subtitle" Text="{localization:Localize SettingsServerPage.ChapterConfig}"
+                                   Margin="0" />
                     </StackPanel>
 
                     <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto,Auto"
                           ColumnSpacing="16" RowSpacing="16">
 
                         <StackPanel Grid.Column="0" Grid.Row="0" Spacing="6">
-                            <TextBlock Text="{localization:Localize SettingsServerPage.MaxPageWidth}" FontWeight="Medium" />
+                            <TextBlock Text="{localization:Localize SettingsServerPage.MaxPageWidth}"
+                                       FontWeight="Medium" />
                             <NumericUpDown FormatString="0"
                                            Value="{Binding Settings.MaxChapterWidth}"
                                            Minimum="{Binding Settings.MinChapterWidth}" />
                         </StackPanel>
 
                         <StackPanel Grid.Column="1" Grid.Row="0" Spacing="6">
-                            <TextBlock Text="{localization:Localize SettingsServerPage.MinPageWidth}" FontWeight="Medium" />
+                            <TextBlock Text="{localization:Localize SettingsServerPage.MinPageWidth}"
+                                       FontWeight="Medium" />
                             <NumericUpDown Value="{Binding Settings.MinChapterWidth}"
                                            Maximum="{Binding Settings.MaxChapterWidth}"
                                            Minimum="1" />
                         </StackPanel>
 
                         <StackPanel Grid.Column="0" Grid.Row="1" Spacing="6">
-                            <TextBlock Text="{localization:Localize SettingsServerPage.ImageFormat}" FontWeight="Medium" />
+                            <TextBlock Text="{localization:Localize SettingsServerPage.ImageFormat}"
+                                       FontWeight="Medium" />
                             <ComboBox SelectedItem="{Binding Settings.ImageFormat}"
                                       ItemsSource="{Binding AllImageFormats}"
                                       HorizontalAlignment="Stretch" />
                         </StackPanel>
 
                         <StackPanel Grid.Column="1" Grid.Row="1" Spacing="6">
-                            <TextBlock Text="{localization:Localize SettingsServerPage.ArchiveFormat}" FontWeight="Medium" />
+                            <TextBlock Text="{localization:Localize SettingsServerPage.ArchiveFormat}"
+                                       FontWeight="Medium" />
                             <ComboBox SelectedItem="{Binding Settings.ArchiveFormat}"
                                       ItemsSource="{Binding AllArchiveFormats}"
                                       HorizontalAlignment="Stretch" />
@@ -141,21 +149,24 @@
                 <StackPanel Spacing="20">
                     <StackPanel Orientation="Horizontal" Spacing="12">
                         <TextBlock Text="📚" FontSize="20" />
-                        <TextBlock Classes="subtitle" Text="{localization:Localize SettingsServerPage.SeriesConfig}" Margin="0" />
+                        <TextBlock Classes="subtitle" Text="{localization:Localize SettingsServerPage.SeriesConfig}"
+                                   Margin="0" />
                     </StackPanel>
 
                     <Grid ColumnDefinitions="*,*" RowDefinitions="Auto"
                           ColumnSpacing="16" RowSpacing="16">
 
                         <StackPanel Grid.Column="0" Grid.Row="0" Spacing="6">
-                            <TextBlock Text="{localization:Localize SettingsServerPage.MaxDescriptionLength}" FontWeight="Medium" />
+                            <TextBlock Text="{localization:Localize SettingsServerPage.MaxDescriptionLength}"
+                                       FontWeight="Medium" />
                             <NumericUpDown FormatString="0"
                                            Value="{Binding Settings.MaxDescriptionLength}"
                                            Minimum="{Binding Settings.MinDescriptionLength}" />
                         </StackPanel>
 
                         <StackPanel Grid.Column="1" Grid.Row="0" Spacing="6">
-                            <TextBlock Text="{localization:Localize SettingsServerPage.MinDescriptionLength}" FontWeight="Medium" />
+                            <TextBlock Text="{localization:Localize SettingsServerPage.MinDescriptionLength}"
+                                       FontWeight="Medium" />
                             <NumericUpDown FormatString="0"
                                            Value="{Binding Settings.MinDescriptionLength}"
                                            Maximum="{Binding Settings.MaxDescriptionLength}"
@@ -172,11 +183,11 @@
                         Padding="12">
                     <StackPanel Spacing="8">
                         <TextBlock Text="{localization:Localize SettingsServerPage.TipTitle}"
-                                   FontWeight="Bold"/>
+                                   FontWeight="Bold" />
                         <TextBlock
                             Text="{localization:Localize SettingsServerPage.TipMessage}"
                             TextWrapping="Wrap"
-                            FontSize="12"/>
+                            FontSize="12" />
                     </StackPanel>
                 </Border>
 

@@ -21,9 +21,9 @@ public class PersonController(ManaxContext context, INotificationService notific
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<PersonDto>>> GetPeople()
     {
-        return await context.People.Include(p=> p.Role).Select(person => person.ToDto()).ToListAsync();
+        return await context.People.Include(p => p.Role).Select(person => person.ToDto()).ToListAsync();
     }
-    
+
     // DELETE: api/person/5
     [HttpDelete("{id:long}")]
     [RequirePermission(Permission.DeletePeople)]
@@ -38,7 +38,7 @@ public class PersonController(ManaxContext context, INotificationService notific
         notificationService.NotifyPersonDeletedAsync(id);
         return Ok();
     }
-    
+
     // POST: api/person
     [HttpPost]
     [RequirePermission(Permission.WritePeople)]
@@ -46,19 +46,16 @@ public class PersonController(ManaxContext context, INotificationService notific
     public async Task<ActionResult<PersonDto>> CreatePerson(PersonCreateDto personCreateDto)
     {
         Role? role = await context.Roles.FindAsync(personCreateDto.RoleId);
-        if (role == null)
-        {
-            return BadRequest(Localizer.RoleNotFound(personCreateDto.RoleId));
-        }
+        if (role == null) return BadRequest(Localizer.RoleNotFound(personCreateDto.RoleId));
 
-        Person person = Person.Create(personCreateDto,context);
+        Person person = Person.Create(personCreateDto, context);
         person.Role = role;
         context.People.Add(person);
         await context.SaveChangesAsync();
         notificationService.NotifyPersonCreatedAsync(person.ToDto());
         return Ok();
     }
-    
+
     // PUT: api/person/5
     [HttpPut("{id:long}")]
     [RequirePermission(Permission.WritePeople)]
@@ -70,12 +67,9 @@ public class PersonController(ManaxContext context, INotificationService notific
         if (person == null) return NotFound(Localizer.PersonNotFound(id));
 
         Role? role = await context.Roles.FindAsync(personUpdateDto.RoleId);
-        if (role == null)
-        {
-            return BadRequest(Localizer.RoleNotFound(personUpdateDto.RoleId));
-        }
+        if (role == null) return BadRequest(Localizer.RoleNotFound(personUpdateDto.RoleId));
 
-        person.Update(personUpdateDto,role);
+        person.Update(personUpdateDto, role);
         await context.SaveChangesAsync();
         notificationService.NotifyPersonUpdatedAsync(person.ToDto());
         return Ok();

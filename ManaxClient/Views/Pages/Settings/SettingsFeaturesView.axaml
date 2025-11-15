@@ -16,7 +16,7 @@
 
             <StackPanel Orientation="Vertical">
                 <TextBlock Classes="title" Text="{localization:Localize SettingsFeaturesPage.Title}" />
-                <TextBlock Text="{localization:Localize SettingsFeaturesPage.Subtitle}"/>
+                <TextBlock Text="{localization:Localize SettingsFeaturesPage.Subtitle}" />
             </StackPanel>
 
             <!-- Success/Error Messages -->
@@ -33,7 +33,7 @@
                     IsVisible="{Binding Problem, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
                 <StackPanel Orientation="Horizontal" Spacing="12">
                     <TextBlock Text="❌" FontSize="20" />
-                    <TextBlock Text="{Binding Problem}" 
+                    <TextBlock Text="{Binding Problem}"
                                FontWeight="Medium" />
                 </StackPanel>
             </Border>
@@ -58,7 +58,7 @@
                     <DataTemplate>
                         <Border Classes="card" Margin="0,0,0,12">
                             <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto">
-                                
+
                                 <!-- Feature Name -->
                                 <TextBlock Grid.Column="0" Grid.Row="0"
                                            Text="{Binding Name}"
@@ -86,4 +86,3 @@
         </StackPanel>
     </ScrollViewer>
 </UserControl>
-

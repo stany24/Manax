@@ -15,7 +15,7 @@ public class Library
     public long Id { get; set; }
     public string Name { get; set; } = string.Empty;
     public DateTime Creation { get; set; }
-    
+
     public LibraryDto ToDto()
     {
         return new LibraryDto

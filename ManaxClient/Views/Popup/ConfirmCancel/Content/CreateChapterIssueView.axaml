@@ -15,17 +15,17 @@
                 <TextBlock
                     Text="{localization:Localize CreateChapterIssuePopup.Title}"
                     FontSize="18"
-                    FontWeight="Bold"/>
+                    FontWeight="Bold" />
                 <TextBlock
                     Text="{localization:Localize CreateChapterIssuePopup.Select}"
-                    FontSize="12"/>
+                    FontSize="12" />
             </StackPanel>
         </StackPanel>
 
         <StackPanel Grid.Row="1" Spacing="8">
             <TextBlock
                 Text="{localization:Localize CreateChapterIssuePopup.ProblemType}"
-                FontWeight="Medium"/>
+                FontWeight="Medium" />
             <ComboBox
                 ItemsSource="{Binding Issues}"
                 SelectedItem="{Binding SelectedIssue, Mode=TwoWay}"
@@ -52,7 +52,7 @@
                 <TextBlock
                     Text="{localization:Localize CreateChapterIssuePopup.Info}"
                     TextWrapping="Wrap"
-                    FontSize="12"/>
+                    FontSize="12" />
             </StackPanel>
         </Border>
     </Grid>

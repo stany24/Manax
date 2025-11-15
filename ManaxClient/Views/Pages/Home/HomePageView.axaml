@@ -19,7 +19,7 @@
                 <StackPanel Grid.Column="0" Orientation="Vertical">
                     <TextBlock Classes="title" Text="{localization:Localize HomePage.Welcome}" />
                     <TextBlock Classes="subtitle"
-                               Text="{localization:Localize HomePage.Subtitle}"/>
+                               Text="{localization:Localize HomePage.Subtitle}" />
                 </StackPanel>
 
                 <Button Grid.Column="1"

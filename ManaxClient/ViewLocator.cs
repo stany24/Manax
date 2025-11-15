@@ -24,7 +24,7 @@ public class ViewLocator : IDataTemplate
         }
         catch (Exception e)
         {
-            return new TextBlock { Text = "Failed to create control: "+e };
+            return new TextBlock { Text = "Failed to create control: " + e };
         }
     }
 

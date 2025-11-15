@@ -15,7 +15,7 @@ public class Rank
     public long Id { get; set; }
     public int Value { get; set; }
     [MaxLength(128)] public string Name { get; set; }
-    
+
     public RankDto ToDto()
     {
         return new RankDto

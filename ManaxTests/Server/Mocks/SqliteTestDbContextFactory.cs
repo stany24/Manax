@@ -24,7 +24,7 @@ public static class SqliteTestDbContextFactory
         DbContextOptions<ManaxContext> options = new DbContextOptionsBuilder<ManaxContext>()
             .UseSqlite($"Data Source={dbPath}")
             .Options;
-        
+
         string savePointPath = Path.Combine(Directory.GetCurrentDirectory(), "savepoint");
         if (Directory.Exists(savePointPath)) Directory.Delete(savePointPath, true);
         Directory.CreateDirectory(savePointPath);

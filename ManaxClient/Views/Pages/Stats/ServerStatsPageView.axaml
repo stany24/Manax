@@ -18,7 +18,7 @@
 
             <StackPanel Orientation="Vertical">
                 <TextBlock Classes="title" Text="{localization:Localize ServerStatsPage.Title}" />
-                <TextBlock Text="{localization:Localize ServerStatsPage.Subtitle}"/>
+                <TextBlock Text="{localization:Localize ServerStatsPage.Subtitle}" />
             </StackPanel>
 
             <Grid ColumnDefinitions="*,*" ColumnSpacing="24">
@@ -26,28 +26,31 @@
                     <StackPanel Spacing="20">
                         <StackPanel Orientation="Horizontal" Spacing="12">
                             <TextBlock Text="💾" FontSize="20" />
-                            <TextBlock Classes="subtitle" Text="{localization:Localize ServerStatsPage.DiskUsage.Title}" Margin="0" />
+                            <TextBlock Classes="subtitle"
+                                       Text="{localization:Localize ServerStatsPage.DiskUsage.Title}" Margin="0" />
                         </StackPanel>
 
                         <avalonia:PieChart Series="{Binding DiskUsageSeries}"
                                            Width="300"
                                            Height="300"
                                            HorizontalAlignment="Center"
-                                           Background="{DynamicResource MaterialPaperBrush}"/>
+                                           Background="{DynamicResource MaterialPaperBrush}" />
 
                         <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
                             <StackPanel Grid.Column="0" Spacing="4">
-                                <TextBlock Text="{localization:Localize ServerStatsPage.DiskUsage.Used}" FontSize="12" FontWeight="Medium" />
+                                <TextBlock Text="{localization:Localize ServerStatsPage.DiskUsage.Used}" FontSize="12"
+                                           FontWeight="Medium" />
                                 <TextBlock Text="{Binding DiskSizeInGb, StringFormat={}{0:F1} GB}"
                                            FontSize="16"
-                                           FontWeight="Bold"/>
+                                           FontWeight="Bold" />
                             </StackPanel>
 
                             <StackPanel Grid.Column="1" Spacing="4">
-                                <TextBlock Text="{localization:Localize ServerStatsPage.DiskUsage.Available}" FontSize="12" FontWeight="Medium" />
+                                <TextBlock Text="{localization:Localize ServerStatsPage.DiskUsage.Available}"
+                                           FontSize="12" FontWeight="Medium" />
                                 <TextBlock Text="{Binding AvailableDiskSizeInGb, StringFormat={}{0:F1} GB}"
                                            FontSize="16"
-                                           FontWeight="Bold"/>
+                                           FontWeight="Bold" />
                             </StackPanel>
                         </Grid>
                     </StackPanel>
@@ -57,28 +60,31 @@
                     <StackPanel Spacing="20">
                         <StackPanel Orientation="Horizontal" Spacing="12">
                             <TextBlock Text="👥" FontSize="20" />
-                            <TextBlock Classes="subtitle" Text="{localization:Localize ServerStatsPage.UserActivity.Title}" Margin="0" />
+                            <TextBlock Classes="subtitle"
+                                       Text="{localization:Localize ServerStatsPage.UserActivity.Title}" Margin="0" />
                         </StackPanel>
 
                         <avalonia:PieChart Series="{Binding UserActivitySeries}"
                                            Width="300"
                                            Height="300"
                                            HorizontalAlignment="Center"
-                                           Background="{DynamicResource MaterialPaperBrush}"/>
+                                           Background="{DynamicResource MaterialPaperBrush}" />
 
                         <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
                             <StackPanel Grid.Column="0" Spacing="4">
-                                <TextBlock Text="{localization:Localize ServerStatsPage.UserActivity.Active}" FontSize="12" FontWeight="Medium" />
+                                <TextBlock Text="{localization:Localize ServerStatsPage.UserActivity.Active}"
+                                           FontSize="12" FontWeight="Medium" />
                                 <TextBlock Text="{Binding ServerStats.ActiveUsers}"
                                            FontSize="16"
-                                           FontWeight="Bold"/>
+                                           FontWeight="Bold" />
                             </StackPanel>
 
                             <StackPanel Grid.Column="1" Spacing="4">
-                                <TextBlock Text="{localization:Localize ServerStatsPage.UserActivity.Inactive}" FontSize="12" FontWeight="Medium" />
+                                <TextBlock Text="{localization:Localize ServerStatsPage.UserActivity.Inactive}"
+                                           FontSize="12" FontWeight="Medium" />
                                 <TextBlock Text="{Binding ServerStats.InactiveUsers}"
                                            FontSize="16"
-                                           FontWeight="Bold"/>
+                                           FontWeight="Bold" />
                             </StackPanel>
                         </Grid>
                     </StackPanel>
@@ -90,24 +96,27 @@
                     <StackPanel Spacing="20">
                         <StackPanel Orientation="Horizontal" Spacing="12">
                             <TextBlock Text="📚" FontSize="20" />
-                            <TextBlock Classes="subtitle" Text="{localization:Localize ServerStatsPage.Content.Title}" Margin="0" />
+                            <TextBlock Classes="subtitle" Text="{localization:Localize ServerStatsPage.Content.Title}"
+                                       Margin="0" />
                         </StackPanel>
 
                         <Grid RowDefinitions="Auto,Auto" RowSpacing="16">
                             <StackPanel Grid.Row="0" Spacing="4" HorizontalAlignment="Center">
-                                <TextBlock Text="{localization:Localize ServerStatsPage.Content.Series}" FontSize="14" FontWeight="Medium" />
+                                <TextBlock Text="{localization:Localize ServerStatsPage.Content.Series}" FontSize="14"
+                                           FontWeight="Medium" />
                                 <TextBlock Text="{Binding ServerStats.Series}"
                                            FontSize="32"
                                            FontWeight="Bold"
-                                           HorizontalAlignment="Center"/>
+                                           HorizontalAlignment="Center" />
                             </StackPanel>
 
                             <StackPanel Grid.Row="1" Spacing="4" HorizontalAlignment="Center">
-                                <TextBlock Text="{localization:Localize ServerStatsPage.Content.Chapters}" FontSize="14" FontWeight="Medium" />
+                                <TextBlock Text="{localization:Localize ServerStatsPage.Content.Chapters}"
+                                           FontSize="14" FontWeight="Medium" />
                                 <TextBlock Text="{Binding ServerStats.Chapters}"
                                            FontSize="32"
                                            FontWeight="Bold"
-                                           HorizontalAlignment="Center"/>
+                                           HorizontalAlignment="Center" />
                             </StackPanel>
                         </Grid>
                     </StackPanel>
@@ -117,14 +126,16 @@
                     <StackPanel Spacing="20">
                         <StackPanel Orientation="Horizontal" Spacing="12">
                             <TextBlock Text="📚" FontSize="20" />
-                            <TextBlock Classes="subtitle" Text="{localization:Localize ServerStatsPage.LibraryDistribution.Title}" Margin="0" />
+                            <TextBlock Classes="subtitle"
+                                       Text="{localization:Localize ServerStatsPage.LibraryDistribution.Title}"
+                                       Margin="0" />
                         </StackPanel>
 
                         <avalonia:PieChart Series="{Binding LibraryDistributionSeries}"
                                            Width="300"
                                            Height="300"
                                            HorizontalAlignment="Center"
-                                           Background="{DynamicResource MaterialPaperBrush}"/>
+                                           Background="{DynamicResource MaterialPaperBrush}" />
                     </StackPanel>
                 </Border>
             </Grid>
@@ -133,7 +144,8 @@
                 <StackPanel Spacing="20">
                     <StackPanel Orientation="Horizontal" Spacing="12">
                         <TextBlock Text="🚫" FontSize="20" />
-                        <TextBlock Classes="subtitle" Text="{localization:Localize ServerStatsPage.NeverRead.Title}" Margin="0" />
+                        <TextBlock Classes="subtitle" Text="{localization:Localize ServerStatsPage.NeverRead.Title}"
+                                   Margin="0" />
                     </StackPanel>
 
                     <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
@@ -145,7 +157,7 @@
                             </ItemsControl.ItemsPanel>
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <previews:SeriePreview Serie="{Binding}"/>
+                                    <previews:SeriePreview Serie="{Binding}" />
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>

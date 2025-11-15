@@ -8,7 +8,7 @@ public class Role
 {
     public long Id { get; set; }
     public string Name { get; set; }
-    
+
     public RoleDto ToDto()
     {
         return new RoleDto

@@ -7,17 +7,16 @@ using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace ManaxClient.Models.Upload;
 
-public partial class ChapterFolder: ObservableObject
+public partial class ChapterFolder : ObservableObject
 {
-    [ObservableProperty] private string _name;
-    [ObservableProperty] private ImageFile? _selectedImage;
-    public ObservableCollection<ImageFile> Images { get; set; }
-    private readonly List<KeyValuePair<string,string>> _deletedImages = [];
-    
     private static readonly string TrashPath = Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
         "ManaxClient",
         "Trash");
+
+    private readonly List<KeyValuePair<string, string>> _deletedImages = [];
+    [ObservableProperty] private string _name;
+    [ObservableProperty] private ImageFile? _selectedImage;
 
     public ChapterFolder(string path)
     {
@@ -28,21 +27,20 @@ public partial class ChapterFolder: ObservableObject
             .ToList();
         Images = new ObservableCollection<ImageFile>(images);
     }
-    
+
+    public ObservableCollection<ImageFile> Images { get; set; }
+
     public void DeleteImage(ImageFile image)
     {
         Images.Remove(image);
-        if (!Directory.Exists(Path.Combine(TrashPath,Name)))
-        {
-            Directory.CreateDirectory(Path.Combine(TrashPath,Name));
-        }
+        if (!Directory.Exists(Path.Combine(TrashPath, Name))) Directory.CreateDirectory(Path.Combine(TrashPath, Name));
 
-        string trashImagePath = Path.Combine(TrashPath, Name, Path.GetFileName(image.Path)+Guid.NewGuid());
+        string trashImagePath = Path.Combine(TrashPath, Name, Path.GetFileName(image.Path) + Guid.NewGuid());
         File.Move(image.Path, trashImagePath);
         _deletedImages.Add(new KeyValuePair<string, string>(image.Path, trashImagePath));
         OnPropertyChanged(nameof(Images));
     }
-    
+
     public void RestoreLastImage()
     {
         if (_deletedImages.Count == 0) return;
@@ -58,17 +56,11 @@ public partial class ChapterFolder: ObservableObject
 
     public void LoadImages()
     {
-        foreach (ImageFile imageFile in Images)
-        {
-            imageFile.LoadPreview();
-        }
+        foreach (ImageFile imageFile in Images) imageFile.LoadPreview();
     }
 
     public void UnloadImages()
     {
-        foreach (ImageFile imageFile in Images)
-        {
-            imageFile.UnloadPreview();
-        }
+        foreach (ImageFile imageFile in Images) imageFile.UnloadPreview();
     }
 }

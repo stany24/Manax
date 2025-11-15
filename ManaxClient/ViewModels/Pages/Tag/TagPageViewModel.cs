@@ -31,7 +31,8 @@ public class TagPageViewModel : PageViewModel
 
     public void CreateTag()
     {
-        TagEditViewModel content = new(new TagUpdateDto { Name = Localizer.Get("TagPage.DefaultName"), Color = Color.Blue });
+        TagEditViewModel content = new(new TagUpdateDto
+            { Name = Localizer.Get("TagPage.DefaultName"), Color = Color.Blue });
         ConfirmCancelViewModel viewModel = new(content);
         Controls.Popups.Popup popup = new(viewModel);
         popup.Closed += async void (_, _) =>

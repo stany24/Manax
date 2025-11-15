@@ -6,7 +6,7 @@ namespace ManaxClient.Models;
 
 public partial class Role : ObservableObject
 {
-    [ObservableProperty] private long _id ;
+    [ObservableProperty] private long _id;
     [ObservableProperty] private string _name = string.Empty;
 
     public Role(RoleDto dto)

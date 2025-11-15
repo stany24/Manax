@@ -18,8 +18,9 @@
             <Grid ColumnDefinitions="*,Auto">
                 <StackPanel Grid.Column="0" Orientation="Vertical">
                     <TextBlock Classes="title" Text="{localization:Localize RankPage.Title}" />
-                    <TextBlock Text="{localization1:LocalizeFormat RankPage.RanksCount,
-                                   Param1={Binding $parent[UserControl].((page:RankPageViewModel)DataContext).Ranks.Count}}"/>
+                    <TextBlock
+                        Text="{localization1:LocalizeFormat RankPage.RanksCount,
+                                   Param1={Binding $parent[UserControl].((page:RankPageViewModel)DataContext).Ranks.Count}}" />
                 </StackPanel>
 
                 <Button Grid.Column="1"
@@ -44,7 +45,7 @@
                                FontWeight="Medium"
                                HorizontalAlignment="Center" />
                     <TextBlock Text="{localization:Localize RankPage.NoRanks.Description}"
-                               TextAlignment="Center"/>
+                               TextAlignment="Center" />
                     <Button Classes="primary"
                             IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).CanWriteRanks}"
                             Command="{Binding CreateRank}"
@@ -84,9 +85,10 @@
                                             <TextBlock Text="{Binding Name}"
                                                        FontWeight="Bold"
                                                        FontSize="16" />
-                                            <TextBlock Text="{localization1:LocalizeFormat RankPage.Level,
+                                            <TextBlock
+                                                Text="{localization1:LocalizeFormat RankPage.Level,
                                                            Param1={Binding Value}}"
-                                                       FontSize="12" />
+                                                FontSize="12" />
                                         </StackPanel>
 
                                         <Border Grid.Column="2"

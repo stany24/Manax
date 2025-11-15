@@ -15,13 +15,15 @@ public partial class IssueChapterAutomatic : ObservableObject
     [ObservableProperty] private IssueChapterAutomaticType _problem;
     private IDisposable? _subscription;
 
-    public static string AutomaticBadgeText => Localizer.Get("IssuesPage.Automatic");
-    public string FormattedInfo => string.Format(CultureInfo.InvariantCulture, Localizer.Get("IssuesPage.ChapterInfo"), Chapter?.FileName ?? "", CreatedAt);
-
     public IssueChapterAutomatic(IssueChapterAutomaticDto dto)
     {
         FromDto(dto);
     }
+
+    public static string AutomaticBadgeText => Localizer.Get("IssuesPage.Automatic");
+
+    public string FormattedInfo => string.Format(CultureInfo.InvariantCulture, Localizer.Get("IssuesPage.ChapterInfo"),
+        Chapter?.FileName ?? "", CreatedAt);
 
     private void FromDto(IssueChapterAutomaticDto dto)
     {

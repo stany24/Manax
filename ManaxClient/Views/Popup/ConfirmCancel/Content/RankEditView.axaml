@@ -15,31 +15,30 @@
                 <TextBlock
                     Text="{localization:Localize RankEditPopup.Title}"
                     FontSize="18"
-                    FontWeight="Bold"/>
+                    FontWeight="Bold" />
                 <TextBlock
                     Text="{localization:Localize RankEditPopup.Description}"
-                    FontSize="12"/>
+                    FontSize="12" />
             </StackPanel>
         </StackPanel>
 
         <StackPanel Grid.Row="1" Spacing="8">
             <TextBlock
                 Text="{localization:Localize RankEditPopup.Name}"
-                FontWeight="Medium"/>
+                FontWeight="Medium" />
             <TextBox
                 Text="{Binding Name}"
                 Watermark="{localization:Localize RankEditPopup.Name.Placeholder}"
                 Padding="12"
                 CornerRadius="8"
                 BorderThickness="1"
-                FontSize="14">
-            </TextBox>
+                FontSize="14" />
         </StackPanel>
 
         <StackPanel Grid.Row="2" Spacing="8">
             <TextBlock
                 Text="{localization:Localize RankEditPopup.Value}"
-                FontWeight="Medium"/>
+                FontWeight="Medium" />
             <NumericUpDown
                 Value="{Binding Value}"
                 Minimum="0"
@@ -47,8 +46,7 @@
                 Increment="1"
                 Padding="12"
                 CornerRadius="8"
-                BorderThickness="1">
-            </NumericUpDown>
+                BorderThickness="1" />
         </StackPanel>
     </Grid>
 </UserControl>

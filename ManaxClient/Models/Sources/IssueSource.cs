@@ -40,6 +40,7 @@ public static class IssueSource
                 IssueChapterAutomatic.Clear();
                 IssueSerieAutomatic.Clear();
             }
+
             if (features is { Key: FeatureType.ReportedIssues, Value: true })
             {
                 LoadReportedChapterIssues();
@@ -90,7 +91,7 @@ public static class IssueSource
             IssueSerieReported.RemoveKey(issueId);
         }
     }
-    
+
     private static void LoadAutomaticChapterIssues()
     {
         Task.Run(() =>
@@ -120,7 +121,7 @@ public static class IssueSource
             }
         });
     }
-    
+
     private static void LoadAutomaticSerieIssues()
     {
         Task.Run(() =>
@@ -180,7 +181,7 @@ public static class IssueSource
             }
         });
     }
-    
+
     private static void LoadReportedSerieIssues()
     {
         Task.Run(() =>

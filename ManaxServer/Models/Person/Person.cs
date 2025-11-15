@@ -14,7 +14,7 @@ public class Person
     public string LastName { get; set; }
     public string Pseudonym { get; set; }
     public Role Role { get; set; }
-    
+
     public PersonDto ToDto()
     {
         return new PersonDto
@@ -28,7 +28,7 @@ public class Person
         };
     }
 
-    public static Person Create(PersonCreateDto personCreateDto,ManaxContext context)
+    public static Person Create(PersonCreateDto personCreateDto, ManaxContext context)
     {
         return new Person
         {

@@ -12,7 +12,7 @@ public class Tag
     public List<Serie.Serie> Series { get; set; } = [];
     public string Name { get; set; } = null!;
     public int ColorArgb { get; set; }
-    
+
     public TagDto ToDto()
     {
         return new TagDto
@@ -23,7 +23,7 @@ public class Tag
             ColorArgb = ColorArgb
         };
     }
-    
+
     public void Update(TagUpdateDto tagUpdate)
     {
         Name = tagUpdate.Name;

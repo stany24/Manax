@@ -5,10 +5,10 @@ using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace ManaxClient.Models.Upload;
 
-public partial class ImageFile: ObservableObject
+public partial class ImageFile : ObservableObject
 {
-    [ObservableProperty] private string _path;
     [ObservableProperty] private string _fileName;
+    [ObservableProperty] private string _path;
     [ObservableProperty] private Bitmap? _preview;
 
     public ImageFile(string path)

@@ -6,8 +6,6 @@ namespace ManaxClient.Models.Upload;
 
 public partial class NaturalSortComparer : IComparer<string>
 {
-    [GeneratedRegex(@"\d+", RegexOptions.Compiled)]
-    private static partial Regex NumbersRegex();
     private static readonly Regex Regex = NumbersRegex();
 
     public int Compare(string? x, string? y)
@@ -41,6 +39,9 @@ public partial class NaturalSortComparer : IComparer<string>
         return partsX.Count.CompareTo(partsY.Count);
     }
 
+    [GeneratedRegex(@"\d+", RegexOptions.Compiled)]
+    private static partial Regex NumbersRegex();
+
     private static List<string> SplitIntoParts(string s)
     {
         List<string> parts = [];
@@ -48,18 +49,12 @@ public partial class NaturalSortComparer : IComparer<string>
 
         foreach (Match match in Regex.Matches(s))
         {
-            if (match.Index > lastIndex)
-            {
-                parts.Add(s.Substring(lastIndex, match.Index - lastIndex));
-            }
+            if (match.Index > lastIndex) parts.Add(s.Substring(lastIndex, match.Index - lastIndex));
             parts.Add(match.Value);
             lastIndex = match.Index + match.Length;
         }
 
-        if (lastIndex < s.Length)
-        {
-            parts.Add(s[lastIndex..]);
-        }
+        if (lastIndex < s.Length) parts.Add(s[lastIndex..]);
 
         if (parts.Count == 0)
             parts.Add(s);

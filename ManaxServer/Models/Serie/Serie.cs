@@ -26,7 +26,7 @@ public class Serie
     public DateTime LastModification { get; set; }
 
     public string SavePath => SavePoint.Path + Path.DirectorySeparatorChar + FolderName;
-    
+
     public SerieDto ToDto()
     {
         return new SerieDto
@@ -50,25 +50,19 @@ public class Serie
         Library = context.Libraries.Find(serieUpdate.LibraryId);
         Status = serieUpdate.Status;
         LastModification = DateTime.UtcNow;
-        
+
         Tags.Clear();
         foreach (TagDto tagDto in serieUpdate.Tags)
         {
             Tag.Tag? tag = context.Tags.Find(tagDto.Id);
-            if (tag != null)
-            {
-                Tags.Add(tag);
-            }
+            if (tag != null) Tags.Add(tag);
         }
-        
+
         Persons.Clear();
         foreach (PersonDto personDto in serieUpdate.Persons)
         {
             Person.Person? person = context.People.Find(personDto.Id);
-            if (person != null)
-            {
-                Persons.Add(person);
-            }
+            if (person != null) Persons.Add(person);
         }
     }
 }

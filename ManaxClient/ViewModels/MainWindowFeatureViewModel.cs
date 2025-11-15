@@ -34,7 +34,7 @@ public partial class MainWindowViewModel
         }
         catch (Exception e)
         {
-            Logger.LogError("Failed to load features",e);
+            Logger.LogError("Failed to load features", e);
         }
     }
 
@@ -44,7 +44,7 @@ public partial class MainWindowViewModel
         {
             _features.Features.RemoveAll(f => f.Key == feature.Key);
             _features.Features.Add(feature);
-            
+
             FeatureChanged?.Invoke(this, feature);
             NotifyAllForFeatureChanged();
         });
@@ -54,7 +54,8 @@ public partial class MainWindowViewModel
     {
         PropertyInfo[] propertyInfos = GetType().GetProperties();
         foreach (PropertyInfo propertyInfo in propertyInfos)
-            if (propertyInfo.PropertyType == typeof(bool) && propertyInfo.Name.EndsWith("FeatureEnabled",StringComparison.InvariantCulture))
+            if (propertyInfo.PropertyType == typeof(bool) &&
+                propertyInfo.Name.EndsWith("FeatureEnabled", StringComparison.InvariantCulture))
                 OnPropertyChanged(propertyInfo.Name);
     }
 }

@@ -25,10 +25,7 @@ public class GetFeaturesTests : FeatureTestsSetup
 
         Assert.IsNotNull(result);
         Assert.HasCount(3, result);
-        foreach (Feature feature in result)
-        {
-            Assert.IsTrue(feature.Value);
-        }
+        foreach (Feature feature in result) Assert.IsTrue(feature.Value);
     }
 
     [TestMethod]
@@ -42,4 +39,3 @@ public class GetFeaturesTests : FeatureTestsSetup
         Assert.IsTrue(FeatureService.IsFeatureEnabled(FeatureType.Ranks));
     }
 }
-

@@ -73,8 +73,9 @@
                                                FontWeight="Medium" />
                                 </Border>
 
-                                <TextBlock Text="{localization1:LocalizeFormat SeriePage.ChapterCount,
-                                               Param1={Binding $parent[UserControl].((page:SeriePageViewModel)DataContext).Serie.Chapters.Count}}"/>
+                                <TextBlock
+                                    Text="{localization1:LocalizeFormat SeriePage.ChapterCount,
+                                               Param1={Binding $parent[UserControl].((page:SeriePageViewModel)DataContext).Serie.Chapters.Count}}" />
                             </StackPanel>
 
                         </Grid>
@@ -86,13 +87,13 @@
 
                     <Border Classes="card">
                         <TextBlock Text="{Binding Serie.Description}"
-                                   TextWrapping="Wrap"/>
+                                   TextWrapping="Wrap" />
                     </Border>
 
                     <Border Classes="card">
                         <StackPanel Spacing="12">
                             <TextBlock Classes="subtitle" Text="{localization:Localize SeriePage.Tags}" Margin="0" />
-                            
+
                             <Border CornerRadius="8"
                                     Padding="12"
                                     IsVisible="{Binding !Serie.Tags.Count}">
@@ -132,7 +133,7 @@
                     <Border Classes="card">
                         <StackPanel Spacing="12">
                             <TextBlock Classes="subtitle" Text="{localization:Localize SeriePage.Persons}" Margin="0" />
-                            
+
                             <Border CornerRadius="8"
                                     Padding="12"
                                     IsVisible="{Binding !Serie.Persons.Count}">
@@ -162,7 +163,7 @@
                                                            FontSize="13"
                                                            FontWeight="Medium" />
                                                 <TextBlock Text="{Binding Role.Name}"
-                                                           FontSize="11"/>
+                                                           FontSize="11" />
                                             </StackPanel>
                                         </Border>
                                     </DataTemplate>
@@ -174,7 +175,7 @@
                     <Border Classes="card">
                         <StackPanel Spacing="12">
                             <TextBlock Classes="subtitle" Text="{localization:Localize SeriePage.Tags}" Margin="0" />
-                            
+
                             <Border Background="{DynamicResource Background2}"
                                     CornerRadius="8"
                                     Padding="12"
@@ -216,7 +217,7 @@
                     <Border Classes="card">
                         <StackPanel Spacing="12">
                             <TextBlock Classes="subtitle" Text="{localization:Localize SeriePage.Persons}" Margin="0" />
-                            
+
                             <Border Background="{DynamicResource Background2}"
                                     CornerRadius="8"
                                     Padding="12"
@@ -272,7 +273,7 @@
                                     <TextBlock Text="{localization:Localize SeriePage.NoChaptersAvailable}"
                                                FontWeight="Medium" />
                                     <TextBlock Text="{localization:Localize SeriePage.NoChaptersDescription}"
-                                               FontSize="12"/>
+                                               FontSize="12" />
                                 </StackPanel>
                             </Border>
 

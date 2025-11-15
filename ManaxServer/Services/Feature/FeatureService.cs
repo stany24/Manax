@@ -7,8 +7,8 @@ public class FeatureService
     : Service, IFeatureService
 {
     private readonly Dictionary<FeatureType, bool> _features;
-    private readonly IFeatureSaver _saver;
     private readonly INotificationService _notificationService;
+    private readonly IFeatureSaver _saver;
 
     public FeatureService(IFeatureLoader loader, IFeatureSaver saver, INotificationService notificationService)
     {
@@ -16,7 +16,7 @@ public class FeatureService
         _saver = saver;
         _notificationService = notificationService;
     }
-    
+
     public bool IsFeatureEnabled(FeatureType featureType)
     {
         return _features.TryGetValue(featureType, out bool enabled) && enabled;
@@ -37,12 +37,12 @@ public class FeatureService
     {
         if (feature.Value)
         {
-            if (_features.TryGetValue(feature.Key, out bool value) && value) { return; }
+            if (_features.TryGetValue(feature.Key, out bool value) && value) return;
             _features[feature.Key] = true;
         }
         else
         {
-            if (_features.TryGetValue(feature.Key, out bool value) && !value) { return; }
+            if (_features.TryGetValue(feature.Key, out bool value) && !value) return;
             _features[feature.Key] = false;
         }
 

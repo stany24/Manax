@@ -17,7 +17,7 @@ public class IssueChapterAutomatic
 
     [ForeignKey(nameof(ChapterId))] public Chapter.Chapter Chapter { get; set; } = null!;
     public IssueChapterAutomaticType Problem { get; set; }
-    
+
     public IssueChapterAutomaticDto ToDto()
     {
         return new IssueChapterAutomaticDto

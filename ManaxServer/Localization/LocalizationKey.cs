@@ -73,10 +73,10 @@ public enum LocalizationKey
     PasswordNoSpecialCharacterOrDigit,
 
     TagNotFound,
-    
+
     FeatureDisabled,
-    
+
     PersonNotFound,
-    
+
     RoleNotFound
 }

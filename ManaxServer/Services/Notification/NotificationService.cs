@@ -186,9 +186,9 @@ public class NotificationService(IHubContext<NotificationService> hubContext, IP
     public void NotifyFeatureChanged(ManaxLibrary.DTO.Feature.Feature feature)
     {
         TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadFeatures,
-            NotificationType.FeatureModified,feature);
+            NotificationType.FeatureModified, feature);
     }
-    
+
     public void NotifyPersonCreatedAsync(PersonDto person)
     {
         TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadPeople, NotificationType.PersonCreated,
@@ -206,7 +206,7 @@ public class NotificationService(IHubContext<NotificationService> hubContext, IP
         TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadPeople, NotificationType.PersonDeleted,
             personId);
     }
-    
+
     public void NotifyRoleCreatedAsync(RoleDto role)
     {
         TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadPeople, NotificationType.RoleCreated,

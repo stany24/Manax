@@ -14,18 +14,19 @@ using ManaxLibrary.Logging;
 
 namespace ManaxClient.ViewModels.Pages.Upload.Tab;
 
-public partial class ConfigureUploadTabViewModel:TabViewModel
+public partial class ConfigureUploadTabViewModel : TabViewModel
 {
-    public ObservableCollection<Source> SourceFolders { get; set; } = [];
-    [ObservableProperty] private string _processingFolder = string.Empty;
     [ObservableProperty] private bool _canFetch = true;
+    [ObservableProperty] private string _processingFolder = string.Empty;
 
     public ConfigureUploadTabViewModel()
     {
         LoadSettings();
         UploadSettings.SettingsChanged += (_, _) => LoadSettings();
     }
-    
+
+    public ObservableCollection<Source> SourceFolders { get; set; } = [];
+
     private void LoadSettings()
     {
         IEnumerable<Source> sources = UploadSettings.SourceFolders.Select(s => new Source { Path = s });
@@ -33,7 +34,7 @@ public partial class ConfigureUploadTabViewModel:TabViewModel
         SourceFolders.AddRange(sources);
         ProcessingFolder = UploadSettings.ProcessingFolder;
     }
-    
+
     public async void AddSource()
     {
         try
@@ -42,7 +43,7 @@ public partial class ConfigureUploadTabViewModel:TabViewModel
                 ? desktop.MainWindow
                 : null;
             if (window?.StorageProvider == null) return;
-        
+
             IReadOnlyList<IStorageFolder> folders = await window.StorageProvider.OpenFolderPickerAsync(
                 new FolderPickerOpenOptions
                 {
@@ -56,9 +57,9 @@ public partial class ConfigureUploadTabViewModel:TabViewModel
             {
                 string folderPath = folder.Path.LocalPath;
                 if (string.IsNullOrEmpty(folderPath)) continue;
-            
+
                 if (SourceFolders.Any(s => s.Path == folderPath)) continue;
-            
+
                 UploadSettings.AddSourceFolder(folderPath);
             }
         }
@@ -67,7 +68,7 @@ public partial class ConfigureUploadTabViewModel:TabViewModel
             Logger.LogError("Error adding source folder", e);
         }
     }
-    
+
     public void RemoveSource(Source source)
     {
         UploadSettings.RemoveSourceFolder(source.Path);
@@ -77,7 +78,7 @@ public partial class ConfigureUploadTabViewModel:TabViewModel
     {
         NextRequested?.Invoke(this, new FetchFromSourceTabViewModel());
     }
-    
+
     public async void UpdateProcessingFolder()
     {
         try
@@ -86,7 +87,7 @@ public partial class ConfigureUploadTabViewModel:TabViewModel
                 ? desktop.MainWindow
                 : null;
             if (window?.StorageProvider == null) return;
-        
+
             IReadOnlyList<IStorageFolder> folders = await window.StorageProvider.OpenFolderPickerAsync(
                 new FolderPickerOpenOptions
                 {
@@ -95,12 +96,9 @@ public partial class ConfigureUploadTabViewModel:TabViewModel
                 });
 
             if (folders.Count == 0) return;
-        
+
             string folderPath = folders[0].Path.LocalPath;
-            if (!string.IsNullOrEmpty(folderPath))
-            {
-                UploadSettings.SetProcessingFolder(folderPath);
-            }
+            if (!string.IsNullOrEmpty(folderPath)) UploadSettings.SetProcessingFolder(folderPath);
         }
         catch (Exception e)
         {

@@ -15,31 +15,30 @@
                 <TextBlock
                     Text="{localization:Localize UserCreatePopup.Title}"
                     FontSize="18"
-                    FontWeight="Bold"/>
+                    FontWeight="Bold" />
                 <TextBlock
                     Text="{localization:Localize UserCreatePopup.Description}"
-                    FontSize="12"/>
+                    FontSize="12" />
             </StackPanel>
         </StackPanel>
 
         <StackPanel Grid.Row="1" Spacing="8">
             <TextBlock
                 Text="{localization:Localize UserCreatePopup.Username}"
-                FontWeight="Medium"/>
+                FontWeight="Medium" />
             <TextBox
                 Text="{Binding Username}"
                 Watermark="{localization:Localize UserCreatePopup.Username.Placeholder}"
                 Padding="12"
                 CornerRadius="8"
                 BorderThickness="1"
-                FontSize="14">
-            </TextBox>
+                FontSize="14" />
         </StackPanel>
 
         <StackPanel Grid.Row="2" Spacing="8">
             <TextBlock
                 Text="{localization:Localize UserCreatePopup.Password}"
-                FontWeight="Medium"/>
+                FontWeight="Medium" />
             <TextBox
                 Text="{Binding Password}"
                 Watermark="{localization:Localize UserCreatePopup.Password.Placeholder}"
@@ -47,22 +46,20 @@
                 Padding="12"
                 CornerRadius="8"
                 BorderThickness="1"
-                FontSize="14">
-            </TextBox>
+                FontSize="14" />
         </StackPanel>
 
         <StackPanel Grid.Row="3" Spacing="8">
             <TextBlock
                 Text="{localization:Localize UserCreatePopup.Role}"
-                FontWeight="Medium"/>
+                FontWeight="Medium" />
             <ComboBox
                 ItemsSource="{Binding Roles}"
                 SelectedItem="{Binding SelectedRole}"
                 HorizontalAlignment="Stretch"
                 Padding="12"
                 CornerRadius="8"
-                BorderThickness="1">
-            </ComboBox>
+                BorderThickness="1" />
         </StackPanel>
 
         <Border
@@ -75,7 +72,7 @@
                 <TextBlock
                     Text="{localization:Localize UserCreatePopup.Tip}"
                     TextWrapping="Wrap"
-                    FontSize="12"/>
+                    FontSize="12" />
             </StackPanel>
         </Border>
     </Grid>

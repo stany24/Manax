@@ -30,11 +30,8 @@ public partial class IssueChapterReported : ObservableObject
     {
         Task.Run(async () =>
         {
-            Optional<bool> response =await ManaxApiIssueClient.CloseChapterIssueAsync(Id);
-            if (response.Failed)
-            {
-                IssueSource.ErrorEmitted?.Invoke(this, response.Error);
-            }
+            Optional<bool> response = await ManaxApiIssueClient.CloseChapterIssueAsync(Id);
+            if (response.Failed) IssueSource.ErrorEmitted?.Invoke(this, response.Error);
         });
     }
 

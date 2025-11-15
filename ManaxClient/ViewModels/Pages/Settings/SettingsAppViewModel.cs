@@ -9,11 +9,11 @@ namespace ManaxClient.ViewModels.Pages.Settings;
 
 public partial class SettingsAppViewModel : PageViewModel
 {
-    [ObservableProperty] private List<ThemeSettingsData> _availableThemes;
     [ObservableProperty] private List<LanguageItem> _availableLanguages = [];
-    [ObservableProperty] private LanguageItem? _selectedLanguage;
+    [ObservableProperty] private List<ThemeSettingsData> _availableThemes;
 
     private bool _isDarkMode;
+    [ObservableProperty] private LanguageItem? _selectedLanguage;
     private ThemeSettingsData _selectedThemeSettingsData;
 
     public SettingsAppViewModel()
@@ -23,27 +23,6 @@ public partial class SettingsAppViewModel : PageViewModel
             .FirstOrDefault(t => t.Name == ThemeSettings.Current.Name) ?? AvailableThemes[0];
         IsDarkMode = ThemeSettings.Current.IsDark;
         InitializeLanguages();
-    }
-
-    private void InitializeLanguages()
-    {
-        AvailableLanguages = 
-        [
-            new LanguageItem { Code = "en", DisplayName = "English" },
-            new LanguageItem { Code = "fr", DisplayName = "Français" }
-        ];
-        
-        string currentLanguage = Localizer.Language;
-        if (string.IsNullOrEmpty(currentLanguage)) {currentLanguage = "en";}
-        SelectedLanguage = AvailableLanguages.FirstOrDefault(l => l.Code == currentLanguage);
-    }
-
-    partial void OnSelectedLanguageChanged(LanguageItem? value)
-    {
-        if (value != null && value.Code != Localizer.Language)
-        {
-            Localizer.Language = value.Code;
-        }
     }
 
     public ThemeSettingsData SelectedThemeSettingsData
@@ -62,6 +41,24 @@ public partial class SettingsAppViewModel : PageViewModel
         {
             if (SetProperty(ref _isDarkMode, value)) UpdateTheme();
         }
+    }
+
+    private void InitializeLanguages()
+    {
+        AvailableLanguages =
+        [
+            new LanguageItem { Code = "en", DisplayName = "English" },
+            new LanguageItem { Code = "fr", DisplayName = "Français" }
+        ];
+
+        string currentLanguage = Localizer.Language;
+        if (string.IsNullOrEmpty(currentLanguage)) currentLanguage = "en";
+        SelectedLanguage = AvailableLanguages.FirstOrDefault(l => l.Code == currentLanguage);
+    }
+
+    partial void OnSelectedLanguageChanged(LanguageItem? value)
+    {
+        if (value != null && value.Code != Localizer.Language) Localizer.Language = value.Code;
     }
 
     private void UpdateTheme()

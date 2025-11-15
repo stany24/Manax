@@ -14,7 +14,7 @@
     MinWidth="960"
     MinHeight="500"
     WindowStartupLocation="CenterScreen">
-    
+
     <Window.Resources>
         <converters:IssuePageVisibleConverter x:Key="IssuePageVisibleConverter" />
     </Window.Resources>
@@ -68,7 +68,7 @@
                             </ItemsControl.ItemsPanel>
                         </ItemsControl>
                     </ScrollViewer>
-                    
+
                     <TextBlock Classes="subtitle"
                                Text="{localization:Localize MainWindow.Admin}"
                                Margin="16,8"
@@ -129,7 +129,7 @@
                             <TextBlock Text="{localization:Localize MainWindow.Upload}" />
                         </StackPanel>
                     </Button>
-                    
+
                     <Button Classes="sidebar"
                             IsVisible="{Binding CanReadPeople}"
                             Command="{Binding ChangePagePeople}">
@@ -193,7 +193,7 @@
                     <Button
                         Classes="sidebar"
                         Command="{Binding Logout}"
-                        Content="{localization:Localize MainWindow.Logout}"/>
+                        Content="{localization:Localize MainWindow.Logout}" />
 
                     <Border Classes="card"
                             Margin="8,16,8,8"

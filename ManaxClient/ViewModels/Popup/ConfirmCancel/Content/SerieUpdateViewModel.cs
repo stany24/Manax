@@ -15,12 +15,12 @@ public partial class SerieUpdateViewModel : ConfirmCancelContentViewModel
     private readonly Serie _originalSerie;
 
     [ObservableProperty] private string _description;
+    [ObservableProperty] private string _personSearchText = "";
     [ObservableProperty] private Library? _selectedLibrary;
+    [ObservableProperty] private Person? _selectedPerson;
     [ObservableProperty] private Status _selectedStatus;
     [ObservableProperty] private Tag? _selectedTag;
-    [ObservableProperty] private Person? _selectedPerson;
     [ObservableProperty] private string _tagSearchText = "";
-    [ObservableProperty] private string _personSearchText = "";
     [ObservableProperty] private string _title;
 
     public SerieUpdateViewModel(Serie serie)
@@ -48,6 +48,7 @@ public partial class SerieUpdateViewModel : ConfirmCancelContentViewModel
                         AddTag(SelectedTag);
                         SelectedTag = null;
                     }
+
                     break;
                 case nameof(SelectedPerson):
                     if (SelectedPerson != null)
@@ -55,6 +56,7 @@ public partial class SerieUpdateViewModel : ConfirmCancelContentViewModel
                         AddPerson(SelectedPerson);
                         SelectedPerson = null;
                     }
+
                     break;
             }
         };
@@ -89,7 +91,7 @@ public partial class SerieUpdateViewModel : ConfirmCancelContentViewModel
             AvailableTags.Add(tag);
         });
     }
-    
+
     private void AddPerson(Person person)
     {
         Dispatcher.UIThread.Post(() =>
@@ -138,7 +140,7 @@ public partial class SerieUpdateViewModel : ConfirmCancelContentViewModel
             foreach (Tag tag in allTags) AvailableTags.Add(tag);
         });
     }
-    
+
     private void LoadPersons()
     {
         List<Person> allPersons = PersonSource.Persons.Items.ToList();
