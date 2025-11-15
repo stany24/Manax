@@ -13,7 +13,6 @@ namespace ManaxServer.Controllers;
 [ApiController]
 public class SavePointController(ManaxContext context) : ControllerBase
 {
-    // POST: api/SavePoint
     [HttpPost("create")]
     [RequirePermission(Permission.WriteSavePoints)]
     [ProducesResponseType(StatusCodes.Status200OK)]

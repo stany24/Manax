@@ -60,18 +60,6 @@ public class IssueController(
             .ToListAsync();
     }
 
-    [HttpGet("chapter/reported/types")]
-    [RequirePermission(Permission.ReadAllIssues)]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<IEnumerable<IssueChapterReportedTypeDto>>> GetAllReportedChapterIssuesTypes()
-    {
-        if (!featureService.IsFeatureEnabled(FeatureType.ReportedIssues))
-            return BadRequest(Localizer.FeatureDisabled(FeatureType.ReportedIssues));
-
-        return await context.ReportedIssueChapterTypes.Select(i => i.ToDto())
-            .ToListAsync();
-    }
-
     [HttpGet("serie/reported")]
     [RequirePermission(Permission.ReadAllIssues)]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -82,18 +70,6 @@ public class IssueController(
 
         return await context.ReportedIssuesSerie
             .Select(i => i.ToDto())
-            .ToListAsync();
-    }
-
-    [HttpGet("serie/reported/types")]
-    [RequirePermission(Permission.ReadAllIssues)]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<IEnumerable<IssueSerieReportedTypeDto>>> GetAllReportedSerieIssuesTypes()
-    {
-        if (!featureService.IsFeatureEnabled(FeatureType.ReportedIssues))
-            return BadRequest(Localizer.FeatureDisabled(FeatureType.ReportedIssues));
-
-        return await context.ReportedIssueSerieTypes.Select(i => i.ToDto())
             .ToListAsync();
     }
 

@@ -191,37 +191,37 @@ public class NotificationService(IHubContext<NotificationService> hubContext, IP
 
     public void NotifyPersonCreatedAsync(PersonDto person)
     {
-        TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadPeople, NotificationType.PersonCreated,
+        TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadPersons, NotificationType.PersonCreated,
             person);
     }
 
     public void NotifyPersonUpdatedAsync(PersonDto person)
     {
-        TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadPeople, NotificationType.PersonUpdated,
+        TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadPersons, NotificationType.PersonUpdated,
             person);
     }
 
     public void NotifyPersonDeletedAsync(long personId)
     {
-        TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadPeople, NotificationType.PersonDeleted,
+        TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadPersons, NotificationType.PersonDeleted,
             personId);
     }
 
     public void NotifyRoleCreatedAsync(RoleDto role)
     {
-        TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadPeople, NotificationType.RoleCreated,
+        TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadPersons, NotificationType.RoleCreated,
             role);
     }
 
     public void NotifyRoleUpdatedAsync(RoleDto role)
     {
-        TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadPeople, NotificationType.RoleUpdated,
+        TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadPersons, NotificationType.RoleUpdated,
             role);
     }
 
     public void NotifyRoleDeletedAsync(long roleId)
     {
-        TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadPeople, NotificationType.RoleDeleted,
+        TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadPersons, NotificationType.RoleDeleted,
             roleId);
     }
 

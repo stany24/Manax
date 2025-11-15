@@ -30,6 +30,6 @@ public class ManaxContext(DbContextOptions<ManaxContext> options) : DbContext(op
     public virtual DbSet<Rank.Rank> Ranks { get; set; } = null!;
     public virtual DbSet<Tag.Tag> Tags { get; set; } = null!;
 
-    public virtual DbSet<Person.Person> People { get; set; } = null!;
+    public virtual DbSet<Person.Person> Persons { get; set; } = null!;
     public virtual DbSet<Role> Roles { get; set; } = null!;
 }

@@ -50,9 +50,9 @@ public enum Permission
     ReadFeatures = 121,
     WriteFeatures = 122,
 
-    ReadPeople = 131,
-    WritePeople = 132,
-    DeletePeople = 133,
+    ReadPersons = 131,
+    WritePersons = 132,
+    DeletePersons = 133,
 
     WriteRoles = 141,
     DeleteRoles = 142

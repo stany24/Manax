@@ -131,8 +131,8 @@
                     </Button>
 
                     <Button Classes="sidebar"
-                            IsVisible="{Binding CanReadPeople}"
-                            Command="{Binding ChangePagePeople}">
+                            IsVisible="{Binding CanReadPersons}"
+                            Command="{Binding ChangePagePersons}">
                         <StackPanel Orientation="Horizontal" Spacing="12">
                             <TextBlock Text="👥" FontSize="14" />
                             <TextBlock Text="People" />

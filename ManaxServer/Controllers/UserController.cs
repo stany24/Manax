@@ -29,7 +29,6 @@ public class UserController(
 {
     private readonly Lock _claimLock = new();
 
-    // GET: api/Users
     [HttpGet("/api/users")]
     [RequirePermission(Permission.ReadUsers)]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -38,7 +37,6 @@ public class UserController(
         return await context.Users.Select(user => user.Id).ToListAsync();
     }
 
-    // GET: api/User/5
     [HttpGet("{id:long}")]
     [RequirePermission(Permission.ReadUsers)]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -90,7 +88,6 @@ public class UserController(
         return newPassword;
     }
 
-    // POST: api/User
     [HttpPost("create")]
     [RequirePermission(Permission.WriteUsers)]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -113,7 +110,6 @@ public class UserController(
         return Ok();
     }
 
-    // DELETE: api/User/5
     [HttpDelete("{id:long}")]
     [RequirePermission(Permission.DeleteUsers)]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -148,7 +144,6 @@ public class UserController(
         return Ok();
     }
 
-    // POST: api/User/login
     [HttpPost("/api/login")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -239,7 +234,6 @@ public class UserController(
         }
     }
 
-    // POST: api/User/logout
     [HttpPost("/api/logout")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]

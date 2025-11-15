@@ -28,7 +28,6 @@ public class SerieController(
     IBackgroundTaskService backgroundTaskService)
     : ControllerBase
 {
-    // GET: api/Serie
     [HttpGet("/api/series")]
     [RequirePermission(Permission.ReadSeries)]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -37,7 +36,6 @@ public class SerieController(
         return await context.Series.Select(serie => serie.Id).ToListAsync();
     }
 
-    // GET: api/serie/{id}
     [HttpGet("{id:long}")]
     [RequirePermission(Permission.ReadSeries)]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -54,7 +52,6 @@ public class SerieController(
         return serie.ToDto();
     }
 
-    // GET: api/series/{id}/chapters
     [HttpGet("{id:long}/chapters")]
     [RequirePermission(Permission.ReadChapters)]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -71,7 +68,6 @@ public class SerieController(
         return chaptersIds;
     }
 
-    // GET: api/series/{id}/chapters
     [HttpGet("{id:long}/reads")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -88,7 +84,6 @@ public class SerieController(
         return reads;
     }
 
-    // GET: api/serie/{id}/poster
     [HttpGet("{id:long}/poster")]
     [RequirePermission(Permission.ReadSeries)]
     [Produces("image/webp")]
@@ -108,7 +103,6 @@ public class SerieController(
         return File(readAllBytes, "image/webp", posterName);
     }
 
-    // PUT: api/Serie/5
     [HttpPut("{id:long}")]
     [RequirePermission(Permission.WriteSeries)]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -139,7 +133,6 @@ public class SerieController(
         return Ok();
     }
 
-    // POST: api/Serie
     [HttpPost]
     [RequirePermission(Permission.WriteSeries)]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -209,7 +202,6 @@ public class SerieController(
         return size;
     }
 
-    // DELETE: api/Serie/5
     [HttpDelete("{id:long}")]
     [RequirePermission(Permission.DeleteSeries)]
     [ProducesResponseType(StatusCodes.Status200OK)]

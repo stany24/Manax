@@ -11,14 +11,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ManaxServer.Migrations
 {
     [DbContext(typeof(ManaxContext))]
-    [Migration("20251114084027_ManaxV0.1")]
+    [Migration("20251115134104_ManaxV0.1")]
     partial class ManaxV01
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "9.0.10");
+            modelBuilder.HasAnnotation("ProductVersion", "10.0.0");
 
             modelBuilder.Entity("ManaxServer.Models.Chapter.Chapter", b =>
                 {
@@ -226,7 +226,7 @@ namespace ManaxServer.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("People");
+                    b.ToTable("Persons");
                 });
 
             modelBuilder.Entity("ManaxServer.Models.Person.Role", b =>

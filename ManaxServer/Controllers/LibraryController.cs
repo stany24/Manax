@@ -16,7 +16,6 @@ namespace ManaxServer.Controllers;
 public class LibraryController(ManaxContext context, INotificationService notificationService)
     : ControllerBase
 {
-    // GET: api/Library
     [HttpGet("/api/libraries")]
     [RequirePermission(Permission.ReadLibraries)]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -25,7 +24,6 @@ public class LibraryController(ManaxContext context, INotificationService notifi
         return await context.Libraries.Select(t => t.Id).ToListAsync();
     }
 
-    // GET: api/library/{id}
     [HttpGet("{id:long}")]
     [RequirePermission(Permission.ReadLibraries)]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -41,7 +39,6 @@ public class LibraryController(ManaxContext context, INotificationService notifi
         return library.ToDto();
     }
 
-    // PUT: api/Library/5
     [HttpPut("{id:long}")]
     [RequirePermission(Permission.WriteLibraries)]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -79,7 +76,6 @@ public class LibraryController(ManaxContext context, INotificationService notifi
         return Ok();
     }
 
-    // POST: api/Library
     [HttpPost("create")]
     [RequirePermission(Permission.WriteLibraries)]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -109,7 +105,6 @@ public class LibraryController(ManaxContext context, INotificationService notifi
         return library.Id;
     }
 
-    // DELETE: api/Library/5
     [HttpDelete("{id:long}")]
     [RequirePermission(Permission.DeleteLibraries)]
     [ProducesResponseType(StatusCodes.Status200OK)]

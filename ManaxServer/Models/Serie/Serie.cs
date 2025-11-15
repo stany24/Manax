@@ -58,7 +58,7 @@ public class Serie
         }
 
         Persons.Clear();
-        foreach (Person.Person person in serieUpdate.Persons.Select(personDto => context.People.Find(personDto.Id)).OfType<Person.Person>())
+        foreach (Person.Person person in serieUpdate.Persons.Select(personDto => context.Persons.Find(personDto.Id)).OfType<Person.Person>())
         {
             Persons.Add(person);
         }

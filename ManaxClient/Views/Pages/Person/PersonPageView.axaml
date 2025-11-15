@@ -24,7 +24,7 @@
                 </StackPanel>
 
                 <Button Grid.Column="1"
-                        IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).CanWritePeople}"
+                        IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).CanWritePersons}"
                         Classes="primary"
                         Command="{Binding CreatePerson}"
                         VerticalAlignment="Center">
@@ -47,7 +47,7 @@
                     <TextBlock Text="{localization:Localize PersonPage.NoPersons.Description}"
                                TextAlignment="Center" />
                     <Button Classes="primary"
-                            IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).CanWritePeople}"
+                            IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).CanWritePersons}"
                             Command="{Binding CreatePerson}"
                             HorizontalAlignment="Center">
                         <StackPanel Orientation="Horizontal" Spacing="8">
@@ -106,7 +106,7 @@
                                         </Border>
 
                                         <Button Grid.Column="3"
-                                                IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).CanWritePeople}"
+                                                IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).CanWritePersons}"
                                                 Classes="secondary"
                                                 Command="{Binding $parent[UserControl].((page:PersonPageViewModel)DataContext).UpdatePerson}"
                                                 CommandParameter="{Binding .}"
@@ -116,7 +116,7 @@
                                         </Button>
 
                                         <Button Grid.Column="4"
-                                                IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).CanDeletePeople}"
+                                                IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).CanDeletePersons}"
                                                 Classes="danger"
                                                 Command="{Binding $parent[UserControl].((page:PersonPageViewModel)DataContext).DeletePerson}"
                                                 CommandParameter="{Binding .}"

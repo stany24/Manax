@@ -15,16 +15,14 @@ namespace ManaxServer.Controllers;
 public class RoleController(ManaxContext context, INotificationService notificationService)
     : ControllerBase
 {
-    // GET: api/roles
     [HttpGet("/api/roles")]
-    [RequirePermission(Permission.ReadPeople)]
+    [RequirePermission(Permission.ReadPersons)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<RoleDto>>> GetRoles()
     {
         return await context.Roles.Select(role => role.ToDto()).ToListAsync();
     }
 
-    // DELETE: api/role/5
     [HttpDelete("{id:long}")]
     [RequirePermission(Permission.DeleteRoles)]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -39,7 +37,6 @@ public class RoleController(ManaxContext context, INotificationService notificat
         return Ok();
     }
 
-    // POST: api/role
     [HttpPost]
     [RequirePermission(Permission.WriteRoles)]
     [ProducesResponseType(StatusCodes.Status201Created)]
@@ -52,7 +49,6 @@ public class RoleController(ManaxContext context, INotificationService notificat
         return Ok();
     }
 
-    // PUT: api/role/5
     [HttpPut("{id:long}")]
     [RequirePermission(Permission.WriteRoles)]
     [ProducesResponseType(StatusCodes.Status200OK)]

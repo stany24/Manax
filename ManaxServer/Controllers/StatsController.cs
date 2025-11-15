@@ -15,7 +15,6 @@ namespace ManaxServer.Controllers;
 [ApiController]
 public class StatsController(ManaxContext context) : ControllerBase
 {
-    // GET: api/Chapter
     [HttpGet("self")]
     [RequirePermission(Permission.ReadSelfStats)]
     [ProducesResponseType(StatusCodes.Status200OK)]

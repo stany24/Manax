@@ -29,11 +29,9 @@ public partial class UploadController(
 {
     [GeneratedRegex("\\d{1,4}")]
     private static partial Regex RegexNumber();
-
     [GeneratedRegex(@"[^a-zA-Z0-9_\-\.]")]
     private static partial Regex InvalidPathChars();
 
-    // POST: api/upload/chapter
     [HttpPost("chapter")]
     [RequirePermission(Permission.UploadChapter)]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -82,7 +80,6 @@ public partial class UploadController(
         return Ok();
     }
 
-    // POST: api/upload/chapter/replace
     [HttpPost("chapter/replace")]
     [RequirePermission(Permission.UploadChapter)]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -130,7 +127,6 @@ public partial class UploadController(
         return Ok();
     }
 
-    // POST: api/upload/poster
     [HttpPost("poster")]
     [RequirePermission(Permission.UploadChapter)]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -140,7 +136,6 @@ public partial class UploadController(
         return await CreateOrReplacePoster(file, serieId, false);
     }
 
-    // POST: api/upload/poster/replace
     [HttpPost("poster/replace")]
     [RequirePermission(Permission.UploadChapter)]
     [ProducesResponseType(StatusCodes.Status200OK)]

@@ -15,33 +15,30 @@ namespace ManaxServer.Controllers;
 public class PersonController(ManaxContext context, INotificationService notificationService)
     : ControllerBase
 {
-    // GET: api/people
     [HttpGet("/api/persons")]
-    [RequirePermission(Permission.ReadPeople)]
+    [RequirePermission(Permission.ReadPersons)]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<IEnumerable<PersonDto>>> GetPeople()
+    public async Task<ActionResult<IEnumerable<PersonDto>>> GetPersons()
     {
-        return await context.People.Include(p => p.Role).Select(person => person.ToDto()).ToListAsync();
+        return await context.Persons.Include(p => p.Role).Select(person => person.ToDto()).ToListAsync();
     }
 
-    // DELETE: api/person/5
     [HttpDelete("{id:long}")]
-    [RequirePermission(Permission.DeletePeople)]
+    [RequirePermission(Permission.DeletePersons)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeletePerson(long id)
     {
-        Person? person = await context.People.FindAsync(id);
+        Person? person = await context.Persons.FindAsync(id);
         if (person == null) return NotFound(Localizer.PersonNotFound(id));
-        context.People.Remove(person);
+        context.Persons.Remove(person);
         await context.SaveChangesAsync();
         notificationService.NotifyPersonDeletedAsync(id);
         return Ok();
     }
 
-    // POST: api/person
     [HttpPost]
-    [RequirePermission(Permission.WritePeople)]
+    [RequirePermission(Permission.WritePersons)]
     [ProducesResponseType(StatusCodes.Status201Created)]
     public async Task<ActionResult<PersonDto>> CreatePerson(PersonCreateDto personCreateDto)
     {
@@ -50,20 +47,19 @@ public class PersonController(ManaxContext context, INotificationService notific
 
         Person person = Person.Create(personCreateDto, context);
         person.Role = role;
-        context.People.Add(person);
+        context.Persons.Add(person);
         await context.SaveChangesAsync();
         notificationService.NotifyPersonCreatedAsync(person.ToDto());
         return Ok();
     }
 
-    // PUT: api/person/5
     [HttpPut("{id:long}")]
-    [RequirePermission(Permission.WritePeople)]
+    [RequirePermission(Permission.WritePersons)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> UpdatePerson(long id, PersonUpdateDto personUpdateDto)
     {
-        Person? person = await context.People.FindAsync(id);
+        Person? person = await context.Persons.FindAsync(id);
         if (person == null) return NotFound(Localizer.PersonNotFound(id));
 
         Role? role = await context.Roles.FindAsync(personUpdateDto.RoleId);

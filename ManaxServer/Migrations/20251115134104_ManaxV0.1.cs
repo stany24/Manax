@@ -141,7 +141,7 @@ namespace ManaxServer.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "People",
+                name: "Persons",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "INTEGER", nullable: false)
@@ -153,9 +153,9 @@ namespace ManaxServer.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_People", x => x.Id);
+                    table.PrimaryKey("PK_Persons", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_People_Roles_RoleId",
+                        name: "FK_Persons_Roles_RoleId",
                         column: x => x.RoleId,
                         principalTable: "Roles",
                         principalColumn: "Id",
@@ -268,9 +268,9 @@ namespace ManaxServer.Migrations
                 {
                     table.PrimaryKey("PK_PersonSerie", x => new { x.PersonsId, x.SeriesId });
                     table.ForeignKey(
-                        name: "FK_PersonSerie_People_PersonsId",
+                        name: "FK_PersonSerie_Persons_PersonsId",
                         column: x => x.PersonsId,
-                        principalTable: "People",
+                        principalTable: "Persons",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -459,8 +459,8 @@ namespace ManaxServer.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_People_RoleId",
-                table: "People",
+                name: "IX_Persons_RoleId",
+                table: "Persons",
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
@@ -600,7 +600,7 @@ namespace ManaxServer.Migrations
                 name: "UserRanks");
 
             migrationBuilder.DropTable(
-                name: "People");
+                name: "Persons");
 
             migrationBuilder.DropTable(
                 name: "Chapters");

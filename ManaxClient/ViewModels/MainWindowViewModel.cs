@@ -202,7 +202,7 @@ public partial class MainWindowViewModel : ObservableObject
         SetPage(new TagPageViewModel());
     }
 
-    public void ChangePagePeople()
+    public void ChangePagePersons()
     {
         SetPage(new PersonPageViewModel());
     }

@@ -15,7 +15,6 @@ namespace ManaxServer.Controllers;
 public class TagController(ManaxContext context, INotificationService notificationService)
     : ControllerBase
 {
-    // GET: api/tag
     [HttpGet("/api/tags")]
     [RequirePermission(Permission.ReadTags)]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -24,7 +23,6 @@ public class TagController(ManaxContext context, INotificationService notificati
         return await context.Tags.Select(t => t.ToDto()).ToListAsync();
     }
 
-    // POST: api/tag
     [HttpPost]
     [RequirePermission(Permission.WriteTags)]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -37,7 +35,6 @@ public class TagController(ManaxContext context, INotificationService notificati
         return Ok();
     }
 
-    // PUT: api/tag
     [HttpPut]
     [RequirePermission(Permission.WriteTags)]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -61,7 +58,6 @@ public class TagController(ManaxContext context, INotificationService notificati
         return Ok();
     }
 
-    // DELETE: api/tag/5
     [HttpDelete("{id:long}")]
     [RequirePermission(Permission.DeleteTags)]
     [ProducesResponseType(StatusCodes.Status200OK)]

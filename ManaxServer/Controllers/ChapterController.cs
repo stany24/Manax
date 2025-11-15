@@ -13,10 +13,8 @@ namespace ManaxServer.Controllers;
 
 [Route("api/chapter/{id:long}")]
 [ApiController]
-public class ChapterController(ManaxContext context, INotificationService notificationService)
-    : ControllerBase
+public class ChapterController(ManaxContext context, INotificationService notificationService) : ControllerBase
 {
-    // GET: api/Chapter
     [HttpGet("/api/chapters")]
     [RequirePermission(Permission.ReadChapters)]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -25,7 +23,6 @@ public class ChapterController(ManaxContext context, INotificationService notifi
         return await context.Chapters.Select(chapter => chapter.Id).ToListAsync();
     }
 
-    // GET: api/Chapter/5
     [HttpGet("")]
     [RequirePermission(Permission.ReadChapters)]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -39,7 +36,6 @@ public class ChapterController(ManaxContext context, INotificationService notifi
         return chapter.ToDto();
     }
 
-    // DELETE: api/Chapter/5
     [HttpDelete("")]
     [RequirePermission(Permission.DeleteChapters)]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -56,7 +52,6 @@ public class ChapterController(ManaxContext context, INotificationService notifi
         return Ok();
     }
 
-    // GET: api/Chapter/{id}/page/{number}
     [HttpGet("page/{number:int}")]
     [RequirePermission(Permission.ReadChapters)]
     [Produces("image/webp")]
@@ -82,7 +77,6 @@ public class ChapterController(ManaxContext context, INotificationService notifi
         return File(memoryStream.ToArray(), "image/webp", entry.Name);
     }
 
-    // GET: api/Chapter/{id}/pages
     [HttpGet("pages")]
     [RequirePermission(Permission.ReadChapters)]
     [Produces("application/x-cbz")]
