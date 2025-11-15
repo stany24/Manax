@@ -1,7 +1,9 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace ManaxLibrary.DTO.Role;
 
 public class RoleUpdateDto
 {
-    public long Id { get; set; }
-    public string Name { get; set; } = string.Empty;
+    [Required] public long Id { get; init; }
+    [Required] public string Name { get; init; } = string.Empty;
 }

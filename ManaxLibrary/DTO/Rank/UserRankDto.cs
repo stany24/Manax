@@ -1,16 +1,8 @@
-// ReSharper disable InconsistentNaming
-// ReSharper disable PropertyCanBeMadeInitOnly.Global
-// ReSharper disable UnusedAutoPropertyAccessor.Global
-// ReSharper disable UnusedMember.Global
-
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
-
-
 namespace ManaxLibrary.DTO.Rank;
 
 public class UserRankDto
 {
-    public long UserId { get; set; }
-    public long SerieId { get; set; }
-    public long RankId { get; set; }
+    public long UserId { get; init; }
+    public long SerieId { get; init; }
+    public long RankId { get; init; }
 }

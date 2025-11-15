@@ -1,12 +1,8 @@
-// ReSharper disable PropertyCanBeMadeInitOnly.Global
-// ReSharper disable PropertyCanBeMadeInitOnly.Global
-// ReSharper disable UnusedAutoPropertyAccessor.Global
-// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
-// ReSharper disable MemberCanBePrivate.Global
+using System.ComponentModel.DataAnnotations;
 
 namespace ManaxLibrary.DTO.SavePoint;
 
 public class SavePointCreateDto
 {
-    public string Path { get; set; } = string.Empty;
+    [Required] public string Path { get; init; } = string.Empty;
 }

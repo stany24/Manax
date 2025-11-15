@@ -1,20 +1,14 @@
-// ReSharper disable InconsistentNaming
-// ReSharper disable PropertyCanBeMadeInitOnly.Global
-// ReSharper disable UnusedAutoPropertyAccessor.Global
-
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
-
 namespace ManaxLibrary.DTO.Serie;
 
 public class SerieDto
 {
-    public long Id { get; set; }
-    public List<long> PersonIds { get; set; } = [];
-    public List<long> TagIds { get; set; } = [];
-    public long? LibraryId { get; set; }
-    public string Title { get; set; }
-    public string Description { get; set; }
-    public Status Status { get; set; }
-    public DateTime Creation { get; set; }
-    public DateTime LastModification { get; set; }
+    public long Id { get; init; }
+    public List<long> PersonIds { get; init; } = [];
+    public List<long> TagIds { get; init; } = [];
+    public long? LibraryId { get; init; }
+    public string Title { get; init; } = string.Empty;
+    public string Description { get; init; } = string.Empty;
+    public Status Status { get; init; }
+    public DateTime Creation { get; init; }
+    public DateTime LastModification { get; init; }
 }
