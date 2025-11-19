@@ -3,6 +3,7 @@ using System.Globalization;
 using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData;
 using Jeek.Avalonia.Localization;
+using ManaxClient.Models.Server.Data;
 using ManaxClient.Models.Server.Sources;
 using ManaxLibrary.DTO.Issue.Automatic;
 
@@ -12,7 +13,7 @@ public partial class IssueSerieAutomatic : ObservableObject
 {
     [ObservableProperty] private DateTime _createdAt;
     [ObservableProperty] private IssueSerieAutomaticType _problem;
-    [ObservableProperty] private Server.Data.Serie _serie = null!;
+    [ObservableProperty] private Serie _serie = null!;
     private IDisposable? _subscription;
 
     public IssueSerieAutomatic(IssueSerieAutomaticDto dto)
@@ -36,7 +37,7 @@ public partial class IssueSerieAutomatic : ObservableObject
             .Filter(o => o.Id == dto.SerieId)
             .Subscribe(changes =>
             {
-                foreach (Change<Server.Data.Serie, long> change in changes)
+                foreach (Change<Serie, long> change in changes)
                 {
                     if (change.Reason is not (ChangeReason.Add or ChangeReason.Update)) continue;
                     Serie = change.Current;
@@ -45,7 +46,7 @@ public partial class IssueSerieAutomatic : ObservableObject
             });
     }
 
-    partial void OnSerieChanged(Server.Data.Serie value)
+    partial void OnSerieChanged(Serie value)
     {
         OnPropertyChanged(nameof(FormattedInfo));
     }

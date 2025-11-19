@@ -1,4 +1,3 @@
-
 namespace ManaxLibrary.DTO.Issue.Reported;
 
 public class IssueChapterReportedDto

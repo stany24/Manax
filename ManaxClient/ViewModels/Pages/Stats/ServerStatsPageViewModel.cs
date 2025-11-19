@@ -128,7 +128,8 @@ public partial class ServerStatsPageViewModel : PageViewModel
             colorIndex++;
         }
 
-        foreach (Models.Server.Data.Serie serie in ServerStats.NeverReadSeries.ConvertAll(s => new Models.Server.Data.Serie(s)))
+        foreach (Models.Server.Data.Serie serie in ServerStats.NeverReadSeries.ConvertAll(s =>
+                     new Models.Server.Data.Serie(s)))
             NeverReadSeries.Add(serie);
     }
 }

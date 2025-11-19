@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using DynamicData;
+using ManaxClient.Models.Server.Data;
 using ManaxClient.ViewModels;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
@@ -14,7 +15,7 @@ namespace ManaxClient.Models.Server.Sources;
 
 public static class UserSource
 {
-    public static readonly SourceCache<Data.User, long> Users = new(x => x.Id);
+    public static readonly SourceCache<User, long> Users = new(x => x.Id);
     private static readonly Lock UsersLock = new();
 
     static UserSource()
@@ -60,7 +61,7 @@ public static class UserSource
                     UserDto dto = userResponse.GetValue();
                     lock (UsersLock)
                     {
-                        Users.AddOrUpdate(new Data.User(dto));
+                        Users.AddOrUpdate(new User(dto));
                     }
                 }
             }
@@ -84,7 +85,7 @@ public static class UserSource
     {
         lock (UsersLock)
         {
-            Users.AddOrUpdate(new Data.User(user));
+            Users.AddOrUpdate(new User(user));
         }
     }
 }

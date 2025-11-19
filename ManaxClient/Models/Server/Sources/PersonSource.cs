@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using DynamicData;
+using ManaxClient.Models.Server.Data;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTO.Person;
@@ -14,7 +15,7 @@ namespace ManaxClient.Models.Server.Sources;
 
 public static class PersonSource
 {
-    public static readonly SourceCache<Data.Person, long> Persons = new(x => x.Id);
+    public static readonly SourceCache<Person, long> Persons = new(x => x.Id);
     private static bool _loaded;
     private static readonly Lock LoadLock = new();
     private static readonly Lock PersonsLock = new();
@@ -39,7 +40,7 @@ public static class PersonSource
     {
         lock (PersonsLock)
         {
-            Persons.AddOrUpdate(new Data.Person(dto));
+            Persons.AddOrUpdate(new Person(dto));
         }
     }
 
@@ -65,7 +66,7 @@ public static class PersonSource
                         Persons.Edit(updater =>
                         {
                             updater.Clear();
-                            List<Data.Person> persons = personsResponse.GetValue().Select(dto => new Data.Person(dto)).ToList();
+                            List<Person> persons = personsResponse.GetValue().Select(dto => new Person(dto)).ToList();
                             updater.AddOrUpdate(persons);
                         });
                     }

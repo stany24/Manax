@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData;
+using ManaxClient.Models.Server.Data;
 using ManaxClient.Models.Server.Sources;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
@@ -15,11 +16,11 @@ public partial class IssueSerieReported : ObservableObject
     [ObservableProperty] private DateTime _createdAt;
     [ObservableProperty] private long _id;
     [ObservableProperty] private IssueChapterReportedType _problem = null!;
-    [ObservableProperty] private Server.Data.Serie _serie = null!;
+    [ObservableProperty] private Serie _serie = null!;
     private IDisposable? _subscriptionProblem;
     private IDisposable? _subscriptionSerie;
     private IDisposable? _subscriptionUser;
-    [ObservableProperty] private Server.Data.User _user = null!;
+    [ObservableProperty] private User _user = null!;
 
     public IssueSerieReported(IssueSerieReportedDto dto)
     {
@@ -47,7 +48,7 @@ public partial class IssueSerieReported : ObservableObject
             .Filter(o => o.Id == dto.SerieId)
             .Subscribe(changes =>
             {
-                using IEnumerator<Change<Server.Data.Serie, long>> enumerator = changes.GetEnumerator();
+                using IEnumerator<Change<Serie, long>> enumerator = changes.GetEnumerator();
                 if (enumerator.MoveNext()) Serie = enumerator.Current.Current;
             });
 
@@ -58,7 +59,7 @@ public partial class IssueSerieReported : ObservableObject
             .Filter(o => o.Id == dto.UserId)
             .Subscribe(changes =>
             {
-                using IEnumerator<Change<Server.Data.User, long>> enumerator = changes.GetEnumerator();
+                using IEnumerator<Change<User, long>> enumerator = changes.GetEnumerator();
                 if (enumerator.MoveNext()) User = enumerator.Current.Current;
             });
 

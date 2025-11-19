@@ -19,7 +19,8 @@ public class RankPageViewModel : PageViewModel
 
     public RankPageViewModel()
     {
-        SortExpressionComparer<Models.Server.Data.Rank> comparer = SortExpressionComparer<Models.Server.Data.Rank>.Descending(t => t.Value);
+        SortExpressionComparer<Models.Server.Data.Rank> comparer =
+            SortExpressionComparer<Models.Server.Data.Rank>.Descending(t => t.Value);
         RankSource.Ranks.Connect()
             .SortAndBind(out _ranks, comparer)
             .Subscribe();

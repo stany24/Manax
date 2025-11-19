@@ -5,7 +5,8 @@ using ManaxServer.Tasks;
 
 namespace ManaxServer.Services.BackgroundTask;
 
-public class BackgroundTaskService(INotificationService notificationService) : Service, IBackgroundTaskService, IDisposable
+public class BackgroundTaskService(INotificationService notificationService)
+    : Service, IBackgroundTaskService, IDisposable
 {
     private const int MaxTasks = 6;
 
@@ -32,6 +33,12 @@ public class BackgroundTaskService(INotificationService notificationService) : S
 
         await TryStartTasksAsync().ConfigureAwait(false);
         await PublishTasksAsync().ConfigureAwait(false);
+    }
+
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
     }
 
     ~BackgroundTaskService()
@@ -130,16 +137,7 @@ public class BackgroundTaskService(INotificationService notificationService) : S
 
     private void Dispose(bool disposing)
     {
-        if (disposing)
-        {
-            _taskSemaphore.Dispose();
-        }
-    }
-
-    public void Dispose()
-    {
-        Dispose(true);
-        GC.SuppressFinalize(this);
+        if (disposing) _taskSemaphore.Dispose();
     }
 }
 

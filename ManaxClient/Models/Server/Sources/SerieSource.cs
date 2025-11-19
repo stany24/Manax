@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using DynamicData;
+using ManaxClient.Models.Server.Data;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTO.Serie;
@@ -14,7 +15,7 @@ namespace ManaxClient.Models.Server.Sources;
 
 public static class SerieSource
 {
-    public static readonly SourceCache<Data.Serie, long> Series = new(serie => serie.Id);
+    public static readonly SourceCache<Serie, long> Series = new(serie => serie.Id);
     private static bool _isLoaded;
     private static readonly Lock SeriesLock = new();
     private static readonly Lock LoadLock = new();
@@ -28,7 +29,7 @@ public static class SerieSource
 
     private static void OnSerieCreated(SerieDto dto)
     {
-        Data.Serie serie = new(dto);
+        Serie serie = new(dto);
         serie.LoadInfo();
         serie.LoadPoster();
         lock (SeriesLock)
@@ -64,7 +65,7 @@ public static class SerieSource
                     List<long> seriesIds = seriesIdsResponse.GetValue();
                     lock (SeriesLock)
                     {
-                        Series.AddOrUpdate(seriesIds.Select(serieId => new Data.Serie(serieId)));
+                        Series.AddOrUpdate(seriesIds.Select(serieId => new Serie(serieId)));
                         _isLoaded = true;
                     }
                 }

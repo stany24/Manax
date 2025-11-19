@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using DynamicData;
+using ManaxClient.Models.Server.Data;
 using ManaxClient.ViewModels;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
@@ -16,7 +17,7 @@ namespace ManaxClient.Models.Server.Sources;
 
 public static class RankSource
 {
-    public static readonly SourceCache<Data.Rank, long> Ranks = new(x => x.Id);
+    public static readonly SourceCache<Rank, long> Ranks = new(x => x.Id);
     private static bool _loaded;
     private static readonly Lock LoadLock = new();
     private static readonly Lock RanksLock = new();
@@ -48,7 +49,7 @@ public static class RankSource
     {
         lock (RanksLock)
         {
-            Ranks.AddOrUpdate(new Data.Rank(dto));
+            Ranks.AddOrUpdate(new Rank(dto));
         }
     }
 
@@ -74,7 +75,7 @@ public static class RankSource
                         Ranks.Edit(updater =>
                         {
                             updater.Clear();
-                            List<Data.Rank> ranks = ranksResponse.GetValue().Select(dto => new Data.Rank(dto)).ToList();
+                            List<Rank> ranks = ranksResponse.GetValue().Select(dto => new Rank(dto)).ToList();
                             updater.AddOrUpdate(ranks);
                         });
                     }

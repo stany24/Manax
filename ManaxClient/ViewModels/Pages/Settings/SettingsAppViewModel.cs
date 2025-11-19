@@ -13,12 +13,10 @@ namespace ManaxClient.ViewModels.Pages.Settings;
 
 public partial class SettingsAppViewModel : PageViewModel
 {
+    private readonly ReadOnlyObservableCollection<Language> _languages;
     [ObservableProperty] private List<ThemeSettingsData> _availableThemes;
     [ObservableProperty] private Language? _selectedLanguage;
     private ThemeSettingsData _selectedThemeSettingsData;
-    private readonly ReadOnlyObservableCollection<Language> _languages;
-    
-    public ReadOnlyObservableCollection<Language> Languages => _languages;
 
     public SettingsAppViewModel()
     {
@@ -26,7 +24,7 @@ public partial class SettingsAppViewModel : PageViewModel
         _selectedThemeSettingsData = AvailableThemes
             .FirstOrDefault(t => t.Name == ThemeSettings.Current.Name) ?? AvailableThemes[0];
         IsDarkMode = ThemeSettings.Current.IsDark;
-        
+
         LanguageSource.Languages
             .Connect()
             .SortAndBind(out _languages, SortExpressionComparer<Language>.Ascending(lang => lang.Code))
@@ -35,6 +33,8 @@ public partial class SettingsAppViewModel : PageViewModel
         if (string.IsNullOrEmpty(currentLanguage)) currentLanguage = "en";
         SelectedLanguage = Languages.FirstOrDefault(l => l.Code == currentLanguage) ?? Languages.First();
     }
+
+    public ReadOnlyObservableCollection<Language> Languages => _languages;
 
     public ThemeSettingsData SelectedThemeSettingsData
     {

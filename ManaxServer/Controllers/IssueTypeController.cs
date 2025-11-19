@@ -12,7 +12,7 @@ namespace ManaxServer.Controllers;
 
 [Route("api/issue")]
 [ApiController]
-public class IssueTypeController(ManaxContext context, IFeatureService featureService): ControllerBase
+public class IssueTypeController(ManaxContext context, IFeatureService featureService) : ControllerBase
 {
     [HttpGet("chapter/reported/types")]
     [RequirePermission(Permission.ReadAllIssues)]
@@ -25,7 +25,7 @@ public class IssueTypeController(ManaxContext context, IFeatureService featureSe
         return await context.ReportedIssueChapterTypes.Select(i => i.ToDto())
             .ToListAsync();
     }
-    
+
     [HttpGet("serie/reported/types")]
     [RequirePermission(Permission.ReadAllIssues)]
     [ProducesResponseType(StatusCodes.Status200OK)]

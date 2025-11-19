@@ -191,19 +191,22 @@ public class NotificationService(IHubContext<NotificationService> hubContext, IP
 
     public void NotifyPersonCreatedAsync(PersonDto person)
     {
-        TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadPersons, NotificationType.PersonCreated,
+        TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadPersons,
+            NotificationType.PersonCreated,
             person);
     }
 
     public void NotifyPersonUpdatedAsync(PersonDto person)
     {
-        TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadPersons, NotificationType.PersonUpdated,
+        TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadPersons,
+            NotificationType.PersonUpdated,
             person);
     }
 
     public void NotifyPersonDeletedAsync(long personId)
     {
-        TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadPersons, NotificationType.PersonDeleted,
+        TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadPersons,
+            NotificationType.PersonDeleted,
             personId);
     }
 

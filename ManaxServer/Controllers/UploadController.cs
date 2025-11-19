@@ -29,6 +29,7 @@ public partial class UploadController(
 {
     [GeneratedRegex("\\d{1,4}")]
     private static partial Regex RegexNumber();
+
     [GeneratedRegex(@"[^a-zA-Z0-9_\-\.]")]
     private static partial Regex InvalidPathChars();
 

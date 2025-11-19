@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using DynamicData;
+using ManaxClient.Models.Server.Data;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTO.Tag;
@@ -14,7 +15,7 @@ namespace ManaxClient.Models.Server.Sources;
 
 public static class TagSource
 {
-    public static readonly SourceCache<Data.Tag, long> Tags = new(x => x.Id);
+    public static readonly SourceCache<Tag, long> Tags = new(x => x.Id);
     private static bool _loaded;
     private static readonly Lock LoadLock = new();
     private static readonly Lock TagLock = new();
@@ -47,7 +48,7 @@ public static class TagSource
 
                     lock (TagLock)
                     {
-                        Tags.AddOrUpdate(response.GetValue().Select(dto => new Data.Tag(dto)));
+                        Tags.AddOrUpdate(response.GetValue().Select(dto => new Tag(dto)));
                     }
 
                     _loaded = true;
@@ -74,7 +75,7 @@ public static class TagSource
     {
         lock (TagLock)
         {
-            Tags.AddOrUpdate(new Data.Tag(tag));
+            Tags.AddOrUpdate(new Tag(tag));
         }
     }
 }

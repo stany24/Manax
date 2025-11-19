@@ -68,7 +68,7 @@
         <PackageReference Include="Magick.NET-Q8-AnyCPU" Version="14.9.1"/>
         <PackageReference Include="Material.Avalonia" Version="3.13.3"/>
         <PackageReference Include="nulastudio.NetBeauty" Version="2.1.5"/>
-        <PackageReference Include="Xaml.Behaviors.Avalonia" Version="11.3.8.2" />
+        <PackageReference Include="Xaml.Behaviors.Avalonia" Version="11.3.8.2"/>
     </ItemGroup>
 
     <ItemGroup>

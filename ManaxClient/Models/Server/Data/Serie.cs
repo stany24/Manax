@@ -76,6 +76,12 @@ public partial class Serie : ObservableObject, IDisposable
 
     public static EventHandler<string>? ErrorEmitted { get; set; }
 
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
     ~Serie()
     {
         Dispose(false);
@@ -191,11 +197,5 @@ public partial class Serie : ObservableObject, IDisposable
         _personIds.Dispose();
         _tagIds.Dispose();
         Poster?.Dispose();
-    }
-
-    public void Dispose()
-    {
-        Dispose(true);
-        GC.SuppressFinalize(this);
     }
 }

@@ -20,7 +20,8 @@ public class TagPageViewModel : PageViewModel
 
     public TagPageViewModel()
     {
-        SortExpressionComparer<Models.Server.Data.Tag> comparer = SortExpressionComparer<Models.Server.Data.Tag>.Descending(tag => tag.Name);
+        SortExpressionComparer<Models.Server.Data.Tag> comparer =
+            SortExpressionComparer<Models.Server.Data.Tag>.Descending(tag => tag.Name);
         TagSource.Tags
             .Connect()
             .SortAndBind(out _tags, comparer)

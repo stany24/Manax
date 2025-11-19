@@ -5,7 +5,6 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:page="clr-namespace:ManaxClient.ViewModels.Pages.Rank"
     xmlns:viewModels="clr-namespace:ManaxClient.ViewModels"
-    xmlns:models="clr-namespace:ManaxClient.Models"
     xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
     xmlns:localization1="clr-namespace:ManaxClient.Localization"
     xmlns:data="clr-namespace:ManaxClient.Models.Server.Data"

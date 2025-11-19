@@ -48,14 +48,10 @@ public class Serie
 
         Tags.Clear();
         foreach (Tag.Tag tag in serieUpdate.TagIds.Select(tagId => context.Tags.Find(tagId)).OfType<Tag.Tag>())
-        {
             Tags.Add(tag);
-        }
 
         Persons.Clear();
-        foreach (Person.Person person in serieUpdate.PersonIds.Select(personId => context.Persons.Find(personId)).OfType<Person.Person>())
-        {
-            Persons.Add(person);
-        }
+        foreach (Person.Person person in serieUpdate.PersonIds.Select(personId => context.Persons.Find(personId))
+                     .OfType<Person.Person>()) Persons.Add(person);
     }
 }

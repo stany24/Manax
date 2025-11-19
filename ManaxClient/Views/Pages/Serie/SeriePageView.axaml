@@ -6,7 +6,6 @@
     xmlns:previews="clr-namespace:ManaxClient.Controls.Previews"
     xmlns:page="clr-namespace:ManaxClient.ViewModels.Pages.Serie"
     xmlns:viewModels="clr-namespace:ManaxClient.ViewModels"
-    xmlns:models="clr-namespace:ManaxClient.Models"
     xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
     xmlns:localization1="clr-namespace:ManaxClient.Localization"
     xmlns:converters="clr-namespace:ManaxClient.Converters"
@@ -252,7 +251,7 @@
                                                            FontSize="13"
                                                            FontWeight="Medium" />
                                                 <TextBlock Text="{Binding Role.Name}"
-                                                           FontSize="11"/>
+                                                           FontSize="11" />
                                             </StackPanel>
                                         </Border>
                                     </DataTemplate>

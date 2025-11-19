@@ -58,7 +58,6 @@ public class MockTokenService : ITokenService
         if (DateTime.UtcNow <= tokenInfo.Expiry) return tokenInfo.Permissions.Contains(permission);
         _activeBearerTokens.Remove(token);
         return false;
-
     }
 
     public TokenInfo? GetTokenInfo(string token)
@@ -72,7 +71,6 @@ public class MockTokenService : ITokenService
         if (DateTime.UtcNow <= tokenInfo.Expiry) return tokenInfo;
         _activeBearerTokens.Remove(token);
         return null;
-
     }
 
     public void AddToken(string token, TokenInfo tokenInfo)

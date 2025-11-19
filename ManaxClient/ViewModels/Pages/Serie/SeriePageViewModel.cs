@@ -32,7 +32,8 @@ public partial class SeriePageViewModel : PageViewModel
 
     public SeriePageViewModel(Models.Server.Data.Serie serie)
     {
-        SortExpressionComparer<Models.Server.Data.Rank> comparer = SortExpressionComparer<Models.Server.Data.Rank>.Descending(t => t.Value);
+        SortExpressionComparer<Models.Server.Data.Rank> comparer =
+            SortExpressionComparer<Models.Server.Data.Rank>.Descending(t => t.Value);
         RankSource.Ranks
             .Connect()
             .SortAndBind(out _ranks, comparer)

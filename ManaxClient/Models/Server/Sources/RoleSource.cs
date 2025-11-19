@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using DynamicData;
+using ManaxClient.Models.Server.Data;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTO.Role;
@@ -14,7 +15,7 @@ namespace ManaxClient.Models.Server.Sources;
 
 public static class RoleSource
 {
-    public static readonly SourceCache<Data.Role, long> Roles = new(x => x.Id);
+    public static readonly SourceCache<Role, long> Roles = new(x => x.Id);
     private static bool _loaded;
     private static readonly Lock LoadLock = new();
     private static readonly Lock RolesLock = new();
@@ -39,7 +40,7 @@ public static class RoleSource
     {
         lock (RolesLock)
         {
-            Roles.AddOrUpdate(new Data.Role(dto));
+            Roles.AddOrUpdate(new Role(dto));
         }
     }
 
@@ -65,7 +66,7 @@ public static class RoleSource
                         Roles.Edit(updater =>
                         {
                             updater.Clear();
-                            List<Data.Role> ranks = ranksResponse.GetValue().Select(dto => new Data.Role(dto)).ToList();
+                            List<Role> ranks = ranksResponse.GetValue().Select(dto => new Role(dto)).ToList();
                             updater.AddOrUpdate(ranks);
                         });
                     }

@@ -7,13 +7,10 @@ namespace ManaxClient.Localization;
 public class ResXLocalizer : BaseLocalizer
 {
     private readonly List<string> _languagesKeys = ["en", "fr"];
-    
+
     public override void Reload()
     {
-        if (_languages.Count == 0)
-        {
-            _languages.AddRange(_languagesKeys);
-        }
+        if (_languages.Count == 0) _languages.AddRange(_languagesKeys);
 
         ValidateLanguage();
 

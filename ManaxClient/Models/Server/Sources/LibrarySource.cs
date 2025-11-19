@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using DynamicData;
+using ManaxClient.Models.Server.Data;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTO.Library;
@@ -14,7 +15,7 @@ namespace ManaxClient.Models.Server.Sources;
 
 public static class LibrarySource
 {
-    public static readonly SourceCache<Data.Library, long> Libraries = new(x => x.Id);
+    public static readonly SourceCache<Library, long> Libraries = new(x => x.Id);
     private static bool _loaded;
     private static readonly Lock LoadLock = new();
     private static readonly Lock LibrariesLock = new();
@@ -39,7 +40,7 @@ public static class LibrarySource
     {
         lock (LibrariesLock)
         {
-            Libraries.AddOrUpdate(new Data.Library(dto));
+            Libraries.AddOrUpdate(new Library(dto));
         }
     }
 
@@ -60,7 +61,8 @@ public static class LibrarySource
                         return;
                     }
 
-                    foreach (Optional<LibraryDto> libraryResponse in response.GetValue().Select(id => ManaxApiLibraryClient.GetLibraryAsync(id).Result))
+                    foreach (Optional<LibraryDto> libraryResponse in response.GetValue()
+                                 .Select(id => ManaxApiLibraryClient.GetLibraryAsync(id).Result))
                     {
                         if (libraryResponse.Failed)
                         {
@@ -71,7 +73,7 @@ public static class LibrarySource
 
                         lock (LibrariesLock)
                         {
-                            Libraries.AddOrUpdate(new Data.Library(libraryResponse.GetValue()));
+                            Libraries.AddOrUpdate(new Library(libraryResponse.GetValue()));
                         }
                     }
 

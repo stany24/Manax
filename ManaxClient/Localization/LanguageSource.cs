@@ -11,7 +11,7 @@ public static class LanguageSource
 
     static LanguageSource()
     {
-        Localizer.LanguageChanged += (_,_) => UpdateLanguages();
+        Localizer.LanguageChanged += (_, _) => UpdateLanguages();
         GenerateLanguages();
     }
 
@@ -19,20 +19,15 @@ public static class LanguageSource
     {
         List<string> availableLanguages = Localizer.Languages;
         List<Language> languages = [];
-        languages.AddRange(availableLanguages.Select(langCode => new Language { Code = langCode, DisplayName = Localizer.Get(langCode) }));
+        languages.AddRange(availableLanguages.Select(langCode => new Language
+            { Code = langCode, DisplayName = Localizer.Get(langCode) }));
 
-        Languages.Edit(innerCache =>
-        {
-            innerCache.AddOrUpdate(languages);
-        });
+        Languages.Edit(innerCache => { innerCache.AddOrUpdate(languages); });
     }
-    
+
     private static void UpdateLanguages()
     {
         List<Language> updatedLanguages = Languages.Items.ToList();
-        foreach (Language lang in updatedLanguages)
-        {
-            lang.DisplayName = Localizer.Get(lang.Code);
-        }
+        foreach (Language lang in updatedLanguages) lang.DisplayName = Localizer.Get(lang.Code);
     }
 }

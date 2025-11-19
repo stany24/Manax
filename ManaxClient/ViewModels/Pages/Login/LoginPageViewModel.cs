@@ -20,25 +20,23 @@ namespace ManaxClient.ViewModels.Pages.Login;
 
 public sealed partial class LoginPageViewModel : PageViewModel
 {
-    private bool _isAdmin;
+    private readonly ReadOnlyObservableCollection<Language> _languages;
     private readonly string _saveFile;
     [ObservableProperty] private bool _canLogin = true;
     [ObservableProperty] private string _emoji = "🔑";
     [ObservableProperty] private string _host = string.Empty;
+    private bool _isAdmin;
     [ObservableProperty] private string _password = string.Empty;
     [ObservableProperty] private int? _port;
     [ObservableProperty] private Language _selectedLanguage;
     [ObservableProperty] private string _username = string.Empty;
 
-    private readonly ReadOnlyObservableCollection<Language> _languages;
-    
-    public ReadOnlyObservableCollection<Language> Languages => _languages;
     public LoginPageViewModel()
     {
         ManaxApiConfig.ResetToken();
         _saveFile = Path.Combine(Directory.GetCurrentDirectory(), "login.json");
         ControlBarVisible = false;
-        
+
         LanguageSource.Languages
             .Connect()
             .SortAndBind(out _languages, SortExpressionComparer<Language>.Ascending(lang => lang.Code))
@@ -46,9 +44,11 @@ public sealed partial class LoginPageViewModel : PageViewModel
         string currentLanguage = Localizer.Language;
         if (string.IsNullOrEmpty(currentLanguage)) currentLanguage = "en";
         SelectedLanguage = Languages.FirstOrDefault(l => l.Code == currentLanguage) ?? Languages.First();
-        
+
         TryLoadSavedLogin();
     }
+
+    public ReadOnlyObservableCollection<Language> Languages => _languages;
 
     partial void OnSelectedLanguageChanged(Language? value)
     {

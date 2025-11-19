@@ -40,6 +40,12 @@ public partial class Chapter : ObservableObject, IDisposable
 
     public static EventHandler<string>? ErrorEmitted { get; set; }
 
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
     ~Chapter()
     {
         Dispose(false);
@@ -127,15 +133,6 @@ public partial class Chapter : ObservableObject, IDisposable
     private void Dispose(bool disposing)
     {
         ReleaseUnmanagedResources();
-        if (disposing)
-        {
-            _loadPagesCts?.Dispose();
-        }
-    }
-
-    public void Dispose()
-    {
-        Dispose(true);
-        GC.SuppressFinalize(this);
+        if (disposing) _loadPagesCts?.Dispose();
     }
 }
