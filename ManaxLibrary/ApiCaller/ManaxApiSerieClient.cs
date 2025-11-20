@@ -104,6 +104,19 @@ public static class ManaxApiSerieClient
                 : new Optional<byte[]>(data);
         });
     }
+    
+    public static async Task<Optional<byte[]>> GetSerieBannerAsync(long id)
+    {
+        return await ManaxApiClient.ExecuteWithErrorHandlingAsync(async () =>
+        {
+            HttpResponseMessage response = await ManaxApiClient.Client.GetAsync($"api/serie/{id}/banner");
+            if (!response.IsSuccessStatusCode) return new Optional<byte[]>(response);
+            byte[] data = await response.Content.ReadAsByteArrayAsync();
+            return data.Length == 0
+                ? new Optional<byte[]>($"Empty banner data received for serie ID {id}.")
+                : new Optional<byte[]>(data);
+        });
+    }
 
     public static async Task<Optional<List<long>>> GetSearchResult(Search search)
     {

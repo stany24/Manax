@@ -330,6 +330,12 @@
     <data name="SettingsServerPage.PosterName" xml:space="preserve">
         <value>Poster filename</value>
     </data>
+    <data name="SettingsServerPage.BannerConfig" xml:space="preserve">
+        <value>Banner configuration</value>
+    </data>
+    <data name="SettingsServerPage.BannerName" xml:space="preserve">
+        <value>Banner filename</value>
+    </data>
     <data name="SettingsServerPage.ImageFormat" xml:space="preserve">
         <value>Image format</value>
     </data>

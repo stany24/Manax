@@ -146,6 +146,42 @@ public class SettingsData : INotifyPropertyChanged
             OnPropertyChanged();
         }
     } = ImageFormat.Webp;
+    
+    public string BannerName
+    {
+        get;
+        set
+        {
+            if (field == value) return;
+            field = value;
+            UpdateIssues();
+            OnPropertyChanged();
+        }
+    } = "banner";
+
+    public uint BannerQuality
+    {
+        get;
+        set
+        {
+            if (field == value) return;
+            field = value;
+            UpdateIssues();
+            OnPropertyChanged();
+        }
+    } = 94;
+
+    public ImageFormat BannerFormat
+    {
+        get;
+        set
+        {
+            if (field == value) return;
+            field = value;
+            UpdateIssues();
+            OnPropertyChanged();
+        }
+    } = ImageFormat.Webp;
 
     public ImageFormat ImageFormat
     {

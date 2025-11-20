@@ -50,9 +50,9 @@ public sealed partial class LoginPageViewModel : PageViewModel
 
     public ReadOnlyObservableCollection<Language> Languages => _languages;
 
-    partial void OnSelectedLanguageChanged(Language? value)
+    partial void OnSelectedLanguageChanged(Language value)
     {
-        if (value != null && value.Code != Localizer.Language) Localizer.Language = value.Code;
+        if (value.Code != Localizer.Language) Localizer.Language = value.Code;
     }
 
     public void Login()

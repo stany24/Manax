@@ -42,6 +42,7 @@ public partial class SeriePageViewModel : PageViewModel
         Serie.LoadInfo();
         Serie.LoadChapters();
         Serie.LoadPoster();
+        Serie.LoadBanner();
     }
 
     public ReadOnlyObservableCollection<Models.Server.Data.Rank> Ranks => _ranks;

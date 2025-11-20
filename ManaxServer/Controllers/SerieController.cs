@@ -101,6 +101,25 @@ public class SerieController(
         byte[] readAllBytes = await System.IO.File.ReadAllBytesAsync(posterPath);
         return File(readAllBytes, "image/webp", posterName);
     }
+    
+    [HttpGet("{id:long}/banner")]
+    [RequirePermission(Permission.ReadSeries)]
+    [Produces("image/webp")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetBanner(long id)
+    {
+        Serie? serie = context.Series
+            .Include(s => s.SavePoint)
+            .FirstOrDefault(s => s.Id == id);
+        if (serie == null) return NotFound();
+        string bannerName = SettingsManager.Data.BannerName + "." +
+                            SettingsManager.Data.BannerFormat.ToString().ToLower(CultureInfo.InvariantCulture);
+        string bannerPath = Path.Combine(serie.SavePath, bannerName);
+        if (!System.IO.File.Exists(bannerPath)) return NotFound();
+        byte[] readAllBytes = await System.IO.File.ReadAllBytesAsync(bannerPath);
+        return File(readAllBytes, "image/webp", bannerName);
+    }
 
     [HttpPut("{id:long}")]
     [RequirePermission(Permission.WriteSeries)]

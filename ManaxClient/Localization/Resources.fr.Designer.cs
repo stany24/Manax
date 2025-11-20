@@ -657,6 +657,18 @@ namespace ManaxClient.Localization {
             }
         }
         
+        public static string SettingsServerPage_BannerConfig {
+            get {
+                return ResourceManager.GetString("SettingsServerPage.BannerConfig", resourceCulture);
+            }
+        }
+        
+        public static string SettingsServerPage_BannerName {
+            get {
+                return ResourceManager.GetString("SettingsServerPage.BannerName", resourceCulture);
+            }
+        }
+        
         public static string SettingsServerPage_ImageFormat {
             get {
                 return ResourceManager.GetString("SettingsServerPage.ImageFormat", resourceCulture);

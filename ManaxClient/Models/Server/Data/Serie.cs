@@ -23,21 +23,22 @@ public partial class Serie : ObservableObject, IDisposable
     private readonly ReadOnlyObservableCollection<Chapter> _chapters;
     private readonly SourceList<long> _personIds = new();
     private readonly ReadOnlyObservableCollection<Person> _persons;
-
     private readonly SourceList<long> _tagIds = new();
     private readonly ReadOnlyObservableCollection<Tag> _tags;
 
     [ObservableProperty] private DateTime _creation;
     [ObservableProperty] private string _description = string.Empty;
     [ObservableProperty] private long _id;
-    private bool _infoLoaded;
     [ObservableProperty] private DateTime _lastModification;
     [ObservableProperty] private long? _libraryId;
     [ObservableProperty] private Bitmap? _poster;
-
-    private bool _posterLoaded;
+    [ObservableProperty] private Bitmap? _banner;
     [ObservableProperty] private Status _status;
     [ObservableProperty] private string _title = string.Empty;
+
+    private bool _posterLoaded;
+    private bool _bannerLoaded;
+    private bool _infoLoaded;
 
     public Serie(long id) : this(new SerieDto { Id = id })
     {
@@ -150,6 +151,31 @@ public partial class Serie : ObservableObject, IDisposable
             }
         });
     }
+    
+    public void LoadBanner()
+    {
+        if (_bannerLoaded) return;
+        Task.Run(() =>
+        {
+            try
+            {
+                Optional<byte[]> serieBannerResponse = ManaxApiSerieClient.GetSerieBannerAsync(Id).Result;
+                if (serieBannerResponse.Failed)
+                {
+                    Banner = null;
+                    ErrorEmitted?.Invoke(this, serieBannerResponse.Error);
+                    return;
+                }
+
+                Banner = new Bitmap(new MemoryStream(serieBannerResponse.GetValue()));
+                _bannerLoaded = true;
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
+        });
+    }
 
     public void LoadChapters()
     {
@@ -159,15 +185,13 @@ public partial class Serie : ObservableObject, IDisposable
     private void OnReadDeleted(long obj)
     {
         Chapter? chapter = Chapters.FirstOrDefault(c => c.Id == obj);
-        if (chapter == null) return;
-        chapter.Read = null;
+        chapter?.Read = null;
     }
 
     private void OnReadCreated(ReadDto read)
     {
         Chapter? chapter = Chapters.FirstOrDefault(c => c.Id == read.ChapterId);
-        if (chapter == null) return;
-        chapter.Read = read;
+        chapter?.Read = read;
     }
 
     private void OnSerieUpdated(SerieDto serie)
