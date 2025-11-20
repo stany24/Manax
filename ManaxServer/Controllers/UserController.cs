@@ -2,7 +2,6 @@ using System.Security.Claims;
 using ManaxLibrary.DTO.User;
 using ManaxLibrary.Logging;
 using ManaxServer.Attributes;
-using ManaxServer.Localization;
 using ManaxServer.Models;
 using ManaxServer.Models.Claim;
 using ManaxServer.Models.User;
@@ -45,7 +44,7 @@ public class UserController(
     {
         User? user = await context.Users.FindAsync(id);
 
-        if (user == null) return NotFound(Localizer.UserNotFound(id));
+        if (user == null) return NotFound();
 
         return user.ToDto();
     }
@@ -57,13 +56,13 @@ public class UserController(
     {
         long? userId = GetCurrentUserId(HttpContext);
         if (userId == null)
-            return Unauthorized(Localizer.Unauthorized());
+            return Unauthorized();
 
         User? user = await context.Users.FindAsync(userId);
-        if (user == null) return NotFound(Localizer.UserNotFound((long)userId));
+        if (user == null) return NotFound();
 
-        if (!passwordValidationService.IsPasswordValid(userUpdate.Password, out string? errorMessage))
-            return BadRequest(errorMessage);
+        if (!passwordValidationService.IsPasswordValid(userUpdate.Password))
+            return BadRequest();
 
         user.PasswordHash = hashService.HashPassword(userUpdate.Password);
         notificationService.NotifyUserUpdatedAsync(user.ToDto());
@@ -78,7 +77,7 @@ public class UserController(
     public async Task<ActionResult<string>> ResetPassword(long id)
     {
         User? user = await context.Users.FindAsync(id);
-        if (user == null) return NotFound(Localizer.UserNotFound(id));
+        if (user == null) return NotFound();
 
         string newPassword = passwordValidationService.GenerateValidPassword();
 
@@ -93,8 +92,8 @@ public class UserController(
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> PostUser(UserCreateDto userCreate)
     {
-        if (!passwordValidationService.IsPasswordValid(userCreate.Password, out string? errorMessage))
-            return BadRequest(errorMessage);
+        if (!passwordValidationService.IsPasswordValid(userCreate.Password))
+            return BadRequest();
         User user = Models.User.User.Create(userCreate);
         user.Creation = DateTime.UtcNow;
         user.PasswordHash = hashService.HashPassword(userCreate.Password);
@@ -119,20 +118,20 @@ public class UserController(
     public async Task<IActionResult> DeleteUser(long id)
     {
         User? userToDelete = await context.Users.FindAsync(id);
-        if (userToDelete == null) return NotFound(Localizer.UserNotFound(id));
+        if (userToDelete == null) return NotFound();
 
         long? selfId = GetCurrentUserId(HttpContext);
         if (selfId == null)
-            return Unauthorized(Localizer.UserMustBeLoggedInDelete());
+            return Unauthorized();
         if (selfId == id)
-            return Forbid(Localizer.UserCannotDeleteSelf());
+            return Forbid();
 
         User? self = context.Users.FirstOrDefault(u => u.Id == selfId);
         if (self == null)
-            return Unauthorized(Localizer.UserMustBeLoggedInDelete());
+            return Unauthorized();
 
         if (self.Role == UserRole.Admin && userToDelete.Role is UserRole.Admin or UserRole.Owner)
-            return Forbid(Localizer.UserCannotDeleteAdminOrOwner());
+            return Forbid();
 
         StringValues auths = Request.Headers.Authorization;
         foreach (string? token in auths) tokenService.RevokeToken(token);
@@ -165,7 +164,7 @@ public class UserController(
             Logger.LogWarning("Failed login attempt for user " + loginDto.Username + " from " + loginAttempt.Origin);
             context.LoginAttempts.Add(loginAttempt);
             await context.SaveChangesAsync();
-            return Unauthorized(Localizer.UserInvalidLogin());
+            return Unauthorized();
         }
 
         user.LastLogin = DateTime.UtcNow;
@@ -188,8 +187,8 @@ public class UserController(
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public ActionResult<UserLoginResultDto> Claim(ClaimRequest request)
     {
-        if (!passwordValidationService.IsPasswordValid(request.Password, out string? errorMessage))
-            return BadRequest(errorMessage);
+        if (!passwordValidationService.IsPasswordValid(request.Password))
+            return BadRequest();
         LoginAttempt loginAttempt = new()
         {
             Origin = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "Unknown",
@@ -205,7 +204,7 @@ public class UserController(
             {
                 context.LoginAttempts.Add(loginAttempt);
                 context.SaveChanges();
-                return Unauthorized(Localizer.UserClaimNotAllowed());
+                return Unauthorized();
             }
 
             User user = new()
@@ -240,12 +239,9 @@ public class UserController(
     public async Task<IActionResult> Logout()
     {
         long? userId = GetCurrentUserId(HttpContext);
-        if (userId == null)
-            return Unauthorized(Localizer.Unauthorized());
-
         User? user = await context.Users.FindAsync(userId);
-        if (user == null)
-            return Unauthorized(Localizer.UserNotFound((long)userId));
+        if (userId == null || user == null)
+            return Unauthorized();
 
         StringValues auths = Request.Headers.Authorization;
         foreach (string? token in auths) tokenService.RevokeToken(token);

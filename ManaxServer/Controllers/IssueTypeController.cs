@@ -2,7 +2,6 @@ using ManaxLibrary.DTO.Feature;
 using ManaxLibrary.DTO.Issue.Reported;
 using ManaxLibrary.DTO.User;
 using ManaxServer.Attributes;
-using ManaxServer.Localization;
 using ManaxServer.Models;
 using ManaxServer.Services.Feature;
 using Microsoft.AspNetCore.Mvc;
@@ -20,7 +19,7 @@ public class IssueTypeController(ManaxContext context, IFeatureService featureSe
     public async Task<ActionResult<IEnumerable<IssueChapterReportedTypeDto>>> GetAllReportedChapterIssuesTypes()
     {
         if (!featureService.IsFeatureEnabled(FeatureType.ReportedIssues))
-            return BadRequest(Localizer.FeatureDisabled(FeatureType.ReportedIssues));
+            return BadRequest();
 
         return await context.ReportedIssueChapterTypes.Select(i => i.ToDto())
             .ToListAsync();
@@ -32,7 +31,7 @@ public class IssueTypeController(ManaxContext context, IFeatureService featureSe
     public async Task<ActionResult<IEnumerable<IssueSerieReportedTypeDto>>> GetAllReportedSerieIssuesTypes()
     {
         if (!featureService.IsFeatureEnabled(FeatureType.ReportedIssues))
-            return BadRequest(Localizer.FeatureDisabled(FeatureType.ReportedIssues));
+            return BadRequest();
 
         return await context.ReportedIssueSerieTypes.Select(i => i.ToDto())
             .ToListAsync();

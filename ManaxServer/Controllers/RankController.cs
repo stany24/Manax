@@ -2,7 +2,6 @@ using ManaxLibrary.DTO.Feature;
 using ManaxLibrary.DTO.Rank;
 using ManaxLibrary.DTO.User;
 using ManaxServer.Attributes;
-using ManaxServer.Localization;
 using ManaxServer.Models;
 using ManaxServer.Models.Rank;
 using ManaxServer.Services.Feature;
@@ -26,7 +25,7 @@ public class RankController(
     public async Task<ActionResult<IEnumerable<RankDto>>> GetRanks()
     {
         if (!featureService.IsFeatureEnabled(FeatureType.Ranks))
-            return BadRequest(Localizer.FeatureDisabled(FeatureType.Ranks));
+            return BadRequest();
 
         return await context.Ranks.Select(rank => rank.ToDto()).ToListAsync();
     }
@@ -37,7 +36,7 @@ public class RankController(
     public async Task<ActionResult<long>> CreateRank(RankCreateDto rankCreate)
     {
         if (!featureService.IsFeatureEnabled(FeatureType.Ranks))
-            return BadRequest(Localizer.FeatureDisabled(FeatureType.Ranks));
+            return BadRequest();
 
         Rank rank = Rank.Create(rankCreate);
         context.Ranks.Add(rank);
@@ -54,10 +53,10 @@ public class RankController(
     public async Task<IActionResult> UpdateRank(RankUpdateDto rankUpdate)
     {
         if (!featureService.IsFeatureEnabled(FeatureType.Ranks))
-            return BadRequest(Localizer.FeatureDisabled(FeatureType.Ranks));
+            return BadRequest();
 
         Rank? rank = context.Ranks.FirstOrDefault(r => r.Id == rankUpdate.Id);
-        if (rank == null) return NotFound(Localizer.RankNotFound(rankUpdate.Id));
+        if (rank == null) return NotFound();
         rank.Update(rankUpdate);
         try
         {
@@ -79,10 +78,10 @@ public class RankController(
     public async Task<IActionResult> DeleteRank(long id)
     {
         if (!featureService.IsFeatureEnabled(FeatureType.Ranks))
-            return BadRequest(Localizer.FeatureDisabled(FeatureType.Ranks));
+            return BadRequest();
 
         Rank? rank = await context.Ranks.FindAsync(id);
-        if (rank == null) return NotFound(Localizer.RankNotFound(id));
+        if (rank == null) return NotFound();
         context.Ranks.Remove(rank);
         await context.SaveChangesAsync();
         notificationService.NotifyRankDeletedAsync(id);
@@ -96,10 +95,10 @@ public class RankController(
     public async Task<IActionResult> SetUserRank(UserRankCreateDto rank)
     {
         if (!featureService.IsFeatureEnabled(FeatureType.Ranks))
-            return BadRequest(Localizer.FeatureDisabled(FeatureType.Ranks));
+            return BadRequest();
 
         long? userId = UserController.GetCurrentUserId(HttpContext);
-        if (userId == null) return Unauthorized(Localizer.MustBeLoggedInSetRank());
+        if (userId == null) return Unauthorized();
 
         UserRank? existing =
             await context.UserRanks.FirstOrDefaultAsync(ur => ur.UserId == userId.Value && ur.SerieId == rank.SerieId);
@@ -129,10 +128,10 @@ public class RankController(
     public async Task<ActionResult<IEnumerable<UserRankDto>>> GetRanking()
     {
         if (!featureService.IsFeatureEnabled(FeatureType.Ranks))
-            return BadRequest(Localizer.FeatureDisabled(FeatureType.Ranks));
+            return BadRequest();
 
         long? currentUserId = UserController.GetCurrentUserId(HttpContext);
-        if (currentUserId == null) return Unauthorized(Localizer.MustBeLoggedInGetRanking());
+        if (currentUserId == null) return Unauthorized();
         return await context.UserRanks
             .Where(r => r.UserId == currentUserId)
             .Select(r => r.ToDto()).ToListAsync();

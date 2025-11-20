@@ -1,7 +1,6 @@
 using ManaxLibrary.DTO.Setting;
 using ManaxLibrary.DTO.User;
 using ManaxServer.Attributes;
-using ManaxServer.Localization;
 using ManaxServer.Models;
 using ManaxServer.Services.BackgroundTask;
 using ManaxServer.Services.Fix;
@@ -39,7 +38,7 @@ public class SettingsController(
         lock (_lock)
         {
             SettingsData oldData = SettingsManager.Data;
-            if (!data.IsValid) return BadRequest(Localizer.SettingsUpdateNotForced());
+            if (!data.IsValid) return BadRequest();
             SettingsManager.OverwriteSettings(data);
             IServiceScope scope = serviceProvider.CreateScope();
             Task.Run(() => CheckModifications(data, oldData, scope));

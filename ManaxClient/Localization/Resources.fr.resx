@@ -1038,4 +1038,7 @@
     <data name="fr" xml:space="preserve">
         <value>Français</value>
     </data>
+    <data name="LoginPage.Connected" xml:space="preserve">
+        <value>Connecté en tant que {0} ({1})</value>
+    </data>
 </root>

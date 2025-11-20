@@ -104,8 +104,9 @@ public sealed partial class LoginPageViewModel : PageViewModel
 
             UserDto self = result.User;
             _isAdmin = self.Role is UserRole.Admin or UserRole.Owner;
-            InfoEmitted?.Invoke(this, $"Logged in as {self.Username} ({self.Role})");
-            Logger.LogInfo($"Logged in as {self.Username} ({self.Role})");
+            string format = string.Format(Localizer.Get("LoginPage.Connected"),self.Username,self.Role);
+            InfoEmitted?.Invoke(this, format);
+            Logger.LogInfo(format);
             SaveLoginValues();
             PageChangedRequested?.Invoke(this, new HomePageViewModel());
         }

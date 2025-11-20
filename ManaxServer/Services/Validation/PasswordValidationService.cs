@@ -1,17 +1,13 @@
 using System.Text.RegularExpressions;
-using ManaxServer.Localization;
 
 namespace ManaxServer.Services.Validation;
 
 public partial class PasswordValidationService(bool isProduction) : IPasswordValidationService
 {
-    public bool IsPasswordValid(string password, out string? errorMessage)
+    public bool IsPasswordValid(string password)
     {
-        errorMessage = null;
-
         if (string.IsNullOrEmpty(password))
         {
-            errorMessage = Localizer.PasswordEmpty();
             return false;
         }
 
@@ -19,25 +15,20 @@ public partial class PasswordValidationService(bool isProduction) : IPasswordVal
 
         if (password.Length < 14)
         {
-            errorMessage = Localizer.PasswordTooShort();
             return false;
         }
 
         if (!HasLowercase().IsMatch(password))
         {
-            errorMessage = Localizer.PasswordNoLowercase();
             return false;
         }
 
         if (!HasUppercase().IsMatch(password))
         {
-            errorMessage = Localizer.PasswordNoUppercase();
             return false;
         }
 
-        if (HasSpecialCharacter().IsMatch(password) || HasDigit().IsMatch(password)) return true;
-        errorMessage = Localizer.PasswordNoSpecialCharacterOrDigit();
-        return false;
+        return HasSpecialCharacter().IsMatch(password) || HasDigit().IsMatch(password);
     }
 
     public string GenerateValidPassword()

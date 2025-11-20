@@ -1,7 +1,6 @@
 using ManaxLibrary.DTO.Person;
 using ManaxLibrary.DTO.User;
 using ManaxServer.Attributes;
-using ManaxServer.Localization;
 using ManaxServer.Models;
 using ManaxServer.Models.Person;
 using ManaxServer.Services.Notification;
@@ -30,7 +29,7 @@ public class PersonController(ManaxContext context, INotificationService notific
     public async Task<IActionResult> DeletePerson(long id)
     {
         Person? person = await context.Persons.FindAsync(id);
-        if (person == null) return NotFound(Localizer.PersonNotFound(id));
+        if (person == null) return NotFound();
         context.Persons.Remove(person);
         await context.SaveChangesAsync();
         notificationService.NotifyPersonDeletedAsync(id);
@@ -43,7 +42,7 @@ public class PersonController(ManaxContext context, INotificationService notific
     public async Task<ActionResult<PersonDto>> CreatePerson(PersonCreateDto personCreateDto)
     {
         Role? role = await context.Roles.FindAsync(personCreateDto.RoleId);
-        if (role == null) return BadRequest(Localizer.RoleNotFound(personCreateDto.RoleId));
+        if (role == null) return BadRequest();
 
         Person person = Person.Create(personCreateDto, context);
         person.Role = role;
@@ -60,10 +59,10 @@ public class PersonController(ManaxContext context, INotificationService notific
     public async Task<IActionResult> UpdatePerson(long id, PersonUpdateDto personUpdateDto)
     {
         Person? person = await context.Persons.FindAsync(id);
-        if (person == null) return NotFound(Localizer.PersonNotFound(id));
+        if (person == null) return NotFound();
 
         Role? role = await context.Roles.FindAsync(personUpdateDto.RoleId);
-        if (role == null) return BadRequest(Localizer.RoleNotFound(personUpdateDto.RoleId));
+        if (role == null) return BadRequest();
 
         person.Update(personUpdateDto, role);
         await context.SaveChangesAsync();

@@ -1,4 +1,3 @@
-using ManaxServer.Localization;
 using ManaxServer.Services.Fix;
 
 namespace ManaxServer.Tasks;
@@ -14,7 +13,7 @@ public class FixChapterBackGroundTask(IFixService fixService, long chapterId) : 
 
     public string GetName()
     {
-        return Localizer.TaskChapterFix();
+        return "Chapter fix";
     }
 
     public TaskPriority GetPriority()

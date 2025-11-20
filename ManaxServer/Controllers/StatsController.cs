@@ -3,7 +3,6 @@ using ManaxLibrary.DTO.Serie;
 using ManaxLibrary.DTO.Stats;
 using ManaxLibrary.DTO.User;
 using ManaxServer.Attributes;
-using ManaxServer.Localization;
 using ManaxServer.Models;
 using ManaxServer.Models.SavePoint;
 using Microsoft.AspNetCore.Mvc;
@@ -22,7 +21,7 @@ public class StatsController(ManaxContext context) : ControllerBase
     public async Task<ActionResult<UserStats>> GetStats()
     {
         long? currentUserId = UserController.GetCurrentUserId(HttpContext);
-        if (currentUserId == null) return Unauthorized(Localizer.Unauthorized());
+        if (currentUserId == null) return Unauthorized();
 
         List<long> chaptersRead = context.Reads
             .Where(r => r.UserId == currentUserId.Value)

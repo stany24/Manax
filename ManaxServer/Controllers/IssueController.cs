@@ -3,7 +3,6 @@ using ManaxLibrary.DTO.Issue.Automatic;
 using ManaxLibrary.DTO.Issue.Reported;
 using ManaxLibrary.DTO.User;
 using ManaxServer.Attributes;
-using ManaxServer.Localization;
 using ManaxServer.Models;
 using ManaxServer.Models.Issue.Reported;
 using ManaxServer.Services.Feature;
@@ -27,7 +26,7 @@ public class IssueController(
     public async Task<ActionResult<IEnumerable<IssueChapterAutomaticDto>>> GetAllAutomaticChapterIssues()
     {
         if (!featureService.IsFeatureEnabled(FeatureType.AutomaticIssues))
-            return BadRequest(Localizer.FeatureDisabled(FeatureType.AutomaticIssues));
+            return BadRequest();
 
         return await context.AutomaticIssuesChapter
             .Select(i => i.ToDto())
@@ -40,7 +39,7 @@ public class IssueController(
     public async Task<ActionResult<IEnumerable<IssueSerieAutomaticDto>>> GetAllAutomaticSerieIssues()
     {
         if (!featureService.IsFeatureEnabled(FeatureType.AutomaticIssues))
-            return BadRequest(Localizer.FeatureDisabled(FeatureType.AutomaticIssues));
+            return BadRequest();
 
         return await context.AutomaticIssuesSerie
             .Select(i => i.ToDto())
@@ -53,7 +52,7 @@ public class IssueController(
     public async Task<ActionResult<IEnumerable<IssueChapterReportedDto>>> GetAllReportedChapterIssues()
     {
         if (!featureService.IsFeatureEnabled(FeatureType.ReportedIssues))
-            return BadRequest(Localizer.FeatureDisabled(FeatureType.ReportedIssues));
+            return BadRequest();
 
         return await context.ReportedIssuesChapter
             .Select(i => i.ToDto())
@@ -66,7 +65,7 @@ public class IssueController(
     public async Task<ActionResult<IEnumerable<IssueSerieReportedDto>>> GetAllReportedSerieIssues()
     {
         if (!featureService.IsFeatureEnabled(FeatureType.ReportedIssues))
-            return BadRequest(Localizer.FeatureDisabled(FeatureType.ReportedIssues));
+            return BadRequest();
 
         return await context.ReportedIssuesSerie
             .Select(i => i.ToDto())
@@ -81,7 +80,7 @@ public class IssueController(
     public async Task<ActionResult> CreateChapterIssue(IssueChapterReportedCreateDto issueChapterReportedCreate)
     {
         if (!featureService.IsFeatureEnabled(FeatureType.ReportedIssues))
-            return BadRequest(Localizer.FeatureDisabled(FeatureType.ReportedIssues));
+            return BadRequest();
 
         long? currentUserId = UserController.GetCurrentUserId(HttpContext);
         if (currentUserId == null) return Unauthorized();
@@ -91,7 +90,7 @@ public class IssueController(
                            i.ChapterId == issueChapterReportedCreate.ChapterId &&
                            i.ProblemId == issueChapterReportedCreate.ProblemId);
 
-        if (issueExists) return Conflict("Issue already reported for this chapter and problem type.");
+        if (issueExists) return Conflict();
 
         IssueChapterReported issue = IssueChapterReported.Create(issueChapterReportedCreate, (long)currentUserId);
         issue.UserId = (long)currentUserId;
@@ -112,7 +111,7 @@ public class IssueController(
     public async Task<ActionResult> CreateSerieIssue(IssueSerieReportedCreateDto issueSerieReportedCreate)
     {
         if (!featureService.IsFeatureEnabled(FeatureType.ReportedIssues))
-            return BadRequest(Localizer.FeatureDisabled(FeatureType.ReportedIssues));
+            return BadRequest();
 
         long? currentUserId = UserController.GetCurrentUserId(HttpContext);
         if (currentUserId == null) return Unauthorized();
@@ -122,7 +121,7 @@ public class IssueController(
                            i.SerieId == issueSerieReportedCreate.SerieId &&
                            i.ProblemId == issueSerieReportedCreate.ProblemId);
 
-        if (issueExists) return Conflict("Issue already reported for this series and problem type.");
+        if (issueExists) return Conflict();
 
         IssueSerieReported issue = IssueSerieReported.Create(issueSerieReportedCreate, (long)currentUserId);
 
@@ -140,11 +139,11 @@ public class IssueController(
     public async Task<IActionResult> CloseChapterIssue(long id)
     {
         if (!featureService.IsFeatureEnabled(FeatureType.ReportedIssues))
-            return BadRequest(Localizer.FeatureDisabled(FeatureType.ReportedIssues));
+            return BadRequest();
 
         IssueChapterReported? issue = await context.ReportedIssuesChapter.FindAsync(id);
 
-        if (issue == null) return NotFound(Localizer.IssueNotFound(id));
+        if (issue == null) return NotFound();
 
         context.ReportedIssuesChapter.Remove(issue);
         await context.SaveChangesAsync();
@@ -160,11 +159,11 @@ public class IssueController(
     public async Task<IActionResult> CloseSerieIssue(long id)
     {
         if (!featureService.IsFeatureEnabled(FeatureType.ReportedIssues))
-            return BadRequest(Localizer.FeatureDisabled(FeatureType.ReportedIssues));
+            return BadRequest();
 
         IssueSerieReported? issue = await context.ReportedIssuesSerie.FindAsync(id);
 
-        if (issue == null) return NotFound(Localizer.IssueNotFound(id));
+        if (issue == null) return NotFound();
 
         context.ReportedIssuesSerie.Remove(issue);
         await context.SaveChangesAsync();

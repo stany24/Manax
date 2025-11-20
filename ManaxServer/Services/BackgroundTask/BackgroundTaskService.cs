@@ -1,5 +1,4 @@
 using ManaxLibrary.Logging;
-using ManaxServer.Localization;
 using ManaxServer.Services.Notification;
 using ManaxServer.Tasks;
 
@@ -73,7 +72,7 @@ public class BackgroundTaskService(INotificationService notificationService)
                     }
                     catch (Exception e)
                     {
-                        Logger.LogError(Localizer.TaskError(backGroundTask.GetName()), e);
+                        Logger.LogError("Error while executing background task " + backGroundTask.GetName(), e);
                     }
                 });
 

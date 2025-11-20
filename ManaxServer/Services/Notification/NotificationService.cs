@@ -13,7 +13,6 @@ using ManaxLibrary.DTO.Tag;
 using ManaxLibrary.DTO.User;
 using ManaxLibrary.Logging;
 using ManaxLibrary.Notifications;
-using ManaxServer.Localization;
 using ManaxServer.Services.Permission;
 using Microsoft.AspNetCore.SignalR;
 
@@ -232,18 +231,18 @@ public class NotificationService(IHubContext<NotificationService> hubContext, IP
     {
         try
         {
-            Logger.LogInfo(Localizer.HubConnected(Context.ConnectionId, Context.User?.Identity?.Name ?? "Unknown"));
+            Logger.LogInfo("Hub connected: " + Context.ConnectionId + ", User: " + Context.User?.Identity?.Name);
 
             if (Context.User?.Identity?.IsAuthenticated == true)
                 if (long.TryParse(Context.User.FindFirst(ClaimTypes.NameIdentifier)?.Value, out long userId))
                     Connections.TryAdd(Context.ConnectionId, userId);
 
             await base.OnConnectedAsync();
-            await Clients.Caller.SendAsync("Connected", Localizer.HubConnectionSuccess());
+            await Clients.Caller.SendAsync("Connected");
         }
         catch (Exception ex)
         {
-            Logger.LogError(Localizer.HubConnectionError(Context.ConnectionId), ex);
+            Logger.LogError("Error during connection of " + Context.ConnectionId, ex);
         }
     }
 
@@ -254,15 +253,15 @@ public class NotificationService(IHubContext<NotificationService> hubContext, IP
             Connections.TryRemove(Context.ConnectionId, out _);
 
             if (exception != null)
-                Logger.LogError(Localizer.HubDisconnectedError(Context.ConnectionId), exception);
+                Logger.LogError("Hub disconnected with error: " + Context.ConnectionId, exception);
             else
-                Logger.LogInfo(Localizer.HubDisconnected(Context.ConnectionId));
+                Logger.LogInfo("Hub disconnected: " + Context.ConnectionId);
 
             await base.OnDisconnectedAsync(exception);
         }
         catch (Exception ex)
         {
-            Logger.LogError(Localizer.HubDisconnectedError(Context.ConnectionId), ex);
+            Logger.LogError("Error during disconnection of " + Context.ConnectionId, ex);
         }
     }
 
@@ -279,11 +278,11 @@ public class NotificationService(IHubContext<NotificationService> hubContext, IP
 
             if (connectionIds.Count <= 0) return;
             hubContext.Clients.Clients(connectionIds).SendAsync(methodName, arg);
-            Logger.LogInfo(Localizer.HubMessageSent(methodName));
+            Logger.LogInfo("Message sent to " + connectionIds.Count + " clients: " + methodName);
         }
         catch (Exception ex)
         {
-            Logger.LogError(Localizer.HubMessageError(methodName), ex);
+            Logger.LogError("Error sending message to clients: " + methodName, ex);
         }
     }
 
@@ -293,11 +292,11 @@ public class NotificationService(IHubContext<NotificationService> hubContext, IP
         try
         {
             hubContext.Clients.User(id.ToString(CultureInfo.InvariantCulture)).SendAsync(methodName, arg);
-            Logger.LogInfo(Localizer.HubMessageSentSingle(id, methodName));
+            Logger.LogInfo("Message sent to user " + id + ": " + methodName);
         }
         catch (Exception ex)
         {
-            Logger.LogError(Localizer.HubMessageErrorSingle(id, methodName), ex);
+            Logger.LogError("Error sending message to user " + id + ": " + methodName, ex);
         }
     }
 }

@@ -1,7 +1,6 @@
 using ManaxLibrary.DTO.Tag;
 using ManaxLibrary.DTO.User;
 using ManaxServer.Attributes;
-using ManaxServer.Localization;
 using ManaxServer.Models;
 using ManaxServer.Models.Tag;
 using ManaxServer.Services.Notification;
@@ -43,7 +42,7 @@ public class TagController(ManaxContext context, INotificationService notificati
     public async Task<IActionResult> UpdateTag(TagUpdateDto tagUpdate)
     {
         Tag? tag = context.Tags.FirstOrDefault(r => r.Id == tagUpdate.Id);
-        if (tag == null) return NotFound(Localizer.TagNotFound(tagUpdate.Id));
+        if (tag == null) return NotFound();
         tag.Update(tagUpdate);
         try
         {
@@ -65,7 +64,7 @@ public class TagController(ManaxContext context, INotificationService notificati
     public async Task<IActionResult> DeleteTag(long id)
     {
         Tag? tag = await context.Tags.FindAsync(id);
-        if (tag == null) return NotFound(Localizer.TagNotFound(id));
+        if (tag == null) return NotFound();
         context.Tags.Remove(tag);
         await context.SaveChangesAsync();
         notificationService.NotifyTagDeletedAsync(id);

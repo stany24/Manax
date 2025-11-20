@@ -2072,5 +2072,11 @@ namespace ManaxClient.Localization {
                 return ResourceManager.GetString("fr", resourceCulture);
             }
         }
+        
+        public static string LoginPage_Connected {
+            get {
+                return ResourceManager.GetString("LoginPage.Connected", resourceCulture);
+            }
+        }
     }
 }

@@ -2,7 +2,6 @@ using System.IO.Compression;
 using ManaxLibrary.DTO.Chapter;
 using ManaxLibrary.DTO.User;
 using ManaxServer.Attributes;
-using ManaxServer.Localization;
 using ManaxServer.Models;
 using ManaxServer.Models.Chapter;
 using ManaxServer.Services.Notification;
@@ -31,7 +30,7 @@ public class ChapterController(ManaxContext context, INotificationService notifi
     {
         Chapter? chapter = await context.Chapters.FindAsync(id);
 
-        if (chapter == null) return NotFound(Localizer.ChapterNotFound(id));
+        if (chapter == null) return NotFound();
 
         return chapter.ToDto();
     }
@@ -43,7 +42,7 @@ public class ChapterController(ManaxContext context, INotificationService notifi
     public async Task<IActionResult> DeleteChapter(long id)
     {
         Chapter? chapter = await context.Chapters.FindAsync(id);
-        if (chapter == null) return NotFound(Localizer.ChapterNotFound(id));
+        if (chapter == null) return NotFound();
 
         context.Chapters.Remove(chapter);
         await context.SaveChangesAsync();
@@ -60,15 +59,15 @@ public class ChapterController(ManaxContext context, INotificationService notifi
     public async Task<IActionResult> GetChapterPage(long id, int number)
     {
         Chapter? chapter = await context.Chapters.FindAsync(id);
-        if (chapter == null) return NotFound(Localizer.ChapterNotFound(id));
+        if (chapter == null) return NotFound();
 
         string filePath = chapter.Path;
         if (string.IsNullOrEmpty(filePath) || !System.IO.File.Exists(filePath) ||
             !filePath.EndsWith(".cbz", StringComparison.OrdinalIgnoreCase))
-            return NotFound(Localizer.ChapterFileNotExistOrInvalid());
+            return NotFound();
         await using ZipArchive archive = await ZipFile.OpenReadAsync(filePath);
         if (number < 0 || number >= archive.Entries.Count)
-            return NotFound(Localizer.PageNumberTooBig(number, archive.Entries.Count));
+            return BadRequest();
         ZipArchiveEntry entry = archive.Entries[number];
         await using Stream stream = await entry.OpenAsync();
         using MemoryStream memoryStream = new();
@@ -85,10 +84,10 @@ public class ChapterController(ManaxContext context, INotificationService notifi
     public async Task<IActionResult> GetChapterPages(long id)
     {
         Chapter? chapter = await context.Chapters.FindAsync(id);
-        if (chapter == null) return NotFound(Localizer.ChapterNotFound(id));
+        if (chapter == null) return NotFound();
         string filePath = chapter.Path;
         if (string.IsNullOrEmpty(filePath) || !System.IO.File.Exists(filePath))
-            return NotFound(Localizer.ChapterFileNotExistOrInvalid());
+            return NotFound();
         byte[] bytes = await System.IO.File.ReadAllBytesAsync(filePath);
         return File(bytes, "application/x-cbz");
     }

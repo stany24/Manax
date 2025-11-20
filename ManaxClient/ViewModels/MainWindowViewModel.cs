@@ -87,7 +87,6 @@ public partial class MainWindowViewModel : ObservableObject
             LibrarySource.LoadLibraries();
             PersonSource.LoadPersons();
             TagSource.LoadTags();
-            RankSource.LoadRanks();
         };
         SetPage(loginPage);
     }

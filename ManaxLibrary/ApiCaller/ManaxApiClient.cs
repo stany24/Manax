@@ -11,7 +11,7 @@ internal static class ManaxApiClient
         Timeout = TimeSpan.FromSeconds(5)
     };
 
-    public static void SetHost(Uri host)
+    internal static void SetHost(Uri host)
     {
         HttpClientHandler handler = new();
         Client = new HttpClient(handler)
@@ -21,14 +21,14 @@ internal static class ManaxApiClient
         };
     }
 
-    public static void SetToken(string token)
+    internal static void SetToken(string token)
     {
         Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
         if (Client.BaseAddress == null) return;
         _ = ServerNotification.InitializeAsync(Client.BaseAddress, token);
     }
 
-    public static void ResetToken()
+    internal static void ResetToken()
     {
         Client.DefaultRequestHeaders.Authorization = null;
     }

@@ -1,7 +1,6 @@
 using ManaxLibrary.DTO.Read;
 using ManaxLibrary.DTO.User;
 using ManaxServer.Attributes;
-using ManaxServer.Localization;
 using ManaxServer.Models;
 using ManaxServer.Models.Chapter;
 using ManaxServer.Models.Read;
@@ -24,12 +23,12 @@ public class ReadController(ManaxContext context, INotificationService notificat
     public async Task<IActionResult> Read(ReadCreateDto readCreate)
     {
         long? userId = UserController.GetCurrentUserId(HttpContext);
-        if (userId == null) return Unauthorized(Localizer.UserMustBeLoggedInRead());
+        if (userId == null) return Unauthorized();
 
         User? user = await context.Users.FindAsync(userId);
         Chapter? chapter = await context.Chapters.FindAsync(readCreate.ChapterId);
 
-        if (user == null || chapter == null) return NotFound(Localizer.UserOrChapterNotFound());
+        if (user == null || chapter == null) return NotFound();
 
         Read? existingRead = await context.Reads
             .FirstOrDefaultAsync(r => r.User.Id == userId && r.Chapter.Id == readCreate.ChapterId);
@@ -61,7 +60,7 @@ public class ReadController(ManaxContext context, INotificationService notificat
     public async Task<IActionResult> Unread(long chapterId)
     {
         long? currentUserId = UserController.GetCurrentUserId(HttpContext);
-        if (currentUserId == null) return Unauthorized(Localizer.UserMustBeLoggedInRead());
+        if (currentUserId == null) return Unauthorized();
 
         Read? existingRead = await context.Reads
             .FirstOrDefaultAsync(r => r.User.Id == currentUserId && r.Chapter.Id == chapterId);

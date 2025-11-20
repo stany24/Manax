@@ -4,16 +4,9 @@ namespace ManaxTests.Server.Mocks;
 
 public class MockPasswordValidationService : IPasswordValidationService
 {
-    public bool IsPasswordValid(string password, out string? errorMessage)
+    public bool IsPasswordValid(string password)
     {
-        if (string.IsNullOrEmpty(password))
-        {
-            errorMessage = "Password cannot be empty.";
-            return false;
-        }
-
-        errorMessage = string.Empty;
-        return true;
+        return !string.IsNullOrEmpty(password);
     }
 
     public string GenerateValidPassword()
