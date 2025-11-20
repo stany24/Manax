@@ -23,7 +23,7 @@ public class DeleteChapterTests : ChapterTestsSetup
     {
         IActionResult result = await Controller.DeleteChapter(999999);
 
-        Assert.IsInstanceOfType<NotFoundObjectResult>(result);
+        Assert.IsInstanceOfType<NotFoundResult>(result);
     }
 
     [TestMethod]

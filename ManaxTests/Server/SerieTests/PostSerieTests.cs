@@ -38,7 +38,7 @@ public class PostSerieTests : SerieTestsSetup
 
         ActionResult<long> result = await Controller.PostSerie(createDto);
 
-        Assert.IsInstanceOfType<BadRequestObjectResult>(result.Result);
+        Assert.IsInstanceOfType<BadRequestResult>(result.Result);
     }
 
     [TestMethod]

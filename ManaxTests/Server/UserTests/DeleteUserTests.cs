@@ -26,7 +26,7 @@ public class DeleteUserTests : UserTestsSetup
     {
         IActionResult result = await Controller.DeleteUser(999999);
 
-        Assert.IsInstanceOfType<NotFoundObjectResult>(result);
+        Assert.IsInstanceOfType<NotFoundResult>(result);
     }
 
     [TestMethod]
@@ -97,7 +97,7 @@ public class DeleteUserTests : UserTestsSetup
 
         IActionResult result = await Controller.DeleteUser(1);
 
-        Assert.IsInstanceOfType<UnauthorizedObjectResult>(result);
+        Assert.IsInstanceOfType<UnauthorizedResult>(result);
     }
 
     [TestMethod]
@@ -133,7 +133,7 @@ public class DeleteUserTests : UserTestsSetup
 
         IActionResult result = await Controller.DeleteUser(1);
 
-        Assert.IsInstanceOfType<UnauthorizedObjectResult>(result);
+        Assert.IsInstanceOfType<UnauthorizedResult>(result);
     }
 
     [TestMethod]

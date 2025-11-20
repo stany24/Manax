@@ -47,7 +47,7 @@ public class ClaimUserTests : UserTestsSetup
 
         ActionResult<UserLoginResultDto> result = Controller.Claim(claimRequest);
 
-        Assert.IsInstanceOfType<UnauthorizedObjectResult>(result.Result);
+        Assert.IsInstanceOfType<UnauthorizedResult>(result.Result);
 
         LoginAttempt? claimAttempt = Context.LoginAttempts.FirstOrDefault(la => la.Type == "Claim");
         Assert.IsNotNull(claimAttempt);

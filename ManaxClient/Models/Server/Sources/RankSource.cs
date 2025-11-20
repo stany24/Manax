@@ -53,7 +53,7 @@ public static class RankSource
         }
     }
 
-    public static void LoadRanks()
+    private static void LoadRanks()
     {
         Task.Run(() =>
         {

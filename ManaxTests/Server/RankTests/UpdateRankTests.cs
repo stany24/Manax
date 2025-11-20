@@ -40,7 +40,7 @@ public class UpdateRankTests : RankTestsSetup
 
         IActionResult result = await Controller.UpdateRank(updateRank);
 
-        Assert.IsInstanceOfType<NotFoundObjectResult>(result);
+        Assert.IsInstanceOfType<NotFoundResult>(result);
     }
 
     [TestMethod]

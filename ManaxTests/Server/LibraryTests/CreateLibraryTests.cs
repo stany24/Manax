@@ -39,7 +39,7 @@ public class CreateLibraryTests : LibraryTestsSetup
 
         ActionResult<long> result = await Controller.PostLibrary(createDto);
 
-        Assert.IsInstanceOfType<ConflictObjectResult>(result.Result);
+        Assert.IsInstanceOfType<ConflictResult>(result.Result);
     }
 
     [TestMethod]
@@ -52,7 +52,7 @@ public class CreateLibraryTests : LibraryTestsSetup
 
         ActionResult<long> result = await Controller.PostLibrary(createDto);
 
-        Assert.IsInstanceOfType<BadRequestObjectResult>(result.Result);
+        Assert.IsInstanceOfType<BadRequestResult>(result.Result);
     }
 
     [TestMethod]

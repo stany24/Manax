@@ -42,7 +42,7 @@ public class PutUserTests : UserTestsSetup
 
         IActionResult result = await Controller.PutUser(userUpdate);
 
-        Assert.IsInstanceOfType<BadRequestObjectResult>(result);
+        Assert.IsInstanceOfType<BadRequestResult>(result);
         MockHashService.VerifyHashPasswordNotCalled();
     }
 
@@ -59,7 +59,7 @@ public class PutUserTests : UserTestsSetup
 
         IActionResult result = await Controller.PutUser(userUpdate);
 
-        Assert.IsInstanceOfType<UnauthorizedObjectResult>(result);
+        Assert.IsInstanceOfType<UnauthorizedResult>(result);
         MockHashService.VerifyHashPasswordNotCalled();
     }
 
@@ -85,7 +85,7 @@ public class PutUserTests : UserTestsSetup
     {
         ActionResult<string> result = await Controller.ResetPassword(999);
 
-        Assert.IsInstanceOfType<NotFoundObjectResult>(result.Result);
+        Assert.IsInstanceOfType<NotFoundResult>(result.Result);
         MockHashService.VerifyHashPasswordNotCalled();
     }
 }

@@ -44,7 +44,7 @@ public class GetSerieTests : SerieTestsSetup
     {
         ActionResult<SerieDto> result = await Controller.GetSerie(999999);
 
-        Assert.IsInstanceOfType<NotFoundObjectResult>(result.Result);
+        Assert.IsInstanceOfType<NotFoundResult>(result.Result);
     }
 
     [TestMethod]
@@ -69,7 +69,7 @@ public class GetSerieTests : SerieTestsSetup
     {
         ActionResult<List<long>> result = Controller.GetSerieChapters(999999);
 
-        NotFoundObjectResult? notFoundResult = result.Result as NotFoundObjectResult;
+        NotFoundResult? notFoundResult = result.Result as NotFoundResult;
         Assert.IsNotNull(notFoundResult);
 
         Assert.IsNull(result.Value);

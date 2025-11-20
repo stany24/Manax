@@ -24,7 +24,7 @@ public class DeleteSerieTests : SerieTestsSetup
     {
         IActionResult result = await Controller.DeleteSerie(999999);
 
-        Assert.IsInstanceOfType<NotFoundObjectResult>(result);
+        Assert.IsInstanceOfType<NotFoundResult>(result);
     }
 
     [TestMethod]

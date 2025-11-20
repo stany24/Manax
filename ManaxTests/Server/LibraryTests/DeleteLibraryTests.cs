@@ -25,7 +25,7 @@ public class DeleteLibraryTests : LibraryTestsSetup
     {
         IActionResult result = await Controller.DeleteLibrary(999999);
 
-        Assert.IsInstanceOfType<NotFoundObjectResult>(result);
+        Assert.IsInstanceOfType<NotFoundResult>(result);
     }
 
     [TestMethod]

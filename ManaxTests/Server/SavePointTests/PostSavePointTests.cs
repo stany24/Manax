@@ -39,7 +39,7 @@ public class PostSavePointTests : SavePointTestsSetup
 
         ActionResult<long> result = await Controller.PostSavePoint(createDto);
 
-        Assert.IsInstanceOfType<ConflictObjectResult>(result.Result);
+        Assert.IsInstanceOfType<ConflictResult>(result.Result);
     }
 
     [TestMethod]
@@ -52,7 +52,7 @@ public class PostSavePointTests : SavePointTestsSetup
 
         ActionResult<long> result = await Controller.PostSavePoint(createDto);
 
-        Assert.IsInstanceOfType<ConflictObjectResult>(result.Result);
+        Assert.IsInstanceOfType<ConflictResult>(result.Result);
     }
 
     [TestMethod]
@@ -161,7 +161,7 @@ public class PostSavePointTests : SavePointTestsSetup
 
         ActionResult<long> result = await Controller.PostSavePoint(createDto);
 
-        Assert.IsInstanceOfType<ConflictObjectResult>(result.Result);
+        Assert.IsInstanceOfType<ConflictResult>(result.Result);
     }
 
     [TestMethod]
@@ -212,6 +212,6 @@ public class PostSavePointTests : SavePointTestsSetup
 
         ActionResult<long> result = await Controller.PostSavePoint(createDto);
 
-        Assert.IsInstanceOfType<ConflictObjectResult>(result.Result);
+        Assert.IsInstanceOfType<ConflictResult>(result.Result);
     }
 }

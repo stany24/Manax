@@ -65,7 +65,7 @@ public class UnReadTests : ReadTestsSetup
 
         IActionResult result = await Controller.Unread(1);
 
-        Assert.IsInstanceOfType<UnauthorizedObjectResult>(result);
+        Assert.IsInstanceOfType<UnauthorizedResult>(result);
     }
 
     [TestMethod]

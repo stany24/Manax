@@ -194,7 +194,7 @@ public partial class UploadController(
             _ = backgroundTaskService.AddTaskAsync(new FixPosterBackGroundTask(fixService, serie.Id));
             notificationService.NotifyPosterUpdatedAsync(serie.Id);
         }
-        catch (Exception e)
+        catch (Exception)
         {
             return BadRequest();
         }

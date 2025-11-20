@@ -230,7 +230,7 @@ public class CreateIssueTests : IssueTestsSetup
         ActionResult secondResult = await Controller.CreateChapterIssue(createDto);
 
         Assert.IsInstanceOfType<CreatedResult>(firstResult);
-        Assert.IsInstanceOfType<ConflictObjectResult>(secondResult);
+        Assert.IsInstanceOfType<ConflictResult>(secondResult);
     }
 
     [TestMethod]
@@ -246,6 +246,6 @@ public class CreateIssueTests : IssueTestsSetup
         ActionResult secondResult = await Controller.CreateSerieIssue(createDto);
 
         Assert.IsInstanceOfType<CreatedResult>(firstResult);
-        Assert.IsInstanceOfType<ConflictObjectResult>(secondResult);
+        Assert.IsInstanceOfType<ConflictResult>(secondResult);
     }
 }

@@ -28,7 +28,7 @@ public class ResetPasswordTests : UserTestsSetup
     {
         ActionResult<string> result = await Controller.ResetPassword(999999);
 
-        Assert.IsInstanceOfType<NotFoundObjectResult>(result.Result);
+        Assert.IsInstanceOfType<NotFoundResult>(result.Result);
         MockHashService.VerifyHashPasswordNotCalled();
     }
 }

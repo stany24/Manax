@@ -80,7 +80,7 @@ public class TestReadController : ReadTestsSetup
 
         IActionResult result = await Controller.Read(readCreateDto);
 
-        Assert.IsInstanceOfType<NotFoundObjectResult>(result);
+        Assert.IsInstanceOfType<NotFoundResult>(result);
     }
 
     [TestMethod]
@@ -99,7 +99,7 @@ public class TestReadController : ReadTestsSetup
 
         IActionResult result = await Controller.Read(readCreateDto);
 
-        Assert.IsInstanceOfType<UnauthorizedObjectResult>(result);
+        Assert.IsInstanceOfType<UnauthorizedResult>(result);
     }
 
     [TestMethod]

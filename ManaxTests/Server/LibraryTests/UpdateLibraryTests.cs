@@ -35,7 +35,7 @@ public class UpdateLibraryTests : LibraryTestsSetup
 
         IActionResult result = await Controller.PutLibrary(999999, updateDto);
 
-        Assert.IsInstanceOfType<NotFoundObjectResult>(result);
+        Assert.IsInstanceOfType<NotFoundResult>(result);
     }
 
     [TestMethod]
@@ -51,7 +51,7 @@ public class UpdateLibraryTests : LibraryTestsSetup
 
         IActionResult result = await Controller.PutLibrary(firstLibrary.Id, updateDto);
 
-        Assert.IsInstanceOfType<ConflictObjectResult>(result);
+        Assert.IsInstanceOfType<ConflictResult>(result);
     }
 
     [TestMethod]
@@ -65,6 +65,6 @@ public class UpdateLibraryTests : LibraryTestsSetup
 
         IActionResult result = await Controller.PutLibrary(library.Id, updateDto);
 
-        Assert.IsInstanceOfType<BadRequestObjectResult>(result);
+        Assert.IsInstanceOfType<BadRequestResult>(result);
     }
 }

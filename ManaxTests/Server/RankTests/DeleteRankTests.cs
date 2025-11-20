@@ -23,7 +23,7 @@ public class DeleteRankTests : RankTestsSetup
     {
         IActionResult result = await Controller.DeleteRank(999999);
 
-        Assert.IsInstanceOfType<NotFoundObjectResult>(result);
+        Assert.IsInstanceOfType<NotFoundResult>(result);
     }
 
     [TestMethod]

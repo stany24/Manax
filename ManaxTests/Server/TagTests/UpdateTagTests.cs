@@ -43,7 +43,7 @@ public class UpdateTagTests : TagTestsSetup
 
         IActionResult result = await Controller.UpdateTag(tagUpdate);
 
-        Assert.IsInstanceOfType<NotFoundObjectResult>(result);
+        Assert.IsInstanceOfType<NotFoundResult>(result);
     }
 
     [TestMethod]
@@ -172,7 +172,7 @@ public class UpdateTagTests : TagTestsSetup
 
         IActionResult result = await Controller.UpdateTag(tagUpdate);
 
-        Assert.IsInstanceOfType<NotFoundObjectResult>(result);
+        Assert.IsInstanceOfType<NotFoundResult>(result);
     }
 
     [TestMethod]
@@ -187,6 +187,6 @@ public class UpdateTagTests : TagTestsSetup
 
         IActionResult result = await Controller.UpdateTag(tagUpdate);
 
-        Assert.IsInstanceOfType<NotFoundObjectResult>(result);
+        Assert.IsInstanceOfType<NotFoundResult>(result);
     }
 }

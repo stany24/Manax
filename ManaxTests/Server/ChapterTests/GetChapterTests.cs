@@ -42,7 +42,7 @@ public class GetChapterTests : ChapterTestsSetup
     {
         ActionResult<ChapterDto> result = await Controller.GetChapter(999999);
 
-        Assert.IsInstanceOfType<NotFoundObjectResult>(result.Result);
+        Assert.IsInstanceOfType<NotFoundResult>(result.Result);
     }
 
     [TestMethod]
@@ -50,7 +50,7 @@ public class GetChapterTests : ChapterTestsSetup
     {
         IActionResult result = await Controller.GetChapterPage(999999, 0);
 
-        Assert.IsInstanceOfType<NotFoundObjectResult>(result);
+        Assert.IsInstanceOfType<NotFoundResult>(result);
     }
 
     [TestMethod]
@@ -58,7 +58,7 @@ public class GetChapterTests : ChapterTestsSetup
     {
         IActionResult result = await Controller.GetChapterPages(999999);
 
-        Assert.IsInstanceOfType<NotFoundObjectResult>(result);
+        Assert.IsInstanceOfType<NotFoundResult>(result);
     }
 
     [TestMethod]
@@ -67,7 +67,7 @@ public class GetChapterTests : ChapterTestsSetup
         Chapter chapter = Context.Chapters.First();
         IActionResult result = await Controller.GetChapterPage(chapter.Id, 999);
 
-        Assert.IsInstanceOfType<NotFoundObjectResult>(result);
+        Assert.IsInstanceOfType<NotFoundResult>(result);
     }
 
     [TestMethod]
@@ -76,7 +76,7 @@ public class GetChapterTests : ChapterTestsSetup
         Chapter chapter = Context.Chapters.First();
         IActionResult result = await Controller.GetChapterPage(chapter.Id, -1);
 
-        Assert.IsInstanceOfType<NotFoundObjectResult>(result);
+        Assert.IsInstanceOfType<NotFoundResult>(result);
     }
 
     [TestMethod]
@@ -102,7 +102,7 @@ public class GetChapterTests : ChapterTestsSetup
         Chapter chapter = Context.Chapters.First();
         IActionResult result = await Controller.GetChapterPage(chapter.Id, -1);
 
-        Assert.IsInstanceOfType<NotFoundObjectResult>(result);
+        Assert.IsInstanceOfType<NotFoundResult>(result);
     }
 
     [TestMethod]

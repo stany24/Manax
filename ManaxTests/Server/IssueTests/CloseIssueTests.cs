@@ -23,7 +23,7 @@ public class CloseIssueTests : IssueTestsSetup
     {
         IActionResult result = await Controller.CloseChapterIssue(999999);
 
-        Assert.IsInstanceOfType<NotFoundObjectResult>(result);
+        Assert.IsInstanceOfType<NotFoundResult>(result);
     }
 
     [TestMethod]
@@ -57,7 +57,7 @@ public class CloseIssueTests : IssueTestsSetup
     {
         IActionResult result = await Controller.CloseSerieIssue(999999);
 
-        Assert.IsInstanceOfType<NotFoundObjectResult>(result);
+        Assert.IsInstanceOfType<NotFoundResult>(result);
     }
 
     [TestMethod]

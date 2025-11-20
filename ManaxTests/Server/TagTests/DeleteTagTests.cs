@@ -26,7 +26,7 @@ public class DeleteTagTests : TagTestsSetup
     {
         IActionResult result = await Controller.DeleteTag(999999);
 
-        Assert.IsInstanceOfType<NotFoundObjectResult>(result);
+        Assert.IsInstanceOfType<NotFoundResult>(result);
     }
 
     [TestMethod]
@@ -66,7 +66,7 @@ public class DeleteTagTests : TagTestsSetup
     {
         IActionResult result = await Controller.DeleteTag(0);
 
-        Assert.IsInstanceOfType<NotFoundObjectResult>(result);
+        Assert.IsInstanceOfType<NotFoundResult>(result);
     }
 
     [TestMethod]
@@ -74,7 +74,7 @@ public class DeleteTagTests : TagTestsSetup
     {
         IActionResult result = await Controller.DeleteTag(-1);
 
-        Assert.IsInstanceOfType<NotFoundObjectResult>(result);
+        Assert.IsInstanceOfType<NotFoundResult>(result);
     }
 
     [TestMethod]
@@ -113,7 +113,7 @@ public class DeleteTagTests : TagTestsSetup
         Assert.IsInstanceOfType<OkResult>(result1);
 
         IActionResult result2 = await Controller.DeleteTag(tagId);
-        Assert.IsInstanceOfType<NotFoundObjectResult>(result2);
+        Assert.IsInstanceOfType<NotFoundResult>(result2);
     }
 
     [TestMethod]

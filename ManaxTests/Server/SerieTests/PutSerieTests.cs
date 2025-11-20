@@ -41,7 +41,7 @@ public class PutSerieTests : SerieTestsSetup
 
         IActionResult result = await Controller.PutSerie(999999, updateDto);
 
-        Assert.IsInstanceOfType<NotFoundObjectResult>(result);
+        Assert.IsInstanceOfType<NotFoundResult>(result);
     }
 
     [TestMethod]
@@ -57,7 +57,7 @@ public class PutSerieTests : SerieTestsSetup
 
         IActionResult result = await Controller.PutSerie(serie.Id, updateDto);
 
-        Assert.IsInstanceOfType<BadRequestObjectResult>(result);
+        Assert.IsInstanceOfType<BadRequestResult>(result);
     }
 
     [TestMethod]
