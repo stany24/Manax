@@ -31,8 +31,9 @@ public interface INotificationService
     void NotifyLibraryDeletedAsync(long libraryId);
 
     void NotifyChapterAddedAsync(ChapterDto chapter);
-    void NotifyChapterModifiedAsync(ChapterDto chapter);
+    void NotifyChapterUpdatedAsync(ChapterDto chapter);
     void NotifyChapterRemovedAsync(long chapterId);
+    void NotifyChapterUploadFailedAsync(long userId, string serieTitle, int number);
 
     void NotifyRankCreatedAsync(RankDto rank);
     void NotifyRankUpdatedAsync(RankDto rank);

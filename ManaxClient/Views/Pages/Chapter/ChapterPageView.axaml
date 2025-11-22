@@ -28,7 +28,7 @@
                         HorizontalAlignment="Center"
                         IsVisible="{Binding ControlBordersVisible}">
                     <StackPanel Orientation="Horizontal" Spacing="16">
-                        <TextBlock Text="{Binding Chapter.FileName}"
+                        <TextBlock Text="{Binding Chapter.Number}"
                                    FontWeight="Medium"
                                    VerticalAlignment="Center" />
                         <TextBlock

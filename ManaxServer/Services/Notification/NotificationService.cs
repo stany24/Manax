@@ -83,7 +83,7 @@ public class NotificationService(IHubContext<NotificationService> hubContext, IP
             NotificationType.ChapterAdded, chapter);
     }
 
-    public void NotifyChapterModifiedAsync(ChapterDto chapter)
+    public void NotifyChapterUpdatedAsync(ChapterDto chapter)
     {
         TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadChapters,
             NotificationType.ChapterUpdated, chapter);
@@ -93,6 +93,11 @@ public class NotificationService(IHubContext<NotificationService> hubContext, IP
     {
         TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadChapters,
             NotificationType.ChapterRemoved, chapterId);
+    }
+    
+    public void NotifyChapterUploadFailedAsync(long userId, string serieTitle, int number)
+    {
+        TrySendToSingleClientAsync(userId, NotificationType.ChapterUploadFailed, serieTitle+Path.PathSeparator+number);
     }
 
     public void NotifyPermissionModifiedAsync(long userId, List<ManaxLibrary.DTO.User.Permission> permissions)

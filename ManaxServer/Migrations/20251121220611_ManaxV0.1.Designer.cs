@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ManaxServer.Migrations
 {
     [DbContext(typeof(ManaxContext))]
-    [Migration("20251115134104_ManaxV0.1")]
+    [Migration("20251121220611_ManaxV0.1")]
     partial class ManaxV01
     {
         /// <inheritdoc />
@@ -29,10 +29,6 @@ namespace ManaxServer.Migrations
                     b.Property<DateTime>("Creation")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("FileName")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
                     b.Property<DateTime>("LastModification")
                         .HasColumnType("TEXT");
 
@@ -42,16 +38,17 @@ namespace ManaxServer.Migrations
                     b.Property<int>("PageNumber")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Path")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
                     b.Property<long>("SerieId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<long>("UploaderId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
                     b.HasIndex("SerieId");
+
+                    b.HasIndex("UploaderId");
 
                     b.ToTable("Chapters");
                 });
@@ -191,6 +188,7 @@ namespace ManaxServer.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasMaxLength(256)
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -209,14 +207,17 @@ namespace ManaxServer.Migrations
 
                     b.Property<string>("FirstName")
                         .IsRequired()
+                        .HasMaxLength(50)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("LastName")
                         .IsRequired()
+                        .HasMaxLength(50)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Pseudonym")
                         .IsRequired()
+                        .HasMaxLength(50)
                         .HasColumnType("TEXT");
 
                     b.Property<long>("RoleId")
@@ -237,6 +238,7 @@ namespace ManaxServer.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasMaxLength(50)
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -321,6 +323,7 @@ namespace ManaxServer.Migrations
 
                     b.Property<string>("Path")
                         .IsRequired()
+                        .HasMaxLength(4096)
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -346,6 +349,7 @@ namespace ManaxServer.Migrations
 
                     b.Property<string>("FolderName")
                         .IsRequired()
+                        .HasMaxLength(255)
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("LastModification")
@@ -516,7 +520,15 @@ namespace ManaxServer.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("ManaxServer.Models.User.User", "Uploader")
+                        .WithMany()
+                        .HasForeignKey("UploaderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Serie");
+
+                    b.Navigation("Uploader");
                 });
 
             modelBuilder.Entity("ManaxServer.Models.Issue.Automatic.AutomaticIssueSerie", b =>

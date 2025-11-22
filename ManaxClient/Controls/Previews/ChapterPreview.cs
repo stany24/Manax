@@ -35,9 +35,6 @@ public class ChapterPreview : Button
     public static readonly StyledProperty<ICommand?> PopupRequestedCommandProperty =
         AvaloniaProperty.Register<ChapterPreview, ICommand?>(nameof(PopupRequestedCommand));
 
-    private readonly IBrush _backgroundColor = Brushes.White;
-    private readonly IBrush _hoverColor = new SolidColorBrush(Color.Parse("#F8F9FA"));
-
     private readonly IBrush _readTextColor = new SolidColorBrush(Color.Parse("#6C757D"));
     private readonly IBrush _unreadTextColor = new SolidColorBrush(Color.Parse("#212529"));
 
@@ -51,7 +48,6 @@ public class ChapterPreview : Button
 
         Border border = new()
         {
-            Background = _backgroundColor,
             BorderThickness = new Thickness(1),
             CornerRadius = new CornerRadius(8),
             Padding = new Thickness(16, 12)
@@ -105,12 +101,11 @@ public class ChapterPreview : Button
             FontSize = 12
         };
 
-        chapterName.Bind(TextBlock.TextProperty, new Binding(nameof(Chapter) + "." + nameof(Chapter.FileName))
+        chapterName.Bind(TextBlock.TextProperty, new Binding(nameof(Chapter) + "." + nameof(Chapter.Number))
         {
             Source = this,
             Mode = BindingMode.OneWay,
-            Converter = new FuncValueConverter<string, string>(fileName =>
-                Path.GetFileNameWithoutExtension(fileName) ?? fileName ?? string.Empty)
+            Converter = new FuncValueConverter<int, string>(fileName => $"Chapitre {fileName}")
         });
 
         chapterName.Bind(ForegroundProperty, new Binding(nameof(Chapter) + "." + nameof(Chapter.Read))
@@ -277,18 +272,6 @@ public class ChapterPreview : Button
             }
         };
         Dispatcher.UIThread.Post(() => { PopupRequestedCommand?.Execute(popup); });
-    }
-
-    protected override void OnPointerEntered(PointerEventArgs e)
-    {
-        base.OnPointerEntered(e);
-        if (Content is Border border) border.Background = _hoverColor;
-    }
-
-    protected override void OnPointerExited(PointerEventArgs e)
-    {
-        base.OnPointerExited(e);
-        if (Content is Border border) border.Background = _backgroundColor;
     }
 
     public static void SetChapter(AvaloniaObject element, Chapter serieValue)

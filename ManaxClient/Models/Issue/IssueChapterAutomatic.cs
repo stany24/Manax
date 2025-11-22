@@ -24,7 +24,7 @@ public partial class IssueChapterAutomatic : ObservableObject
     public static string AutomaticBadgeText => Localizer.Get("IssuesPage.Automatic");
 
     public string FormattedInfo => string.Format(CultureInfo.InvariantCulture, Localizer.Get("IssuesPage.ChapterInfo"),
-        Chapter.FileName, CreatedAt);
+        Chapter.Number, CreatedAt);
 
     private void FromDto(IssueChapterAutomaticDto dto)
     {

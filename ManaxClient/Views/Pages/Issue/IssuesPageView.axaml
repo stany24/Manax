@@ -61,7 +61,7 @@
                                    Command="{Binding $parent[UserControl].((page:IssuesPageViewModel)DataContext).OnChapterIssueClicked}"
                                    CommandParameter="{Binding Chapter}"
                                    Info="{localization1:LocalizeFormat IssuesPage.ChapterUserInfo,
-                                   Param1={Binding Chapter.FileName},
+                                   Param1={Binding Chapter.Number},
                                    Param2={Binding User.Username},
                                    Param3={Binding CreatedAt}}" />
         </DataTemplate>

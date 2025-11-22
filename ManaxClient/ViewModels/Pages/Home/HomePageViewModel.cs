@@ -31,15 +31,7 @@ public partial class HomePageViewModel : PageViewModel
         SerieSource.Series
             .Connect()
             .SortAndBind(out _series, comparer)
-            .Subscribe(changes =>
-            {
-                foreach (Change<Models.Server.Data.Serie, long> change in changes)
-                {
-                    if (change.Reason != ChangeReason.Add) continue;
-                    change.Current.LoadInfo();
-                    change.Current.LoadPoster();
-                }
-            });
+            .Subscribe();
     }
 
     public ReadOnlyObservableCollection<Models.Server.Data.Serie> Series => _series;

@@ -67,7 +67,8 @@ public static class Program
             new IssueService(provider.GetRequiredService<IServiceScopeFactory>()));
         builder.Services.AddSingleton<IFixService>(provider =>
             new FixService(provider.GetRequiredService<IServiceScopeFactory>(),
-                provider.GetRequiredService<IIssueService>()));
+                provider.GetRequiredService<IIssueService>(),
+                provider.GetRequiredService<INotificationService>()));
         builder.Services.AddSingleton<IPasswordValidationService>(_ =>
             new PasswordValidationService(builder.Environment.IsProduction()));
         FeatureFileManager featureFileManager = new();

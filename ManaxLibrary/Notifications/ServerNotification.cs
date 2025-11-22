@@ -37,8 +37,9 @@ public static class ServerNotification
     public static event Action<long>? OnRankDeleted;
 
     public static event Action<ChapterDto>? OnChapterAdded;
-    public static event Action<ChapterDto>? OnChapterModified;
+    public static event Action<ChapterDto>? OnChapterUpdated;
     public static event Action<long>? OnChapterDeleted;
+    public static event Action<string>? OnChapterUploadFailed;
 
     public static event Action<UserDto>? OnUserCreated;
     public static event Action<UserDto>? OnUserUpdated;
@@ -112,10 +113,13 @@ public static class ServerNotification
             chapterData => { OnChapterAdded?.Invoke(chapterData); });
 
         _hubConnection.On<ChapterDto>(nameof(NotificationType.ChapterUpdated),
-            chapterData => { OnChapterModified?.Invoke(chapterData); });
+            chapterData => { OnChapterUpdated?.Invoke(chapterData); });
 
         _hubConnection.On<long>(nameof(NotificationType.ChapterRemoved),
             chapterId => { OnChapterDeleted?.Invoke(chapterId); });
+        
+        _hubConnection.On<string>(nameof(NotificationType.ChapterUploadFailed),
+            message => { OnChapterUploadFailed?.Invoke(message); });
 
         _hubConnection.On<UserDto>(nameof(NotificationType.UserCreated),
             userData => { OnUserCreated?.Invoke(userData); });

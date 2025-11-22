@@ -2,6 +2,7 @@ using ManaxLibrary.DTO.Setting;
 using ManaxLibrary.DTO.User;
 using ManaxServer.Attributes;
 using ManaxServer.Models;
+using ManaxServer.Models.Chapter;
 using ManaxServer.Services.BackgroundTask;
 using ManaxServer.Services.Fix;
 using ManaxServer.Services.Renaming;
@@ -65,7 +66,11 @@ public class SettingsController(
             newData.MaxChapterWidth != oldData.MaxChapterWidth ||
             newData.MinChapterWidth != oldData.MinChapterWidth)
             foreach (long chapterId in manaxContext.Chapters.Select(chapter => chapter.Id))
-                _ = backgroundTaskService.AddTaskAsync(new FixChapterBackGroundTask(fixService, chapterId));
+            {
+                Chapter? chapter = manaxContext.Chapters.Find(chapterId);
+                if (chapter == null) continue;
+                _ = backgroundTaskService.AddTaskAsync(new UpdateChapterBackGroundTask(fixService, chapter.Id));
+            }
     }
 
     private void HandlePosterModifications(SettingsData newData, SettingsData oldData, ManaxContext context)

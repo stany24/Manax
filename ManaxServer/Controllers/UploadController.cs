@@ -4,6 +4,7 @@ using System.Text.RegularExpressions;
 using ImageMagick;
 using ManaxLibrary.DTO.Setting;
 using ManaxLibrary.DTO.User;
+using ManaxLibrary.Logging;
 using ManaxServer.Attributes;
 using ManaxServer.Models;
 using ManaxServer.Models.Chapter;
@@ -20,17 +21,24 @@ namespace ManaxServer.Controllers;
 
 [Route("api/upload")]
 [ApiController]
-public partial class UploadController(
+public class UploadController(
     ManaxContext context,
     INotificationService notificationService,
     IBackgroundTaskService backgroundTaskService,
     IFixService fixService) : ControllerBase
 {
-    [GeneratedRegex("\\d{1,4}")]
-    private static partial Regex RegexNumber();
-
-    [GeneratedRegex(@"[^a-zA-Z0-9_\-\.]")]
-    private static partial Regex InvalidPathChars();
+    private readonly string[] _chapterNumberPatterns =
+    [
+        "CH\\d{1,4}",
+        "(?i)chapter[-_ ]\\d{1,4}",
+        "(?i)episode[-_ ][-_ ]\\d{1,4}",
+        "(?i)episode[-_ ]\\d{1,4}",
+        "(?i)chap[-_ ]\\d{1,4}",
+        "(?i)ch.[-_ ]*\\d{1,4}",
+        "(?i)ep.[-_ ]*\\d{1,4}",
+        "(?i)Flight[-_ ]\\d{1,4}",
+        "\\d{1,4}"
+    ];
 
     [HttpPost("chapter")]
     [RequirePermission(Permission.UploadChapter)]
@@ -38,40 +46,38 @@ public partial class UploadController(
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> UploadChapter(IFormFile file, [FromForm] long serieId)
     {
+        Logger.LogInfo("Uploading chapter file: " + file.FileName + " to serie ID: " + serieId);
+        long? currentUserId = UserController.GetCurrentUserId(HttpContext);
+        if (currentUserId == null)
+            return Unauthorized();
+        
         Serie? serie = context.Series
             .Include(s => s.SavePoint)
             .FirstOrDefault(s => s.Id == serieId);
-        if (serie == null || !TryGetPagesCountFromCbz(file, out int pagesCount))
+        if (serie == null || !TryGetPagesCountFromCbz(file, out int pagesCount)) 
             return BadRequest();
-
-        string filePath = Path.Combine(serie.SavePath, file.FileName);
+        
+        int number = ExtractChapterNumber(file.FileName);
+        Logger.LogInfo("Extracted chapter number: " + number);
+        if (context.Chapters.Any(s => s.SerieId == serieId && s.Number == number))
+            return BadRequest();
+        
+        string filePath = Path.Combine(serie.SavePath, number.ToString(),SettingsManager.Data.ArchiveFormat.ToString().ToLower());
         if (Directory.Exists(filePath) || System.IO.File.Exists(filePath))
             return BadRequest();
-
-        await SaveFileAsync(file, filePath);
-
-        int number = ExtractChapterNumber(file.FileName);
-
-        DateTime creation = GetChapterCreationDate(filePath);
-
-        Chapter chapter = new()
+        
+        string tempPath = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+        await SaveFileAsync(file, tempPath);
+        
+        NewChapter chapter = new()
         {
             SerieId = serieId,
-            Path = filePath,
-            FileName = file.FileName,
             Number = number,
-            PageNumber = pagesCount,
-            Creation = creation,
-            LastModification = DateTime.UtcNow
+            UploaderId = (long)currentUserId,
+            TempPath = tempPath,
         };
 
-        context.Chapters.Add(chapter);
-        serie.LastModification = DateTime.UtcNow;
-        await context.SaveChangesAsync();
-
-        notificationService.NotifyChapterAddedAsync(chapter.ToDto());
-
-        _ = backgroundTaskService.AddTaskAsync(new FixChapterBackGroundTask(fixService, chapter.Id));
+        _ = backgroundTaskService.AddTaskAsync(new FixNewChapterBackGroundTask(fixService, chapter));
         _ = backgroundTaskService.AddTaskAsync(new FixSerieBackGroundTask(fixService, chapter.SerieId));
 
         return Ok();
@@ -89,18 +95,7 @@ public partial class UploadController(
         if (serie == null)
             return BadRequest();
 
-        string sanitizedFileName = SanitizeFileName(file.FileName);
-        if (string.IsNullOrEmpty(sanitizedFileName))
-            return BadRequest("Invalid filename");
-
-        string filePath = Path.Combine(serie.SavePath, sanitizedFileName);
-        if (!IsPathSafe(filePath, serie.SavePath))
-            return BadRequest("Invalid file path");
-
-        if (!Directory.Exists(filePath) && !System.IO.File.Exists(filePath))
-            return BadRequest();
-
-        int number = ExtractChapterNumber(sanitizedFileName);
+        int number = ExtractChapterNumber(file.FileName);
         Chapter? chapter = context.Chapters.FirstOrDefault(c => c.Number == number);
         if (chapter == null || !TryGetPagesCountFromCbz(file, out int pagesCount))
             return BadRequest();
@@ -110,12 +105,12 @@ public partial class UploadController(
 
         serie.LastModification = DateTime.UtcNow;
 
-        await SaveFileAsync(file, filePath);
+        await SaveFileAsync(file, chapter.Path());
         await context.SaveChangesAsync();
 
-        notificationService.NotifyChapterModifiedAsync(chapter.ToDto());
+        notificationService.NotifyChapterUpdatedAsync(chapter.ToDto());
 
-        _ = backgroundTaskService.AddTaskAsync(new FixChapterBackGroundTask(fixService, chapter.Id));
+        //_ = backgroundTaskService.AddTaskAsync(new FixNewChapterBackGroundTask(fixService, chapter));
         _ = backgroundTaskService.AddTaskAsync(new FixSerieBackGroundTask(fixService, chapter.SerieId));
 
         return Ok();
@@ -161,17 +156,20 @@ public partial class UploadController(
         await System.IO.File.WriteAllBytesAsync(filePath, buffer);
     }
 
-    private static int ExtractChapterNumber(string fileName)
+    private int ExtractChapterNumber(string fileName)
     {
-        Regex regex = RegexNumber();
-        Match match = regex.Match(fileName);
-        return match.Success ? Convert.ToInt32(match.Value, CultureInfo.InvariantCulture) : 0;
-    }
-
-    private DateTime GetChapterCreationDate(string filePath)
-    {
-        Chapter? replacedChapter = context.Chapters.FirstOrDefault(c => c.FileName == filePath);
-        return replacedChapter?.Creation ?? DateTime.UtcNow;
+        foreach (string pattern in _chapterNumberPatterns)
+        {
+            Regex regex = new(pattern);
+            Match match = regex.Match(fileName);
+            if (!match.Success) continue;
+            string numberStr = Regex.Replace(match.Value, @"[^\d]", "");
+            if (int.TryParse(numberStr, out int number))
+            {
+                return number;
+            }
+        }
+        return 0;
     }
 
     private async Task<IActionResult> CreateOrReplacePoster(IFormFile file, [FromForm] long serieId, bool replace)
@@ -190,7 +188,7 @@ public partial class UploadController(
         {
             MagickImage image = new(file.OpenReadStream());
             image.Quality = SettingsManager.Data.PosterQuality;
-            await image.WriteAsync(path, GetMagickFormat(format));
+            await image.WriteAsync(path, format.GetMagickFormat());
             _ = backgroundTaskService.AddTaskAsync(new FixPosterBackGroundTask(fixService, serie.Id));
             notificationService.NotifyPosterUpdatedAsync(serie.Id);
         }
@@ -200,37 +198,5 @@ public partial class UploadController(
         }
 
         return Ok();
-    }
-
-    private static MagickFormat GetMagickFormat(ImageFormat format)
-    {
-        return format switch
-        {
-            ImageFormat.Webp => MagickFormat.WebP,
-            ImageFormat.Png => MagickFormat.Png,
-            ImageFormat.Jpeg => MagickFormat.Jpeg,
-            _ => MagickFormat.WebP
-        };
-    }
-
-    private static string SanitizeFileName(string fileName)
-    {
-        if (string.IsNullOrEmpty(fileName)) return string.Empty;
-        fileName = fileName.Replace("..", "").Replace("/", "").Replace("\\", "");
-        return InvalidPathChars().Replace(fileName, "");
-    }
-
-    private static bool IsPathSafe(string filePath, string basePath)
-    {
-        try
-        {
-            string fullFilePath = Path.GetFullPath(filePath);
-            string fullBasePath = Path.GetFullPath(basePath);
-            return fullFilePath.StartsWith(fullBasePath, StringComparison.OrdinalIgnoreCase);
-        }
-        catch
-        {
-            return false;
-        }
     }
 }

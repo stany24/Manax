@@ -61,7 +61,7 @@ public class ChapterController(ManaxContext context, INotificationService notifi
         Chapter? chapter = await context.Chapters.FindAsync(id);
         if (chapter == null) return NotFound();
 
-        string filePath = chapter.Path;
+        string filePath = chapter.Path();
         if (string.IsNullOrEmpty(filePath) || !System.IO.File.Exists(filePath) ||
             !filePath.EndsWith(".cbz", StringComparison.OrdinalIgnoreCase))
             return NotFound();
@@ -85,7 +85,7 @@ public class ChapterController(ManaxContext context, INotificationService notifi
     {
         Chapter? chapter = await context.Chapters.FindAsync(id);
         if (chapter == null) return NotFound();
-        string filePath = chapter.Path;
+        string filePath = chapter.Path();
         if (string.IsNullOrEmpty(filePath) || !System.IO.File.Exists(filePath))
             return NotFound();
         byte[] bytes = await System.IO.File.ReadAllBytesAsync(filePath);

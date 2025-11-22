@@ -34,7 +34,6 @@ public class GetChapterTests : ChapterTestsSetup
         Assert.IsNotNull(returnedChapter);
         Assert.AreEqual(chapter.Id, returnedChapter.Id);
         Assert.AreEqual(chapter.SerieId, returnedChapter.SerieId);
-        Assert.AreEqual(chapter.FileName, returnedChapter.FileName);
     }
 
     [TestMethod]
@@ -89,7 +88,6 @@ public class GetChapterTests : ChapterTestsSetup
         Assert.IsNotNull(returnedChapter);
         Assert.AreEqual(chapter.Id, returnedChapter.Id);
         Assert.AreEqual(chapter.SerieId, returnedChapter.SerieId);
-        Assert.AreEqual(chapter.FileName, returnedChapter.FileName);
         Assert.AreEqual(chapter.Number, returnedChapter.Number);
         Assert.AreEqual(chapter.PageNumber, returnedChapter.PageNumber);
         Assert.AreEqual(chapter.Creation, returnedChapter.Creation);

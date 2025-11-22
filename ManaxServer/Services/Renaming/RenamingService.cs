@@ -35,21 +35,10 @@ public class RenamingService(IServiceScopeFactory scopeFactory) : Service, IRena
                 else
                 {
                     MagickImage image = new(oldPoster);
-                    image.Format = GetMagickFormat(newFormat);
+                    image.Format = newFormat.GetMagickFormat();
                     image.Write(newPoster);
                     File.Delete(oldPoster);
                 }
             });
-    }
-
-    private static MagickFormat GetMagickFormat(ImageFormat format)
-    {
-        return format switch
-        {
-            ImageFormat.Webp => MagickFormat.WebP,
-            ImageFormat.Png => MagickFormat.Png,
-            ImageFormat.Jpeg => MagickFormat.Jpeg,
-            _ => MagickFormat.WebP
-        };
     }
 }

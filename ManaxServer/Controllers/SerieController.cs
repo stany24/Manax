@@ -61,7 +61,7 @@ public class SerieController(
         if (serie == null) return NotFound();
         List<long> chaptersIds = context.Chapters
             .Where(c => c.SerieId == id)
-            .OrderBy(c => c.FileName)
+            .OrderBy(c => c.Number)
             .Select(c => c.Id).ToList();
 
         return chaptersIds;

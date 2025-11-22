@@ -31,7 +31,6 @@ public static class SerieSource
     {
         Serie serie = new(dto);
         serie.LoadInfo();
-        serie.LoadPoster();
         lock (SeriesLock)
         {
             Series.AddOrUpdate(serie);

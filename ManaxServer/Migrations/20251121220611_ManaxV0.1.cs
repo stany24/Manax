@@ -17,7 +17,7 @@ namespace ManaxServer.Migrations
                 {
                     Id = table.Column<long>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", nullable: false),
+                    Name = table.Column<string>(type: "TEXT", maxLength: 256, nullable: false),
                     Creation = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
@@ -88,7 +88,7 @@ namespace ManaxServer.Migrations
                 {
                     Id = table.Column<long>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", nullable: false)
+                    Name = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -101,7 +101,7 @@ namespace ManaxServer.Migrations
                 {
                     Id = table.Column<long>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Path = table.Column<string>(type: "TEXT", nullable: false),
+                    Path = table.Column<string>(type: "TEXT", maxLength: 4096, nullable: false),
                     Creation = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
@@ -146,9 +146,9 @@ namespace ManaxServer.Migrations
                 {
                     Id = table.Column<long>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    FirstName = table.Column<string>(type: "TEXT", nullable: false),
-                    LastName = table.Column<string>(type: "TEXT", nullable: false),
-                    Pseudonym = table.Column<string>(type: "TEXT", nullable: false),
+                    FirstName = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
+                    LastName = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
+                    Pseudonym = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
                     RoleId = table.Column<long>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
@@ -170,7 +170,7 @@ namespace ManaxServer.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     LibraryId = table.Column<long>(type: "INTEGER", nullable: true),
                     SavePointId = table.Column<long>(type: "INTEGER", nullable: false),
-                    FolderName = table.Column<string>(type: "TEXT", nullable: false),
+                    FolderName = table.Column<string>(type: "TEXT", maxLength: 255, nullable: false),
                     Title = table.Column<string>(type: "TEXT", nullable: false),
                     Description = table.Column<string>(type: "TEXT", nullable: false),
                     Status = table.Column<int>(type: "INTEGER", nullable: false),
@@ -239,10 +239,9 @@ namespace ManaxServer.Migrations
                     Id = table.Column<long>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     SerieId = table.Column<long>(type: "INTEGER", nullable: false),
-                    FileName = table.Column<string>(type: "TEXT", nullable: false),
+                    UploaderId = table.Column<long>(type: "INTEGER", nullable: false),
                     Number = table.Column<int>(type: "INTEGER", nullable: false),
                     PageNumber = table.Column<int>(type: "INTEGER", nullable: false),
-                    Path = table.Column<string>(type: "TEXT", nullable: false),
                     Creation = table.Column<DateTime>(type: "TEXT", nullable: false),
                     LastModification = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
@@ -253,6 +252,12 @@ namespace ManaxServer.Migrations
                         name: "FK_Chapters_Series_SerieId",
                         column: x => x.SerieId,
                         principalTable: "Series",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Chapters_Users_UploaderId",
+                        column: x => x.UploaderId,
+                        principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -453,6 +458,11 @@ namespace ManaxServer.Migrations
                 column: "SerieId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Chapters_UploaderId",
+                table: "Chapters",
+                column: "UploaderId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Libraries_Name",
                 table: "Libraries",
                 column: "Name",
@@ -618,13 +628,13 @@ namespace ManaxServer.Migrations
                 name: "Ranks");
 
             migrationBuilder.DropTable(
-                name: "Users");
-
-            migrationBuilder.DropTable(
                 name: "Roles");
 
             migrationBuilder.DropTable(
                 name: "Series");
+
+            migrationBuilder.DropTable(
+                name: "Users");
 
             migrationBuilder.DropTable(
                 name: "Libraries");

@@ -103,10 +103,9 @@ public static class SqliteTestDbContextFactory
             {
                 Id = 1,
                 SerieId = 1,
-                FileName = "chapter1.cbz",
+                UploaderId = 1,
                 Number = 1,
                 PageNumber = 24,
-                Path = "/test_path/serie1/chapter1.cbz",
                 Creation = DateTime.UtcNow,
                 LastModification = DateTime.UtcNow
             },
@@ -115,10 +114,9 @@ public static class SqliteTestDbContextFactory
             {
                 Id = 2,
                 SerieId = 1,
-                FileName = "chapter2.cbz",
+                UploaderId = 1,
                 Number = 2,
                 PageNumber = 30,
-                Path = "/test_path/serie1/chapter2.cbz",
                 Creation = DateTime.UtcNow,
                 LastModification = DateTime.UtcNow
             },
@@ -127,10 +125,9 @@ public static class SqliteTestDbContextFactory
             {
                 Id = 3,
                 SerieId = 2,
-                FileName = "chapter1.cbz",
+                UploaderId = 2,
                 Number = 1,
                 PageNumber = 25,
-                Path = "/test_path/serie2/chapter1.cbz",
                 Creation = DateTime.UtcNow,
                 LastModification = DateTime.UtcNow
             }

@@ -74,8 +74,8 @@ public partial class IssuesPageViewModel : PageViewModel
         string serieFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Manax",
             chapter.SerieId.ToString(CultureInfo.InvariantCulture));
         if (!Directory.Exists(serieFolder)) Directory.CreateDirectory(serieFolder);
-        string saveFile = Path.Combine(serieFolder, chapter.FileName);
-        string saveFolder = Path.Combine(serieFolder, Path.GetFileNameWithoutExtension(chapter.FileName));
+        string saveFile = Path.Combine(serieFolder, chapter.Number.ToString());
+        string saveFolder = Path.Combine(serieFolder, Path.GetFileNameWithoutExtension(chapter.Number.ToString()));
 
         ReplaceChapterViewModel content = new(saveFolder);
         ConfirmCancelViewModel viewModel = new(content);
@@ -125,7 +125,7 @@ public partial class IssuesPageViewModel : PageViewModel
             byte[] data = await File.ReadAllBytesAsync(saveFile);
 
             Optional<bool> request =
-                await ManaxApiUploadClient.ReplaceChapterAsync(new ByteArrayContent(data), chapter.FileName,
+                await ManaxApiUploadClient.ReplaceChapterAsync(new ByteArrayContent(data), chapter.Number.ToString(),
                     chapter.SerieId);
             if (request.Failed)
             {

@@ -17,7 +17,6 @@ namespace ManaxClient.Models.Server.Data;
 public partial class Chapter : ObservableObject, IDisposable
 {
     [ObservableProperty] private DateTime _creation;
-    [ObservableProperty] private string _fileName = string.Empty;
     [ObservableProperty] private long _id;
     [ObservableProperty] private DateTime _lastModification;
 
@@ -31,7 +30,7 @@ public partial class Chapter : ObservableObject, IDisposable
     public Chapter(ChapterDto chapter)
     {
         FromChapterDto(chapter);
-        ServerNotification.OnChapterModified += OnChapterModified;
+        ServerNotification.OnChapterUpdated += ChapterUpdated;
     }
 
     public Chapter() : this(new ChapterDto())
@@ -51,7 +50,7 @@ public partial class Chapter : ObservableObject, IDisposable
         Dispose(false);
     }
 
-    private void OnChapterModified(ChapterDto chapter)
+    private void ChapterUpdated(ChapterDto chapter)
     {
         if (chapter.Id != Id) return;
         FromChapterDto(chapter);
@@ -61,7 +60,6 @@ public partial class Chapter : ObservableObject, IDisposable
     {
         Id = dto.Id;
         SerieId = dto.SerieId;
-        FileName = dto.FileName;
         Number = dto.Number;
         PageNumber = dto.PageNumber;
         Creation = dto.Creation;
@@ -127,7 +125,7 @@ public partial class Chapter : ObservableObject, IDisposable
 
     private void ReleaseUnmanagedResources()
     {
-        ServerNotification.OnChapterModified -= OnChapterModified;
+        ServerNotification.OnChapterUpdated -= ChapterUpdated;
     }
 
     private void Dispose(bool disposing)

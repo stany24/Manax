@@ -20,6 +20,7 @@ public enum NotificationType
     ChapterAdded,
     ChapterUpdated,
     ChapterRemoved,
+    ChapterUploadFailed,
 
     UserCreated,
     UserUpdated,

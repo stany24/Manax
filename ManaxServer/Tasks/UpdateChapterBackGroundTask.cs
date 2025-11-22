@@ -2,13 +2,13 @@ using ManaxServer.Services.Fix;
 
 namespace ManaxServer.Tasks;
 
-public class FixChapterBackGroundTask(IFixService fixService, long chapterId) : IBackGroundTask
+public class UpdateChapterBackGroundTask(IFixService fixService, long chapterId) : IBackGroundTask
 {
     private readonly long _chapterId = chapterId;
 
     public void Execute()
     {
-        fixService.FixChapter(_chapterId);
+        fixService.UpdateChapter(_chapterId);
     }
 
     public string GetName()
@@ -23,7 +23,7 @@ public class FixChapterBackGroundTask(IFixService fixService, long chapterId) : 
 
     public override bool Equals(object? obj)
     {
-        if (obj is not FixChapterBackGroundTask fixChapterTask) return false;
+        if (obj is not UpdateChapterBackGroundTask fixChapterTask) return false;
         return fixChapterTask._chapterId == _chapterId;
     }
 

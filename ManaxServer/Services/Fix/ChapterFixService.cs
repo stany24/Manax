@@ -4,123 +4,112 @@ using System.Text.RegularExpressions;
 using ImageMagick;
 using ManaxLibrary.DTO.Issue.Automatic;
 using ManaxLibrary.DTO.Setting;
+using ManaxLibrary.Logging;
 using ManaxServer.Models;
 using ManaxServer.Models.Chapter;
+using ManaxServer.Models.Serie;
 using ManaxServer.Services.Issue;
+using ManaxServer.Services.Notification;
 using ManaxServer.Settings;
+using Microsoft.EntityFrameworkCore;
 
 namespace ManaxServer.Services.Fix;
 
-public partial class FixService(IServiceScopeFactory scopeFactory, IIssueService issueService) : Service, IFixService
+public partial class FixService(IServiceScopeFactory scopeFactory, IIssueService issueService,INotificationService notificationService) : Service, IFixService
 {
-    private readonly string[] _chapterNumberPatterns =
-    [
-        "CH\\d{1,4}",
-        "(?i)chapter[-_ ]\\d{1,4}",
-        "(?i)episode[-_ ][-_ ]\\d{1,4}",
-        "(?i)episode[-_ ]\\d{1,4}",
-        "(?i)chap[-_ ]\\d{1,4}",
-        "(?i)ch.[-_ ]*\\d{1,4}",
-        "(?i)ep.[-_ ]*\\d{1,4}",
-        "(?i)Flight[-_ ]\\d{1,4}",
-        "\\d{1,4}"
-    ];
+    public void UpdateChapter(long chapterId)
+    {
+        
+    }
 
-    public void FixChapter(long chapterId)
+    public void FixNewChapter(NewChapter newChapter)
     {
         using IServiceScope scope = scopeFactory.CreateScope();
         ManaxContext manaxContext = scope.ServiceProvider.GetRequiredService<ManaxContext>();
-        Chapter? chapter = manaxContext.Chapters.Find(chapterId);
-        if (chapter == null) return;
 
-        chapter.PageNumber = ZipFile.OpenRead(chapter.Path).Entries.Count;
-
-        FixChapterDeep(chapter);
-        manaxContext.SaveChangesAsync();
+        Serie? serie = manaxContext.Series
+            .Include(s => s.SavePoint)
+            .FirstOrDefault(s => s.Id == newChapter.SerieId);
+        
+        if (serie == null)
+        {
+            Logger.LogFailure($"Serie with id {newChapter.SerieId} not found for chapter {newChapter.Number}");
+            return;
+        }
+        
+        Chapter chapter = new()
+        {
+            SerieId = newChapter.SerieId,
+            Serie = serie,
+            UploaderId = newChapter.UploaderId,
+            Number = newChapter.Number,
+            Creation = DateTime.UtcNow,
+            LastModification = DateTime.UtcNow,
+            PageNumber = ZipFile.OpenRead(newChapter.TempPath).Entries.Count
+        };
+        
+        bool success = FixChapterDeep(newChapter,chapter);
+        if (!success)
+        {
+            notificationService.NotifyChapterUploadFailedAsync(newChapter.UploaderId,serie.Title, newChapter.Number);
+            return;
+        }
+        
+        serie.LastModification = DateTime.UtcNow;
+        manaxContext.Chapters.Add(chapter);
+        manaxContext.SaveChanges();
+        notificationService.NotifyChapterAddedAsync(chapter.ToDto());
     }
 
     [GeneratedRegex("\\d{1,4}")]
     private partial Regex RegexNumber();
 
-    private void FixChapterDeep(Chapter chapter)
+    private bool FixChapterDeep(NewChapter newChapter, Chapter chapter)
     {
-        string copyName = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+        string extractedPath = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
 
         try
         {
-            ZipFile.ExtractToDirectory(chapter.Path, copyName);
-            List<string> list = Directory.GetFiles(copyName, "*.*", SearchOption.AllDirectories).ToList();
-            foreach (string file in list) File.Move(file, Path.Combine(copyName, Path.GetFileName(file)));
-            foreach (string directory in Directory.GetDirectories(copyName)) Directory.Delete(directory);
+            ZipFile.ExtractToDirectory(newChapter.TempPath, extractedPath);
+            List<string> allExtractedFiles = Directory.GetFiles(extractedPath, "*.*", SearchOption.AllDirectories).ToList();
+            foreach (string file in allExtractedFiles) File.Move(file, Path.Combine(extractedPath, Path.GetFileName(file)));
+            foreach (string directory in Directory.GetDirectories(extractedPath)) Directory.Delete(directory);
         }
-        catch
+        catch(Exception e)
         {
-            if (Directory.Exists(copyName)) Directory.Delete(copyName, true);
-            issueService.CreateChapterIssue(chapter.Id, IssueChapterAutomaticType.CouldNotOpen);
-            return;
+            if (Directory.Exists(extractedPath)) Directory.Delete(extractedPath, true);
+            Logger.LogError("Failed to extract chapter archive",e);
+            return false;
         }
 
-        string[] files = Directory.GetFiles(copyName);
+        string[] files = Directory.GetFiles(extractedPath);
         Array.Sort(files);
-        MagickImage?[] images = LoadImages(chapter.Id, files);
-        bool modified1 = FixWidthOfChapter(chapter.Id, images);
-        bool modified2 = FixChapterFilesFormat(images);
-        bool modified3 = FixPagesNaming(images);
-        bool modified4 = FixChapterName(chapter);
-        if (modified1 || modified2 || modified3 || modified4)
+        MagickImage[]? images = LoadImages(files);
+        if (images == null)
         {
-            File.Delete(chapter.Path);
-            ZipFile.CreateFromDirectory(copyName, chapter.Path);
+            Directory.Delete(extractedPath, true);
+            Logger.LogFailure($"Failed to load images for chapter {newChapter.Number} in serie {newChapter.SerieId}");
+            return false;
         }
+        
+        bool modified = false;
+        modified = modified || FixWidthOfChapter(chapter.Id, images);
+        modified = modified || FixChapterFilesFormat(images);
+        modified = modified || FixPagesNaming(images);
+        
+        if (modified) { ZipFile.CreateFromDirectory(extractedPath, chapter.Path()); }
+        else { File.Move(newChapter.TempPath, chapter.Path()); }
+        
+        File.Delete(newChapter.TempPath);
+        Directory.Delete(extractedPath,true);
 
         foreach (MagickImage? image in images) image?.Dispose();
-
-        Directory.Delete(copyName, true);
-    }
-
-    private bool FixChapterName(Chapter chapter)
-    {
-        int? chapterNumber = GetChapterNumber(chapter.FileName);
-        if (chapterNumber != null) return ChangeChapterName(chapter, (int)chapterNumber);
-        issueService.CreateChapterIssue(chapter.Id, IssueChapterAutomaticType.ChapterNumberMissing);
-        return false;
-    }
-
-    private static bool ChangeChapterName(Chapter chapter, int number)
-    {
-        string newName = Path.GetDirectoryName(chapter.Path) + Path.DirectorySeparatorChar +
-                         $"CH{number:0000}." + SettingsManager.Data.ArchiveFormat.ToString()
-                             .ToLower(CultureInfo.InvariantCulture);
-        if (newName == chapter.Path) return false;
-        Directory.Move(chapter.Path, newName);
-        chapter.Path = newName;
-        chapter.FileName = Path.GetFileName(newName);
         return true;
     }
 
-    private int? GetChapterNumber(string fullChapterPath)
+    private MagickImage[]? LoadImages(string[] files)
     {
-        string folderName = Path.GetFileName(fullChapterPath);
-        foreach (string pattern in _chapterNumberPatterns)
-        {
-            Regex regex = new(pattern);
-            Match match = regex.Match(folderName);
-            if (match.Success) return GetNumber(match.Value);
-        }
-
-        return null;
-    }
-
-    private int GetNumber(string chapterName)
-    {
-        Regex regex = RegexNumber();
-        Match match = regex.Match(chapterName);
-        return Convert.ToInt32(match.Value, CultureInfo.InvariantCulture);
-    }
-
-    private MagickImage?[] LoadImages(long chapterId, string[] files)
-    {
-        MagickImage?[] images = new MagickImage[files.Length];
+        MagickImage[] images = new MagickImage[files.Length];
         for (int i = 0; i < files.Length; i++)
             try
             {
@@ -128,8 +117,7 @@ public partial class FixService(IServiceScopeFactory scopeFactory, IIssueService
             }
             catch
             {
-                images[i] = null;
-                issueService.CreateChapterIssue(chapterId, IssueChapterAutomaticType.CouldNotOpen);
+                return null;
             }
 
         return images;
@@ -188,7 +176,7 @@ public partial class FixService(IServiceScopeFactory scopeFactory, IIssueService
     private static bool FixChapterFilesFormat(MagickImage?[] images)
     {
         bool modified = false;
-        MagickFormat format = GetMagickFormat(SettingsManager.Data.ImageFormat);
+        MagickFormat format = SettingsManager.Data.ImageFormat.GetMagickFormat();
         foreach (MagickImage? image in images)
         {
             if (image == null) continue;
@@ -202,16 +190,5 @@ public partial class FixService(IServiceScopeFactory scopeFactory, IIssueService
         }
 
         return modified;
-    }
-
-    private static MagickFormat GetMagickFormat(ImageFormat format)
-    {
-        return format switch
-        {
-            ImageFormat.Webp => MagickFormat.WebP,
-            ImageFormat.Png => MagickFormat.Png,
-            ImageFormat.Jpeg => MagickFormat.Jpeg,
-            _ => MagickFormat.WebP
-        };
     }
 }

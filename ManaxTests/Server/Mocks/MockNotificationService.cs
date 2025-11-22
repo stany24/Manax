@@ -73,11 +73,15 @@ public class MockNotificationService : INotificationService
     {
     }
 
-    public void NotifyChapterModifiedAsync(ChapterDto chapter)
+    public void NotifyChapterUpdatedAsync(ChapterDto chapter)
     {
     }
 
     public void NotifyChapterRemovedAsync(long chapterId)
+    {
+    }
+    
+    public void NotifyChapterUploadFailedAsync(long userId, string serieTitle, int number)
     {
     }
 

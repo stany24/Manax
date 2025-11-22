@@ -80,6 +80,7 @@ public partial class MainWindowViewModel : ObservableObject
             ServerNotification.OnRunningTasks += OnRunningTasks;
             ServerNotification.OnPermissionModified += OnPermissionModified;
             ServerNotification.OnFeatureModified += OnFeatureModified;
+            ServerNotification.OnChapterUploadFailed += OnChapterUploadFailed;
             Task.Run(LoadPermissions);
             Task.Run(LoadFeatures);
 
@@ -101,6 +102,8 @@ public partial class MainWindowViewModel : ObservableObject
     {
         ServerNotification.OnRunningTasks -= OnRunningTasks;
         ServerNotification.OnPermissionModified -= OnPermissionModified;
+        ServerNotification.OnFeatureModified -= OnFeatureModified;
+        ServerNotification.OnChapterUploadFailed -= OnChapterUploadFailed;
         _librariesSubscription.Dispose();
     }
 
@@ -113,6 +116,11 @@ public partial class MainWindowViewModel : ObservableObject
             foreach (KeyValuePair<string, int> task in tasks)
                 RunningTasks.Add(new TaskItem { TaskName = task.Key, Number = task.Value });
         });
+    }
+    
+    private void OnChapterUploadFailed(string chapterPath)
+    {
+        ShowInfo($"Chapter upload failed: {chapterPath}");
     }
 
     public async void Logout()

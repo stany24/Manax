@@ -1,5 +1,6 @@
 using ManaxLibrary.DTO.SavePoint;
 using ManaxLibrary.DTO.User;
+using ManaxLibrary.Logging;
 using ManaxServer.Attributes;
 using ManaxServer.Models;
 using ManaxServer.Models.SavePoint;
@@ -33,6 +34,7 @@ public class SavePointController(ManaxContext context) : ControllerBase
             return Conflict();
         }
 
+        Logger.LogInfo("Created new save point with ID " + savePoint.Id + " at: " + savePoint.Path);
         return savePoint.Id;
     }
 }
