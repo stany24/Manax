@@ -17,9 +17,34 @@ namespace ManaxServer.Services.Fix;
 
 public partial class FixService(IServiceScopeFactory scopeFactory, IIssueService issueService,INotificationService notificationService) : Service, IFixService
 {
-    public void UpdateChapter(long chapterId)
+    public void ReplaceChapter(long oldChapterId, NewChapter newChapter)
     {
+        using IServiceScope scope = scopeFactory.CreateScope();
+        ManaxContext manaxContext = scope.ServiceProvider.GetRequiredService<ManaxContext>();
         
+        Serie? serie = manaxContext.Series
+            .Include(s => s.SavePoint)
+            .FirstOrDefault(s => s.Id == newChapter.SerieId);
+        Chapter? chapter = manaxContext.Chapters.Find(oldChapterId);
+        
+        if (serie == null || chapter == null)
+        {
+            Logger.LogFailure($"Serie with id {newChapter.SerieId} not found for chapter {newChapter.Number}");
+            return;
+        }
+        
+        bool success = FixChapterDeep(newChapter,chapter);
+        if (!success)
+        {
+            notificationService.NotifyChapterUploadFailedAsync(newChapter.UploaderId,serie.Title, newChapter.Number);
+            return;
+        }
+        
+        chapter.PageNumber = ZipFile.OpenRead(chapter.Path()).Entries.Count;
+        serie.LastModification = DateTime.UtcNow;
+        chapter.LastModification = DateTime.UtcNow;
+        manaxContext.SaveChanges();
+        notificationService.NotifyChapterAddedAsync(chapter.ToDto());
     }
 
     public void FixNewChapter(NewChapter newChapter)
@@ -97,13 +122,14 @@ public partial class FixService(IServiceScopeFactory scopeFactory, IIssueService
         modified = modified || FixChapterFilesFormat(images);
         modified = modified || FixPagesNaming(images);
         
+        if(File.Exists(chapter.Path())) {File.Delete(chapter.Path());}
         if (modified) { ZipFile.CreateFromDirectory(extractedPath, chapter.Path()); }
         else { File.Move(newChapter.TempPath, chapter.Path()); }
         
         File.Delete(newChapter.TempPath);
         Directory.Delete(extractedPath,true);
 
-        foreach (MagickImage? image in images) image?.Dispose();
+        foreach (MagickImage image in images) image.Dispose();
         return true;
     }
 

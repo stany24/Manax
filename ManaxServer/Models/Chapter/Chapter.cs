@@ -3,7 +3,6 @@
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable UnusedMember.Global
 
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using ManaxLibrary.DTO.Chapter;
 using ManaxServer.Settings;

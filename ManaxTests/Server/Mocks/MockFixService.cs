@@ -17,7 +17,8 @@ public class MockFixService : IFixService
     {
     }
 
-    public void UpdateChapter(long chapterId)
+    public void ReplaceChapter(long oldChapterId, NewChapter newChapter)
     {
+        throw new NotImplementedException();
     }
 }

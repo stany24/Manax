@@ -69,7 +69,6 @@ public class SettingsController(
             {
                 Chapter? chapter = manaxContext.Chapters.Find(chapterId);
                 if (chapter == null) continue;
-                _ = backgroundTaskService.AddTaskAsync(new UpdateChapterBackGroundTask(fixService, chapter.Id));
             }
     }
 

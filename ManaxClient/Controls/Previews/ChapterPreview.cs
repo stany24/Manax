@@ -1,5 +1,4 @@
 using System;
-using System.IO;
 using System.Windows.Input;
 using Avalonia;
 using Avalonia.Animation;
@@ -35,12 +34,8 @@ public class ChapterPreview : Button
     public static readonly StyledProperty<ICommand?> PopupRequestedCommandProperty =
         AvaloniaProperty.Register<ChapterPreview, ICommand?>(nameof(PopupRequestedCommand));
 
-    private readonly IBrush _readTextColor = new SolidColorBrush(Color.Parse("#6C757D"));
-    private readonly IBrush _unreadTextColor = new SolidColorBrush(Color.Parse("#212529"));
-
     public ChapterPreview()
     {
-        Background = Brushes.Transparent;
         BorderThickness = new Thickness(0);
         Padding = new Thickness(0);
         HorizontalAlignment = HorizontalAlignment.Stretch;
@@ -108,17 +103,6 @@ public class ChapterPreview : Button
             Converter = new FuncValueConverter<int, string>(fileName => $"Chapitre {fileName}")
         });
 
-        chapterName.Bind(ForegroundProperty, new Binding(nameof(Chapter) + "." + nameof(Chapter.Read))
-        {
-            Source = this,
-            Mode = BindingMode.OneWay,
-            Converter = new FuncValueConverter<ReadDto?, IBrush>(read =>
-            {
-                if (read == null) return _unreadTextColor;
-                return read.Page + 1 == Chapter.PageNumber ? _readTextColor : _unreadTextColor;
-            })
-        });
-
         chapterDetails.Bind(TextBlock.TextProperty, new Binding(nameof(Chapter) + "." + nameof(Chapter.PageNumber))
         {
             Source = this,
@@ -171,23 +155,15 @@ public class ChapterPreview : Button
         Button actionButton = new()
         {
             Content = "...",
-            Background = Brushes.Transparent,
             BorderThickness = new Thickness(0),
             Padding = new Thickness(4),
             HorizontalAlignment = HorizontalAlignment.Right,
             VerticalAlignment = VerticalAlignment.Center,
             Cursor = new Cursor(StandardCursorType.Hand)
         };
-        actionButton.SetValue(Grid.ColumnProperty, 4);
+        actionButton.SetValue(Grid.ColumnProperty, 3);
         actionButton.Click += ShowChoices;
-
-        TextBlock chevron = new()
-        {
-            Text = "›",
-            FontSize = 16,
-            VerticalAlignment = VerticalAlignment.Center
-        };
-        chevron.SetValue(Grid.ColumnProperty, 3);
+        
 
         infoStack.Children.Add(chapterName);
         infoStack.Children.Add(chapterDetails);
@@ -195,7 +171,6 @@ public class ChapterPreview : Button
         mainGrid.Children.Add(statusIndicator);
         mainGrid.Children.Add(infoStack);
         mainGrid.Children.Add(progressBadge);
-        mainGrid.Children.Add(chevron);
         mainGrid.Children.Add(actionButton);
 
         border.Child = mainGrid;

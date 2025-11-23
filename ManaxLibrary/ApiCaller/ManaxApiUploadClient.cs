@@ -1,11 +1,43 @@
 using System.Globalization;
 using System.Net.Http.Headers;
+using System.Net.Http.Json;
+using System.Text.RegularExpressions;
+using ManaxLibrary.DTO.Chapter;
 using ManaxLibrary.DTO.Serie;
 
 namespace ManaxLibrary.ApiCaller;
 
 public static class ManaxApiUploadClient
 {
+    private static readonly string[] ChapterNumberPatterns =
+    [
+        "CH\\d{1,4}",
+        "(?i)chapter[-_ ]\\d{1,4}",
+        "(?i)episode[-_ ][-_ ]\\d{1,4}",
+        "(?i)episode[-_ ]\\d{1,4}",
+        "(?i)chap[-_ ]\\d{1,4}",
+        "(?i)ch.[-_ ]*\\d{1,4}",
+        "(?i)ep.[-_ ]*\\d{1,4}",
+        "(?i)Flight[-_ ]\\d{1,4}",
+        "\\d{1,4}"
+    ];
+    
+    private static int ExtractChapterNumber(string fileName)
+    {
+        foreach (string pattern in ChapterNumberPatterns)
+        {
+            Regex regex = new(pattern);
+            Match match = regex.Match(fileName);
+            if (!match.Success) continue;
+            string numberStr = Regex.Replace(match.Value, @"[^\d]", "");
+            if (int.TryParse(numberStr, out int number))
+            {
+                return number;
+            }
+        }
+        return 0;
+    }
+    
     public static async Task<Optional<bool>> UploadSerieAsync(string directory)
     {
         return await ManaxApiClient.ExecuteWithErrorHandlingAsync(async () =>
@@ -32,10 +64,13 @@ public static class ManaxApiUploadClient
 
             foreach (string filePath in Directory.GetFiles(directory, "*.cbz"))
             {
-                await using FileStream fileStream = File.OpenRead(filePath);
-                ByteArrayContent fileContent = new(await File.ReadAllBytesAsync(filePath));
-                string fileName = Path.GetFileName(filePath);
-                Optional<bool> uploadChapterResponse = await UploadChapterAsync(fileContent, fileName, serieId);
+                NewChapterDto newChapterDto = new()
+                {
+                    Data = await File.ReadAllBytesAsync(filePath),
+                    SerieId = (int)serieId,
+                    Number = ExtractChapterNumber(Path.GetFileName(filePath))
+                };
+                Optional<bool> uploadChapterResponse = await UploadChapterAsync(newChapterDto);
                 if (uploadChapterResponse.Failed)
                     return new Optional<bool>(uploadChapterResponse.Error);
             }
@@ -44,16 +79,11 @@ public static class ManaxApiUploadClient
         });
     }
 
-    public static async Task<Optional<bool>> UploadChapterAsync(ByteArrayContent file, string fileName,
-        long serieId)
+    public static async Task<Optional<bool>> UploadChapterAsync(NewChapterDto dto)
     {
         return await ManaxApiClient.ExecuteWithErrorHandlingAsync(async () =>
         {
-            using MultipartFormDataContent content = new();
-            file.Headers.ContentType = MediaTypeHeaderValue.Parse("application/zip");
-            content.Add(file, "file", fileName);
-            content.Add(new StringContent(serieId.ToString(CultureInfo.InvariantCulture)), "serieId");
-            HttpResponseMessage response = await ManaxApiClient.Client.PostAsync("api/upload/chapter", content);
+            HttpResponseMessage response = await ManaxApiClient.Client.PostAsJsonAsync("api/upload/chapter", dto);
             return new Optional<bool>(response.IsSuccessStatusCode);
         });
     }
