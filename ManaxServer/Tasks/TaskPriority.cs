@@ -7,5 +7,4 @@ public enum TaskPriority
     ChapterFix = 10,
 
     PosterFix = 5,
-    PosterRenaming = 4
 }

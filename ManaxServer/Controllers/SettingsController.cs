@@ -51,10 +51,20 @@ public class SettingsController(
         lock (_lock)
         {
             HandlePosterModifications(newData, oldData, manaxContext);
+            HandleBannerModifications(newData, oldData, manaxContext);
             HandleChapterModifications(newData, oldData, manaxContext);
+            HandleSerieModifications(newData, oldData, manaxContext);
         }
 
         scope.Dispose();
+    }
+
+    private void HandleSerieModifications(SettingsData newData, SettingsData oldData, ManaxContext manaxContext)
+    {
+    }
+
+    private void HandleBannerModifications(SettingsData newData, SettingsData oldData, ManaxContext manaxContext)
+    {
     }
 
     private void HandleChapterModifications(SettingsData newData, SettingsData oldData, ManaxContext manaxContext)

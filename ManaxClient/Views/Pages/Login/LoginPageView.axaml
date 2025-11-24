@@ -41,7 +41,7 @@
                                 <TextBlock Text="{localization:Localize LoginPage.Username}"
                                            FontWeight="Medium" />
                                 <TextBox Name="TbxUsername"
-                                         Loaded="TbxUsername_OnLoaded"
+                                         Loaded="TbxUsernameOnLoaded"
                                          Text="{Binding Username}"
                                          Watermark="{localization:Localize LoginPage.Username.Placeholder}"
                                          Padding="12"

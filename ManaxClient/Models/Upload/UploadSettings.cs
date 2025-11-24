@@ -7,7 +7,7 @@ namespace ManaxClient.Models.Upload;
 
 public static class UploadSettings
 {
-    public static EventHandler? SettingsChanged;
+    public static EventHandler? SettingsChanged { get; set; }
     private static UploadSettingsData _settings = new();
 
     private static readonly string SavePath = Path.Combine(

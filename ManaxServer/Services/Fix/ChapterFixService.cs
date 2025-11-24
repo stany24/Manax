@@ -44,7 +44,7 @@ public partial class FixService(IServiceScopeFactory scopeFactory, IIssueService
         serie.LastModification = DateTime.UtcNow;
         chapter.LastModification = DateTime.UtcNow;
         manaxContext.SaveChanges();
-        notificationService.NotifyChapterAddedAsync(chapter.ToDto());
+        notificationService.NotifyChapterUpdatedAsync(chapter.ToDto());
     }
 
     public void FixNewChapter(NewChapter newChapter)
@@ -133,7 +133,7 @@ public partial class FixService(IServiceScopeFactory scopeFactory, IIssueService
         return true;
     }
 
-    private MagickImage[]? LoadImages(string[] files)
+    private static MagickImage[]? LoadImages(string[] files)
     {
         MagickImage[] images = new MagickImage[files.Length];
         for (int i = 0; i < files.Length; i++)

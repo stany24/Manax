@@ -43,7 +43,7 @@ public class UploadController(
         if (serie == null || context.Chapters.Any(s => s.SerieId == chapterDto.SerieId && s.Number == chapterDto.Number)) 
             return BadRequest();
 
-        string filePath = Path.Combine(serie.SavePath, chapterDto.Number.ToString(),SettingsManager.Data.ArchiveFormat.ToString().ToLower());
+        string filePath = Path.Combine(serie.SavePath, chapterDto.Number.ToString(CultureInfo.InvariantCulture),SettingsManager.Data.ArchiveFormat.ToString().ToLower(CultureInfo.InvariantCulture));
         if (Directory.Exists(filePath) || System.IO.File.Exists(filePath))
             return BadRequest();
         

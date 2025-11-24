@@ -21,7 +21,6 @@ public class MockNotificationService : INotificationService
     public TagDto? TagCreated { get; private set; }
     public TagDto? TagUpdated { get; private set; }
     public long TagDeletedId { get; private set; }
-    public Feature? FeatureChanged { get; set; }
 
     public void NotifyPermissionModifiedAsync(long userId, List<Permission> permissions)
     {
@@ -143,7 +142,6 @@ public class MockNotificationService : INotificationService
 
     public void NotifyFeatureChanged(Feature feature)
     {
-        FeatureChanged = feature;
     }
 
     public void NotifyPersonCreatedAsync(PersonDto person)

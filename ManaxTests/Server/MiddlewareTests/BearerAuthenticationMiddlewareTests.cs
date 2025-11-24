@@ -66,7 +66,7 @@ public class BearerAuthenticationMiddlewareTests : BearerAuthenticationMiddlewar
     [TestMethod]
     public async Task InvokeAsyncInvalidTokenReturnsUnauthorized()
     {
-        string token = "invalid-token";
+        const string token = "invalid-token";
         HttpContext.Request.Headers.Authorization = $"Bearer {token}";
         HttpContext.Response.Body = new MemoryStream();
         BearerAuthenticationMiddleware middleware = new(Next, TokenService);

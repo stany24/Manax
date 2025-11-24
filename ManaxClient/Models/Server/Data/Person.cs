@@ -41,16 +41,4 @@ public partial class Person : ObservableObject
         if (Id != dto.Id) return;
         FromDto(dto);
     }
-
-    public PersonDto ToPersonDto()
-    {
-        return new PersonDto
-        {
-            Id = Id,
-            FirstName = FirstName,
-            LastName = LastName,
-            Pseudonym = Pseudonym,
-            RoleId = Role.Id
-        };
-    }
 }

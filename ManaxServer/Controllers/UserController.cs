@@ -65,6 +65,7 @@ public class UserController(
             return BadRequest();
 
         user.PasswordHash = hashService.HashPassword(userUpdate.Password);
+        user.Username = userUpdate.Username;
         notificationService.NotifyUserUpdatedAsync(user.ToDto());
         await context.SaveChangesAsync();
         return Ok();

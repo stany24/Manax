@@ -15,10 +15,6 @@ public class SeriePreview : Button
         AvaloniaProperty.RegisterAttached<SeriePreview, Grid, Serie?>(
             "Serie", null, false, BindingMode.OneTime);
 
-    public static readonly AttachedProperty<SolidColorBrush> TextColorProperty =
-        AvaloniaProperty.RegisterAttached<SeriePreview, Grid, SolidColorBrush>(
-            "TextColor", new SolidColorBrush(), false, BindingMode.OneTime);
-
     public static readonly AttachedProperty<SolidColorBrush> BackGroundColorProperty =
         AvaloniaProperty.RegisterAttached<SeriePreview, Grid, SolidColorBrush>(
             "BackGroundColor", new SolidColorBrush(), false, BindingMode.OneTime);
@@ -88,11 +84,6 @@ public class SeriePreview : Button
             Source = this,
             Mode = BindingMode.OneWay
         });
-        textBlock.Bind(TextBlock.ForegroundProperty, new Binding(nameof(TextColor))
-        {
-            Source = this,
-            Mode = BindingMode.OneWay
-        });
 
         titleContainer.Child = textBlock;
 
@@ -117,12 +108,6 @@ public class SeriePreview : Button
     {
         get => GetSerie(this);
         set => SetSerie(this, value);
-    }
-
-    public SolidColorBrush TextColor
-    {
-        get => GetTextColor(this);
-        set => SetTextColor(this, value);
     }
 
     public SolidColorBrush BackGroundColor
@@ -151,16 +136,6 @@ public class SeriePreview : Button
     private static Serie? GetSerie(AvaloniaObject element)
     {
         return element.GetValue(SerieProperty);
-    }
-
-    private static void SetTextColor(AvaloniaObject element, SolidColorBrush textColorValue)
-    {
-        element.SetValue(TextColorProperty, textColorValue);
-    }
-
-    private static SolidColorBrush GetTextColor(AvaloniaObject element)
-    {
-        return element.GetValue(TextColorProperty);
     }
 
     private static void SetBackGroundColor(AvaloniaObject element, SolidColorBrush backGroundColorValue)

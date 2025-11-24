@@ -1,5 +1,6 @@
 using System;
 using System.Globalization;
+using System.Text;
 using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData;
 using Jeek.Avalonia.Localization;
@@ -15,16 +16,22 @@ public partial class IssueSerieAutomatic : ObservableObject
     [ObservableProperty] private IssueSerieAutomaticType _problem;
     [ObservableProperty] private Serie _serie = null!;
     private IDisposable? _subscription;
+    public static string AutomaticBadgeText => Localizer.Get("IssuesPage.Automatic");
+    private static CompositeFormat? _serieInfoFormat;
+
+    public string FormattedInfo
+    {
+        get
+        {
+            _serieInfoFormat ??= CompositeFormat.Parse(Localizer.Get("IssuesPage.SeriesInfo"));
+            return string.Format(CultureInfo.InvariantCulture, _serieInfoFormat, Serie.Title, CreatedAt);
+        }
+    }
 
     public IssueSerieAutomatic(IssueSerieAutomaticDto dto)
     {
         FromDto(dto);
     }
-
-    public static string AutomaticBadgeText => Localizer.Get("IssuesPage.Automatic");
-
-    public string FormattedInfo => string.Format(CultureInfo.InvariantCulture, Localizer.Get("IssuesPage.SeriesInfo"),
-        Serie.Title, CreatedAt);
 
     private void FromDto(IssueSerieAutomaticDto dto)
     {

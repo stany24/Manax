@@ -7,8 +7,11 @@ using ManaxLibrary.DTO.Serie;
 
 namespace ManaxLibrary.ApiCaller;
 
-public static class ManaxApiUploadClient
+public static partial class ManaxApiUploadClient
 {
+    [GeneratedRegex(@"[^\d]")]
+    private static partial Regex RegexNotNumber();
+    
     private static readonly string[] ChapterNumberPatterns =
     [
         "CH\\d{1,4}",
@@ -29,7 +32,7 @@ public static class ManaxApiUploadClient
             Regex regex = new(pattern);
             Match match = regex.Match(fileName);
             if (!match.Success) continue;
-            string numberStr = Regex.Replace(match.Value, @"[^\d]", "");
+            string numberStr = RegexNotNumber().Replace(match.Value, "");
             if (int.TryParse(numberStr, out int number))
             {
                 return number;

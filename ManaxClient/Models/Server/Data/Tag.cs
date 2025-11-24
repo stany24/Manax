@@ -44,14 +44,4 @@ public partial class Tag : ObservableObject
         Name = dto.Name;
         Color = Color.FromArgb(dto.ColorArgb);
     }
-
-    public TagDto ToTagDto()
-    {
-        return new TagDto
-        {
-            Id = Id,
-            Name = Name,
-            ColorArgb = Color.ToArgb()
-        };
-    }
 }

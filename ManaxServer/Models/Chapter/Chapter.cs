@@ -4,6 +4,7 @@
 // ReSharper disable UnusedMember.Global
 
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Globalization;
 using ManaxLibrary.DTO.Chapter;
 using ManaxServer.Settings;
 
@@ -23,7 +24,7 @@ public class Chapter
 
     public string Path()
     {
-        return System.IO.Path.Combine(Serie.SavePath, Number + "." + SettingsManager.Data.ArchiveFormat.ToString().ToLower());
+        return System.IO.Path.Combine(Serie.SavePath, Number + "." + SettingsManager.Data.ArchiveFormat.ToString().ToLower(CultureInfo.InvariantCulture));
     }
     
     public ChapterDto ToDto()
