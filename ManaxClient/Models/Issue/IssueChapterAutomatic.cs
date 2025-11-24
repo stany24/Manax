@@ -12,13 +12,18 @@ namespace ManaxClient.Models.Issue;
 
 public partial class IssueChapterAutomatic : ObservableObject
 {
+    private static CompositeFormat? _chapterInfoFormat;
     [ObservableProperty] private Chapter _chapter = null!;
     [ObservableProperty] private DateTime _createdAt;
     [ObservableProperty] private IssueChapterAutomaticType _problem;
     private IDisposable? _subscription;
-    public static string AutomaticBadgeText => Localizer.Get("IssuesPage.Automatic");
 
-    private static CompositeFormat? _chapterInfoFormat;
+    public IssueChapterAutomatic(IssueChapterAutomaticDto dto)
+    {
+        FromDto(dto);
+    }
+
+    public static string AutomaticBadgeText => Localizer.Get("IssuesPage.Automatic");
 
     public string FormattedInfo
     {
@@ -27,11 +32,6 @@ public partial class IssueChapterAutomatic : ObservableObject
             _chapterInfoFormat ??= CompositeFormat.Parse(Localizer.Get("IssuesPage.ChapterInfo"));
             return string.Format(CultureInfo.InvariantCulture, _chapterInfoFormat, Chapter.Number, CreatedAt);
         }
-    }
-
-    public IssueChapterAutomatic(IssueChapterAutomaticDto dto)
-    {
-        FromDto(dto);
     }
 
     private void FromDto(IssueChapterAutomaticDto dto)

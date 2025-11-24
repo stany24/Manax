@@ -7,7 +7,6 @@ namespace ManaxClient.Models.Upload;
 
 public static class UploadSettings
 {
-    public static EventHandler? SettingsChanged { get; set; }
     private static UploadSettingsData _settings = new();
 
     private static readonly string SavePath = Path.Combine(
@@ -21,6 +20,8 @@ public static class UploadSettings
     {
         Load();
     }
+
+    public static EventHandler? SettingsChanged { get; set; }
 
     public static string ProcessingFolder => _settings.ProcessingFolder;
     public static ObservableCollection<string> SourceFolders => _settings.SourceFolders;

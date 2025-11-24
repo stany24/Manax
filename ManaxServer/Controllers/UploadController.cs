@@ -36,20 +36,22 @@ public class UploadController(
         long? currentUserId = UserController.GetCurrentUserId(HttpContext);
         if (currentUserId == null)
             return Unauthorized();
-        
+
         Serie? serie = context.Series
             .Include(s => s.SavePoint)
             .FirstOrDefault(s => s.Id == chapterDto.SerieId);
-        if (serie == null || context.Chapters.Any(s => s.SerieId == chapterDto.SerieId && s.Number == chapterDto.Number)) 
+        if (serie == null ||
+            context.Chapters.Any(s => s.SerieId == chapterDto.SerieId && s.Number == chapterDto.Number))
             return BadRequest();
 
-        string filePath = Path.Combine(serie.SavePath, chapterDto.Number.ToString(CultureInfo.InvariantCulture),SettingsManager.Data.ArchiveFormat.ToString().ToLower(CultureInfo.InvariantCulture));
+        string filePath = Path.Combine(serie.SavePath, chapterDto.Number.ToString(CultureInfo.InvariantCulture),
+            SettingsManager.Data.ArchiveFormat.ToString().ToLower(CultureInfo.InvariantCulture));
         if (Directory.Exists(filePath) || System.IO.File.Exists(filePath))
             return BadRequest();
-        
+
         string tempPath = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
         await System.IO.File.WriteAllBytesAsync(tempPath, chapterDto.Data);
-        
+
         NewChapter chapter = NewChapter.FromDto(chapterDto);
         chapter.UploaderId = currentUserId.Value;
         chapter.TempPath = tempPath;
@@ -70,13 +72,14 @@ public class UploadController(
         if (currentUserId == null)
             return Unauthorized();
 
-        Chapter? chapter = context.Chapters.FirstOrDefault(c => c.Number == chapterDto.Number && c.SerieId == chapterDto.SerieId);
+        Chapter? chapter =
+            context.Chapters.FirstOrDefault(c => c.Number == chapterDto.Number && c.SerieId == chapterDto.SerieId);
         if (chapter == null)
             return BadRequest();
 
         string tempPath = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
         await System.IO.File.WriteAllBytesAsync(tempPath, chapterDto.Data);
-        
+
         NewChapter newChapter = NewChapter.FromDto(chapterDto);
         newChapter.UploaderId = (long)currentUserId;
         newChapter.TempPath = tempPath;

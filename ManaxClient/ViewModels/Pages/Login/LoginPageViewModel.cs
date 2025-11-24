@@ -105,7 +105,8 @@ public sealed partial class LoginPageViewModel : PageViewModel
 
             UserDto self = result.User;
             _isAdmin = self.Role is UserRole.Admin or UserRole.Owner;
-            string format = string.Format(CultureInfo.InvariantCulture, Localizer.Get("LoginPage.Connected"),self.Username,self.Role);
+            string format = string.Format(CultureInfo.InvariantCulture, Localizer.Get("LoginPage.Connected"),
+                self.Username, self.Role);
             InfoEmitted?.Invoke(this, format);
             Logger.LogInfo(format);
             SaveLoginValues();

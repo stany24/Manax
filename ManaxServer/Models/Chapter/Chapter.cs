@@ -24,9 +24,10 @@ public class Chapter
 
     public string Path()
     {
-        return System.IO.Path.Combine(Serie.SavePath, Number + "." + SettingsManager.Data.ArchiveFormat.ToString().ToLower(CultureInfo.InvariantCulture));
+        return System.IO.Path.Combine(Serie.SavePath,
+            Number + "." + SettingsManager.Data.ArchiveFormat.ToString().ToLower(CultureInfo.InvariantCulture));
     }
-    
+
     public ChapterDto ToDto()
     {
         return new ChapterDto

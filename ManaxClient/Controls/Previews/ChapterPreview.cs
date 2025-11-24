@@ -163,7 +163,7 @@ public class ChapterPreview : Button
         };
         actionButton.SetValue(Grid.ColumnProperty, 3);
         actionButton.Click += ShowChoices;
-        
+
 
         infoStack.Children.Add(chapterName);
         infoStack.Children.Add(chapterDetails);

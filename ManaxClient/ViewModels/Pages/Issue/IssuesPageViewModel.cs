@@ -75,7 +75,8 @@ public partial class IssuesPageViewModel : PageViewModel
             chapter.SerieId.ToString(CultureInfo.InvariantCulture));
         if (!Directory.Exists(serieFolder)) Directory.CreateDirectory(serieFolder);
         string saveFile = Path.Combine(serieFolder, chapter.Number.ToString(CultureInfo.InvariantCulture));
-        string saveFolder = Path.Combine(serieFolder, Path.GetFileNameWithoutExtension(chapter.Number.ToString(CultureInfo.InvariantCulture)));
+        string saveFolder = Path.Combine(serieFolder,
+            Path.GetFileNameWithoutExtension(chapter.Number.ToString(CultureInfo.InvariantCulture)));
 
         ReplaceChapterViewModel content = new(saveFolder);
         ConfirmCancelViewModel viewModel = new(content);
@@ -125,7 +126,8 @@ public partial class IssuesPageViewModel : PageViewModel
             byte[] data = await File.ReadAllBytesAsync(saveFile);
 
             Optional<bool> request =
-                await ManaxApiUploadClient.ReplaceChapterAsync(new ByteArrayContent(data), chapter.Number.ToString(CultureInfo.InvariantCulture),
+                await ManaxApiUploadClient.ReplaceChapterAsync(new ByteArrayContent(data),
+                    chapter.Number.ToString(CultureInfo.InvariantCulture),
                     chapter.SerieId);
             if (request.Failed)
             {

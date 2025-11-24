@@ -117,7 +117,7 @@ public partial class MainWindowViewModel : ObservableObject
                 RunningTasks.Add(new TaskItem { TaskName = task.Key, Number = task.Value });
         });
     }
-    
+
     private void OnChapterUploadFailed(string chapterPath)
     {
         ShowInfo($"Chapter upload failed: {chapterPath}");

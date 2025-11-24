@@ -12,12 +12,18 @@ namespace ManaxClient.Models.Issue;
 
 public partial class IssueSerieAutomatic : ObservableObject
 {
+    private static CompositeFormat? _serieInfoFormat;
     [ObservableProperty] private DateTime _createdAt;
     [ObservableProperty] private IssueSerieAutomaticType _problem;
     [ObservableProperty] private Serie _serie = null!;
     private IDisposable? _subscription;
+
+    public IssueSerieAutomatic(IssueSerieAutomaticDto dto)
+    {
+        FromDto(dto);
+    }
+
     public static string AutomaticBadgeText => Localizer.Get("IssuesPage.Automatic");
-    private static CompositeFormat? _serieInfoFormat;
 
     public string FormattedInfo
     {
@@ -26,11 +32,6 @@ public partial class IssueSerieAutomatic : ObservableObject
             _serieInfoFormat ??= CompositeFormat.Parse(Localizer.Get("IssuesPage.SeriesInfo"));
             return string.Format(CultureInfo.InvariantCulture, _serieInfoFormat, Serie.Title, CreatedAt);
         }
-    }
-
-    public IssueSerieAutomatic(IssueSerieAutomaticDto dto)
-    {
-        FromDto(dto);
     }
 
     private void FromDto(IssueSerieAutomaticDto dto)

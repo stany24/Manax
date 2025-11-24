@@ -10,6 +10,8 @@ namespace ManaxServer.Models.Serie;
 
 public class Serie
 {
+    public const string PosterName = "poster";
+    public const string BannerName = "banner";
     public long Id { get; set; }
     public List<Person.Person> Persons { get; set; } = [];
     public List<Tag.Tag> Tags { get; set; } = [];
@@ -23,12 +25,13 @@ public class Serie
     public Status Status { get; set; }
     public DateTime Creation { get; set; }
     public DateTime LastModification { get; set; }
-    
-    public const string PosterName = "poster";
-    public const string BannerName = "banner";
     public string SavePath => SavePoint.Path + Path.DirectorySeparatorChar + FolderName;
-    public string PosterPath => SavePath + PosterName + "." + SettingsManager.Data.PosterFormat.ToString().ToLower(CultureInfo.InvariantCulture);
-    public string BannerPath => SavePath + BannerName + "." + SettingsManager.Data.BannerFormat.ToString().ToLower(CultureInfo.InvariantCulture);
+
+    public string PosterPath => SavePath + PosterName + "." +
+                                SettingsManager.Data.PosterFormat.ToString().ToLower(CultureInfo.InvariantCulture);
+
+    public string BannerPath => SavePath + BannerName + "." +
+                                SettingsManager.Data.BannerFormat.ToString().ToLower(CultureInfo.InvariantCulture);
 
     public SerieDto ToDto()
     {

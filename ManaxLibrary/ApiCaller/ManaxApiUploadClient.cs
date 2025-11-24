@@ -9,9 +9,6 @@ namespace ManaxLibrary.ApiCaller;
 
 public static partial class ManaxApiUploadClient
 {
-    [GeneratedRegex(@"[^\d]")]
-    private static partial Regex RegexNotNumber();
-    
     private static readonly string[] ChapterNumberPatterns =
     [
         "CH\\d{1,4}",
@@ -24,7 +21,10 @@ public static partial class ManaxApiUploadClient
         "(?i)Flight[-_ ]\\d{1,4}",
         "\\d{1,4}"
     ];
-    
+
+    [GeneratedRegex(@"[^\d]")]
+    private static partial Regex RegexNotNumber();
+
     private static int ExtractChapterNumber(string fileName)
     {
         foreach (string pattern in ChapterNumberPatterns)
@@ -33,14 +33,12 @@ public static partial class ManaxApiUploadClient
             Match match = regex.Match(fileName);
             if (!match.Success) continue;
             string numberStr = RegexNotNumber().Replace(match.Value, "");
-            if (int.TryParse(numberStr, out int number))
-            {
-                return number;
-            }
+            if (int.TryParse(numberStr, out int number)) return number;
         }
+
         return 0;
     }
-    
+
     public static async Task<Optional<bool>> UploadSerieAsync(string directory)
     {
         return await ManaxApiClient.ExecuteWithErrorHandlingAsync(async () =>

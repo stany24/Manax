@@ -15,31 +15,34 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ManaxServer.Services.Fix;
 
-public partial class FixService(IServiceScopeFactory scopeFactory, IIssueService issueService,INotificationService notificationService) : Service, IFixService
+public partial class FixService(
+    IServiceScopeFactory scopeFactory,
+    IIssueService issueService,
+    INotificationService notificationService) : Service, IFixService
 {
     public void ReplaceChapter(long oldChapterId, NewChapter newChapter)
     {
         using IServiceScope scope = scopeFactory.CreateScope();
         ManaxContext manaxContext = scope.ServiceProvider.GetRequiredService<ManaxContext>();
-        
+
         Serie? serie = manaxContext.Series
             .Include(s => s.SavePoint)
             .FirstOrDefault(s => s.Id == newChapter.SerieId);
         Chapter? chapter = manaxContext.Chapters.Find(oldChapterId);
-        
+
         if (serie == null || chapter == null)
         {
             Logger.LogFailure($"Serie with id {newChapter.SerieId} not found for chapter {newChapter.Number}");
             return;
         }
-        
-        bool success = FixChapterDeep(newChapter,chapter);
+
+        bool success = FixChapterDeep(newChapter, chapter);
         if (!success)
         {
-            notificationService.NotifyChapterUploadFailedAsync(newChapter.UploaderId,serie.Title, newChapter.Number);
+            notificationService.NotifyChapterUploadFailedAsync(newChapter.UploaderId, serie.Title, newChapter.Number);
             return;
         }
-        
+
         chapter.PageNumber = ZipFile.OpenRead(chapter.Path()).Entries.Count;
         serie.LastModification = DateTime.UtcNow;
         chapter.LastModification = DateTime.UtcNow;
@@ -55,13 +58,13 @@ public partial class FixService(IServiceScopeFactory scopeFactory, IIssueService
         Serie? serie = manaxContext.Series
             .Include(s => s.SavePoint)
             .FirstOrDefault(s => s.Id == newChapter.SerieId);
-        
+
         if (serie == null)
         {
             Logger.LogFailure($"Serie with id {newChapter.SerieId} not found for chapter {newChapter.Number}");
             return;
         }
-        
+
         Chapter chapter = new()
         {
             SerieId = newChapter.SerieId,
@@ -72,14 +75,14 @@ public partial class FixService(IServiceScopeFactory scopeFactory, IIssueService
             LastModification = DateTime.UtcNow,
             PageNumber = ZipFile.OpenRead(newChapter.TempPath).Entries.Count
         };
-        
-        bool success = FixChapterDeep(newChapter,chapter);
+
+        bool success = FixChapterDeep(newChapter, chapter);
         if (!success)
         {
-            notificationService.NotifyChapterUploadFailedAsync(newChapter.UploaderId,serie.Title, newChapter.Number);
+            notificationService.NotifyChapterUploadFailedAsync(newChapter.UploaderId, serie.Title, newChapter.Number);
             return;
         }
-        
+
         serie.LastModification = DateTime.UtcNow;
         manaxContext.Chapters.Add(chapter);
         manaxContext.SaveChanges();
@@ -96,14 +99,16 @@ public partial class FixService(IServiceScopeFactory scopeFactory, IIssueService
         try
         {
             ZipFile.ExtractToDirectory(newChapter.TempPath, extractedPath);
-            List<string> allExtractedFiles = Directory.GetFiles(extractedPath, "*.*", SearchOption.AllDirectories).ToList();
-            foreach (string file in allExtractedFiles) File.Move(file, Path.Combine(extractedPath, Path.GetFileName(file)));
+            List<string> allExtractedFiles =
+                Directory.GetFiles(extractedPath, "*.*", SearchOption.AllDirectories).ToList();
+            foreach (string file in allExtractedFiles)
+                File.Move(file, Path.Combine(extractedPath, Path.GetFileName(file)));
             foreach (string directory in Directory.GetDirectories(extractedPath)) Directory.Delete(directory);
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             if (Directory.Exists(extractedPath)) Directory.Delete(extractedPath, true);
-            Logger.LogError("Failed to extract chapter archive",e);
+            Logger.LogError("Failed to extract chapter archive", e);
             return false;
         }
 
@@ -116,18 +121,20 @@ public partial class FixService(IServiceScopeFactory scopeFactory, IIssueService
             Logger.LogFailure($"Failed to load images for chapter {newChapter.Number} in serie {newChapter.SerieId}");
             return false;
         }
-        
+
         bool modified = false;
         modified = modified || FixWidthOfChapter(chapter.Id, images);
         modified = modified || FixChapterFilesFormat(images);
         modified = modified || FixPagesNaming(images);
-        
-        if(File.Exists(chapter.Path())) {File.Delete(chapter.Path());}
-        if (modified) { ZipFile.CreateFromDirectory(extractedPath, chapter.Path()); }
-        else { File.Move(newChapter.TempPath, chapter.Path()); }
-        
+
+        if (File.Exists(chapter.Path())) File.Delete(chapter.Path());
+        if (modified)
+            ZipFile.CreateFromDirectory(extractedPath, chapter.Path());
+        else
+            File.Move(newChapter.TempPath, chapter.Path());
+
         File.Delete(newChapter.TempPath);
-        Directory.Delete(extractedPath,true);
+        Directory.Delete(extractedPath, true);
 
         foreach (MagickImage image in images) image.Dispose();
         return true;

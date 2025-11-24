@@ -6,5 +6,5 @@ public enum TaskPriority
 
     ChapterFix = 10,
 
-    PosterFix = 5,
+    PosterFix = 5
 }

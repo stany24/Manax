@@ -32,13 +32,13 @@ public partial class HomePageViewModel : PageViewModel
             .Connect()
             .SortAndBind(out _series, comparer)
             .Subscribe(changes =>
-            { 
+            {
                 foreach (Change<Models.Server.Data.Serie, long> change in changes)
                 {
                     if (change.Reason != ChangeReason.Add) continue;
                     change.Current.LoadInfo();
                     change.Current.LoadPoster();
-                } 
+                }
             });
     }
 

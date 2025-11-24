@@ -22,7 +22,7 @@ public partial class FixService
         string[] chapterPaths =
             manaxContext.Chapters.Where(c => c.SerieId == serie.Id).Select(c => c.Path()).ToArray();
 
-        CheckMissingChapters(chapterPaths,serieId);
+        CheckMissingChapters(chapterPaths, serieId);
         CheckDescription(serie);
     }
 

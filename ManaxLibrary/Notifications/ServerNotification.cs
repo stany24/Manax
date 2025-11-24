@@ -117,7 +117,7 @@ public static class ServerNotification
 
         _hubConnection.On<long>(nameof(NotificationType.ChapterRemoved),
             chapterId => { OnChapterDeleted?.Invoke(chapterId); });
-        
+
         _hubConnection.On<string>(nameof(NotificationType.ChapterUploadFailed),
             message => { OnChapterUploadFailed?.Invoke(message); });
 

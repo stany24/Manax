@@ -94,10 +94,11 @@ public class NotificationService(IHubContext<NotificationService> hubContext, IP
         TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadChapters,
             NotificationType.ChapterRemoved, chapterId);
     }
-    
+
     public void NotifyChapterUploadFailedAsync(long userId, string serieTitle, int number)
     {
-        TrySendToSingleClientAsync(userId, NotificationType.ChapterUploadFailed, serieTitle+Path.PathSeparator+number);
+        TrySendToSingleClientAsync(userId, NotificationType.ChapterUploadFailed,
+            serieTitle + Path.PathSeparator + number);
     }
 
     public void NotifyPermissionModifiedAsync(long userId, List<ManaxLibrary.DTO.User.Permission> permissions)

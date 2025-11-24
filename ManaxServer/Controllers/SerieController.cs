@@ -101,7 +101,7 @@ public class SerieController(
         byte[] readAllBytes = await System.IO.File.ReadAllBytesAsync(posterPath);
         return File(readAllBytes, "image/webp", posterName);
     }
-    
+
     [HttpGet("{id:long}/banner")]
     [RequirePermission(Permission.ReadSeries)]
     [Produces("image/webp")]

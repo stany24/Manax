@@ -104,7 +104,7 @@ public static class ManaxApiSerieClient
                 : new Optional<byte[]>(data);
         });
     }
-    
+
     public static async Task<Optional<byte[]>> GetSerieBannerAsync(long id)
     {
         return await ManaxApiClient.ExecuteWithErrorHandlingAsync(async () =>

@@ -79,7 +79,7 @@ public class MockNotificationService : INotificationService
     public void NotifyChapterRemovedAsync(long chapterId)
     {
     }
-    
+
     public void NotifyChapterUploadFailedAsync(long userId, string serieTitle, int number)
     {
     }

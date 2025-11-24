@@ -25,20 +25,20 @@ public partial class Serie : ObservableObject, IDisposable
     private readonly ReadOnlyObservableCollection<Person> _persons;
     private readonly SourceList<long> _tagIds = new();
     private readonly ReadOnlyObservableCollection<Tag> _tags;
+    [ObservableProperty] private Bitmap? _banner;
+    private bool _bannerLoaded;
 
     [ObservableProperty] private DateTime _creation;
     [ObservableProperty] private string _description = string.Empty;
     [ObservableProperty] private long _id;
+    private bool _infoLoaded;
     [ObservableProperty] private DateTime _lastModification;
     [ObservableProperty] private long? _libraryId;
     [ObservableProperty] private Bitmap? _poster;
-    [ObservableProperty] private Bitmap? _banner;
-    [ObservableProperty] private Status _status;
-    [ObservableProperty] private string _title = string.Empty;
 
     private bool _posterLoaded;
-    private bool _bannerLoaded;
-    private bool _infoLoaded;
+    [ObservableProperty] private Status _status;
+    [ObservableProperty] private string _title = string.Empty;
 
     public Serie(long id) : this(new SerieDto { Id = id })
     {
@@ -151,7 +151,7 @@ public partial class Serie : ObservableObject, IDisposable
             }
         });
     }
-    
+
     public void LoadBanner()
     {
         if (_bannerLoaded) return;

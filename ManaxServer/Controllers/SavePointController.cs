@@ -19,7 +19,8 @@ public class SavePointController(ManaxContext context) : ControllerBase
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<ActionResult<long>> PostSavePoint(SavePointCreateDto savePointCreate)
     {
-        if (await context.SavePoints.AnyAsync(l => l.Path == savePointCreate.Path) || !Directory.Exists(savePointCreate.Path))
+        if (await context.SavePoints.AnyAsync(l => l.Path == savePointCreate.Path) ||
+            !Directory.Exists(savePointCreate.Path))
             return Conflict();
 
         SavePoint savePoint = SavePoint.Create(savePointCreate);

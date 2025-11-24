@@ -3,7 +3,8 @@ using ManaxServer.Services.Fix;
 
 namespace ManaxServer.Tasks;
 
-public class ReplaceChapterBackGroundTask(IFixService fixService, long oldChapter, NewChapter newChapter) : IBackGroundTask
+public class ReplaceChapterBackGroundTask(IFixService fixService, long oldChapter, NewChapter newChapter)
+    : IBackGroundTask
 {
     private readonly long _oldChapter = oldChapter;
 

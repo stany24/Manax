@@ -17,7 +17,7 @@ public partial class FixService
             .Include(s => s.SavePoint)
             .FirstOrDefault(s => s.Id == serieId);
         if (serie == null) return;
-        
+
         string posterPath = serie.PosterPath;
         issueService.ManageSerieIssue(serie.Id, IssueSerieAutomaticType.PosterMissing, !File.Exists(posterPath));
         if (!File.Exists(posterPath)) return;

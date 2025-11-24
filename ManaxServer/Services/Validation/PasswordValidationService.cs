@@ -6,27 +6,15 @@ public partial class PasswordValidationService(bool isProduction) : IPasswordVal
 {
     public bool IsPasswordValid(string password)
     {
-        if (string.IsNullOrEmpty(password))
-        {
-            return false;
-        }
+        if (string.IsNullOrEmpty(password)) return false;
 
         if (!isProduction) return true;
 
-        if (password.Length < 14)
-        {
-            return false;
-        }
+        if (password.Length < 14) return false;
 
-        if (!HasLowercase().IsMatch(password))
-        {
-            return false;
-        }
+        if (!HasLowercase().IsMatch(password)) return false;
 
-        if (!HasUppercase().IsMatch(password))
-        {
-            return false;
-        }
+        if (!HasUppercase().IsMatch(password)) return false;
 
         return HasSpecialCharacter().IsMatch(password) || HasDigit().IsMatch(password);
     }
