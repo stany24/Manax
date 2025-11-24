@@ -12,7 +12,6 @@ using ManaxServer.Services.Hash;
 using ManaxServer.Services.Issue;
 using ManaxServer.Services.Notification;
 using ManaxServer.Services.Permission;
-using ManaxServer.Services.Renaming;
 using ManaxServer.Services.Token;
 using ManaxServer.Services.Validation;
 using Microsoft.AspNetCore.Http.Features;
@@ -59,8 +58,6 @@ public static class Program
                 provider.GetRequiredService<IHubContext<NotificationService>>(),
                 provider.GetRequiredService<IPermissionService>()));
         builder.Services.AddSingleton<IHashService>(_ => new HashService());
-        builder.Services.AddSingleton<IRenamingService>(provider =>
-            new RenamingService(provider.GetRequiredService<IServiceScopeFactory>()));
         builder.Services.AddSingleton<IBackgroundTaskService>(provider =>
             new BackgroundTaskService(provider.GetRequiredService<INotificationService>()));
         builder.Services.AddSingleton<IIssueService>(provider =>

@@ -115,7 +115,7 @@ public class UploadController(
 
         ImageFormat format = SettingsManager.Data.PosterFormat;
         string path = Path.Combine(serie.SavePath,
-            SettingsManager.Data.PosterName + "." + format.ToString().ToLower(CultureInfo.InvariantCulture));
+            Serie.PosterName + "." + format.ToString().ToLower(CultureInfo.InvariantCulture));
         if (System.IO.File.Exists(path) && !replace) return BadRequest();
         try
         {

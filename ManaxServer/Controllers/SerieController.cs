@@ -94,7 +94,7 @@ public class SerieController(
             .Include(s => s.SavePoint)
             .FirstOrDefault(s => s.Id == id);
         if (serie == null) return NotFound();
-        string posterName = SettingsManager.Data.PosterName + "." +
+        string posterName = Serie.PosterName + "." +
                             SettingsManager.Data.PosterFormat.ToString().ToLower(CultureInfo.InvariantCulture);
         string posterPath = Path.Combine(serie.SavePath, posterName);
         if (!System.IO.File.Exists(posterPath)) return NotFound();
@@ -113,7 +113,7 @@ public class SerieController(
             .Include(s => s.SavePoint)
             .FirstOrDefault(s => s.Id == id);
         if (serie == null) return NotFound();
-        string bannerName = SettingsManager.Data.BannerName + "." +
+        string bannerName = Serie.BannerName + "." +
                             SettingsManager.Data.BannerFormat.ToString().ToLower(CultureInfo.InvariantCulture);
         string bannerPath = Path.Combine(serie.SavePath, bannerName);
         if (!System.IO.File.Exists(bannerPath)) return NotFound();

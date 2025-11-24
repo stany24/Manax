@@ -56,16 +56,10 @@
                                    Margin="0" />
                     </StackPanel>
 
-                    <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto"
+                    <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto"
                           ColumnSpacing="16" RowSpacing="16">
 
                         <StackPanel Grid.Column="0" Grid.Row="0" Spacing="6">
-                            <TextBlock Text="{localization:Localize SettingsServerPage.PosterName}" FontWeight="Medium" />
-                            <TextBox Text="{Binding Settings.PosterName}"
-                                     Watermark="poster.jpg" />
-                        </StackPanel>
-
-                        <StackPanel Grid.Column="1" Grid.Row="0" Spacing="6">
                             <TextBlock Text="{localization:Localize SettingsServerPage.ImageFormat}"
                                        FontWeight="Medium" />
                             <ComboBox SelectedItem="{Binding Settings.PosterFormat}"
@@ -73,7 +67,7 @@
                                       HorizontalAlignment="Stretch" />
                         </StackPanel>
 
-                        <StackPanel Grid.Column="0" Grid.Row="1" Spacing="6">
+                        <StackPanel Grid.Column="1" Grid.Row="0" Spacing="6">
                             <TextBlock Text="{localization:Localize SettingsServerPage.Quality}" FontWeight="Medium" />
                             <NumericUpDown FormatString="0"
                                            Value="{Binding Settings.PosterQuality}"
@@ -81,14 +75,14 @@
                                            Minimum="1" />
                         </StackPanel>
 
-                        <StackPanel Grid.Column="1" Grid.Row="1" Spacing="6">
+                        <StackPanel Grid.Column="0" Grid.Row="1" Spacing="6">
                             <TextBlock Text="{localization:Localize SettingsServerPage.MaxWidth}" FontWeight="Medium" />
                             <NumericUpDown FormatString="0"
                                            Value="{Binding Settings.MaxPosterWidth}"
                                            Minimum="{Binding Settings.MinPosterWidth}" />
                         </StackPanel>
 
-                        <StackPanel Grid.Column="0" Grid.Row="2" Spacing="6">
+                        <StackPanel Grid.Column="1" Grid.Row="1" Spacing="6">
                             <TextBlock Text="{localization:Localize SettingsServerPage.MinWidth}" FontWeight="Medium" />
                             <NumericUpDown FormatString="0"
                                            Value="{Binding Settings.MinPosterWidth}"
@@ -107,16 +101,9 @@
                                    Margin="0" />
                     </StackPanel>
 
-                    <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto"
+                    <Grid ColumnDefinitions="*,*" RowDefinitions="Auto"
                           ColumnSpacing="16" RowSpacing="16">
-
                         <StackPanel Grid.Column="0" Grid.Row="0" Spacing="6">
-                            <TextBlock Text="{localization:Localize SettingsServerPage.BannerName}" FontWeight="Medium" />
-                            <TextBox Text="{Binding Settings.BannerName}"
-                                     Watermark="banner.jpg" />
-                        </StackPanel>
-
-                        <StackPanel Grid.Column="1" Grid.Row="0" Spacing="6">
                             <TextBlock Text="{localization:Localize SettingsServerPage.ImageFormat}"
                                        FontWeight="Medium" />
                             <ComboBox SelectedItem="{Binding Settings.BannerFormat}"
@@ -124,7 +111,7 @@
                                       HorizontalAlignment="Stretch" />
                         </StackPanel>
 
-                        <StackPanel Grid.Column="0" Grid.Row="1" Spacing="6">
+                        <StackPanel Grid.Column="1" Grid.Row="0" Spacing="6">
                             <TextBlock Text="{localization:Localize SettingsServerPage.Quality}" FontWeight="Medium" />
                             <NumericUpDown FormatString="0"
                                            Value="{Binding Settings.BannerQuality}"

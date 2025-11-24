@@ -5,7 +5,6 @@ using ManaxServer.Models;
 using ManaxServer.Models.Chapter;
 using ManaxServer.Services.BackgroundTask;
 using ManaxServer.Services.Fix;
-using ManaxServer.Services.Renaming;
 using ManaxServer.Settings;
 using ManaxServer.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -17,8 +16,7 @@ namespace ManaxServer.Controllers;
 public class SettingsController(
     IServiceProvider serviceProvider,
     IBackgroundTaskService backgroundTaskService,
-    IFixService fixService,
-    IRenamingService renamingService) : ControllerBase
+    IFixService fixService) : ControllerBase
 {
     private readonly Lock _lock = new();
 
@@ -74,10 +72,6 @@ public class SettingsController(
 
     private void HandlePosterModifications(SettingsData newData, SettingsData oldData, ManaxContext context)
     {
-        if (newData.PosterName != oldData.PosterName || newData.PosterFormat != oldData.PosterFormat)
-            renamingService.RenamePosters(oldData.PosterName, newData.PosterName, oldData.PosterFormat,
-                newData.PosterFormat);
-
         if (newData.MaxPosterWidth != oldData.MaxPosterWidth || newData.MinPosterWidth != oldData.MinPosterWidth ||
             newData.PosterQuality != oldData.PosterQuality)
             foreach (long serieId in context.Series.Select(serie => serie.Id))

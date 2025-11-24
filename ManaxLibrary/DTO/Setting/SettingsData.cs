@@ -111,18 +111,6 @@ public class SettingsData : INotifyPropertyChanged
         }
     } = 94;
 
-    public string PosterName
-    {
-        get;
-        set
-        {
-            if (field == value) return;
-            field = value;
-            UpdateIssues();
-            OnPropertyChanged();
-        }
-    } = "poster";
-
     public uint PosterQuality
     {
         get;
@@ -146,18 +134,6 @@ public class SettingsData : INotifyPropertyChanged
             OnPropertyChanged();
         }
     } = ImageFormat.Webp;
-    
-    public string BannerName
-    {
-        get;
-        set
-        {
-            if (field == value) return;
-            field = value;
-            UpdateIssues();
-            OnPropertyChanged();
-        }
-    } = "banner";
 
     public uint BannerQuality
     {
