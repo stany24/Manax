@@ -32,13 +32,14 @@ public partial class SeriePageViewModel : PageViewModel
 
     public SeriePageViewModel(Models.Server.Data.Serie serie)
     {
+        Serie = serie;
         SortExpressionComparer<Models.Server.Data.Rank> comparer =
             SortExpressionComparer<Models.Server.Data.Rank>.Descending(t => t.Value);
         RankSource.Ranks
             .Connect()
             .SortAndBind(out _ranks, comparer)
             .Subscribe();
-        Serie = serie;
+        
         Serie.LoadInfo();
         Serie.LoadChapters();
         Serie.LoadPoster();
@@ -81,7 +82,9 @@ public partial class SeriePageViewModel : PageViewModel
                 if (viewModel.Canceled()) return;
                 SerieUpdateDto serie = content.GetResult();
                 Optional<bool> serieResponse = await ManaxApiSerieClient.PutSerieAsync(Serie.Id, serie);
-                if (serieResponse.Failed) InfoEmitted?.Invoke(this, serieResponse.Error);
+                if (!serieResponse.Failed) return;
+                InfoEmitted?.Invoke(this, Localizer.Get("SeriePage.ErrorUpdatingSerie"));
+                Logger.LogFailure("Failed to update serie with ID: " + Serie.Id);
             }
             catch (Exception e)
             {

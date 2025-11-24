@@ -531,21 +531,9 @@ namespace ManaxClient.Localization {
             }
         }
         
-        public static string SeriePage_NoTags {
-            get {
-                return ResourceManager.GetString("SeriePage.NoTags", resourceCulture);
-            }
-        }
-        
         public static string SeriePage_Persons {
             get {
                 return ResourceManager.GetString("SeriePage.Persons", resourceCulture);
-            }
-        }
-        
-        public static string SeriePage_NoPersons {
-            get {
-                return ResourceManager.GetString("SeriePage.NoPersons", resourceCulture);
             }
         }
         

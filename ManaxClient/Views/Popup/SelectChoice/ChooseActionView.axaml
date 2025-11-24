@@ -24,7 +24,6 @@
                         Content="{Binding}"
                         HorizontalAlignment="Stretch"
                         HorizontalContentAlignment="Left"
-                        Background="Transparent"
                         BorderThickness="0"
                         Padding="12,8"
                         Command="{Binding $parent[UserControl].((selectChoice:ChooseActionViewModel)DataContext).SelectAction}"

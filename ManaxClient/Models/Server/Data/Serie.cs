@@ -163,7 +163,6 @@ public partial class Serie : ObservableObject, IDisposable
                 if (serieBannerResponse.Failed)
                 {
                     Banner = null;
-                    ErrorEmitted?.Invoke(this, serieBannerResponse.Error);
                     return;
                 }
 

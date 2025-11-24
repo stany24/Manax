@@ -17,14 +17,14 @@
                     FontSize="18"
                     FontWeight="Bold" />
                 <TextBlock
-                    Text="{localization:Localize CreateChapterIssuePopup.Select}"
+                    Text="{localization:Localize CreateChapterIssuePopup.Description}"
                     FontSize="12" />
             </StackPanel>
         </StackPanel>
 
         <StackPanel Grid.Row="1" Spacing="8">
             <TextBlock
-                Text="{localization:Localize CreateChapterIssuePopup.ProblemType}"
+                Text="{localization:Localize CreateChapterIssuePopup.Type}"
                 FontWeight="Medium" />
             <ComboBox
                 ItemsSource="{Binding Issues}"
@@ -50,7 +50,7 @@
             <StackPanel Orientation="Horizontal" Spacing="8">
                 <TextBlock Text="💡" FontSize="14" VerticalAlignment="Top" />
                 <TextBlock
-                    Text="{localization:Localize CreateChapterIssuePopup.Info}"
+                    Text="{localization:Localize CreateChapterIssuePopup.Tip}"
                     TextWrapping="Wrap"
                     FontSize="12" />
             </StackPanel>

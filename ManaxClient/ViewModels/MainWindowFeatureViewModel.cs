@@ -30,7 +30,10 @@ public partial class MainWindowViewModel
             }
 
             _features = featureResponse.GetValue();
-            NotifyAllForFeatureChanged();
+            foreach (Feature feature in _features.Features)
+            {
+                OnFeatureModified(feature);
+            }
         }
         catch (Exception e)
         {
@@ -56,6 +59,8 @@ public partial class MainWindowViewModel
         foreach (PropertyInfo propertyInfo in propertyInfos)
             if (propertyInfo.PropertyType == typeof(bool) &&
                 propertyInfo.Name.EndsWith("FeatureEnabled", StringComparison.InvariantCulture))
+            {
                 OnPropertyChanged(propertyInfo.Name);
+            }
     }
 }
