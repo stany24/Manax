@@ -22,8 +22,8 @@ public static class ChapterSource
 
     static ChapterSource()
     {
-        ServerNotification.OnChapterAdded += OnChapterCreated;
-        ServerNotification.OnChapterDeleted += OnChapterDeleted;
+        NotificationReceiver.OnChapterAdded += OnChapterCreated;
+        NotificationReceiver.OnChapterDeleted += OnChapterDeleted;
     }
 
     public static EventHandler<string>? ErrorEmitted { get; set; }

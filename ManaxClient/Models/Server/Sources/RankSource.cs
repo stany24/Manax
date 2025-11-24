@@ -31,8 +31,8 @@ public static class RankSource
             else
                 Ranks.Clear();
         };
-        ServerNotification.OnRankCreated += OnRankCreated;
-        ServerNotification.OnRankDeleted += OnRankDeleted;
+        NotificationReceiver.OnRankCreated += OnRankCreated;
+        NotificationReceiver.OnRankDeleted += OnRankDeleted;
     }
 
     public static EventHandler<string>? ErrorEmitted { get; set; }

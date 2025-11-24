@@ -14,12 +14,12 @@ public partial class Tag : ObservableObject
     public Tag(TagDto dto)
     {
         FromTagDto(dto);
-        ServerNotification.OnTagUpdated += OnTagUpdated;
+        NotificationReceiver.OnTagUpdated += OnTagUpdated;
     }
 
     ~Tag()
     {
-        ServerNotification.OnTagUpdated -= OnTagUpdated;
+        NotificationReceiver.OnTagUpdated -= OnTagUpdated;
     }
 
     public override bool Equals(object? obj)

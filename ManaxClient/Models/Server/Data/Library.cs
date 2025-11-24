@@ -18,7 +18,7 @@ public partial class Library : ObservableObject
 
     public Library(LibraryDto dto)
     {
-        ServerNotification.OnLibraryUpdated += OnLibraryUpdated;
+        NotificationReceiver.OnLibraryUpdated += OnLibraryUpdated;
         FromLibraryDto(dto);
         SortExpressionComparer<Serie> comparer = SortExpressionComparer<Serie>.Ascending(serie => serie.Title);
         SerieSource.Series
@@ -43,7 +43,7 @@ public partial class Library : ObservableObject
 
     ~Library()
     {
-        ServerNotification.OnLibraryUpdated -= OnLibraryUpdated;
+        NotificationReceiver.OnLibraryUpdated -= OnLibraryUpdated;
     }
 
     private void FromLibraryDto(LibraryDto dto)

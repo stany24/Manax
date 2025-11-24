@@ -11,13 +11,13 @@ public partial class Role : ObservableObject
 
     public Role(RoleDto dto)
     {
-        ServerNotification.OnRoleUpdated += OnRoleUpdated;
+        NotificationReceiver.OnRoleUpdated += OnRoleUpdated;
         FromDto(dto);
     }
 
     ~Role()
     {
-        ServerNotification.OnRoleUpdated -= OnRoleUpdated;
+        NotificationReceiver.OnRoleUpdated -= OnRoleUpdated;
     }
 
     private void FromDto(RoleDto dto)

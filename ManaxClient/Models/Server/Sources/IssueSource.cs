@@ -53,10 +53,10 @@ public static class IssueSource
                 IssueSerieReported.Clear();
             }
         };
-        ServerNotification.OnReportedChapterIssueCreated += OnReportedChapterIssueCreated;
-        ServerNotification.OnReportedChapterIssueDeleted += OnReportedChapterIssueDeleted;
-        ServerNotification.OnReportedSerieIssueCreated += OnReportedSerieIssueCreated;
-        ServerNotification.OnReportedSerieIssueDeleted += OnReportedSerieIssueDeleted;
+        NotificationReceiver.OnReportedChapterIssueCreated += OnReportedChapterIssueCreated;
+        NotificationReceiver.OnReportedChapterIssueDeleted += OnReportedChapterIssueDeleted;
+        NotificationReceiver.OnReportedSerieIssueCreated += OnReportedSerieIssueCreated;
+        NotificationReceiver.OnReportedSerieIssueDeleted += OnReportedSerieIssueDeleted;
     }
 
     public static EventHandler<string>? ErrorEmitted { get; set; }

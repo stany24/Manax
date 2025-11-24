@@ -49,7 +49,7 @@ public partial class IssueChapterAutomatic : ObservableObject
                 {
                     if (change.Reason is not (ChangeReason.Add or ChangeReason.Update)) continue;
                     Chapter = change.Current;
-                    OnPropertyChanged(nameof(FormattedInfo)); // Notifier le changement
+                    OnPropertyChanged(nameof(FormattedInfo));
                 }
             });
     }

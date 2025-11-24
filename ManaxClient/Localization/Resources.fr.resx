@@ -1047,4 +1047,13 @@
     <data name="LoginPage.Connected" xml:space="preserve">
         <value>Connecté en tant que {0} ({1})</value>
     </data>
+    <data name="ChapterPreview.ReportFailed" xml:space="preserve">
+        <value>La création du problème à échoué</value>
+    </data>
+    <data name="Chapter.LoadPageFailed" xml:space="preserve">
+        <value>Le chargement de la page {0} à échoué</value>
+    </data>
+    <data name="Choice.SignalIssue" xml:space="preserve">
+        <value>Signaler un problème</value>
+    </data>
 </root>

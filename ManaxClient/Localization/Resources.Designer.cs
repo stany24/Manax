@@ -2090,5 +2090,23 @@ namespace ManaxClient.Localization {
                 return ResourceManager.GetString("LoginPage.Connected", resourceCulture);
             }
         }
+        
+        public static string ChapterPreview_ReportFailed {
+            get {
+                return ResourceManager.GetString("ChapterPreview.ReportFailed", resourceCulture);
+            }
+        }
+        
+        public static string Chapter_LoadPageFailed {
+            get {
+                return ResourceManager.GetString("Chapter.LoadPageFailed", resourceCulture);
+            }
+        }
+        
+        public static string Choice_SignalIssue {
+            get {
+                return ResourceManager.GetString("Choice.SignalIssue", resourceCulture);
+            }
+        }
     }
 }

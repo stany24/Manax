@@ -20,8 +20,8 @@ public static class UserSource
 
     static UserSource()
     {
-        ServerNotification.OnUserCreated += OnUserCreated;
-        ServerNotification.OnUserDeleted += OnUserDeleted;
+        NotificationReceiver.OnUserCreated += OnUserCreated;
+        NotificationReceiver.OnUserDeleted += OnUserDeleted;
         MainWindowViewModel.PermissionsChanged += (_, permissions) =>
         {
             if (permissions.Contains(Permission.ReadUsers))

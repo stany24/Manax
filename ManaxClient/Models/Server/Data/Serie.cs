@@ -46,10 +46,10 @@ public partial class Serie : ObservableObject, IDisposable
 
     public Serie(SerieDto dto)
     {
-        ServerNotification.OnSerieUpdated += OnSerieUpdated;
-        ServerNotification.OnPosterModified += OnPosterModified;
-        ServerNotification.OnReadCreated += OnReadCreated;
-        ServerNotification.OnReadDeleted += OnReadDeleted;
+        NotificationReceiver.OnSerieUpdated += OnSerieUpdated;
+        NotificationReceiver.OnPosterModified += OnPosterModified;
+        NotificationReceiver.OnReadCreated += OnReadCreated;
+        NotificationReceiver.OnReadDeleted += OnReadDeleted;
 
         FromSerieDto(dto);
         ChapterSource.Chapters
@@ -208,10 +208,10 @@ public partial class Serie : ObservableObject, IDisposable
 
     private void ReleaseUnmanagedResources()
     {
-        ServerNotification.OnSerieUpdated -= OnSerieUpdated;
-        ServerNotification.OnPosterModified -= OnPosterModified;
-        ServerNotification.OnReadCreated -= OnReadCreated;
-        ServerNotification.OnReadDeleted -= OnReadDeleted;
+        NotificationReceiver.OnSerieUpdated -= OnSerieUpdated;
+        NotificationReceiver.OnPosterModified -= OnPosterModified;
+        NotificationReceiver.OnReadCreated -= OnReadCreated;
+        NotificationReceiver.OnReadDeleted -= OnReadDeleted;
     }
 
     private void Dispose(bool disposing)

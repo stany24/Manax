@@ -12,13 +12,13 @@ public partial class Rank : ObservableObject
 
     public Rank(RankDto dto)
     {
-        ServerNotification.OnRankUpdated += OnRankUpdated;
+        NotificationReceiver.OnRankUpdated += OnRankUpdated;
         FromDto(dto);
     }
 
     ~Rank()
     {
-        ServerNotification.OnRankUpdated -= OnRankUpdated;
+        NotificationReceiver.OnRankUpdated -= OnRankUpdated;
     }
 
     private void FromDto(RankDto dto)

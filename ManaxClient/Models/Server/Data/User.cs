@@ -15,12 +15,12 @@ public partial class User : ObservableObject
     public User(UserDto dto)
     {
         FromUserDto(dto);
-        ServerNotification.OnUserUpdated += OnUserUpdated;
+        NotificationReceiver.OnUserUpdated += OnUserUpdated;
     }
 
     ~User()
     {
-        ServerNotification.OnUserUpdated -= OnUserUpdated;
+        NotificationReceiver.OnUserUpdated -= OnUserUpdated;
     }
 
     private void OnUserUpdated(UserDto dto)

@@ -16,7 +16,7 @@ public partial class Person : ObservableObject
 
     public Person(PersonDto dto)
     {
-        ServerNotification.OnPersonUpdated += OnPersonUpdated;
+        NotificationReceiver.OnPersonUpdated += OnPersonUpdated;
         FromDto(dto);
     }
 
@@ -24,7 +24,7 @@ public partial class Person : ObservableObject
 
     ~Person()
     {
-        ServerNotification.OnPersonUpdated -= OnPersonUpdated;
+        NotificationReceiver.OnPersonUpdated -= OnPersonUpdated;
     }
 
     private void FromDto(PersonDto dto)

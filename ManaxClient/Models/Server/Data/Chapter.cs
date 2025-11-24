@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
+using Jeek.Avalonia.Localization;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTO.Chapter;
@@ -30,7 +31,7 @@ public partial class Chapter : ObservableObject, IDisposable
     public Chapter(ChapterDto chapter)
     {
         FromChapterDto(chapter);
-        ServerNotification.OnChapterUpdated += ChapterUpdated;
+        NotificationReceiver.OnChapterUpdated += ChapterUpdated;
     }
 
     public Chapter() : this(new ChapterDto())
@@ -101,8 +102,8 @@ public partial class Chapter : ObservableObject, IDisposable
                 }
                 catch (Exception e)
                 {
-                    ErrorEmitted?.Invoke(this, "Erreur lors du chargement de la page " + index);
-                    Logger.LogError("Échec du chargement de la page " + index + " pour le chapitre " + Id, e);
+                    ErrorEmitted?.Invoke(this, string.Format(Localizer.Get("Chapter.LoadPageFailed"),index));
+                    Logger.LogError("Loading page " + index + " for chapter " + Id + " failed", e);
                 }
             }
         }), token);
@@ -125,7 +126,7 @@ public partial class Chapter : ObservableObject, IDisposable
 
     private void ReleaseUnmanagedResources()
     {
-        ServerNotification.OnChapterUpdated -= ChapterUpdated;
+        NotificationReceiver.OnChapterUpdated -= ChapterUpdated;
     }
 
     private void Dispose(bool disposing)

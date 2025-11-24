@@ -25,7 +25,7 @@ internal static class ManaxApiClient
     {
         Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
         if (Client.BaseAddress == null) return;
-        _ = ServerNotification.InitializeAsync(Client.BaseAddress, token);
+        _ = NotificationReceiver.InitializeAsync(Client.BaseAddress, token);
     }
 
     internal static void ResetToken()

@@ -10,6 +10,7 @@ using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Threading;
+using Jeek.Avalonia.Localization;
 using ManaxClient.Controls.Popups;
 using ManaxClient.ViewModels.Popup.ConfirmCancel;
 using ManaxClient.ViewModels.Popup.ConfirmCancel.Content;
@@ -206,17 +207,15 @@ public class ChapterPreview : Button
 
     private void ShowChoices(object? sender, RoutedEventArgs e)
     {
-        const string signalIssue = "Signaler un problème";
+        string signalIssue = Localizer.Get("Choice.SignalIssue");
         ChooseActionViewModel viewmodel = new([signalIssue]);
         Popup popup = new(viewmodel);
         popup.Closed += (_, _) =>
         {
             string actionName = viewmodel.GetResult();
-            switch (actionName)
+            if (actionName == signalIssue)
             {
-                case signalIssue:
-                    ReportIssue();
-                    break;
+                ReportIssue();
             }
         };
 
@@ -242,8 +241,8 @@ public class ChapterPreview : Button
             }
             catch (Exception e)
             {
-                InfoEmittedCommand?.Execute(" Une erreur est survenue lors de la création du problème.");
-                Logger.LogError("Erreur lors de la création d'un problème de chapitre", e);
+                InfoEmittedCommand?.Execute(Localizer.Get("ChapterPreview.ReportFailed"));
+                Logger.LogError($"Error while creating chapter issue for chapter {Chapter.Id}", e);
             }
         };
         Dispatcher.UIThread.Post(() => { PopupRequestedCommand?.Execute(popup); });

@@ -22,8 +22,8 @@ public static class PersonSource
 
     static PersonSource()
     {
-        ServerNotification.OnPersonCreated += OnPersonCreated;
-        ServerNotification.OnPersonDeleted += OnPersonDeleted;
+        NotificationReceiver.OnPersonCreated += OnPersonCreated;
+        NotificationReceiver.OnPersonDeleted += OnPersonDeleted;
     }
 
     public static EventHandler<string>? ErrorEmitted { get; set; }

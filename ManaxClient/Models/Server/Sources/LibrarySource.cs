@@ -22,8 +22,8 @@ public static class LibrarySource
 
     static LibrarySource()
     {
-        ServerNotification.OnLibraryCreated += OnLibraryCreated;
-        ServerNotification.OnLibraryDeleted += OnLibraryDeleted;
+        NotificationReceiver.OnLibraryCreated += OnLibraryCreated;
+        NotificationReceiver.OnLibraryDeleted += OnLibraryDeleted;
     }
 
     public static EventHandler<string>? ErrorEmitted { get; set; }

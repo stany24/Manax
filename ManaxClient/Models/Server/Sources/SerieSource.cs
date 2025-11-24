@@ -22,8 +22,8 @@ public static class SerieSource
 
     static SerieSource()
     {
-        ServerNotification.OnSerieCreated += OnSerieCreated;
-        ServerNotification.OnSerieDeleted += OnSerieDeleted;
+        NotificationReceiver.OnSerieCreated += OnSerieCreated;
+        NotificationReceiver.OnSerieDeleted += OnSerieDeleted;
         LoadSeries();
     }
 

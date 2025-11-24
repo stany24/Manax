@@ -1,6 +1,4 @@
 // ReSharper disable PropertyCanBeMadeInitOnly.Global
-// ReSharper disable PropertyCanBeMadeInitOnly.Global
-// ReSharper disable UnusedAutoPropertyAccessor.Global
 
 using System.ComponentModel.DataAnnotations;
 using ManaxLibrary.DTO.User;

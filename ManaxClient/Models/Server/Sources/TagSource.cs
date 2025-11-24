@@ -22,8 +22,8 @@ public static class TagSource
 
     static TagSource()
     {
-        ServerNotification.OnTagCreated += OnTagCreated;
-        ServerNotification.OnTagDeleted += OnTagDeleted;
+        NotificationReceiver.OnTagCreated += OnTagCreated;
+        NotificationReceiver.OnTagDeleted += OnTagDeleted;
     }
 
     public static EventHandler<string>? ErrorEmitted { get; set; }

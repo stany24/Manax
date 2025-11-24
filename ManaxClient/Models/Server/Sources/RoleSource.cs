@@ -22,8 +22,8 @@ public static class RoleSource
 
     static RoleSource()
     {
-        ServerNotification.OnRoleCreated += OnRoleCreated;
-        ServerNotification.OnRoleDeleted += OnRoleDeleted;
+        NotificationReceiver.OnRoleCreated += OnRoleCreated;
+        NotificationReceiver.OnRoleDeleted += OnRoleDeleted;
     }
 
     public static EventHandler<string>? ErrorEmitted { get; set; }

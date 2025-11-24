@@ -77,10 +77,10 @@ public partial class MainWindowViewModel : ObservableObject
             UserSource.ErrorEmitted += (_, e) => ShowInfo(e);
             IssueSource.ErrorEmitted += (_, e) => ShowInfo(e);
             IsAdmin = loginPage.IsAdmin();
-            ServerNotification.OnRunningTasks += OnRunningTasks;
-            ServerNotification.OnPermissionModified += OnPermissionModified;
-            ServerNotification.OnFeatureModified += OnFeatureModified;
-            ServerNotification.OnChapterUploadFailed += OnChapterUploadFailed;
+            NotificationReceiver.OnRunningTasks += OnRunningTasks;
+            NotificationReceiver.OnPermissionModified += OnPermissionModified;
+            NotificationReceiver.OnFeatureModified += OnFeatureModified;
+            NotificationReceiver.OnChapterUploadFailed += OnChapterUploadFailed;
             Task.Run(LoadPermissions);
             Task.Run(LoadFeatures);
 
@@ -100,10 +100,10 @@ public partial class MainWindowViewModel : ObservableObject
 
     ~MainWindowViewModel()
     {
-        ServerNotification.OnRunningTasks -= OnRunningTasks;
-        ServerNotification.OnPermissionModified -= OnPermissionModified;
-        ServerNotification.OnFeatureModified -= OnFeatureModified;
-        ServerNotification.OnChapterUploadFailed -= OnChapterUploadFailed;
+        NotificationReceiver.OnRunningTasks -= OnRunningTasks;
+        NotificationReceiver.OnPermissionModified -= OnPermissionModified;
+        NotificationReceiver.OnFeatureModified -= OnFeatureModified;
+        NotificationReceiver.OnChapterUploadFailed -= OnChapterUploadFailed;
         _librariesSubscription.Dispose();
     }
 
