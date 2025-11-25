@@ -20,6 +20,7 @@ public static class ThemeSettings
 
     public static ThemeSettingsData Current { get; private set; } =
         new("Last default", Color.Parse("#007ACC"), Color.Parse("#6C757D"));
+    public static EventHandler? OnThemeUpdated;
 
     public static void UpdateTheme(ThemeSettingsData themeSettingsData)
     {
@@ -34,6 +35,7 @@ public static class ThemeSettings
         themeBootstrap.CurrentTheme = theme;
         Save(themeSettingsData);
         Current = themeSettingsData;
+        OnThemeUpdated?.Invoke(null, EventArgs.Empty);
     }
 
     public static List<ThemeSettingsData> GetPresets()

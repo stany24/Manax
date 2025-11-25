@@ -3,6 +3,7 @@
              x:Class="ManaxClient.App"
              xmlns:local="using:ManaxClient"
              xmlns:themes="clr-namespace:Material.Styles.Themes;assembly=Material.Styles"
+             xmlns:assists="clr-namespace:Material.Styles.Assists;assembly=Material.Styles"
              RequestedThemeVariant="Default">
 
     <Application.DataTemplates>
@@ -35,6 +36,11 @@
         <Style Selector="Button.danger">
             <Setter Property="Foreground" Value="Red" />
         </Style>
+        
+        <Style Selector="Image.icon">
+            <Setter Property="Width" Value="24" />
+            <Setter Property="Height" Value="24" />
+        </Style>
 
         <Style Selector="Button.primary">
             <Setter Property="FontWeight" Value="Bold" />
@@ -49,12 +55,18 @@
         </Style>
 
         <Style Selector="Button.sidebar">
+            <Setter Property="assists:ShadowAssist.ShadowDepth" Value="Depth0"></Setter>
+            <Setter Property="Background" Value="Transparent"></Setter>
             <Setter Property="HorizontalAlignment" Value="Stretch" />
             <Setter Property="HorizontalContentAlignment" Value="Left" />
-            <Setter Property="Padding" Value="16,12" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="Padding" Value="10,6" />
             <Setter Property="Margin" Value="2" />
             <Setter Property="BorderThickness" Value="0" />
             <Setter Property="CornerRadius" Value="8" />
+            <Style Selector="^:pointerover">
+                <Setter Property="Background" Value="{DynamicResource MaterialSecondaryMidBrush}"/>
+            </Style>
         </Style>
 
         <Style Selector="TextBlock.title">
@@ -78,7 +90,6 @@
 
         <Style Selector="StackPanel.sidebar">
             <Setter Property="Margin" Value="0,0,4,0" />
-            <Setter Property="MinWidth" Value="240" />
         </Style>
 
         <Style Selector="Border.task-item">

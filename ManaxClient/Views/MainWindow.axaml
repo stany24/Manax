@@ -37,7 +37,8 @@
                     <Button Classes="sidebar"
                             Command="{Binding ChangePageHome}">
                         <StackPanel Orientation="Horizontal" Spacing="12">
-                            <TextBlock Text="🏠" FontSize="16" />
+                            <Image Classes="icon"
+                                   Source="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).IconManager.HomeIcon}"/>
                             <TextBlock Text="{localization:Localize MainWindow.Home}" />
                         </StackPanel>
                     </Button>
@@ -52,10 +53,12 @@
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
                                     <Button Classes="sidebar"
+                                            Background="Transparent"
                                             Command="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).ShowLibrary}"
                                             CommandParameter="{Binding }">
                                         <StackPanel Orientation="Horizontal" Spacing="12">
-                                            <TextBlock Text="📚" FontSize="14" />
+                                            <Image Classes="icon"
+                                                   Source="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).IconManager.LibraryIcon}"/>
                                             <TextBlock Text="{Binding Name}" TextTrimming="CharacterEllipsis" />
                                         </StackPanel>
                                     </Button>
@@ -84,7 +87,8 @@
                             </MultiBinding>
                         </Button.IsVisible>
                         <StackPanel Orientation="Horizontal" Spacing="12">
-                            <TextBlock Text="⚙️" FontSize="14" />
+                            <Image Classes="icon"
+                                   Source="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).IconManager.IssuesIcon}"/>
                             <TextBlock Text="{localization:Localize MainWindow.Issues}" />
                         </StackPanel>
                     </Button>
@@ -93,7 +97,8 @@
                             IsVisible="{Binding CanReadUsers}"
                             Command="{Binding ChangePageUsers}">
                         <StackPanel Orientation="Horizontal" Spacing="12">
-                            <TextBlock Text="👥" FontSize="14" />
+                            <Image Classes="icon"
+                                   Source="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).IconManager.UsersIcon}"/>
                             <TextBlock Text="{localization:Localize MainWindow.Users}" />
                         </StackPanel>
                     </Button>
@@ -107,7 +112,8 @@
                             </MultiBinding>
                         </Button.IsVisible>
                         <StackPanel Orientation="Horizontal" Spacing="12">
-                            <TextBlock Text="🏆" FontSize="14" />
+                            <Image Classes="icon"
+                                   Source="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).IconManager.RanksIcon}"/>
                             <TextBlock Text="{localization:Localize MainWindow.Ranks}" />
                         </StackPanel>
                     </Button>
@@ -116,7 +122,8 @@
                             IsVisible="{Binding CanReadTags}"
                             Command="{Binding ChangePageTags}">
                         <StackPanel Orientation="Horizontal" Spacing="12">
-                            <TextBlock Text="🏷️" FontSize="14" />
+                            <Image Classes="icon"
+                                   Source="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).IconManager.TagsIcon}"/>
                             <TextBlock Text="{localization:Localize MainWindow.Tags}" />
                         </StackPanel>
                     </Button>
@@ -125,7 +132,8 @@
                             IsVisible="{Binding CanUploadChapter}"
                             Command="{Binding ChangeUploadPage}">
                         <StackPanel Orientation="Horizontal" Spacing="12">
-                            <TextBlock Text="📤" FontSize="14" />
+                            <Image Classes="icon"
+                                   Source="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).IconManager.UploadIcon}"/>
                             <TextBlock Text="{localization:Localize MainWindow.Upload}" />
                         </StackPanel>
                     </Button>
@@ -134,7 +142,8 @@
                             IsVisible="{Binding CanReadPersons}"
                             Command="{Binding ChangePagePersons}">
                         <StackPanel Orientation="Horizontal" Spacing="12">
-                            <TextBlock Text="👥" FontSize="14" />
+                            <Image Classes="icon"
+                                   Source="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).IconManager.UsersIcon}"/>
                             <TextBlock Text="People" />
                         </StackPanel>
                     </Button>
@@ -147,7 +156,8 @@
                             IsVisible="{Binding CanReadServerSettings}"
                             Command="{Binding ChangePageSettings}">
                         <StackPanel Orientation="Horizontal" Spacing="12">
-                            <TextBlock Text="⚙️" FontSize="14" />
+                            <Image Classes="icon"
+                                   Source="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).IconManager.SettingsIcon}"/>
                             <TextBlock Text="{localization:Localize MainWindow.Parameters.Server}" />
                         </StackPanel>
                     </Button>
@@ -155,7 +165,8 @@
                     <Button Classes="sidebar"
                             Command="{Binding ChangePageAppSettings}">
                         <StackPanel Orientation="Horizontal" Spacing="12">
-                            <TextBlock Text="🎨" FontSize="14" />
+                            <Image Classes="icon"
+                                   Source="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).IconManager.SettingsIcon}"/>
                             <TextBlock Text="{localization:Localize MainWindow.Parameters.UI}" />
                         </StackPanel>
                     </Button>
@@ -164,7 +175,8 @@
                             IsVisible="{Binding CanReadFeatures}"
                             Command="{Binding ChangePageFeatures}">
                         <StackPanel Orientation="Horizontal" Spacing="12">
-                            <TextBlock Text="🎛️" FontSize="14" />
+                            <Image Classes="icon"
+                                   Source="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).IconManager.FeaturesIcon}"/>
                             <TextBlock Text="{localization:Localize MainWindow.Parameters.Features}" />
                         </StackPanel>
                     </Button>
@@ -176,7 +188,8 @@
                     <Button Classes="sidebar"
                             Command="{Binding ChangePageUserStats}">
                         <StackPanel Orientation="Horizontal" Spacing="12">
-                            <TextBlock Text="📊" FontSize="14" />
+                            <Image Classes="icon"
+                                   Source="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).IconManager.StatsIcon}"/>
                             <TextBlock Text="{localization:Localize MainWindow.Stats.User}" />
                         </StackPanel>
                     </Button>
@@ -185,15 +198,20 @@
                             IsVisible="{Binding CanReadServerStats}"
                             Command="{Binding ChangePageServerStats}">
                         <StackPanel Orientation="Horizontal" Spacing="12">
-                            <TextBlock Text="🖥️" FontSize="14" />
+                            <Image Classes="icon"
+                                   Source="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).IconManager.StatsIcon}"/>
                             <TextBlock Text="{localization:Localize MainWindow.Stats.Server}" />
                         </StackPanel>
                     </Button>
 
-                    <Button
-                        Classes="sidebar"
-                        Command="{Binding Logout}"
-                        Content="{localization:Localize MainWindow.Logout}" />
+                    <Button Classes="sidebar"
+                            Command="{Binding Logout}">
+                        <StackPanel Orientation="Horizontal" Spacing="12">
+                            <Image Classes="icon"
+                                   Source="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).IconManager.LogoutIcon}"/>
+                            <TextBlock Text="{localization:Localize MainWindow.Logout}" />
+                        </StackPanel>
+                    </Button>
 
                     <Border Classes="card"
                             Margin="8,16,8,8"

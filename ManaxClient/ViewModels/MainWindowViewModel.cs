@@ -8,6 +8,7 @@ using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData;
 using DynamicData.Binding;
+using ManaxClient.Assets;
 using ManaxClient.Models;
 using ManaxClient.Models.History;
 using ManaxClient.Models.Server.Sources;
@@ -36,15 +37,15 @@ namespace ManaxClient.ViewModels;
 public partial class MainWindowViewModel : ObservableObject
 {
     private readonly PageHistoryManager _history = new();
-
     private readonly ReadOnlyObservableCollection<Library> _libraries;
-
     private readonly IDisposable _librariesSubscription;
+    
     [ObservableProperty] private ObservableCollection<string> _infos = [];
     [ObservableProperty] private bool _isAdmin;
     [ObservableProperty] private Thickness _pageMargin = new(0, 0, 0, 0);
     [ObservableProperty] private Controls.Popups.Popup? _popup;
     [ObservableProperty] private ObservableCollection<TaskItem> _runningTasks = new([]);
+    [ObservableProperty] private IconManager _iconManager = new();
 
     public MainWindowViewModel()
     {
