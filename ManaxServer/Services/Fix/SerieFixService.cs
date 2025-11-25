@@ -28,8 +28,8 @@ public partial class FixService
 
     private void CheckDescription(Serie serie)
     {
-        uint max = SettingsManager.Data.MaxDescriptionLength;
-        uint min = SettingsManager.Data.MinDescriptionLength;
+        uint max = SettingsManager.DataDto.MaxDescriptionLength;
+        uint min = SettingsManager.DataDto.MinDescriptionLength;
         issueService.ManageSerieIssue(serie.Id, IssueSerieAutomaticType.DescriptionTooLong,
             serie.Description.Length > max);
         issueService.ManageSerieIssue(serie.Id, IssueSerieAutomaticType.DescriptionTooShort,

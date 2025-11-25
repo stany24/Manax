@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Jeek.Avalonia.Localization;
+using ManaxClient.Models;
 using ManaxClient.ViewModels.Popup.ConfirmCancel;
 using ManaxClient.ViewModels.Popup.ConfirmCancel.Content;
 using ManaxLibrary;
@@ -34,7 +35,7 @@ public partial class SettingsServerPageViewModel : PageViewModel
     {
         try
         {
-            Optional<bool> updateTask = await ManaxApiSettingsClient.UpdateSettingsAsync(Settings);
+            Optional<bool> updateTask = await ManaxApiSettingsClient.UpdateSettingsAsync(Settings.ToDto());
             if (updateTask.Failed)
             {
                 Problem = updateTask.Error;
@@ -55,7 +56,7 @@ public partial class SettingsServerPageViewModel : PageViewModel
     {
         try
         {
-            Optional<SettingsData> settingsAsync = await ManaxApiSettingsClient.GetSettingsAsync();
+            Optional<SettingsDataDto> settingsAsync = await ManaxApiSettingsClient.GetSettingsAsync();
             if (settingsAsync.Failed)
             {
                 Problem = settingsAsync.Error;
@@ -63,7 +64,7 @@ public partial class SettingsServerPageViewModel : PageViewModel
                 return;
             }
 
-            Settings = settingsAsync.GetValue();
+            Settings = SettingsData.FromDto(settingsAsync.GetValue());
         }
         catch (Exception e)
         {

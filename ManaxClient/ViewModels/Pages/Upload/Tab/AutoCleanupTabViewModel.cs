@@ -30,7 +30,7 @@ public partial class AutoCleanupTabViewModel : TabViewModel
     [ObservableProperty] private int _nbArchive;
     [ObservableProperty] private int _nbImage;
     private string _processingFolder;
-    private SettingsData? _settings;
+    private SettingsDataDto? _settings;
 
     public AutoCleanupTabViewModel()
     {
@@ -190,7 +190,7 @@ public partial class AutoCleanupTabViewModel : TabViewModel
     {
         try
         {
-            Optional<SettingsData> settingsAsync = ManaxApiSettingsClient.GetSettingsAsync().Result;
+            Optional<SettingsDataDto> settingsAsync = ManaxApiSettingsClient.GetSettingsAsync().Result;
             if (settingsAsync.Failed)
             {
                 Logger.LogFailure("Failed to load settings");

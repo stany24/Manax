@@ -4,7 +4,7 @@ namespace ManaxLibrary.DTO.Chapter;
 
 public class NewChapterDto
 {
-    public int Number { get; set; }
-    [Required] public byte[] Data { get; set; } = [];
-    public int SerieId { get; set; }
+    public int Number { get; init; }
+    [Required] public byte[] Data { get; init; } = [];
+    public int SerieId { get; init; }
 }

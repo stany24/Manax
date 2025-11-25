@@ -45,7 +45,7 @@ public class UploadController(
             return BadRequest();
 
         string filePath = Path.Combine(serie.SavePath, chapterDto.Number.ToString(CultureInfo.InvariantCulture),
-            SettingsManager.Data.ArchiveFormat.ToString().ToLower(CultureInfo.InvariantCulture));
+            SettingsManager.DataDto.ArchiveFormat.ToString().ToLower(CultureInfo.InvariantCulture));
         if (Directory.Exists(filePath) || System.IO.File.Exists(filePath))
             return BadRequest();
 
@@ -116,14 +116,14 @@ public class UploadController(
         if (serie == null)
             return BadRequest();
 
-        ImageFormat format = SettingsManager.Data.PosterFormat;
+        ImageFormat format = SettingsManager.DataDto.PosterFormat;
         string path = Path.Combine(serie.SavePath,
             Serie.PosterName + "." + format.ToString().ToLower(CultureInfo.InvariantCulture));
         if (System.IO.File.Exists(path) && !replace) return BadRequest();
         try
         {
             MagickImage image = new(file.OpenReadStream());
-            image.Quality = SettingsManager.Data.PosterQuality;
+            image.Quality = SettingsManager.DataDto.PosterQuality;
             await image.WriteAsync(path, format.GetMagickFormat());
             _ = backgroundTaskService.AddTaskAsync(new FixPosterBackGroundTask(fixService, serie.Id));
             notificationService.NotifyPosterUpdatedAsync(serie.Id);

@@ -190,8 +190,8 @@ public partial class FixService(
             {
                 if (image == null) continue;
                 issueService.RemoveChapterIssue(id, IssueChapterAutomaticType.CouldNotOpen);
-                uint min = SettingsManager.Data.MinChapterWidth;
-                uint max = SettingsManager.Data.MaxChapterWidth;
+                uint min = SettingsManager.DataDto.MinChapterWidth;
+                uint max = SettingsManager.DataDto.MaxChapterWidth;
                 issueService.ManageChapterIssue(id, IssueChapterAutomaticType.ImageTooSmall, image.Width < min);
                 if (image.Width <= max) continue;
                 image.Resize(max, image.Height * max / image.Width);
@@ -209,7 +209,7 @@ public partial class FixService(
     private static bool FixChapterFilesFormat(MagickImage?[] images)
     {
         bool modified = false;
-        MagickFormat format = SettingsManager.Data.ImageFormat.GetMagickFormat();
+        MagickFormat format = SettingsManager.DataDto.ImageFormat.GetMagickFormat();
         foreach (MagickImage? image in images)
         {
             if (image == null) continue;

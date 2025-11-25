@@ -23,56 +23,56 @@ public class SettingsController(
     [HttpGet]
     [RequirePermission(Permission.ReadServerSettings)]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public SettingsData GetSettings()
+    public SettingsDataDto GetSettings()
     {
-        return SettingsManager.Data;
+        return SettingsManager.DataDto;
     }
 
     [HttpPut]
     [RequirePermission(Permission.WriteServerSettings)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public IActionResult ChangeSettings(SettingsData data)
+    public IActionResult ChangeSettings(SettingsDataDto dataDto)
     {
         lock (_lock)
         {
-            SettingsData oldData = SettingsManager.Data;
-            if (!data.IsValid) return BadRequest();
-            SettingsManager.OverwriteSettings(data);
+            SettingsDataDto oldDataDto = SettingsManager.DataDto;
+            if (dataDto.Validate() != null) return BadRequest();
+            SettingsManager.OverwriteSettings(dataDto);
             IServiceScope scope = serviceProvider.CreateScope();
-            Task.Run(() => CheckModifications(data, oldData, scope));
+            Task.Run(() => CheckModifications(dataDto, oldDataDto, scope));
             return Ok();
         }
     }
 
-    private void CheckModifications(SettingsData newData, SettingsData oldData, IServiceScope scope)
+    private void CheckModifications(SettingsDataDto newDataDto, SettingsDataDto oldDataDto, IServiceScope scope)
     {
         ManaxContext manaxContext = scope.ServiceProvider.GetRequiredService<ManaxContext>();
         lock (_lock)
         {
-            HandlePosterModifications(newData, oldData, manaxContext);
-            HandleBannerModifications(newData, oldData, manaxContext);
-            HandleChapterModifications(newData, oldData, manaxContext);
-            HandleSerieModifications(newData, oldData, manaxContext);
+            HandlePosterModifications(newDataDto, oldDataDto, manaxContext);
+            HandleBannerModifications(newDataDto, oldDataDto, manaxContext);
+            HandleChapterModifications(newDataDto, oldDataDto, manaxContext);
+            HandleSerieModifications(newDataDto, oldDataDto, manaxContext);
         }
 
         scope.Dispose();
     }
 
-    private void HandleSerieModifications(SettingsData newData, SettingsData oldData, ManaxContext manaxContext)
+    private void HandleSerieModifications(SettingsDataDto newDataDto, SettingsDataDto oldDataDto, ManaxContext manaxContext)
     {
     }
 
-    private void HandleBannerModifications(SettingsData newData, SettingsData oldData, ManaxContext manaxContext)
+    private void HandleBannerModifications(SettingsDataDto newDataDto, SettingsDataDto oldDataDto, ManaxContext manaxContext)
     {
     }
 
-    private void HandleChapterModifications(SettingsData newData, SettingsData oldData, ManaxContext manaxContext)
+    private void HandleChapterModifications(SettingsDataDto newDataDto, SettingsDataDto oldDataDto, ManaxContext manaxContext)
     {
-        if (newData.ImageFormat != oldData.ImageFormat ||
-            newData.ImageQuality != oldData.ImageQuality ||
-            newData.MaxChapterWidth != oldData.MaxChapterWidth ||
-            newData.MinChapterWidth != oldData.MinChapterWidth)
+        if (newDataDto.ImageFormat != oldDataDto.ImageFormat ||
+            newDataDto.ImageQuality != oldDataDto.ImageQuality ||
+            newDataDto.MaxChapterWidth != oldDataDto.MaxChapterWidth ||
+            newDataDto.MinChapterWidth != oldDataDto.MinChapterWidth)
             foreach (long chapterId in manaxContext.Chapters.Select(chapter => chapter.Id))
             {
                 Chapter? chapter = manaxContext.Chapters.Find(chapterId);
@@ -80,10 +80,10 @@ public class SettingsController(
             }
     }
 
-    private void HandlePosterModifications(SettingsData newData, SettingsData oldData, ManaxContext context)
+    private void HandlePosterModifications(SettingsDataDto newDataDto, SettingsDataDto oldDataDto, ManaxContext context)
     {
-        if (newData.MaxPosterWidth != oldData.MaxPosterWidth || newData.MinPosterWidth != oldData.MinPosterWidth ||
-            newData.PosterQuality != oldData.PosterQuality)
+        if (newDataDto.MaxPosterWidth != oldDataDto.MaxPosterWidth || newDataDto.MinPosterWidth != oldDataDto.MinPosterWidth ||
+            newDataDto.PosterQuality != oldDataDto.PosterQuality)
             foreach (long serieId in context.Series.Select(serie => serie.Id))
                 _ = backgroundTaskService.AddTaskAsync(new FixPosterBackGroundTask(fixService, serieId));
     }

@@ -193,7 +193,7 @@
                             <NumericUpDown FormatString="0"
                                            Value="{Binding Settings.MinDescriptionLength}"
                                            Maximum="{Binding Settings.MaxDescriptionLength}"
-                                           Minimum="1" />
+                                           Minimum="0" />
                         </StackPanel>
                     </Grid>
                 </StackPanel>

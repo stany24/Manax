@@ -95,7 +95,7 @@ public class SerieController(
             .FirstOrDefault(s => s.Id == id);
         if (serie == null) return NotFound();
         string posterName = Serie.PosterName + "." +
-                            SettingsManager.Data.PosterFormat.ToString().ToLower(CultureInfo.InvariantCulture);
+                            SettingsManager.DataDto.PosterFormat.ToString().ToLower(CultureInfo.InvariantCulture);
         string posterPath = Path.Combine(serie.SavePath, posterName);
         if (!System.IO.File.Exists(posterPath)) return NotFound();
         byte[] readAllBytes = await System.IO.File.ReadAllBytesAsync(posterPath);
@@ -114,7 +114,7 @@ public class SerieController(
             .FirstOrDefault(s => s.Id == id);
         if (serie == null) return NotFound();
         string bannerName = Serie.BannerName + "." +
-                            SettingsManager.Data.BannerFormat.ToString().ToLower(CultureInfo.InvariantCulture);
+                            SettingsManager.DataDto.BannerFormat.ToString().ToLower(CultureInfo.InvariantCulture);
         string bannerPath = Path.Combine(serie.SavePath, bannerName);
         if (!System.IO.File.Exists(bannerPath)) return NotFound();
         byte[] readAllBytes = await System.IO.File.ReadAllBytesAsync(bannerPath);

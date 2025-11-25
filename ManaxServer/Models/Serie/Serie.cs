@@ -28,10 +28,10 @@ public class Serie
     public string SavePath => SavePoint.Path + Path.DirectorySeparatorChar + FolderName;
 
     public string PosterPath => SavePath + PosterName + "." +
-                                SettingsManager.Data.PosterFormat.ToString().ToLower(CultureInfo.InvariantCulture);
+                                SettingsManager.DataDto.PosterFormat.ToString().ToLower(CultureInfo.InvariantCulture);
 
     public string BannerPath => SavePath + BannerName + "." +
-                                SettingsManager.Data.BannerFormat.ToString().ToLower(CultureInfo.InvariantCulture);
+                                SettingsManager.DataDto.BannerFormat.ToString().ToLower(CultureInfo.InvariantCulture);
 
     public SerieDto ToDto()
     {

@@ -22,8 +22,8 @@ public partial class FixService
         issueService.ManageSerieIssue(serie.Id, IssueSerieAutomaticType.PosterMissing, !File.Exists(posterPath));
         if (!File.Exists(posterPath)) return;
 
-        uint min = SettingsManager.Data.MinPosterWidth;
-        uint max = SettingsManager.Data.MaxPosterWidth;
+        uint min = SettingsManager.DataDto.MinPosterWidth;
+        uint max = SettingsManager.DataDto.MaxPosterWidth;
         try
         {
             using MagickImage poster = new(posterPath);
