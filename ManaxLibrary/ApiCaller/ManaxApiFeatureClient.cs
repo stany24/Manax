@@ -20,19 +20,11 @@ public static class ManaxApiFeatureClient
 
     public static async Task<Optional<bool>> SetFeatureEnabledAsync(Feature feature)
     {
-        return await ManaxApiClient.ExecuteWithErrorHandlingAsync(async () =>
-        {
-            HttpResponseMessage response = await ManaxApiClient.Client.PostAsJsonAsync("api/feature", feature);
-            return !response.IsSuccessStatusCode ? new Optional<bool>(response) : new Optional<bool>(true);
-        });
+        return await ManaxApiClient.PostSuccessAsync("api/feature", feature);
     }
 
     public static async Task<Optional<bool>> SetFeaturesAsync(List<Feature> features)
     {
-        return await ManaxApiClient.ExecuteWithErrorHandlingAsync(async () =>
-        {
-            HttpResponseMessage response = await ManaxApiClient.Client.PutAsJsonAsync("api/features", features);
-            return !response.IsSuccessStatusCode ? new Optional<bool>(response) : new Optional<bool>(true);
-        });
+        return await ManaxApiClient.PutSuccessAsync("api/features", features);
     }
 }

@@ -1,4 +1,3 @@
-using System.Net.Http.Json;
 using ManaxLibrary.DTO.Stats;
 
 namespace ManaxLibrary.ApiCaller;
@@ -7,27 +6,11 @@ public static class ManaxApiStatsClient
 {
     public static async Task<Optional<UserStats>> GetUserStats()
     {
-        return await ManaxApiClient.ExecuteWithErrorHandlingAsync(async () =>
-        {
-            HttpResponseMessage response = await ManaxApiClient.Client.GetAsync("api/stats/self");
-            if (!response.IsSuccessStatusCode) return new Optional<UserStats>(response);
-            UserStats? library = await response.Content.ReadFromJsonAsync<UserStats>();
-            return library == null
-                ? new Optional<UserStats>("Failed to read user stats from response.")
-                : new Optional<UserStats>(library);
-        });
+        return await ManaxApiClient.GetAsync<UserStats>("api/stats/self");
     }
 
     public static async Task<Optional<ServerStats>> GetServerStats()
     {
-        return await ManaxApiClient.ExecuteWithErrorHandlingAsync(async () =>
-        {
-            HttpResponseMessage response = await ManaxApiClient.Client.GetAsync("api/stats/server");
-            if (!response.IsSuccessStatusCode) return new Optional<ServerStats>(response);
-            ServerStats? library = await response.Content.ReadFromJsonAsync<ServerStats>();
-            return library == null
-                ? new Optional<ServerStats>("Failed to read server stats from response.")
-                : new Optional<ServerStats>(library);
-        });
+        return await ManaxApiClient.GetAsync<ServerStats>("api/stats/server");
     }
 }

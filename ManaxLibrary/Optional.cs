@@ -1,5 +1,3 @@
-using ManaxLibrary.Logging;
-
 namespace ManaxLibrary;
 
 public class Optional<TReturn>
@@ -18,7 +16,6 @@ public class Optional<TReturn>
         if (isError)
         {
             Error = error;
-            Logger.LogFailure(error);
         }
         else
         {
@@ -32,7 +29,6 @@ public class Optional<TReturn>
     {
         string error = response.StatusCode + ": " + response.Content.ReadAsStringAsync().Result;
         Error = error;
-        Logger.LogFailure(error);
     }
 
     public TReturn GetValue()

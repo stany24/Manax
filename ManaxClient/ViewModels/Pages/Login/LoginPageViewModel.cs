@@ -34,7 +34,7 @@ public sealed partial class LoginPageViewModel : PageViewModel
 
     public LoginPageViewModel()
     {
-        ManaxApiConfig.ResetToken();
+        ManaxApiClient.ResetToken();
         _saveFile = Path.Combine(Directory.GetCurrentDirectory(), "login.json");
         ControlBarVisible = false;
 
@@ -72,7 +72,7 @@ public sealed partial class LoginPageViewModel : PageViewModel
 
         Task.Run(async () =>
         {
-            ManaxApiConfig.SetHost(hostUri);
+            ManaxApiClient.SetHost(hostUri);
             Optional<UserLoginResultDto> loginResponse = await ManaxApiUserClient.LoginAsync(Username, Password);
             if (loginResponse.Failed)
             {
@@ -101,7 +101,7 @@ public sealed partial class LoginPageViewModel : PageViewModel
     {
         try
         {
-            ManaxApiConfig.SetToken(result.Token);
+            ManaxApiClient.SetToken(result.Token);
 
             UserDto self = result.User;
             _isAdmin = self.Role is UserRole.Admin or UserRole.Owner;
