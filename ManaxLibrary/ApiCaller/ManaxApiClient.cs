@@ -42,127 +42,118 @@ public static class ManaxApiClient
         }
         catch (TaskCanceledException)
         {
-            return new Optional<T>("Timeout");
+            return Optional<T>.Failure("Timeout");
         }
         catch (Exception e)
         {
-            return new Optional<T>("Exception: " + e.Message);
+            return Optional<T>.Failure("Exception: " + e.Message);
         }
     }
 
-    // Generic GET method that returns deserialized JSON data
     internal static async Task<Optional<T>> GetAsync<T>(string endpoint, string? errorMessage = null)
     {
         return await ExecuteWithErrorHandlingAsync(async () =>
         {
             HttpResponseMessage response = await Client.GetAsync(endpoint);
-            if (!response.IsSuccessStatusCode) return new Optional<T>(response);
+            if (!response.IsSuccessStatusCode) return Optional<T>.Failure(response);
             T? data = await response.Content.ReadFromJsonAsync<T>();
             return data == null
-                ? new Optional<T>(errorMessage ?? $"Failed to deserialize {typeof(T).Name} from API response.")
-                : new Optional<T>(data);
+                ? Optional<T>.Failure(errorMessage ?? $"Failed to deserialize {typeof(T).Name} from API response.")
+                : Optional<T>.Success(data);
         });
     }
 
-    // Generic GET method for binary data (images, zips, etc.)
     internal static async Task<Optional<byte[]>> GetBytesAsync(string endpoint, string? errorMessage = null)
     {
         return await ExecuteWithErrorHandlingAsync(async () =>
         {
             HttpResponseMessage response = await Client.GetAsync(endpoint);
-            if (!response.IsSuccessStatusCode) return new Optional<byte[]>(response);
+            if (!response.IsSuccessStatusCode) return Optional<byte[]>.Failure(response);
             byte[] data = await response.Content.ReadAsByteArrayAsync();
             return data.Length == 0
-                ? new Optional<byte[]>(errorMessage ?? $"Empty data received from {endpoint}.")
-                : new Optional<byte[]>(data);
+                ? Optional<byte[]>.Failure(errorMessage ?? $"Empty data received from {endpoint}.")
+                : Optional<byte[]>.Success(data);
         });
     }
 
-    // Generic POST method that returns deserialized JSON data
     internal static async Task<Optional<TResult>> PostAsync<TResult, TBody>(string endpoint, TBody body, string? errorMessage = null)
     {
         return await ExecuteWithErrorHandlingAsync(async () =>
         {
             HttpResponseMessage response = await Client.PostAsJsonAsync(endpoint, body);
-            if (!response.IsSuccessStatusCode) return new Optional<TResult>(response);
+            if (!response.IsSuccessStatusCode) return Optional<TResult>.Failure(response);
             TResult? data = await response.Content.ReadFromJsonAsync<TResult>();
             return data == null
-                ? new Optional<TResult>(errorMessage ?? $"Failed to deserialize {typeof(TResult).Name} from API response.")
-                : new Optional<TResult>(data);
+                ? Optional<TResult>.Failure(errorMessage ?? $"Failed to deserialize {typeof(TResult).Name} from API response.")
+                : Optional<TResult>.Success(data);
         });
     }
 
-    // Generic POST method that returns bool (success indicator)
     internal static async Task<Optional<bool>> PostSuccessAsync<TBody>(string endpoint, TBody body)
     {
         return await ExecuteWithErrorHandlingAsync(async () =>
         {
             HttpResponseMessage response = await Client.PostAsJsonAsync(endpoint, body);
             return response.IsSuccessStatusCode
-                ? new Optional<bool>(true)
-                : new Optional<bool>(response);
+                ? Optional<bool>.Success(true)
+                : Optional<bool>.Failure(response);
         });
     }
 
-    // POST method with null body that returns bool
     internal static async Task<Optional<bool>> PostSuccessAsync(string endpoint)
     {
         return await ExecuteWithErrorHandlingAsync(async () =>
         {
             HttpResponseMessage response = await Client.PostAsync(endpoint, null);
             return response.IsSuccessStatusCode
-                ? new Optional<bool>(true)
-                : new Optional<bool>(response);
+                ? Optional<bool>.Success(true)
+                : Optional<bool>.Failure(response);
         });
     }
 
-    // Generic PUT method that returns deserialized JSON data
     internal static async Task<Optional<TResult>> PutAsync<TResult, TBody>(string endpoint, TBody body, string? errorMessage = null)
     {
         return await ExecuteWithErrorHandlingAsync(async () =>
         {
             HttpResponseMessage response = await Client.PutAsJsonAsync(endpoint, body);
-            if (!response.IsSuccessStatusCode) return new Optional<TResult>(response);
+            if (!response.IsSuccessStatusCode) return Optional<TResult>.Failure(response);
             TResult? data = await response.Content.ReadFromJsonAsync<TResult>();
             return data == null
-                ? new Optional<TResult>(errorMessage ?? $"Failed to deserialize {typeof(TResult).Name} from API response.")
-                : new Optional<TResult>(data);
+                ? Optional<TResult>.Failure(errorMessage ?? $"Failed to deserialize {typeof(TResult).Name} from API response.")
+                : Optional<TResult>.Success(data);
         });
     }
 
-    // Generic PUT method that returns bool (success indicator)
     internal static async Task<Optional<bool>> PutSuccessAsync<TBody>(string endpoint, TBody body)
     {
         return await ExecuteWithErrorHandlingAsync(async () =>
         {
             HttpResponseMessage response = await Client.PutAsJsonAsync(endpoint, body);
             return response.IsSuccessStatusCode
-                ? new Optional<bool>(true)
-                : new Optional<bool>(response);
+                ? Optional<bool>.Success(true)
+                : Optional<bool>.Failure(response);
         });
     }
 
-    // PUT method with null body that returns bool
     internal static async Task<Optional<bool>> PutSuccessAsync(string endpoint)
     {
         return await ExecuteWithErrorHandlingAsync(async () =>
         {
             HttpResponseMessage response = await Client.PutAsync(endpoint, null);
             return response.IsSuccessStatusCode
-                ? new Optional<bool>(true)
-                : new Optional<bool>(response);
+                ? Optional<bool>.Success(true)
+                : Optional<bool>.Failure(response);
         });
     }
 
-    // Generic DELETE method that returns bool (success indicator)
     internal static async Task<Optional<bool>> DeleteAsync(string endpoint)
     {
         return await ExecuteWithErrorHandlingAsync(async () =>
         {
             HttpResponseMessage response = await Client.DeleteAsync(endpoint);
             return response.IsSuccessStatusCode
-                ? new Optional<bool>(true)
-                : new Optional<bool>(response);
+                ? Optional<bool>.Success(true)
+                : Optional<bool>.Failure(response);
         });
     }
 }

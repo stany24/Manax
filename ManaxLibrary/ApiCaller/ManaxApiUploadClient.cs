@@ -50,7 +50,7 @@ public static partial class ManaxApiUploadClient
 
             Optional<long> serieCreateResponse = await ManaxApiSerieClient.PostSerieAsync(serieCreate);
             if (serieCreateResponse.Failed)
-                return new Optional<bool>(serieCreateResponse.Error);
+                return Optional<bool>.Failure(serieCreateResponse.Error);
 
             long serieId = serieCreateResponse.GetValue();
 
@@ -73,10 +73,12 @@ public static partial class ManaxApiUploadClient
                 };
                 Optional<bool> uploadChapterResponse = await UploadChapterAsync(newChapterDto);
                 if (uploadChapterResponse.Failed)
-                    return new Optional<bool>(uploadChapterResponse.Error);
+                    return Optional<bool>.Failure(uploadChapterResponse.Error);
             }
 
-            return new Optional<bool>(posterError == null);
+            return posterError == null 
+                ? Optional<bool>.Success(true) 
+                : Optional<bool>.Failure(posterError);
         });
     }
 
@@ -85,7 +87,9 @@ public static partial class ManaxApiUploadClient
         return await ManaxApiClient.ExecuteWithErrorHandlingAsync(async () =>
         {
             HttpResponseMessage response = await ManaxApiClient.Client.PostAsJsonAsync("api/upload/chapter", dto);
-            return new Optional<bool>(response.IsSuccessStatusCode);
+            return response.IsSuccessStatusCode
+                ? Optional<bool>.Success(true)
+                : Optional<bool>.Failure(response);
         });
     }
 
@@ -99,7 +103,9 @@ public static partial class ManaxApiUploadClient
             content.Add(file, "file", fileName);
             content.Add(new StringContent(serieId.ToString(CultureInfo.InvariantCulture)), "serieId");
             HttpResponseMessage response = await ManaxApiClient.Client.PostAsync("api/upload/chapter/replace", content);
-            return new Optional<bool>(response.IsSuccessStatusCode);
+            return response.IsSuccessStatusCode
+                ? Optional<bool>.Success(true)
+                : Optional<bool>.Failure(response);
         });
     }
 
@@ -113,7 +119,9 @@ public static partial class ManaxApiUploadClient
             content.Add(img, "file", fileName);
             content.Add(new StringContent(serieId.ToString(CultureInfo.InvariantCulture)), "serieId");
             HttpResponseMessage response = await ManaxApiClient.Client.PostAsync("api/upload/poster", content);
-            return new Optional<bool>(response.IsSuccessStatusCode);
+            return response.IsSuccessStatusCode
+                ? Optional<bool>.Success(true)
+                : Optional<bool>.Failure(response);
         });
     }
 
@@ -127,7 +135,9 @@ public static partial class ManaxApiUploadClient
             content.Add(img, "file", fileName);
             content.Add(new StringContent(serieId.ToString(CultureInfo.InvariantCulture)), "serieId");
             HttpResponseMessage response = await ManaxApiClient.Client.PostAsync("api/upload/poster/replace", content);
-            return new Optional<bool>(response.IsSuccessStatusCode);
+            return response.IsSuccessStatusCode
+                ? Optional<bool>.Success(true)
+                : Optional<bool>.Failure(response);
         });
     }
 }

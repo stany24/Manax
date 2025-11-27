@@ -10,11 +10,11 @@ public static class ManaxApiFeatureClient
         return await ManaxApiClient.ExecuteWithErrorHandlingAsync(async () =>
         {
             HttpResponseMessage response = await ManaxApiClient.Client.GetAsync("api/features");
-            if (!response.IsSuccessStatusCode) return new Optional<FeaturesManager>(response);
+            if (!response.IsSuccessStatusCode) return Optional<FeaturesManager>.Failure(response);
             List<Feature>? permissions = await response.Content.ReadFromJsonAsync<List<Feature>>();
             return permissions == null
-                ? new Optional<FeaturesManager>("Failed to read permissions from response.")
-                : new Optional<FeaturesManager>(new FeaturesManager(permissions));
+                ? Optional<FeaturesManager>.Failure("Failed to read permissions from response.")
+                : Optional<FeaturesManager>.Success(new FeaturesManager(permissions));
         });
     }
 
