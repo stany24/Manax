@@ -46,11 +46,11 @@ public static class ChapterSource
 
     public static void LoadSerieChapters(long id, bool loadReads = true)
     {
-        Task.Run(() =>
+        Task.Run(async () =>
         {
             try
             {
-                Optional<List<long>> response = ManaxApiSerieClient.GetSerieChaptersAsync(id).Result;
+                Optional<List<long>> response = await ManaxApiSerieClient.GetSerieChaptersAsync(id);
                 if (response.Failed)
                 {
                     Logger.LogFailure(response.Error);
@@ -58,8 +58,8 @@ public static class ChapterSource
                     return;
                 }
 
-                foreach (long chapterId in response.GetValue()) LoadChapter(chapterId);
-                if (loadReads) LoadSerieReads(id);
+                foreach (long chapterId in response.GetValue()) _ = LoadChapter(chapterId);
+                if (loadReads) _ = LoadSerieReads(id);
             }
             catch (Exception e)
             {
@@ -70,7 +70,7 @@ public static class ChapterSource
         });
     }
 
-    private static void LoadChapter(long id)
+    private static async Task LoadChapter(long id)
     {
         lock (ChaptersLock)
         {
@@ -79,7 +79,7 @@ public static class ChapterSource
 
         try
         {
-            Optional<ChapterDto> response = ManaxApiChapterClient.GetChapterAsync(id).Result;
+            Optional<ChapterDto> response = await ManaxApiChapterClient.GetChapterAsync(id);
             if (response.Failed)
             {
                 Logger.LogFailure(response.Error);
@@ -99,11 +99,11 @@ public static class ChapterSource
         }
     }
 
-    private static void LoadSerieReads(long serieId)
+    private static async Task LoadSerieReads(long serieId)
     {
         try
         {
-            Optional<List<ReadDto>> response = ManaxApiSerieClient.GetSerieChaptersReadAsync(serieId).Result;
+            Optional<List<ReadDto>> response = await ManaxApiSerieClient.GetSerieChaptersReadAsync(serieId);
             if (response.Failed)
             {
                 ErrorEmitted?.Invoke(null, response.Error);

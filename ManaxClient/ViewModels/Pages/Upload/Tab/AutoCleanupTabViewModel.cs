@@ -186,11 +186,11 @@ public partial class AutoCleanupTabViewModel : TabViewModel
         image.Write(newFileName);
     }
 
-    private void LoadSettings()
+    private async Task LoadSettings()
     {
         try
         {
-            Optional<SettingsDataDto> settingsAsync = ManaxApiSettingsClient.GetSettingsAsync().Result;
+            Optional<SettingsDataDto> settingsAsync = await ManaxApiSettingsClient.GetSettingsAsync();
             if (settingsAsync.Failed)
             {
                 Logger.LogFailure("Failed to load settings");

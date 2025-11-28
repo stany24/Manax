@@ -25,10 +25,10 @@ public static class ProblemSource
 
     private static void LoadProblems()
     {
-        Task.Run(() =>
+        Task.Run(async () =>
         {
-            Optional<List<IssueChapterReportedTypeDto>> chapterResponse =
-                ManaxApiIssueClient.GetAllReportedChapterIssueTypesAsync().Result;
+            Optional<List<IssueChapterReportedTypeDto>> chapterResponse = 
+                await ManaxApiIssueClient.GetAllReportedChapterIssueTypesAsync();
             if (chapterResponse.Failed)
             {
                 Logger.LogFailure(chapterResponse.Error);
@@ -40,7 +40,7 @@ public static class ProblemSource
                 .Select(issue => new IssueChapterReportedType(issue)));
 
             Optional<List<IssueSerieReportedTypeDto>> serieResponse =
-                ManaxApiIssueClient.GetAllReportedSerieIssueTypesAsync().Result;
+                await ManaxApiIssueClient.GetAllReportedSerieIssueTypesAsync();
             if (serieResponse.Failed)
             {
                 Logger.LogFailure(serieResponse.Error);

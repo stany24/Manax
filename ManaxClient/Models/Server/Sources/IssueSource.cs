@@ -95,12 +95,12 @@ public static class IssueSource
 
     private static void LoadAutomaticChapterIssues()
     {
-        Task.Run(() =>
+        Task.Run(async () =>
         {
             try
             {
                 Optional<List<IssueChapterAutomaticDto>> responseIssueChapterAutomatic =
-                    ManaxApiIssueClient.GetAllAutomaticChapterIssuesAsync().Result;
+                    await ManaxApiIssueClient.GetAllAutomaticChapterIssuesAsync();
                 if (responseIssueChapterAutomatic.Failed)
                 {
                     ErrorEmitted?.Invoke(null, responseIssueChapterAutomatic.Error);
@@ -125,12 +125,12 @@ public static class IssueSource
 
     private static void LoadAutomaticSerieIssues()
     {
-        Task.Run(() =>
+        Task.Run(async () =>
         {
             try
             {
                 Optional<List<IssueSerieAutomaticDto>> responseIssueSerieAutomatic =
-                    ManaxApiIssueClient.GetAllAutomaticSerieIssuesAsync().Result;
+                    await ManaxApiIssueClient.GetAllAutomaticSerieIssuesAsync();
                 if (responseIssueSerieAutomatic.Failed)
                 {
                     ErrorEmitted?.Invoke(null, responseIssueSerieAutomatic.Error);
@@ -155,12 +155,12 @@ public static class IssueSource
 
     private static void LoadReportedChapterIssues()
     {
-        Task.Run(() =>
+        Task.Run(async () =>
         {
             try
             {
                 Optional<List<IssueChapterReportedDto>> responseIssueChapterReported =
-                    ManaxApiIssueClient.GetAllReportedChapterIssuesAsync().Result;
+                    await ManaxApiIssueClient.GetAllReportedChapterIssuesAsync();
                 if (responseIssueChapterReported.Failed)
                 {
                     ErrorEmitted?.Invoke(null, responseIssueChapterReported.Error);
@@ -185,12 +185,12 @@ public static class IssueSource
 
     private static void LoadReportedSerieIssues()
     {
-        Task.Run(() =>
+        Task.Run(async () =>
         {
             try
             {
                 Optional<List<IssueSerieReportedDto>> responseIssueSerieReported =
-                    ManaxApiIssueClient.GetAllReportedSerieIssuesAsync().Result;
+                    await ManaxApiIssueClient.GetAllReportedSerieIssuesAsync();
                 if (responseIssueSerieReported.Failed)
                 {
                     ErrorEmitted?.Invoke(null, responseIssueSerieReported.Error);

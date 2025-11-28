@@ -106,11 +106,11 @@ public partial class Serie : ObservableObject, IDisposable
     public void LoadInfo()
     {
         if (_infoLoaded) return;
-        Task.Run(() =>
+        Task.Run(async () =>
         {
             try
             {
-                Optional<SerieDto> serieInfoResponse = ManaxApiSerieClient.GetSerieInfoAsync(Id).Result;
+                Optional<SerieDto> serieInfoResponse = await ManaxApiSerieClient.GetSerieInfoAsync(Id);
                 if (serieInfoResponse.Failed) ErrorEmitted?.Invoke(this, serieInfoResponse.Error);
 
                 FromSerieDto(serieInfoResponse.GetValue());
@@ -128,11 +128,11 @@ public partial class Serie : ObservableObject, IDisposable
     public void LoadPoster()
     {
         if (_posterLoaded) return;
-        Task.Run(() =>
+        Task.Run(async () =>
         {
             try
             {
-                Optional<byte[]> seriePosterResponse = ManaxApiSerieClient.GetSeriePosterAsync(Id).Result;
+                Optional<byte[]> seriePosterResponse = await ManaxApiSerieClient.GetSeriePosterAsync(Id);
                 if (seriePosterResponse.Failed)
                 {
                     Poster = null;
@@ -155,11 +155,11 @@ public partial class Serie : ObservableObject, IDisposable
     public void LoadBanner()
     {
         if (_bannerLoaded) return;
-        Task.Run(() =>
+        Task.Run(async () =>
         {
             try
             {
-                Optional<byte[]> serieBannerResponse = ManaxApiSerieClient.GetSerieBannerAsync(Id).Result;
+                Optional<byte[]> serieBannerResponse = await ManaxApiSerieClient.GetSerieBannerAsync(Id);
                 if (serieBannerResponse.Failed)
                 {
                     Banner = null;

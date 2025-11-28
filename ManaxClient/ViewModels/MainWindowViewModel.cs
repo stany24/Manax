@@ -39,6 +39,8 @@ public partial class MainWindowViewModel : ObservableObject
     private readonly PageHistoryManager _history = new();
     private readonly ReadOnlyObservableCollection<Library> _libraries;
     private readonly IDisposable _librariesSubscription;
+    private readonly Dictionary<string, CancellationTokenSource> _infoCancellationTokens = new();
+    private readonly Lock _infoCancellationLock = new();
     
     [ObservableProperty] private ObservableCollection<string> _infos = [];
     [ObservableProperty] private bool _isAdmin;
@@ -106,6 +108,16 @@ public partial class MainWindowViewModel : ObservableObject
         NotificationReceiver.OnFeatureModified -= OnFeatureModified;
         NotificationReceiver.OnChapterUploadFailed -= OnChapterUploadFailed;
         _librariesSubscription.Dispose();
+        
+        lock (_infoCancellationLock)
+        {
+            foreach (CancellationTokenSource cts in _infoCancellationTokens.Values)
+            {
+                cts.Cancel();
+                cts.Dispose();
+            }
+            _infoCancellationTokens.Clear();
+        }
     }
 
     private void OnRunningTasks(Dictionary<string, int> tasks)
@@ -136,6 +148,7 @@ public partial class MainWindowViewModel : ObservableObject
                 return;
             }
 
+            ClearAllNotifications();
             SetPage(new LoginPageViewModel());
         }
         catch (Exception e)
@@ -144,6 +157,21 @@ public partial class MainWindowViewModel : ObservableObject
             Logger.LogError(error, e);
             ShowInfo(error);
         }
+    }
+
+    private void ClearAllNotifications()
+    {
+        lock (_infoCancellationLock)
+        {
+            foreach (CancellationTokenSource cts in _infoCancellationTokens.Values)
+            {
+                cts.Cancel();
+                cts.Dispose();
+            }
+            _infoCancellationTokens.Clear();
+        }
+        
+        Dispatcher.UIThread.Invoke(() => { Infos.Clear(); });
     }
 
     private void SetPopup(Controls.Popups.Popup? popup)
@@ -158,11 +186,52 @@ public partial class MainWindowViewModel : ObservableObject
     private void ShowInfo(string info)
     {
         Dispatcher.UIThread.Invoke(() => { Infos.Add(info); });
-        Task.Run(() =>
+        
+        CancellationTokenSource cts = new();
+        lock (_infoCancellationLock)
         {
-            Thread.Sleep(10000);
-            Dispatcher.UIThread.Invoke(() => { Infos.Remove(info); });
-        });
+            _infoCancellationTokens[info] = cts;
+        }
+        
+        Task.Run(async () =>
+        {
+            try
+            {
+                await Task.Delay(TimeSpan.FromSeconds(10), cts.Token);
+                
+                Dispatcher.UIThread.Invoke(() => 
+                { 
+                    Infos.Remove(info);
+                    lock (_infoCancellationLock)
+                    {
+                        _infoCancellationTokens.Remove(info);
+                    }
+                });
+            }
+            catch (OperationCanceledException)
+            {
+                // Ignored
+            }
+            finally
+            {
+                cts.Dispose();
+            }
+        }, cts.Token);
+    }
+
+    public void DismissNotification(string info)
+    {
+        lock (_infoCancellationLock)
+        {
+            if (_infoCancellationTokens.TryGetValue(info, out CancellationTokenSource? cts))
+            {
+                cts.Cancel();
+                cts.Dispose();
+                _infoCancellationTokens.Remove(info);
+            }
+        }
+        
+        Dispatcher.UIThread.Invoke(() => { Infos.Remove(info); });
     }
 
     public void GoBack()
