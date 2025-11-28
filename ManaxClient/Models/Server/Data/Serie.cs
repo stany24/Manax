@@ -6,8 +6,10 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
 using DynamicData;
 using DynamicData.Binding;
+using ManaxClient.Event;
 using ManaxClient.Models.Server.Sources;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
@@ -75,8 +77,6 @@ public partial class Serie : ObservableObject, IDisposable
     public ReadOnlyObservableCollection<Tag> Tags => _tags;
     public ReadOnlyObservableCollection<Person> Persons => _persons;
 
-    public static EventHandler<string>? ErrorEmitted { get; set; }
-
     public void Dispose()
     {
         Dispose(true);
@@ -111,7 +111,8 @@ public partial class Serie : ObservableObject, IDisposable
             try
             {
                 Optional<SerieDto> serieInfoResponse = await ManaxApiSerieClient.GetSerieInfoAsync(Id);
-                if (serieInfoResponse.Failed) ErrorEmitted?.Invoke(this, serieInfoResponse.Error);
+                if (serieInfoResponse.Failed) 
+                    WeakReferenceMessenger.Default.Send(new NotificationMessage(serieInfoResponse.Error));
 
                 FromSerieDto(serieInfoResponse.GetValue());
                 _infoLoaded = true;
@@ -119,7 +120,7 @@ public partial class Serie : ObservableObject, IDisposable
             catch (Exception e)
             {
                 string message = "Failed to load serie with ID: " + Id;
-                ErrorEmitted?.Invoke(this, message);
+                WeakReferenceMessenger.Default.Send(new NotificationMessage(message));
                 Logger.LogError(message, e);
             }
         });
@@ -136,7 +137,7 @@ public partial class Serie : ObservableObject, IDisposable
                 if (seriePosterResponse.Failed)
                 {
                     Poster = null;
-                    ErrorEmitted?.Invoke(this, seriePosterResponse.Error);
+                    WeakReferenceMessenger.Default.Send(new NotificationMessage(seriePosterResponse.Error));
                     return;
                 }
 
@@ -147,7 +148,7 @@ public partial class Serie : ObservableObject, IDisposable
             {
                 string message = "Failed to load poster for serie with ID: " + Id;
                 Logger.LogError(message, e);
-                ErrorEmitted?.Invoke(this, message);
+                WeakReferenceMessenger.Default.Send(new NotificationMessage(message));
             }
         });
     }

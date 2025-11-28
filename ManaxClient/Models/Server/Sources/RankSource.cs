@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.Messaging;
 using DynamicData;
+using ManaxClient.Event;
 using ManaxClient.Models.Server.Data;
 using ManaxClient.ViewModels;
 using ManaxLibrary;
@@ -35,8 +37,6 @@ public static class RankSource
         NotificationReceiver.OnRankDeleted += OnRankDeleted;
     }
 
-    public static EventHandler<string>? ErrorEmitted { get; set; }
-
     private static void OnRankDeleted(long id)
     {
         lock (RanksLock)
@@ -66,7 +66,7 @@ public static class RankSource
                     if (ranksResponse.Failed)
                     {
                         Logger.LogFailure(ranksResponse.Error);
-                        ErrorEmitted?.Invoke(null, ranksResponse.Error);
+                        WeakReferenceMessenger.Default.Send(new NotificationMessage(ranksResponse.Error));
                         return;
                     }
 
@@ -86,7 +86,7 @@ public static class RankSource
                 {
                     const string error = "Failed to load ranks from server";
                     Logger.LogError(error, e);
-                    ErrorEmitted?.Invoke(null, error);
+                    WeakReferenceMessenger.Default.Send(new NotificationMessage(error));
                 }
             }
         });

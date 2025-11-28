@@ -39,8 +39,6 @@ public partial class Library : ObservableObject
 
     public ReadOnlyObservableCollection<Serie> Series => _series;
 
-    public static EventHandler<string>? ErrorEmitted { get; set; }
-
     ~Library()
     {
         NotificationReceiver.OnLibraryUpdated -= OnLibraryUpdated;

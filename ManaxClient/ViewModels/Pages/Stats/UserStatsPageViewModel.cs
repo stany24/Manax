@@ -6,11 +6,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
 using Jeek.Avalonia.Localization;
 using LiveChartsCore;
 using LiveChartsCore.Measure;
 using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Painting;
+using ManaxClient.Event;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTO.Stats;
@@ -42,8 +44,9 @@ public partial class UserStatsPageViewModel : PageViewModel
             Optional<UserStats> userStats = await ManaxApiStatsClient.GetUserStats();
             if (userStats.Failed)
             {
-                Logger.LogFailure($"Failed to load user stats: {userStats.Error}");
-                InfoEmitted?.Invoke(this, $"Failed to load user stats: {userStats.Error}");
+                string error = $"Failed to load user stats: {userStats.Error}";
+                Logger.LogFailure(error);
+                WeakReferenceMessenger.Default.Send(new NotificationMessage(error));
                 return;
             }
 
@@ -55,8 +58,9 @@ public partial class UserStatsPageViewModel : PageViewModel
         }
         catch (Exception e)
         {
-            Logger.LogError($"An error occurred while loading user stats: {e.Message}", e);
-            InfoEmitted?.Invoke(this, $"An error occurred while loading user stats: {e.Message}");
+            string error = $"An error occurred while loading user stats: {e.Message}";
+            Logger.LogError(error, e);
+            WeakReferenceMessenger.Default.Send(new NotificationMessage(error));
         }
     }
 

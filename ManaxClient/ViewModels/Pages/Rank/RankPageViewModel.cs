@@ -1,8 +1,10 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.Messaging;
 using DynamicData;
 using DynamicData.Binding;
+using ManaxClient.Event;
 using ManaxClient.Models.Server.Sources;
 using ManaxClient.ViewModels.Popup.ConfirmCancel;
 using ManaxClient.ViewModels.Popup.ConfirmCancel.Content;
@@ -47,15 +49,16 @@ public class RankPageViewModel : PageViewModel
                 RankUpdateDto result = content.GetResult();
                 Optional<bool> updateRankAsync = await ManaxApiRankClient.UpdateRankAsync(result);
                 if (updateRankAsync.Failed)
-                    InfoEmitted?.Invoke(this, updateRankAsync.Error);
+                    WeakReferenceMessenger.Default.Send(new NotificationMessage(updateRankAsync.Error));
             }
             catch (Exception e)
             {
-                InfoEmitted?.Invoke(this, "Failed to update rank on server");
-                Logger.LogError("Failed to update rank on server", e);
+                const string error = "Failed to update rank on server";
+                WeakReferenceMessenger.Default.Send(new NotificationMessage(error));
+                Logger.LogError(error, e);
             }
         };
-        PopupRequested?.Invoke(this, popup);
+        WeakReferenceMessenger.Default.Send(new PopupMessage(popup));
     }
 
     public void DeleteRank(Models.Server.Data.Rank rank)
@@ -65,12 +68,14 @@ public class RankPageViewModel : PageViewModel
             try
             {
                 Optional<bool> deleteRankResponse = await ManaxApiRankClient.DeleteRankAsync(rank.Id);
-                if (deleteRankResponse.Failed) InfoEmitted?.Invoke(this, deleteRankResponse.Error);
+                if (deleteRankResponse.Failed) 
+                    WeakReferenceMessenger.Default.Send(new NotificationMessage(deleteRankResponse.Error));
             }
             catch (Exception e)
             {
-                InfoEmitted?.Invoke(this, "Failed to delete rank on server");
-                Logger.LogError("Failed to delete rank on server", e);
+                const string error = "Failed to delete rank on server";
+                WeakReferenceMessenger.Default.Send(new NotificationMessage(error));
+                Logger.LogError(error, e);
             }
         });
     }
@@ -90,14 +95,15 @@ public class RankPageViewModel : PageViewModel
                     { Name = result.Name, Value = result.Value });
 
                 if (rankResponse.Failed)
-                    InfoEmitted?.Invoke(this, rankResponse.Error);
+                    WeakReferenceMessenger.Default.Send(new NotificationMessage(rankResponse.Error));
             }
             catch (Exception e)
             {
-                InfoEmitted?.Invoke(this, "Failed to create rank on server");
-                Logger.LogError("Failed to create rank on server", e);
+                const string error = "Failed to create rank on server";
+                WeakReferenceMessenger.Default.Send(new NotificationMessage(error));
+                Logger.LogError(error, e);
             }
         };
-        PopupRequested?.Invoke(this, popup);
+        WeakReferenceMessenger.Default.Send(new PopupMessage(popup));
     }
 }

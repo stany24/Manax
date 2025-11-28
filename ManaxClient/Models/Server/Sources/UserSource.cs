@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.Messaging;
 using DynamicData;
+using ManaxClient.Event;
 using ManaxClient.Models.Server.Data;
 using ManaxClient.ViewModels;
 using ManaxLibrary;
@@ -31,8 +33,6 @@ public static class UserSource
         };
     }
 
-    public static EventHandler<string>? ErrorEmitted { get; set; }
-
     private static void LoadUsers()
     {
         Task.Run(async void () =>
@@ -43,7 +43,7 @@ public static class UserSource
                 if (usersIdsResponse.Failed)
                 {
                     Logger.LogFailure(usersIdsResponse.Error);
-                    ErrorEmitted?.Invoke(null, usersIdsResponse.Error);
+                    WeakReferenceMessenger.Default.Send(new NotificationMessage(usersIdsResponse.Error));
                     return;
                 }
 
@@ -54,7 +54,7 @@ public static class UserSource
                     if (userResponse.Failed)
                     {
                         Logger.LogFailure(userResponse.Error);
-                        ErrorEmitted?.Invoke(null, userResponse.Error);
+                        WeakReferenceMessenger.Default.Send(new NotificationMessage(userResponse.Error));
                         continue;
                     }
 

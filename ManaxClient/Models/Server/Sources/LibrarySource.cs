@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.Messaging;
 using DynamicData;
+using ManaxClient.Event;
 using ManaxClient.Models.Server.Data;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
@@ -25,8 +27,6 @@ public static class LibrarySource
         NotificationReceiver.OnLibraryCreated += OnLibraryCreated;
         NotificationReceiver.OnLibraryDeleted += OnLibraryDeleted;
     }
-
-    public static EventHandler<string>? ErrorEmitted { get; set; }
 
     private static void OnLibraryDeleted(long id)
     {
@@ -57,7 +57,7 @@ public static class LibrarySource
                     if (response.Failed)
                     {
                         Logger.LogFailure(response.Error);
-                        ErrorEmitted?.Invoke(null, response.Error);
+                        WeakReferenceMessenger.Default.Send(new NotificationMessage(response.Error));
                         return;
                     }
 
@@ -67,7 +67,7 @@ public static class LibrarySource
                         if (libraryResponse.Failed)
                         {
                             Logger.LogFailure(libraryResponse.Error);
-                            ErrorEmitted?.Invoke(null, libraryResponse.Error);
+                            WeakReferenceMessenger.Default.Send(new NotificationMessage(libraryResponse.Error));
                             continue;
                         }
 
@@ -83,7 +83,7 @@ public static class LibrarySource
                 {
                     const string error = "Failed to load libraries from server";
                     Logger.LogError(error, e);
-                    ErrorEmitted?.Invoke(null, error);
+                    WeakReferenceMessenger.Default.Send(new NotificationMessage(error));
                 }
             }
         });

@@ -5,7 +5,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
 using Jeek.Avalonia.Localization;
+using ManaxClient.Event;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTO.Chapter;
@@ -37,8 +39,6 @@ public partial class Chapter : ObservableObject, IDisposable
     public Chapter() : this(new ChapterDto())
     {
     }
-
-    public static EventHandler<string>? ErrorEmitted { get; set; }
 
     public void Dispose()
     {
@@ -91,7 +91,7 @@ public partial class Chapter : ObservableObject, IDisposable
                 Optional<byte[]> chapterPageResponse = await ManaxApiChapterClient.GetChapterPageAsync(Id, i);
                 if (chapterPageResponse.Failed)
                 {
-                    ErrorEmitted?.Invoke(this, chapterPageResponse.Error);
+                    WeakReferenceMessenger.Default.Send(new NotificationMessage(chapterPageResponse.Error));
                     continue;
                 }
 
@@ -102,7 +102,7 @@ public partial class Chapter : ObservableObject, IDisposable
                 }
                 catch (Exception e)
                 {
-                    ErrorEmitted?.Invoke(this, string.Format(Localizer.Get("Chapter.LoadPageFailed"),index));
+                    WeakReferenceMessenger.Default.Send(new NotificationMessage(string.Format(Localizer.Get("Chapter.LoadPageFailed"),index)));
                     Logger.LogError("Loading page " + index + " for chapter " + Id + " failed", e);
                 }
             }
@@ -120,7 +120,7 @@ public partial class Chapter : ObservableObject, IDisposable
         Task.Run(async () =>
         {
             Optional<bool> response = await ManaxApiReadClient.MarkAsRead(readCreateDto);
-            if (response.Failed) ErrorEmitted?.Invoke(this, response.Error);
+            if (response.Failed) WeakReferenceMessenger.Default.Send(new NotificationMessage(response.Error));
         });
     }
 

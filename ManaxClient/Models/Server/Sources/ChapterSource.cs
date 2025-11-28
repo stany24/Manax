@@ -4,7 +4,9 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Threading;
+using CommunityToolkit.Mvvm.Messaging;
 using DynamicData;
+using ManaxClient.Event;
 using ManaxClient.Models.Server.Data;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
@@ -25,8 +27,6 @@ public static class ChapterSource
         NotificationReceiver.OnChapterAdded += OnChapterCreated;
         NotificationReceiver.OnChapterDeleted += OnChapterDeleted;
     }
-
-    public static EventHandler<string>? ErrorEmitted { get; set; }
 
     private static void OnChapterDeleted(long id)
     {
@@ -54,7 +54,7 @@ public static class ChapterSource
                 if (response.Failed)
                 {
                     Logger.LogFailure(response.Error);
-                    ErrorEmitted?.Invoke(null, response.Error);
+                    WeakReferenceMessenger.Default.Send(new NotificationMessage(response.Error));
                     return;
                 }
 
@@ -65,7 +65,7 @@ public static class ChapterSource
             {
                 const string error = "Failed to load chapters from server";
                 Logger.LogError(error, e);
-                ErrorEmitted?.Invoke(null, error);
+                WeakReferenceMessenger.Default.Send(new NotificationMessage(error));
             }
         });
     }
@@ -83,7 +83,7 @@ public static class ChapterSource
             if (response.Failed)
             {
                 Logger.LogFailure(response.Error);
-                ErrorEmitted?.Invoke(null, response.Error);
+                WeakReferenceMessenger.Default.Send(new NotificationMessage(response.Error));
                 return;
             }
 
@@ -106,7 +106,7 @@ public static class ChapterSource
             Optional<List<ReadDto>> response = await ManaxApiSerieClient.GetSerieChaptersReadAsync(serieId);
             if (response.Failed)
             {
-                ErrorEmitted?.Invoke(null, response.Error);
+                WeakReferenceMessenger.Default.Send(new NotificationMessage(response.Error));
                 return;
             }
 
@@ -126,7 +126,7 @@ public static class ChapterSource
         catch (Exception e)
         {
             string message = "Failed to load chapters for serie with ID: " + serieId;
-            ErrorEmitted?.Invoke(null, message);
+            WeakReferenceMessenger.Default.Send(new NotificationMessage(message));
             Logger.LogError(message, e);
         }
     }

@@ -4,11 +4,13 @@ using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
 using Jeek.Avalonia.Localization;
 using LiveChartsCore;
 using LiveChartsCore.Measure;
 using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Painting;
+using ManaxClient.Event;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTO.Stats;
@@ -42,7 +44,7 @@ public partial class ServerStatsPageViewModel : PageViewModel
             if (serverStats.Failed)
             {
                 Logger.LogFailure($"Failed to load server stats: {serverStats.Error}");
-                InfoEmitted?.Invoke(this, $"Failed to load server stats: {serverStats.Error}");
+                WeakReferenceMessenger.Default.Send(new NotificationMessage($"Failed to load server stats: {serverStats.Error}"));
                 return;
             }
 
@@ -55,7 +57,7 @@ public partial class ServerStatsPageViewModel : PageViewModel
         catch (Exception e)
         {
             Logger.LogError($"An error occurred while loading server stats: {e.Message}", e);
-            InfoEmitted?.Invoke(this, $"An error occurred while loading server stats: {e.Message}");
+            WeakReferenceMessenger.Default.Send(new NotificationMessage($"An error occurred while loading server stats: {e.Message}"));
         }
     }
 

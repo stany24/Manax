@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
 using DynamicData;
 using DynamicData.Binding;
 using ManaxClient.Assets;
+using ManaxClient.Event;
 using ManaxClient.Models;
 using ManaxClient.Models.History;
 using ManaxClient.Models.Server.Sources;
@@ -28,9 +30,7 @@ using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.Logging;
 using ManaxLibrary.Notifications;
-using Chapter = ManaxClient.Models.Server.Data.Chapter;
 using Library = ManaxClient.Models.Server.Data.Library;
-using Serie = ManaxClient.Models.Server.Data.Serie;
 
 namespace ManaxClient.ViewModels;
 
@@ -51,6 +51,8 @@ public partial class MainWindowViewModel : ObservableObject
 
     public MainWindowViewModel()
     {
+        WeakReferenceMessenger.Default.Register<NotificationMessage>(this, (_, m) => { ShowInfo(m.Value); });
+        WeakReferenceMessenger.Default.Register<PopupMessage>(this, (_, m) => { SetPopup(m.Value); });
         SortExpressionComparer<Library> comparer = SortExpressionComparer<Library>.Descending(library => library.Name);
         _librariesSubscription = LibrarySource.Libraries
             .Connect()
@@ -62,8 +64,6 @@ public partial class MainWindowViewModel : ObservableObject
             if (CurrentPageViewModel == null) return;
             CurrentPageViewModel.Admin = IsAdmin;
             CurrentPageViewModel.PageChangedRequested += (_, e) => { SetPage(e); };
-            CurrentPageViewModel.PopupRequested += (_, e) => { SetPopup(e); };
-            CurrentPageViewModel.InfoEmitted += (_, e) => { ShowInfo(e); };
             CurrentPageViewModel.PreviousRequested += (_, _) => GoBack();
             CurrentPageViewModel.NextRequested += (_, _) => GoForward();
             PageMargin = CurrentPageViewModel.HasMargin ? new Thickness(20) : new Thickness(0);
@@ -72,13 +72,6 @@ public partial class MainWindowViewModel : ObservableObject
         LoginPageViewModel loginPage = new();
         loginPage.PageChangedRequested += (_, _) =>
         {
-            Library.ErrorEmitted += (_, e) => ShowInfo(e);
-            Serie.ErrorEmitted += (_, e) => ShowInfo(e);
-            Chapter.ErrorEmitted += (_, e) => ShowInfo(e);
-            RankSource.ErrorEmitted += (_, e) => ShowInfo(e);
-            TagSource.ErrorEmitted += (_, e) => ShowInfo(e);
-            UserSource.ErrorEmitted += (_, e) => ShowInfo(e);
-            IssueSource.ErrorEmitted += (_, e) => ShowInfo(e);
             IsAdmin = loginPage.IsAdmin();
             NotificationReceiver.OnRunningTasks += OnRunningTasks;
             NotificationReceiver.OnPermissionModified += OnPermissionModified;

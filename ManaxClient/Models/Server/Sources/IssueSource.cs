@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.Messaging;
 using DynamicData;
+using ManaxClient.Event;
 using ManaxClient.Models.Issue;
 using ManaxClient.ViewModels;
 using ManaxLibrary;
@@ -59,8 +61,6 @@ public static class IssueSource
         NotificationReceiver.OnReportedSerieIssueDeleted += OnReportedSerieIssueDeleted;
     }
 
-    public static EventHandler<string>? ErrorEmitted { get; set; }
-
     private static void OnReportedChapterIssueCreated(IssueChapterReportedDto issue)
     {
         lock (IssueLock)
@@ -103,7 +103,7 @@ public static class IssueSource
                     await ManaxApiIssueClient.GetAllAutomaticChapterIssuesAsync();
                 if (responseIssueChapterAutomatic.Failed)
                 {
-                    ErrorEmitted?.Invoke(null, responseIssueChapterAutomatic.Error);
+                    WeakReferenceMessenger.Default.Send(new NotificationMessage(responseIssueChapterAutomatic.Error));
                 }
                 else
                 {
@@ -133,7 +133,7 @@ public static class IssueSource
                     await ManaxApiIssueClient.GetAllAutomaticSerieIssuesAsync();
                 if (responseIssueSerieAutomatic.Failed)
                 {
-                    ErrorEmitted?.Invoke(null, responseIssueSerieAutomatic.Error);
+                    WeakReferenceMessenger.Default.Send(new NotificationMessage(responseIssueSerieAutomatic.Error));
                 }
                 else
                 {
@@ -163,7 +163,7 @@ public static class IssueSource
                     await ManaxApiIssueClient.GetAllReportedChapterIssuesAsync();
                 if (responseIssueChapterReported.Failed)
                 {
-                    ErrorEmitted?.Invoke(null, responseIssueChapterReported.Error);
+                    WeakReferenceMessenger.Default.Send(new NotificationMessage(responseIssueChapterReported.Error));
                 }
                 else
                 {
@@ -193,7 +193,7 @@ public static class IssueSource
                     await ManaxApiIssueClient.GetAllReportedSerieIssuesAsync();
                 if (responseIssueSerieReported.Failed)
                 {
-                    ErrorEmitted?.Invoke(null, responseIssueSerieReported.Error);
+                    WeakReferenceMessenger.Default.Send(new NotificationMessage(responseIssueSerieReported.Error));
                 }
                 else
                 {

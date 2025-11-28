@@ -3,14 +3,18 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using DynamicData;
 using DynamicData.Binding;
 using Jeek.Avalonia.Localization;
+using ManaxClient.Event;
 using ManaxClient.Models.Server.Sources;
 using ManaxClient.ViewModels.Pages.Chapter;
 using ManaxClient.ViewModels.Popup.ConfirmCancel;
@@ -59,10 +63,22 @@ public partial class SeriePageViewModel : PageViewModel
         Task.Run(async () =>
         {
             Optional<bool> userRankResponse = await ManaxApiRankClient.SetUserRankAsync(userRankCreateDto);
-            InfoEmitted?.Invoke(this,
-                userRankResponse.Failed ? userRankResponse.Error : Localizer.Get("SeriePage.RankSetCorrectly"));
+            string message = userRankResponse.Failed
+                ? userRankResponse.Error
+                : Localizer.Get("SeriePage.RankSetCorrectly");
+            WeakReferenceMessenger.Default.Send(new NotificationMessage(message));
         });
     }
+    
+    public ICommand InfoEmittedCommand => new RelayCommand<string>(info =>
+    {
+        if (info != null) WeakReferenceMessenger.Default.Send(new NotificationMessage(info));
+    });
+    
+    public ICommand PopupRequestedCommand => new RelayCommand<Controls.Popups.Popup>(popup =>
+    {
+        if (popup != null) WeakReferenceMessenger.Default.Send(new PopupMessage(popup));
+    });
 
     public void MoveToChapterPage(Models.Server.Data.Chapter chapter)
     {
@@ -83,16 +99,16 @@ public partial class SeriePageViewModel : PageViewModel
                 SerieUpdateDto serie = content.GetResult();
                 Optional<bool> serieResponse = await ManaxApiSerieClient.PutSerieAsync(Serie.Id, serie);
                 if (!serieResponse.Failed) return;
-                InfoEmitted?.Invoke(this, Localizer.Get("SeriePage.ErrorUpdatingSerie"));
+                WeakReferenceMessenger.Default.Send(new NotificationMessage(Localizer.Get("SeriePage.ErrorUpdatingSerie")));
                 Logger.LogFailure("Failed to update serie with ID: " + Serie.Id);
             }
             catch (Exception e)
             {
-                InfoEmitted?.Invoke(this, Localizer.Get("SeriePage.ErrorUpdatingSerie"));
+                WeakReferenceMessenger.Default.Send(new NotificationMessage(Localizer.Get("SeriePage.ErrorUpdatingSerie")));
                 Logger.LogError("Failed to update serie with ID: " + Serie.Id, e);
             }
         };
-        PopupRequested?.Invoke(this, popup);
+        WeakReferenceMessenger.Default.Send(new PopupMessage(popup));
     }
 
     public async void ReplacePoster()
@@ -133,17 +149,17 @@ public partial class SeriePageViewModel : PageViewModel
 
             if (replacePosterResponse.Failed)
             {
-                InfoEmitted?.Invoke(this, replacePosterResponse.Error);
+                WeakReferenceMessenger.Default.Send(new NotificationMessage(replacePosterResponse.Error));
             }
             else
             {
-                InfoEmitted?.Invoke(this, Localizer.Get("SeriePage.PosterReplacedSuccess"));
+                WeakReferenceMessenger.Default.Send(new NotificationMessage(Localizer.Get("SeriePage.PosterReplacedSuccess")));
                 Logger.LogInfo("Poster replaced successfully for serie ID: " + Serie.Id);
             }
         }
         catch (Exception e)
         {
-            InfoEmitted?.Invoke(this, Localizer.Get("SeriePage.ErrorReplacingPoster"));
+            WeakReferenceMessenger.Default.Send(new NotificationMessage(Localizer.Get("SeriePage.ErrorReplacingPoster")));
             Logger.LogError("Error replacing poster for serie ID: " + Serie.Id, e);
         }
     }

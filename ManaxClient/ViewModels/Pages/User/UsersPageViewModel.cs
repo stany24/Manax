@@ -2,9 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.Messaging;
 using DynamicData;
 using DynamicData.Binding;
 using Jeek.Avalonia.Localization;
+using ManaxClient.Event;
 using ManaxClient.Models.Server.Sources;
 using ManaxClient.ViewModels.Popup.ConfirmCancel;
 using ManaxClient.ViewModels.Popup.ConfirmCancel.Content;
@@ -36,9 +38,10 @@ public class UsersPageViewModel : PageViewModel
         Task.Run(async () =>
         {
             Optional<bool> deleteUserResponse = await ManaxApiUserClient.DeleteUserAsync(user.Id);
-            InfoEmitted?.Invoke(this, deleteUserResponse.Failed
+            string error = deleteUserResponse.Failed
                 ? deleteUserResponse.Error
-                : $"User '{user.Username}' was deleted");
+                : $"User '{user.Username}' was deleted";
+            WeakReferenceMessenger.Default.Send(new NotificationMessage(error));
         });
     }
 
@@ -47,7 +50,7 @@ public class UsersPageViewModel : PageViewModel
         UserPermissionsEditViewModel content = new(userId);
         ConfirmCancelViewModel context = new(content);
         Controls.Popups.Popup popup = new(context);
-        PopupRequested?.Invoke(this, popup);
+        WeakReferenceMessenger.Default.Send(new PopupMessage(popup));
         popup.Closed += async void (_, _) =>
         {
             try
@@ -56,12 +59,12 @@ public class UsersPageViewModel : PageViewModel
                 List<Permission> perms = content.GetSelectedPermissions();
                 Optional<bool> postUserResponse = await ManaxApiPermissionClient.SetPermissionsAsync(userId, perms);
                 if (postUserResponse.Failed)
-                    InfoEmitted?.Invoke(this, Localizer.Get("UserPage.UpdatePermissionsError"));
+                    WeakReferenceMessenger.Default.Send(new NotificationMessage(Localizer.Get("UserPage.UpdatePermissionsError")));
             }
             catch (Exception e)
             {
                 Logger.LogError("Error updating user permissions", e);
-                InfoEmitted?.Invoke(this, Localizer.Get("UserPage.UpdatePermissionsError"));
+                WeakReferenceMessenger.Default.Send(new NotificationMessage(Localizer.Get("UserPage.UpdatePermissionsError")));
             }
         };
     }
@@ -71,7 +74,7 @@ public class UsersPageViewModel : PageViewModel
         UserCreateViewModel content = new();
         ConfirmCancelViewModel context = new(content);
         Controls.Popups.Popup popup = new(context);
-        PopupRequested?.Invoke(this, popup);
+        WeakReferenceMessenger.Default.Send(new PopupMessage(popup));
         popup.Closed += async void (_, _) =>
         {
             try
@@ -79,12 +82,13 @@ public class UsersPageViewModel : PageViewModel
                 if (context.Canceled()) return;
                 UserCreateDto user = content.GetResult();
                 Optional<bool> postUserResponse = await ManaxApiUserClient.PostUserAsync(user);
-                if (postUserResponse.Failed) InfoEmitted?.Invoke(this, Localizer.Get("UserPage.CreateError"));
+                if (postUserResponse.Failed) 
+                    WeakReferenceMessenger.Default.Send(new NotificationMessage(Localizer.Get("UserPage.CreateError")));
             }
             catch (Exception e)
             {
                 Logger.LogError("Error creating user", e);
-                InfoEmitted?.Invoke(this, Localizer.Get("UserPage.CreateError"));
+                WeakReferenceMessenger.Default.Send(new NotificationMessage(Localizer.Get("UserPage.CreateError")));
             }
         };
     }

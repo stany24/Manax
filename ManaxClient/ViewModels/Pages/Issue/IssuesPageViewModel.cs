@@ -5,9 +5,11 @@ using System.IO;
 using System.IO.Compression;
 using System.Net.Http;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
 using DynamicData;
 using DynamicData.Binding;
 using Jeek.Avalonia.Localization;
+using ManaxClient.Event;
 using ManaxClient.Models.Issue;
 using ManaxClient.Models.Server.Sources;
 using ManaxClient.ViewModels.Pages.Serie;
@@ -82,7 +84,7 @@ public partial class IssuesPageViewModel : PageViewModel
         ConfirmCancelViewModel viewModel = new(content);
         Controls.Popups.Popup popup = new(viewModel);
         popup.Closed += (_, _) => { PopupClosed(viewModel, saveFile, saveFolder, chapter); };
-        PopupRequested?.Invoke(this, popup);
+        WeakReferenceMessenger.Default.Send(new PopupMessage(popup));
 
         DownloadChapter(saveFile, saveFolder, chapter, content);
     }
@@ -95,7 +97,7 @@ public partial class IssuesPageViewModel : PageViewModel
             Optional<byte[]> chapterPagesAsync = await ManaxApiChapterClient.GetChapterPagesAsync(chapter.Id);
             if (chapterPagesAsync.Failed)
             {
-                InfoEmitted?.Invoke(this, chapterPagesAsync.Error);
+                WeakReferenceMessenger.Default.Send(new NotificationMessage(chapterPagesAsync.Error));
                 return;
             }
 
@@ -109,7 +111,7 @@ public partial class IssuesPageViewModel : PageViewModel
         }
         catch (Exception e)
         {
-            InfoEmitted?.Invoke(this, e.Message);
+            WeakReferenceMessenger.Default.Send(new NotificationMessage(e.Message));
             Logger.LogError("Error downloading chapter", e);
         }
     }
@@ -131,7 +133,7 @@ public partial class IssuesPageViewModel : PageViewModel
                     chapter.SerieId);
             if (request.Failed)
             {
-                InfoEmitted?.Invoke(this, request.Error);
+                WeakReferenceMessenger.Default.Send(new NotificationMessage(request.Error));
                 Logger.LogFailure("Replace chapter failed");
                 return;
             }
@@ -142,11 +144,11 @@ public partial class IssuesPageViewModel : PageViewModel
             string message = request.GetValue()
                 ? Localizer.Get("IssuesPage.ReplacementSuccessful")
                 : Localizer.Get("IssuesPage.ReplacementFailed");
-            InfoEmitted?.Invoke(this, message);
+            WeakReferenceMessenger.Default.Send(new NotificationMessage(message));
         }
         catch (Exception e)
         {
-            InfoEmitted?.Invoke(this, e.Message);
+            WeakReferenceMessenger.Default.Send(new NotificationMessage(e.Message));
             Logger.LogError("Error replacing chapter", e);
         }
     }

@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.Messaging;
 using DynamicData;
+using ManaxClient.Event;
 using ManaxClient.Models.Server.Data;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
@@ -25,8 +27,6 @@ public static class RoleSource
         NotificationReceiver.OnRoleCreated += OnRoleCreated;
         NotificationReceiver.OnRoleDeleted += OnRoleDeleted;
     }
-
-    public static EventHandler<string>? ErrorEmitted { get; set; }
 
     private static void OnRoleDeleted(long id)
     {
@@ -57,7 +57,7 @@ public static class RoleSource
                     if (ranksResponse.Failed)
                     {
                         Logger.LogFailure(ranksResponse.Error);
-                        ErrorEmitted?.Invoke(null, ranksResponse.Error);
+                        WeakReferenceMessenger.Default.Send(new NotificationMessage(ranksResponse.Error));
                         return;
                     }
 
@@ -77,7 +77,7 @@ public static class RoleSource
                 {
                     const string error = "Failed to load ranks from server";
                     Logger.LogError(error, e);
-                    ErrorEmitted?.Invoke(null, error);
+                    WeakReferenceMessenger.Default.Send(new NotificationMessage(error));
                 }
             }
         });

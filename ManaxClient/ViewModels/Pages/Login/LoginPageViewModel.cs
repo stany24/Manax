@@ -6,9 +6,11 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
 using DynamicData;
 using DynamicData.Binding;
 using Jeek.Avalonia.Localization;
+using ManaxClient.Event;
 using ManaxClient.Localization;
 using ManaxClient.Models;
 using ManaxClient.ViewModels.Pages.Home;
@@ -92,7 +94,7 @@ public sealed partial class LoginPageViewModel : PageViewModel
 
     private void Release(string errorMessage)
     {
-        InfoEmitted?.Invoke(this, errorMessage);
+        WeakReferenceMessenger.Default.Send(new NotificationMessage(errorMessage));
         CanLogin = true;
         Emoji = "🔑";
     }
@@ -107,14 +109,14 @@ public sealed partial class LoginPageViewModel : PageViewModel
             _isAdmin = self.Role is UserRole.Admin or UserRole.Owner;
             string format = string.Format(CultureInfo.InvariantCulture, Localizer.Get("LoginPage.Connected"),
                 self.Username, self.Role);
-            InfoEmitted?.Invoke(this, format);
+            WeakReferenceMessenger.Default.Send(new NotificationMessage(format));
             Logger.LogInfo(format);
             SaveLoginValues();
             PageChangedRequested?.Invoke(this, new HomePageViewModel());
         }
         catch (Exception)
         {
-            InfoEmitted?.Invoke(this, "Unknown error while checking token");
+            WeakReferenceMessenger.Default.Send(new NotificationMessage("Unknown error while checking token"));
         }
     }
 

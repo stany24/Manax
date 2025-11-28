@@ -8,9 +8,11 @@ using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
 using DynamicData;
 using DynamicData.Binding;
 using Jeek.Avalonia.Localization;
+using ManaxClient.Event;
 using ManaxClient.Models.Server.Sources;
 using ManaxClient.ViewModels.Pages.Serie;
 using ManaxLibrary;
@@ -77,22 +79,24 @@ public partial class HomePageViewModel : PageViewModel
             Optional<bool> uploadSerieResponse = await ManaxApiUploadClient.UploadSerieAsync(folderPath);
             if (uploadSerieResponse.Failed)
             {
-                InfoEmitted?.Invoke(this,
-                    string.Format(CultureInfo.InvariantCulture, Localizer.Get("HomePage.UploadFailure"),
-                        Path.GetDirectoryName(folderPath)));
+                string format1 = string.Format(CultureInfo.InvariantCulture, Localizer.Get("HomePage.UploadFailure"),
+                    Path.GetDirectoryName(folderPath));
+                
+                WeakReferenceMessenger.Default.Send(new NotificationMessage(format1));
+                    
                 Logger.LogFailure("Failed to upload series: " + uploadSerieResponse.Error);
                 return;
             }
 
-            InfoEmitted?.Invoke(this,
-                string.Format(CultureInfo.InvariantCulture, Localizer.Get("HomePage.UploadSuccess"),
-                    Path.GetDirectoryName(folderPath)));
+            string format2 = string.Format(CultureInfo.InvariantCulture, Localizer.Get("HomePage.UploadSuccess"),
+                Path.GetDirectoryName(folderPath));
+            WeakReferenceMessenger.Default.Send(new NotificationMessage(format2));
             Logger.LogInfo("Serie upload successful");
         }
         catch (Exception e)
         {
             IsFolderPickerOpen = false;
-            InfoEmitted?.Invoke(this, Localizer.Get("HomePage.UploadError"));
+            WeakReferenceMessenger.Default.Send(new NotificationMessage(Localizer.Get("HomePage.UploadError")));
             Logger.LogError("Error uploading series", e);
         }
     }

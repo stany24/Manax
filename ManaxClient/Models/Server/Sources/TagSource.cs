@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.Messaging;
 using DynamicData;
+using ManaxClient.Event;
 using ManaxClient.Models.Server.Data;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
@@ -26,8 +28,6 @@ public static class TagSource
         NotificationReceiver.OnTagDeleted += OnTagDeleted;
     }
 
-    public static EventHandler<string>? ErrorEmitted { get; set; }
-
     public static void LoadTags()
     {
         Task.Run(() =>
@@ -42,7 +42,7 @@ public static class TagSource
                     {
                         const string message = "failed to load tags.";
                         Logger.LogFailure(message);
-                        ErrorEmitted?.Invoke(null, message);
+                        WeakReferenceMessenger.Default.Send(new NotificationMessage(message));
                         return;
                     }
 
@@ -58,7 +58,7 @@ public static class TagSource
             {
                 const string message = "An error occurred while loading tags.";
                 Logger.LogError(message, e);
-                ErrorEmitted?.Invoke(null, message);
+                WeakReferenceMessenger.Default.Send(new NotificationMessage(message));
             }
         });
     }

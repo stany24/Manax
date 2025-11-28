@@ -1,5 +1,7 @@
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
+using ManaxClient.Event;
 using ManaxClient.ViewModels.Pages.Serie;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
@@ -26,8 +28,8 @@ public partial class LibraryPageViewModel : PageViewModel
         Task.Run(async () =>
         {
             Optional<bool> deleteLibraryResponse = await ManaxApiLibraryClient.DeleteLibraryAsync(Library.Id);
-            if (deleteLibraryResponse.Failed)
-                InfoEmitted?.Invoke(this, "Failed to delete Library '" + Library.Name + "'");
+            if (deleteLibraryResponse.Failed) 
+                WeakReferenceMessenger.Default.Send(new NotificationMessage("Failed to delete Library '" + Library.Name + "'"));
         });
     }
 }

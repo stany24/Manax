@@ -1,8 +1,9 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.Messaging;
 using DynamicData;
+using ManaxClient.Event;
 using ManaxClient.Models.Issue;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
@@ -21,8 +22,6 @@ public static class ProblemSource
         LoadProblems();
     }
 
-    public static EventHandler<string>? ErrorEmitted { get; set; }
-
     private static void LoadProblems()
     {
         Task.Run(async () =>
@@ -32,7 +31,7 @@ public static class ProblemSource
             if (chapterResponse.Failed)
             {
                 Logger.LogFailure(chapterResponse.Error);
-                ErrorEmitted?.Invoke(null, chapterResponse.Error);
+                WeakReferenceMessenger.Default.Send(new NotificationMessage(chapterResponse.Error));
                 return;
             }
 
@@ -44,7 +43,7 @@ public static class ProblemSource
             if (serieResponse.Failed)
             {
                 Logger.LogFailure(serieResponse.Error);
-                ErrorEmitted?.Invoke(null, serieResponse.Error);
+                WeakReferenceMessenger.Default.Send(new NotificationMessage(serieResponse.Error));
                 return;
             }
 

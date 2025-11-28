@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
 using DynamicData;
+using ManaxClient.Event;
 using ManaxClient.Models.Server.Data;
 using ManaxClient.Models.Server.Sources;
 using ManaxLibrary;
@@ -32,7 +34,7 @@ public partial class IssueSerieReported : ObservableObject
         Task.Run(async () =>
         {
             Optional<bool> response = await ManaxApiIssueClient.CloseSerieIssueAsync(Id);
-            if (response.Failed) IssueSource.ErrorEmitted?.Invoke(this, response.Error);
+            if (response.Failed) WeakReferenceMessenger.Default.Send(new NotificationMessage(response.Error));
         });
     }
 

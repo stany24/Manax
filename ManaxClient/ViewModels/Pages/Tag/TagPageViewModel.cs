@@ -2,9 +2,11 @@ using System;
 using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.Messaging;
 using DynamicData;
 using DynamicData.Binding;
 using Jeek.Avalonia.Localization;
+using ManaxClient.Event;
 using ManaxClient.Models.Server.Sources;
 using ManaxClient.ViewModels.Popup.ConfirmCancel;
 using ManaxClient.ViewModels.Popup.ConfirmCancel.Content;
@@ -50,15 +52,15 @@ public class TagPageViewModel : PageViewModel
 
                 Optional<bool> request = await ManaxApiTagClient.CreateTagAsync(tagCreate);
                 if (request.Failed)
-                    InfoEmitted?.Invoke(this, Localizer.Get("TagPage.CreateError"));
+                    WeakReferenceMessenger.Default.Send(new NotificationMessage(Localizer.Get("TagPage.CreateError")));
             }
             catch
             {
-                InfoEmitted?.Invoke(this, Localizer.Get("TagPage.CreateError"));
+                WeakReferenceMessenger.Default.Send(new NotificationMessage(Localizer.Get("TagPage.CreateError")));
             }
         };
 
-        PopupRequested?.Invoke(this, popup);
+        WeakReferenceMessenger.Default.Send(new PopupMessage(popup));
     }
 
     public void UpdateTag(Models.Server.Data.Tag tag)
@@ -81,15 +83,15 @@ public class TagPageViewModel : PageViewModel
                 TagUpdateDto result = content.GetResult();
                 Optional<bool> response = await ManaxApiTagClient.UpdateTagAsync(result);
                 if (response.Failed)
-                    InfoEmitted?.Invoke(this, response.Error);
+                    WeakReferenceMessenger.Default.Send(new NotificationMessage(response.Error));
             }
             catch
             {
-                InfoEmitted?.Invoke(this, Localizer.Get("TagPage.UpdateError"));
+                WeakReferenceMessenger.Default.Send(new NotificationMessage(Localizer.Get("TagPage.UpdateError")));
             }
         };
 
-        PopupRequested?.Invoke(this, popup);
+        WeakReferenceMessenger.Default.Send(new PopupMessage(popup));
     }
 
     public void DeleteTag(Models.Server.Data.Tag tag)
@@ -100,11 +102,11 @@ public class TagPageViewModel : PageViewModel
             {
                 Optional<bool> response = await ManaxApiTagClient.DeleteTagAsync(tag.Id);
                 if (response.Failed)
-                    InfoEmitted?.Invoke(this, response.Error);
+                    WeakReferenceMessenger.Default.Send(new NotificationMessage(response.Error));
             }
             catch
             {
-                InfoEmitted?.Invoke(this, Localizer.Get("TagPage.DeleteError"));
+                WeakReferenceMessenger.Default.Send(new NotificationMessage(Localizer.Get("TagPage.DeleteError")));
             }
         });
     }

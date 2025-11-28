@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.Messaging;
 using DynamicData;
+using ManaxClient.Event;
 using ManaxClient.Models.Server.Data;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
@@ -25,8 +27,6 @@ public static class PersonSource
         NotificationReceiver.OnPersonCreated += OnPersonCreated;
         NotificationReceiver.OnPersonDeleted += OnPersonDeleted;
     }
-
-    public static EventHandler<string>? ErrorEmitted { get; set; }
 
     private static void OnPersonDeleted(long id)
     {
@@ -57,7 +57,7 @@ public static class PersonSource
                     if (personsResponse.Failed)
                     {
                         Logger.LogFailure(personsResponse.Error);
-                        ErrorEmitted?.Invoke(null, personsResponse.Error);
+                        WeakReferenceMessenger.Default.Send(new NotificationMessage(personsResponse.Error));
                         return;
                     }
 
@@ -77,7 +77,7 @@ public static class PersonSource
                 {
                     const string error = "Failed to load ranks from server";
                     Logger.LogError(error, e);
-                    ErrorEmitted?.Invoke(null, error);
+                    WeakReferenceMessenger.Default.Send(new NotificationMessage(error));
                 }
             }
         });

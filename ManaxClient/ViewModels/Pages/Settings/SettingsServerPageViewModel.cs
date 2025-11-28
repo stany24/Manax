@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
 using Jeek.Avalonia.Localization;
+using ManaxClient.Event;
 using ManaxClient.Models;
 using ManaxClient.ViewModels.Popup.ConfirmCancel;
 using ManaxClient.ViewModels.Popup.ConfirmCancel.Content;
@@ -84,15 +86,16 @@ public partial class SettingsServerPageViewModel : PageViewModel
                 if (viewModel.Canceled()) return;
                 SavePointCreateDto savePoint = content.GetResult();
                 Optional<long> postLibraryResponse = await ManaxApiSavePointClient.PostSavePointAsync(savePoint);
-                if (postLibraryResponse.Failed) InfoEmitted?.Invoke(this, postLibraryResponse.Error);
+                if (postLibraryResponse.Failed) 
+                    WeakReferenceMessenger.Default.Send(new NotificationMessage(postLibraryResponse.Error));
             }
             catch (Exception e)
             {
                 Logger.LogError("Error creating save point", e);
-                InfoEmitted?.Invoke(this, Localizer.Get("SettingsServerPage.ErrorCreatingSavePoint"));
+                WeakReferenceMessenger.Default.Send(new NotificationMessage(Localizer.Get("SettingsServerPage.ErrorCreatingSavePoint")));
             }
         };
-        PopupRequested?.Invoke(this, popup);
+        WeakReferenceMessenger.Default.Send(new PopupMessage(popup));
     }
 
     public void CreateLibrary()
@@ -107,14 +110,15 @@ public partial class SettingsServerPageViewModel : PageViewModel
                 if (viewModel.Canceled()) return;
                 LibraryCreateDto library = content.GetResult();
                 Optional<long> postLibraryResponse = await ManaxApiLibraryClient.PostLibraryAsync(library);
-                if (postLibraryResponse.Failed) InfoEmitted?.Invoke(this, postLibraryResponse.Error);
+                if (postLibraryResponse.Failed) 
+                    WeakReferenceMessenger.Default.Send(new NotificationMessage(postLibraryResponse.Error));
             }
             catch (Exception e)
             {
                 Logger.LogError("Error creating library", e);
-                InfoEmitted?.Invoke(this, Localizer.Get("SettingsServerPage.ErrorCreatingLibrary"));
+                WeakReferenceMessenger.Default.Send(new NotificationMessage(Localizer.Get("SettingsServerPage.ErrorCreatingLibrary")));
             }
         };
-        PopupRequested?.Invoke(this, popup);
+        WeakReferenceMessenger.Default.Send(new PopupMessage(popup));
     }
 }
