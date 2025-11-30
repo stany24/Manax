@@ -28,6 +28,15 @@ public partial class ChapterFolder : ObservableObject
         Images = new ObservableCollection<ImageFile>(images);
     }
 
+    ~ChapterFolder()
+    {
+        foreach (KeyValuePair<string, string> keyValuePair in _deletedImages)
+        {
+            try { File.Delete(keyValuePair.Value); }
+            catch { /*Ignored*/ }
+        }
+    }
+
     public ObservableCollection<ImageFile> Images { get; set; }
 
     public void DeleteImage(ImageFile image)

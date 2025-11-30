@@ -27,9 +27,6 @@
     <data name="LoginPage.Title" xml:space="preserve">
         <value>Manax</value>
     </data>
-    <data name="LoginPage.Subtitle" xml:space="preserve">
-        <value>Sign in to your account</value>
-    </data>
     <data name="LoginPage.Username" xml:space="preserve">
         <value>Username</value>
     </data>

@@ -30,7 +30,6 @@ public sealed partial class LoginPageViewModel : PageViewModel
     [ObservableProperty] private string _host = string.Empty;
     private bool _isAdmin;
     [ObservableProperty] private string _password = string.Empty;
-    [ObservableProperty] private int? _port;
     [ObservableProperty] private Language _selectedLanguage;
     [ObservableProperty] private string _username = string.Empty;
 
@@ -64,7 +63,7 @@ public sealed partial class LoginPageViewModel : PageViewModel
         Uri hostUri;
         try
         {
-            hostUri = Port != null ? new Uri(Host + $":{Port}/") : new Uri(Host);
+            hostUri = new Uri(Host);
         }
         catch
         {
@@ -125,7 +124,6 @@ public sealed partial class LoginPageViewModel : PageViewModel
         LoginValues loginValues = new()
         {
             Host = Host,
-            Port = Port,
             Username = Username
         };
         try
@@ -155,7 +153,6 @@ public sealed partial class LoginPageViewModel : PageViewModel
             LoginValues? loginValues = JsonSerializer.Deserialize<LoginValues>(content);
             if (loginValues == null) return;
             Host = loginValues.Host;
-            Port = loginValues.Port;
             Username = loginValues.Username;
         }
         catch (Exception e)

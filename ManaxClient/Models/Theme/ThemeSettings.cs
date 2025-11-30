@@ -4,6 +4,8 @@ using System.IO;
 using System.Text.Json;
 using Avalonia;
 using Avalonia.Media;
+using CommunityToolkit.Mvvm.Messaging;
+using ManaxClient.Event;
 using Material.Styles.Themes;
 using Material.Styles.Themes.Base;
 
@@ -18,34 +20,44 @@ public static class ThemeSettings
 
     private static readonly JsonSerializerOptions Settings = new() { WriteIndented = true };
 
-    public static ThemeSettingsData Current { get; private set; } =
-        new("Last default", Color.Parse("#007ACC"), Color.Parse("#6C757D"));
-    public static EventHandler? OnThemeUpdated;
+    public static ThemeSettingsData Current { get; private set; } = GetPresets()[0];
+
 
     public static void UpdateTheme(ThemeSettingsData themeSettingsData)
     {
         IBaseTheme mode = themeSettingsData.IsDark
             ? Material.Styles.Themes.Theme.Dark
             : Material.Styles.Themes.Theme.Light;
+        
+        double offset = themeSettingsData.IsDark ? - 0.15 : 0.15;
 
-        Material.Styles.Themes.Theme theme = Material.Styles.Themes.Theme.Create(mode,
-            themeSettingsData.PrimaryColor.Color, themeSettingsData.SecondaryColor.Color);
+        HslColor primaryHsl = new(themeSettingsData.PrimaryColor.A,
+            themeSettingsData.PrimaryColor.H,
+            themeSettingsData.PrimaryColor.S,
+            Math.Clamp(themeSettingsData.PrimaryColor.L + offset, 0, 1));
+        
+        HslColor secondaryHsl = new(themeSettingsData.PrimaryColor.A,
+            themeSettingsData.PrimaryColor.H,
+            themeSettingsData.PrimaryColor.S,
+            Math.Clamp(themeSettingsData.PrimaryColor.L + 2*offset, 0, 1));
+        
+        Material.Styles.Themes.Theme theme = Material.Styles.Themes.Theme.Create(mode,primaryHsl.ToRgb(), secondaryHsl.ToRgb());
         MaterialThemeBase? themeBootstrap = Application.Current?.LocateMaterialTheme<MaterialThemeBase>();
         if (themeBootstrap == null) return;
         themeBootstrap.CurrentTheme = theme;
         Save(themeSettingsData);
         Current = themeSettingsData;
-        OnThemeUpdated?.Invoke(null, EventArgs.Empty);
+        WeakReferenceMessenger.Default.Send(new ThemeMessage(themeSettingsData));
     }
 
     public static List<ThemeSettingsData> GetPresets()
     {
         return
         [
-            new ThemeSettingsData("Bleu", Color.Parse("#007ACC"), Color.Parse("#6C757D")),
-            new ThemeSettingsData("Violet", Color.Parse("#6F42C1"), Color.Parse("#6C757D")),
-            new ThemeSettingsData("Rouge", Color.Parse("#DC3545"), Color.Parse("#6C757D")),
-            new ThemeSettingsData("Vert", Color.Parse("#28A745"), Color.Parse("#6C757D"))
+            new ThemeSettingsData("Bleu", new HslColor(1,240.0,1,0.5)),
+            new ThemeSettingsData("Violet", new HslColor(1,270.0,1,0.5)),
+            new ThemeSettingsData("Rouge", new HslColor(1,335.0,1,0.5)),
+            new ThemeSettingsData("Vert", new HslColor(1,120.0,1,0.5))
         ];
     }
 
@@ -58,7 +70,8 @@ public static class ThemeSettings
         }
 
         string json = File.ReadAllText(SavePath);
-        UpdateTheme(JsonSerializer.Deserialize<ThemeSettingsData>(json) ?? GetPresets()[0]);
+        ThemeSettingsData? themeSettingsData = JsonSerializer.Deserialize<ThemeSettingsData>(json);
+        UpdateTheme(themeSettingsData ?? GetPresets()[0]);
     }
 
     private static void Save(ThemeSettingsData themeSettingsData)

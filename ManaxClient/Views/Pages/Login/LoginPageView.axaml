@@ -32,8 +32,6 @@
                             <TextBlock Text="📺" FontSize="48" HorizontalAlignment="Center" />
                             <TextBlock Classes="title" Text="{localization:Localize LoginPage.Title}"
                                        HorizontalAlignment="Center" />
-                            <TextBlock Text="{localization:Localize LoginPage.Subtitle}"
-                                       HorizontalAlignment="Center" />
                         </StackPanel>
 
                         <StackPanel Spacing="16">
@@ -63,27 +61,12 @@
                             <StackPanel Spacing="6">
                                 <TextBlock Text="{localization:Localize LoginPage.Server}"
                                            FontWeight="Medium" />
-                                <Grid
-                                    ColumnDefinitions="*,Auto,Auto">
-                                    <TextBox Text="{Binding Host}"
-                                             Grid.Column="0"
-                                             Watermark="{localization:Localize LoginPage.Server.Placeholder}"
-                                             Padding="12"
-                                             CornerRadius="8"
-                                             BorderThickness="1" />
-                                    <Label Content=":"
-                                           Grid.Column="1"
-                                           VerticalAlignment="Center" />
-                                    <NumericUpDown Value="{Binding Port}"
-                                                   Increment="1"
-                                                   Minimum="1"
-                                                   Maximum="65535"
-                                                   Grid.Column="2"
-                                                   Watermark="8080"
-                                                   Padding="12"
-                                                   CornerRadius="8"
-                                                   BorderThickness="1" />
-                                </Grid>
+                                <TextBox Text="{Binding Host}"
+                                         Watermark="{localization:Localize LoginPage.Server.Placeholder}"
+                                         Padding="12"
+                                         CornerRadius="8"
+                                         BorderThickness="1"
+                                         VerticalAlignment="Center" />
                             </StackPanel>
                         </StackPanel>
 

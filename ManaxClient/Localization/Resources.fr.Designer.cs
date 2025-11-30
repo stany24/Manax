@@ -51,12 +51,6 @@ namespace ManaxClient.Localization {
             }
         }
         
-        public static string LoginPage_Subtitle {
-            get {
-                return ResourceManager.GetString("LoginPage.Subtitle", resourceCulture);
-            }
-        }
-        
         public static string LoginPage_Username {
             get {
                 return ResourceManager.GetString("LoginPage.Username", resourceCulture);

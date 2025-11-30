@@ -47,13 +47,13 @@ public partial class AutoCleanupTabViewModel : TabViewModel
         CurrentImage = 0;
         Errors.Clear();
 
-        Task.Run(() =>
+        Task.Run(async () =>
         {
+            await LoadSettings();
             MoveSeriesToRoot();
             DecompressFiles();
             ScaleAndConvertImages();
             RemoveUnwantedFiles();
-            LoadSettings();
             NextRequested?.Invoke(this, new ManualCleanupTabViewModel());
         });
     }
@@ -150,7 +150,6 @@ public partial class AutoCleanupTabViewModel : TabViewModel
 
     private void ScaleAndConvertImages()
     {
-        LoadSettings();
         string[] imagesToConvert = _imagesFormats.AsParallel().SelectMany(ext =>
             Directory.GetFiles(_processingFolder, "*." + ext, SearchOption.AllDirectories)).ToArray();
         NbImage = imagesToConvert.Length;

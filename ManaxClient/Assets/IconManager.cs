@@ -5,7 +5,9 @@ using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
 using ImageMagick;
+using ManaxClient.Event;
 using ManaxClient.Models.Theme;
 
 namespace ManaxClient.Assets;
@@ -26,14 +28,14 @@ public partial class IconManager:ObservableObject
     
     public IconManager()
     {
-        ThemeSettings.OnThemeUpdated += (_, _) => LoadIcons();
+        WeakReferenceMessenger.Default.Register<ThemeMessage>(this, (_, data) => { LoadIcons(data.Value); });
     }
 
 
-    private void LoadIcons()
+    private void LoadIcons(ThemeSettingsData theme)
     {
-        SolidColorBrush primaryColor = ThemeSettings.Current.PrimaryColor;
-        MagickColor iconColor = new(primaryColor.Color.R, primaryColor.Color.G, primaryColor.Color.B);
+        Color primaryColor = theme.PrimaryColor.ToRgb();
+        MagickColor iconColor = new(primaryColor.R, primaryColor.G, primaryColor.B);
         Parallel.ForEach(typeof(IconManager).GetProperties(), propertyInfo =>
         {
             if (!propertyInfo.Name.EndsWith("Icon")) return;

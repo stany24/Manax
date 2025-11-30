@@ -83,32 +83,6 @@
                                 </ComboBox.ItemTemplate>
                             </ComboBox>
                         </StackPanel>
-
-                        <StackPanel Grid.Column="0" Grid.Row="1" Spacing="12">
-                            <TextBlock Text="{localization:Localize SettingsAppPage.ColorPreview}" FontWeight="Medium" />
-                            <WrapPanel Orientation="Horizontal" ItemWidth="150" ItemHeight="80">
-                                <Border Classes="card" Margin="4" Width="140" Height="70">
-                                    <StackPanel Spacing="4">
-                                        <TextBlock Text="{localization:Localize SettingsAppPage.PrimaryColor}"
-                                                   FontSize="12" FontWeight="Medium" />
-                                        <Rectangle Height="20" Fill="{Binding SelectedThemeSettingsData.PrimaryColor}" />
-                                        <TextBlock Text="{Binding SelectedThemeSettingsData.PrimaryColor.Color}"
-                                                   FontSize="10" />
-                                    </StackPanel>
-                                </Border>
-
-                                <Border Classes="card" Margin="4" Width="140" Height="70">
-                                    <StackPanel Spacing="4">
-                                        <TextBlock Text="{localization:Localize SettingsAppPage.SecondaryColor}"
-                                                   FontSize="12" FontWeight="Medium" />
-                                        <Rectangle Height="20"
-                                                   Fill="{Binding SelectedThemeSettingsData.SecondaryColor}" />
-                                        <TextBlock Text="{Binding SelectedThemeSettingsData.SecondaryColor.Color}"
-                                                   FontSize="10" />
-                                    </StackPanel>
-                                </Border>
-                            </WrapPanel>
-                        </StackPanel>
                     </Grid>
                 </StackPanel>
             </Border>

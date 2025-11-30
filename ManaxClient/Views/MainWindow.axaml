@@ -11,7 +11,7 @@
     x:DataType="vm:MainWindowViewModel"
     Icon="/Assets/avalonia-logo.ico"
     Title="{localization:Localize MainWindow.Title}"
-    MinWidth="960"
+    MinWidth="900"
     MinHeight="500"
     WindowStartupLocation="CenterScreen">
 
