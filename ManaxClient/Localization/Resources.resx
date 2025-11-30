@@ -1050,4 +1050,7 @@
     <data name="Choice.SignalIssue" xml:space="preserve">
         <value>Report an issue</value>
     </data>
+    <data name="MainWindow.Persons" xml:space="preserve">
+        <value>People</value>
+    </data>
 </root>

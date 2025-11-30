@@ -24,7 +24,8 @@
             ColumnDefinitions="Auto,*">
             <ScrollViewer Grid.Column="0"
                           HorizontalScrollBarVisibility="Disabled"
-                          VerticalScrollBarVisibility="Hidden">
+                          VerticalScrollBarVisibility="Hidden"
+                          Background="{DynamicResource MaterialCardBackgroundBrush}">
                 <StackPanel Classes="sidebar"
                             IsVisible="{Binding CurrentPageViewModel.ControlBarVisible}"
                             Orientation="Vertical">
@@ -39,7 +40,8 @@
                         <StackPanel Orientation="Horizontal" Spacing="12">
                             <Image Classes="icon"
                                    Source="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).IconManager.HomeIcon}"/>
-                            <TextBlock Text="{localization:Localize MainWindow.Home}" />
+                            <TextBlock Text="{localization:Localize MainWindow.Home}"
+                                       VerticalAlignment="Center"/>
                         </StackPanel>
                     </Button>
 
@@ -89,7 +91,8 @@
                         <StackPanel Orientation="Horizontal" Spacing="12">
                             <Image Classes="icon"
                                    Source="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).IconManager.IssuesIcon}"/>
-                            <TextBlock Text="{localization:Localize MainWindow.Issues}" />
+                            <TextBlock Text="{localization:Localize MainWindow.Issues}"
+                                       VerticalAlignment="Center" />
                         </StackPanel>
                     </Button>
 
@@ -99,7 +102,8 @@
                         <StackPanel Orientation="Horizontal" Spacing="12">
                             <Image Classes="icon"
                                    Source="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).IconManager.UsersIcon}"/>
-                            <TextBlock Text="{localization:Localize MainWindow.Users}" />
+                            <TextBlock Text="{localization:Localize MainWindow.Users}"
+                                       VerticalAlignment="Center" />
                         </StackPanel>
                     </Button>
 
@@ -114,7 +118,8 @@
                         <StackPanel Orientation="Horizontal" Spacing="12">
                             <Image Classes="icon"
                                    Source="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).IconManager.RanksIcon}"/>
-                            <TextBlock Text="{localization:Localize MainWindow.Ranks}" />
+                            <TextBlock Text="{localization:Localize MainWindow.Ranks}"
+                                       VerticalAlignment="Center" />
                         </StackPanel>
                     </Button>
 
@@ -124,7 +129,8 @@
                         <StackPanel Orientation="Horizontal" Spacing="12">
                             <Image Classes="icon"
                                    Source="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).IconManager.TagsIcon}"/>
-                            <TextBlock Text="{localization:Localize MainWindow.Tags}" />
+                            <TextBlock Text="{localization:Localize MainWindow.Tags}"
+                                       VerticalAlignment="Center" />
                         </StackPanel>
                     </Button>
 
@@ -134,7 +140,8 @@
                         <StackPanel Orientation="Horizontal" Spacing="12">
                             <Image Classes="icon"
                                    Source="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).IconManager.UploadIcon}"/>
-                            <TextBlock Text="{localization:Localize MainWindow.Upload}" />
+                            <TextBlock Text="{localization:Localize MainWindow.Upload}"
+                                       VerticalAlignment="Center" />
                         </StackPanel>
                     </Button>
 
@@ -144,7 +151,8 @@
                         <StackPanel Orientation="Horizontal" Spacing="12">
                             <Image Classes="icon"
                                    Source="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).IconManager.UsersIcon}"/>
-                            <TextBlock Text="People" />
+                            <TextBlock Text="{localization:Localize MainWindow.Persons}"
+                                       VerticalAlignment="Center" />
                         </StackPanel>
                     </Button>
 
@@ -158,7 +166,8 @@
                         <StackPanel Orientation="Horizontal" Spacing="12">
                             <Image Classes="icon"
                                    Source="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).IconManager.SettingsIcon}"/>
-                            <TextBlock Text="{localization:Localize MainWindow.Parameters.Server}" />
+                            <TextBlock Text="{localization:Localize MainWindow.Parameters.Server}"
+                                       VerticalAlignment="Center" />
                         </StackPanel>
                     </Button>
 
@@ -167,7 +176,8 @@
                         <StackPanel Orientation="Horizontal" Spacing="12">
                             <Image Classes="icon"
                                    Source="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).IconManager.SettingsIcon}"/>
-                            <TextBlock Text="{localization:Localize MainWindow.Parameters.UI}" />
+                            <TextBlock Text="{localization:Localize MainWindow.Parameters.UI}"
+                                       VerticalAlignment="Center" />
                         </StackPanel>
                     </Button>
 
@@ -177,7 +187,8 @@
                         <StackPanel Orientation="Horizontal" Spacing="12">
                             <Image Classes="icon"
                                    Source="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).IconManager.FeaturesIcon}"/>
-                            <TextBlock Text="{localization:Localize MainWindow.Parameters.Features}" />
+                            <TextBlock Text="{localization:Localize MainWindow.Parameters.Features}"
+                                       VerticalAlignment="Center" />
                         </StackPanel>
                     </Button>
 
@@ -190,7 +201,8 @@
                         <StackPanel Orientation="Horizontal" Spacing="12">
                             <Image Classes="icon"
                                    Source="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).IconManager.StatsIcon}"/>
-                            <TextBlock Text="{localization:Localize MainWindow.Stats.User}" />
+                            <TextBlock Text="{localization:Localize MainWindow.Stats.User}"
+                                       VerticalAlignment="Center" />
                         </StackPanel>
                     </Button>
 
@@ -200,7 +212,8 @@
                         <StackPanel Orientation="Horizontal" Spacing="12">
                             <Image Classes="icon"
                                    Source="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).IconManager.StatsIcon}"/>
-                            <TextBlock Text="{localization:Localize MainWindow.Stats.Server}" />
+                            <TextBlock Text="{localization:Localize MainWindow.Stats.Server}"
+                                       VerticalAlignment="Center" />
                         </StackPanel>
                     </Button>
 
@@ -209,7 +222,8 @@
                         <StackPanel Orientation="Horizontal" Spacing="12">
                             <Image Classes="icon"
                                    Source="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).IconManager.LogoutIcon}"/>
-                            <TextBlock Text="{localization:Localize MainWindow.Logout}" />
+                            <TextBlock Text="{localization:Localize MainWindow.Logout}"
+                                       VerticalAlignment="Center" />
                         </StackPanel>
                     </Button>
 

@@ -61,7 +61,7 @@ public class SeriePreview : Button
             Converter = new FuncValueConverter<SolidColorBrush, LinearGradientBrush>(brush => new LinearGradientBrush
             {
                 StartPoint = new RelativePoint(0, 1, RelativeUnit.Relative),
-                EndPoint = new RelativePoint(0, 0, RelativeUnit.Relative),
+                EndPoint = new RelativePoint(0, -0.2, RelativeUnit.Relative),
                 GradientStops =
                 [
                     new GradientStop(brush?.Color ?? Colors.White, 0),

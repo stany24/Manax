@@ -26,7 +26,7 @@ namespace ManaxClient.Controls.Previews;
 public class ChapterPreview : Button
 {
     public static readonly AttachedProperty<Chapter> ChapterProperty =
-        AvaloniaProperty.RegisterAttached<ChapterPreview, Grid, Chapter>(
+        AvaloniaProperty.RegisterAttached<ChapterPreview, ChapterPreview, Chapter>(
             "Chapter", new Chapter(), false, BindingMode.OneTime);
 
     public static readonly StyledProperty<ICommand?> InfoEmittedCommandProperty =

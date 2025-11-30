@@ -85,6 +85,7 @@
                                             Margin="4">
                                         <previews:SeriePreview
                                             Serie="{Binding .}"
+                                            BackGroundColor="{DynamicResource MaterialCardBackgroundBrush}"
                                             Command="{Binding $parent[UserControl].((page:HomePageViewModel)DataContext).MoveToSeriePage}"
                                             CommandParameter="{Binding .}" />
                                     </Border>

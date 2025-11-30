@@ -2096,5 +2096,11 @@ namespace ManaxClient.Localization {
                 return ResourceManager.GetString("Choice.SignalIssue", resourceCulture);
             }
         }
+        
+        public static string MainWindow_Persons {
+            get {
+                return ResourceManager.GetString("MainWindow.Persons", resourceCulture);
+            }
+        }
     }
 }
