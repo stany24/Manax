@@ -1,5 +1,4 @@
 using ManaxLibrary.DTO.Read;
-using ManaxLibrary.DTO.Serie;
 using ManaxLibrary.DTO.Stats;
 using ManaxLibrary.DTO.User;
 using ManaxServer.Attributes;
@@ -83,9 +82,9 @@ public class StatsController(ManaxContext context) : ControllerBase
             .GroupBy(s => s.Library != null ? s.Library.Name : "No library")
             .ToDictionaryAsync(g => g.Key, g => g.Count());
 
-        List<SerieDto> neverReadSeries = await context.Series
+        List<long> neverReadSerieIds = await context.Series
             .Where(s => !context.Reads.Any(r => context.Chapters.Any(c => c.SerieId == s.Id && c.Id == r.ChapterId)))
-            .Select(s => s.ToDto())
+            .Select(s => s.Id)
             .ToListAsync();
 
         ServerStats stats = new()
@@ -93,7 +92,7 @@ public class StatsController(ManaxContext context) : ControllerBase
             SeriesInLibraries = seriesInLibraries,
             DiskSize = diskSize,
             AvailableDiskSize = availableDiskSize,
-            NeverReadSeries = neverReadSeries,
+            NeverReadSerieIds = neverReadSerieIds,
             Series = await context.Series.CountAsync(),
             Chapters = await context.Chapters.CountAsync(),
             Users = await context.Users.CountAsync(),

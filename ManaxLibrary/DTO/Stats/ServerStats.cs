@@ -1,5 +1,3 @@
-using ManaxLibrary.DTO.Serie;
-
 namespace ManaxLibrary.DTO.Stats;
 
 public class ServerStats
@@ -8,7 +6,7 @@ public class ServerStats
     public long AvailableDiskSize { get; init; }
     public int Series { get; init; }
     public Dictionary<string, int> SeriesInLibraries { get; init; } = [];
-    public List<SerieDto> NeverReadSeries { get; init; } = [];
+    public List<long> NeverReadSerieIds { get; init; } = [];
     public int Chapters { get; init; }
     public int Users { get; init; }
     public int ActiveUsers { get; init; }

@@ -115,7 +115,7 @@ public partial class MainWindowViewModel : ObservableObject
 
     private void OnRunningTasks(Dictionary<string, int> tasks)
     {
-        Dispatcher.UIThread.Invoke(() =>
+        Dispatcher.UIThread.Post(() =>
         {
             RunningTasks.Clear();
 
@@ -164,12 +164,12 @@ public partial class MainWindowViewModel : ObservableObject
             _infoCancellationTokens.Clear();
         }
         
-        Dispatcher.UIThread.Invoke(() => { Infos.Clear(); });
+        Dispatcher.UIThread.Post(() => { Infos.Clear(); });
     }
 
     private void SetPopup(Controls.Popups.Popup? popup)
     {
-        Dispatcher.UIThread.Invoke(() =>
+        Dispatcher.UIThread.Post(() =>
         {
             Popup = popup;
             Popup?.Closed += (_, _) => Popup = null;
@@ -178,7 +178,7 @@ public partial class MainWindowViewModel : ObservableObject
 
     private void ShowInfo(string info)
     {
-        Dispatcher.UIThread.Invoke(() => { Infos.Add(info); });
+        Dispatcher.UIThread.Post(() => { Infos.Add(info); });
         
         CancellationTokenSource cts = new();
         lock (_infoCancellationLock)
@@ -192,7 +192,7 @@ public partial class MainWindowViewModel : ObservableObject
             {
                 await Task.Delay(TimeSpan.FromSeconds(10), cts.Token);
                 
-                Dispatcher.UIThread.Invoke(() => 
+                Dispatcher.UIThread.Post(() => 
                 { 
                     Infos.Remove(info);
                     lock (_infoCancellationLock)
@@ -224,7 +224,7 @@ public partial class MainWindowViewModel : ObservableObject
             }
         }
         
-        Dispatcher.UIThread.Invoke(() => { Infos.Remove(info); });
+        Dispatcher.UIThread.Post(() => { Infos.Remove(info); });
     }
 
     public void GoBack()

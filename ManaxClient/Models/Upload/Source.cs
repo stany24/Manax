@@ -43,7 +43,7 @@ public partial class Source : ObservableObject
             string dest = file.Replace(Path, processingFolder);
             File.Copy(file, dest, true);
             File.Delete(file);
-            Dispatcher.UIThread.Invoke(() =>
+            Dispatcher.UIThread.Post(() =>
             {
                 Current++;
                 Percentage = Current / (double)FileNumber * 100;

@@ -34,7 +34,7 @@ public partial class UserPermissionsEditViewModel : ConfirmCancelContentViewMode
             if (response.Failed) return;
 
             _currentPermissions = response.GetValue();
-            await Dispatcher.UIThread.InvokeAsync(() =>
+            Dispatcher.UIThread.Post(() =>
             {
                 OrganizePermissions();
                 CanConfirm = true;

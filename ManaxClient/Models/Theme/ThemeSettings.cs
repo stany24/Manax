@@ -29,7 +29,7 @@ public static class ThemeSettings
             ? Material.Styles.Themes.Theme.Dark
             : Material.Styles.Themes.Theme.Light;
         
-        double offset = themeSettingsData.IsDark ? - 0.15 : 0.15;
+        double offset = themeSettingsData.IsDark ? - 0.2 : 0.2;
 
         HslColor primaryHsl = new(themeSettingsData.PrimaryColor.A,
             themeSettingsData.PrimaryColor.H,

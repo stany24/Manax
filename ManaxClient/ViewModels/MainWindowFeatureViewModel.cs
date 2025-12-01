@@ -43,7 +43,7 @@ public partial class MainWindowViewModel
 
     private void OnFeatureModified(Feature feature)
     {
-        Dispatcher.UIThread.Invoke(() =>
+        Dispatcher.UIThread.Post(() =>
         {
             _features.Features.RemoveAll(f => f.Key == feature.Key);
             _features.Features.Add(feature);

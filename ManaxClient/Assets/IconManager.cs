@@ -30,8 +30,7 @@ public partial class IconManager:ObservableObject
     {
         WeakReferenceMessenger.Default.Register<ThemeMessage>(this, (_, data) => { LoadIcons(data.Value); });
     }
-
-
+    
     private void LoadIcons(ThemeSettingsData theme)
     {
         Color primaryColor = theme.PrimaryColor.ToRgb();
