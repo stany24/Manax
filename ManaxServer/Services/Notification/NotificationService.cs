@@ -143,7 +143,7 @@ public class NotificationService(IHubContext<NotificationService> hubContext, IP
 
     public void NotifyReadRemoved(ReadDto existingRead)
     {
-        TrySendToSingleClientAsync(existingRead.UserId, NotificationType.ReadCreated, existingRead.ChapterId);
+        TrySendToSingleClientAsync(existingRead.UserId, NotificationType.ReadDeleted, existingRead.ChapterId);
     }
 
     public void NotifySerieIssueCreatedAsync(IssueSerieReportedDto issue)
@@ -283,7 +283,7 @@ public class NotificationService(IHubContext<NotificationService> hubContext, IP
                     connectionIds.Add(connection.Key);
 
             if (connectionIds.Count <= 0) return;
-            hubContext.Clients.Clients(connectionIds).SendAsync(methodName, arg);
+            _ = hubContext.Clients.Clients(connectionIds).SendAsync(methodName, arg);
             Logger.LogInfo("Message sent to " + connectionIds.Count + " clients: " + methodName);
         }
         catch (Exception ex)
@@ -297,7 +297,7 @@ public class NotificationService(IHubContext<NotificationService> hubContext, IP
         string methodName = type.ToString();
         try
         {
-            hubContext.Clients.User(id.ToString(CultureInfo.InvariantCulture)).SendAsync(methodName, arg);
+            _ = hubContext.Clients.User(id.ToString(CultureInfo.InvariantCulture)).SendAsync(methodName, arg);
             Logger.LogInfo("Message sent to user " + id + ": " + methodName);
         }
         catch (Exception ex)

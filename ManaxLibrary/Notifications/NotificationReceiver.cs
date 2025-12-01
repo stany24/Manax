@@ -82,52 +82,110 @@ public static class NotificationReceiver
             .WithAutomaticReconnect()
             .Build();
 
-        RegisterNotification(NotificationType.LibraryCreated, OnLibraryCreated);
-        RegisterNotification(NotificationType.LibraryDeleted, OnLibraryDeleted);
-        RegisterNotification(NotificationType.LibraryUpdated, OnLibraryUpdated);
+        _hubConnection.On<LibraryDto>(nameof(NotificationType.LibraryCreated),
+            libraryData => { OnLibraryCreated?.Invoke(libraryData); });
 
-        RegisterNotification(NotificationType.SerieCreated, OnSerieCreated);
-        RegisterNotification(NotificationType.SerieUpdated, OnSerieUpdated);
-        RegisterNotification(NotificationType.SerieDeleted, OnSerieDeleted);
+        _hubConnection.On<long>(nameof(NotificationType.LibraryDeleted),
+            libraryId => { OnLibraryDeleted?.Invoke(libraryId); });
 
-        RegisterNotification(NotificationType.RankCreated, OnRankCreated);
-        RegisterNotification(NotificationType.RankUpdated, OnRankUpdated);
-        RegisterNotification(NotificationType.RankDeleted, OnRankDeleted);
+        _hubConnection.On<LibraryDto>(nameof(NotificationType.LibraryUpdated),
+            libraryData => { OnLibraryUpdated?.Invoke(libraryData); });
 
-        RegisterNotification(NotificationType.ChapterAdded, OnChapterAdded);
-        RegisterNotification(NotificationType.ChapterUpdated, OnChapterUpdated);
-        RegisterNotification(NotificationType.ChapterRemoved, OnChapterDeleted);
-        RegisterNotification(NotificationType.ChapterUploadFailed, OnChapterUploadFailed);
+        _hubConnection.On<SerieDto>(nameof(NotificationType.SerieCreated),
+            serieData => { OnSerieCreated?.Invoke(serieData); });
 
-        RegisterNotification(NotificationType.UserCreated, OnUserCreated);
-        RegisterNotification(NotificationType.UserUpdated, OnUserUpdated);
-        RegisterNotification(NotificationType.UserDeleted, OnUserDeleted);
+        _hubConnection.On<SerieDto>(nameof(NotificationType.SerieUpdated),
+            serieData => { OnSerieUpdated?.Invoke(serieData); });
 
-        RegisterNotification(NotificationType.RunningTasks, OnRunningTasks);
-        RegisterNotification(NotificationType.PosterUpdated, OnPosterModified);
-        RegisterNotification(NotificationType.PermissionModified, OnPermissionModified);
+        _hubConnection.On<long>(nameof(NotificationType.SerieDeleted),
+            serieId => { OnSerieDeleted?.Invoke(serieId); });
 
-        RegisterNotification(NotificationType.ReadCreated, OnReadCreated);
-        RegisterNotification(NotificationType.ReadDeleted, OnReadDeleted);
+        _hubConnection.On<RankDto>(nameof(NotificationType.RankCreated),
+            rankData => { OnRankCreated?.Invoke(rankData); });
 
-        RegisterNotification(NotificationType.ReportedChapterIssueCreated, OnReportedChapterIssueCreated);
-        RegisterNotification(NotificationType.ReportedChapterIssueDeleted, OnReportedChapterIssueDeleted);
-        RegisterNotification(NotificationType.ReportedSerieIssueCreated, OnReportedSerieIssueCreated);
-        RegisterNotification(NotificationType.ReportedSerieIssueDeleted, OnReportedSerieIssueDeleted);
+        _hubConnection.On<RankDto>(nameof(NotificationType.RankUpdated),
+            rankData => { OnRankUpdated?.Invoke(rankData); });
 
-        RegisterNotification(NotificationType.TagCreated, OnTagCreated);
-        RegisterNotification(NotificationType.TagUpdated, OnTagUpdated);
-        RegisterNotification(NotificationType.TagDeleted, OnTagDeleted);
+        _hubConnection.On<long>(nameof(NotificationType.RankDeleted),
+            rankId => { OnRankDeleted?.Invoke(rankId); });
 
-        RegisterNotification(NotificationType.PersonCreated, OnPersonCreated);
-        RegisterNotification(NotificationType.PersonUpdated, OnPersonUpdated);
-        RegisterNotification(NotificationType.PersonDeleted, OnPersonDeleted);
+        _hubConnection.On<ChapterDto>(nameof(NotificationType.ChapterAdded),
+            chapterData => { OnChapterAdded?.Invoke(chapterData); });
 
-        RegisterNotification(NotificationType.RoleCreated, OnRoleCreated);
-        RegisterNotification(NotificationType.RoleUpdated, OnRoleUpdated);
-        RegisterNotification(NotificationType.RoleDeleted, OnRoleDeleted);
+        _hubConnection.On<ChapterDto>(nameof(NotificationType.ChapterUpdated),
+            chapterData => { OnChapterUpdated?.Invoke(chapterData); });
 
-        RegisterNotification(NotificationType.FeatureModified, OnFeatureModified);
+        _hubConnection.On<long>(nameof(NotificationType.ChapterRemoved),
+            chapterId => { OnChapterDeleted?.Invoke(chapterId); });
+
+        _hubConnection.On<string>(nameof(NotificationType.ChapterUploadFailed),
+            message => { OnChapterUploadFailed?.Invoke(message); });
+
+        _hubConnection.On<UserDto>(nameof(NotificationType.UserCreated),
+            userData => { OnUserCreated?.Invoke(userData); });
+
+        _hubConnection.On<UserDto>(nameof(NotificationType.UserUpdated),
+            userData => { OnUserUpdated?.Invoke(userData); });
+
+        _hubConnection.On<long>(nameof(NotificationType.UserDeleted),
+            userId => { OnUserDeleted?.Invoke(userId); });
+
+        _hubConnection.On<Dictionary<string, int>>(nameof(NotificationType.RunningTasks),
+            tasks => { OnRunningTasks?.Invoke(tasks); });
+
+        _hubConnection.On<long>(nameof(NotificationType.PosterUpdated),
+            serieId => { OnPosterModified?.Invoke(serieId); });
+
+        _hubConnection.On<List<Permission>>(nameof(NotificationType.PermissionModified),
+            serieId => { OnPermissionModified?.Invoke(serieId); });
+
+        _hubConnection.On<ReadDto>(nameof(NotificationType.ReadCreated),
+            readData => { OnReadCreated?.Invoke(readData); });
+
+        _hubConnection.On<long>(nameof(NotificationType.ReadDeleted),
+            readId => { OnReadDeleted?.Invoke(readId); });
+
+        _hubConnection.On<IssueChapterReportedDto>(nameof(NotificationType.ReportedChapterIssueCreated),
+            issueData => { OnReportedChapterIssueCreated?.Invoke(issueData); });
+
+        _hubConnection.On<long>(nameof(NotificationType.ReportedChapterIssueDeleted),
+            issueId => { OnReportedChapterIssueDeleted?.Invoke(issueId); });
+
+        _hubConnection.On<IssueSerieReportedDto>(nameof(NotificationType.ReportedSerieIssueCreated),
+            issueData => { OnReportedSerieIssueCreated?.Invoke(issueData); });
+
+        _hubConnection.On<long>(nameof(NotificationType.ReportedSerieIssueDeleted),
+            issueId => { OnReportedSerieIssueDeleted?.Invoke(issueId); });
+
+        _hubConnection.On<TagDto>(nameof(NotificationType.TagCreated),
+            tagData => { OnTagCreated?.Invoke(tagData); });
+
+        _hubConnection.On<TagDto>(nameof(NotificationType.TagUpdated),
+            tagData => { OnTagUpdated?.Invoke(tagData); });
+
+        _hubConnection.On<long>(nameof(NotificationType.TagDeleted),
+            tagId => { OnTagDeleted?.Invoke(tagId); });
+
+        _hubConnection.On<PersonDto>(nameof(NotificationType.PersonCreated),
+            personData => { OnPersonCreated?.Invoke(personData); });
+
+        _hubConnection.On<PersonDto>(nameof(NotificationType.PersonUpdated),
+            personData => { OnPersonUpdated?.Invoke(personData); });
+
+        _hubConnection.On<long>(nameof(NotificationType.PersonDeleted),
+            personId => { OnPersonDeleted?.Invoke(personId); });
+
+        _hubConnection.On<RoleDto>(nameof(NotificationType.RoleCreated),
+            roleData => { OnRoleCreated?.Invoke(roleData); });
+
+        _hubConnection.On<RoleDto>(nameof(NotificationType.RoleUpdated),
+            roleData => { OnRoleUpdated?.Invoke(roleData); });
+
+        _hubConnection.On<long>(nameof(NotificationType.RoleDeleted),
+            roleId => { OnRoleDeleted?.Invoke(roleId); });
+
+        _hubConnection.On<Feature>(nameof(NotificationType.FeatureModified),
+            feature => { OnFeatureModified?.Invoke(feature); });
 
         _hubConnection.On<string>(nameof(NotificationType.Connected),
             message => { Logger.LogInfo("SignalR Server: " + message); });
@@ -158,11 +216,6 @@ public static class NotificationReceiver
         };
 
         await ConnectAsync();
-    }
-    
-    private static void RegisterNotification<T>(NotificationType type, Action<T>? handler)
-    {
-        _hubConnection!.On<T>(type.ToString(), data => handler?.Invoke(data));
     }
 
     private static async Task ConnectAsync()
