@@ -5,6 +5,9 @@ using Avalonia.Data.Converters;
 using Avalonia.Input;
 using Avalonia.Layout;
 using Avalonia.Media;
+using CommunityToolkit.Mvvm.Messaging;
+using ManaxClient.Event;
+using ManaxClient.ViewModels.Pages.Serie;
 using Serie = ManaxClient.Models.Server.Data.Serie;
 
 namespace ManaxClient.Controls.Previews;
@@ -26,6 +29,14 @@ public class SeriePreview : Button
         Padding = new Thickness(0);
         BorderThickness = new Thickness(0);
         CornerRadius = new CornerRadius(12);
+
+        Click += (_, _) =>
+        {
+            Serie? serie = GetSerie(this);
+            if (serie == null) return;
+            SeriePageViewModel seriePageViewModel = new(serie);
+            WeakReferenceMessenger.Default.Send(new PageChangeMessage(seriePageViewModel));
+        };
 
         Image image = new()
         {

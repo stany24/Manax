@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Avalonia;
@@ -16,7 +15,6 @@ using DynamicData.Binding;
 using Jeek.Avalonia.Localization;
 using ManaxClient.Event;
 using ManaxClient.Models.Server.Sources;
-using ManaxClient.ViewModels.Pages.Chapter;
 using ManaxClient.ViewModels.Popup.ConfirmCancel;
 using ManaxClient.ViewModels.Popup.ConfirmCancel.Content;
 using ManaxLibrary;
@@ -77,14 +75,8 @@ public partial class SeriePageViewModel : PageViewModel
     
     public ICommand PopupRequestedCommand => new RelayCommand<Controls.Popups.Popup>(popup =>
     {
-        if (popup != null) WeakReferenceMessenger.Default.Send(new PopupMessage(popup));
+        if (popup != null) WeakReferenceMessenger.Default.Send(new PopupChangeMessage(popup));
     });
-
-    public void MoveToChapterPage(Models.Server.Data.Chapter chapter)
-    {
-        ChapterPageViewModel chapterPageViewModel = new(Serie.Chapters.ToList(), chapter);
-        PageChangedRequested?.Invoke(this, chapterPageViewModel);
-    }
 
     public void UpdateSerie()
     {
@@ -108,7 +100,7 @@ public partial class SeriePageViewModel : PageViewModel
                 Logger.LogError("Failed to update serie with ID: " + Serie.Id, e);
             }
         };
-        WeakReferenceMessenger.Default.Send(new PopupMessage(popup));
+        WeakReferenceMessenger.Default.Send(new PopupChangeMessage(popup));
     }
 
     public async void ReplacePoster()

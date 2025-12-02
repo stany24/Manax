@@ -167,8 +167,6 @@
                                         CornerRadius="8"
                                         Margin="0,2">
                                     <previews:ChapterPreview
-                                        Command="{Binding $parent[UserControl].((page:SeriePageViewModel)DataContext).MoveToChapterPage}"
-                                        CommandParameter="{Binding .}"
                                         Chapter="{Binding .}"
                                         InfoEmittedCommand="{Binding $parent[UserControl].((page:SeriePageViewModel)DataContext).InfoEmittedCommand}"
                                         PopupRequestedCommand="{Binding $parent[UserControl].((page:SeriePageViewModel)DataContext).PopupRequestedCommand}" />

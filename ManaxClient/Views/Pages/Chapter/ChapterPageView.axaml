@@ -39,7 +39,7 @@
                     </StackPanel>
                 </Border>
 
-                <ItemsControl ItemsSource="{Binding Chapter.Pages}" Margin="0,8">
+                <ItemsControl ItemsSource="{Binding Chapter.Pages, Mode=OneWay}" Margin="0,8">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <Border ClipToBounds="True"

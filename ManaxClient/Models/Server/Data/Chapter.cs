@@ -86,30 +86,31 @@ public partial class Chapter : ObservableObject, IDisposable
             {
                 if (token.IsCancellationRequested)
                     break;
-
-                int index = i;
                 Optional<byte[]> chapterPageResponse = await ManaxApiChapterClient.GetChapterPageAsync(Id, i);
                 if (chapterPageResponse.Failed)
                 {
                     WeakReferenceMessenger.Default.Send(new NotificationMessage(chapterPageResponse.Error));
+                    Logger.LogFailure("Loading page " + i+ " for chapter " + Id + " failed: " + chapterPageResponse.Error);
                     continue;
                 }
 
                 try
                 {
                     Bitmap page = new(new MemoryStream(chapterPageResponse.GetValue()));
-                    Pages[index] = page;
+                    if (token.IsCancellationRequested)
+                        break;
+                    Pages[i] = page;
                 }
                 catch (Exception e)
                 {
-                    WeakReferenceMessenger.Default.Send(new NotificationMessage(string.Format(Localizer.Get("Chapter.LoadPageFailed"),index)));
-                    Logger.LogError("Loading page " + index + " for chapter " + Id + " failed", e);
+                    WeakReferenceMessenger.Default.Send(new NotificationMessage(string.Format(Localizer.Get("Chapter.LoadPageFailed"),i)));
+                    Logger.LogError("Loading page " + i+ " for chapter " + Id + " failed", e);
                 }
             }
         }), token);
     }
 
-    public void MarkAsRead(int page)
+    public void MarkAsRead(uint page)
     {
         if (page == 0) return;
         ReadCreateDto readCreateDto = new()

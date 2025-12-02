@@ -65,7 +65,7 @@ public class TestReadController : ReadTestsSetup
         Read? updatedRead = await Context.Reads
             .FirstOrDefaultAsync(r => r.ChapterId == chapter.Id && r.UserId == user.Id);
         Assert.IsNotNull(updatedRead);
-        Assert.AreEqual(15, updatedRead.Page);
+        Assert.AreEqual<uint>(15, updatedRead.Page);
         Assert.IsTrue(updatedRead.Date > start);
     }
 
@@ -158,27 +158,7 @@ public class TestReadController : ReadTestsSetup
         Read? createdRead = await Context.Reads
             .FirstOrDefaultAsync(r => r.ChapterId == chapter.Id && r.UserId == 1);
         Assert.IsNotNull(createdRead);
-        Assert.AreEqual(0, createdRead.Page);
-    }
-
-    [TestMethod]
-    public async Task ReadWithNegativePageCreatesRead()
-    {
-        Chapter chapter = Context.Chapters.First();
-        ReadCreateDto readCreateDto = new()
-        {
-            ChapterId = chapter.Id,
-            Page = -1
-        };
-
-        IActionResult result = await Controller.Read(readCreateDto);
-
-        Assert.IsInstanceOfType<OkResult>(result);
-
-        Read? createdRead = await Context.Reads
-            .FirstOrDefaultAsync(r => r.ChapterId == chapter.Id && r.UserId == 1);
-        Assert.IsNotNull(createdRead);
-        Assert.AreEqual(-1, createdRead.Page);
+        Assert.AreEqual<uint>(0, createdRead.Page);
     }
 
     [TestMethod]
@@ -244,12 +224,12 @@ public class TestReadController : ReadTestsSetup
         Read? otherUserReadAfter = await Context.Reads
             .FirstOrDefaultAsync(r => r.ChapterId == chapter.Id && r.UserId == otherUser.Id);
         Assert.IsNotNull(otherUserReadAfter);
-        Assert.AreEqual(5, otherUserReadAfter.Page);
+        Assert.AreEqual<uint>(5, otherUserReadAfter.Page);
 
         Read? currentUserRead = await Context.Reads
             .FirstOrDefaultAsync(r => r.ChapterId == chapter.Id && r.UserId == 1);
         Assert.IsNotNull(currentUserRead);
-        Assert.AreEqual(10, currentUserRead.Page);
+        Assert.AreEqual<uint>(10, currentUserRead.Page);
     }
 
     [TestMethod]
@@ -268,7 +248,7 @@ public class TestReadController : ReadTestsSetup
 
         ReadDto? readCreated = MockNotificationService.ReadCreated;
         Assert.IsNotNull(readCreated);
-        Assert.AreEqual(10, readCreated.Page);
+        Assert.AreEqual<uint>(10, readCreated.Page);
         Assert.AreEqual(chapter.Id, readCreated.ChapterId);
         Assert.AreEqual(1, readCreated.UserId);
     }
@@ -290,7 +270,7 @@ public class TestReadController : ReadTestsSetup
         Read? createdRead = await Context.Reads
             .FirstOrDefaultAsync(r => r.ChapterId == chapter.Id && r.UserId == 1);
         Assert.IsNotNull(createdRead);
-        Assert.AreEqual(999999, createdRead.Page);
+        Assert.AreEqual(Convert.ToUInt32(chapter.PageNumber), createdRead.Page);
     }
 
     [TestMethod]
@@ -318,7 +298,7 @@ public class TestReadController : ReadTestsSetup
             Read? read = await Context.Reads
                 .FirstOrDefaultAsync(r => r.ChapterId == chapter.Id && r.UserId == 1);
             Assert.IsNotNull(read);
-            Assert.AreEqual(10, read.Page);
+            Assert.AreEqual<uint>(10, read.Page);
         }
     }
 }

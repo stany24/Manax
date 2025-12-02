@@ -50,7 +50,7 @@ public class UsersPageViewModel : PageViewModel
         UserPermissionsEditViewModel content = new(userId);
         ConfirmCancelViewModel context = new(content);
         Controls.Popups.Popup popup = new(context);
-        WeakReferenceMessenger.Default.Send(new PopupMessage(popup));
+        WeakReferenceMessenger.Default.Send(new PopupChangeMessage(popup));
         popup.Closed += async void (_, _) =>
         {
             try
@@ -74,7 +74,7 @@ public class UsersPageViewModel : PageViewModel
         UserCreateViewModel content = new();
         ConfirmCancelViewModel context = new(content);
         Controls.Popups.Popup popup = new(context);
-        WeakReferenceMessenger.Default.Send(new PopupMessage(popup));
+        WeakReferenceMessenger.Default.Send(new PopupChangeMessage(popup));
         popup.Closed += async void (_, _) =>
         {
             try

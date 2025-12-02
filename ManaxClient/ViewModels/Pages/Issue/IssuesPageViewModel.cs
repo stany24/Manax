@@ -84,7 +84,7 @@ public partial class IssuesPageViewModel : PageViewModel
         ConfirmCancelViewModel viewModel = new(content);
         Controls.Popups.Popup popup = new(viewModel);
         popup.Closed += (_, _) => { PopupClosed(viewModel, saveFile, saveFolder, chapter); };
-        WeakReferenceMessenger.Default.Send(new PopupMessage(popup));
+        WeakReferenceMessenger.Default.Send(new PopupChangeMessage(popup));
 
         DownloadChapter(saveFile, saveFolder, chapter, content);
     }

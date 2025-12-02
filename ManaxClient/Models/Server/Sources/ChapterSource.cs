@@ -89,7 +89,7 @@ public static class ChapterSource
 
             lock (ChaptersLock)
             {
-                Chapters.AddOrUpdate(new Chapter(response.GetValue()));
+                Dispatcher.UIThread.Post(() => {Chapters.AddOrUpdate(new Chapter(response.GetValue()));});
             }
         }
         catch (Exception e)

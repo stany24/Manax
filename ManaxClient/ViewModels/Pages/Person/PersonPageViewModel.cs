@@ -71,7 +71,7 @@ public class PersonPageViewModel : PageViewModel
                 Logger.LogError(error, e);
             }
         };
-        WeakReferenceMessenger.Default.Send(new PopupMessage(popup));
+        WeakReferenceMessenger.Default.Send(new PopupChangeMessage(popup));
     }
 
     public void DeletePerson(Models.Server.Data.Person person)
@@ -123,7 +123,7 @@ public class PersonPageViewModel : PageViewModel
                 Logger.LogError(error, e);
             }
         };
-        WeakReferenceMessenger.Default.Send(new PopupMessage(popup));
+        WeakReferenceMessenger.Default.Send(new PopupChangeMessage(popup));
     }
 
     public void UpdateRole(Role role)
@@ -153,7 +153,7 @@ public class PersonPageViewModel : PageViewModel
                 Logger.LogError(error, e);
             }
         };
-        WeakReferenceMessenger.Default.Send(new PopupMessage(popup));
+        WeakReferenceMessenger.Default.Send(new PopupChangeMessage(popup));
     }
 
     public void DeleteRole(Role role)
@@ -199,6 +199,6 @@ public class PersonPageViewModel : PageViewModel
                 Logger.LogError(error, e);
             }
         };
-        WeakReferenceMessenger.Default.Send(new PopupMessage(popup));
+        WeakReferenceMessenger.Default.Send(new PopupChangeMessage(popup));
     }
 }

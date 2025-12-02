@@ -14,7 +14,6 @@ using DynamicData.Binding;
 using Jeek.Avalonia.Localization;
 using ManaxClient.Event;
 using ManaxClient.Models.Server.Sources;
-using ManaxClient.ViewModels.Pages.Serie;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.Logging;
@@ -45,12 +44,6 @@ public partial class HomePageViewModel : PageViewModel
     }
 
     public ReadOnlyObservableCollection<Models.Server.Data.Serie> Series => _series;
-
-    public void MoveToSeriePage(Models.Server.Data.Serie serie)
-    {
-        SeriePageViewModel seriePageViewModel = new(serie);
-        PageChangedRequested?.Invoke(this, seriePageViewModel);
-    }
 
     public async void UploadSerie()
     {

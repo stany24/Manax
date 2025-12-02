@@ -1,23 +1,31 @@
-using System.Collections.Generic;
+using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Globalization;
 using Avalonia;
 using CommunityToolkit.Mvvm.ComponentModel;
-using ManaxLibrary.Logging;
+using DynamicData;
+using DynamicData.Binding;
+using ManaxClient.Models.Server.Sources;
 
 namespace ManaxClient.ViewModels.Pages.Chapter;
 
 public partial class ChapterPageViewModel : PageViewModel
 {
-    private readonly List<Models.Server.Data.Chapter> _chapters;
+    private readonly ReadOnlyObservableCollection<Models.Server.Data.Chapter> _chapters;
     [ObservableProperty] private Models.Server.Data.Chapter _chapter = new();
     [ObservableProperty] private bool _controlBordersVisible;
-    [ObservableProperty] private int _currentPage;
+    [ObservableProperty] private uint _currentPage;
     [ObservableProperty] private Vector _scrollOffset = new(0, 0);
 
-    public ChapterPageViewModel(List<Models.Server.Data.Chapter> chapters, Models.Server.Data.Chapter chapter)
+    public ChapterPageViewModel(Models.Server.Data.Chapter chapter)
     {
-        _chapters = chapters;
+        SortExpressionComparer<Models.Server.Data.Chapter> comparer =
+            SortExpressionComparer<Models.Server.Data.Chapter>.Ascending(t => t.Number);
+        ChapterSource.Chapters
+            .Connect()
+            .Filter(c => c.SerieId == chapter.SerieId)
+            .SortAndBind(out _chapters, comparer)
+            .Subscribe();
         ControlBarVisible = false;
         HasMargin = false;
         Chapter = chapter;
@@ -34,38 +42,40 @@ public partial class ChapterPageViewModel : PageViewModel
     {
         if (CurrentPage + 1 == Chapter.Pages.Count) return;
 
-        ScrollOffset = new Vector(0, ScrollOffset.Y + Chapter.Pages[CurrentPage].Size.Height);
+        ScrollOffset = new Vector(0, ScrollOffset.Y + Chapter.Pages[(int)CurrentPage].Size.Height);
     }
 
     public void PreviousPage()
     {
         if (CurrentPage == 0) return;
 
-        ScrollOffset = new Vector(0, ScrollOffset.Y - Chapter.Pages[CurrentPage].Size.Height);
+        ScrollOffset = new Vector(0, ScrollOffset.Y - Chapter.Pages[(int)CurrentPage].Size.Height);
     }
 
     public void PreviousChapter()
     {
         Chapter.MarkAsRead(CurrentPage);
-        int index = _chapters.FindIndex(c => c.Id == Chapter.Id);
+        int index = _chapters.IndexOf(Chapter);
         if (index == 0) return;
         Chapter.CancelLoadingPages();
         Chapter.Pages.Clear();
         Chapter = _chapters[index - 1];
         Chapter.LoadPages();
         ScrollOffset = new Vector(0, 0);
+        CurrentPage = 0;
     }
 
     public void NextChapter()
     {
         Chapter.MarkAsRead(CurrentPage);
-        int index = _chapters.FindIndex(c => c.Id == Chapter.Id);
+        int index = _chapters.IndexOf(Chapter);
         if (index + 1 == _chapters.Count) return;
         Chapter.CancelLoadingPages();
         Chapter.Pages.Clear();
         Chapter = _chapters[index + 1];
         Chapter.LoadPages();
         ScrollOffset = new Vector(0, 0);
+        CurrentPage = 0;
     }
 
     private void HandleOffsetChanged(object? sender, PropertyChangedEventArgs e)
@@ -73,12 +83,11 @@ public partial class ChapterPageViewModel : PageViewModel
         if (e.PropertyName != nameof(ScrollOffset)) return;
 
         double height = 0;
-        for (int i = 0; i < Chapter.Pages.Count; i++)
+        for (uint i = 0; i < Chapter.Pages.Count; i++)
         {
-            height += Chapter.Pages[i].Size.Height;
+            height += Chapter.Pages[(int)i].Size.Height;
             if (!(height > ScrollOffset.Y)) continue;
             CurrentPage = i;
-            Logger.LogInfo(CurrentPage.ToString(CultureInfo.InvariantCulture));
             return;
         }
     }

@@ -37,12 +37,14 @@ public class ReadController(ManaxContext context, INotificationService notificat
         {
             existingRead.Date = DateTime.UtcNow;
             existingRead.Page = readCreate.Page;
+            existingRead.Page = Math.Clamp(readCreate.Page, 0, Convert.ToUInt32(chapter.PageNumber));
             await context.SaveChangesAsync();
             notification.NotifyReadCreated(existingRead.ToDto());
         }
         else
         {
             Read read = Models.Read.Read.Create(readCreate, user.Id);
+            read.Page = Math.Clamp(readCreate.Page, 0, Convert.ToUInt32(chapter.PageNumber));
             await context.Reads.AddAsync(read);
             await context.SaveChangesAsync();
             notification.NotifyReadCreated(read.ToDto());

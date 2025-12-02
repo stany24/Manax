@@ -60,7 +60,7 @@ public class TagPageViewModel : PageViewModel
             }
         };
 
-        WeakReferenceMessenger.Default.Send(new PopupMessage(popup));
+        WeakReferenceMessenger.Default.Send(new PopupChangeMessage(popup));
     }
 
     public void UpdateTag(Models.Server.Data.Tag tag)
@@ -91,7 +91,7 @@ public class TagPageViewModel : PageViewModel
             }
         };
 
-        WeakReferenceMessenger.Default.Send(new PopupMessage(popup));
+        WeakReferenceMessenger.Default.Send(new PopupChangeMessage(popup));
     }
 
     public void DeleteTag(Models.Server.Data.Tag tag)

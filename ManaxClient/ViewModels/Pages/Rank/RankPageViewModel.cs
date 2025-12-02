@@ -58,7 +58,7 @@ public class RankPageViewModel : PageViewModel
                 Logger.LogError(error, e);
             }
         };
-        WeakReferenceMessenger.Default.Send(new PopupMessage(popup));
+        WeakReferenceMessenger.Default.Send(new PopupChangeMessage(popup));
     }
 
     public void DeleteRank(Models.Server.Data.Rank rank)
@@ -104,6 +104,6 @@ public class RankPageViewModel : PageViewModel
                 Logger.LogError(error, e);
             }
         };
-        WeakReferenceMessenger.Default.Send(new PopupMessage(popup));
+        WeakReferenceMessenger.Default.Send(new PopupChangeMessage(popup));
     }
 }

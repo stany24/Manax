@@ -52,7 +52,8 @@ public partial class MainWindowViewModel : ObservableObject
     public MainWindowViewModel()
     {
         WeakReferenceMessenger.Default.Register<NotificationMessage>(this, (_, m) => { ShowInfo(m.Value); });
-        WeakReferenceMessenger.Default.Register<PopupMessage>(this, (_, m) => { SetPopup(m.Value); });
+        WeakReferenceMessenger.Default.Register<PopupChangeMessage>(this, (_, m) => { SetPopup(m.Value); });
+        WeakReferenceMessenger.Default.Register<PageChangeMessage>(this, (_, m) => { SetPage(m.Value);});
         SortExpressionComparer<Library> comparer = SortExpressionComparer<Library>.Descending(library => library.Name);
         _librariesSubscription = LibrarySource.Libraries
             .Connect()

@@ -77,7 +77,6 @@
                                     </Border.Transitions>
                                     <previews:SeriePreview
                                         Serie="{Binding .}"
-                                        Command="{Binding $parent[UserControl].((page:LibraryPageViewModel)DataContext).MoveToSeriePage}"
                                         CommandParameter="{Binding .}" />
                                 </Border>
                             </DataTemplate>

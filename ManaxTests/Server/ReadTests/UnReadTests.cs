@@ -137,6 +137,6 @@ public class UnReadTests : ReadTestsSetup
         Read? remainingOtherUserRead = await Context.Reads
             .FirstOrDefaultAsync(r => r.ChapterId == chapter.Id && r.UserId == otherUser.Id);
         Assert.IsNotNull(remainingOtherUserRead);
-        Assert.AreEqual(10, remainingOtherUserRead.Page);
+        Assert.AreEqual<uint>(10, remainingOtherUserRead.Page);
     }
 }

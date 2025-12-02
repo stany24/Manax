@@ -10,8 +10,11 @@ using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Threading;
+using CommunityToolkit.Mvvm.Messaging;
 using Jeek.Avalonia.Localization;
 using ManaxClient.Controls.Popups;
+using ManaxClient.Event;
+using ManaxClient.ViewModels.Pages.Chapter;
 using ManaxClient.ViewModels.Popup.ConfirmCancel;
 using ManaxClient.ViewModels.Popup.ConfirmCancel.Content;
 using ManaxClient.ViewModels.Popup.SelectChoice;
@@ -25,9 +28,9 @@ namespace ManaxClient.Controls.Previews;
 
 public class ChapterPreview : Button
 {
-    public static readonly AttachedProperty<Chapter> ChapterProperty =
-        AvaloniaProperty.RegisterAttached<ChapterPreview, ChapterPreview, Chapter>(
-            "Chapter", new Chapter(), false, BindingMode.OneTime);
+    public static readonly AttachedProperty<Chapter?> ChapterProperty =
+        AvaloniaProperty.RegisterAttached<ChapterPreview, ChapterPreview, Chapter?>(
+            "Chapter", null, false, BindingMode.OneTime);
 
     public static readonly StyledProperty<ICommand?> InfoEmittedCommandProperty =
         AvaloniaProperty.Register<ChapterPreview, ICommand?>(nameof(InfoEmittedCommand));
@@ -41,6 +44,14 @@ public class ChapterPreview : Button
         Padding = new Thickness(0);
         HorizontalAlignment = HorizontalAlignment.Stretch;
         HorizontalContentAlignment = HorizontalAlignment.Stretch;
+        
+        Click += (_, _) =>
+        {
+            Chapter? chapter = GetChapter(this);
+            if (chapter == null) return;
+            ChapterPageViewModel chapterPageViewModel = new(chapter);
+            WeakReferenceMessenger.Default.Send(new PageChangeMessage(chapterPageViewModel));
+        };
 
         Border border = new()
         {
@@ -71,7 +82,7 @@ public class ChapterPreview : Button
             Converter = new FuncValueConverter<ReadDto?, IBrush>(read =>
             {
                 if (read == null) return new SolidColorBrush(Color.Parse("#6C757D"));
-                return read.Page + 1 == Chapter.PageNumber
+                return read.Page + 1 == Chapter?.PageNumber
                     ? new SolidColorBrush(Color.Parse("#28A745"))
                     : new SolidColorBrush(Color.Parse("#007ACC"));
             })
@@ -132,7 +143,7 @@ public class ChapterPreview : Button
             Converter = new FuncValueConverter<ReadDto?, string>(read =>
             {
                 if (read == null) return "Non lu";
-                int currentPage = read.Page + 1;
+                uint currentPage = read.Page + 1;
                 int totalPages = Chapter.PageNumber;
                 return currentPage == totalPages ? "Terminé" : $"{currentPage}/{totalPages}";
             })
@@ -147,7 +158,7 @@ public class ChapterPreview : Button
             Converter = new FuncValueConverter<ReadDto?, IBrush>(read =>
             {
                 if (read == null) return new SolidColorBrush(Color.Parse("#E9ECEF"));
-                return read.Page + 1 == Chapter.PageNumber
+                return read.Page + 1 == Chapter?.PageNumber
                     ? new SolidColorBrush(Color.Parse("#D4EDDA"))
                     : new SolidColorBrush(Color.Parse("#CCE5FF"));
             })
@@ -199,7 +210,7 @@ public class ChapterPreview : Button
         set => SetValue(PopupRequestedCommandProperty, value);
     }
 
-    public Chapter Chapter
+    public Chapter? Chapter
     {
         get => GetChapter(this);
         set => SetChapter(this, value);
@@ -225,6 +236,7 @@ public class ChapterPreview : Button
 
     private void ReportIssue()
     {
+        if (Chapter == null) return;
         CreateChapterIssueViewModel content = new(Chapter.Id);
         ConfirmCancelViewModel viewmodel = new(content);
         Popup popup = new(viewmodel);
@@ -248,12 +260,12 @@ public class ChapterPreview : Button
         Dispatcher.UIThread.Post(() => { PopupRequestedCommand?.Execute(popup); });
     }
 
-    public static void SetChapter(AvaloniaObject element, Chapter serieValue)
+    public static void SetChapter(AvaloniaObject element, Chapter? chapterValue)
     {
-        element.SetValue(ChapterProperty, serieValue);
+        element.SetValue(ChapterProperty, chapterValue);
     }
 
-    public static Chapter GetChapter(AvaloniaObject element)
+    public static Chapter? GetChapter(AvaloniaObject element)
     {
         return element.GetValue(ChapterProperty);
     }

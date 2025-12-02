@@ -58,7 +58,10 @@ public class ChapterController(ManaxContext context, INotificationService notifi
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetChapterPage(long id, int number)
     {
-        Chapter? chapter = await context.Chapters.FindAsync(id);
+        Chapter? chapter = context.Chapters
+            .Include(c => c.Serie)
+            .ThenInclude(s => s.SavePoint)
+            .FirstOrDefault(c => c.Id == id);
         if (chapter == null) return NotFound();
 
         string filePath = chapter.Path();

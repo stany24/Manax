@@ -95,7 +95,7 @@ public partial class SettingsServerPageViewModel : PageViewModel
                 WeakReferenceMessenger.Default.Send(new NotificationMessage(Localizer.Get("SettingsServerPage.ErrorCreatingSavePoint")));
             }
         };
-        WeakReferenceMessenger.Default.Send(new PopupMessage(popup));
+        WeakReferenceMessenger.Default.Send(new PopupChangeMessage(popup));
     }
 
     public void CreateLibrary()
@@ -119,6 +119,6 @@ public partial class SettingsServerPageViewModel : PageViewModel
                 WeakReferenceMessenger.Default.Send(new NotificationMessage(Localizer.Get("SettingsServerPage.ErrorCreatingLibrary")));
             }
         };
-        WeakReferenceMessenger.Default.Send(new PopupMessage(popup));
+        WeakReferenceMessenger.Default.Send(new PopupChangeMessage(popup));
     }
 }
