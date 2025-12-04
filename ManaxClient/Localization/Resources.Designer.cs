@@ -2084,5 +2084,17 @@ namespace ManaxClient.Localization {
                 return ResourceManager.GetString("SettingsAppPage.AccentColor", resourceCulture);
             }
         }
+        
+        public static string Chapter_NotRead {
+            get {
+                return ResourceManager.GetString("Chapter.NotRead", resourceCulture);
+            }
+        }
+        
+        public static string Chapter_Read {
+            get {
+                return ResourceManager.GetString("Chapter.Read", resourceCulture);
+            }
+        }
     }
 }

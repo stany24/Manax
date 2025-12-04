@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.IO;
 using System.Threading.Tasks;
 using Avalonia.Media;
@@ -14,6 +15,7 @@ namespace ManaxClient.Assets;
 
 public partial class IconManager:ObservableObject
 {
+    private readonly ConcurrentDictionary<string, MagickImage> _cachedIconImages = new();
     [ObservableProperty] private Bitmap? _libraryIcon;
     [ObservableProperty] private Bitmap? _tagsIcon;
     [ObservableProperty] private Bitmap? _homeIcon;
@@ -28,20 +30,34 @@ public partial class IconManager:ObservableObject
     
     public IconManager()
     {
-        WeakReferenceMessenger.Default.Register<ThemeMessage>(this, (_, data) => { LoadIcons(data.Value); });
+        LoadIconsFromDisk();
+        WeakReferenceMessenger.Default.Register<ThemeMessage>(this, (_, data) => { ColorizeIcons(data.Value); });
     }
     
-    private void LoadIcons(ThemeSettingsData theme)
+    private void LoadIconsFromDisk()
+    {
+        Parallel.ForEach(typeof(IconManager).GetProperties(), propertyInfo =>
+        {
+            if (!propertyInfo.Name.EndsWith("Icon")) return;
+            
+            string iconName = propertyInfo.Name.Replace("Icon", "").ToLower();
+            MagickImage originalIcon = new(AssetLoader.Open(new Uri(
+                $"avares://ManaxClient/Assets/Icons/{iconName}.webp")));
+            _cachedIconImages.TryAdd(iconName, originalIcon);
+        });
+    }
+    
+    private void ColorizeIcons(ThemeSettingsData theme)
     {
         Color accent = theme.AccentColor.ToRgb();
         MagickColor iconColor = new(accent.R, accent.G, accent.B);
         Parallel.ForEach(typeof(IconManager).GetProperties(), propertyInfo =>
         {
             if (!propertyInfo.Name.EndsWith("Icon")) return;
-            MagickImage icon =
-                new(AssetLoader.Open(new Uri(
-                    $"avares://ManaxClient/Assets/Icons/{propertyInfo.Name.Replace("Icon", "").ToLower()}.webp")));
-            Bitmap updatedIcon = UpdateIconColor(icon,iconColor);
+            
+            string iconName = propertyInfo.Name.Replace("Icon", "").ToLower();
+            MagickImage iconCopy = (MagickImage)_cachedIconImages[iconName].Clone();
+            Bitmap updatedIcon = UpdateIconColor(iconCopy, iconColor);
             propertyInfo.SetValue(this, updatedIcon);
         });
     }

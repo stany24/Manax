@@ -1044,4 +1044,10 @@
     <data name="MainWindow.Persons" xml:space="preserve">
         <value>Personnes</value>
     </data>
+    <data name="Chapter.Read" xml:space="preserve">
+        <value>Terminé</value>
+    </data>
+    <data name="Chapter.NotRead" xml:space="preserve">
+        <value>Non lu</value>
+    </data>
 </root>

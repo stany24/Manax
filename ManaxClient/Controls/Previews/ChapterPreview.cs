@@ -142,10 +142,10 @@ public class ChapterPreview : Button
             Mode = BindingMode.OneWay,
             Converter = new FuncValueConverter<ReadDto?, string>(read =>
             {
-                if (read == null) return "Non lu";
+                if (read == null) return Localizer.Get("Chapter.NotRead");
                 uint currentPage = read.Page + 1;
-                int totalPages = Chapter.PageNumber;
-                return currentPage == totalPages ? "Terminé" : $"{currentPage}/{totalPages}";
+                int totalPages = Chapter?.PageNumber ?? 0;
+                return currentPage >= totalPages ? Localizer.Get("Chapter.Read") : $"{currentPage}/{totalPages}";
             })
         });
 
@@ -158,7 +158,7 @@ public class ChapterPreview : Button
             Converter = new FuncValueConverter<ReadDto?, IBrush>(read =>
             {
                 if (read == null) return new SolidColorBrush(Color.Parse("#E9ECEF"));
-                return read.Page + 1 == Chapter?.PageNumber
+                return read.Page + 1 >= Chapter?.PageNumber
                     ? new SolidColorBrush(Color.Parse("#D4EDDA"))
                     : new SolidColorBrush(Color.Parse("#CCE5FF"));
             })

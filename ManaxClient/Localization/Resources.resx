@@ -1044,4 +1044,10 @@
     <data name="SettingsAppPage.AccentColor" xml:space="preserve">
         <value>Color accent</value>
     </data>
+    <data name="Chapter.NotRead" xml:space="preserve">
+        <value>Not read</value>
+    </data>
+    <data name="Chapter.Read" xml:space="preserve">
+        <value>Read</value>
+    </data>
 </root>
