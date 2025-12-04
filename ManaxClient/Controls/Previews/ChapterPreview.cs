@@ -32,12 +32,6 @@ public class ChapterPreview : Button
         AvaloniaProperty.RegisterAttached<ChapterPreview, ChapterPreview, Chapter?>(
             "Chapter", null, false, BindingMode.OneTime);
 
-    public static readonly StyledProperty<ICommand?> InfoEmittedCommandProperty =
-        AvaloniaProperty.Register<ChapterPreview, ICommand?>(nameof(InfoEmittedCommand));
-
-    public static readonly StyledProperty<ICommand?> PopupRequestedCommandProperty =
-        AvaloniaProperty.Register<ChapterPreview, ICommand?>(nameof(PopupRequestedCommand));
-
     public ChapterPreview()
     {
         BorderThickness = new Thickness(0);
@@ -198,18 +192,6 @@ public class ChapterPreview : Button
         ];
     }
 
-    public ICommand? InfoEmittedCommand
-    {
-        get => GetValue(InfoEmittedCommandProperty);
-        set => SetValue(InfoEmittedCommandProperty, value);
-    }
-
-    public ICommand? PopupRequestedCommand
-    {
-        get => GetValue(PopupRequestedCommandProperty);
-        set => SetValue(PopupRequestedCommandProperty, value);
-    }
-
     public Chapter? Chapter
     {
         get => GetChapter(this);
@@ -230,7 +212,7 @@ public class ChapterPreview : Button
             }
         };
 
-        PopupRequestedCommand?.Execute(popup);
+        WeakReferenceMessenger.Default.Send(new PopupChangeMessage(popup));
         e.Handled = true;
     }
 
@@ -249,15 +231,15 @@ public class ChapterPreview : Button
                 ManaxLibrary.Optional<bool> chapterIssueAsync =
                     await ManaxApiIssueClient.CreateChapterIssueAsync(issue);
                 if (chapterIssueAsync.Failed)
-                    InfoEmittedCommand?.Execute(chapterIssueAsync.Error);
+                    WeakReferenceMessenger.Default.Send(new NotificationMessage(chapterIssueAsync.Error));
             }
             catch (Exception e)
             {
-                InfoEmittedCommand?.Execute(Localizer.Get("ChapterPreview.ReportFailed"));
+                WeakReferenceMessenger.Default.Send(new NotificationMessage(Localizer.Get("ChapterPreview.ReportFailed")));
                 Logger.LogError($"Error while creating chapter issue for chapter {Chapter.Id}", e);
             }
         };
-        Dispatcher.UIThread.Post(() => { PopupRequestedCommand?.Execute(popup); });
+        WeakReferenceMessenger.Default.Send(new PopupChangeMessage(popup));
     }
 
     public static void SetChapter(AvaloniaObject element, Chapter? chapterValue)

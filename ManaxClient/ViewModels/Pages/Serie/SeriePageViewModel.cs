@@ -67,16 +67,6 @@ public partial class SeriePageViewModel : PageViewModel
             WeakReferenceMessenger.Default.Send(new NotificationMessage(message));
         });
     }
-    
-    public ICommand InfoEmittedCommand => new RelayCommand<string>(info =>
-    {
-        if (info != null) WeakReferenceMessenger.Default.Send(new NotificationMessage(info));
-    });
-    
-    public ICommand PopupRequestedCommand => new RelayCommand<Controls.Popups.Popup>(popup =>
-    {
-        if (popup != null) WeakReferenceMessenger.Default.Send(new PopupChangeMessage(popup));
-    });
 
     public void UpdateSerie()
     {
