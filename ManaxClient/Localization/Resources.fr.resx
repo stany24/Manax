@@ -285,14 +285,8 @@
     <data name="SettingsAppPage.SelectedTheme" xml:space="preserve">
         <value>Thème sélectionné</value>
     </data>
-    <data name="SettingsAppPage.ColorPreview" xml:space="preserve">
-        <value>Aperçu des couleurs</value>
-    </data>
-    <data name="SettingsAppPage.PrimaryColor" xml:space="preserve">
-        <value>Primaire</value>
-    </data>
-    <data name="SettingsAppPage.SecondaryColor" xml:space="preserve">
-        <value>Secondaire</value>
+    <data name="SettingsAppPage.AccentColor" xml:space="preserve">
+        <value>Couleur principale</value>
     </data>
     <data name="SettingsAppPage.TertiaryColor" xml:space="preserve">
         <value>Tertiaire</value>

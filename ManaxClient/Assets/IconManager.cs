@@ -33,8 +33,8 @@ public partial class IconManager:ObservableObject
     
     private void LoadIcons(ThemeSettingsData theme)
     {
-        Color primaryColor = theme.PrimaryColor.ToRgb();
-        MagickColor iconColor = new(primaryColor.R, primaryColor.G, primaryColor.B);
+        Color accent = theme.AccentColor.ToRgb();
+        MagickColor iconColor = new(accent.R, accent.G, accent.B);
         Parallel.ForEach(typeof(IconManager).GetProperties(), propertyInfo =>
         {
             if (!propertyInfo.Name.EndsWith("Icon")) return;

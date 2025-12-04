@@ -567,24 +567,6 @@ namespace ManaxClient.Localization {
             }
         }
         
-        public static string SettingsAppPage_ColorPreview {
-            get {
-                return ResourceManager.GetString("SettingsAppPage.ColorPreview", resourceCulture);
-            }
-        }
-        
-        public static string SettingsAppPage_PrimaryColor {
-            get {
-                return ResourceManager.GetString("SettingsAppPage.PrimaryColor", resourceCulture);
-            }
-        }
-        
-        public static string SettingsAppPage_SecondaryColor {
-            get {
-                return ResourceManager.GetString("SettingsAppPage.SecondaryColor", resourceCulture);
-            }
-        }
-        
         public static string SettingsAppPage_TertiaryColor {
             get {
                 return ResourceManager.GetString("SettingsAppPage.TertiaryColor", resourceCulture);
@@ -2094,6 +2076,12 @@ namespace ManaxClient.Localization {
         public static string MainWindow_Persons {
             get {
                 return ResourceManager.GetString("MainWindow.Persons", resourceCulture);
+            }
+        }
+        
+        public static string SettingsAppPage_AccentColor {
+            get {
+                return ResourceManager.GetString("SettingsAppPage.AccentColor", resourceCulture);
             }
         }
     }

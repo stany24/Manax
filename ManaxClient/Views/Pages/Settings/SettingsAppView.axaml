@@ -63,27 +63,13 @@
                 <StackPanel Spacing="20">
                     <StackPanel Orientation="Horizontal" Spacing="12">
                         <TextBlock Text="🎨" FontSize="20" />
-                        <TextBlock Classes="subtitle" Text="{localization:Localize SettingsAppPage.ColorTheme}"
+                        <TextBlock Classes="subtitle" Text="{localization:Localize SettingsAppPage.AccentColor}"
                                    Margin="0" />
                     </StackPanel>
 
-                    <Grid ColumnDefinitions="*" RowDefinitions="Auto,Auto" RowSpacing="16">
-                        <StackPanel Grid.Column="0" Grid.Row="0" Spacing="6">
-                            <TextBlock Text="{localization:Localize SettingsAppPage.SelectedTheme}" FontWeight="Medium" />
-                            <ComboBox SelectedItem="{Binding SelectedThemeSettingsData}"
-                                      ItemsSource="{Binding AvailableThemes}"
-                                      HorizontalAlignment="Stretch">
-                                <ComboBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <StackPanel Orientation="Horizontal" Spacing="8">
-                                            <Border Width="16" Height="16" CornerRadius="8" />
-                                            <TextBlock Text="{Binding Name}" />
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </ComboBox.ItemTemplate>
-                            </ComboBox>
-                        </StackPanel>
-                    </Grid>
+                    <ColorView
+                        HsvColor="{Binding ThemeColor}">
+                    </ColorView>
                 </StackPanel>
             </Border>
         </StackPanel>

@@ -1,7 +1,7 @@
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Avalonia.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData;
 using DynamicData.Binding;
@@ -14,16 +14,12 @@ namespace ManaxClient.ViewModels.Pages.Settings;
 public partial class SettingsAppViewModel : PageViewModel
 {
     private readonly ReadOnlyObservableCollection<Language> _languages;
-    [ObservableProperty] private List<ThemeSettingsData> _availableThemes;
     [ObservableProperty] private Language? _selectedLanguage;
-    private ThemeSettingsData _selectedThemeSettingsData;
 
     public SettingsAppViewModel()
     {
-        _availableThemes = ThemeSettings.GetPresets();
-        _selectedThemeSettingsData = AvailableThemes
-            .FirstOrDefault(t => t.Name == ThemeSettings.Current.Name) ?? AvailableThemes[0];
         IsDarkMode = ThemeSettings.Current.IsDark;
+        ThemeColor = ThemeSettings.Current.AccentColor.ToHsv();
 
         LanguageSource.Languages
             .Connect()
@@ -35,17 +31,18 @@ public partial class SettingsAppViewModel : PageViewModel
     }
 
     public ReadOnlyObservableCollection<Language> Languages => _languages;
-
-    public ThemeSettingsData SelectedThemeSettingsData
-    {
-        get => _selectedThemeSettingsData;
-        set
-        {
-            if (SetProperty(ref _selectedThemeSettingsData, value)) UpdateTheme();
-        }
-    }
+    
 
     public bool IsDarkMode
+    {
+        get;
+        set
+        {
+            if (SetProperty(ref field, value)) UpdateTheme();
+        }
+    }
+    
+    public HsvColor ThemeColor
     {
         get;
         set
@@ -61,7 +58,6 @@ public partial class SettingsAppViewModel : PageViewModel
 
     private void UpdateTheme()
     {
-        SelectedThemeSettingsData.IsDark = IsDarkMode;
-        ThemeSettings.UpdateTheme(SelectedThemeSettingsData);
+        ThemeSettings.UpdateTheme(new ThemeSettingsData(ThemeColor.ToHsl(), IsDarkMode));
     }
 }

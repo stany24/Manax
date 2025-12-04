@@ -567,21 +567,9 @@ namespace ManaxClient.Localization {
             }
         }
         
-        public static string SettingsAppPage_ColorPreview {
+        public static string SettingsAppPage_AccentColor {
             get {
-                return ResourceManager.GetString("SettingsAppPage.ColorPreview", resourceCulture);
-            }
-        }
-        
-        public static string SettingsAppPage_PrimaryColor {
-            get {
-                return ResourceManager.GetString("SettingsAppPage.PrimaryColor", resourceCulture);
-            }
-        }
-        
-        public static string SettingsAppPage_SecondaryColor {
-            get {
-                return ResourceManager.GetString("SettingsAppPage.SecondaryColor", resourceCulture);
+                return ResourceManager.GetString("SettingsAppPage.AccentColor", resourceCulture);
             }
         }
         
