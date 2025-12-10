@@ -13,43 +13,43 @@ using ManaxLibrary.Notifications;
 
 namespace ManaxClient.Models.Server.Sources;
 
-public static class SerieSource
+public class SerieSource
 {
-    public static readonly SourceCache<Serie, long> Series = new(serie => serie.Id);
-    private static bool _isLoaded;
-    private static readonly Lock SeriesLock = new();
-    private static readonly Lock LoadLock = new();
+    public readonly SourceCache<Serie, long> Series = new(serie => serie.Id);
+    private bool _isLoaded;
+    private readonly Lock _seriesLock = new();
+    private readonly Lock _loadLock = new();
 
-    static SerieSource()
+    public SerieSource()
     {
         NotificationReceiver.OnSerieCreated += OnSerieCreated;
         NotificationReceiver.OnSerieDeleted += OnSerieDeleted;
         LoadSeries();
     }
 
-    private static void OnSerieCreated(SerieDto dto)
+    private void OnSerieCreated(SerieDto dto)
     {
         Serie serie = new(dto);
         serie.LoadInfo();
-        lock (SeriesLock)
+        lock (_seriesLock)
         {
             Series.AddOrUpdate(serie);
         }
     }
 
-    private static void OnSerieDeleted(long id)
+    private void OnSerieDeleted(long id)
     {
-        lock (SeriesLock)
+        lock (_seriesLock)
         {
             Series.RemoveKey(id);
         }
     }
 
-    private static void LoadSeries()
+    private void LoadSeries()
     {
         Task.Run(() =>
         {
-            lock (LoadLock)
+            lock (_loadLock)
             {
                 if (_isLoaded) return;
                 try
@@ -62,7 +62,7 @@ public static class SerieSource
                     }
 
                     List<long> seriesIds = seriesIdsResponse.GetValue();
-                    lock (SeriesLock)
+                    lock (_seriesLock)
                     {
                         Series.AddOrUpdate(seriesIds.Select(serieId => new Serie(serieId)));
                         _isLoaded = true;

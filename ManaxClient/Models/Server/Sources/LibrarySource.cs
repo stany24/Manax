@@ -15,40 +15,40 @@ using ManaxLibrary.Notifications;
 
 namespace ManaxClient.Models.Server.Sources;
 
-public static class LibrarySource
+public class LibrarySource
 {
-    public static readonly SourceCache<Library, long> Libraries = new(x => x.Id);
-    private static bool _loaded;
-    private static readonly Lock LoadLock = new();
-    private static readonly Lock LibrariesLock = new();
+    public readonly SourceCache<Library, long> Libraries = new(x => x.Id);
+    private bool _loaded;
+    private readonly Lock _loadLock = new();
+    private readonly Lock _librariesLock = new();
 
-    static LibrarySource()
+    public LibrarySource()
     {
         NotificationReceiver.OnLibraryCreated += OnLibraryCreated;
         NotificationReceiver.OnLibraryDeleted += OnLibraryDeleted;
     }
 
-    private static void OnLibraryDeleted(long id)
+    private void OnLibraryDeleted(long id)
     {
-        lock (LibrariesLock)
+        lock (_librariesLock)
         {
             Libraries.RemoveKey(id);
         }
     }
 
-    private static void OnLibraryCreated(LibraryDto dto)
+    private void OnLibraryCreated(LibraryDto dto)
     {
-        lock (LibrariesLock)
+        lock (_librariesLock)
         {
             Libraries.AddOrUpdate(new Library(dto));
         }
     }
 
-    public static void LoadLibraries()
+    public void LoadLibraries()
     {
         Task.Run(() =>
         {
-            lock (LoadLock)
+            lock (_loadLock)
             {
                 if (_loaded) return;
                 try
@@ -71,7 +71,7 @@ public static class LibrarySource
                             continue;
                         }
 
-                        lock (LibrariesLock)
+                        lock (_librariesLock)
                         {
                             Libraries.AddOrUpdate(new Library(libraryResponse.GetValue()));
                         }

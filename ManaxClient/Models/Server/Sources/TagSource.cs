@@ -15,26 +15,26 @@ using ManaxLibrary.Notifications;
 
 namespace ManaxClient.Models.Server.Sources;
 
-public static class TagSource
+public class TagSource
 {
-    public static readonly SourceCache<Tag, long> Tags = new(x => x.Id);
-    private static bool _loaded;
-    private static readonly Lock LoadLock = new();
-    private static readonly Lock TagLock = new();
+    public readonly SourceCache<Tag, long> Tags = new(x => x.Id);
+    private bool _loaded;
+    private readonly Lock _loadLock = new();
+    private readonly Lock _tagLock = new();
 
-    static TagSource()
+    public TagSource()
     {
         NotificationReceiver.OnTagCreated += OnTagCreated;
         NotificationReceiver.OnTagDeleted += OnTagDeleted;
     }
 
-    public static void LoadTags()
+    public void LoadTags()
     {
         Task.Run(() =>
         {
             try
             {
-                lock (LoadLock)
+                lock (_loadLock)
                 {
                     if (_loaded) return;
                     Optional<List<TagDto>> response = ManaxApiTagClient.GetTagsAsync().Result;
@@ -46,7 +46,7 @@ public static class TagSource
                         return;
                     }
 
-                    lock (TagLock)
+                    lock (_tagLock)
                     {
                         Tags.AddOrUpdate(response.GetValue().Select(dto => new Tag(dto)));
                     }
@@ -63,17 +63,17 @@ public static class TagSource
         });
     }
 
-    private static void OnTagDeleted(long id)
+    private void OnTagDeleted(long id)
     {
-        lock (TagLock)
+        lock (_tagLock)
         {
             Tags.RemoveKey(id);
         }
     }
 
-    private static void OnTagCreated(TagDto tag)
+    private void OnTagCreated(TagDto tag)
     {
-        lock (TagLock)
+        lock (_tagLock)
         {
             Tags.AddOrUpdate(new Tag(tag));
         }

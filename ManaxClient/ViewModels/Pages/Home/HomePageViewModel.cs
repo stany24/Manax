@@ -13,7 +13,6 @@ using DynamicData;
 using DynamicData.Binding;
 using Jeek.Avalonia.Localization;
 using ManaxClient.Event;
-using ManaxClient.Models.Server.Sources;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.Logging;
@@ -29,7 +28,7 @@ public partial class HomePageViewModel : PageViewModel
     {
         SortExpressionComparer<Models.Server.Data.Serie> comparer =
             SortExpressionComparer<Models.Server.Data.Serie>.Descending(serie => serie.Title);
-        SerieSource.Series
+        MainWindowViewModel.Instance.SerieSource.Series
             .Connect()
             .SortAndBind(out _series, comparer)
             .Subscribe(changes =>

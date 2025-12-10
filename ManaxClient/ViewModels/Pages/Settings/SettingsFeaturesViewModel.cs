@@ -25,38 +25,21 @@ public partial class SettingsFeaturesViewModel : PageViewModel
         Task.Run(LoadFeatures);
     }
 
-    private async void LoadFeatures()
+    private void LoadFeatures()
     {
-        try
+        List<FeatureType> allFeatures = Enum.GetValues<FeatureType>().ToList();
+        Dispatcher.UIThread.Post(() =>
         {
-            Logger.LogInfo("Loading features");
-            Optional<FeaturesManager> featuresResponse = await ManaxApiFeatureClient.GetEnabledFeaturesAsync();
-            if (featuresResponse.Failed)
-            {
-                Problem = featuresResponse.Error;
-                Logger.LogFailure("Failed to load features");
-                return;
-            }
-
-            FeaturesManager featuresManager = featuresResponse.GetValue();
-            List<FeatureType> allFeatures = Enum.GetValues<FeatureType>().ToList();
-            Dispatcher.UIThread.Post(() =>
-            {
-                Features.Clear();
-                foreach (FeatureType type in allFeatures)
-                    Features.Add(new Feature
-                    {
-                        Key = type,
-                        Value = featuresManager.IsEnabled(type),
-                        Name = Feature.GetFeatureName(type),
-                        Description = Feature.GetFeatureDescription(type)
-                    });
-            });
-        }
-        catch (Exception e)
-        {
-            Logger.LogError("Error when fetching features", e);
-        }
+            Features.Clear();
+            foreach (FeatureType type in allFeatures)
+                Features.Add(new Feature
+                {
+                    Key = type,
+                    Value = MainWindowViewModel.Instance.FeatureManager.IsEnabled(type),
+                    Name = Feature.GetFeatureName(type),
+                    Description = Feature.GetFeatureDescription(type)
+                });
+        });
     }
 
     public async void SaveFeatures()

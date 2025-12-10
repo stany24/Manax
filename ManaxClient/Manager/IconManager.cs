@@ -11,7 +11,7 @@ using ImageMagick;
 using ManaxClient.Event;
 using ManaxClient.Models.Theme;
 
-namespace ManaxClient.Assets;
+namespace ManaxClient.Manager;
 
 public partial class IconManager:ObservableObject
 {

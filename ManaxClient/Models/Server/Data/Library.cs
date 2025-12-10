@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData;
 using DynamicData.Binding;
-using ManaxClient.Models.Server.Sources;
+using ManaxClient.ViewModels;
 using ManaxLibrary.DTO.Library;
 using ManaxLibrary.Notifications;
 
@@ -21,7 +21,7 @@ public partial class Library : ObservableObject
         NotificationReceiver.OnLibraryUpdated += OnLibraryUpdated;
         FromLibraryDto(dto);
         SortExpressionComparer<Serie> comparer = SortExpressionComparer<Serie>.Ascending(serie => serie.Title);
-        SerieSource.Series
+        MainWindowViewModel.Instance.SerieSource.Series
             .Connect()
             .AutoRefresh()
             .Filter(serie => serie.LibraryId == Id)

@@ -2,19 +2,16 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
-using System.Windows.Input;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using DynamicData;
 using DynamicData.Binding;
 using Jeek.Avalonia.Localization;
 using ManaxClient.Event;
-using ManaxClient.Models.Server.Sources;
 using ManaxClient.ViewModels.Popup.ConfirmCancel;
 using ManaxClient.ViewModels.Popup.ConfirmCancel.Content;
 using ManaxLibrary;
@@ -37,7 +34,7 @@ public partial class SeriePageViewModel : PageViewModel
         Serie = serie;
         SortExpressionComparer<Models.Server.Data.Rank> comparer =
             SortExpressionComparer<Models.Server.Data.Rank>.Descending(t => t.Value);
-        RankSource.Ranks
+        MainWindowViewModel.Instance.RankSource.Ranks
             .Connect()
             .SortAndBind(out _ranks, comparer)
             .Subscribe();

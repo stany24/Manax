@@ -11,7 +11,7 @@
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Pages.Library.LibraryPageView"
     x:DataType="page:LibraryPageViewModel"
-    IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).CanReadLibraries}">
+    IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanReadLibraries}">
 
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel Orientation="Vertical" Spacing="24">
@@ -26,7 +26,7 @@
                 </StackPanel>
 
                 <Button Grid.Column="1" Grid.Row="0"
-                        IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).CanDeleteLibraries}"
+                        IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanDeleteLibraries}"
                         Classes="danger"
                         Command="{Binding DeleteLibrary}"
                         VerticalAlignment="Top"

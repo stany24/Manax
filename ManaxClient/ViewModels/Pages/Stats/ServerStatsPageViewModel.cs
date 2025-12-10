@@ -16,7 +16,6 @@ using LiveChartsCore.Measure;
 using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Painting;
 using ManaxClient.Event;
-using ManaxClient.Models.Server.Sources;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTO.Stats;
@@ -35,7 +34,7 @@ public partial class ServerStatsPageViewModel : PageViewModel
     {
         Task.Run(LoadServerStats);
         SortExpressionComparer<Models.Server.Data.Serie> comparer = SortExpressionComparer<Models.Server.Data.Serie>.Ascending(serie => serie.Title);
-        SerieSource.Series
+        MainWindowViewModel.Instance.SerieSource.Series
             .Connect()
             .AutoRefresh()
             .FilterOnObservable(f => _filterRefresh.Select(_ => _neverReadSerieIds.Contains(f.Id)))

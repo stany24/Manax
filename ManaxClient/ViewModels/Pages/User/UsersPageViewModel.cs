@@ -7,7 +7,6 @@ using DynamicData;
 using DynamicData.Binding;
 using Jeek.Avalonia.Localization;
 using ManaxClient.Event;
-using ManaxClient.Models.Server.Sources;
 using ManaxClient.ViewModels.Popup.ConfirmCancel;
 using ManaxClient.ViewModels.Popup.ConfirmCancel.Content;
 using ManaxLibrary;
@@ -25,7 +24,7 @@ public class UsersPageViewModel : PageViewModel
     {
         SortExpressionComparer<Models.Server.Data.User> comparer =
             SortExpressionComparer<Models.Server.Data.User>.Descending(user => user.Username);
-        UserSource.Users
+        MainWindowViewModel.Instance.UserSource.Users
             .Connect()
             .SortAndBind(out _users, comparer)
             .Subscribe();

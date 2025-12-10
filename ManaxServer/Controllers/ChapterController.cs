@@ -71,7 +71,9 @@ public class ChapterController(ManaxContext context, INotificationService notifi
         await using ZipArchive archive = await ZipFile.OpenReadAsync(filePath);
         if (number < 0 || number >= archive.Entries.Count)
             return BadRequest();
-        ZipArchiveEntry entry = archive.Entries[number];
+        List<ZipArchiveEntry> pages = archive.Entries.ToList();
+        pages.Sort((a, b) => String.Compare(a.Name, b.Name, StringComparison.Ordinal));
+        ZipArchiveEntry entry = pages[number];
         await using Stream stream = await entry.OpenAsync();
         using MemoryStream memoryStream = new();
         await stream.CopyToAsync(memoryStream);

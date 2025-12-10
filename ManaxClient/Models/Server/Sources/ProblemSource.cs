@@ -12,17 +12,17 @@ using ManaxLibrary.Logging;
 
 namespace ManaxClient.Models.Server.Sources;
 
-public static class ProblemSource
+public class ProblemSource
 {
-    public static readonly SourceCache<IssueChapterReportedType, long> ChapterProblems = new(x => x.Id);
-    public static readonly SourceCache<IssueSerieReportedType, long> SerieProblems = new(x => x.Id);
+    public readonly SourceCache<IssueChapterReportedType, long> ChapterProblems = new(x => x.Id);
+    public readonly SourceCache<IssueSerieReportedType, long> SerieProblems = new(x => x.Id);
 
-    static ProblemSource()
+    public ProblemSource()
     {
         LoadProblems();
     }
 
-    private static void LoadProblems()
+    private void LoadProblems()
     {
         Task.Run(async () =>
         {

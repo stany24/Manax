@@ -10,7 +10,7 @@ using CommunityToolkit.Mvvm.Messaging;
 using DynamicData;
 using DynamicData.Binding;
 using ManaxClient.Event;
-using ManaxClient.Models.Server.Sources;
+using ManaxClient.ViewModels;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTO.Read;
@@ -54,18 +54,18 @@ public partial class Serie : ObservableObject, IDisposable
         NotificationReceiver.OnReadDeleted += OnReadDeleted;
 
         FromSerieDto(dto);
-        ChapterSource.Chapters
+        MainWindowViewModel.Instance.ChapterSource.Chapters
             .Connect()
             .Filter(chapter => chapter.SerieId == Id)
             .SortAndBind(out _chapters, SortExpressionComparer<Chapter>.Ascending(chapter => chapter.Number))
             .Subscribe();
-        TagSource.Tags
+        MainWindowViewModel.Instance.TagSource.Tags
             .Connect()
             .Filter(_tagIds.Connect().Select(_ => (Func<Tag, bool>)(tag => _tagIds.Items.Contains(tag.Id))))
             .SortAndBind(out _tags, SortExpressionComparer<Tag>.Ascending(tag => tag.Name))
             .Subscribe();
 
-        PersonSource.Persons
+        MainWindowViewModel.Instance.PersonSource.Persons
             .Connect()
             .Filter(_personIds.Connect()
                 .Select(_ => (Func<Person, bool>)(person => _personIds.Items.Contains(person.Id))))
@@ -179,7 +179,7 @@ public partial class Serie : ObservableObject, IDisposable
 
     public void LoadChapters()
     {
-        ChapterSource.LoadSerieChapters(Id);
+        MainWindowViewModel.Instance.ChapterSource.LoadSerieChapters(Id);
     }
 
     private void OnReadDeleted(long obj)

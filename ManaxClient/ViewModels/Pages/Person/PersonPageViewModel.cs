@@ -5,7 +5,6 @@ using CommunityToolkit.Mvvm.Messaging;
 using DynamicData;
 using DynamicData.Binding;
 using ManaxClient.Event;
-using ManaxClient.Models.Server.Sources;
 using ManaxClient.ViewModels.Popup.ConfirmCancel;
 using ManaxClient.ViewModels.Popup.ConfirmCancel.Content;
 using ManaxLibrary;
@@ -27,13 +26,13 @@ public class PersonPageViewModel : PageViewModel
         SortExpressionComparer<Models.Server.Data.Person> comparer = SortExpressionComparer<Models.Server.Data.Person>
             .Ascending(p => p.LastName)
             .ThenByAscending(p => p.FirstName);
-        PersonSource.Persons.Connect()
+        MainWindowViewModel.Instance.PersonSource.Persons.Connect()
             .SortAndBind(out _persons, comparer)
             .Subscribe();
 
         SortExpressionComparer<Role> roleComparer = SortExpressionComparer<Role>
             .Ascending(r => r.Name);
-        RoleSource.Roles.Connect()
+        MainWindowViewModel.Instance.RoleSource.Roles.Connect()
             .SortAndBind(out _roles, roleComparer)
             .Subscribe();
     }

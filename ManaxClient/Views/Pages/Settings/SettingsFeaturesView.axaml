@@ -9,7 +9,7 @@
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="600"
     x:Class="ManaxClient.Views.Pages.Settings.SettingsFeaturesView"
     x:DataType="page:SettingsFeaturesViewModel"
-    IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).CanReadFeatures}">
+    IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanReadFeatures}">
 
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel Orientation="Vertical" Spacing="24" MaxWidth="800">
@@ -41,7 +41,7 @@
             <!-- Save Button -->
             <Border Classes="card">
                 <Button Classes="primary"
-                        IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).CanWriteFeatures}"
+                        IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWriteFeatures}"
                         Command="{Binding SaveFeatures}"
                         Padding="24,12"
                         HorizontalAlignment="Left">

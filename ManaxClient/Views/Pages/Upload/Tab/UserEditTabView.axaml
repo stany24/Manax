@@ -8,6 +8,6 @@
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Pages.Upload.Tab.UserEditTabView"
     x:DataType="tab:UserEditTabViewModel"
-    IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).CanUploadChapter}">
+    IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanUploadChapter}">
     <TextBlock>User edit</TextBlock>
 </UserControl>

@@ -37,7 +37,7 @@
                     <StackPanel
                         Orientation="Horizontal">
                         <Button Classes="secondary"
-                                IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).CanWriteSeries}"
+                                IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWriteSeries}"
                                 Command="{Binding ReplacePoster}"
                                 IsEnabled="{Binding !IsFilePickerOpen}"
                                 HorizontalAlignment="Stretch">
@@ -45,7 +45,7 @@
                         </Button>
 
                         <Button Classes="secondary"
-                                IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).CanWriteSeries}"
+                                IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWriteSeries}"
                                 Command="{Binding UpdateSerie}"
                                 IsEnabled="{Binding !IsFilePickerOpen}"
                                 HorizontalAlignment="Stretch">
@@ -54,7 +54,7 @@
                     </StackPanel>
 
                     <StackPanel Spacing="8" 
-                                IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).RankFeatureEnabled}">
+                                IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).FeatureManager.RankFeatureEnabled}">
                         <TextBlock Text="{localization:Localize SeriePage.SerieRating}" FontWeight="Medium" />
                         <ComboBox ItemsSource="{Binding Ranks}"
                                   SelectedItem="{Binding SelectedRank}"

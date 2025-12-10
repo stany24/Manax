@@ -6,7 +6,7 @@ using CommunityToolkit.Mvvm.Messaging;
 using DynamicData;
 using ManaxClient.Event;
 using ManaxClient.Models.Server.Data;
-using ManaxClient.Models.Server.Sources;
+using ManaxClient.ViewModels;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTO.Issue.Reported;
@@ -44,7 +44,7 @@ public partial class IssueSerieReported : ObservableObject
         CreatedAt = dto.CreatedAt;
 
         _subscriptionSerie?.Dispose();
-        _subscriptionSerie = SerieSource.Series
+        _subscriptionSerie = MainWindowViewModel.Instance.SerieSource.Series
             .Connect()
             .AutoRefresh(o => o)
             .Filter(o => o.Id == dto.SerieId)
@@ -55,7 +55,7 @@ public partial class IssueSerieReported : ObservableObject
             });
 
         _subscriptionUser?.Dispose();
-        _subscriptionUser = UserSource.Users
+        _subscriptionUser = MainWindowViewModel.Instance.UserSource.Users
             .Connect()
             .AutoRefresh(o => o)
             .Filter(o => o.Id == dto.UserId)
@@ -66,7 +66,7 @@ public partial class IssueSerieReported : ObservableObject
             });
 
         _subscriptionProblem?.Dispose();
-        _subscriptionProblem = ProblemSource.ChapterProblems
+        _subscriptionProblem = MainWindowViewModel.Instance.ProblemSource.ChapterProblems
             .Connect()
             .AutoRefresh(o => o)
             .Filter(o => o.Id == dto.ProblemId)

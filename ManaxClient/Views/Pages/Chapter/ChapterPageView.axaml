@@ -10,7 +10,7 @@
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Pages.Chapter.ChapterPageView"
     x:DataType="chapter1:ChapterPageViewModel"
-    IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).CanReadChapters}">
+    IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanReadChapters}">
 
     <Panel>
         <ScrollViewer Offset="{Binding ScrollOffset,Mode=TwoWay}"

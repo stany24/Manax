@@ -4,7 +4,6 @@ using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData;
 using DynamicData.Binding;
-using ManaxClient.Models.Server.Sources;
 using ManaxLibrary.DTO.Person;
 using Role = ManaxClient.Models.Server.Data.Role;
 
@@ -29,7 +28,7 @@ public partial class PersonEditViewModel : ConfirmCancelContentViewModel
 
         SortExpressionComparer<Role> roleComparer = SortExpressionComparer<Role>
             .Ascending(r => r.Name);
-        RoleSource.Roles.Connect()
+        MainWindowViewModel.Instance.RoleSource.Roles.Connect()
             .SortAndBind(out _roles, roleComparer)
             .Subscribe();
         

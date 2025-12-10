@@ -15,25 +15,23 @@ using ManaxLibrary.Notifications;
 
 namespace ManaxClient.Models.Server.Sources;
 
-public static class UserSource
+public class UserSource
 {
-    public static readonly SourceCache<User, long> Users = new(x => x.Id);
-    private static readonly Lock UsersLock = new();
+    public readonly SourceCache<User, long> Users = new(x => x.Id);
+    private readonly Lock _usersLock = new();
 
-    static UserSource()
+    public UserSource()
     {
         NotificationReceiver.OnUserCreated += OnUserCreated;
         NotificationReceiver.OnUserDeleted += OnUserDeleted;
-        MainWindowViewModel.PermissionsChanged += (_, permissions) =>
+        WeakReferenceMessenger.Default.Register<LoggedInMessage>(this, (_, _) =>
         {
-            if (permissions.Contains(Permission.ReadUsers))
+            if (MainWindowViewModel.Instance.PermissionManager.CanReadUsers)
                 LoadUsers();
-            else
-                Users.Clear();
-        };
+        });
     }
 
-    private static void LoadUsers()
+    private void LoadUsers()
     {
         Task.Run(async void () =>
         {
@@ -59,7 +57,7 @@ public static class UserSource
                     }
 
                     UserDto dto = userResponse.GetValue();
-                    lock (UsersLock)
+                    lock (_usersLock)
                     {
                         Users.AddOrUpdate(new User(dto));
                     }
@@ -73,17 +71,17 @@ public static class UserSource
         });
     }
 
-    private static void OnUserDeleted(long id)
+    private void OnUserDeleted(long id)
     {
-        lock (UsersLock)
+        lock (_usersLock)
         {
             Users.RemoveKey(id);
         }
     }
 
-    private static void OnUserCreated(UserDto user)
+    private void OnUserCreated(UserDto user)
     {
-        lock (UsersLock)
+        lock (_usersLock)
         {
             Users.AddOrUpdate(new User(user));
         }

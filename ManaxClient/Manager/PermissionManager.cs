@@ -1,18 +1,21 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
+using ManaxClient.Event;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTO.User;
 using ManaxLibrary.Logging;
+using ManaxLibrary.Notifications;
 
-namespace ManaxClient.ViewModels;
+namespace ManaxClient.Manager;
 
-public partial class MainWindowViewModel
+public class PermissionManager:ObservableObject
 {
     private List<Permission> _permissions = [];
-
-    public static EventHandler<List<Permission>>? PermissionsChanged { get; set; }
 
     // Permission permissions
     public bool CanReadPermissions => _permissions.Contains(Permission.ReadPermissions);
@@ -84,6 +87,17 @@ public partial class MainWindowViewModel
     public bool CanWriteRoles => _permissions.Contains(Permission.WriteRoles);
     public bool CanDeleteRoles => _permissions.Contains(Permission.DeleteRoles);
 
+    public PermissionManager()
+    {
+        WeakReferenceMessenger.Default.Register<LoggedInMessage>(this, (_, _) => { Task.Run(LoadPermissions); });
+        NotificationReceiver.OnPermissionModified += OnPermissionModified;
+    }
+
+    ~PermissionManager()
+    {
+        NotificationReceiver.OnPermissionModified -= OnPermissionModified;
+    }
+    
     private async void LoadPermissions()
     {
         try
@@ -91,7 +105,7 @@ public partial class MainWindowViewModel
             Optional<List<Permission>> myPermissionsAsync = await ManaxApiPermissionClient.GetMyPermissionsAsync();
             if (myPermissionsAsync.Failed)
             {
-                ShowInfo(myPermissionsAsync.Error);
+                WeakReferenceMessenger.Default.Send(new NotificationMessage(myPermissionsAsync.Error));
                 return;
             }
 

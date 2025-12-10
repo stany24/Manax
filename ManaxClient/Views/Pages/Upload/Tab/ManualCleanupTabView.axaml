@@ -11,7 +11,7 @@
     mc:Ignorable="d" d:DesignWidth="1200" d:DesignHeight="600"
     x:Class="ManaxClient.Views.Pages.Upload.Tab.ManualCleanupTabView"
     x:DataType="tab:ManualCleanupTabViewModel"
-    IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).CanUploadChapter}">
+    IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanUploadChapter}">
     <Grid ColumnDefinitions="200,*,200" RowDefinitions="*" Margin="8">
 
         <!-- Left Panel: Serie Folders with Chapters -->

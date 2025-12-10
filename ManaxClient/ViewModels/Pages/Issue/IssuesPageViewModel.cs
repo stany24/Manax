@@ -11,7 +11,6 @@ using DynamicData.Binding;
 using Jeek.Avalonia.Localization;
 using ManaxClient.Event;
 using ManaxClient.Models.Issue;
-using ManaxClient.Models.Server.Sources;
 using ManaxClient.ViewModels.Pages.Serie;
 using ManaxClient.ViewModels.Popup.ConfirmCancel;
 using ManaxClient.ViewModels.Popup.ConfirmCancel.Content;
@@ -43,19 +42,19 @@ public partial class IssuesPageViewModel : PageViewModel
         SortExpressionComparer<IssueSerieReported> comparer4 =
             SortExpressionComparer<IssueSerieReported>.Descending(t => t.CreatedAt);
 
-        IssueSource.IssueChapterAutomatic
+        MainWindowViewModel.Instance.IssueSource.IssueChapterAutomatic
             .Connect()
             .SortAndBind(out _issueChapterAutomatic, comparer1)
             .Subscribe();
-        IssueSource.IssueSerieAutomatic
+        MainWindowViewModel.Instance.IssueSource.IssueSerieAutomatic
             .Connect()
             .SortAndBind(out _issueSerieAutomatic, comparer2)
             .Subscribe();
-        IssueSource.IssueChapterReported
+        MainWindowViewModel.Instance.IssueSource.IssueChapterReported
             .Connect()
             .SortAndBind(out _issueChapterReported, comparer3)
             .Subscribe();
-        IssueSource.IssueSerieReported
+        MainWindowViewModel.Instance.IssueSource.IssueSerieReported
             .Connect()
             .SortAndBind(out _issueSerieReported, comparer4)
             .Subscribe();

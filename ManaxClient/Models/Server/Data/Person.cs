@@ -1,6 +1,6 @@
 using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
-using ManaxClient.Models.Server.Sources;
+using ManaxClient.ViewModels;
 using ManaxLibrary.DTO.Person;
 using ManaxLibrary.Notifications;
 
@@ -33,7 +33,7 @@ public partial class Person : ObservableObject
         FirstName = dto.FirstName;
         LastName = dto.LastName;
         Pseudonym = dto.Pseudonym;
-        Role = RoleSource.Roles.Items.First(r => r.Id == dto.RoleId);
+        Role = MainWindowViewModel.Instance.RoleSource.Roles.Items.First(r => r.Id == dto.RoleId);
     }
 
     private void OnPersonUpdated(PersonDto dto)

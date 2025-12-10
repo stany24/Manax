@@ -15,40 +15,40 @@ using ManaxLibrary.Notifications;
 
 namespace ManaxClient.Models.Server.Sources;
 
-public static class RoleSource
+public class RoleSource
 {
-    public static readonly SourceCache<Role, long> Roles = new(x => x.Id);
-    private static bool _loaded;
-    private static readonly Lock LoadLock = new();
-    private static readonly Lock RolesLock = new();
+    public readonly SourceCache<Role, long> Roles = new(x => x.Id);
+    private bool _loaded;
+    private readonly Lock _loadLock = new();
+    private readonly Lock _rolesLock = new();
 
-    static RoleSource()
+    public RoleSource()
     {
         NotificationReceiver.OnRoleCreated += OnRoleCreated;
         NotificationReceiver.OnRoleDeleted += OnRoleDeleted;
     }
 
-    private static void OnRoleDeleted(long id)
+    private void OnRoleDeleted(long id)
     {
-        lock (RolesLock)
+        lock (_rolesLock)
         {
             Roles.RemoveKey(id);
         }
     }
 
-    private static void OnRoleCreated(RoleDto dto)
+    private void OnRoleCreated(RoleDto dto)
     {
-        lock (RolesLock)
+        lock (_rolesLock)
         {
             Roles.AddOrUpdate(new Role(dto));
         }
     }
 
-    public static void LoadRoles()
+    public void LoadRoles()
     {
         Task.Run(() =>
         {
-            lock (LoadLock)
+            lock (_loadLock)
             {
                 if (_loaded) return;
                 try
@@ -61,7 +61,7 @@ public static class RoleSource
                         return;
                     }
 
-                    lock (RolesLock)
+                    lock (_rolesLock)
                     {
                         Roles.Edit(updater =>
                         {

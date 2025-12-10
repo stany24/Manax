@@ -5,7 +5,6 @@ using CommunityToolkit.Mvvm.Messaging;
 using DynamicData;
 using DynamicData.Binding;
 using ManaxClient.Event;
-using ManaxClient.Models.Server.Sources;
 using ManaxClient.ViewModels.Popup.ConfirmCancel;
 using ManaxClient.ViewModels.Popup.ConfirmCancel.Content;
 using ManaxLibrary;
@@ -23,7 +22,7 @@ public class RankPageViewModel : PageViewModel
     {
         SortExpressionComparer<Models.Server.Data.Rank> comparer =
             SortExpressionComparer<Models.Server.Data.Rank>.Descending(t => t.Value);
-        RankSource.Ranks.Connect()
+        MainWindowViewModel.Instance.RankSource.Ranks.Connect()
             .SortAndBind(out _ranks, comparer)
             .Subscribe();
     }

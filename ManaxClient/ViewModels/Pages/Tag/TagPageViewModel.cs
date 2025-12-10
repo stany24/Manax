@@ -7,7 +7,6 @@ using DynamicData;
 using DynamicData.Binding;
 using Jeek.Avalonia.Localization;
 using ManaxClient.Event;
-using ManaxClient.Models.Server.Sources;
 using ManaxClient.ViewModels.Popup.ConfirmCancel;
 using ManaxClient.ViewModels.Popup.ConfirmCancel.Content;
 using ManaxLibrary;
@@ -24,7 +23,7 @@ public class TagPageViewModel : PageViewModel
     {
         SortExpressionComparer<Models.Server.Data.Tag> comparer =
             SortExpressionComparer<Models.Server.Data.Tag>.Descending(tag => tag.Name);
-        TagSource.Tags
+        MainWindowViewModel.Instance.TagSource.Tags
             .Connect()
             .SortAndBind(out _tags, comparer)
             .Subscribe();

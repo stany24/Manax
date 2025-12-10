@@ -15,40 +15,40 @@ using ManaxLibrary.Notifications;
 
 namespace ManaxClient.Models.Server.Sources;
 
-public static class PersonSource
+public class PersonSource
 {
-    public static readonly SourceCache<Person, long> Persons = new(x => x.Id);
-    private static bool _loaded;
-    private static readonly Lock LoadLock = new();
-    private static readonly Lock PersonsLock = new();
+    public readonly SourceCache<Person, long> Persons = new(x => x.Id);
+    private bool _loaded;
+    private readonly Lock _loadLock = new();
+    private readonly Lock _personsLock = new();
 
-    static PersonSource()
+    public PersonSource()
     {
         NotificationReceiver.OnPersonCreated += OnPersonCreated;
         NotificationReceiver.OnPersonDeleted += OnPersonDeleted;
     }
 
-    private static void OnPersonDeleted(long id)
+    private void OnPersonDeleted(long id)
     {
-        lock (PersonsLock)
+        lock (_personsLock)
         {
             Persons.RemoveKey(id);
         }
     }
 
-    private static void OnPersonCreated(PersonDto dto)
+    private void OnPersonCreated(PersonDto dto)
     {
-        lock (PersonsLock)
+        lock (_personsLock)
         {
             Persons.AddOrUpdate(new Person(dto));
         }
     }
 
-    public static void LoadPersons()
+    public void LoadPersons()
     {
         Task.Run(() =>
         {
-            lock (LoadLock)
+            lock (_loadLock)
             {
                 if (_loaded) return;
                 try
@@ -61,7 +61,7 @@ public static class PersonSource
                         return;
                     }
 
-                    lock (PersonsLock)
+                    lock (_personsLock)
                     {
                         Persons.Edit(updater =>
                         {

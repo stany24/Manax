@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Messaging;
 using DynamicData;
 using ManaxClient.Event;
+using ManaxClient.Manager;
 using ManaxClient.Models.Server.Data;
-using ManaxClient.ViewModels;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTO.Feature;
@@ -17,16 +17,16 @@ using ManaxLibrary.Notifications;
 
 namespace ManaxClient.Models.Server.Sources;
 
-public static class RankSource
+public class RankSource
 {
-    public static readonly SourceCache<Rank, long> Ranks = new(x => x.Id);
-    private static bool _loaded;
-    private static readonly Lock LoadLock = new();
-    private static readonly Lock RanksLock = new();
+    public readonly SourceCache<Rank, long> Ranks = new(x => x.Id);
+    private bool _loaded;
+    private readonly Lock _loadLock = new();
+    private readonly Lock _ranksLock = new();
 
-    static RankSource()
+    public RankSource()
     {
-        MainWindowViewModel.FeatureChanged += (_, features) =>
+        FeatureManager.FeatureChanged += (_, features) =>
         {
             if (features is { Key: FeatureType.Ranks, Value: true })
                 LoadRanks();
@@ -37,27 +37,27 @@ public static class RankSource
         NotificationReceiver.OnRankDeleted += OnRankDeleted;
     }
 
-    private static void OnRankDeleted(long id)
+    private void OnRankDeleted(long id)
     {
-        lock (RanksLock)
+        lock (_ranksLock)
         {
             Ranks.RemoveKey(id);
         }
     }
 
-    private static void OnRankCreated(RankDto dto)
+    private void OnRankCreated(RankDto dto)
     {
-        lock (RanksLock)
+        lock (_ranksLock)
         {
             Ranks.AddOrUpdate(new Rank(dto));
         }
     }
 
-    private static void LoadRanks()
+    private void LoadRanks()
     {
         Task.Run(() =>
         {
-            lock (LoadLock)
+            lock (_loadLock)
             {
                 if (_loaded) return;
                 try
@@ -70,7 +70,7 @@ public static class RankSource
                         return;
                     }
 
-                    lock (RanksLock)
+                    lock (_ranksLock)
                     {
                         Ranks.Edit(updater =>
                         {

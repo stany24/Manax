@@ -9,8 +9,8 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
 using DynamicData;
 using DynamicData.Binding;
-using ManaxClient.Assets;
 using ManaxClient.Event;
+using ManaxClient.Manager;
 using ManaxClient.Models;
 using ManaxClient.Models.History;
 using ManaxClient.Models.Server.Sources;
@@ -30,6 +30,7 @@ using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.Logging;
 using ManaxLibrary.Notifications;
+using IconManager = ManaxClient.Manager.IconManager;
 using Library = ManaxClient.Models.Server.Data.Library;
 
 namespace ManaxClient.ViewModels;
@@ -48,9 +49,24 @@ public partial class MainWindowViewModel : ObservableObject
     [ObservableProperty] private Controls.Popups.Popup? _popup;
     [ObservableProperty] private ObservableCollection<TaskItem> _runningTasks = new([]);
     [ObservableProperty] private IconManager _iconManager = new();
-
+    [ObservableProperty] private FeatureManager _featureManager = new();
+    [ObservableProperty] private PermissionManager _permissionManager = new();
+    [ObservableProperty] private ChapterSource _chapterSource = new();
+    [ObservableProperty] private IssueSource _issueSource = new();
+    [ObservableProperty] private LibrarySource _librarySource = new();
+    [ObservableProperty] private PersonSource _personSource = new();
+    [ObservableProperty] private ProblemSource _problemSource = new();
+    [ObservableProperty] private RankSource _rankSource = new();
+    [ObservableProperty] private RoleSource _roleSource = new();
+    [ObservableProperty] private SerieSource _serieSource = new();
+    [ObservableProperty] private TagSource _tagSource = new();
+    [ObservableProperty] private UserSource _userSource = new();
+    
+    public static MainWindowViewModel Instance { get; private set; } = new();
+    
     public MainWindowViewModel()
     {
+        Instance = this;
         WeakReferenceMessenger.Default.Register<NotificationMessage>(this, (_, m) => { ShowInfo(m.Value); });
         WeakReferenceMessenger.Default.Register<PopupChangeMessage>(this, (_, m) => { SetPopup(m.Value); });
         WeakReferenceMessenger.Default.Register<PageChangeMessage>(this, (_, m) => { SetPage(m.Value);});
@@ -75,11 +91,7 @@ public partial class MainWindowViewModel : ObservableObject
         {
             IsAdmin = loginPage.IsAdmin();
             NotificationReceiver.OnRunningTasks += OnRunningTasks;
-            NotificationReceiver.OnPermissionModified += OnPermissionModified;
-            NotificationReceiver.OnFeatureModified += OnFeatureModified;
             NotificationReceiver.OnChapterUploadFailed += OnChapterUploadFailed;
-            Task.Run(LoadPermissions);
-            Task.Run(LoadFeatures);
 
             RoleSource.LoadRoles();
             LibrarySource.LoadLibraries();
@@ -98,8 +110,6 @@ public partial class MainWindowViewModel : ObservableObject
     ~MainWindowViewModel()
     {
         NotificationReceiver.OnRunningTasks -= OnRunningTasks;
-        NotificationReceiver.OnPermissionModified -= OnPermissionModified;
-        NotificationReceiver.OnFeatureModified -= OnFeatureModified;
         NotificationReceiver.OnChapterUploadFailed -= OnChapterUploadFailed;
         _librariesSubscription.Dispose();
         

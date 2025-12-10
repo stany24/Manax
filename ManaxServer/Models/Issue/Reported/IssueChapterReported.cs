@@ -31,7 +31,7 @@ public class IssueChapterReported
             CreatedAt = CreatedAt,
             UserId = UserId,
             ChapterId = ChapterId,
-            ProblemId = Problem.Id
+            ProblemId = ProblemId
         };
     }
 

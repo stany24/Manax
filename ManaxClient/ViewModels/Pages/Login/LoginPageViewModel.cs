@@ -103,7 +103,7 @@ public sealed partial class LoginPageViewModel : PageViewModel
         try
         {
             ManaxApiClient.SetToken(result.Token);
-
+            WeakReferenceMessenger.Default.Send(new LoggedInMessage(result.Token));
             UserDto self = result.User;
             _isAdmin = self.Role is UserRole.Admin or UserRole.Owner;
             string format = string.Format(CultureInfo.InvariantCulture, Localizer.Get("LoginPage.Connected"),

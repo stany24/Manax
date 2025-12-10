@@ -5,7 +5,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData;
 using Jeek.Avalonia.Localization;
 using ManaxClient.Models.Server.Data;
-using ManaxClient.Models.Server.Sources;
+using ManaxClient.ViewModels;
 using ManaxLibrary.DTO.Issue.Automatic;
 
 namespace ManaxClient.Models.Issue;
@@ -39,7 +39,7 @@ public partial class IssueChapterAutomatic : ObservableObject
         CreatedAt = dto.CreatedAt;
         Problem = dto.Problem;
         _subscription?.Dispose();
-        _subscription = ChapterSource.Chapters
+        _subscription = MainWindowViewModel.Instance.ChapterSource.Chapters
             .Connect()
             .AutoRefresh()
             .Filter(o => o.Id == dto.ChapterId)

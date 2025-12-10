@@ -9,7 +9,7 @@
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Pages.Settings.SettingsServerPageView"
     x:DataType="page:SettingsServerPageViewModel"
-    IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).CanReadServerSettings}">
+    IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanReadServerSettings}">
 
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel Orientation="Vertical" Spacing="24">
@@ -22,7 +22,7 @@
             <Border Classes="card">
                 <StackPanel Orientation="Horizontal" Spacing="12">
                     <Button Classes="primary"
-                            IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).CanWriteSavePoints}"
+                            IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWriteSavePoints}"
                             Command="{Binding CreateSavePoint}"
                             Padding="24,12"
                             Margin="16,0,0,0"
@@ -35,7 +35,7 @@
                     </Button>
 
                     <Button Classes="primary"
-                            IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).CanWriteLibraries}"
+                            IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWriteLibraries}"
                             Command="{Binding CreateLibrary}"
                             Padding="24,12"
                             Margin="16,0,0,0"
@@ -215,7 +215,7 @@
                 </Border>
 
                 <Button Grid.Column="2"
-                        IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).CanWriteServerSettings}"
+                        IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWriteServerSettings}"
                         Classes="primary"
                         IsEnabled="{Binding Settings.IsValid}"
                         Command="{Binding Update}"

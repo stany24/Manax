@@ -17,34 +17,34 @@ using ManaxLibrary.Notifications;
 
 namespace ManaxClient.Models.Server.Sources;
 
-public static class ChapterSource
+public class ChapterSource
 {
-    public static readonly SourceCache<Chapter, long> Chapters = new(x => x.Id);
-    private static readonly Lock ChaptersLock = new();
+    public readonly SourceCache<Chapter, long> Chapters = new(x => x.Id);
+    private readonly Lock _chaptersLock = new();
 
-    static ChapterSource()
+    public ChapterSource()
     {
         NotificationReceiver.OnChapterAdded += OnChapterCreated;
         NotificationReceiver.OnChapterDeleted += OnChapterDeleted;
     }
 
-    private static void OnChapterDeleted(long id)
+    private void OnChapterDeleted(long id)
     {
-        lock (ChaptersLock)
+        lock (_chaptersLock)
         {
             Chapters.RemoveKey(id);
         }
     }
 
-    private static void OnChapterCreated(ChapterDto dto)
+    private void OnChapterCreated(ChapterDto dto)
     {
-        lock (ChaptersLock)
+        lock (_chaptersLock)
         {
             Chapters.AddOrUpdate(new Chapter(dto));
         }
     }
 
-    public static void LoadSerieChapters(long id, bool loadReads = true)
+    public void LoadSerieChapters(long id, bool loadReads = true)
     {
         Task.Run(async () =>
         {
@@ -70,9 +70,9 @@ public static class ChapterSource
         });
     }
 
-    private static async Task LoadChapter(long id)
+    private async Task LoadChapter(long id)
     {
-        lock (ChaptersLock)
+        lock (_chaptersLock)
         {
             if (Chapters.Keys.Contains(id)) return;
         }
@@ -87,7 +87,7 @@ public static class ChapterSource
                 return;
             }
 
-            lock (ChaptersLock)
+            lock (_chaptersLock)
             {
                 Dispatcher.UIThread.Post(() => {Chapters.AddOrUpdate(new Chapter(response.GetValue()));});
             }
@@ -99,7 +99,7 @@ public static class ChapterSource
         }
     }
 
-    private static async Task LoadSerieReads(long serieId)
+    private async Task LoadSerieReads(long serieId)
     {
         try
         {
@@ -115,7 +115,7 @@ public static class ChapterSource
             Dispatcher.UIThread.Post(() =>
             {
                 foreach (ReadDto read in reads)
-                    lock (ChaptersLock)
+                    lock (_chaptersLock)
                     {
                         Chapter? chapter = Chapters.Items.FirstOrDefault(c => c.Id == read.ChapterId);
                         if (chapter == null) continue;

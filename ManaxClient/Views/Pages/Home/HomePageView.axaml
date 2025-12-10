@@ -23,7 +23,7 @@
                 </StackPanel>
 
                 <Button Grid.Column="1"
-                        IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).CanWriteSeries}"
+                        IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWriteSeries}"
                         Classes="primary"
                         Command="{Binding UploadSerie}"
                         Padding="16,12">
@@ -49,7 +49,7 @@
                         TextWrapping="Wrap"
                         MaxWidth="400" />
                     <Button Classes="primary"
-                            IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).CanWriteSeries}"
+                            IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWriteSeries}"
                             Command="{Binding UploadSerie}"
                             HorizontalAlignment="Center"
                             Margin="0,8,0,0">

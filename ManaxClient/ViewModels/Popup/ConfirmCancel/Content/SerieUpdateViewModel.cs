@@ -4,7 +4,6 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
-using ManaxClient.Models.Server.Sources;
 using ManaxLibrary.DTO.Serie;
 using Library = ManaxClient.Models.Server.Data.Library;
 using Person = ManaxClient.Models.Server.Data.Person;
@@ -118,7 +117,7 @@ public partial class SerieUpdateViewModel : ConfirmCancelContentViewModel
     {
         Dispatcher.UIThread.Post(() =>
         {
-            foreach (Library library in LibrarySource.Libraries.Items.ToList())
+            foreach (Library library in MainWindowViewModel.Instance.LibrarySource.Libraries.Items.ToList())
             {
                 Libraries.Add(library);
                 if (library.Id == _originalSerie.LibraryId)
@@ -129,7 +128,7 @@ public partial class SerieUpdateViewModel : ConfirmCancelContentViewModel
 
     private void LoadTags()
     {
-        List<Tag> allTags = TagSource.Tags.Items.ToList();
+        List<Tag> allTags = MainWindowViewModel.Instance.TagSource.Tags.Items.ToList();
         Dispatcher.UIThread.Post(() =>
         {
             SelectedTags.Clear();
@@ -146,7 +145,7 @@ public partial class SerieUpdateViewModel : ConfirmCancelContentViewModel
 
     private void LoadPersons()
     {
-        List<Person> allPersons = PersonSource.Persons.Items.ToList();
+        List<Person> allPersons = MainWindowViewModel.Instance.PersonSource.Persons.Items.ToList();
         Dispatcher.UIThread.Post(() =>
         {
             SelectedPersons.Clear();

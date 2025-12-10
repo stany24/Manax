@@ -5,7 +5,6 @@ using Avalonia;
 using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData;
 using DynamicData.Binding;
-using ManaxClient.Models.Server.Sources;
 
 namespace ManaxClient.ViewModels.Pages.Chapter;
 
@@ -21,7 +20,7 @@ public partial class ChapterPageViewModel : PageViewModel
     {
         SortExpressionComparer<Models.Server.Data.Chapter> comparer =
             SortExpressionComparer<Models.Server.Data.Chapter>.Ascending(t => t.Number);
-        ChapterSource.Chapters
+        MainWindowViewModel.Instance.ChapterSource.Chapters
             .Connect()
             .Filter(c => c.SerieId == chapter.SerieId)
             .SortAndBind(out _chapters, comparer)

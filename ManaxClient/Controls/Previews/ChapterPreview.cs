@@ -1,5 +1,4 @@
 using System;
-using System.Windows.Input;
 using Avalonia;
 using Avalonia.Animation;
 using Avalonia.Controls;
@@ -9,7 +8,6 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
-using Avalonia.Threading;
 using CommunityToolkit.Mvvm.Messaging;
 using Jeek.Avalonia.Localization;
 using ManaxClient.Controls.Popups;
