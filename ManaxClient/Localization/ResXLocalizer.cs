@@ -11,13 +11,9 @@ public class ResXLocalizer : BaseLocalizer
     public override void Reload()
     {
         if (_languages.Count == 0) _languages.AddRange(_languagesKeys);
-
         ValidateLanguage();
-
         Resources.Culture = new CultureInfo(_language);
-
         _hasLoaded = true;
-
         UpdateDisplayLanguages();
     }
 

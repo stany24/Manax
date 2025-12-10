@@ -19,7 +19,7 @@ public class LocalizeFormatMultiConverter(string key) : IMultiValueConverter
             object?[] formatArgs = new object[LocalizeFormatExtension.NbParameters];
             if (values == null) return string.Format(CultureInfo.InvariantCulture, localizedText, formatArgs);
 
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < LocalizeFormatExtension.NbParameters; i++)
                 if (i < values.Count)
                     formatArgs[i] = values[i] ?? string.Empty;
                 else

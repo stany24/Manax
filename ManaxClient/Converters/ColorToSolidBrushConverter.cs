@@ -12,8 +12,8 @@ public class ColorToSolidBrushConverter : IValueConverter
         return value switch
         {
             null => new SolidColorBrush(Colors.Transparent),
-            Color color => new SolidColorBrush(color),
-            System.Drawing.Color color1 => new SolidColorBrush(Color.FromArgb(color1.A, color1.R, color1.G, color1.B)),
+            Color avaloniaColor => new SolidColorBrush(avaloniaColor),
+            System.Drawing.Color systemColor => new SolidColorBrush(Color.FromArgb(systemColor.A, systemColor.R, systemColor.G, systemColor.B)),
             _ => new SolidColorBrush(Colors.Transparent)
         };
     }

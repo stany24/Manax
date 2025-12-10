@@ -1,6 +1,5 @@
 using System.Reflection;
 using ManaxClient.Manager;
-using ManaxClient.ViewModels;
 using ManaxLibrary.DTO.User;
 
 namespace ManaxTests.Client;
