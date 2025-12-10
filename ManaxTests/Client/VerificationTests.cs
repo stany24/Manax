@@ -1,4 +1,5 @@
 using System.Reflection;
+using ManaxClient.Manager;
 using ManaxClient.ViewModels;
 using ManaxLibrary.DTO.User;
 
@@ -10,7 +11,7 @@ public class VerificationTests
     [TestMethod]
     public void VerifyAllPermissionProperties()
     {
-        Type type = typeof(MainWindowViewModel);
+        Type type = typeof(PermissionManager);
         List<PropertyInfo> propertyInfos = type.GetProperties().ToList();
         List<Permission> allPermissions = Enum.GetValues<Permission>().ToList();
         foreach (Permission permission in allPermissions)
