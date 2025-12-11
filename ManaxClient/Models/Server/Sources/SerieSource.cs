@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.Messaging;
 using DynamicData;
+using ManaxClient.Event;
 using ManaxClient.Models.Server.Data;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
@@ -24,7 +26,7 @@ public class SerieSource
     {
         NotificationReceiver.OnSerieCreated += OnSerieCreated;
         NotificationReceiver.OnSerieDeleted += OnSerieDeleted;
-        LoadSeries();
+        WeakReferenceMessenger.Default.Register<LoggedInMessage>(this, (_,_) => LoadSeries());
     }
 
     private void OnSerieCreated(SerieDto dto)

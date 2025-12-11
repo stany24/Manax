@@ -56,8 +56,8 @@ public class UploadController(
         chapter.UploaderId = currentUserId.Value;
         chapter.TempPath = tempPath;
 
-        _ = backgroundTaskService.AddTaskAsync(new FixNewChapterBackGroundTask(fixService, chapter));
-        _ = backgroundTaskService.AddTaskAsync(new FixSerieBackGroundTask(fixService, chapter.SerieId));
+        backgroundTaskService.AddTask(new FixNewChapterBackGroundTask(fixService, chapter));
+        backgroundTaskService.AddTask(new FixSerieBackGroundTask(fixService, chapter.SerieId));
 
         return Ok();
     }
@@ -84,8 +84,8 @@ public class UploadController(
         newChapter.UploaderId = (long)currentUserId;
         newChapter.TempPath = tempPath;
 
-        _ = backgroundTaskService.AddTaskAsync(new ReplaceChapterBackGroundTask(fixService, chapter.Id, newChapter));
-        _ = backgroundTaskService.AddTaskAsync(new FixSerieBackGroundTask(fixService, chapter.SerieId));
+        backgroundTaskService.AddTask(new ReplaceChapterBackGroundTask(fixService, chapter.Id, newChapter));
+        backgroundTaskService.AddTask(new FixSerieBackGroundTask(fixService, chapter.SerieId));
 
         return Ok();
     }
@@ -125,7 +125,7 @@ public class UploadController(
             MagickImage image = new(file.OpenReadStream());
             image.Quality = SettingsManager.DataDto.PosterQuality;
             await image.WriteAsync(path, format.GetMagickFormat());
-            _ = backgroundTaskService.AddTaskAsync(new FixPosterBackGroundTask(fixService, serie.Id));
+            backgroundTaskService.AddTask(new FixPosterBackGroundTask(fixService, serie.Id));
             notificationService.NotifyPosterUpdatedAsync(serie.Id);
         }
         catch (Exception)

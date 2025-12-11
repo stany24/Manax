@@ -140,7 +140,7 @@ public class SerieController(
         try
         {
             await context.SaveChangesAsync();
-            _ = backgroundTaskService.AddTaskAsync(new FixSerieBackGroundTask(fixService, serie.Id));
+            backgroundTaskService.AddTask(new FixSerieBackGroundTask(fixService, serie.Id));
             notificationService.NotifySerieUpdatedAsync(serie.ToDto());
         }
         catch (DbUpdateConcurrencyException)
@@ -180,7 +180,7 @@ public class SerieController(
             await context.SaveChangesAsync();
             Directory.CreateDirectory(folderPath);
             notificationService.NotifySerieCreatedAsync(serie.ToDto());
-            _ = backgroundTaskService.AddTaskAsync(new FixSerieBackGroundTask(fixService, serie.Id));
+            backgroundTaskService.AddTask(new FixSerieBackGroundTask(fixService, serie.Id));
             return serie.Id;
         }
         catch (Exception)

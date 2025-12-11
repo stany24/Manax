@@ -85,6 +85,6 @@ public class SettingsController(
         if (newDataDto.MaxPosterWidth != oldDataDto.MaxPosterWidth || newDataDto.MinPosterWidth != oldDataDto.MinPosterWidth ||
             newDataDto.PosterQuality != oldDataDto.PosterQuality)
             foreach (long serieId in context.Series.Select(serie => serie.Id))
-                _ = backgroundTaskService.AddTaskAsync(new FixPosterBackGroundTask(fixService, serieId));
+                backgroundTaskService.AddTask(new FixPosterBackGroundTask(fixService, serieId));
     }
 }

@@ -30,8 +30,7 @@ using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.Logging;
 using ManaxLibrary.Notifications;
-using IconManager = ManaxClient.Manager.IconManager;
-using Library = ManaxClient.Models.Server.Data.Library;
+using ManaxClient.Models.Server.Data;
 
 namespace ManaxClient.ViewModels;
 

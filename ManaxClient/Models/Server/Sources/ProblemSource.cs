@@ -19,7 +19,7 @@ public class ProblemSource
 
     public ProblemSource()
     {
-        LoadProblems();
+        WeakReferenceMessenger.Default.Register<LoggedInMessage>(this, (_,_) => LoadProblems());
     }
 
     private void LoadProblems()

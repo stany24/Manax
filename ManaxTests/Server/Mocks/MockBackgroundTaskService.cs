@@ -5,8 +5,7 @@ namespace ManaxTests.Server.Mocks;
 
 public class MockBackgroundTaskService : IBackgroundTaskService
 {
-    public Task AddTaskAsync(IBackGroundTask backGroundTask)
+    public void AddTask(IBackGroundTask backGroundTask)
     {
-        return Task.CompletedTask;
     }
 }

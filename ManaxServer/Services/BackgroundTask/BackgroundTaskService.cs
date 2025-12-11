@@ -13,25 +13,28 @@ public class BackgroundTaskService(INotificationService notificationService)
     private readonly SemaphoreSlim _taskSemaphore = new(1, 1);
     private readonly SortedSet<IBackGroundTask> _waitingTasks = new(TaskPriorityComparer.Instance);
 
-    public async Task AddTaskAsync(IBackGroundTask backGroundTask)
+    public void AddTask(IBackGroundTask backGroundTask)
     {
-        await _taskSemaphore.WaitAsync().ConfigureAwait(false);
-        try
+        Task.Run(async () =>
         {
-            bool alreadyWaiting = _waitingTasks.Contains(backGroundTask);
-            bool alreadyRunning = _runningTasks.Any(rt => rt.Task.Equals(backGroundTask));
-            if (alreadyWaiting || alreadyRunning) return;
+            await _taskSemaphore.WaitAsync().ConfigureAwait(false);
+            try
+            {
+                bool alreadyWaiting = _waitingTasks.Contains(backGroundTask);
+                bool alreadyRunning = _runningTasks.Any(rt => rt.Task.Equals(backGroundTask));
+                if (alreadyWaiting || alreadyRunning) return;
 
-            _waitingTasks.Add(backGroundTask);
-            Logger.LogInfo("Task added to waiting list " + backGroundTask.GetName());
-        }
-        finally
-        {
-            _taskSemaphore.Release();
-        }
+                _waitingTasks.Add(backGroundTask);
+                Logger.LogInfo("Task added to waiting list " + backGroundTask.GetName());
+            }
+            finally
+            {
+                _taskSemaphore.Release();
+            }
 
-        await TryStartTasksAsync().ConfigureAwait(false);
-        await PublishTasksAsync().ConfigureAwait(false);
+            await TryStartTasksAsync().ConfigureAwait(false);
+            await PublishTasksAsync().ConfigureAwait(false);
+        });
     }
 
     public void Dispose()

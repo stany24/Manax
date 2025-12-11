@@ -31,7 +31,10 @@ public partial class IconManager:ObservableObject
     public IconManager()
     {
         LoadIconsFromDisk();
-        WeakReferenceMessenger.Default.Register<ThemeMessage>(this, (_, data) => { ColorizeIcons(data.Value); });
+        WeakReferenceMessenger.Default.Register<ThemeMessage>(this, (_, data) =>
+        {
+            ColorizeIcons(data.Value);
+        });
     }
     
     private void LoadIconsFromDisk()

@@ -63,7 +63,10 @@ public static partial class ManaxApiUploadClient
                     posterError = posterResult.Error;
             }
 
-            foreach (string filePath in Directory.GetFiles(directory, "*.cbz"))
+            string[] chapters = Directory.GetFiles(directory, "*.cbz");
+            Array.Sort(chapters);
+
+            foreach (string filePath in chapters)
             {
                 NewChapterDto newChapterDto = new()
                 {
