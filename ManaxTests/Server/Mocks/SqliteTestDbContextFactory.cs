@@ -196,12 +196,6 @@ public static class SqliteTestDbContextFactory
                 ChapterId = 1,
                 Problem = IssueChapterAutomaticType.ImageTooSmall,
                 CreatedAt = DateTime.UtcNow
-            },
-            new()
-            {
-                ChapterId = 2,
-                Problem = IssueChapterAutomaticType.CouldNotOpen,
-                CreatedAt = DateTime.UtcNow
             }
         ];
 

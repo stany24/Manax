@@ -1,4 +1,5 @@
 using System.IO.Compression;
+using ManaxLibrary;
 using ManaxLibrary.DTO.Chapter;
 using ManaxLibrary.DTO.User;
 using ManaxServer.Attributes;
@@ -72,7 +73,7 @@ public class ChapterController(ManaxContext context, INotificationService notifi
         if (number < 0 || number >= archive.Entries.Count)
             return BadRequest();
         List<ZipArchiveEntry> pages = archive.Entries.ToList();
-        pages.Sort((a, b) => String.Compare(a.Name, b.Name, StringComparison.Ordinal));
+        pages.Sort((a, b) => new NaturalSortComparer().Compare(a.Name, b.Name));
         ZipArchiveEntry entry = pages[number];
         await using Stream stream = await entry.OpenAsync();
         using MemoryStream memoryStream = new();

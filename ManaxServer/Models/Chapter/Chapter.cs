@@ -40,4 +40,16 @@ public class Chapter
             LastModification = LastModification
         };
     }
+    
+    public static Chapter FromDto(NewChapter dto)
+    {
+        return new Chapter
+        {
+            SerieId = dto.SerieId,
+            UploaderId = dto.UploaderId,
+            Number = dto.Number,
+            Creation = DateTime.UtcNow,
+            LastModification = DateTime.UtcNow,
+        };
+    }
 }

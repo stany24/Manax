@@ -11,6 +11,12 @@ public static class ManaxApiClient
         BaseAddress = new Uri("http://127.0.0.1:5246/"),
         Timeout = TimeSpan.FromSeconds(5)
     };
+    
+    internal static HttpClient UploadClient = new()
+    {
+        BaseAddress = new Uri("http://127.0.0.1:5246/"),
+        Timeout = TimeSpan.FromSeconds(60)
+    };
 
     public static void SetHost(Uri host)
     {
@@ -20,11 +26,17 @@ public static class ManaxApiClient
             BaseAddress = host,
             Timeout = TimeSpan.FromSeconds(5)
         };
+        UploadClient = new HttpClient(handler)
+        {
+            BaseAddress = host,
+            Timeout = TimeSpan.FromSeconds(60)
+        };
     }
 
     public static void SetToken(string token)
     {
         Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        UploadClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
         if (Client.BaseAddress == null) return;
         _ = NotificationReceiver.InitializeAsync(Client.BaseAddress, token);
     }
@@ -32,6 +44,7 @@ public static class ManaxApiClient
     public static void ResetToken()
     {
         Client.DefaultRequestHeaders.Authorization = null;
+        UploadClient.DefaultRequestHeaders.Authorization = null;
     }
 
     internal static async Task<Optional<T>> ExecuteWithErrorHandlingAsync<T>(Func<Task<Optional<T>>> apiCall)

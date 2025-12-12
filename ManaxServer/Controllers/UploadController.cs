@@ -54,7 +54,6 @@ public class UploadController(
 
         NewChapter chapter = NewChapter.FromDto(chapterDto);
         chapter.UploaderId = currentUserId.Value;
-        chapter.TempPath = tempPath;
 
         backgroundTaskService.AddTask(new FixNewChapterBackGroundTask(fixService, chapter));
         backgroundTaskService.AddTask(new FixSerieBackGroundTask(fixService, chapter.SerieId));
@@ -82,7 +81,6 @@ public class UploadController(
 
         NewChapter newChapter = NewChapter.FromDto(chapterDto);
         newChapter.UploaderId = (long)currentUserId;
-        newChapter.TempPath = tempPath;
 
         backgroundTaskService.AddTask(new ReplaceChapterBackGroundTask(fixService, chapter.Id, newChapter));
         backgroundTaskService.AddTask(new FixSerieBackGroundTask(fixService, chapter.SerieId));

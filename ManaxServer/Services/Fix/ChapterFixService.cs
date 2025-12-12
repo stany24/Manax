@@ -36,14 +36,42 @@ public partial class FixService(
             return;
         }
 
-        bool success = FixChapterDeep(newChapter, chapter);
-        if (!success)
+        ZipArchive archive = new(new MemoryStream(newChapter.Data));
+        ZipArchiveEntry[] entries = archive.Entries.ToArray();
+        Array.Sort(entries, (a,b) => string.Compare(b.FullName, a.FullName, StringComparison.Ordinal));
+        MagickImage[] images = new MagickImage[archive.Entries.Count];
+        
+        for (int i = 0; i < entries.Length; i++)
         {
-            notificationService.NotifyChapterUploadFailedAsync(newChapter.UploaderId, serie.Title, newChapter.Number);
-            return;
+            try
+            {
+                MagickImage magickImage = new(entries[i].Open());
+                images[i] = magickImage;
+            }
+            catch (Exception)
+            {
+                notificationService.NotifyChapterUploadFailedAsync(newChapter.UploaderId, serie.Title, newChapter.Number);
+                return;
+            }
         }
 
-        chapter.PageNumber = ZipFile.OpenRead(chapter.Path()).Entries.Count;
+        FixWidthOfChapter(chapter.Id, images);
+        FixChapterFilesFormat(images);
+
+        File.Delete(chapter.Path());
+        using (FileStream fs = new(chapter.Path(), FileMode.Create, FileAccess.Write, FileShare.None))
+        using (ZipArchive chapterFile = new(fs, ZipArchiveMode.Create))
+        {
+            for (int i = 0; i < images.Length; i++)
+            {
+                ZipArchiveEntry zipArchiveEntry = chapterFile.CreateEntry(i + ".webp");
+                using Stream stream = zipArchiveEntry.Open();
+                byte[] data = images[i].ToByteArray();
+                stream.Write(data, 0, data.Length);
+            }
+        }
+
+        chapter.PageNumber = images.Length;
         serie.LastModification = DateTime.UtcNow;
         chapter.LastModification = DateTime.UtcNow;
         manaxContext.SaveChanges();
@@ -65,22 +93,41 @@ public partial class FixService(
             return;
         }
 
-        Chapter chapter = new()
+        ZipArchive archive = new(new MemoryStream(newChapter.Data));
+        Chapter chapter = Chapter.FromDto(newChapter);
+        chapter.PageNumber = archive.Entries.Count;
+        chapter.Serie = serie;
+        
+        ZipArchiveEntry[] entries = archive.Entries.ToArray();
+        Array.Sort(entries, (a,b) => string.Compare(a.FullName, b.FullName, StringComparison.Ordinal));
+        MagickImage[] images = new MagickImage[archive.Entries.Count];
+        
+        for (int i = 0; i < entries.Length; i++)
         {
-            SerieId = newChapter.SerieId,
-            Serie = serie,
-            UploaderId = newChapter.UploaderId,
-            Number = newChapter.Number,
-            Creation = DateTime.UtcNow,
-            LastModification = DateTime.UtcNow,
-            PageNumber = ZipFile.OpenRead(newChapter.TempPath).Entries.Count
-        };
+            try
+            {
+                MagickImage magickImage = new(entries[i].Open());
+                images[i] = magickImage;
+            }
+            catch (Exception)
+            {
+                notificationService.NotifyChapterUploadFailedAsync(newChapter.UploaderId, serie.Title, newChapter.Number);
+                return;
+            }
+        }
 
-        bool success = FixChapterDeep(newChapter, chapter);
-        if (!success)
+        FixWidthOfChapter(chapter.Id, images);
+        FixChapterFilesFormat(images);
+        
+        using (FileStream fs = new(chapter.Path(), FileMode.Create, FileAccess.Write, FileShare.None))
+        using (ZipArchive chapterFile = new(fs, ZipArchiveMode.Create))
         {
-            notificationService.NotifyChapterUploadFailedAsync(newChapter.UploaderId, serie.Title, newChapter.Number);
-            return;
+            for (int i = 0; i < images.Length; i++)
+            {
+                ZipArchiveEntry zipArchiveEntry = chapterFile.CreateEntry(i + ".webp");
+                using Stream stream = zipArchiveEntry.Open();
+                stream.Write(images[i].ToByteArray());
+            }
         }
 
         serie.LastModification = DateTime.UtcNow;
@@ -92,136 +139,28 @@ public partial class FixService(
     [GeneratedRegex("\\d{1,4}")]
     private partial Regex RegexNumber();
 
-    private bool FixChapterDeep(NewChapter newChapter, Chapter chapter)
+    private void FixWidthOfChapter(long id, MagickImage[] images)
     {
-        string extractedPath = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
-
-        try
-        {
-            ZipFile.ExtractToDirectory(newChapter.TempPath, extractedPath);
-            List<string> allExtractedFiles =
-                Directory.GetFiles(extractedPath, "*.*", SearchOption.AllDirectories).ToList();
-            foreach (string file in allExtractedFiles)
-                File.Move(file, Path.Combine(extractedPath, Path.GetFileName(file)));
-            foreach (string directory in Directory.GetDirectories(extractedPath)) Directory.Delete(directory);
+        foreach (MagickImage image in images){
+            uint min = SettingsManager.DataDto.MinChapterWidth;
+            uint max = SettingsManager.DataDto.MaxChapterWidth;
+            issueService.ManageChapterIssue(id, IssueChapterAutomaticType.ImageTooSmall, image.Width < min);
+            if (image.Width <= max) continue;
+            image.Resize(max, image.Height * max / image.Width);
         }
-        catch (Exception e)
-        {
-            if (Directory.Exists(extractedPath)) Directory.Delete(extractedPath, true);
-            Logger.LogError("Failed to extract chapter archive", e);
-            return false;
-        }
-
-        string[] files = Directory.GetFiles(extractedPath);
-        Array.Sort(files);
-        MagickImage[]? images = LoadImages(files);
-        if (images == null)
-        {
-            Directory.Delete(extractedPath, true);
-            Logger.LogFailure($"Failed to load images for chapter {newChapter.Number} in serie {newChapter.SerieId}");
-            return false;
-        }
-
-        bool modified = false;
-        modified = modified || FixWidthOfChapter(chapter.Id, images);
-        modified = modified || FixChapterFilesFormat(images);
-        modified = modified || FixPagesNaming(images);
-
-        if (File.Exists(chapter.Path())) File.Delete(chapter.Path());
-        if (modified)
-            ZipFile.CreateFromDirectory(extractedPath, chapter.Path());
-        else
-            File.Move(newChapter.TempPath, chapter.Path());
-
-        File.Delete(newChapter.TempPath);
-        Directory.Delete(extractedPath, true);
-
-        foreach (MagickImage image in images) image.Dispose();
-        return true;
     }
 
-    private static MagickImage[]? LoadImages(string[] files)
+    private static void FixChapterFilesFormat(MagickImage[] images)
     {
-        MagickImage[] images = new MagickImage[files.Length];
-        for (int i = 0; i < files.Length; i++)
-            try
-            {
-                images[i] = new MagickImage(files[i]);
-            }
-            catch
-            {
-                return null;
-            }
-
-        return images;
-    }
-
-    private static bool FixPagesNaming(MagickImage?[] images)
-    {
-        bool modified = false;
-        string? directory = null;
-        foreach (MagickImage? image in images)
-        {
-            if (image == null) continue;
-            directory = Path.GetDirectoryName(image.FileName);
-            if (directory != null) break;
-        }
-
-        for (int i = 0; i < images.Length; i++)
-        {
-            if (images[i] == null) continue;
-            string newPath = directory + Path.DirectorySeparatorChar + $"P{i + 1:000}" +
-                             Path.GetExtension(images[i]!.FileName);
-            if (newPath == images[i]!.FileName) continue;
-            File.Move(images[i]!.FileName!, newPath);
-            images[i]?.Dispose();
-            images[i] = new MagickImage(newPath);
-            modified = true;
-        }
-
-        return modified;
-    }
-
-    private bool FixWidthOfChapter(long id, MagickImage?[] images)
-    {
-        bool modified = false;
-        foreach (MagickImage? image in images)
-            try
-            {
-                if (image == null) continue;
-                issueService.RemoveChapterIssue(id, IssueChapterAutomaticType.CouldNotOpen);
-                uint min = SettingsManager.DataDto.MinChapterWidth;
-                uint max = SettingsManager.DataDto.MaxChapterWidth;
-                issueService.ManageChapterIssue(id, IssueChapterAutomaticType.ImageTooSmall, image.Width < min);
-                if (image.Width <= max) continue;
-                image.Resize(max, image.Height * max / image.Width);
-                image.Write(image.FileName!);
-                modified = true;
-            }
-            catch
-            {
-                issueService.CreateChapterIssue(id, IssueChapterAutomaticType.CouldNotOpen);
-            }
-
-        return modified;
-    }
-
-    private static bool FixChapterFilesFormat(MagickImage?[] images)
-    {
-        bool modified = false;
         MagickFormat format = SettingsManager.DataDto.ImageFormat.GetMagickFormat();
-        foreach (MagickImage? image in images)
+        foreach (MagickImage image in images)
         {
-            if (image == null) continue;
             if (image.Format == format) continue;
             image.Format = format;
             string newPath = Path.Combine(Path.GetDirectoryName(image.FileName) ?? string.Empty,
                 $"{Path.GetFileNameWithoutExtension(image.FileName)}.{format.ToString().ToLower(CultureInfo.InvariantCulture)}");
             File.Delete(image.FileName!);
             image.Write(newPath);
-            modified = true;
         }
-
-        return modified;
     }
 }

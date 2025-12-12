@@ -25,11 +25,13 @@ public class FixNewChapterBackGroundTask(IFixService fixService, NewChapter chap
     public override bool Equals(object? obj)
     {
         if (obj is not FixNewChapterBackGroundTask fixChapterTask) return false;
-        return fixChapterTask._chapter.TempPath == _chapter.TempPath;
+        return fixChapterTask._chapter.Number == _chapter.Number 
+               && fixChapterTask._chapter.SerieId == _chapter.SerieId 
+               && fixChapterTask._chapter.UploaderId == _chapter.UploaderId;
     }
 
     public override int GetHashCode()
     {
-        return _chapter.TempPath.GetHashCode();
+        return _chapter.Number.GetHashCode();
     }
 }
