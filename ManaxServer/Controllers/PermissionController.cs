@@ -1,3 +1,4 @@
+using ManaxLibrary;
 using ManaxLibrary.DTO.User;
 using ManaxServer.Attributes;
 using ManaxServer.Services.Notification;
@@ -27,7 +28,7 @@ public class PermissionController(IPermissionService permissionService, INotific
     public async Task<ActionResult<List<Permission>>> GetMyPermissions()
     {
         long? currentUserId = UserController.GetCurrentUserId(HttpContext);
-        if (currentUserId == null) return Unauthorized();
+        if (currentUserId == null) return Unauthorized(ErrorCode.TokenRequired);
         IEnumerable<Permission> permissions = await permissionService.GetUserPermissionsAsync((long)currentUserId);
         return Ok(permissions);
     }

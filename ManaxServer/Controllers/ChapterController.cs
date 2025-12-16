@@ -30,9 +30,7 @@ public class ChapterController(ManaxContext context, INotificationService notifi
     public async Task<ActionResult<ChapterDto>> GetChapter(long id)
     {
         Chapter? chapter = await context.Chapters.FindAsync(id);
-
-        if (chapter == null) return NotFound();
-
+        if (chapter == null) return NotFound(ErrorCode.ChapterDoesNotExist);
         return chapter.ToDto();
     }
 
@@ -43,7 +41,7 @@ public class ChapterController(ManaxContext context, INotificationService notifi
     public async Task<IActionResult> DeleteChapter(long id)
     {
         Chapter? chapter = await context.Chapters.FindAsync(id);
-        if (chapter == null) return NotFound();
+        if (chapter == null) return NotFound(ErrorCode.ChapterDoesNotExist);
 
         context.Chapters.Remove(chapter);
         await context.SaveChangesAsync();
@@ -63,15 +61,14 @@ public class ChapterController(ManaxContext context, INotificationService notifi
             .Include(c => c.Serie)
             .ThenInclude(s => s.SavePoint)
             .FirstOrDefault(c => c.Id == id);
-        if (chapter == null) return NotFound();
+        if (chapter == null) return NotFound(ErrorCode.ChapterDoesNotExist);
 
         string filePath = chapter.Path();
-        if (string.IsNullOrEmpty(filePath) || !System.IO.File.Exists(filePath) ||
-            !filePath.EndsWith(".cbz", StringComparison.OrdinalIgnoreCase))
-            return NotFound();
+        if (!System.IO.File.Exists(filePath))
+            return NotFound(ErrorCode.ChapterFileDoesNotExist);
         await using ZipArchive archive = await ZipFile.OpenReadAsync(filePath);
         if (number < 0 || number >= archive.Entries.Count)
-            return BadRequest();
+            return BadRequest(ErrorCode.PageDoesNotExist);
         List<ZipArchiveEntry> pages = archive.Entries.ToList();
         pages.Sort((a, b) => new NaturalSortComparer().Compare(a.Name, b.Name));
         ZipArchiveEntry entry = pages[number];
@@ -90,10 +87,10 @@ public class ChapterController(ManaxContext context, INotificationService notifi
     public async Task<IActionResult> GetChapterPages(long id)
     {
         Chapter? chapter = await context.Chapters.FindAsync(id);
-        if (chapter == null) return NotFound();
+        if (chapter == null) return NotFound(ErrorCode.ChapterDoesNotExist);
         string filePath = chapter.Path();
         if (string.IsNullOrEmpty(filePath) || !System.IO.File.Exists(filePath))
-            return NotFound();
+            return NotFound(ErrorCode.ChapterFileDoesNotExist);
         byte[] bytes = await System.IO.File.ReadAllBytesAsync(filePath);
         return File(bytes, "application/x-cbz");
     }

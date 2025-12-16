@@ -2,5 +2,5 @@ namespace ManaxLibrary.DTO.Issue.Automatic;
 
 public enum IssueChapterAutomaticType
 {
-    ImageTooSmall
+    ImageTooSmall = 0
 }

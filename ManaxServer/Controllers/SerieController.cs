@@ -1,5 +1,6 @@
 using System.Globalization;
 using System.Text.RegularExpressions;
+using ManaxLibrary;
 using ManaxLibrary.DTO.Read;
 using ManaxLibrary.DTO.Search;
 using ManaxLibrary.DTO.Serie;
@@ -46,7 +47,7 @@ public class SerieController(
             .Include(s => s.Persons)
             .FirstOrDefaultAsync(l => l.Id == id);
 
-        if (serie == null) return NotFound();
+        if (serie == null) return NotFound(ErrorCode.SerieDoesNotExist);
 
         return serie.ToDto();
     }
@@ -58,7 +59,7 @@ public class SerieController(
     public ActionResult<List<long>> GetSerieChapters(long id)
     {
         Serie? serie = context.Series.FirstOrDefault(s => s.Id == id);
-        if (serie == null) return NotFound();
+        if (serie == null) return NotFound(ErrorCode.SerieDoesNotExist);
         List<long> chaptersIds = context.Chapters
             .Where(c => c.SerieId == id)
             .OrderBy(c => c.Number)
@@ -73,7 +74,7 @@ public class SerieController(
     public ActionResult<List<ReadDto>> GetSerieReads(long id)
     {
         Serie? serie = context.Series.FirstOrDefault(s => s.Id == id);
-        if (serie == null) return NotFound();
+        if (serie == null) return NotFound(ErrorCode.SerieDoesNotExist);
         List<ReadDto> reads = context.Reads
             .Where(r => r.Chapter.SerieId == id)
             .Where(r => r.UserId == UserController.GetCurrentUserId(HttpContext))
@@ -93,11 +94,11 @@ public class SerieController(
         Serie? serie = context.Series
             .Include(s => s.SavePoint)
             .FirstOrDefault(s => s.Id == id);
-        if (serie == null) return NotFound();
+        if (serie == null) return NotFound(ErrorCode.SerieDoesNotExist);
         string posterName = Serie.PosterName + "." +
                             SettingsManager.DataDto.PosterFormat.ToString().ToLower(CultureInfo.InvariantCulture);
         string posterPath = Path.Combine(serie.SavePath, posterName);
-        if (!System.IO.File.Exists(posterPath)) return NotFound();
+        if (!System.IO.File.Exists(posterPath)) return NotFound(ErrorCode.SerieHasNoPoster);
         byte[] readAllBytes = await System.IO.File.ReadAllBytesAsync(posterPath);
         return File(readAllBytes, "image/webp", posterName);
     }
@@ -112,11 +113,11 @@ public class SerieController(
         Serie? serie = context.Series
             .Include(s => s.SavePoint)
             .FirstOrDefault(s => s.Id == id);
-        if (serie == null) return NotFound();
+        if (serie == null) return NotFound(ErrorCode.SerieDoesNotExist);
         string bannerName = Serie.BannerName + "." +
                             SettingsManager.DataDto.BannerFormat.ToString().ToLower(CultureInfo.InvariantCulture);
         string bannerPath = Path.Combine(serie.SavePath, bannerName);
-        if (!System.IO.File.Exists(bannerPath)) return NotFound();
+        if (!System.IO.File.Exists(bannerPath)) return NotFound(ErrorCode.SerieHasNoBanner);
         byte[] readAllBytes = await System.IO.File.ReadAllBytesAsync(bannerPath);
         return File(readAllBytes, "image/webp", bannerName);
     }
@@ -129,25 +130,14 @@ public class SerieController(
     public async Task<IActionResult> PutSerie(long id, SerieUpdateDto serieUpdate)
     {
         Serie? serie = await context.Series.FindAsync(id);
-
-        if (serie == null) return NotFound();
-
-        if (string.IsNullOrWhiteSpace(serieUpdate.Title))
-            return BadRequest();
-
+        if (serie == null) return NotFound(ErrorCode.SerieDoesNotExist);
         serie.Update(serieUpdate, context);
 
-        try
-        {
-            await context.SaveChangesAsync();
-            backgroundTaskService.AddTask(new FixSerieBackGroundTask(fixService, serie.Id));
-            notificationService.NotifySerieUpdatedAsync(serie.ToDto());
-        }
-        catch (DbUpdateConcurrencyException)
-        {
-            BadRequest("Failed to update serie with ID " + id);
-        }
-
+        try { await context.SaveChangesAsync(); }
+        catch { return BadRequest(ErrorCode.InvalidSerieData); }
+        
+        backgroundTaskService.AddTask(new FixSerieBackGroundTask(fixService, serie.Id));
+        notificationService.NotifySerieUpdatedAsync(serie.ToDto());
         return Ok();
     }
 
@@ -157,36 +147,30 @@ public class SerieController(
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<long>> PostSerie(SerieCreateDto serieCreate)
     {
-        if (string.IsNullOrWhiteSpace(serieCreate.Title))
-            return BadRequest();
-
         SavePoint? savePoint = SelectSavePoint();
-        if (savePoint == null) return BadRequest();
-        try
+        if (savePoint == null) return BadRequest(ErrorCode.NoSavePointAvailable);
+        
+        string folderPath = savePoint.Path + Path.DirectorySeparatorChar + serieCreate.Title;
+        if (System.IO.File.Exists(folderPath)) return BadRequest(ErrorCode.SerieAlreadyExists);
+        Serie serie = new()
         {
-            string folderPath = savePoint.Path + Path.DirectorySeparatorChar + serieCreate.Title;
-            if (System.IO.File.Exists(folderPath)) return BadRequest();
-            Serie serie = new()
-            {
-                SavePoint = savePoint,
-                Title = serieCreate.Title,
-                FolderName = serieCreate.Title,
-                Description = "",
-                Status = Status.Ongoing,
-                Creation = DateTime.UtcNow,
-                LastModification = DateTime.UtcNow
-            };
-            context.Series.Add(serie);
-            await context.SaveChangesAsync();
-            Directory.CreateDirectory(folderPath);
-            notificationService.NotifySerieCreatedAsync(serie.ToDto());
-            backgroundTaskService.AddTask(new FixSerieBackGroundTask(fixService, serie.Id));
-            return serie.Id;
-        }
-        catch (Exception)
-        {
-            return BadRequest();
-        }
+            SavePoint = savePoint,
+            Title = serieCreate.Title,
+            FolderName = serieCreate.Title,
+            Description = "",
+            Status = Status.Ongoing,
+            Creation = DateTime.UtcNow,
+            LastModification = DateTime.UtcNow
+        };
+        context.Series.Add(serie);
+        
+        try { await context.SaveChangesAsync(); }
+        catch { return BadRequest(ErrorCode.InvalidSerieData); }
+        
+        Directory.CreateDirectory(folderPath);
+        notificationService.NotifySerieCreatedAsync(serie.ToDto());
+        backgroundTaskService.AddTask(new FixSerieBackGroundTask(fixService, serie.Id));
+        return serie.Id;
     }
 
     private SavePoint? SelectSavePoint()
@@ -227,7 +211,7 @@ public class SerieController(
     public async Task<IActionResult> DeleteSerie(long id)
     {
         Serie? serie = await context.Series.FindAsync(id);
-        if (serie == null) return NotFound();
+        if (serie == null) return NotFound(ErrorCode.SerieDoesNotExist);
 
         context.Series.Remove(serie);
         await context.SaveChangesAsync();

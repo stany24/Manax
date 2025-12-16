@@ -1,3 +1,4 @@
+using ManaxLibrary;
 using ManaxLibrary.DTO.Feature;
 using ManaxLibrary.DTO.Issue.Automatic;
 using ManaxLibrary.DTO.Issue.Reported;
@@ -26,7 +27,7 @@ public class IssueController(
     public async Task<ActionResult<IEnumerable<IssueChapterAutomaticDto>>> GetAllAutomaticChapterIssues()
     {
         if (!featureService.IsFeatureEnabled(FeatureType.AutomaticIssues))
-            return BadRequest();
+            return BadRequest(ErrorCode.FeatureDisabled);
 
         return await context.AutomaticIssuesChapter
             .Select(i => i.ToDto())
@@ -39,7 +40,7 @@ public class IssueController(
     public async Task<ActionResult<IEnumerable<IssueSerieAutomaticDto>>> GetAllAutomaticSerieIssues()
     {
         if (!featureService.IsFeatureEnabled(FeatureType.AutomaticIssues))
-            return BadRequest();
+            return BadRequest(ErrorCode.FeatureDisabled);
 
         return await context.AutomaticIssuesSerie
             .Select(i => i.ToDto())
@@ -52,7 +53,7 @@ public class IssueController(
     public async Task<ActionResult<IEnumerable<IssueChapterReportedDto>>> GetAllReportedChapterIssues()
     {
         if (!featureService.IsFeatureEnabled(FeatureType.ReportedIssues))
-            return BadRequest();
+            return BadRequest(ErrorCode.FeatureDisabled);
 
         return await context.ReportedIssuesChapter
             .Select(i => i.ToDto())
@@ -65,7 +66,7 @@ public class IssueController(
     public async Task<ActionResult<IEnumerable<IssueSerieReportedDto>>> GetAllReportedSerieIssues()
     {
         if (!featureService.IsFeatureEnabled(FeatureType.ReportedIssues))
-            return BadRequest();
+            return BadRequest(ErrorCode.FeatureDisabled);
 
         return await context.ReportedIssuesSerie
             .Select(i => i.ToDto())
@@ -80,24 +81,18 @@ public class IssueController(
     public async Task<ActionResult> CreateChapterIssue(IssueChapterReportedCreateDto issueChapterReportedCreate)
     {
         if (!featureService.IsFeatureEnabled(FeatureType.ReportedIssues))
-            return BadRequest();
+            return BadRequest(ErrorCode.FeatureDisabled);
 
         long? currentUserId = UserController.GetCurrentUserId(HttpContext);
-        if (currentUserId == null) return Unauthorized();
-
-        bool issueExists = await context.ReportedIssuesChapter
-            .AnyAsync(i => i.UserId == currentUserId &&
-                           i.ChapterId == issueChapterReportedCreate.ChapterId &&
-                           i.ProblemId == issueChapterReportedCreate.ProblemId);
-
-        if (issueExists) return Conflict();
+        if (currentUserId == null) return Unauthorized(ErrorCode.TokenRequired);
 
         IssueChapterReported issue = IssueChapterReported.Create(issueChapterReportedCreate, (long)currentUserId);
         issue.UserId = (long)currentUserId;
         issue.CreatedAt = DateTime.UtcNow;
 
         context.ReportedIssuesChapter.Add(issue);
-        await context.SaveChangesAsync();
+        try { await context.SaveChangesAsync(); }
+        catch { return Conflict(ErrorCode.IssueAlreadyExists); }
         notificationService.NotifyChapterIssueCreatedAsync(issue.ToDto());
 
         return Created();
@@ -111,22 +106,16 @@ public class IssueController(
     public async Task<ActionResult> CreateSerieIssue(IssueSerieReportedCreateDto issueSerieReportedCreate)
     {
         if (!featureService.IsFeatureEnabled(FeatureType.ReportedIssues))
-            return BadRequest();
+            return BadRequest(ErrorCode.FeatureDisabled);
 
         long? currentUserId = UserController.GetCurrentUserId(HttpContext);
-        if (currentUserId == null) return Unauthorized();
-
-        bool issueExists = await context.ReportedIssuesSerie
-            .AnyAsync(i => i.UserId == currentUserId &&
-                           i.SerieId == issueSerieReportedCreate.SerieId &&
-                           i.ProblemId == issueSerieReportedCreate.ProblemId);
-
-        if (issueExists) return Conflict();
+        if (currentUserId == null) return Unauthorized(ErrorCode.TokenRequired);
 
         IssueSerieReported issue = IssueSerieReported.Create(issueSerieReportedCreate, (long)currentUserId);
 
         context.ReportedIssuesSerie.Add(issue);
-        await context.SaveChangesAsync();
+        try { await context.SaveChangesAsync(); }
+        catch { return Conflict(ErrorCode.IssueAlreadyExists); }
         notificationService.NotifySerieIssueCreatedAsync(issue.ToDto());
 
         return Created();
@@ -139,11 +128,11 @@ public class IssueController(
     public async Task<IActionResult> CloseChapterIssue(long id)
     {
         if (!featureService.IsFeatureEnabled(FeatureType.ReportedIssues))
-            return BadRequest();
+            return BadRequest(ErrorCode.FeatureDisabled);
 
         IssueChapterReported? issue = await context.ReportedIssuesChapter.FindAsync(id);
 
-        if (issue == null) return NotFound();
+        if (issue == null) return NotFound(ErrorCode.IssueDoesNotExist);
 
         context.ReportedIssuesChapter.Remove(issue);
         await context.SaveChangesAsync();
@@ -159,11 +148,11 @@ public class IssueController(
     public async Task<IActionResult> CloseSerieIssue(long id)
     {
         if (!featureService.IsFeatureEnabled(FeatureType.ReportedIssues))
-            return BadRequest();
+            return BadRequest(ErrorCode.FeatureDisabled);
 
         IssueSerieReported? issue = await context.ReportedIssuesSerie.FindAsync(id);
 
-        if (issue == null) return NotFound();
+        if (issue == null) return NotFound(ErrorCode.IssueDoesNotExist);
 
         context.ReportedIssuesSerie.Remove(issue);
         await context.SaveChangesAsync();

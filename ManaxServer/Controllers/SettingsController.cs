@@ -1,3 +1,4 @@
+using ManaxLibrary;
 using ManaxLibrary.DTO.Setting;
 using ManaxLibrary.DTO.User;
 using ManaxServer.Attributes;
@@ -37,7 +38,7 @@ public class SettingsController(
         lock (_lock)
         {
             SettingsDataDto oldDataDto = SettingsManager.DataDto;
-            if (dataDto.Validate() != null) return BadRequest();
+            if (dataDto.Validate() != null) return BadRequest(ErrorCode.InvalidSettings);
             SettingsManager.OverwriteSettings(dataDto);
             IServiceScope scope = serviceProvider.CreateScope();
             Task.Run(() => CheckModifications(dataDto, oldDataDto, scope));

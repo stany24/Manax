@@ -1,5 +1,6 @@
 using System.Globalization;
 using ImageMagick;
+using ManaxLibrary;
 using ManaxLibrary.DTO.Chapter;
 using ManaxLibrary.DTO.Setting;
 using ManaxLibrary.DTO.User;
@@ -30,27 +31,26 @@ public class UploadController(
     [RequirePermission(Permission.UploadChapter)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> UploadChapter(NewChapterDto chapterDto)
+    public IActionResult UploadChapter(NewChapterDto chapterDto)
     {
         Logger.LogInfo("Uploading chapter: " + chapterDto.Number + " to serie ID: " + chapterDto.SerieId);
         long? currentUserId = UserController.GetCurrentUserId(HttpContext);
         if (currentUserId == null)
-            return Unauthorized();
+            return Unauthorized(ErrorCode.TokenRequired);
 
         Serie? serie = context.Series
             .Include(s => s.SavePoint)
             .FirstOrDefault(s => s.Id == chapterDto.SerieId);
-        if (serie == null ||
-            context.Chapters.Any(s => s.SerieId == chapterDto.SerieId && s.Number == chapterDto.Number))
-            return BadRequest();
+        
+        if (serie == null)
+            return BadRequest(ErrorCode.SerieDoesNotExist);
+        if (context.Chapters.Any(s => s.SerieId == chapterDto.SerieId && s.Number == chapterDto.Number))
+            return BadRequest(ErrorCode.ChapterAlreadyExists);
 
         string filePath = Path.Combine(serie.SavePath, chapterDto.Number.ToString(CultureInfo.InvariantCulture),
             SettingsManager.DataDto.ArchiveFormat.ToString().ToLower(CultureInfo.InvariantCulture));
         if (Directory.Exists(filePath) || System.IO.File.Exists(filePath))
-            return BadRequest();
-
-        string tempPath = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
-        await System.IO.File.WriteAllBytesAsync(tempPath, chapterDto.Data);
+            return BadRequest(ErrorCode.ChapterFileAlreadyExists);
 
         NewChapter chapter = NewChapter.FromDto(chapterDto);
         chapter.UploaderId = currentUserId.Value;
@@ -65,19 +65,16 @@ public class UploadController(
     [RequirePermission(Permission.UploadChapter)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> ReplaceChapter(NewChapterDto chapterDto)
+    public IActionResult ReplaceChapter(NewChapterDto chapterDto)
     {
         long? currentUserId = UserController.GetCurrentUserId(HttpContext);
         if (currentUserId == null)
-            return Unauthorized();
+            return Unauthorized(ErrorCode.TokenRequired);
 
         Chapter? chapter =
             context.Chapters.FirstOrDefault(c => c.Number == chapterDto.Number && c.SerieId == chapterDto.SerieId);
         if (chapter == null)
-            return BadRequest();
-
-        string tempPath = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
-        await System.IO.File.WriteAllBytesAsync(tempPath, chapterDto.Data);
+            return BadRequest(ErrorCode.ChapterDoesNotExist);
 
         NewChapter newChapter = NewChapter.FromDto(chapterDto);
         newChapter.UploaderId = (long)currentUserId;
@@ -112,12 +109,12 @@ public class UploadController(
             .Include(s => s.SavePoint)
             .FirstOrDefault(s => s.Id == serieId);
         if (serie == null)
-            return BadRequest();
+            return BadRequest(ErrorCode.SerieDoesNotExist);
 
         ImageFormat format = SettingsManager.DataDto.PosterFormat;
         string path = Path.Combine(serie.SavePath,
             Serie.PosterName + "." + format.ToString().ToLower(CultureInfo.InvariantCulture));
-        if (System.IO.File.Exists(path) && !replace) return BadRequest();
+        if (System.IO.File.Exists(path) && !replace) return BadRequest(ErrorCode.PosterDoesNotExist);
         try
         {
             MagickImage image = new(file.OpenReadStream());
@@ -128,7 +125,7 @@ public class UploadController(
         }
         catch (Exception)
         {
-            return BadRequest();
+            return BadRequest(ErrorCode.InvalidChapterData);
         }
 
         return Ok();

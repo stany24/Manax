@@ -1,3 +1,4 @@
+using ManaxLibrary;
 using ManaxLibrary.DTO.Read;
 using ManaxLibrary.DTO.Stats;
 using ManaxLibrary.DTO.User;
@@ -20,7 +21,7 @@ public class StatsController(ManaxContext context) : ControllerBase
     public async Task<ActionResult<UserStats>> GetStats()
     {
         long? currentUserId = UserController.GetCurrentUserId(HttpContext);
-        if (currentUserId == null) return Unauthorized();
+        if (currentUserId == null) return Unauthorized(ErrorCode.TokenRequired);
 
         List<long> chaptersRead = context.Reads
             .Where(r => r.UserId == currentUserId.Value)

@@ -1,3 +1,4 @@
+using ManaxLibrary;
 using ManaxLibrary.DTO.Role;
 using ManaxLibrary.DTO.User;
 using ManaxServer.Attributes;
@@ -29,7 +30,7 @@ public class RoleController(ManaxContext context, INotificationService notificat
     public async Task<IActionResult> DeleteRole(long id)
     {
         Role? role = await context.Roles.FindAsync(id);
-        if (role == null) return NotFound();
+        if (role == null) return NotFound(ErrorCode.RoleDoesNotExist);
         context.Roles.Remove(role);
         await context.SaveChangesAsync();
         notificationService.NotifyRoleDeletedAsync(id);
@@ -55,7 +56,7 @@ public class RoleController(ManaxContext context, INotificationService notificat
     public async Task<IActionResult> UpdateRole(long id, RoleUpdateDto roleUpdateDto)
     {
         Role? role = await context.Roles.FindAsync(id);
-        if (role == null) return NotFound();
+        if (role == null) return NotFound(ErrorCode.RoleDoesNotExist);
         role.Update(roleUpdateDto);
         await context.SaveChangesAsync();
         notificationService.NotifyRoleUpdatedAsync(role.ToDto());

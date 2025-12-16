@@ -1,3 +1,4 @@
+using ManaxLibrary;
 using ManaxLibrary.DTO.Read;
 using ManaxLibrary.DTO.User;
 using ManaxServer.Attributes;
@@ -23,12 +24,13 @@ public class ReadController(ManaxContext context, INotificationService notificat
     public async Task<IActionResult> Read(ReadCreateDto readCreate)
     {
         long? userId = UserController.GetCurrentUserId(HttpContext);
-        if (userId == null) return Unauthorized();
+        if (userId == null) return Unauthorized(ErrorCode.TokenRequired);
 
         User? user = await context.Users.FindAsync(userId);
         Chapter? chapter = await context.Chapters.FindAsync(readCreate.ChapterId);
 
-        if (user == null || chapter == null) return NotFound();
+        if (user == null) return NotFound(ErrorCode.UserDoesNotExist);
+        if (chapter == null) return NotFound(ErrorCode.ChapterDoesNotExist);
 
         Read? existingRead = await context.Reads
             .FirstOrDefaultAsync(r => r.User.Id == userId && r.Chapter.Id == readCreate.ChapterId);
@@ -49,8 +51,7 @@ public class ReadController(ManaxContext context, INotificationService notificat
             await context.SaveChangesAsync();
             notification.NotifyReadCreated(read.ToDto());
         }
-
-
+        
         return Ok();
     }
 
@@ -62,7 +63,7 @@ public class ReadController(ManaxContext context, INotificationService notificat
     public async Task<IActionResult> Unread(long chapterId)
     {
         long? currentUserId = UserController.GetCurrentUserId(HttpContext);
-        if (currentUserId == null) return Unauthorized();
+        if (currentUserId == null) return Unauthorized(ErrorCode.TokenRequired);
 
         Read? existingRead = await context.Reads
             .FirstOrDefaultAsync(r => r.User.Id == currentUserId && r.Chapter.Id == chapterId);

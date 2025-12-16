@@ -1,3 +1,4 @@
+using ManaxLibrary;
 using ManaxLibrary.DTO.Library;
 using ManaxLibrary.DTO.User;
 using ManaxServer.Attributes;
@@ -33,7 +34,7 @@ public class LibraryController(ManaxContext context, INotificationService notifi
             .AsNoTracking()
             .FirstOrDefaultAsync(l => l.Id == id);
 
-        if (library == null) return NotFound();
+        if (library == null) return NotFound(ErrorCode.LibraryDoesNotExist);
 
         return library.ToDto();
     }
@@ -47,29 +48,11 @@ public class LibraryController(ManaxContext context, INotificationService notifi
     public async Task<IActionResult> PutLibrary(long id, LibraryUpdateDto libraryUpdate)
     {
         Library? library = await context.Libraries.FindAsync(id);
-
-        if (library == null) return NotFound();
-
-        if (string.IsNullOrWhiteSpace(libraryUpdate.Name))
-            return BadRequest();
-        if (await context.Libraries.AnyAsync(l => l.Name == libraryUpdate.Name && l.Id != id))
-            return Conflict();
-
+        if (library == null) return NotFound(ErrorCode.LibraryDoesNotExist);
         library.Update(libraryUpdate);
 
-        try
-        {
-            await context.SaveChangesAsync();
-        }
-        catch (DbUpdateConcurrencyException)
-        {
-            if (!context.Libraries.Any(e => e.Id == id)) return BadRequest();
-            throw;
-        }
-        catch (DbUpdateException ex) when (ex.InnerException?.Message.Contains("constraint") ?? false)
-        {
-            return Conflict();
-        }
+        try { await context.SaveChangesAsync(); }
+        catch { return Conflict(ErrorCode.InvalidLibraryData); }
 
         notificationService.NotifyLibraryUpdatedAsync(library.ToDto());
         return Ok();
@@ -81,24 +64,13 @@ public class LibraryController(ManaxContext context, INotificationService notifi
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<ActionResult<long>> PostLibrary(LibraryCreateDto libraryCreate)
     {
-        if (string.IsNullOrWhiteSpace(libraryCreate.Name))
-            return BadRequest();
-        if (await context.Libraries.AnyAsync(l => l.Name == libraryCreate.Name))
-            return Conflict();
-
         Library library = Library.Create(libraryCreate);
         library.Creation = DateTime.UtcNow;
 
         context.Libraries.Add(library);
 
-        try
-        {
-            await context.SaveChangesAsync();
-        }
-        catch (DbUpdateException ex) when (ex.InnerException?.Message.Contains("constraint") ?? false)
-        {
-            return Conflict();
-        }
+        try { await context.SaveChangesAsync(); }
+        catch { return Conflict(ErrorCode.InvalidLibraryData); }
 
         notificationService.NotifyLibraryCreatedAsync(library.ToDto());
         return library.Id;
@@ -111,7 +83,7 @@ public class LibraryController(ManaxContext context, INotificationService notifi
     public async Task<IActionResult> DeleteLibrary(long id)
     {
         Library? library = await context.Libraries.FindAsync(id);
-        if (library == null) return NotFound();
+        if (library == null) return NotFound(ErrorCode.LibraryDoesNotExist);
 
         List<Serie> seriesToUpdate = await context.Series
             .Where(s => s.Library != null && s.Library.Id == id)

@@ -1,6 +1,7 @@
 using System.Globalization;
 using System.Net;
 using System.Security.Claims;
+using ManaxLibrary;
 using ManaxServer.Services.Token;
 
 namespace ManaxServer.Middleware;
@@ -23,7 +24,7 @@ public class BearerAuthenticationMiddleware(RequestDelegate next, ITokenService 
         if (tokenService.IsTokenRevoked(token))
         {
             context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
-            await context.Response.WriteAsync("Token has been revoked");
+            await context.Response.WriteAsync(nameof(ErrorCode.TokenRevoked));
             return;
         }
 
@@ -31,7 +32,7 @@ public class BearerAuthenticationMiddleware(RequestDelegate next, ITokenService 
         if (tokenInfo == null)
         {
             context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
-            await context.Response.WriteAsync("Invalid or expired token");
+            await context.Response.WriteAsync(nameof(ErrorCode.InvalidToken));
             return;
         }
 

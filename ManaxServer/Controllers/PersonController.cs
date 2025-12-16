@@ -1,3 +1,4 @@
+using ManaxLibrary;
 using ManaxLibrary.DTO.Person;
 using ManaxLibrary.DTO.User;
 using ManaxServer.Attributes;
@@ -29,7 +30,7 @@ public class PersonController(ManaxContext context, INotificationService notific
     public async Task<IActionResult> DeletePerson(long id)
     {
         Person? person = await context.Persons.FindAsync(id);
-        if (person == null) return NotFound();
+        if (person == null) return NotFound(ErrorCode.PersonDoesNotExist);
         context.Persons.Remove(person);
         await context.SaveChangesAsync();
         notificationService.NotifyPersonDeletedAsync(id);
@@ -42,7 +43,7 @@ public class PersonController(ManaxContext context, INotificationService notific
     public async Task<ActionResult<PersonDto>> CreatePerson(PersonCreateDto personCreateDto)
     {
         Role? role = await context.Roles.FindAsync(personCreateDto.RoleId);
-        if (role == null) return BadRequest();
+        if (role == null) return BadRequest(ErrorCode.RoleDoesNotExist);
 
         Person person = Person.Create(personCreateDto, context);
         person.Role = role;
@@ -59,10 +60,10 @@ public class PersonController(ManaxContext context, INotificationService notific
     public async Task<IActionResult> UpdatePerson(long id, PersonUpdateDto personUpdateDto)
     {
         Person? person = await context.Persons.FindAsync(id);
-        if (person == null) return NotFound();
+        if (person == null) return NotFound(ErrorCode.PersonDoesNotExist);
 
         Role? role = await context.Roles.FindAsync(personUpdateDto.RoleId);
-        if (role == null) return BadRequest();
+        if (role == null) return BadRequest(ErrorCode.RoleDoesNotExist);
 
         person.Update(personUpdateDto, role);
         await context.SaveChangesAsync();

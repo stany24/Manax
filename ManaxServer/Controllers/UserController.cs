@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using ManaxLibrary;
 using ManaxLibrary.DTO.User;
 using ManaxLibrary.Logging;
 using ManaxServer.Attributes;
@@ -44,7 +45,7 @@ public class UserController(
     {
         User? user = await context.Users.FindAsync(id);
 
-        if (user == null) return NotFound();
+        if (user == null) return NotFound(ErrorCode.UserDoesNotExist);
 
         return user.ToDto();
     }
@@ -56,13 +57,13 @@ public class UserController(
     {
         long? userId = GetCurrentUserId(HttpContext);
         if (userId == null)
-            return Unauthorized();
+            return Unauthorized(ErrorCode.TokenRequired);
 
         User? user = await context.Users.FindAsync(userId);
-        if (user == null) return NotFound();
+        if (user == null) return NotFound(ErrorCode.UserDoesNotExist);
 
         if (!passwordValidationService.IsPasswordValid(userUpdate.Password))
-            return BadRequest();
+            return BadRequest(ErrorCode.InvalidPassword);
 
         user.PasswordHash = hashService.HashPassword(userUpdate.Password);
         user.Username = userUpdate.Username;
@@ -78,7 +79,7 @@ public class UserController(
     public async Task<ActionResult<string>> ResetPassword(long id)
     {
         User? user = await context.Users.FindAsync(id);
-        if (user == null) return NotFound();
+        if (user == null) return NotFound(ErrorCode.UserDoesNotExist);
 
         string newPassword = passwordValidationService.GenerateValidPassword();
 
@@ -94,7 +95,7 @@ public class UserController(
     public async Task<IActionResult> PostUser(UserCreateDto userCreate)
     {
         if (!passwordValidationService.IsPasswordValid(userCreate.Password))
-            return BadRequest();
+            return BadRequest(ErrorCode.InvalidPassword);
         User user = Models.User.User.Create(userCreate);
         user.Creation = DateTime.UtcNow;
         user.PasswordHash = hashService.HashPassword(userCreate.Password);
@@ -119,20 +120,20 @@ public class UserController(
     public async Task<IActionResult> DeleteUser(long id)
     {
         User? userToDelete = await context.Users.FindAsync(id);
-        if (userToDelete == null) return NotFound();
+        if (userToDelete == null) return NotFound(ErrorCode.UserDoesNotExist);
 
         long? selfId = GetCurrentUserId(HttpContext);
         if (selfId == null)
-            return Unauthorized();
+            return Unauthorized(ErrorCode.TokenRequired);
         if (selfId == id)
-            return Forbid();
+            return StatusCode(StatusCodes.Status403Forbidden, ErrorCode.CannotDeleteSelf);
 
         User? self = context.Users.FirstOrDefault(u => u.Id == selfId);
         if (self == null)
-            return Unauthorized();
+            return Unauthorized(ErrorCode.UserDoesNotExist);
 
         if (self.Role == UserRole.Admin && userToDelete.Role is UserRole.Admin or UserRole.Owner)
-            return Forbid();
+            return StatusCode(StatusCodes.Status403Forbidden, ErrorCode.InsufficientPermissions);
 
         StringValues auths = Request.Headers.Authorization;
         foreach (string? token in auths) tokenService.RevokeToken(token);
@@ -165,7 +166,7 @@ public class UserController(
             Logger.LogWarning("Failed login attempt for user " + loginDto.Username + " from " + loginAttempt.Origin);
             context.LoginAttempts.Add(loginAttempt);
             await context.SaveChangesAsync();
-            return Unauthorized();
+            return Unauthorized(ErrorCode.InvalidPassword);
         }
 
         user.LastLogin = DateTime.UtcNow;
@@ -189,7 +190,7 @@ public class UserController(
     public ActionResult<UserLoginResultDto> Claim(ClaimRequest request)
     {
         if (!passwordValidationService.IsPasswordValid(request.Password))
-            return BadRequest();
+            return BadRequest(ErrorCode.InvalidPassword);
         LoginAttempt loginAttempt = new()
         {
             Origin = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "Unknown",
@@ -205,7 +206,7 @@ public class UserController(
             {
                 context.LoginAttempts.Add(loginAttempt);
                 context.SaveChanges();
-                return Unauthorized();
+                return Unauthorized(ErrorCode.ServerAlreadyClaimed);
             }
 
             User user = new()
@@ -242,7 +243,7 @@ public class UserController(
         long? userId = GetCurrentUserId(HttpContext);
         User? user = await context.Users.FindAsync(userId);
         if (userId == null || user == null)
-            return Unauthorized();
+            return Unauthorized(ErrorCode.TokenRequired);
 
         StringValues auths = Request.Headers.Authorization;
         foreach (string? token in auths) tokenService.RevokeToken(token);

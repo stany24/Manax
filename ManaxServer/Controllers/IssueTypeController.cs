@@ -1,3 +1,4 @@
+using ManaxLibrary;
 using ManaxLibrary.DTO.Feature;
 using ManaxLibrary.DTO.Issue.Reported;
 using ManaxLibrary.DTO.User;
@@ -19,7 +20,7 @@ public class IssueTypeController(ManaxContext context, IFeatureService featureSe
     public async Task<ActionResult<IEnumerable<IssueChapterReportedTypeDto>>> GetAllReportedChapterIssuesTypes()
     {
         if (!featureService.IsFeatureEnabled(FeatureType.ReportedIssues))
-            return BadRequest();
+            return BadRequest(ErrorCode.FeatureDisabled);
 
         return await context.ReportedIssueChapterTypes.Select(i => i.ToDto())
             .ToListAsync();
@@ -31,7 +32,7 @@ public class IssueTypeController(ManaxContext context, IFeatureService featureSe
     public async Task<ActionResult<IEnumerable<IssueSerieReportedTypeDto>>> GetAllReportedSerieIssuesTypes()
     {
         if (!featureService.IsFeatureEnabled(FeatureType.ReportedIssues))
-            return BadRequest();
+            return BadRequest(ErrorCode.FeatureDisabled);
 
         return await context.ReportedIssueSerieTypes.Select(i => i.ToDto())
             .ToListAsync();

@@ -256,7 +256,7 @@
         <value>Error replacing poster</value>
     </data>
     <data name="SeriePage.ErrorUpdatingSerie" xml:space="preserve">
-        <value>Error updating series</value>
+        <value>Error updating serie</value>
     </data>
     <data name="SeriePage.RankSetCorrectly" xml:space="preserve">
         <value>Rank set correctly</value>

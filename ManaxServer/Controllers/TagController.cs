@@ -1,3 +1,4 @@
+using ManaxLibrary;
 using ManaxLibrary.DTO.Tag;
 using ManaxLibrary.DTO.User;
 using ManaxServer.Attributes;
@@ -42,15 +43,15 @@ public class TagController(ManaxContext context, INotificationService notificati
     public async Task<IActionResult> UpdateTag(TagUpdateDto tagUpdate)
     {
         Tag? tag = context.Tags.FirstOrDefault(r => r.Id == tagUpdate.Id);
-        if (tag == null) return NotFound();
+        if (tag == null) return NotFound(ErrorCode.TagDoesNotExist);
         tag.Update(tagUpdate);
         try
         {
             await context.SaveChangesAsync();
         }
-        catch (DbUpdateException e)
+        catch (DbUpdateException)
         {
-            return BadRequest(e.Message);
+            return BadRequest(ErrorCode.InvalidTagData);
         }
 
         notificationService.NotifyTagUpdatedAsync(tag.ToDto());
@@ -64,7 +65,7 @@ public class TagController(ManaxContext context, INotificationService notificati
     public async Task<IActionResult> DeleteTag(long id)
     {
         Tag? tag = await context.Tags.FindAsync(id);
-        if (tag == null) return NotFound();
+        if (tag == null) return NotFound(ErrorCode.TagDoesNotExist);
         context.Tags.Remove(tag);
         await context.SaveChangesAsync();
         notificationService.NotifyTagDeletedAsync(id);

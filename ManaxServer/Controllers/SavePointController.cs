@@ -1,3 +1,4 @@
+using ManaxLibrary;
 using ManaxLibrary.DTO.SavePoint;
 using ManaxLibrary.DTO.User;
 using ManaxLibrary.Logging;
@@ -19,21 +20,14 @@ public class SavePointController(ManaxContext context) : ControllerBase
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<ActionResult<long>> PostSavePoint(SavePointCreateDto savePointCreate)
     {
-        if (await context.SavePoints.AnyAsync(l => l.Path == savePointCreate.Path) ||
-            !Directory.Exists(savePointCreate.Path))
-            return Conflict();
+        if (!Directory.Exists(savePointCreate.Path))
+            return BadRequest(ErrorCode.SavePointPathDoesNotExist);
 
         SavePoint savePoint = SavePoint.Create(savePointCreate);
         context.SavePoints.Add(savePoint);
 
-        try
-        {
-            await context.SaveChangesAsync();
-        }
-        catch (DbUpdateException ex) when (ex.InnerException?.Message.Contains("constraint") ?? false)
-        {
-            return Conflict();
-        }
+        try { await context.SaveChangesAsync(); }
+        catch { return Conflict(ErrorCode.SavePointAlreadyExists); }
 
         Logger.LogInfo("Created new save point with ID " + savePoint.Id + " at: " + savePoint.Path);
         return savePoint.Id;
