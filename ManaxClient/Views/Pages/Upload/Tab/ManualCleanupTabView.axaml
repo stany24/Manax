@@ -185,6 +185,9 @@
                         Content="{localization:Localize ManualCleanupPage.EditSelected}"
                         Command="{Binding Edit}" />
                     <Button
+                        Content="{localization:Localize ManualCleanupPage.ClearSelected}"
+                        Command="{Binding Clear}" />
+                    <Button
                         Content="{localization:Localize ManualCleanupPage.Next}"
                         Command="{Binding Next}" />
                     <Button

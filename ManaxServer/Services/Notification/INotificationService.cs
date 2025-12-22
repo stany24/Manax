@@ -19,7 +19,6 @@ public interface INotificationService
     void NotifyUserUpdatedAsync(UserDto user);
     void NotifyUserDeletedAsync(long userId);
 
-
     void NotifySerieCreatedAsync(SerieDto serie);
     void NotifySerieUpdatedAsync(SerieDto serie);
     void NotifySerieDeletedAsync(long serieId);

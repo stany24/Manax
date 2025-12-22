@@ -64,6 +64,11 @@ public partial class ManualCleanupTabViewModel : TabViewModel
         Process.Start("gimp", args);
     }
 
+    public void Clear()
+    {
+        ImagesToEdit.Clear();
+    }
+
     public void Next()
     {
         NextRequested?.Invoke(this, new AutoUploadTabViewModel());

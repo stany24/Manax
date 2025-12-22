@@ -1050,4 +1050,7 @@
     <data name="Chapter.NotRead" xml:space="preserve">
         <value>Non lu</value>
     </data>
+    <data name="ManualCleanupPage.ClearSelected" xml:space="preserve">
+        <value>Supprimer les images sélectionnées</value>
+    </data>
 </root>

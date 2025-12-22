@@ -1050,4 +1050,7 @@
     <data name="Chapter.Read" xml:space="preserve">
         <value>Read</value>
     </data>
+    <data name="ManualCleanupPage.ClearSelected" xml:space="preserve">
+        <value>Clear selected images</value>
+    </data>
 </root>

@@ -2096,5 +2096,11 @@ namespace ManaxClient.Localization {
                 return ResourceManager.GetString("Chapter.Read", resourceCulture);
             }
         }
+        
+        public static string ManualCleanupPage_ClearSelected {
+            get {
+                return ResourceManager.GetString("ManualCleanupPage.ClearSelected", resourceCulture);
+            }
+        }
     }
 }
