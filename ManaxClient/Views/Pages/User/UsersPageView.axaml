@@ -7,6 +7,7 @@
     xmlns:viewModels="clr-namespace:ManaxClient.ViewModels"
     xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
     xmlns:localization1="clr-namespace:ManaxClient.Localization"
+    xmlns:controls="clr-namespace:ManaxClient.Controls"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Pages.User.UsersPageView"
     x:DataType="page:UsersPageViewModel"
@@ -23,16 +24,11 @@
                                    Param1={Binding $parent[UserControl].((page:UsersPageViewModel)DataContext).Users.Count}}" />
                 </StackPanel>
 
-                <Button Grid.Column="1"
-                        IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWriteUsers}"
-                        Classes="primary"
-                        Command="{Binding CreateUser}"
-                        VerticalAlignment="Center">
-                    <StackPanel Orientation="Horizontal" Spacing="8">
-                        <TextBlock Text="➕" />
-                        <TextBlock Text="{localization:Localize UserPage.Add}" />
-                    </StackPanel>
-                </Button>
+                <controls:IconButton Grid.Column="1"
+                                     IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWriteUsers}"
+                                     Command="{Binding CreateUser}"
+                                     Text="{localization:Localize UserPage.Add}"
+                                     Icon="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.AddIcon}"/>
             </Grid>
 
             <Border Classes="card" IsVisible="{Binding !Users.Count}">
@@ -46,15 +42,10 @@
                                HorizontalAlignment="Center" />
                     <TextBlock Text="{localization:Localize UserPage.NoUsers.Description}"
                                TextAlignment="Center" />
-                    <Button Classes="primary"
-                            IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWriteUsers}"
-                            Command="{Binding CreateUser}"
-                            HorizontalAlignment="Center">
-                        <StackPanel Orientation="Horizontal" Spacing="8">
-                            <TextBlock Text="➕" />
-                            <TextBlock Text="{localization:Localize UserPage.CreateFirst}" />
-                        </StackPanel>
-                    </Button>
+                    <controls:IconButton IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWriteUsers}"
+                                        Command="{Binding CreateUser}"
+                                        Text="{localization:Localize UserPage.CreateFirst}"
+                                        Icon="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.AddIcon}"/>
                 </StackPanel>
             </Border>
 

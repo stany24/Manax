@@ -8,6 +8,7 @@
     xmlns:viewModels="clr-namespace:ManaxClient.ViewModels"
     xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
     xmlns:localization1="clr-namespace:ManaxClient.Localization"
+    xmlns:controls="clr-namespace:ManaxClient.Controls"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Pages.Tag.TagPageView"
     x:DataType="tag:TagPageViewModel"
@@ -27,16 +28,11 @@
                                    Param1={Binding $parent[UserControl].((tag:TagPageViewModel)DataContext).Tags.Count}}" />
                 </StackPanel>
 
-                <Button Grid.Column="1"
-                        IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWriteTags}"
-                        Classes="primary"
-                        Command="{Binding CreateTag}"
-                        VerticalAlignment="Center">
-                    <StackPanel Orientation="Horizontal" Spacing="8">
-                        <TextBlock Text="➕" />
-                        <TextBlock Text="{localization:Localize TagPage.NewTag}" />
-                    </StackPanel>
-                </Button>
+                <controls:IconButton Grid.Column="1"
+                                     IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWriteTags}"
+                                     Command="{Binding CreateTag}"
+                                     Text="{localization:Localize TagPage.NewTag}"
+                                     Icon="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.AddIcon}"/>
             </Grid>
 
             <Border Classes="card" IsVisible="{Binding !Tags.Count}">
@@ -50,15 +46,10 @@
                                HorizontalAlignment="Center" />
                     <TextBlock Text="{localization:Localize TagPage.NoTags.Description}"
                                TextAlignment="Center" />
-                    <Button Classes="primary"
-                            IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWriteTags}"
-                            Command="{Binding CreateTag}"
-                            HorizontalAlignment="Center">
-                        <StackPanel Orientation="Horizontal" Spacing="8">
-                            <TextBlock Text="➕" />
-                            <TextBlock Text="{localization:Localize TagPage.CreateFirst}" />
-                        </StackPanel>
-                    </Button>
+                    <controls:IconButton IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWriteTags}"
+                                         Command="{Binding CreateTag}"
+                                         Text="{localization:Localize TagPage.CreateFirst}"
+                                         Icon="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.AddIcon}"/>
                 </StackPanel>
             </Border>
 

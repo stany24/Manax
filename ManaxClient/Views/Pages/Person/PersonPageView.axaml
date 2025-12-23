@@ -8,6 +8,7 @@
     xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
     xmlns:localization1="clr-namespace:ManaxClient.Localization"
     xmlns:data="clr-namespace:ManaxClient.Models.Server.Data"
+    xmlns:controls="clr-namespace:ManaxClient.Controls"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Pages.Person.PersonPageView"
     x:DataType="page:PersonPageViewModel">
@@ -23,16 +24,11 @@
                                    Param1={Binding $parent[UserControl].((page:PersonPageViewModel)DataContext).Persons.Count}}" />
                 </StackPanel>
 
-                <Button Grid.Column="1"
-                        IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWritePersons}"
-                        Classes="primary"
-                        Command="{Binding CreatePerson}"
-                        VerticalAlignment="Center">
-                    <StackPanel Orientation="Horizontal" Spacing="8">
-                        <TextBlock Text="➕" />
-                        <TextBlock Text="{localization:Localize PersonPage.NewPerson}" />
-                    </StackPanel>
-                </Button>
+                <controls:IconButton Grid.Column="1"
+                                     IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWritePersons}"
+                                     Command="{Binding CreatePerson}"
+                                     Text="{localization:Localize PersonPage.NewPerson}"
+                                     Icon="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.AddIcon}"/>
             </Grid>
 
             <Border Classes="card" IsVisible="{Binding !Persons.Count}">
@@ -46,15 +42,10 @@
                                HorizontalAlignment="Center" />
                     <TextBlock Text="{localization:Localize PersonPage.NoPersons.Description}"
                                TextAlignment="Center" />
-                    <Button Classes="primary"
-                            IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWritePersons}"
-                            Command="{Binding CreatePerson}"
-                            HorizontalAlignment="Center">
-                        <StackPanel Orientation="Horizontal" Spacing="8">
-                            <TextBlock Text="➕" />
-                            <TextBlock Text="{localization:Localize PersonPage.CreateFirstPerson}" />
-                        </StackPanel>
-                    </Button>
+                    <controls:IconButton IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWritePersons}"
+                                         Command="{Binding CreatePerson}"
+                                         Text="{localization:Localize PersonPage.CreateFirstPerson}"
+                                         Icon="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.AddIcon}"/>
                 </StackPanel>
             </Border>
 
@@ -141,16 +132,11 @@
                                    Param1={Binding $parent[UserControl].((page:PersonPageViewModel)DataContext).Roles.Count}}" />
                 </StackPanel>
 
-                <Button Grid.Column="1"
-                        IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWriteRoles}"
-                        Classes="primary"
-                        Command="{Binding CreateRole}"
-                        VerticalAlignment="Center">
-                    <StackPanel Orientation="Horizontal" Spacing="8">
-                        <TextBlock Text="➕" />
-                        <TextBlock Text="{localization:Localize RolePage.NewRole}" />
-                    </StackPanel>
-                </Button>
+                <controls:IconButton Grid.Column="1"
+                                     IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWriteRoles}"
+                                     Command="{Binding CreateRole}"
+                                     Text="{localization:Localize RolePage.NewRole}"
+                                     Icon="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.AddIcon}"/>
             </Grid>
 
             <Border Classes="card" IsVisible="{Binding !Roles.Count}">
@@ -164,15 +150,10 @@
                                HorizontalAlignment="Center" />
                     <TextBlock Text="{localization:Localize RolePage.NoRoles.Description}"
                                TextAlignment="Center" />
-                    <Button Classes="primary"
-                            IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWriteRoles}"
-                            Command="{Binding CreateRole}"
-                            HorizontalAlignment="Center">
-                        <StackPanel Orientation="Horizontal" Spacing="8">
-                            <TextBlock Text="➕" />
-                            <TextBlock Text="{localization:Localize RolePage.CreateFirstRole}" />
-                        </StackPanel>
-                    </Button>
+                    <controls:IconButton IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWriteRoles}"
+                                         Command="{Binding CreateRole}"
+                                         Text="{localization:Localize RolePage.CreateFirstRole}"
+                                         Icon="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.AddIcon}"/>
                 </StackPanel>
             </Border>
 

@@ -2,6 +2,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="ManaxClient.App"
              xmlns:local="using:ManaxClient"
+             xmlns:controls="using:ManaxClient.Controls"
              xmlns:themes="clr-namespace:Material.Styles.Themes;assembly=Material.Styles"
              xmlns:assists="clr-namespace:Material.Styles.Assists;assembly=Material.Styles"
              RequestedThemeVariant="Default">

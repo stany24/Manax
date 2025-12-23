@@ -8,6 +8,7 @@
     xmlns:viewModels="clr-namespace:ManaxClient.ViewModels"
     xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
     xmlns:localization1="clr-namespace:ManaxClient.Localization"
+    xmlns:controls="clr-namespace:ManaxClient.Controls"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Pages.Home.HomePageView"
     x:DataType="page:HomePageViewModel">
@@ -22,16 +23,11 @@
                                Text="{localization:Localize HomePage.Subtitle}" />
                 </StackPanel>
 
-                <Button Grid.Column="1"
+                <controls:IconButton Grid.Column="1"
                         IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWriteSeries}"
-                        Classes="primary"
                         Command="{Binding UploadSerie}"
-                        Padding="16,12">
-                    <StackPanel Orientation="Horizontal" Spacing="8">
-                        <TextBlock Text="📤" FontSize="16" />
-                        <TextBlock Text="{localization:Localize HomePage.AddSeries}" FontWeight="Medium" />
-                    </StackPanel>
-                </Button>
+                        Text="{localization:Localize HomePage.AddSeries}"
+                        Icon="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.AddIcon}"/>
             </Grid>
 
             <Border Classes="card" IsVisible="{Binding !Series.Count}">
@@ -48,16 +44,10 @@
                         TextAlignment="Center"
                         TextWrapping="Wrap"
                         MaxWidth="400" />
-                    <Button Classes="primary"
-                            IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWriteSeries}"
+                    <controls:IconButton IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWriteSeries}"
                             Command="{Binding UploadSerie}"
-                            HorizontalAlignment="Center"
-                            Margin="0,8,0,0">
-                        <StackPanel Orientation="Horizontal" Spacing="8">
-                            <TextBlock Text="➕" />
-                            <TextBlock Text="{localization:Localize HomePage.AddFirstSeries}" />
-                        </StackPanel>
-                    </Button>
+                            Text="{localization:Localize HomePage.AddFirstSeries}"
+                            Icon="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.AddIcon}"/>
                 </StackPanel>
             </Border>
 

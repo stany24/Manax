@@ -15,7 +15,7 @@ namespace ManaxClient.Manager;
 
 public partial class IconManager:ObservableObject
 {
-    private readonly ConcurrentDictionary<string, MagickImage> _cachedIconImages = new();
+    private readonly ConcurrentDictionary<string, byte[]> _cachedIconImages = new();
     [ObservableProperty] private Bitmap? _libraryIcon;
     [ObservableProperty] private Bitmap? _tagsIcon;
     [ObservableProperty] private Bitmap? _homeIcon;
@@ -27,6 +27,8 @@ public partial class IconManager:ObservableObject
     [ObservableProperty] private Bitmap? _logoutIcon;
     [ObservableProperty] private Bitmap? _ranksIcon;
     [ObservableProperty] private Bitmap? _issuesIcon;
+    [ObservableProperty] private Bitmap? _folderIcon;
+    [ObservableProperty] private Bitmap? _addIcon;
     
     public IconManager()
     {
@@ -44,9 +46,10 @@ public partial class IconManager:ObservableObject
             if (!propertyInfo.Name.EndsWith("Icon")) return;
             
             string iconName = propertyInfo.Name.Replace("Icon", "").ToLower();
-            MagickImage originalIcon = new(AssetLoader.Open(new Uri(
+            using MagickImage originalIcon = new(AssetLoader.Open(new Uri(
                 $"avares://ManaxClient/Assets/Icons/{iconName}.webp")));
-            _cachedIconImages.TryAdd(iconName, originalIcon);
+            byte[] imageBytes = originalIcon.ToByteArray(MagickFormat.Png);
+            _cachedIconImages.TryAdd(iconName, imageBytes);
         });
     }
     
@@ -59,7 +62,7 @@ public partial class IconManager:ObservableObject
             if (!propertyInfo.Name.EndsWith("Icon")) return;
             
             string iconName = propertyInfo.Name.Replace("Icon", "").ToLower();
-            MagickImage iconCopy = (MagickImage)_cachedIconImages[iconName].Clone();
+            using MagickImage iconCopy = new(_cachedIconImages[iconName]);
             Bitmap updatedIcon = UpdateIconColor(iconCopy, iconColor);
             propertyInfo.SetValue(this, updatedIcon);
         });

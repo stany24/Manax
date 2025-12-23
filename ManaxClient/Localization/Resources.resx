@@ -91,7 +91,7 @@
         <value>Start by adding your first series to discover all the features of Manax.</value>
     </data>
     <data name="HomePage.AddFirstSeries" xml:space="preserve">
-        <value>Add my first series</value>
+        <value>Add first serie</value>
     </data>
     <data name="HomePage.RecentSeries" xml:space="preserve">
         <value>Recent series</value>
