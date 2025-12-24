@@ -15,11 +15,13 @@ public partial class SettingsAppViewModel : PageViewModel
 {
     private readonly ReadOnlyObservableCollection<Language> _languages;
     [ObservableProperty] private Language? _selectedLanguage;
+    private bool _isDarkMode;
+    private HsvColor _themeColor;
 
     public SettingsAppViewModel()
     {
-        IsDarkMode = ThemeSettings.Current.IsDark;
-        ThemeColor = ThemeSettings.Current.AccentColor.ToHsv();
+        _isDarkMode = ThemeSettings.Current.IsDark;
+        _themeColor = ThemeSettings.Current.AccentColor.ToHsv();
 
         LanguageSource.Languages
             .Connect()
@@ -35,19 +37,19 @@ public partial class SettingsAppViewModel : PageViewModel
 
     public bool IsDarkMode
     {
-        get;
+        get => _isDarkMode;
         set
         {
-            if (SetProperty(ref field, value)) UpdateTheme();
+            if (SetProperty(ref _isDarkMode, value)) UpdateTheme();
         }
     }
     
     public HsvColor ThemeColor
     {
-        get;
+        get => _themeColor;
         set
         {
-            if (SetProperty(ref field, value)) UpdateTheme();
+            if (SetProperty(ref _themeColor, value)) UpdateTheme();
         }
     }
 
