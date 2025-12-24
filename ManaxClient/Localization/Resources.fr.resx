@@ -187,7 +187,7 @@
         <value>Gestion des Rangs</value>
     </data>
     <data name="RankPage.RanksCount" xml:space="preserve">
-        <value>🏆 {0} rang(s) configuré(s)</value>
+        <value>{0} rang(s) configuré(s)</value>
     </data>
     <data name="RankPage.NewRank" xml:space="preserve">
         <value>Nouveau rang</value>
@@ -211,7 +211,7 @@
         <value>Gestion des Personnes</value>
     </data>
     <data name="PersonPage.PersonsCount" xml:space="preserve">
-        <value>👤 {0} personne(s) configurée(s)</value>
+        <value>{0} personne(s) configurée(s)</value>
     </data>
     <data name="PersonPage.NewPerson" xml:space="preserve">
         <value>Nouvelle personne</value>
@@ -544,7 +544,7 @@
         <value>Gestion des utilisateurs</value>
     </data>
     <data name="UserPage.Count" xml:space="preserve">
-        <value>👥 {0} utilisateur(s) enregistré(s)</value>
+        <value>{0} utilisateur(s) enregistré(s)</value>
     </data>
     <data name="UserPage.Add" xml:space="preserve">
         <value>Ajouter</value>

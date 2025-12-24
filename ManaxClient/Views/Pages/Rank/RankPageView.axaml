@@ -8,6 +8,7 @@
     xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
     xmlns:localization1="clr-namespace:ManaxClient.Localization"
     xmlns:data="clr-namespace:ManaxClient.Models.Server.Data"
+    xmlns:controls="clr-namespace:ManaxClient.Controls"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Pages.Rank.RankPageView"
     x:DataType="page:RankPageViewModel">
@@ -15,46 +16,50 @@
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel Orientation="Vertical" Spacing="24">
 
-            <Grid ColumnDefinitions="*,Auto">
-                <StackPanel Grid.Column="0" Orientation="Vertical">
-                    <TextBlock Classes="title" Text="{localization:Localize RankPage.Title}" />
-                    <TextBlock
-                        Text="{localization1:LocalizeFormat RankPage.RanksCount,
+            <Grid ColumnDefinitions="*,Auto"
+                  RowDefinitions="Auto,Auto">
+                <TextBlock Grid.Row="0"
+                           Grid.Column="0"
+                           Classes="title" 
+                           Text="{localization:Localize RankPage.Title}" />
+                <StackPanel Grid.Row="1"
+                            Grid.Column="0"
+                            Orientation="Horizontal">
+                    <Image Classes="icon"
+                           Source="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.RanksIcon}"/>
+                    <TextBlock VerticalAlignment="Center"
+                               Text="{localization1:LocalizeFormat RankPage.RanksCount,
                                    Param1={Binding $parent[UserControl].((page:RankPageViewModel)DataContext).Ranks.Count}}" />
                 </StackPanel>
 
-                <Button Grid.Column="1"
-                        IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWriteRanks}"
-                        Classes="primary"
-                        Command="{Binding CreateRank}"
-                        VerticalAlignment="Center">
-                    <StackPanel Orientation="Horizontal" Spacing="8">
-                        <TextBlock Text="➕" />
-                        <TextBlock Text="{localization:Localize RankPage.NewRank}" />
-                    </StackPanel>
-                </Button>
+                <controls:IconButton Grid.Column="1"
+                                     Grid.Row="0"
+                                     IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWriteRanks}"
+                                     Classes="primary"
+                                     Command="{Binding CreateRank}"
+                                     VerticalAlignment="Center"
+                                     Text="{localization:Localize RankPage.NewRank}"
+                                     Icon="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.AddIcon}"/>
             </Grid>
 
             <Border Classes="card" IsVisible="{Binding !Ranks.Count}">
                 <StackPanel Orientation="Vertical"
                             Spacing="16"
                             HorizontalAlignment="Center">
-                    <TextBlock Text="🏆" FontSize="48" HorizontalAlignment="Center" />
+                    <Image Classes="icon"
+                           Source="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.RanksIcon}"/>
                     <TextBlock Text="{localization:Localize RankPage.NoRanks.Title}"
                                FontSize="18"
                                FontWeight="Medium"
                                HorizontalAlignment="Center" />
                     <TextBlock Text="{localization:Localize RankPage.NoRanks.Description}"
                                TextAlignment="Center" />
-                    <Button Classes="primary"
+                    <controls:IconButton Classes="primary"
                             IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWriteRanks}"
                             Command="{Binding CreateRank}"
-                            HorizontalAlignment="Center">
-                        <StackPanel Orientation="Horizontal" Spacing="8">
-                            <TextBlock Text="➕" />
-                            <TextBlock Text="{localization:Localize RankPage.CreateFirstRank}" />
-                        </StackPanel>
-                    </Button>
+                            HorizontalAlignment="Center"
+                            Text="{localization:Localize RankPage.CreateFirstRank}"
+                            Icon="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.AddIcon}"/>
                 </StackPanel>
             </Border>
 
@@ -75,10 +80,8 @@
                                                 CornerRadius="20"
                                                 Width="40"
                                                 Height="40">
-                                            <TextBlock Text="🏆"
-                                                       FontSize="16"
-                                                       HorizontalAlignment="Center"
-                                                       VerticalAlignment="Center" />
+                                            <Image Classes="icon"
+                                                   Source="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.RanksIcon}"/>
                                         </Border>
 
                                         <StackPanel Grid.Column="1" Orientation="Vertical" VerticalAlignment="Center">

@@ -39,8 +39,17 @@
         </Style>
         
         <Style Selector="Image.icon">
+            <Setter Property="HorizontalAlignment" Value="Center"></Setter>
+            <Setter Property="VerticalAlignment" Value="Center"></Setter>
             <Setter Property="Width" Value="24" />
             <Setter Property="Height" Value="24" />
+        </Style>
+        
+        <Style Selector="Image.bigIcon">
+            <Setter Property="HorizontalAlignment" Value="Center"></Setter>
+            <Setter Property="VerticalAlignment" Value="Center"></Setter>
+            <Setter Property="Width" Value="48" />
+            <Setter Property="Height" Value="48" />
         </Style>
 
         <Style Selector="Button.primary">

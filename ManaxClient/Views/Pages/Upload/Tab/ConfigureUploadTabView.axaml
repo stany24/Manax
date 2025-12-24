@@ -137,11 +137,9 @@
                             Padding="12"
                             BorderThickness="1">
                         <Grid ColumnDefinitions="Auto,*">
-                            <TextBlock Grid.Column="0"
-                                       Text="📂"
-                                       FontSize="18"
-                                       VerticalAlignment="Center"
-                                       Margin="0,0,8,0" />
+                            <Image Grid.Column="0"
+                                   Classes="icon"
+                                   Source="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.FolderIcon}"/>
                             <TextBlock Grid.Column="1"
                                        Text="{Binding ProcessingFolder}"
                                        TextWrapping="Wrap"

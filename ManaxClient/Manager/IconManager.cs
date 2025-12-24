@@ -20,6 +20,7 @@ public partial class IconManager:ObservableObject
     [ObservableProperty] private Bitmap? _tagsIcon;
     [ObservableProperty] private Bitmap? _homeIcon;
     [ObservableProperty] private Bitmap? _usersIcon;
+    [ObservableProperty] private Bitmap? _userIcon;
     [ObservableProperty] private Bitmap? _settingsIcon;
     [ObservableProperty] private Bitmap? _uploadIcon;
     [ObservableProperty] private Bitmap? _featuresIcon;
@@ -70,7 +71,7 @@ public partial class IconManager:ObservableObject
 
     private static Bitmap UpdateIconColor(MagickImage image,MagickColor iconColor)
     {
-        image.Colorize(iconColor, new Percentage(100));
+        image.Colorize(iconColor, new Percentage(80));
         using MemoryStream ms = new();
         image.Write(ms, MagickFormat.Png);
         ms.Seek(0, SeekOrigin.Begin);

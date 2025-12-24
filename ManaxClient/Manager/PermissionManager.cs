@@ -130,6 +130,10 @@ public class PermissionManager:ObservableObject
         foreach (PropertyInfo propertyInfo in propertyInfos)
             if (propertyInfo.PropertyType == typeof(bool) &&
                 propertyInfo.Name.StartsWith("Can", StringComparison.InvariantCulture))
+            {
                 OnPropertyChanged(propertyInfo.Name);
+                bool value = propertyInfo.GetValue(this) as bool? ?? false;
+                WeakReferenceMessenger.Default.Send(new PermissionChangedMessage(new KeyValuePair<string, bool>(propertyInfo.Name,value)));
+            }
     }
 }

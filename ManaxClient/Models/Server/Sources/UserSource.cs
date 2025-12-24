@@ -19,20 +19,26 @@ public class UserSource
 {
     public readonly SourceCache<User, long> Users = new(x => x.Id);
     private readonly Lock _usersLock = new();
+    private bool _loaded = false;
 
     public UserSource()
     {
         NotificationReceiver.OnUserCreated += OnUserCreated;
         NotificationReceiver.OnUserDeleted += OnUserDeleted;
-        WeakReferenceMessenger.Default.Register<LoggedInMessage>(this, (_, _) =>
+        WeakReferenceMessenger.Default.Register<PermissionChangedMessage>(this, (_, _) =>
         {
-            if (MainWindowViewModel.Instance.PermissionManager.CanReadUsers)
-                LoadUsers();
+            if (!MainWindowViewModel.Instance.PermissionManager.CanReadUsers)
+            {
+                lock (_usersLock) { Users.Clear(); }
+                return;
+            }
+            if(!_loaded) LoadUsers();
         });
     }
 
     private void LoadUsers()
     {
+        _loaded = true;
         Task.Run(async void () =>
         {
             try

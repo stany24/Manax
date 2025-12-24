@@ -16,15 +16,24 @@
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel Orientation="Vertical" Spacing="24">
 
-            <Grid ColumnDefinitions="*,Auto">
-                <StackPanel Grid.Column="0" Orientation="Vertical">
-                    <TextBlock Classes="title" Text="{localization:Localize PersonPage.Title}" />
-                    <TextBlock
-                        Text="{localization1:LocalizeFormat PersonPage.PersonsCount,
-                                   Param1={Binding $parent[UserControl].((page:PersonPageViewModel)DataContext).Persons.Count}}" />
+            <Grid ColumnDefinitions="*,Auto"
+                  RowDefinitions="Auto,Auto">
+                <TextBlock Grid.Row="0"
+                           Grid.Column="0"
+                           Classes="title"
+                           Text="{localization:Localize PersonPage.Title}" />
+                <StackPanel Grid.Row="1" 
+                            Grid.Column="0" 
+                            Orientation="Horizontal">
+                    <Image Classes="icon"
+                           Source="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.UsersIcon}"/>
+                    <TextBlock VerticalAlignment="Center"
+                               Text="{localization1:LocalizeFormat PersonPage.PersonsCount,
+                               Param1={Binding $parent[UserControl].((page:PersonPageViewModel)DataContext).Persons.Count}}" />
                 </StackPanel>
 
                 <controls:IconButton Grid.Column="1"
+                                     Grid.Row="0"
                                      IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWritePersons}"
                                      Command="{Binding CreatePerson}"
                                      Text="{localization:Localize PersonPage.NewPerson}"
@@ -35,7 +44,8 @@
                 <StackPanel Orientation="Vertical"
                             Spacing="16"
                             HorizontalAlignment="Center">
-                    <TextBlock Text="👤" FontSize="48" HorizontalAlignment="Center" />
+                    <Image Classes="icon"
+                           Source="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.UsersIcon}"/>
                     <TextBlock Text="{localization:Localize PersonPage.NoPersons.Title}"
                                FontSize="18"
                                FontWeight="Medium"
@@ -66,10 +76,8 @@
                                                 CornerRadius="20"
                                                 Width="40"
                                                 Height="40">
-                                            <TextBlock Text="👤"
-                                                       FontSize="16"
-                                                       HorizontalAlignment="Center"
-                                                       VerticalAlignment="Center" />
+                                            <Image Classes="icon"
+                                                   Source="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.UserIcon}"/>
                                         </Border>
 
                                         <StackPanel Grid.Column="1" Orientation="Vertical" VerticalAlignment="Center">
