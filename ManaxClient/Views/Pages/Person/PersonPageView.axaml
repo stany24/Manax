@@ -110,15 +110,11 @@
                                                              CommandParameter="{Binding .}"
                                                              Icon="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.EditIcon}"/>
 
-                                        <Button Grid.Column="4"
-                                                IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanDeletePersons}"
-                                                Classes="danger"
-                                                Command="{Binding $parent[UserControl].((page:PersonPageViewModel)DataContext).DeletePerson}"
-                                                CommandParameter="{Binding .}"
-                                                Padding="8"
-                                                VerticalAlignment="Center">
-                                            <TextBlock Text="🗑️" />
-                                        </Button>
+                                        <controls:IconButton Grid.Column="4"
+                                                             IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanDeletePersons}"
+                                                             Command="{Binding $parent[UserControl].((page:PersonPageViewModel)DataContext).DeletePerson}"
+                                                             CommandParameter="{Binding .}"
+                                                             Icon="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.TrashIcon}"/>
                                     </Grid>
                                 </Border>
                             </DataTemplate>
@@ -196,15 +192,11 @@
                                                              CommandParameter="{Binding .}"
                                                              Icon="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.EditIcon}"/>
 
-                                        <Button Grid.Column="3"
-                                                IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanDeleteRoles}"
-                                                Classes="danger"
-                                                Command="{Binding $parent[UserControl].((page:PersonPageViewModel)DataContext).DeleteRole}"
-                                                CommandParameter="{Binding .}"
-                                                Padding="8"
-                                                VerticalAlignment="Center">
-                                            <TextBlock Text="🗑️" />
-                                        </Button>
+                                        <controls:IconButton Grid.Column="3"
+                                                             IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanDeleteRoles}"
+                                                             Command="{Binding $parent[UserControl].((page:PersonPageViewModel)DataContext).DeleteRole}"
+                                                             CommandParameter="{Binding .}"
+                                                             Icon="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.TrashIcon}"/>
                                     </Grid>
                                 </Border>
                             </DataTemplate>

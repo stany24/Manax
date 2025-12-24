@@ -88,15 +88,11 @@
                                                              CommandParameter="{Binding .}"
                                                              Icon="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.EditIcon}"/>
 
-                                        <Button Grid.Column="3"
-                                                IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanDeleteTags}"
-                                                Classes="danger"
-                                                Command="{Binding $parent[UserControl].((tag:TagPageViewModel)DataContext).DeleteTag}"
-                                                CommandParameter="{Binding .}"
-                                                Padding="8"
-                                                VerticalAlignment="Center">
-                                            <TextBlock Text="🗑️" />
-                                        </Button>
+                                        <controls:IconButton Grid.Column="3"
+                                                             IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanDeleteTags}"
+                                                             Command="{Binding $parent[UserControl].((tag:TagPageViewModel)DataContext).DeleteTag}"
+                                                             CommandParameter="{Binding .}"
+                                                             Icon="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.TrashIcon}"/>
                                     </Grid>
                                 </Border>
                             </DataTemplate>

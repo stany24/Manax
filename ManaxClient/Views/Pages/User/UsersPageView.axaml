@@ -110,15 +110,11 @@
                                         <controls:IconButton Grid.Column="4"
                                                 Icon="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.EditIcon}"/>
 
-                                        <Button Grid.Column="5"
-                                                IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanDeleteUsers}"
-                                                Classes="danger"
-                                                Command="{Binding $parent[UserControl].((page:UsersPageViewModel)DataContext).DeleteUser}"
-                                                CommandParameter="{Binding .}"
-                                                Padding="8"
-                                                VerticalAlignment="Center">
-                                            <TextBlock Text="🗑️" />
-                                        </Button>
+                                        <controls:IconButton Grid.Column="5"
+                                                             IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanDeleteUsers}"
+                                                             Command="{Binding $parent[UserControl].((page:UsersPageViewModel)DataContext).DeleteUser}"
+                                                             CommandParameter="{Binding .}"
+                                                             Icon="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.TrashIcon}"/>
                                     </Grid>
                                 </Border>
                             </DataTemplate>
