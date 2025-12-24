@@ -32,6 +32,12 @@ public class IconButton : Button
             VerticalAlignment = VerticalAlignment.Center
         };
         textBlock.Bind(TextBlock.TextProperty, this.GetObservable(TextProperty));
+        this.GetObservable(TextProperty).Subscribe(text =>
+        {
+            iconImage.Margin = string.IsNullOrEmpty(text) 
+                ? new Thickness(0) 
+                : new Thickness(0, 0, 5, 0);
+        });
         
         StackPanel stackPanel = new()
         {
@@ -43,7 +49,7 @@ public class IconButton : Button
         stackPanel.Children.Add(textBlock);
         
         Content = stackPanel;
-        Padding= new Thickness(12, 6);
+        Padding= new Thickness(6);
         BorderThickness = new Thickness(2);
         CornerRadius = new CornerRadius(5);
         HorizontalAlignment = HorizontalAlignment.Center;

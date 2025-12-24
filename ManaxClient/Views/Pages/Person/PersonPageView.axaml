@@ -104,15 +104,11 @@
                                                        FontWeight="Bold" />
                                         </Border>
 
-                                        <Button Grid.Column="3"
-                                                IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWritePersons}"
-                                                Classes="secondary"
-                                                Command="{Binding $parent[UserControl].((page:PersonPageViewModel)DataContext).UpdatePerson}"
-                                                CommandParameter="{Binding .}"
-                                                Padding="8"
-                                                VerticalAlignment="Center">
-                                            <TextBlock Text="✏️" />
-                                        </Button>
+                                        <controls:IconButton Grid.Column="3"
+                                                             IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWritePersons}"
+                                                             Command="{Binding $parent[UserControl].((page:PersonPageViewModel)DataContext).UpdatePerson}"
+                                                             CommandParameter="{Binding .}"
+                                                             Icon="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.EditIcon}"/>
 
                                         <Button Grid.Column="4"
                                                 IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanDeletePersons}"
@@ -194,15 +190,11 @@
                                                        FontSize="16" />
                                         </StackPanel>
 
-                                        <Button Grid.Column="2"
-                                                IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWriteRoles}"
-                                                Classes="secondary"
-                                                Command="{Binding $parent[UserControl].((page:PersonPageViewModel)DataContext).UpdateRole}"
-                                                CommandParameter="{Binding .}"
-                                                Padding="8"
-                                                VerticalAlignment="Center">
-                                            <TextBlock Text="✏️" />
-                                        </Button>
+                                        <controls:IconButton Grid.Column="2"
+                                                             IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWriteRoles}"
+                                                             Command="{Binding $parent[UserControl].((page:PersonPageViewModel)DataContext).UpdateRole}"
+                                                             CommandParameter="{Binding .}"
+                                                             Icon="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.EditIcon}"/>
 
                                         <Button Grid.Column="3"
                                                 IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanDeleteRoles}"

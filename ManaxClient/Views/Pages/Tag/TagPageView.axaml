@@ -82,15 +82,11 @@
                                                    FontWeight="Bold"
                                                    FontSize="16" />
 
-                                        <Button Grid.Column="2"
-                                                IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWriteTags}"
-                                                Classes="secondary"
-                                                Command="{Binding $parent[UserControl].((tag:TagPageViewModel)DataContext).UpdateTag}"
-                                                CommandParameter="{Binding .}"
-                                                Padding="8"
-                                                VerticalAlignment="Center">
-                                            <TextBlock Text="✏️" />
-                                        </Button>
+                                        <controls:IconButton Grid.Column="2"
+                                                             IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWriteTags}"
+                                                             Command="{Binding $parent[UserControl].((tag:TagPageViewModel)DataContext).UpdateTag}"
+                                                             CommandParameter="{Binding .}"
+                                                             Icon="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.EditIcon}"/>
 
                                         <Button Grid.Column="3"
                                                 IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanDeleteTags}"

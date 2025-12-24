@@ -30,6 +30,7 @@ public partial class IconManager:ObservableObject
     [ObservableProperty] private Bitmap? _issuesIcon;
     [ObservableProperty] private Bitmap? _folderIcon;
     [ObservableProperty] private Bitmap? _addIcon;
+    [ObservableProperty] private Bitmap? _editIcon;
     
     public IconManager()
     {

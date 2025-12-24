@@ -103,15 +103,11 @@
                                                        FontWeight="Bold" />
                                         </Border>
 
-                                        <Button Grid.Column="3"
-                                                IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWriteRanks}"
-                                                Classes="secondary"
-                                                Command="{Binding $parent[UserControl].((page:RankPageViewModel)DataContext).UpdateRank}"
-                                                CommandParameter="{Binding .}"
-                                                Padding="8"
-                                                VerticalAlignment="Center">
-                                            <TextBlock Text="✏️" />
-                                        </Button>
+                                        <controls:IconButton Grid.Column="3"
+                                                             IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWriteRanks}"
+                                                             Command="{Binding $parent[UserControl].((page:RankPageViewModel)DataContext).UpdateRank}"
+                                                             CommandParameter="{Binding .}"
+                                                             Icon="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.EditIcon}"/>
 
                                         <Button Grid.Column="4"
                                                 IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanDeleteRanks}"
