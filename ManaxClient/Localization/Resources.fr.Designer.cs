@@ -1989,12 +1989,6 @@ namespace ManaxClient.Localization {
             }
         }
         
-        public static string FetchFromSourcePage_Tip {
-            get {
-                return ResourceManager.GetString("FetchFromSourcePage.Tip", resourceCulture);
-            }
-        }
-        
         public static string FetchFromSourcePage_OpenFolder {
             get {
                 return ResourceManager.GetString("FetchFromSourcePage.OpenFolder", resourceCulture);

@@ -197,8 +197,14 @@
                         CornerRadius="8"
                         Padding="12">
                     <StackPanel Spacing="8">
-                        <TextBlock Text="{localization:Localize SettingsServerPage.TipTitle}"
-                                   FontWeight="Bold" />
+                        <StackPanel Orientation="Horizontal">
+                            <Image Classes="icon"
+                                   Source="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.IdeaIcon}"/>
+                            <TextBlock Text="{localization:Localize SettingsServerPage.TipTitle}"
+                                       VerticalAlignment="Center"
+                                       FontWeight="Bold" />
+                        </StackPanel>
+                        
                         <TextBlock
                             Text="{localization:Localize SettingsServerPage.TipMessage}"
                             TextWrapping="Wrap"

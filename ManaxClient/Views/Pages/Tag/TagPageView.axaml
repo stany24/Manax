@@ -23,9 +23,15 @@
             <Grid ColumnDefinitions="*,Auto">
                 <StackPanel Grid.Column="0" Orientation="Vertical">
                     <TextBlock Classes="title" Text="{localization:Localize TagPage.Management}" />
-                    <TextBlock
-                        Text="{localization1:LocalizeFormat LibraryPage.SeriesCount,
-                                   Param1={Binding $parent[UserControl].((tag:TagPageViewModel)DataContext).Tags.Count}}" />
+                    <StackPanel Orientation="Horizontal">
+                        <Image Classes="icon"
+                               Source="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.TagsIcon}"/>
+                        <TextBlock VerticalAlignment="Center"
+                                   Margin="5,0,0,0"
+                                   Text="{localization1:LocalizeFormat TagPage.Count,
+                                       Param1={Binding $parent[UserControl].((tag:TagPageViewModel)DataContext).Tags.Count}}" />
+                    </StackPanel>
+                    
                 </StackPanel>
 
                 <controls:IconButton Grid.Column="1"

@@ -355,7 +355,7 @@
         <value>Longueur min description</value>
     </data>
     <data name="SettingsServerPage.TipTitle" xml:space="preserve">
-        <value>💡 Conseil</value>
+        <value>Conseil</value>
     </data>
     <data name="SettingsServerPage.TipMessage" xml:space="preserve">
         <value>Les modifications seront appliquées après validation. Assurez-vous de tester les paramètres avant de les sauvegarder.</value>
@@ -511,7 +511,7 @@
         <value>Gestion des tags</value>
     </data>
     <data name="TagPage.Count" xml:space="preserve">
-        <value>🏷️ {0} tag(s) configuré(s)</value>
+        <value>{0} tag(s) configuré(s)</value>
     </data>
     <data name="TagPage.NewTag" xml:space="preserve">
         <value>Nouveau tag</value>
@@ -995,9 +995,6 @@
     </data>
     <data name="FetchFromSourcePage.Size" xml:space="preserve">
         <value>Taille:</value>
-    </data>
-    <data name="FetchFromSourcePage.Tip" xml:space="preserve">
-        <value>💡 Les fichiers seront copiés des dossiers sources vers cet emplacement de traitement.</value>
     </data>
     <data name="FetchFromSourcePage.OpenFolder" xml:space="preserve">
         <value>Ouvrir le dossier</value>
