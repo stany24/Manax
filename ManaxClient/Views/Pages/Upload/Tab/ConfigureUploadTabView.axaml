@@ -7,6 +7,7 @@
     xmlns:tab="clr-namespace:ManaxClient.ViewModels.Pages.Upload.Tab"
     xmlns:upload="clr-namespace:ManaxClient.Models.Upload"
     xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
+    xmlns:controls="clr-namespace:ManaxClient.Controls"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Pages.Upload.Tab.ConfigureUploadTabView"
     x:DataType="tab:ConfigureUploadTabViewModel"
@@ -85,13 +86,11 @@
                                                    ToolTip.Tip="{Binding Path}" />
 
                                         <!-- Remove Button -->
-                                        <Button Grid.Column="2"
-                                                Content="{localization:Localize ConfigureUploadPage.RemoveSource}"
-                                                Classes="secondary"
+                                        <controls:IconButton Grid.Column="2"
+                                                Text="{localization:Localize ConfigureUploadPage.RemoveSource}"
                                                 Command="{Binding $parent[UserControl].((tab:ConfigureUploadTabViewModel)DataContext).RemoveSource}"
                                                 CommandParameter="{Binding}"
-                                                Padding="8,4"
-                                                Margin="8,0,0,0" />
+                                                Icon="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.TrashIcon}"/>
                                     </Grid>
                                 </Border>
                             </DataTemplate>

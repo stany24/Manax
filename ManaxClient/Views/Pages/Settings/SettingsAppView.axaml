@@ -5,6 +5,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:page="clr-namespace:ManaxClient.ViewModels.Pages.Settings"
     xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
+    xmlns:viewModels="clr-namespace:ManaxClient.ViewModels"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Pages.Settings.SettingsAppView"
     x:DataType="page:SettingsAppViewModel">
@@ -14,7 +15,14 @@
 
             <StackPanel Orientation="Vertical">
                 <TextBlock Classes="title" Text="{localization:Localize SettingsAppPage.Title}" />
-                <TextBlock Text="{localization:Localize SettingsAppPage.Subtitle}" />
+                <StackPanel Orientation="Horizontal">
+                    <Image Classes="icon"
+                           Source="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.SettingsIcon}"/>
+                    <TextBlock Text="{localization:Localize SettingsAppPage.Subtitle}"
+                               VerticalAlignment="Center"
+                               Margin="5,0,0,0"/>
+                </StackPanel>
+                
             </StackPanel>
 
             <Border Classes="card">

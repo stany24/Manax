@@ -49,7 +49,7 @@
         <value>Se connecter</value>
     </data>
     <data name="LoginPage.Tip.Title" xml:space="preserve">
-        <value>💡 Astuce</value>
+        <value>Astuce</value>
     </data>
     <data name="LoginPage.Tip.Message" xml:space="preserve">
         <value>Assurez-vous que votre serveur Manax est démarré et accessible depuis ce réseau.</value>
@@ -271,7 +271,7 @@
         <value>Paramètres d'apparence</value>
     </data>
     <data name="SettingsAppPage.Subtitle" xml:space="preserve">
-        <value>🎨 Personnalisez l'apparence de votre application Manax</value>
+        <value>Personnalisez l'apparence de votre application Manax</value>
     </data>
     <data name="SettingsAppPage.DisplayMode" xml:space="preserve">
         <value>Mode d'affichage</value>
@@ -301,7 +301,7 @@
         <value>Paramètres du serveur</value>
     </data>
     <data name="SettingsServerPage.Subtitle" xml:space="preserve">
-        <value>⚙️ Configurez les paramètres globaux de votre serveur Manax</value>
+        <value>Configurez les paramètres globaux de votre serveur Manax</value>
     </data>
     <data name="SettingsServerPage.AddSavePoint" xml:space="preserve">
         <value>Ajouter un point de sauvegarde</value>
@@ -406,7 +406,7 @@
         <value>Statistiques du serveur</value>
     </data>
     <data name="ServerStatsPage.Subtitle" xml:space="preserve">
-        <value>📊 Vue d'ensemble des données et de l'activité du serveur</value>
+        <value>Vue d'ensemble des données et de l'activité du serveur</value>
     </data>
     <data name="ServerStatsPage.DiskUsage.Title" xml:space="preserve">
         <value>Utilisation de l'espace disque</value>
@@ -457,7 +457,7 @@
         <value>Mes statistiques</value>
     </data>
     <data name="UserStatsPage.Subtitle" xml:space="preserve">
-        <value>📊 Votre activité et progression dans Manax</value>
+        <value>Votre activité et progression dans Manax</value>
     </data>
     <data name="UserStatsPage.SeriesProgress.Title" xml:space="preserve">
         <value>Progression des séries</value>

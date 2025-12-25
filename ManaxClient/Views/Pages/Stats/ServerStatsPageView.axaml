@@ -18,7 +18,13 @@
 
             <StackPanel Orientation="Vertical">
                 <TextBlock Classes="title" Text="{localization:Localize ServerStatsPage.Title}" />
-                <TextBlock Text="{localization:Localize ServerStatsPage.Subtitle}" />
+                <StackPanel Orientation="Horizontal">
+                    <Image Classes="icon"
+                           Source="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.StatsIcon}"/>
+                    <TextBlock Text="{localization:Localize ServerStatsPage.Subtitle}"
+                               VerticalAlignment="Center"
+                               Margin="5,0,0,0"/>
+                </StackPanel>
             </StackPanel>
 
             <Grid ColumnDefinitions="*,*" ColumnSpacing="24">

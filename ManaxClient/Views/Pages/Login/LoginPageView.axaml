@@ -5,6 +5,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:page="clr-namespace:ManaxClient.ViewModels.Pages.Login"
     xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
+    xmlns:viewModels="clr-namespace:ManaxClient.ViewModels"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Pages.Login.LoginPageView"
     x:DataType="page:LoginPageViewModel">
@@ -84,17 +85,18 @@
                             </StackPanel>
                         </Button>
 
-                        <Border CornerRadius="8"
-                                Padding="12">
-                            <StackPanel Spacing="8">
+                        <StackPanel Orientation="Vertical">
+                            <StackPanel Orientation="Horizontal">
+                                <Image Classes="icon"
+                                       Source="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.IdeaIcon}"/>
                                 <TextBlock Text="{localization:Localize LoginPage.Tip.Title}"
+                                           VerticalAlignment="Center"
                                            FontWeight="Bold" />
-                                <TextBlock
-                                    Text="{localization:Localize LoginPage.Tip.Message}"
-                                    TextWrapping="Wrap"
-                                    FontSize="12" />
                             </StackPanel>
-                        </Border>
+                            <TextBlock Text="{localization:Localize LoginPage.Tip.Message}"
+                                       TextWrapping="Wrap"
+                                       FontSize="12" />
+                        </StackPanel>
                     </StackPanel>
                 </ScrollViewer>
 

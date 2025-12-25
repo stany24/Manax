@@ -17,7 +17,13 @@
 
             <StackPanel Orientation="Vertical">
                 <TextBlock Classes="title" Text="{localization:Localize SettingsServerPage.Title}" />
-                <TextBlock Text="{localization:Localize SettingsServerPage.Subtitle}" />
+                <StackPanel Orientation="Horizontal">
+                    <Image Classes="icon"
+                           Source="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.SettingsIcon}"/>
+                    <TextBlock Text="{localization:Localize SettingsServerPage.Subtitle}"
+                               VerticalAlignment="Center"
+                               Margin="5,0,0,0"/>
+                </StackPanel>
             </StackPanel>
 
             <Border Classes="card">

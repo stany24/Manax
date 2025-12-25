@@ -49,7 +49,7 @@
         <value>Sign in</value>
     </data>
     <data name="LoginPage.Tip.Title" xml:space="preserve">
-        <value>💡 Tip</value>
+        <value>Tip</value>
     </data>
     <data name="LoginPage.Tip.Message" xml:space="preserve">
         <value>Make sure your Manax server is running and accessible from this network.</value>
@@ -271,7 +271,7 @@
         <value>Appearance Settings</value>
     </data>
     <data name="SettingsAppPage.Subtitle" xml:space="preserve">
-        <value>🎨 Customize the appearance of your Manax application</value>
+        <value>Customize the appearance of your Manax application</value>
     </data>
     <data name="SettingsAppPage.DisplayMode" xml:space="preserve">
         <value>Display mode</value>
@@ -298,7 +298,7 @@
         <value>Server Settings</value>
     </data>
     <data name="SettingsServerPage.Subtitle" xml:space="preserve">
-        <value>⚙️ Configure the global settings of your Manax server</value>
+        <value>Configure the global settings of your Manax server</value>
     </data>
     <data name="SettingsServerPage.AddSavePoint" xml:space="preserve">
         <value>Add save point</value>
@@ -403,7 +403,7 @@
         <value>Server Statistics</value>
     </data>
     <data name="ServerStatsPage.Subtitle" xml:space="preserve">
-        <value>📊 Overview of server data and activity</value>
+        <value>Overview of server data and activity</value>
     </data>
     <data name="ServerStatsPage.DiskUsage.Title" xml:space="preserve">
         <value>Disk Space Usage</value>
@@ -454,7 +454,7 @@
         <value>My Statistics</value>
     </data>
     <data name="UserStatsPage.Subtitle" xml:space="preserve">
-        <value>📊 Your activity and progress in Manax</value>
+        <value>Your activity and progress in Manax</value>
     </data>
     <data name="UserStatsPage.SeriesProgress.Title" xml:space="preserve">
         <value>Series Progress</value>
