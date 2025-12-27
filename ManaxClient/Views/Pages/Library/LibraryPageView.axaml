@@ -32,7 +32,8 @@
                         VerticalAlignment="Top"
                         Padding="12,8">
                     <StackPanel Orientation="Horizontal" Spacing="8">
-                        <TextBlock Text="🗑️" FontSize="14" />
+                        <Image Classes="icon"
+                               Source="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.TrashIcon}"/>
                         <TextBlock Text="{localization:Localize LibraryPage.Delete}" FontWeight="Medium" />
                     </StackPanel>
                 </Button>

@@ -5,12 +5,14 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:content="clr-namespace:ManaxClient.ViewModels.Popup.ConfirmCancel.Content"
     xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
+    xmlns:viewModels="clr-namespace:ManaxClient.ViewModels"
     mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="400"
     x:Class="ManaxClient.Views.Popup.ConfirmCancel.Content.PersonEditView"
     x:DataType="content:PersonEditViewModel">
     <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" RowSpacing="16" Margin="16">
         <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="12" Margin="0,0,0,8">
-            <TextBlock Text="👤" FontSize="24" VerticalAlignment="Center" />
+            <Image Classes="icon"
+                   Source="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.UserIcon}"/>
             <StackPanel Spacing="4">
                 <TextBlock
                     Text="{localization:Localize PersonEditPopup.Title}"

@@ -5,6 +5,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:content="clr-namespace:ManaxClient.ViewModels.Popup.ConfirmCancel.Content"
     xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
+    xmlns:viewModels="clr-namespace:ManaxClient.ViewModels"
     mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="400"
     x:Class="ManaxClient.Views.Popup.ConfirmCancel.Content.LibraryCreateView"
     x:DataType="content:LibraryCreateViewModel">
@@ -41,7 +42,8 @@
             CornerRadius="8"
             Padding="12">
             <StackPanel Orientation="Horizontal" Spacing="8">
-                <TextBlock Text="💡" FontSize="14" VerticalAlignment="Top" />
+                <Image Classes="icon"
+                       Source="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.IdeaIcon}"/>
                 <TextBlock
                     Text="{localization:Localize LibraryCreatePopup.Info}"
                     TextWrapping="Wrap"
