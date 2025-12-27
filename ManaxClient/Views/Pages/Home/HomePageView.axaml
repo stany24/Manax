@@ -34,7 +34,6 @@
                 <StackPanel Orientation="Vertical"
                             Spacing="16"
                             HorizontalAlignment="Center">
-                    <TextBlock Text="📺" FontSize="48" HorizontalAlignment="Center" />
                     <TextBlock Text="{localization:Localize HomePage.NoSeries}"
                                FontSize="18"
                                FontWeight="Medium"

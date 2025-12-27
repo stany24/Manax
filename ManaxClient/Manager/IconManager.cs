@@ -33,6 +33,10 @@ public partial class IconManager:ObservableObject
     [ObservableProperty] private Bitmap? _editIcon;
     [ObservableProperty] private Bitmap? _trashIcon;
     [ObservableProperty] private Bitmap? _ideaIcon;
+    [ObservableProperty] private Bitmap? _moonIcon;
+    [ObservableProperty] private Bitmap? _nextIcon;
+    [ObservableProperty] private Bitmap? _previousIcon;
+    [ObservableProperty] private Bitmap? _flagIcon;
     
     public IconManager()
     {

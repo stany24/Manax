@@ -30,7 +30,6 @@
                     <StackPanel Spacing="24">
 
                         <StackPanel Spacing="8" HorizontalAlignment="Center">
-                            <TextBlock Text="📺" FontSize="48" HorizontalAlignment="Center" />
                             <TextBlock Classes="title" Text="{localization:Localize LoginPage.Title}"
                                        HorizontalAlignment="Center" />
                         </StackPanel>

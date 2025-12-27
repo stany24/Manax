@@ -28,7 +28,8 @@
             <Border Classes="card">
                 <StackPanel Spacing="20">
                     <StackPanel Orientation="Horizontal" Spacing="12">
-                        <TextBlock Text="🌍" FontSize="20" />
+                        <Image Classes="icon"
+                               Source="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.FlagIcon}"/>
                         <TextBlock Classes="subtitle" Text="{localization:Localize SettingsAppPage.Language}"
                                    Margin="0" />
                     </StackPanel>
@@ -53,7 +54,8 @@
             <Border Classes="card">
                 <StackPanel Spacing="20">
                     <StackPanel Orientation="Horizontal" Spacing="12">
-                        <TextBlock Text="🌙" FontSize="20" />
+                        <Image Classes="icon"
+                               Source="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.MoonIcon}"/>
                         <TextBlock Classes="subtitle" Text="{localization:Localize SettingsAppPage.DisplayMode}"
                                    Margin="0" />
                     </StackPanel>
