@@ -8,6 +8,7 @@
     xmlns:upload="clr-namespace:ManaxClient.Models.Upload"
     xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
     xmlns:controls="clr-namespace:ManaxClient.Controls"
+    xmlns:icon="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Pages.Upload.Tab.ConfigureUploadTabView"
     x:DataType="tab:ConfigureUploadTabViewModel"
@@ -46,10 +47,8 @@
                                 HorizontalAlignment="Center"
                                 Spacing="12"
                                 Margin="24">
-                        <Image Classes="icon"
-                               Source="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.FolderIcon}"
-                               HorizontalAlignment="Center"
-                               Opacity="0.5" />
+                        <icon:MaterialIcon Classes="icon"
+                                           Kind="FolderOpenOutline"/>
                         <TextBlock Text="{localization:Localize ConfigureUploadPage.NoSources}"
                                    TextWrapping="Wrap"
                                    TextAlignment="Center"
@@ -70,27 +69,20 @@
                                         Padding="12">
                                     <Grid ColumnDefinitions="Auto,*,Auto">
 
-                                        <!-- Folder Icon -->
-                                        <Image Grid.Column="0"
-                                               Classes="icon"
-                                               Source="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.FolderIcon}"
-                                               VerticalAlignment="Center"
-                                               Margin="0,0,12,0" />
-
-                                        <!-- Path -->
+                                        <icon:MaterialIcon Classes="icon"
+                                                           Kind="FolderOpenOutline"/>
                                         <TextBlock Grid.Column="1"
                                                    Text="{Binding Path}"
                                                    FontWeight="Medium"
                                                    TextWrapping="Wrap"
                                                    VerticalAlignment="Center"
                                                    ToolTip.Tip="{Binding Path}" />
-
-                                        <!-- Remove Button -->
+                                        
                                         <controls:IconButton Grid.Column="2"
                                                 Text="{localization:Localize ConfigureUploadPage.RemoveSource}"
                                                 Command="{Binding $parent[UserControl].((tab:ConfigureUploadTabViewModel)DataContext).RemoveSource}"
                                                 CommandParameter="{Binding}"
-                                                Icon="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.TrashIcon}"/>
+                                                Icon="DeleteOutline"/>
                                     </Grid>
                                 </Border>
                             </DataTemplate>
@@ -136,9 +128,8 @@
                             Padding="12"
                             BorderThickness="1">
                         <Grid ColumnDefinitions="Auto,*">
-                            <Image Grid.Column="0"
-                                   Classes="icon"
-                                   Source="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.FolderIcon}"/>
+                            <icon:MaterialIcon Classes="icon"
+                                               Kind="FolderOpenOutline"/>
                             <TextBlock Grid.Column="1"
                                        Text="{Binding ProcessingFolder}"
                                        TextWrapping="Wrap"

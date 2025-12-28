@@ -27,7 +27,7 @@
                         IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWriteSeries}"
                         Command="{Binding UploadSerie}"
                         Text="{localization:Localize HomePage.AddSeries}"
-                        Icon="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.AddIcon}"/>
+                        Icon="Add"/>
             </Grid>
 
             <Border Classes="card" IsVisible="{Binding !Series.Count}">
@@ -46,7 +46,7 @@
                     <controls:IconButton IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWriteSeries}"
                             Command="{Binding UploadSerie}"
                             Text="{localization:Localize HomePage.AddFirstSeries}"
-                            Icon="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.AddIcon}"/>
+                            Icon="Add"/>
                 </StackPanel>
             </Border>
 

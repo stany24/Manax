@@ -7,6 +7,7 @@
     xmlns:viewModels="clr-namespace:ManaxClient.ViewModels"
     xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
     xmlns:controls="clr-namespace:ManaxClient.Controls"
+    xmlns:icon="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Pages.Settings.SettingsServerPageView"
     x:DataType="page:SettingsServerPageViewModel"
@@ -18,8 +19,8 @@
             <StackPanel Orientation="Vertical">
                 <TextBlock Classes="title" Text="{localization:Localize SettingsServerPage.Title}" />
                 <StackPanel Orientation="Horizontal">
-                    <Image Classes="icon"
-                           Source="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.SettingsIcon}"/>
+                    <icon:MaterialIcon Classes="icon"
+                                           Kind="Cog"/>
                     <TextBlock Text="{localization:Localize SettingsServerPage.Subtitle}"
                                VerticalAlignment="Center"
                                Margin="5,0,0,0"/>
@@ -31,12 +32,12 @@
                     <controls:IconButton IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWriteSavePoints}"
                                          Command="{Binding CreateSavePoint}"
                                          Text="{localization:Localize SettingsServerPage.AddSavePoint}"
-                                         Icon="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.FolderIcon}"/>
+                                         Icon="FolderOpenOutline"/>
 
                     <controls:IconButton IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWriteLibraries}"
                                          Command="{Binding CreateLibrary}"
                                          Text="{localization:Localize SettingsServerPage.AddLibrary}"
-                                         Icon="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.FolderIcon}"/>
+                                         Icon="FolderOpenOutline"/>
                 </StackPanel>
             </Border>
 
@@ -117,8 +118,8 @@
             <Border Classes="card">
                 <StackPanel Spacing="20">
                     <StackPanel Orientation="Horizontal" Spacing="12">
-                        <Image Classes="icon"
-                               Source="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.BookIcon}"/>
+                        <icon:MaterialIcon Classes="icon"
+                                               Kind="BookOpenVariantOutline"/>
                         <TextBlock Classes="subtitle" Text="{localization:Localize SettingsServerPage.ChapterConfig}"
                                    Margin="0" />
                     </StackPanel>
@@ -164,8 +165,8 @@
             <Border Classes="card">
                 <StackPanel Spacing="20">
                     <StackPanel Orientation="Horizontal" Spacing="12">
-                        <Image Classes="icon"
-                               Source="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.BooksIcon}"/>
+                        <icon:MaterialIcon Classes="icon"
+                                               Kind="Bookshelf"/>
                         <TextBlock Classes="subtitle" Text="{localization:Localize SettingsServerPage.SeriesConfig}"
                                    Margin="0" />
                     </StackPanel>
@@ -200,8 +201,8 @@
                         Padding="12">
                     <StackPanel Spacing="8">
                         <StackPanel Orientation="Horizontal">
-                            <Image Classes="icon"
-                                   Source="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.IdeaIcon}"/>
+                            <icon:MaterialIcon Classes="icon"
+                                                   Kind="Lightbulb"/>
                             <TextBlock Text="{localization:Localize SettingsServerPage.TipTitle}"
                                        VerticalAlignment="Center"
                                        FontWeight="Bold" />

@@ -9,6 +9,7 @@
     xmlns:localization1="clr-namespace:ManaxClient.Localization"
     xmlns:data="clr-namespace:ManaxClient.Models.Server.Data"
     xmlns:controls="clr-namespace:ManaxClient.Controls"
+    xmlns:icon="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Pages.Person.PersonPageView"
     x:DataType="page:PersonPageViewModel">
@@ -25,8 +26,8 @@
                 <StackPanel Grid.Row="1" 
                             Grid.Column="0" 
                             Orientation="Horizontal">
-                    <Image Classes="icon"
-                           Source="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.UsersIcon}"/>
+                    <icon:MaterialIcon Classes="icon"
+                                           Kind="AccountGroupOutline"/>
                     <TextBlock VerticalAlignment="Center"
                                Text="{localization1:LocalizeFormat PersonPage.PersonsCount,
                                Param1={Binding $parent[UserControl].((page:PersonPageViewModel)DataContext).Persons.Count}}" />
@@ -37,15 +38,15 @@
                                      IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWritePersons}"
                                      Command="{Binding CreatePerson}"
                                      Text="{localization:Localize PersonPage.NewPerson}"
-                                     Icon="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.AddIcon}"/>
+                                     Icon="Add"/>
             </Grid>
 
             <Border Classes="card" IsVisible="{Binding !Persons.Count}">
                 <StackPanel Orientation="Vertical"
                             Spacing="16"
                             HorizontalAlignment="Center">
-                    <Image Classes="icon"
-                           Source="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.UsersIcon}"/>
+                    <icon:MaterialIcon Classes="icon"
+                                           Kind="AccountGroupOutline"/>
                     <TextBlock Text="{localization:Localize PersonPage.NoPersons.Title}"
                                FontSize="18"
                                FontWeight="Medium"
@@ -55,7 +56,7 @@
                     <controls:IconButton IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWritePersons}"
                                          Command="{Binding CreatePerson}"
                                          Text="{localization:Localize PersonPage.CreateFirstPerson}"
-                                         Icon="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.AddIcon}"/>
+                                         Icon="Add"/>
                 </StackPanel>
             </Border>
 
@@ -76,8 +77,8 @@
                                                 CornerRadius="20"
                                                 Width="40"
                                                 Height="40">
-                                            <Image Classes="icon"
-                                                   Source="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.UserIcon}"/>
+                                            <icon:MaterialIcon Classes="icon"
+                                                                   Kind="AccountOutline"/>
                                         </Border>
 
                                         <StackPanel Grid.Column="1" Orientation="Vertical" VerticalAlignment="Center">
@@ -108,13 +109,13 @@
                                                              IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWritePersons}"
                                                              Command="{Binding $parent[UserControl].((page:PersonPageViewModel)DataContext).UpdatePerson}"
                                                              CommandParameter="{Binding .}"
-                                                             Icon="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.EditIcon}"/>
+                                                             Icon="PencilOutline"/>
 
                                         <controls:IconButton Grid.Column="4"
                                                              IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanDeletePersons}"
                                                              Command="{Binding $parent[UserControl].((page:PersonPageViewModel)DataContext).DeletePerson}"
                                                              CommandParameter="{Binding .}"
-                                                             Icon="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.TrashIcon}"/>
+                                                             Icon="DeleteOutline"/>
                                     </Grid>
                                 </Border>
                             </DataTemplate>
@@ -136,7 +137,7 @@
                                      IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWriteRoles}"
                                      Command="{Binding CreateRole}"
                                      Text="{localization:Localize RolePage.NewRole}"
-                                     Icon="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.AddIcon}"/>
+                                     Icon="Add"/>
             </Grid>
 
             <Border Classes="card" IsVisible="{Binding !Roles.Count}">
@@ -153,7 +154,7 @@
                     <controls:IconButton IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWriteRoles}"
                                          Command="{Binding CreateRole}"
                                          Text="{localization:Localize RolePage.CreateFirstRole}"
-                                         Icon="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.AddIcon}"/>
+                                         Icon="Add"/>
                 </StackPanel>
             </Border>
 
@@ -190,13 +191,13 @@
                                                              IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWriteRoles}"
                                                              Command="{Binding $parent[UserControl].((page:PersonPageViewModel)DataContext).UpdateRole}"
                                                              CommandParameter="{Binding .}"
-                                                             Icon="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.EditIcon}"/>
+                                                             Icon="PencilOutline"/>
 
                                         <controls:IconButton Grid.Column="3"
                                                              IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanDeleteRoles}"
                                                              Command="{Binding $parent[UserControl].((page:PersonPageViewModel)DataContext).DeleteRole}"
                                                              CommandParameter="{Binding .}"
-                                                             Icon="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.TrashIcon}"/>
+                                                             Icon="DeleteOutline"/>
                                     </Grid>
                                 </Border>
                             </DataTemplate>

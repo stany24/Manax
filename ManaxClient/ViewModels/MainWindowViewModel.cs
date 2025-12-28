@@ -47,7 +47,6 @@ public partial class MainWindowViewModel : ObservableObject
     [ObservableProperty] private Thickness _pageMargin = new(0, 0, 0, 0);
     [ObservableProperty] private Controls.Popups.Popup? _popup;
     [ObservableProperty] private ObservableCollection<TaskItem> _runningTasks = new([]);
-    [ObservableProperty] private IconManager _iconManager = new();
     [ObservableProperty] private FeatureManager _featureManager = new();
     [ObservableProperty] private PermissionManager _permissionManager = new();
     [ObservableProperty] private ChapterSource _chapterSource = new();

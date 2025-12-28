@@ -6,6 +6,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
     xmlns:converters="clr-namespace:ManaxClient.Converters"
+    xmlns:icon="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     mc:Ignorable="d" d:DesignWidth="1200" d:DesignHeight="800"
     x:Class="ManaxClient.Views.MainWindow"
     x:DataType="vm:MainWindowViewModel"
@@ -38,8 +39,8 @@
                     <Button Classes="sidebar"
                             Command="{Binding ChangePageHome}">
                         <StackPanel Orientation="Horizontal" Spacing="12">
-                            <Image Classes="icon"
-                                   Source="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).IconManager.HomeIcon}"/>
+                            <icon:MaterialIcon Classes="icon"
+                                               Kind="Home"/>
                             <TextBlock Text="{localization:Localize MainWindow.Home}"
                                        VerticalAlignment="Center"/>
                         </StackPanel>
@@ -59,8 +60,8 @@
                                             Command="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).ShowLibrary}"
                                             CommandParameter="{Binding }">
                                         <StackPanel Orientation="Horizontal" Spacing="12">
-                                            <Image Classes="icon"
-                                                   Source="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).IconManager.BooksIcon}"/>
+                                            <icon:MaterialIcon Classes="icon"
+                                                               Kind="Bookshelf"/>
                                             <TextBlock Text="{Binding Name}" TextTrimming="CharacterEllipsis" />
                                         </StackPanel>
                                     </Button>
@@ -89,8 +90,8 @@
                             </MultiBinding>
                         </Button.IsVisible>
                         <StackPanel Orientation="Horizontal" Spacing="12">
-                            <Image Classes="icon"
-                                   Source="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).IconManager.IssuesIcon}"/>
+                            <icon:MaterialIcon Classes="icon"
+                                               Kind="WarningOutline"/>
                             <TextBlock Text="{localization:Localize MainWindow.Issues}"
                                        VerticalAlignment="Center" />
                         </StackPanel>
@@ -100,8 +101,8 @@
                             IsVisible="{Binding PermissionManager.CanReadUsers}"
                             Command="{Binding ChangePageUsers}">
                         <StackPanel Orientation="Horizontal" Spacing="12">
-                            <Image Classes="icon"
-                                   Source="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).IconManager.UsersIcon}"/>
+                            <icon:MaterialIcon Classes="icon"
+                                               Kind="AccountGroupOutline"/>
                             <TextBlock Text="{localization:Localize MainWindow.Users}"
                                        VerticalAlignment="Center" />
                         </StackPanel>
@@ -116,8 +117,8 @@
                             </MultiBinding>
                         </Button.IsVisible>
                         <StackPanel Orientation="Horizontal" Spacing="12">
-                            <Image Classes="icon"
-                                   Source="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).IconManager.RanksIcon}"/>
+                            <icon:MaterialIcon Classes="icon"
+                                               Kind="ChevronTripleUp"/>
                             <TextBlock Text="{localization:Localize MainWindow.Ranks}"
                                        VerticalAlignment="Center" />
                         </StackPanel>
@@ -127,8 +128,8 @@
                             IsVisible="{Binding PermissionManager.CanReadTags}"
                             Command="{Binding ChangePageTags}">
                         <StackPanel Orientation="Horizontal" Spacing="12">
-                            <Image Classes="icon"
-                                   Source="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).IconManager.TagsIcon}"/>
+                            <icon:MaterialIcon Classes="icon"
+                                               Kind="TagOutline"/>
                             <TextBlock Text="{localization:Localize MainWindow.Tags}"
                                        VerticalAlignment="Center" />
                         </StackPanel>
@@ -138,8 +139,8 @@
                             IsVisible="{Binding PermissionManager.CanUploadChapter}"
                             Command="{Binding ChangeUploadPage}">
                         <StackPanel Orientation="Horizontal" Spacing="12">
-                            <Image Classes="icon"
-                                   Source="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).IconManager.UploadIcon}"/>
+                            <icon:MaterialIcon Classes="icon"
+                                               Kind="Upload"/>
                             <TextBlock Text="{localization:Localize MainWindow.Upload}"
                                        VerticalAlignment="Center" />
                         </StackPanel>
@@ -149,8 +150,8 @@
                             IsVisible="{Binding PermissionManager.CanReadPersons}"
                             Command="{Binding ChangePagePersons}">
                         <StackPanel Orientation="Horizontal" Spacing="12">
-                            <Image Classes="icon"
-                                   Source="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).IconManager.UsersIcon}"/>
+                            <icon:MaterialIcon Classes="icon"
+                                               Kind="AccountGroupOutline"/>
                             <TextBlock Text="{localization:Localize MainWindow.Persons}"
                                        VerticalAlignment="Center" />
                         </StackPanel>
@@ -164,8 +165,8 @@
                             IsVisible="{Binding PermissionManager.CanReadServerSettings}"
                             Command="{Binding ChangePageSettings}">
                         <StackPanel Orientation="Horizontal" Spacing="12">
-                            <Image Classes="icon"
-                                   Source="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).IconManager.SettingsIcon}"/>
+                            <icon:MaterialIcon Classes="icon"
+                                               Kind="Cog"/>
                             <TextBlock Text="{localization:Localize MainWindow.Parameters.Server}"
                                        VerticalAlignment="Center" />
                         </StackPanel>
@@ -174,8 +175,8 @@
                     <Button Classes="sidebar"
                             Command="{Binding ChangePageAppSettings}">
                         <StackPanel Orientation="Horizontal" Spacing="12">
-                            <Image Classes="icon"
-                                   Source="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).IconManager.SettingsIcon}"/>
+                            <icon:MaterialIcon Classes="icon"
+                                               Kind="Cog"/>
                             <TextBlock Text="{localization:Localize MainWindow.Parameters.UI}"
                                        VerticalAlignment="Center" />
                         </StackPanel>
@@ -185,8 +186,8 @@
                             IsVisible="{Binding PermissionManager.CanReadFeatures}"
                             Command="{Binding ChangePageFeatures}">
                         <StackPanel Orientation="Horizontal" Spacing="12">
-                            <Image Classes="icon"
-                                   Source="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).IconManager.FeaturesIcon}"/>
+                            <icon:MaterialIcon Classes="icon"
+                                               Kind="Feather"/>
                             <TextBlock Text="{localization:Localize MainWindow.Parameters.Features}"
                                        VerticalAlignment="Center" />
                         </StackPanel>
@@ -199,8 +200,8 @@
                     <Button Classes="sidebar"
                             Command="{Binding ChangePageUserStats}">
                         <StackPanel Orientation="Horizontal" Spacing="12">
-                            <Image Classes="icon"
-                                   Source="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).IconManager.StatsIcon}"/>
+                            <icon:MaterialIcon Classes="icon"
+                                               Kind="ChartLine"/>
                             <TextBlock Text="{localization:Localize MainWindow.Stats.User}"
                                        VerticalAlignment="Center" />
                         </StackPanel>
@@ -210,8 +211,8 @@
                             IsVisible="{Binding PermissionManager.CanReadServerStats}"
                             Command="{Binding ChangePageServerStats}">
                         <StackPanel Orientation="Horizontal" Spacing="12">
-                            <Image Classes="icon"
-                                   Source="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).IconManager.StatsIcon}"/>
+                            <icon:MaterialIcon Classes="icon"
+                                               Kind="ChartLine"/>
                             <TextBlock Text="{localization:Localize MainWindow.Stats.Server}"
                                        VerticalAlignment="Center" />
                         </StackPanel>
@@ -220,8 +221,8 @@
                     <Button Classes="sidebar"
                             Command="{Binding Logout}">
                         <StackPanel Orientation="Horizontal" Spacing="12">
-                            <Image Classes="icon"
-                                   Source="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).IconManager.LogoutIcon}"/>
+                            <icon:MaterialIcon Classes="icon"
+                                               Kind="Logout"/>
                             <TextBlock Text="{localization:Localize MainWindow.Logout}"
                                        VerticalAlignment="Center" />
                         </StackPanel>

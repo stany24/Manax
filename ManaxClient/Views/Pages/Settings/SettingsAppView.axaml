@@ -5,7 +5,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:page="clr-namespace:ManaxClient.ViewModels.Pages.Settings"
     xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
-    xmlns:viewModels="clr-namespace:ManaxClient.ViewModels"
+    xmlns:icon="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Pages.Settings.SettingsAppView"
     x:DataType="page:SettingsAppViewModel">
@@ -16,8 +16,8 @@
             <StackPanel Orientation="Vertical">
                 <TextBlock Classes="title" Text="{localization:Localize SettingsAppPage.Title}" />
                 <StackPanel Orientation="Horizontal">
-                    <Image Classes="icon"
-                           Source="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.SettingsIcon}"/>
+                    <icon:MaterialIcon Classes="icon"
+                                           Kind="Cog"/>
                     <TextBlock Text="{localization:Localize SettingsAppPage.Subtitle}"
                                VerticalAlignment="Center"
                                Margin="5,0,0,0"/>
@@ -28,8 +28,8 @@
             <Border Classes="card">
                 <StackPanel Spacing="20">
                     <StackPanel Orientation="Horizontal" Spacing="12">
-                        <Image Classes="icon"
-                               Source="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.FlagIcon}"/>
+                        <icon:MaterialIcon Classes="icon"
+                                               Kind="FlagVariantOutline"/>
                         <TextBlock Classes="subtitle" Text="{localization:Localize SettingsAppPage.Language}"
                                    Margin="0" />
                     </StackPanel>
@@ -54,8 +54,8 @@
             <Border Classes="card">
                 <StackPanel Spacing="20">
                     <StackPanel Orientation="Horizontal" Spacing="12">
-                        <Image Classes="icon"
-                               Source="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.MoonIcon}"/>
+                        <icon:MaterialIcon Classes="icon"
+                                               Kind="MoonWaxingCrescent"/>
                         <TextBlock Classes="subtitle" Text="{localization:Localize SettingsAppPage.DisplayMode}"
                                    Margin="0" />
                     </StackPanel>

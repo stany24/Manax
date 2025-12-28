@@ -8,6 +8,7 @@
     xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
     xmlns:localization1="clr-namespace:ManaxClient.Localization"
     xmlns:controls="clr-namespace:ManaxClient.Controls"
+    xmlns:icon="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Pages.User.UsersPageView"
     x:DataType="page:UsersPageViewModel"
@@ -26,8 +27,8 @@
                             Grid.Row="1"
                             Spacing="5"
                             Orientation="Horizontal">
-                    <Image Classes="icon" 
-                           Source="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.UsersIcon}"/>
+                    <icon:MaterialIcon Classes="icon"
+                                       Kind="AccountGroupOutline"/>
                     <TextBlock VerticalAlignment="Center"
                                Text="{localization1:LocalizeFormat UserPage.Count,
                                Param1={Binding $parent[UserControl].((page:UsersPageViewModel)DataContext).Users.Count}}" />
@@ -38,14 +39,15 @@
                                      IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWriteUsers}"
                                      Command="{Binding CreateUser}"
                                      Text="{localization:Localize UserPage.Add}"
-                                     Icon="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.AddIcon}"/>
+                                     Icon="Add"/>
             </Grid>
 
             <Border Classes="card" IsVisible="{Binding !Users.Count}">
                 <StackPanel Orientation="Vertical"
                             Spacing="16"
                             HorizontalAlignment="Center">
-                    <Image Classes="bigIcon" Source="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.UsersIcon}"/>
+                    <icon:MaterialIcon Classes="icon"
+                                       Kind="AccountGroupOutline"/>
                     <TextBlock Text="{localization:Localize UserPage.NoUsers}"
                                FontSize="18"
                                FontWeight="Medium"
@@ -55,7 +57,7 @@
                     <controls:IconButton IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWriteUsers}"
                                         Command="{Binding CreateUser}"
                                         Text="{localization:Localize UserPage.CreateFirst}"
-                                        Icon="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.AddIcon}"/>
+                                        Icon="Add"/>
                 </StackPanel>
             </Border>
 
@@ -76,8 +78,8 @@
                                                 CornerRadius="20"
                                                 Width="40"
                                                 Height="40">
-                                            <Image Classes="icon"
-                                                Source="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.UserIcon}"></Image>
+                                            <icon:MaterialIcon Classes="icon"
+                                                               Kind="UserOutline"/>
                                         </Border>
 
                                         <StackPanel Grid.Column="1" Orientation="Vertical" VerticalAlignment="Center">
@@ -108,13 +110,13 @@
                                         </Button>
 
                                         <controls:IconButton Grid.Column="4"
-                                                Icon="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.EditIcon}"/>
+                                                Icon="PencilOutline"/>
 
                                         <controls:IconButton Grid.Column="5"
                                                              IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanDeleteUsers}"
                                                              Command="{Binding $parent[UserControl].((page:UsersPageViewModel)DataContext).DeleteUser}"
                                                              CommandParameter="{Binding .}"
-                                                             Icon="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.TrashIcon}"/>
+                                                             Icon="DeleteOutline"/>
                                     </Grid>
                                 </Border>
                             </DataTemplate>

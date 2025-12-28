@@ -10,6 +10,7 @@
     xmlns:localization1="clr-namespace:ManaxClient.Localization"
     xmlns:converters="clr-namespace:ManaxClient.Converters"
     xmlns:data="clr-namespace:ManaxClient.Models.Server.Data"
+    xmlns:icon="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Pages.Serie.SeriePageView"
     x:DataType="page:SeriePageViewModel">
@@ -150,9 +151,8 @@
                             Padding="12"
                             IsVisible="{Binding !Serie.Chapters.Count}">
                         <StackPanel Spacing="8" HorizontalAlignment="Center">
-                            <TextBlock Text="📖" FontSize="32" />
-                            <Image Classes="icon"
-                                   Source="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.BookIcon}"/>
+                            <icon:MaterialIcon Classes="icon"
+                                                   Kind="BookOpenVariantOutline"/>
                             <TextBlock Text="{localization:Localize SeriePage.NoChaptersAvailable}"
                                        FontWeight="Medium" />
                             <TextBlock Text="{localization:Localize SeriePage.NoChaptersDescription}"

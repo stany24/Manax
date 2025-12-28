@@ -9,6 +9,7 @@
     xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
     xmlns:localization1="clr-namespace:ManaxClient.Localization"
     xmlns:controls="clr-namespace:ManaxClient.Controls"
+    xmlns:icon="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Pages.Tag.TagPageView"
     x:DataType="tag:TagPageViewModel"
@@ -24,8 +25,8 @@
                 <StackPanel Grid.Column="0" Orientation="Vertical">
                     <TextBlock Classes="title" Text="{localization:Localize TagPage.Management}" />
                     <StackPanel Orientation="Horizontal">
-                        <Image Classes="icon"
-                               Source="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.TagsIcon}"/>
+                        <icon:MaterialIcon Classes="icon"
+                                           Kind="TagOutline"/>
                         <TextBlock VerticalAlignment="Center"
                                    Margin="5,0,0,0"
                                    Text="{localization1:LocalizeFormat TagPage.Count,
@@ -38,15 +39,15 @@
                                      IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWriteTags}"
                                      Command="{Binding CreateTag}"
                                      Text="{localization:Localize TagPage.NewTag}"
-                                     Icon="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.AddIcon}"/>
+                                     Icon="Add"/>
             </Grid>
 
             <Border Classes="card" IsVisible="{Binding !Tags.Count}">
                 <StackPanel Orientation="Vertical"
                             Spacing="16"
                             HorizontalAlignment="Center">
-                    <Image Classes="icon"
-                           Source="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.TagsIcon}"/>
+                    <icon:MaterialIcon Classes="icon"
+                                       Kind="TagOutline"/>
                     <TextBlock Text="{localization:Localize TagPage.NoTags}"
                                FontSize="18"
                                FontWeight="Medium"
@@ -56,7 +57,7 @@
                     <controls:IconButton IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWriteTags}"
                                          Command="{Binding CreateTag}"
                                          Text="{localization:Localize TagPage.CreateFirst}"
-                                         Icon="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.AddIcon}"/>
+                                         Icon="Add"/>
                 </StackPanel>
             </Border>
 
@@ -78,8 +79,8 @@
                                                 CornerRadius="20"
                                                 Width="40"
                                                 Height="40">
-                                            <Image Classes="icon"
-                                                   Source="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.TagsIcon}"/>
+                                            <icon:MaterialIcon Classes="icon"
+                                                               Kind="TagOutline"/>
                                         </Border>
 
                                         <TextBlock Grid.Column="1"
@@ -91,13 +92,13 @@
                                                              IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWriteTags}"
                                                              Command="{Binding $parent[UserControl].((tag:TagPageViewModel)DataContext).UpdateTag}"
                                                              CommandParameter="{Binding .}"
-                                                             Icon="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.EditIcon}"/>
+                                                             Icon="PencilOutline"/>
 
                                         <controls:IconButton Grid.Column="3"
                                                              IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanDeleteTags}"
                                                              Command="{Binding $parent[UserControl].((tag:TagPageViewModel)DataContext).DeleteTag}"
                                                              CommandParameter="{Binding .}"
-                                                             Icon="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.TrashIcon}"/>
+                                                             Icon="DeleteOutline"/>
                                     </Grid>
                                 </Border>
                             </DataTemplate>

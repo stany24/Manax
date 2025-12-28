@@ -7,6 +7,7 @@
     xmlns:page="clr-namespace:ManaxClient.ViewModels.Pages.Stats"
     xmlns:viewModels="clr-namespace:ManaxClient.ViewModels"
     xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
+    xmlns:icon="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Pages.Stats.UserStatsPageView"
     x:DataType="page:UserStatsPageViewModel"
@@ -18,8 +19,8 @@
             <StackPanel Orientation="Vertical">
                 <TextBlock Classes="title" Text="{localization:Localize UserStatsPage.Title}" />
                 <StackPanel Orientation="Horizontal">
-                    <Image Classes="icon"
-                           Source="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.StatsIcon}"/>
+                    <icon:MaterialIcon Classes="icon"
+                                       Kind="ChartLine"/>
                     <TextBlock Text="{localization:Localize UserStatsPage.Subtitle}"
                                VerticalAlignment="Center"
                                Margin="5,0,0,0"/>
@@ -30,8 +31,8 @@
                 <Border Grid.Column="0" Classes="card">
                     <StackPanel Spacing="20">
                         <StackPanel Orientation="Horizontal" Spacing="12">
-                            <Image Classes="icon"
-                                   Source="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.BooksIcon}"/>
+                            <icon:MaterialIcon Classes="icon"
+                                               Kind="Bookshelf"/>
                             <TextBlock Classes="subtitle"
                                        Text="{localization:Localize UserStatsPage.SeriesProgress.Title}" Margin="0" />
                         </StackPanel>
@@ -73,8 +74,8 @@
                 <Border Grid.Column="1" Classes="card">
                     <StackPanel Spacing="20">
                         <StackPanel Orientation="Horizontal" Spacing="12">
-                            <Image Classes="icon"
-                                   Source="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.BookIcon}"/>
+                            <icon:MaterialIcon Classes="icon"
+                                               Kind="BookOpenVariantOutline"/>
                             <TextBlock Classes="subtitle"
                                        Text="{localization:Localize UserStatsPage.ChaptersProgress.Title}" Margin="0" />
                         </StackPanel>
@@ -109,8 +110,8 @@
             <Border Classes="card">
                 <StackPanel Spacing="20">
                     <StackPanel Orientation="Horizontal" Spacing="12">
-                        <Image Classes="icon"
-                               Source="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.RanksIcon}"/>
+                        <icon:MaterialIcon Classes="icon"
+                                           Kind="ChevronTripleUp"/>
                         <TextBlock Classes="subtitle"
                                    Text="{localization:Localize UserStatsPage.RankDistribution.Title}" Margin="0" />
                     </StackPanel>
@@ -127,8 +128,8 @@
             <Border Classes="card">
                 <StackPanel Spacing="20">
                     <StackPanel Orientation="Horizontal" Spacing="12">
-                        <Image Classes="icon"
-                               Source="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.StatsIcon}"/>
+                        <icon:MaterialIcon Classes="icon"
+                                           Kind="ChartLine"/>
                         <TextBlock Classes="subtitle" Text="{localization:Localize UserStatsPage.ReadsPerDay.Title}"
                                    Margin="0" />
                     </StackPanel>

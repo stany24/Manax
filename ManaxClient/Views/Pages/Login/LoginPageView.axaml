@@ -5,7 +5,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:page="clr-namespace:ManaxClient.ViewModels.Pages.Login"
     xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
-    xmlns:viewModels="clr-namespace:ManaxClient.ViewModels"
+    xmlns:icon="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Pages.Login.LoginPageView"
     x:DataType="page:LoginPageViewModel">
@@ -86,8 +86,8 @@
 
                         <StackPanel Orientation="Vertical">
                             <StackPanel Orientation="Horizontal">
-                                <Image Classes="icon"
-                                       Source="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.IdeaIcon}"/>
+                                <icon:MaterialIcon Classes="icon"
+                                                       Kind="Lightbulb"/>
                                 <TextBlock Text="{localization:Localize LoginPage.Tip.Title}"
                                            VerticalAlignment="Center"
                                            FontWeight="Bold" />

@@ -8,6 +8,7 @@
     xmlns:viewModels="clr-namespace:ManaxClient.ViewModels"
     xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
     xmlns:localization1="clr-namespace:ManaxClient.Localization"
+    xmlns:icon="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Pages.Library.LibraryPageView"
     x:DataType="page:LibraryPageViewModel"
@@ -32,8 +33,8 @@
                         VerticalAlignment="Top"
                         Padding="12,8">
                     <StackPanel Orientation="Horizontal" Spacing="8">
-                        <Image Classes="icon"
-                               Source="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.TrashIcon}"/>
+                        <icon:MaterialIcon Classes="icon"
+                                               Kind="DeleteOutline"/>
                         <TextBlock Text="{localization:Localize LibraryPage.Delete}" FontWeight="Medium" />
                     </StackPanel>
                 </Button>
@@ -43,8 +44,8 @@
                 <StackPanel Orientation="Vertical"
                             Spacing="16"
                             HorizontalAlignment="Center">
-                    <Image Classes="icon"
-                           Source="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.BooksIcon}"/>
+                    <icon:MaterialIcon Classes="icon"
+                                           Kind="Bookshelf"/>
                     <TextBlock Text="{localization:Localize LibraryPage.EmptyLibrary.Title}"
                                FontSize="18"
                                FontWeight="Medium"
