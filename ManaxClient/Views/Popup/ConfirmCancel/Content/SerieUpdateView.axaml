@@ -6,6 +6,7 @@
     xmlns:content="clr-namespace:ManaxClient.ViewModels.Popup.ConfirmCancel.Content"
     xmlns:converters="clr-namespace:ManaxClient.Converters"
     xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
+    xmlns:viewModels="clr-namespace:ManaxClient.ViewModels"
     mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="500"
     x:Class="ManaxClient.Views.Popup.ConfirmCancel.Content.SerieUpdateView"
     x:DataType="content:SerieUpdateViewModel"
@@ -22,9 +23,8 @@
                     Orientation="Horizontal"
                     Spacing="12"
                     Margin="0,0,0,8">
-            <TextBlock Text="📖"
-                       FontSize="24"
-                       VerticalAlignment="Center" />
+            <Image Classes="icon"
+                   Source="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.BookIcon}"/>
             <StackPanel Spacing="4">
                 <TextBlock
                     Text="{localization:Localize SerieUpdatePopup.Title}"

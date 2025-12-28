@@ -43,7 +43,8 @@
                 <StackPanel Orientation="Vertical"
                             Spacing="16"
                             HorizontalAlignment="Center">
-                    <TextBlock Text="📚" FontSize="48" HorizontalAlignment="Center" />
+                    <Image Classes="icon"
+                           Source="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.BooksIcon}"/>
                     <TextBlock Text="{localization:Localize LibraryPage.EmptyLibrary.Title}"
                                FontSize="18"
                                FontWeight="Medium"

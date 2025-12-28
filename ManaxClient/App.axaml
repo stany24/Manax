@@ -64,6 +64,27 @@
             <Setter Property="RenderTransform" Value="scale(1.02)" />
         </Style>
 
+        <Style Selector="controls|IconButton">
+            <Setter Property="Padding" Value="6"></Setter>
+            <Setter Property="BorderThickness" Value="2"></Setter>
+            <Setter Property="CornerRadius" Value="5"></Setter>
+            <Setter Property="HorizontalAlignment" Value="Center"></Setter>
+            <Setter Property="VerticalAlignment" Value="Center"></Setter>
+            <Setter Property="Transitions">
+                <Transitions>
+                    <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.1">
+                        <TransformOperationsTransition.Easing>
+                            <SineEaseInOut />
+                        </TransformOperationsTransition.Easing>
+                    </TransformOperationsTransition>
+                </Transitions>
+            </Setter>
+        </Style>
+
+        <Style Selector="controls|IconButton:pointerover">
+            <Setter Property="RenderTransform" Value="scale(1.02)" />
+        </Style>
+
         <Style Selector="Button.sidebar">
             <Setter Property="assists:ShadowAssist.ShadowDepth" Value="Depth0"></Setter>
             <Setter Property="Background" Value="Transparent"></Setter>

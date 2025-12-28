@@ -151,6 +151,8 @@
                             IsVisible="{Binding !Serie.Chapters.Count}">
                         <StackPanel Spacing="8" HorizontalAlignment="Center">
                             <TextBlock Text="📖" FontSize="32" />
+                            <Image Classes="icon"
+                                   Source="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.BookIcon}"/>
                             <TextBlock Text="{localization:Localize SeriePage.NoChaptersAvailable}"
                                        FontWeight="Medium" />
                             <TextBlock Text="{localization:Localize SeriePage.NoChaptersDescription}"

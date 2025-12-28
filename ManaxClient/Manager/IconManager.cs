@@ -16,7 +16,7 @@ namespace ManaxClient.Manager;
 public partial class IconManager:ObservableObject
 {
     private readonly ConcurrentDictionary<string, byte[]> _cachedIconImages = new();
-    [ObservableProperty] private Bitmap? _libraryIcon;
+    [ObservableProperty] private Bitmap? _booksIcon;
     [ObservableProperty] private Bitmap? _tagsIcon;
     [ObservableProperty] private Bitmap? _homeIcon;
     [ObservableProperty] private Bitmap? _usersIcon;
@@ -37,6 +37,7 @@ public partial class IconManager:ObservableObject
     [ObservableProperty] private Bitmap? _nextIcon;
     [ObservableProperty] private Bitmap? _previousIcon;
     [ObservableProperty] private Bitmap? _flagIcon;
+    [ObservableProperty] private Bitmap? _bookIcon;
     
     public IconManager()
     {

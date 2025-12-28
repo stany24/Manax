@@ -30,7 +30,8 @@
                 <Border Grid.Column="0" Classes="card">
                     <StackPanel Spacing="20">
                         <StackPanel Orientation="Horizontal" Spacing="12">
-                            <TextBlock Text="📚" FontSize="20" />
+                            <Image Classes="icon"
+                                   Source="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.BooksIcon}"/>
                             <TextBlock Classes="subtitle"
                                        Text="{localization:Localize UserStatsPage.SeriesProgress.Title}" Margin="0" />
                         </StackPanel>
@@ -72,7 +73,8 @@
                 <Border Grid.Column="1" Classes="card">
                     <StackPanel Spacing="20">
                         <StackPanel Orientation="Horizontal" Spacing="12">
-                            <TextBlock Text="📖" FontSize="20" />
+                            <Image Classes="icon"
+                                   Source="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.BookIcon}"/>
                             <TextBlock Classes="subtitle"
                                        Text="{localization:Localize UserStatsPage.ChaptersProgress.Title}" Margin="0" />
                         </StackPanel>

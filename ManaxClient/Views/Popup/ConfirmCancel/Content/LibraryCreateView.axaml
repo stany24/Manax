@@ -11,7 +11,8 @@
     x:DataType="content:LibraryCreateViewModel">
     <Grid RowDefinitions="Auto,Auto,Auto" RowSpacing="16" Margin="16">
         <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="12" Margin="0,0,0,8">
-            <TextBlock Text="📚" FontSize="24" VerticalAlignment="Center" />
+            <Image Classes="icon"
+                   Source="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.BookIcon}"/>
             <StackPanel Spacing="4">
                 <TextBlock
                     Text="{localization:Localize LibraryCreatePopup.NewLibrary}"

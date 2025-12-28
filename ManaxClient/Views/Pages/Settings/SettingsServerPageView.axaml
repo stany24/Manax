@@ -117,7 +117,8 @@
             <Border Classes="card">
                 <StackPanel Spacing="20">
                     <StackPanel Orientation="Horizontal" Spacing="12">
-                        <TextBlock Text="📖" FontSize="20" />
+                        <Image Classes="icon"
+                               Source="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.BookIcon}"/>
                         <TextBlock Classes="subtitle" Text="{localization:Localize SettingsServerPage.ChapterConfig}"
                                    Margin="0" />
                     </StackPanel>
@@ -163,7 +164,8 @@
             <Border Classes="card">
                 <StackPanel Spacing="20">
                     <StackPanel Orientation="Horizontal" Spacing="12">
-                        <TextBlock Text="📚" FontSize="20" />
+                        <Image Classes="icon"
+                               Source="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).IconManager.BooksIcon}"/>
                         <TextBlock Classes="subtitle" Text="{localization:Localize SettingsServerPage.SeriesConfig}"
                                    Margin="0" />
                     </StackPanel>

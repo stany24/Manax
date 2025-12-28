@@ -60,7 +60,7 @@
                                             CommandParameter="{Binding }">
                                         <StackPanel Orientation="Horizontal" Spacing="12">
                                             <Image Classes="icon"
-                                                   Source="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).IconManager.LibraryIcon}"/>
+                                                   Source="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).IconManager.BooksIcon}"/>
                                             <TextBlock Text="{Binding Name}" TextTrimming="CharacterEllipsis" />
                                         </StackPanel>
                                     </Button>

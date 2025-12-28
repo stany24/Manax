@@ -1,7 +1,5 @@
 using System;
 using Avalonia;
-using Avalonia.Animation;
-using Avalonia.Animation.Easings;
 using Avalonia.Controls;
 using Avalonia.Layout;
 using Avalonia.Markup.Xaml.MarkupExtensions;
@@ -49,41 +47,9 @@ public class IconButton : Button
         stackPanel.Children.Add(textBlock);
         
         Content = stackPanel;
-        Padding= new Thickness(6);
-        BorderThickness = new Thickness(2);
-        CornerRadius = new CornerRadius(5);
-        HorizontalAlignment = HorizontalAlignment.Center;
-        VerticalAlignment = VerticalAlignment.Center;
+        RenderTransformOrigin = new RelativePoint(0.5, 0.5, RelativeUnit.Relative);
         this[!BackgroundProperty] = new DynamicResourceExtension("MaterialCardBackgroundBrush");
         this[!BorderBrushProperty] = new DynamicResourceExtension("MaterialPrimaryLightBrush");
-        
-        AddHoverAnimation();
-    }
-    
-    private void AddHoverAnimation()
-    {
-        RenderTransform = new ScaleTransform();
-        RenderTransformOrigin = new RelativePoint(0.5, 0.5, RelativeUnit.Relative);
-        Transitions scaleTransition =
-        [
-            new TransformOperationsTransition
-            {
-                Property = RenderTransformProperty,
-                Duration = TimeSpan.FromMilliseconds(200),
-                Easing = new CubicEaseOut()
-            }
-        ];
-        Transitions = scaleTransition;
-        
-        PointerEntered += (_, _) =>
-        {
-            RenderTransform = new ScaleTransform(1.05, 1.05);
-        };
-        
-        PointerExited += (_, _) =>
-        {
-            RenderTransform = new ScaleTransform(1.0, 1.0);
-        };
     }
     
     public IImage? Icon
