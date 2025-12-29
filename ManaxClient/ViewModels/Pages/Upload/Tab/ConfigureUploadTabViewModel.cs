@@ -8,8 +8,10 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData;
+using ManaxClient.Manager;
 using ManaxClient.Models.Upload;
 using ManaxLibrary.Logging;
+using Microsoft.VisualBasic.FileIO;
 
 namespace ManaxClient.ViewModels.Pages.Upload.Tab;
 
@@ -75,6 +77,7 @@ public partial class ConfigureUploadTabViewModel : TabViewModel
 
     public void Next()
     {
+        StorageManager.ClearTrash();
         NextRequested?.Invoke(this, new FetchFromSourceTabViewModel());
     }
 

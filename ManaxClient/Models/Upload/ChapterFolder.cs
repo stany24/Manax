@@ -4,17 +4,13 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
+using ManaxClient.Manager;
 using ManaxLibrary;
 
 namespace ManaxClient.Models.Upload;
 
 public partial class ChapterFolder : ObservableObject
 {
-    private static readonly string TrashPath = Path.Combine(
-        Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-        "ManaxClient",
-        "Trash");
-
     private readonly List<KeyValuePair<string, string>> _deletedImages = [];
     [ObservableProperty] private string _name;
     [ObservableProperty] private ImageFile? _selectedImage;
@@ -43,9 +39,9 @@ public partial class ChapterFolder : ObservableObject
     public void DeleteImage(ImageFile image)
     {
         Images.Remove(image);
-        if (!Directory.Exists(Path.Combine(TrashPath, Name))) Directory.CreateDirectory(Path.Combine(TrashPath, Name));
+        if (!Directory.Exists(Path.Combine(StorageManager.TrashFolder, Name))) Directory.CreateDirectory(Path.Combine(StorageManager.TrashFolder, Name));
 
-        string trashImagePath = Path.Combine(TrashPath, Name, Path.GetFileName(image.Path) + Guid.NewGuid());
+        string trashImagePath = Path.Combine(StorageManager.TrashFolder, Name, Path.GetFileName(image.Path) + Guid.NewGuid());
         File.Move(image.Path, trashImagePath);
         _deletedImages.Add(new KeyValuePair<string, string>(image.Path, trashImagePath));
         OnPropertyChanged(nameof(Images));

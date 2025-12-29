@@ -2,18 +2,13 @@ using System;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Text.Json;
+using ManaxClient.Manager;
 
 namespace ManaxClient.Models.Upload;
 
 public static class UploadSettings
 {
     private static UploadSettingsData _settings = new();
-
-    private static readonly string SavePath = Path.Combine(
-        Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-        "ManaxClient",
-        "uploadsettings.json");
-
     private static readonly JsonSerializerOptions JsonSettings = new() { WriteIndented = true };
 
     static UploadSettings()
@@ -51,18 +46,18 @@ public static class UploadSettings
 
     private static void Load()
     {
-        if (!File.Exists(SavePath)) return;
-        string json = File.ReadAllText(SavePath);
+        if (!File.Exists(StorageManager.UploadFile)) return;
+        string json = File.ReadAllText(StorageManager.UploadFile);
         _settings = JsonSerializer.Deserialize<UploadSettingsData>(json) ?? new UploadSettingsData();
     }
 
     private static void Save()
     {
-        string directory = Path.GetDirectoryName(SavePath) ?? string.Empty;
+        string directory = Path.GetDirectoryName(StorageManager.UploadFile) ?? string.Empty;
         if (!Directory.Exists(directory)) Directory.CreateDirectory(directory);
 
         string json = JsonSerializer.Serialize(_settings, JsonSettings);
-        File.WriteAllText(SavePath, json);
+        File.WriteAllText(StorageManager.UploadFile, json);
         SettingsChanged?.Invoke(null, EventArgs.Empty);
     }
 }

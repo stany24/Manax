@@ -5,6 +5,7 @@ using Avalonia;
 using Avalonia.Media;
 using CommunityToolkit.Mvvm.Messaging;
 using ManaxClient.Event;
+using ManaxClient.Manager;
 using Material.Styles.Themes;
 using Material.Styles.Themes.Base;
 
@@ -12,11 +13,6 @@ namespace ManaxClient.Models.Theme;
 
 public static class ThemeSettings
 {
-    private static readonly string SavePath = Path.Combine(
-        Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-        "ManaxClient",
-        "themesettings.json");
-
     private static readonly JsonSerializerOptions Settings = new() { WriteIndented = true };
     private static ThemeSettingsData LoadFailBackup { get; } = new(new HslColor(1, 230, 0.5,0.5));
     public static ThemeSettingsData Current { get; private set; } = null!;
@@ -46,13 +42,13 @@ public static class ThemeSettings
 
     public static void Load()
     {
-        if (!File.Exists(SavePath))
+        if (!File.Exists(StorageManager.ThemeFile))
         {
             UpdateTheme(LoadFailBackup);
             return; 
         }
 
-        string json = File.ReadAllText(SavePath);
+        string json = File.ReadAllText(StorageManager.ThemeFile);
         ThemeSettingsData? themeSettingsData = JsonSerializer.Deserialize<ThemeSettingsData>(json);
         if (themeSettingsData == null)
         {
@@ -64,10 +60,10 @@ public static class ThemeSettings
 
     private static void Save(ThemeSettingsData themeSettingsData)
     {
-        string directory = Path.GetDirectoryName(SavePath) ?? string.Empty;
+        string directory = Path.GetDirectoryName(StorageManager.ThemeFile) ?? string.Empty;
         if (!Directory.Exists(directory)) Directory.CreateDirectory(directory);
 
         string json = JsonSerializer.Serialize(themeSettingsData, Settings);
-        File.WriteAllText(SavePath, json);
+        File.WriteAllText(StorageManager.ThemeFile, json);
     }
 }

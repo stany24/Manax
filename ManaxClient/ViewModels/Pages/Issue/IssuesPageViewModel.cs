@@ -10,6 +10,7 @@ using DynamicData;
 using DynamicData.Binding;
 using Jeek.Avalonia.Localization;
 using ManaxClient.Event;
+using ManaxClient.Manager;
 using ManaxClient.Models.Issue;
 using ManaxClient.ViewModels.Pages.Serie;
 using ManaxClient.ViewModels.Popup.ConfirmCancel;
@@ -72,8 +73,7 @@ public partial class IssuesPageViewModel : PageViewModel
 
     public void OnChapterIssueClicked(ChapterDto chapter)
     {
-        string serieFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Manax",
-            chapter.SerieId.ToString(CultureInfo.InvariantCulture));
+        string serieFolder = Path.Combine(StorageManager.ConfigFolder,chapter.SerieId.ToString(CultureInfo.InvariantCulture));
         if (!Directory.Exists(serieFolder)) Directory.CreateDirectory(serieFolder);
         string saveFile = Path.Combine(serieFolder, chapter.Number.ToString(CultureInfo.InvariantCulture));
         string saveFolder = Path.Combine(serieFolder,

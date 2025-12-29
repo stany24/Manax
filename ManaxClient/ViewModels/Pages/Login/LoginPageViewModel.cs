@@ -12,6 +12,7 @@ using DynamicData.Binding;
 using Jeek.Avalonia.Localization;
 using ManaxClient.Event;
 using ManaxClient.Localization;
+using ManaxClient.Manager;
 using ManaxClient.Models;
 using ManaxClient.ViewModels.Pages.Home;
 using ManaxLibrary;
@@ -24,7 +25,7 @@ namespace ManaxClient.ViewModels.Pages.Login;
 public sealed partial class LoginPageViewModel : PageViewModel
 {
     private readonly ReadOnlyObservableCollection<Language> _languages;
-    private readonly string _saveFile;
+
     [ObservableProperty] private bool _canLogin = true;
     [ObservableProperty] private string _emoji = "🔑";
     [ObservableProperty] private string _host = string.Empty;
@@ -36,7 +37,6 @@ public sealed partial class LoginPageViewModel : PageViewModel
     public LoginPageViewModel()
     {
         ManaxApiClient.ResetToken();
-        _saveFile = Path.Combine(Directory.GetCurrentDirectory(), "login.json");
         ControlBarVisible = false;
 
         LanguageSource.Languages
@@ -128,8 +128,8 @@ public sealed partial class LoginPageViewModel : PageViewModel
         };
         try
         {
-            if (File.Exists(_saveFile)) File.Delete(_saveFile);
-            using FileStream fileStream = File.OpenWrite(_saveFile);
+            if (File.Exists(StorageManager.LoginFile)) File.Delete(StorageManager.LoginFile);
+            using FileStream fileStream = File.OpenWrite(StorageManager.LoginFile);
             using StreamWriter writer = new(fileStream);
             string serialize = JsonSerializer.Serialize(loginValues);
             writer.Write(serialize);
@@ -144,10 +144,10 @@ public sealed partial class LoginPageViewModel : PageViewModel
 
     private void TryLoadSavedLogin()
     {
-        if (!File.Exists(_saveFile)) return;
+        if (!File.Exists(StorageManager.LoginFile)) return;
         try
         {
-            using FileStream fileStream = File.OpenRead(_saveFile);
+            using FileStream fileStream = File.OpenRead(StorageManager.LoginFile);
             using StreamReader reader = new(fileStream);
             string content = reader.ReadToEnd();
             LoginValues? loginValues = JsonSerializer.Deserialize<LoginValues>(content);
