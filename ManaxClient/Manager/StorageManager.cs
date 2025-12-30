@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Text.Json;
 using System.Threading.Tasks;
 using ManaxLibrary.Logging;
 
@@ -41,5 +42,20 @@ public static class StorageManager
                 Logger.LogError("Error clearing trash folder", e);
             }
         });
+    }
+    
+    public static void Save(string filePath, object data)
+    {
+        string directory = Path.GetDirectoryName(filePath) ?? string.Empty;
+        if (!Directory.Exists(directory)) Directory.CreateDirectory(directory);
+        string json = JsonSerializer.Serialize(data, new JsonSerializerOptions { WriteIndented = true });
+        File.WriteAllText(filePath, json);
+    }
+
+    public static T? Load<T>(string filePath) where T : class
+    {
+        if (!File.Exists(filePath)) return null;
+        string json = File.ReadAllText(filePath);
+        return JsonSerializer.Deserialize<T>(json);
     }
 }

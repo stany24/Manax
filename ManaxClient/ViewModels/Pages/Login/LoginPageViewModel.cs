@@ -1,9 +1,7 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Globalization;
-using System.IO;
 using System.Linq;
-using System.Text.Json;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
@@ -126,39 +124,15 @@ public sealed partial class LoginPageViewModel : PageViewModel
             Host = Host,
             Username = Username
         };
-        try
-        {
-            if (File.Exists(StorageManager.LoginFile)) File.Delete(StorageManager.LoginFile);
-            using FileStream fileStream = File.OpenWrite(StorageManager.LoginFile);
-            using StreamWriter writer = new(fileStream);
-            string serialize = JsonSerializer.Serialize(loginValues);
-            writer.Write(serialize);
-            writer.Flush();
-        }
-        catch (Exception e)
-        {
-            Logger.LogError("Failed to save login values", e);
-            throw;
-        }
+        StorageManager.Save(StorageManager.LoginFile,loginValues);
     }
 
     private void TryLoadSavedLogin()
     {
-        if (!File.Exists(StorageManager.LoginFile)) return;
-        try
-        {
-            using FileStream fileStream = File.OpenRead(StorageManager.LoginFile);
-            using StreamReader reader = new(fileStream);
-            string content = reader.ReadToEnd();
-            LoginValues? loginValues = JsonSerializer.Deserialize<LoginValues>(content);
-            if (loginValues == null) return;
-            Host = loginValues.Host;
-            Username = loginValues.Username;
-        }
-        catch (Exception e)
-        {
-            Logger.LogError("Failed to load login values", e);
-        }
+        LoginValues? loginValues = StorageManager.Load<LoginValues>(StorageManager.LoginFile);
+        if (loginValues == null) return;
+        Host = loginValues.Host;
+        Username = loginValues.Username;
     }
 
     public bool IsAdmin()
