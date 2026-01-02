@@ -4,9 +4,11 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Messaging;
 using DynamicData;
 using ManaxClient.Event;
+using ManaxClient.Manager;
 using ManaxClient.Models.Issue;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
+using ManaxLibrary.DTO.Feature;
 using ManaxLibrary.DTO.Issue.Reported;
 using ManaxLibrary.Logging;
 
@@ -19,7 +21,16 @@ public class ProblemSource
 
     public ProblemSource()
     {
-        WeakReferenceMessenger.Default.Register<LoggedInMessage>(this, (_,_) => LoadProblems());
+        FeatureManager.FeatureChanged += (_, features) =>
+        {
+            if (features is { Key: FeatureType.Ranks, Value: true })
+                LoadProblems();
+            else
+            {
+                ChapterProblems.Clear();
+                SerieProblems.Clear();
+            }
+        };
     }
 
     private void LoadProblems()
