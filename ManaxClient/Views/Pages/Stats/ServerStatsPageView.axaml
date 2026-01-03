@@ -120,6 +120,8 @@
                             </StackPanel>
 
                             <StackPanel Grid.Row="1" Spacing="4" HorizontalAlignment="Center">
+                                <icon:MaterialIcon Classes="icon"
+                                                   Kind="BookOpenVariantOutline"/>
                                 <TextBlock Text="{localization:Localize ServerStatsPage.Content.Chapters}"
                                            FontSize="14" FontWeight="Medium" />
                                 <TextBlock Text="{Binding ServerStats.Chapters}"

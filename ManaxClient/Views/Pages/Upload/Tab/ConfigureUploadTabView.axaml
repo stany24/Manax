@@ -164,6 +164,8 @@
                         Padding="16"
                         Margin="0,8,0,0">
                     <StackPanel Spacing="12">
+                        <icon:MaterialIcon Classes="icon"
+                                           Kind="Lightbulb"/>
                         <TextBlock Text="{localization:Localize ConfigureUploadPage.Information}"
                                    FontWeight="SemiBold"
                                    FontSize="14" />

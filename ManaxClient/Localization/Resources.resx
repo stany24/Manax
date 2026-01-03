@@ -373,7 +373,7 @@
         <value>Features Management</value>
     </data>
     <data name="SettingsFeaturesPage.Subtitle" xml:space="preserve">
-        <value>🎛️ Enable or disable server features</value>
+        <value>Enable or disable server features</value>
     </data>
     <data name="SettingsFeaturesPage.Save" xml:space="preserve">
         <value>Save Features</value>
@@ -430,7 +430,7 @@
         <value>📖 Series</value>
     </data>
     <data name="ServerStatsPage.Content.Chapters" xml:space="preserve">
-        <value>📄 Chapters</value>
+        <value>Chapters</value>
     </data>
     <data name="ServerStatsPage.LibraryDistribution.Title" xml:space="preserve">
         <value>Library Distribution</value>
@@ -799,7 +799,7 @@
         <value>No folder selected</value>
     </data>
     <data name="ConfigureUploadPage.Information" xml:space="preserve">
-        <value>ℹ️ Information</value>
+        <value>Information</value>
     </data>
     <data name="ConfigureUploadPage.Information.Text1" xml:space="preserve">
         <value>The processing folder is where files from source folders will be copied for processing.</value>
@@ -853,7 +853,7 @@
         <value>Role Management</value>
     </data>
     <data name="RolePage.RolesCount" xml:space="preserve">
-        <value>👔 {0} role(s) configured</value>
+        <value>{0} role(s) configured</value>
     </data>
     <data name="RolePage.NewRole" xml:space="preserve">
         <value>New role</value>

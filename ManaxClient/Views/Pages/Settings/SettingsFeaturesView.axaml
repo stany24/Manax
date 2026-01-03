@@ -6,6 +6,7 @@
     xmlns:page="clr-namespace:ManaxClient.ViewModels.Pages.Settings"
     xmlns:viewModels="clr-namespace:ManaxClient.ViewModels"
     xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
+    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="600"
     x:Class="ManaxClient.Views.Pages.Settings.SettingsFeaturesView"
     x:DataType="page:SettingsFeaturesViewModel"
@@ -16,7 +17,12 @@
 
             <StackPanel Orientation="Vertical">
                 <TextBlock Classes="title" Text="{localization:Localize SettingsFeaturesPage.Title}" />
-                <TextBlock Text="{localization:Localize SettingsFeaturesPage.Subtitle}" />
+                <StackPanel Orientation="Horizontal">
+                    <avalonia:MaterialIcon Classes="icon"
+                                       Kind="Feather"/>
+                    <TextBlock Text="{localization:Localize SettingsFeaturesPage.Subtitle}" />
+                </StackPanel>
+                
             </StackPanel>
 
             <!-- Success/Error Messages -->

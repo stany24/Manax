@@ -237,8 +237,4 @@
             <LastGenOutput>Resources.fr.Designer.cs</LastGenOutput>
         </EmbeddedResource>
     </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Assets\Icons\" />
-    </ItemGroup>
 </Project>

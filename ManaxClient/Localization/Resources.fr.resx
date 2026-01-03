@@ -376,7 +376,7 @@
         <value>Gestion des Fonctionnalités</value>
     </data>
     <data name="SettingsFeaturesPage.Subtitle" xml:space="preserve">
-        <value>🎛️ Activer ou désactiver les fonctionnalités du serveur</value>
+        <value>Activer ou désactiver les fonctionnalités du serveur</value>
     </data>
     <data name="SettingsFeaturesPage.Save" xml:space="preserve">
         <value>Enregistrer les Fonctionnalités</value>
@@ -433,7 +433,7 @@
         <value>📖 Séries</value>
     </data>
     <data name="ServerStatsPage.Content.Chapters" xml:space="preserve">
-        <value>📄 Chapitres</value>
+        <value>Chapitres</value>
     </data>
     <data name="ServerStatsPage.LibraryDistribution.Title" xml:space="preserve">
         <value>Répartition par bibliothèque</value>
@@ -844,7 +844,7 @@
         <value>Aucun dossier sélectionné</value>
     </data>
     <data name="ConfigureUploadPage.Information" xml:space="preserve">
-        <value>ℹ️ Information</value>
+        <value>Information</value>
     </data>
     <data name="ConfigureUploadPage.Information.Text1" xml:space="preserve">
         <value>Le dossier de traitement est l'endroit où les fichiers des dossiers sources seront copiés pour traitement.</value>
@@ -898,7 +898,7 @@
         <value>Gestion des rôles</value>
     </data>
     <data name="RolePage.RolesCount" xml:space="preserve">
-        <value>👔 {0} rôle(s) configuré(s)</value>
+        <value>{0} rôle(s) configuré(s)</value>
     </data>
     <data name="RolePage.NewRole" xml:space="preserve">
         <value>Nouveau rôle</value>
