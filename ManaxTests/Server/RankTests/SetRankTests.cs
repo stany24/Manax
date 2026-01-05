@@ -16,7 +16,7 @@ public class SetRankTests : RankTestsSetup
             RankId = 1
         };
 
-        IActionResult result = await Controller.SetUserRank(createDto);
+        ActionResult result = await Controller.SetUserRank(createDto);
 
         Assert.IsInstanceOfType<OkResult>(result);
 
@@ -36,7 +36,7 @@ public class SetRankTests : RankTestsSetup
             RankId = 3
         };
 
-        IActionResult result = await Controller.SetUserRank(updateDto);
+        ActionResult result = await Controller.SetUserRank(updateDto);
 
         Assert.IsInstanceOfType<OkResult>(result);
 
@@ -55,7 +55,7 @@ public class SetRankTests : RankTestsSetup
             RankId = 2
         };
 
-        IActionResult result = await Controller.SetUserRank(createDto);
+        ActionResult result = await Controller.SetUserRank(createDto);
 
         Assert.IsInstanceOfType<OkResult>(result);
 

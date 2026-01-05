@@ -6,7 +6,6 @@ using ManaxServer.Attributes;
 using ManaxServer.Models;
 using ManaxServer.Models.SavePoint;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace ManaxServer.Controllers;
 
@@ -30,6 +29,6 @@ public class SavePointController(ManaxContext context) : ControllerBase
         catch { return Conflict(ErrorCode.SavePointAlreadyExists); }
 
         Logger.LogInfo("Created new save point with ID " + savePoint.Id + " at: " + savePoint.Path);
-        return savePoint.Id;
+        return Ok(savePoint.Id);
     }
 }

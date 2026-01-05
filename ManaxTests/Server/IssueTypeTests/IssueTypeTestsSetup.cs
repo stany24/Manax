@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ManaxTests.Server.IssueTypeTests;
 
-public abstract class IssueTypeTestsSetup
+public abstract class IssueTypeTestsSetup:TestSetup
 {
     private MockFeatureService _mockFeatureService = null!;
     protected ManaxContext Context { get; private set; } = null!;

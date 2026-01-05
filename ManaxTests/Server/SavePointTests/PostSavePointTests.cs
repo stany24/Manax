@@ -1,3 +1,4 @@
+using ManaxLibrary;
 using ManaxLibrary.DTO.SavePoint;
 using ManaxServer.Models.SavePoint;
 using Microsoft.AspNetCore.Mvc;
@@ -18,9 +19,8 @@ public class PostSavePointTests : SavePointTestsSetup
         ActionResult<long> result = await Controller.PostSavePoint(createDto);
 
         OkObjectResult? okResult = result.Result as OkObjectResult;
-        Assert.IsNull(okResult);
-
-        long? savePointId = result.Value;
+        Assert.IsNotNull(okResult);
+        long? savePointId = okResult.Value as long?;
         Assert.IsNotNull(savePointId);
 
         SavePoint? createdSavePoint = await Context.SavePoints.FindAsync(savePointId);
@@ -39,7 +39,7 @@ public class PostSavePointTests : SavePointTestsSetup
 
         ActionResult<long> result = await Controller.PostSavePoint(createDto);
 
-        Assert.IsInstanceOfType<ConflictResult>(result.Result);
+        TestSetup.CheckTypeAndErrorCode<ConflictObjectResult>(result.Result, ErrorCode.SavePointAlreadyExists);
     }
 
     [TestMethod]
@@ -52,7 +52,7 @@ public class PostSavePointTests : SavePointTestsSetup
 
         ActionResult<long> result = await Controller.PostSavePoint(createDto);
 
-        Assert.IsInstanceOfType<ConflictResult>(result.Result);
+        TestSetup.CheckTypeAndErrorCode<BadRequestObjectResult>(result.Result, ErrorCode.SavePointPathDoesNotExist);
     }
 
     [TestMethod]
@@ -67,7 +67,9 @@ public class PostSavePointTests : SavePointTestsSetup
         ActionResult<long> result = await Controller.PostSavePoint(createDto);
         DateTime afterCreation = DateTime.UtcNow;
 
-        long? savePointId = result.Value;
+        OkObjectResult? okResult = result.Result as OkObjectResult;
+        Assert.IsNotNull(okResult);
+        long? savePointId = okResult.Value as long?;
         Assert.IsNotNull(savePointId);
 
         SavePoint? createdSavePoint = await Context.SavePoints.FindAsync(savePointId);
@@ -87,7 +89,9 @@ public class PostSavePointTests : SavePointTestsSetup
 
         ActionResult<long> result = await Controller.PostSavePoint(createDto);
 
-        long? savePointId = result.Value;
+        OkObjectResult? okResult = result.Result as OkObjectResult;
+        Assert.IsNotNull(okResult);
+        long? savePointId = okResult.Value as long?;
         Assert.IsNotNull(savePointId);
 
         int finalCount = Context.SavePoints.Count();
@@ -108,9 +112,8 @@ public class PostSavePointTests : SavePointTestsSetup
         ActionResult<long> result = await Controller.PostSavePoint(createDto);
 
         OkObjectResult? okResult = result.Result as OkObjectResult;
-        Assert.IsNull(okResult);
-
-        long? savePointId = result.Value;
+        Assert.IsNotNull(okResult);
+        long? savePointId = okResult.Value as long?;
         Assert.IsNotNull(savePointId);
 
         SavePoint? createdSavePoint = await Context.SavePoints.FindAsync(savePointId);
@@ -136,7 +139,9 @@ public class PostSavePointTests : SavePointTestsSetup
 
             ActionResult<long> result = await Controller.PostSavePoint(createDto);
 
-            long? savePointId = result.Value;
+            OkObjectResult? okResult = result.Result as OkObjectResult;
+            Assert.IsNotNull(okResult);
+            long? savePointId = okResult.Value as long?;
             Assert.IsNotNull(savePointId);
             createdIds.Add(savePointId.Value);
         }
@@ -161,7 +166,7 @@ public class PostSavePointTests : SavePointTestsSetup
 
         ActionResult<long> result = await Controller.PostSavePoint(createDto);
 
-        Assert.IsInstanceOfType<ConflictResult>(result.Result);
+        TestSetup.CheckTypeAndErrorCode<BadRequestObjectResult>(result.Result, ErrorCode.SavePointPathDoesNotExist);
     }
 
     [TestMethod]
@@ -186,8 +191,13 @@ public class PostSavePointTests : SavePointTestsSetup
         ActionResult<long> result1 = await Controller.PostSavePoint(createDto1);
         ActionResult<long> result2 = await Controller.PostSavePoint(createDto2);
 
-        long? savePointId1 = result1.Value;
-        long? savePointId2 = result2.Value;
+        OkObjectResult? okResult1 = result1.Result as OkObjectResult;
+        Assert.IsNotNull(okResult1);
+        long? savePointId1 = okResult1.Value as long?;
+        
+        OkObjectResult? okResult2 = result2.Result as OkObjectResult;
+        Assert.IsNotNull(okResult2);
+        long? savePointId2 = okResult2.Value as long?;
 
         Assert.IsNotNull(savePointId1);
         Assert.IsNotNull(savePointId2);
@@ -212,6 +222,6 @@ public class PostSavePointTests : SavePointTestsSetup
 
         ActionResult<long> result = await Controller.PostSavePoint(createDto);
 
-        Assert.IsInstanceOfType<ConflictResult>(result.Result);
+        TestSetup.CheckTypeAndErrorCode<BadRequestObjectResult>(result.Result, ErrorCode.SavePointPathDoesNotExist);
     }
 }

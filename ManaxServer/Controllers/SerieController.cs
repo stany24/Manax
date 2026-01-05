@@ -89,7 +89,7 @@ public class SerieController(
     [Produces("image/webp")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetPoster(long id)
+    public async Task<ActionResult> GetPoster(long id)
     {
         Serie? serie = context.Series
             .Include(s => s.SavePoint)
@@ -108,7 +108,7 @@ public class SerieController(
     [Produces("image/webp")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetBanner(long id)
+    public async Task<ActionResult> GetBanner(long id)
     {
         Serie? serie = context.Series
             .Include(s => s.SavePoint)
@@ -127,7 +127,7 @@ public class SerieController(
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> PutSerie(long id, SerieUpdateDto serieUpdate)
+    public async Task<ActionResult> PutSerie(long id, SerieUpdateDto serieUpdate)
     {
         Serie? serie = await context.Series.FindAsync(id);
         if (serie == null) return NotFound(ErrorCode.SerieDoesNotExist);
@@ -170,7 +170,7 @@ public class SerieController(
         Directory.CreateDirectory(folderPath);
         notificationService.NotifySerieCreatedAsync(serie.ToDto());
         backgroundTaskService.AddTask(new FixSerieBackGroundTask(fixService, serie.Id));
-        return serie.Id;
+        return Ok(serie.Id);
     }
 
     private SavePoint? SelectSavePoint()
@@ -208,7 +208,7 @@ public class SerieController(
     [RequirePermission(Permission.DeleteSeries)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> DeleteSerie(long id)
+    public async Task<ActionResult> DeleteSerie(long id)
     {
         Serie? serie = await context.Series.FindAsync(id);
         if (serie == null) return NotFound(ErrorCode.SerieDoesNotExist);
@@ -223,7 +223,7 @@ public class SerieController(
     [HttpPost("search")]
     [RequirePermission(Permission.ReadSeries)]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public List<long> Search(Search search)
+    public ActionResult<List<long>> Search(Search search)
     {
         Regex regex = new(search.RegexSearch, RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
@@ -242,7 +242,7 @@ public class SerieController(
             series = series.Where(s => search.IncludedStatuses.Contains(s.Status)).ToList();
         series = series.Where(s => !search.ExcludedStatuses.Contains(s.Status)).ToList();
 
-        return series
+        List<long> result = series
             .Where(s => regex.IsMatch(s.Title) || regex.IsMatch(s.Description))
             .Where(s =>
             {
@@ -251,5 +251,6 @@ public class SerieController(
             })
             .Select(s => s.Id)
             .ToList();
+        return Ok(result);
     }
 }

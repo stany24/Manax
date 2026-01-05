@@ -31,14 +31,14 @@ public class ChapterController(ManaxContext context, INotificationService notifi
     {
         Chapter? chapter = await context.Chapters.FindAsync(id);
         if (chapter == null) return NotFound(ErrorCode.ChapterDoesNotExist);
-        return chapter.ToDto();
+        return Ok(chapter.ToDto());
     }
 
     [HttpDelete("")]
     [RequirePermission(Permission.DeleteChapters)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> DeleteChapter(long id)
+    public async Task<ActionResult> DeleteChapter(long id)
     {
         Chapter? chapter = await context.Chapters.FindAsync(id);
         if (chapter == null) return NotFound(ErrorCode.ChapterDoesNotExist);
@@ -55,7 +55,7 @@ public class ChapterController(ManaxContext context, INotificationService notifi
     [Produces("image/webp")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetChapterPage(long id, int number)
+    public async Task<ActionResult> GetChapterPage(long id, int number)
     {
         Chapter? chapter = context.Chapters
             .Include(c => c.Serie)
@@ -84,7 +84,7 @@ public class ChapterController(ManaxContext context, INotificationService notifi
     [Produces("application/x-cbz")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetChapterPages(long id)
+    public async Task<ActionResult> GetChapterPages(long id)
     {
         Chapter? chapter = await context.Chapters.FindAsync(id);
         if (chapter == null) return NotFound(ErrorCode.ChapterDoesNotExist);

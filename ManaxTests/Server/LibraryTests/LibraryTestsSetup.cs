@@ -4,7 +4,7 @@ using ManaxTests.Server.Mocks;
 
 namespace ManaxTests.Server.LibraryTests;
 
-public abstract class LibraryTestsSetup
+public abstract class LibraryTestsSetup:TestSetup
 {
     private MockNotificationService _mockNotificationService = null!;
     protected ManaxContext Context { get; private set; } = null!;

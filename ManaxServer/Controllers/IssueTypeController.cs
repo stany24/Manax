@@ -22,8 +22,10 @@ public class IssueTypeController(ManaxContext context, IFeatureService featureSe
         if (!featureService.IsFeatureEnabled(FeatureType.ReportedIssues))
             return BadRequest(ErrorCode.FeatureDisabled);
 
-        return await context.ReportedIssueChapterTypes.Select(i => i.ToDto())
+        List<IssueChapterReportedTypeDto> types =  await context.ReportedIssueChapterTypes
+            .Select(i => i.ToDto())
             .ToListAsync();
+        return Ok(types);
     }
 
     [HttpGet("serie/reported/types")]
@@ -34,7 +36,9 @@ public class IssueTypeController(ManaxContext context, IFeatureService featureSe
         if (!featureService.IsFeatureEnabled(FeatureType.ReportedIssues))
             return BadRequest(ErrorCode.FeatureDisabled);
 
-        return await context.ReportedIssueSerieTypes.Select(i => i.ToDto())
+        List<IssueSerieReportedTypeDto> types = await context.ReportedIssueSerieTypes
+            .Select(i => i.ToDto())
             .ToListAsync();
+        return Ok(types);
     }
 }

@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ManaxTests.Server.ReadTests;
 
-public abstract class ReadTestsSetup
+public abstract class ReadTestsSetup:TestSetup
 {
     protected ManaxContext Context { get; private set; } = null!;
     protected ReadController Controller { get; private set; } = null!;

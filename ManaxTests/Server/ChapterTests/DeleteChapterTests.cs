@@ -1,3 +1,4 @@
+using ManaxLibrary;
 using ManaxServer.Models.Chapter;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,7 +11,7 @@ public class DeleteChapterTests : ChapterTestsSetup
     public async Task DeleteChapterWithValidIdRemovesChapter()
     {
         Chapter chapter = Context.Chapters.First();
-        IActionResult result = await Controller.DeleteChapter(chapter.Id);
+        ActionResult result = await Controller.DeleteChapter(chapter.Id);
 
         Assert.IsInstanceOfType<OkResult>(result);
 
@@ -21,9 +22,8 @@ public class DeleteChapterTests : ChapterTestsSetup
     [TestMethod]
     public async Task DeleteChapterWithInvalidIdReturnsNotFound()
     {
-        IActionResult result = await Controller.DeleteChapter(999999);
-
-        Assert.IsInstanceOfType<NotFoundResult>(result);
+        ActionResult result = await Controller.DeleteChapter(999999);
+        CheckTypeAndErrorCode<NotFoundObjectResult>(result, ErrorCode.ChapterDoesNotExist);
     }
 
     [TestMethod]
@@ -32,11 +32,10 @@ public class DeleteChapterTests : ChapterTestsSetup
         int initialCount = Context.Chapters.Count();
         Chapter chapter = Context.Chapters.First();
 
-        IActionResult result = await Controller.DeleteChapter(chapter.Id);
+        ActionResult result = await Controller.DeleteChapter(chapter.Id);
+        int finalCount = Context.Chapters.Count();
 
         Assert.IsInstanceOfType<OkResult>(result);
-
-        int finalCount = Context.Chapters.Count();
         Assert.AreEqual(initialCount - 1, finalCount);
     }
 
@@ -46,14 +45,12 @@ public class DeleteChapterTests : ChapterTestsSetup
         Chapter chapter = Context.Chapters.First(c => c.SerieId == 1);
         int initialSerieChaptersCount = Context.Chapters.Count(c => c.SerieId == 1);
 
-        IActionResult result = await Controller.DeleteChapter(chapter.Id);
+        ActionResult result = await Controller.DeleteChapter(chapter.Id);
+        int finalSerieChaptersCount = Context.Chapters.Count(c => c.SerieId == 1);
+        int otherSeriesChaptersCount = Context.Chapters.Count(c => c.SerieId != 1);
 
         Assert.IsInstanceOfType<OkResult>(result);
-
-        int finalSerieChaptersCount = Context.Chapters.Count(c => c.SerieId == 1);
         Assert.AreEqual(initialSerieChaptersCount - 1, finalSerieChaptersCount);
-
-        int otherSeriesChaptersCount = Context.Chapters.Count(c => c.SerieId != 1);
         Assert.IsGreaterThan(0, otherSeriesChaptersCount);
     }
 }

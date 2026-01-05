@@ -41,6 +41,16 @@ public class Chapter
         };
     }
     
+    public bool DtoEquals(ChapterDto dto)
+    {
+        return Id == dto.Id &&
+               SerieId == dto.SerieId &&
+               Number == dto.Number &&
+               PageNumber == dto.PageNumber &&
+               Creation == dto.Creation &&
+               LastModification == dto.LastModification;
+    }
+    
     public static Chapter FromDto(NewChapter dto)
     {
         return new Chapter

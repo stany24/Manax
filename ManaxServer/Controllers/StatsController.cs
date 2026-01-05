@@ -58,7 +58,7 @@ public class StatsController(ManaxContext context) : ControllerBase
             Reads = reads
         };
 
-        return stats;
+        return Ok(stats);
     }
 
     [HttpGet("server")]
@@ -100,7 +100,7 @@ public class StatsController(ManaxContext context) : ControllerBase
             ActiveUsers = await context.Users.Where(u => u.LastLogin > recently).CountAsync()
         };
 
-        return stats;
+        return Ok(stats);
     }
 
     private static long GetDirectorySize(DirectoryInfo d)

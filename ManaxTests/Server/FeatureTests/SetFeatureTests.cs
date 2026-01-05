@@ -9,7 +9,7 @@ public class SetFeatureTests : FeatureTestsSetup
     [TestMethod]
     public void SetFeatureEnablesFeature()
     {
-        IActionResult result = Controller.SetFeature(new Feature { Key = FeatureType.Ranks, Value = true });
+        ActionResult result = Controller.SetFeature(new Feature { Key = FeatureType.Ranks, Value = true });
 
         Assert.IsInstanceOfType<OkResult>(result);
         Assert.IsTrue(FeatureService.IsFeatureEnabled(FeatureType.Ranks));
@@ -20,7 +20,7 @@ public class SetFeatureTests : FeatureTestsSetup
     {
         FeatureService.SetFeatureEnabled(FeatureType.Ranks, true);
 
-        IActionResult result = Controller.SetFeature(new Feature { Key = FeatureType.Ranks, Value = false });
+        ActionResult result = Controller.SetFeature(new Feature { Key = FeatureType.Ranks, Value = false });
 
         Assert.IsInstanceOfType<OkResult>(result);
         Assert.IsFalse(FeatureService.IsFeatureEnabled(FeatureType.Ranks));
@@ -31,7 +31,7 @@ public class SetFeatureTests : FeatureTestsSetup
     {
         FeatureService.SetFeatureEnabled(FeatureType.Ranks, true);
 
-        IActionResult result = Controller.SetFeature(new Feature { Key = FeatureType.Ranks, Value = true });
+        ActionResult result = Controller.SetFeature(new Feature { Key = FeatureType.Ranks, Value = true });
 
         Assert.IsInstanceOfType<OkResult>(result);
         Assert.IsTrue(FeatureService.IsFeatureEnabled(FeatureType.Ranks));
@@ -40,7 +40,7 @@ public class SetFeatureTests : FeatureTestsSetup
     [TestMethod]
     public void SetFeatureDisablingAlreadyDisabledFeatureReturnsOk()
     {
-        IActionResult result = Controller.SetFeature(new Feature { Key = FeatureType.Ranks, Value = false });
+        ActionResult result = Controller.SetFeature(new Feature { Key = FeatureType.Ranks, Value = false });
 
         Assert.IsInstanceOfType<OkResult>(result);
         Assert.IsFalse(FeatureService.IsFeatureEnabled(FeatureType.Ranks));
@@ -74,7 +74,7 @@ public class SetFeatureTests : FeatureTestsSetup
     [TestMethod]
     public void SetFeaturesWithEmptyListReturnsOk()
     {
-        IActionResult result = Controller.SetFeatures([]);
+        ActionResult result = Controller.SetFeatures([]);
 
         Assert.IsInstanceOfType<OkResult>(result);
     }
@@ -84,7 +84,7 @@ public class SetFeatureTests : FeatureTestsSetup
     {
         List<Feature> features = [new() { Key = FeatureType.Ranks, Value = true }];
 
-        IActionResult result = Controller.SetFeatures(features);
+        ActionResult result = Controller.SetFeatures(features);
 
         Assert.IsInstanceOfType<OkResult>(result);
         Assert.IsTrue(FeatureService.IsFeatureEnabled(FeatureType.Ranks));
@@ -99,7 +99,7 @@ public class SetFeatureTests : FeatureTestsSetup
             new() { Key = FeatureType.AutomaticIssues, Value = true }
         ];
 
-        IActionResult result = Controller.SetFeatures(features);
+        ActionResult result = Controller.SetFeatures(features);
 
         Assert.IsInstanceOfType<OkResult>(result);
         Assert.IsTrue(FeatureService.IsFeatureEnabled(FeatureType.Ranks));
@@ -111,7 +111,6 @@ public class SetFeatureTests : FeatureTestsSetup
     {
         FeatureService.SetFeatureEnabled(FeatureType.Ranks, true);
         FeatureService.SetFeatureEnabled(FeatureType.AutomaticIssues, true);
-
         List<Feature> features =
         [
             new() { Key = FeatureType.Ranks, Value = false },
@@ -119,7 +118,7 @@ public class SetFeatureTests : FeatureTestsSetup
             new() { Key = FeatureType.ReportedIssues, Value = true }
         ];
 
-        IActionResult result = Controller.SetFeatures(features);
+        ActionResult result = Controller.SetFeatures(features);
 
         Assert.IsInstanceOfType<OkResult>(result);
         Assert.IsFalse(FeatureService.IsFeatureEnabled(FeatureType.Ranks));
@@ -133,7 +132,6 @@ public class SetFeatureTests : FeatureTestsSetup
         FeatureService.SetFeatureEnabled(FeatureType.Ranks, true);
         FeatureService.SetFeatureEnabled(FeatureType.AutomaticIssues, true);
         FeatureService.SetFeatureEnabled(FeatureType.ReportedIssues, true);
-
         List<Feature> features =
         [
             new() { Key = FeatureType.Ranks, Value = false },
@@ -141,7 +139,7 @@ public class SetFeatureTests : FeatureTestsSetup
             new() { Key = FeatureType.ReportedIssues, Value = false }
         ];
 
-        IActionResult result = Controller.SetFeatures(features);
+        ActionResult result = Controller.SetFeatures(features);
 
         Assert.IsInstanceOfType<OkResult>(result);
         Assert.IsFalse(FeatureService.IsFeatureEnabled(FeatureType.Ranks));

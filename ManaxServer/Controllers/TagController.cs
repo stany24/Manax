@@ -20,19 +20,22 @@ public class TagController(ManaxContext context, INotificationService notificati
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<TagDto>>> GetTags()
     {
-        return await context.Tags.Select(t => t.ToDto()).ToListAsync();
+        List<TagDto> tags = await context.Tags
+            .Select(t => t.ToDto())
+            .ToListAsync();
+        return Ok(tags);
     }
 
     [HttpPost]
     [RequirePermission(Permission.WriteTags)]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<IActionResult> CreateTag(TagCreateDto tagCreate)
+    public async Task<ActionResult> CreateTag(TagCreateDto tagCreate)
     {
         Tag tag = Tag.Create(tagCreate);
         context.Tags.Add(tag);
         await context.SaveChangesAsync();
         notificationService.NotifyTagCreatedAsync(tag.ToDto());
-        return Ok();
+        return Ok(tag.Id);
     }
 
     [HttpPut]
@@ -40,7 +43,7 @@ public class TagController(ManaxContext context, INotificationService notificati
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> UpdateTag(TagUpdateDto tagUpdate)
+    public async Task<ActionResult> UpdateTag(TagUpdateDto tagUpdate)
     {
         Tag? tag = context.Tags.FirstOrDefault(r => r.Id == tagUpdate.Id);
         if (tag == null) return NotFound(ErrorCode.TagDoesNotExist);
@@ -62,7 +65,7 @@ public class TagController(ManaxContext context, INotificationService notificati
     [RequirePermission(Permission.DeleteTags)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> DeleteTag(long id)
+    public async Task<ActionResult> DeleteTag(long id)
     {
         Tag? tag = await context.Tags.FindAsync(id);
         if (tag == null) return NotFound(ErrorCode.TagDoesNotExist);

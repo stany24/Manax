@@ -20,14 +20,18 @@ public class PersonController(ManaxContext context, INotificationService notific
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<PersonDto>>> GetPersons()
     {
-        return await context.Persons.Include(p => p.Role).Select(person => person.ToDto()).ToListAsync();
+        List<PersonDto> persons = await context.Persons
+            .Include(p => p.Role)
+            .Select(person => person.ToDto())
+            .ToListAsync();
+        return Ok(persons);
     }
 
     [HttpDelete("{id:long}")]
     [RequirePermission(Permission.DeletePersons)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> DeletePerson(long id)
+    public async Task<ActionResult> DeletePerson(long id)
     {
         Person? person = await context.Persons.FindAsync(id);
         if (person == null) return NotFound(ErrorCode.PersonDoesNotExist);
@@ -57,7 +61,7 @@ public class PersonController(ManaxContext context, INotificationService notific
     [RequirePermission(Permission.WritePersons)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> UpdatePerson(long id, PersonUpdateDto personUpdateDto)
+    public async Task<ActionResult> UpdatePerson(long id, PersonUpdateDto personUpdateDto)
     {
         Person? person = await context.Persons.FindAsync(id);
         if (person == null) return NotFound(ErrorCode.PersonDoesNotExist);

@@ -17,9 +17,9 @@ public class CreateTagTests : TagTestsSetup
             ColorArgb = -16776961
         };
 
-        IActionResult result = await Controller.CreateTag(tagCreate);
+        ActionResult result = await Controller.CreateTag(tagCreate);
 
-        Assert.IsInstanceOfType<OkResult>(result);
+        Assert.IsInstanceOfType<OkObjectResult>(result);
 
         Tag? createdTag = await Context.Tags.FirstOrDefaultAsync(t => t.Name == "Adventure");
         Assert.IsNotNull(createdTag);
@@ -36,9 +36,9 @@ public class CreateTagTests : TagTestsSetup
             ColorArgb = -65536
         };
 
-        IActionResult result = await Controller.CreateTag(tagCreate);
+        ActionResult result = await Controller.CreateTag(tagCreate);
 
-        Assert.IsInstanceOfType<OkResult>(result);
+        Assert.IsInstanceOfType<OkObjectResult>(result);
         Assert.IsNotNull(MockNotificationService.TagCreated);
         Assert.AreEqual("Horror", MockNotificationService.TagCreated.Name);
         Assert.AreEqual(-65536, MockNotificationService.TagCreated.ColorArgb);
@@ -69,9 +69,9 @@ public class CreateTagTests : TagTestsSetup
             ColorArgb = 0
         };
 
-        IActionResult result = await Controller.CreateTag(tagCreate);
+        ActionResult result = await Controller.CreateTag(tagCreate);
 
-        Assert.IsInstanceOfType<OkResult>(result);
+        Assert.IsInstanceOfType<OkObjectResult>(result);
 
         Tag? createdTag = await Context.Tags.FirstOrDefaultAsync(t => t.Name == "Neutral");
         Assert.IsNotNull(createdTag);
@@ -87,9 +87,9 @@ public class CreateTagTests : TagTestsSetup
             ColorArgb = -1
         };
 
-        IActionResult result = await Controller.CreateTag(tagCreate);
+        ActionResult result = await Controller.CreateTag(tagCreate);
 
-        Assert.IsInstanceOfType<OkResult>(result);
+        Assert.IsInstanceOfType<OkObjectResult>(result);
 
         Tag? createdTag = await Context.Tags.FirstOrDefaultAsync(t => t.Name == "Dark");
         Assert.IsNotNull(createdTag);
@@ -107,9 +107,9 @@ public class CreateTagTests : TagTestsSetup
             ColorArgb = -16711681
         };
 
-        IActionResult result = await Controller.CreateTag(tagCreate);
+        ActionResult result = await Controller.CreateTag(tagCreate);
 
-        Assert.IsInstanceOfType<OkResult>(result);
+        Assert.IsInstanceOfType<OkObjectResult>(result);
 
         int finalCount = Context.Tags.Count();
         Assert.AreEqual(initialCount + 1, finalCount);
@@ -124,9 +124,9 @@ public class CreateTagTests : TagTestsSetup
             ColorArgb = -16776961
         };
 
-        IActionResult result = await Controller.CreateTag(tagCreate);
+        ActionResult result = await Controller.CreateTag(tagCreate);
 
-        Assert.IsInstanceOfType<OkResult>(result);
+        Assert.IsInstanceOfType<OkObjectResult>(result);
 
         Tag? createdTag =
             await Context.Tags.FirstOrDefaultAsync(t => t.Name == "Very Long Tag Name That Should Still Be Valid");
@@ -142,9 +142,9 @@ public class CreateTagTests : TagTestsSetup
             ColorArgb = -1
         };
 
-        IActionResult result = await Controller.CreateTag(tagCreate);
+        ActionResult result = await Controller.CreateTag(tagCreate);
 
-        Assert.IsInstanceOfType<OkResult>(result);
+        Assert.IsInstanceOfType<OkObjectResult>(result);
 
         Tag? createdTag = await Context.Tags.FirstOrDefaultAsync(t => t.Name == "TestId");
         Assert.IsNotNull(createdTag);

@@ -1,3 +1,4 @@
+using ManaxLibrary;
 using ManaxServer.Models.Rank;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,7 +11,7 @@ public class DeleteRankTests : RankTestsSetup
     public async Task DeleteRankWithValidIdRemovesRank()
     {
         Rank rank = Context.Ranks.First();
-        IActionResult result = await Controller.DeleteRank(rank.Id);
+        ActionResult result = await Controller.DeleteRank(rank.Id);
 
         Assert.IsInstanceOfType<OkResult>(result);
 
@@ -21,9 +22,9 @@ public class DeleteRankTests : RankTestsSetup
     [TestMethod]
     public async Task DeleteRankWithInvalidIdReturnsNotFound()
     {
-        IActionResult result = await Controller.DeleteRank(999999);
+        ActionResult result = await Controller.DeleteRank(999999);
 
-        Assert.IsInstanceOfType<NotFoundResult>(result);
+        CheckTypeAndErrorCode<NotFoundObjectResult>(result, ErrorCode.RankDoesNotExist);
     }
 
     [TestMethod]
@@ -32,7 +33,7 @@ public class DeleteRankTests : RankTestsSetup
         int initialCount = Context.Ranks.Count();
         Rank rank = Context.Ranks.First();
 
-        IActionResult result = await Controller.DeleteRank(rank.Id);
+        ActionResult result = await Controller.DeleteRank(rank.Id);
 
         Assert.IsInstanceOfType<OkResult>(result);
 
@@ -45,7 +46,7 @@ public class DeleteRankTests : RankTestsSetup
     {
         Rank rankWithUserRanks = Context.Ranks.First(r => Context.UserRanks.Any(ur => ur.RankId == r.Id));
 
-        IActionResult result = await Controller.DeleteRank(rankWithUserRanks.Id);
+        ActionResult result = await Controller.DeleteRank(rankWithUserRanks.Id);
 
         Assert.IsInstanceOfType<OkResult>(result);
 

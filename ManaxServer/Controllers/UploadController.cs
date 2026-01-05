@@ -31,7 +31,7 @@ public class UploadController(
     [RequirePermission(Permission.UploadChapter)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public IActionResult UploadChapter(NewChapterDto chapterDto)
+    public ActionResult UploadChapter(NewChapterDto chapterDto)
     {
         Logger.LogInfo("Uploading chapter: " + chapterDto.Number + " to serie ID: " + chapterDto.SerieId);
         long? currentUserId = UserController.GetCurrentUserId(HttpContext);
@@ -65,7 +65,7 @@ public class UploadController(
     [RequirePermission(Permission.UploadChapter)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public IActionResult ReplaceChapter(NewChapterDto chapterDto)
+    public ActionResult ReplaceChapter(NewChapterDto chapterDto)
     {
         long? currentUserId = UserController.GetCurrentUserId(HttpContext);
         if (currentUserId == null)
@@ -89,7 +89,7 @@ public class UploadController(
     [RequirePermission(Permission.UploadChapter)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> UploadPoster(IFormFile file, [FromForm] long serieId)
+    public async Task<ActionResult> UploadPoster(IFormFile file, [FromForm] long serieId)
     {
         return await CreateOrReplacePoster(file, serieId, false);
     }
@@ -98,12 +98,12 @@ public class UploadController(
     [RequirePermission(Permission.UploadChapter)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> ReplacePoster(IFormFile file, [FromForm] long serieId)
+    public async Task<ActionResult> ReplacePoster(IFormFile file, [FromForm] long serieId)
     {
         return await CreateOrReplacePoster(file, serieId, true);
     }
 
-    private async Task<IActionResult> CreateOrReplacePoster(IFormFile file, [FromForm] long serieId, bool replace)
+    private async Task<ActionResult> CreateOrReplacePoster(IFormFile file, [FromForm] long serieId, bool replace)
     {
         Serie? serie = context.Series
             .Include(s => s.SavePoint)

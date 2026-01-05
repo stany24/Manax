@@ -29,9 +29,10 @@ public class IssueController(
         if (!featureService.IsFeatureEnabled(FeatureType.AutomaticIssues))
             return BadRequest(ErrorCode.FeatureDisabled);
 
-        return await context.AutomaticIssuesChapter
+        List<IssueChapterAutomaticDto> issues = await context.AutomaticIssuesChapter
             .Select(i => i.ToDto())
             .ToListAsync();
+        return Ok(issues);
     }
 
     [HttpGet("serie/automatic")]
@@ -42,9 +43,10 @@ public class IssueController(
         if (!featureService.IsFeatureEnabled(FeatureType.AutomaticIssues))
             return BadRequest(ErrorCode.FeatureDisabled);
 
-        return await context.AutomaticIssuesSerie
+        List<IssueSerieAutomaticDto> issues = await context.AutomaticIssuesSerie
             .Select(i => i.ToDto())
             .ToListAsync();
+        return Ok(issues);
     }
 
     [HttpGet("chapter/reported")]
@@ -55,9 +57,10 @@ public class IssueController(
         if (!featureService.IsFeatureEnabled(FeatureType.ReportedIssues))
             return BadRequest(ErrorCode.FeatureDisabled);
 
-        return await context.ReportedIssuesChapter
+        List<IssueChapterReportedDto> issues = await context.ReportedIssuesChapter
             .Select(i => i.ToDto())
             .ToListAsync();
+        return Ok(issues);
     }
 
     [HttpGet("serie/reported")]
@@ -68,9 +71,10 @@ public class IssueController(
         if (!featureService.IsFeatureEnabled(FeatureType.ReportedIssues))
             return BadRequest(ErrorCode.FeatureDisabled);
 
-        return await context.ReportedIssuesSerie
+        List<IssueSerieReportedDto> issues = await context.ReportedIssuesSerie
             .Select(i => i.ToDto())
             .ToListAsync();
+        return Ok(issues);
     }
 
     [HttpPost("chapter")]
@@ -125,7 +129,7 @@ public class IssueController(
     [RequirePermission(Permission.DeleteIssues)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> CloseChapterIssue(long id)
+    public async Task<ActionResult> CloseChapterIssue(long id)
     {
         if (!featureService.IsFeatureEnabled(FeatureType.ReportedIssues))
             return BadRequest(ErrorCode.FeatureDisabled);
@@ -145,7 +149,7 @@ public class IssueController(
     [RequirePermission(Permission.DeleteIssues)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> CloseSerieIssue(long id)
+    public async Task<ActionResult> CloseSerieIssue(long id)
     {
         if (!featureService.IsFeatureEnabled(FeatureType.ReportedIssues))
             return BadRequest(ErrorCode.FeatureDisabled);

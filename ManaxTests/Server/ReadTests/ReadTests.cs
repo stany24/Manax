@@ -1,3 +1,4 @@
+using ManaxLibrary;
 using ManaxLibrary.DTO.Read;
 using ManaxServer.Models.Chapter;
 using ManaxServer.Models.Read;
@@ -21,7 +22,7 @@ public class TestReadController : ReadTestsSetup
             Page = 10
         };
 
-        IActionResult result = await Controller.Read(readCreateDto);
+        ActionResult result = await Controller.Read(readCreateDto);
 
         Assert.IsInstanceOfType<OkResult>(result);
 
@@ -58,7 +59,7 @@ public class TestReadController : ReadTestsSetup
             Page = 15
         };
 
-        IActionResult result = await Controller.Read(readCreateDto);
+        ActionResult result = await Controller.Read(readCreateDto);
 
         Assert.IsInstanceOfType<OkResult>(result);
 
@@ -78,9 +79,9 @@ public class TestReadController : ReadTestsSetup
             Page = 10
         };
 
-        IActionResult result = await Controller.Read(readCreateDto);
+        ActionResult result = await Controller.Read(readCreateDto);
 
-        Assert.IsInstanceOfType<NotFoundResult>(result);
+        TestSetup.CheckTypeAndErrorCode<NotFoundObjectResult>(result, ErrorCode.ChapterDoesNotExist);
     }
 
     [TestMethod]
@@ -97,9 +98,9 @@ public class TestReadController : ReadTestsSetup
             Page = 10
         };
 
-        IActionResult result = await Controller.Read(readCreateDto);
+        ActionResult result = await Controller.Read(readCreateDto);
 
-        Assert.IsInstanceOfType<UnauthorizedResult>(result);
+        CheckTypeAndErrorCode<UnauthorizedObjectResult>(result, ErrorCode.TokenRequired);
     }
 
     [TestMethod]
@@ -113,7 +114,7 @@ public class TestReadController : ReadTestsSetup
         };
 
         DateTime beforeRead = DateTime.UtcNow;
-        IActionResult result = await Controller.Read(readCreateDto);
+        ActionResult result = await Controller.Read(readCreateDto);
         DateTime afterRead = DateTime.UtcNow;
 
         Assert.IsInstanceOfType<OkResult>(result);
@@ -135,7 +136,7 @@ public class TestReadController : ReadTestsSetup
             Page = 10
         };
 
-        IActionResult result = await Controller.Read(readCreateDto);
+        ActionResult result = await Controller.Read(readCreateDto);
 
         Assert.IsInstanceOfType<OkResult>(result);
         Assert.IsNotNull(MockNotificationService.ReadCreated);
@@ -151,7 +152,7 @@ public class TestReadController : ReadTestsSetup
             Page = 0
         };
 
-        IActionResult result = await Controller.Read(readCreateDto);
+        ActionResult result = await Controller.Read(readCreateDto);
 
         Assert.IsInstanceOfType<OkResult>(result);
 
@@ -185,7 +186,7 @@ public class TestReadController : ReadTestsSetup
             Page = 15
         };
 
-        IActionResult result = await Controller.Read(readCreateDto);
+        ActionResult result = await Controller.Read(readCreateDto);
 
         Assert.IsInstanceOfType<OkResult>(result);
 
@@ -217,7 +218,7 @@ public class TestReadController : ReadTestsSetup
             Page = 10
         };
 
-        IActionResult result = await Controller.Read(readCreateDto);
+        ActionResult result = await Controller.Read(readCreateDto);
 
         Assert.IsInstanceOfType<OkResult>(result);
 
@@ -242,7 +243,7 @@ public class TestReadController : ReadTestsSetup
             Page = 10
         };
 
-        IActionResult result = await Controller.Read(readCreateDto);
+        ActionResult result = await Controller.Read(readCreateDto);
 
         Assert.IsInstanceOfType<OkResult>(result);
 
@@ -263,7 +264,7 @@ public class TestReadController : ReadTestsSetup
             Page = 999999
         };
 
-        IActionResult result = await Controller.Read(readCreateDto);
+        ActionResult result = await Controller.Read(readCreateDto);
 
         Assert.IsInstanceOfType<OkResult>(result);
 
@@ -286,7 +287,7 @@ public class TestReadController : ReadTestsSetup
                 Page = 10
             };
 
-            IActionResult result = await Controller.Read(readCreateDto);
+            ActionResult result = await Controller.Read(readCreateDto);
             Assert.IsInstanceOfType<OkResult>(result);
         }
 

@@ -1,3 +1,4 @@
+using ManaxLibrary;
 using ManaxServer.Models.Chapter;
 using ManaxServer.Models.Serie;
 using Microsoft.AspNetCore.Mvc;
@@ -11,7 +12,7 @@ public class DeleteSerieTests : SerieTestsSetup
     public async Task DeleteSerieWithValidIdRemovesSerie()
     {
         Serie serie = Context.Series.First();
-        IActionResult result = await Controller.DeleteSerie(serie.Id);
+        ActionResult result = await Controller.DeleteSerie(serie.Id);
 
         Assert.IsInstanceOfType<OkResult>(result);
 
@@ -22,9 +23,9 @@ public class DeleteSerieTests : SerieTestsSetup
     [TestMethod]
     public async Task DeleteSerieWithInvalidIdReturnsNotFound()
     {
-        IActionResult result = await Controller.DeleteSerie(999999);
+        ActionResult result = await Controller.DeleteSerie(999999);
 
-        Assert.IsInstanceOfType<NotFoundResult>(result);
+        TestSetup.CheckTypeAndErrorCode<NotFoundObjectResult>(result, ErrorCode.SerieDoesNotExist);
     }
 
     [TestMethod]
@@ -34,7 +35,7 @@ public class DeleteSerieTests : SerieTestsSetup
         List<Chapter> associatedChapters = Context.Chapters.Where(c => c.SerieId == serie.Id).ToList();
         List<long> chapterIds = associatedChapters.Select(c => c.Id).ToList();
 
-        IActionResult result = await Controller.DeleteSerie(serie.Id);
+        ActionResult result = await Controller.DeleteSerie(serie.Id);
 
         Assert.IsInstanceOfType<OkResult>(result);
 
@@ -51,7 +52,7 @@ public class DeleteSerieTests : SerieTestsSetup
         int initialCount = Context.Series.Count();
         Serie serie = Context.Series.First();
 
-        IActionResult result = await Controller.DeleteSerie(serie.Id);
+        ActionResult result = await Controller.DeleteSerie(serie.Id);
 
         Assert.IsInstanceOfType<OkResult>(result);
 

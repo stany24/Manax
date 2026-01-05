@@ -21,7 +21,9 @@ public class LibraryController(ManaxContext context, INotificationService notifi
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<long>>> GetLibraries()
     {
-        return await context.Libraries.Select(t => t.Id).ToListAsync();
+        List<long> libraries = await context.Libraries
+            .Select(t => t.Id).ToListAsync();
+        return Ok(libraries);
     }
 
     [HttpGet("{id:long}")]
@@ -36,7 +38,7 @@ public class LibraryController(ManaxContext context, INotificationService notifi
 
         if (library == null) return NotFound(ErrorCode.LibraryDoesNotExist);
 
-        return library.ToDto();
+        return Ok(library.ToDto());
     }
 
     [HttpPut("{id:long}")]
@@ -45,7 +47,7 @@ public class LibraryController(ManaxContext context, INotificationService notifi
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
-    public async Task<IActionResult> PutLibrary(long id, LibraryUpdateDto libraryUpdate)
+    public async Task<ActionResult> PutLibrary(long id, LibraryUpdateDto libraryUpdate)
     {
         Library? library = await context.Libraries.FindAsync(id);
         if (library == null) return NotFound(ErrorCode.LibraryDoesNotExist);
@@ -73,14 +75,14 @@ public class LibraryController(ManaxContext context, INotificationService notifi
         catch { return Conflict(ErrorCode.InvalidLibraryData); }
 
         notificationService.NotifyLibraryCreatedAsync(library.ToDto());
-        return library.Id;
+        return Ok(library.Id);
     }
 
     [HttpDelete("{id:long}")]
     [RequirePermission(Permission.DeleteLibraries)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> DeleteLibrary(long id)
+    public async Task<ActionResult> DeleteLibrary(long id)
     {
         Library? library = await context.Libraries.FindAsync(id);
         if (library == null) return NotFound(ErrorCode.LibraryDoesNotExist);

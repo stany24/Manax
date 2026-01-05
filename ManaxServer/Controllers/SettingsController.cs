@@ -24,16 +24,16 @@ public class SettingsController(
     [HttpGet]
     [RequirePermission(Permission.ReadServerSettings)]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public SettingsDataDto GetSettings()
+    public ActionResult<SettingsDataDto> GetSettings()
     {
-        return SettingsManager.DataDto;
+        return Ok(SettingsManager.DataDto);
     }
 
     [HttpPut]
     [RequirePermission(Permission.WriteServerSettings)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public IActionResult ChangeSettings(SettingsDataDto dataDto)
+    public ActionResult ChangeSettings(SettingsDataDto dataDto)
     {
         lock (_lock)
         {

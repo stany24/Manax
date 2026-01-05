@@ -1,3 +1,4 @@
+using ManaxLibrary;
 using ManaxLibrary.DTO.Serie;
 using ManaxServer.Models.Chapter;
 using ManaxServer.Models.Serie;
@@ -44,7 +45,7 @@ public class GetSerieTests : SerieTestsSetup
     {
         ActionResult<SerieDto> result = await Controller.GetSerie(999999);
 
-        Assert.IsInstanceOfType<NotFoundResult>(result.Result);
+        TestSetup.CheckTypeAndErrorCode<NotFoundObjectResult>(result.Result, ErrorCode.SerieDoesNotExist);
     }
 
     [TestMethod]
@@ -69,8 +70,9 @@ public class GetSerieTests : SerieTestsSetup
     {
         ActionResult<List<long>> result = Controller.GetSerieChapters(999999);
 
-        NotFoundResult? notFoundResult = result.Result as NotFoundResult;
+        NotFoundObjectResult? notFoundResult = result.Result as NotFoundObjectResult;
         Assert.IsNotNull(notFoundResult);
+        Assert.AreEqual(ErrorCode.SerieDoesNotExist, notFoundResult.Value);
 
         Assert.IsNull(result.Value);
     }

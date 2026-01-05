@@ -1,3 +1,4 @@
+using ManaxLibrary;
 using ManaxServer.Models.Issue.Reported;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,7 +11,7 @@ public class CloseIssueTests : IssueTestsSetup
     public async Task CloseChapterIssueWithValidIdRemovesIssue()
     {
         IssueChapterReported issue = Context.ReportedIssuesChapter.First();
-        IActionResult result = await Controller.CloseChapterIssue(issue.Id);
+        ActionResult result = await Controller.CloseChapterIssue(issue.Id);
 
         Assert.IsInstanceOfType<OkResult>(result);
 
@@ -21,9 +22,9 @@ public class CloseIssueTests : IssueTestsSetup
     [TestMethod]
     public async Task CloseChapterIssueWithInvalidIdReturnsNotFound()
     {
-        IActionResult result = await Controller.CloseChapterIssue(999999);
+        ActionResult result = await Controller.CloseChapterIssue(999999);
 
-        Assert.IsInstanceOfType<NotFoundResult>(result);
+        CheckTypeAndErrorCode<NotFoundObjectResult>(result, ErrorCode.IssueDoesNotExist);
     }
 
     [TestMethod]
@@ -32,7 +33,7 @@ public class CloseIssueTests : IssueTestsSetup
         int initialCount = Context.ReportedIssuesChapter.Count();
         IssueChapterReported issue = Context.ReportedIssuesChapter.First();
 
-        IActionResult result = await Controller.CloseChapterIssue(issue.Id);
+        ActionResult result = await Controller.CloseChapterIssue(issue.Id);
 
         Assert.IsInstanceOfType<OkResult>(result);
 
@@ -44,7 +45,7 @@ public class CloseIssueTests : IssueTestsSetup
     public async Task CloseSerieIssueWithValidIdRemovesIssue()
     {
         IssueSerieReported issue = Context.ReportedIssuesSerie.First();
-        IActionResult result = await Controller.CloseSerieIssue(issue.Id);
+        ActionResult result = await Controller.CloseSerieIssue(issue.Id);
 
         Assert.IsInstanceOfType<OkResult>(result);
 
@@ -55,9 +56,9 @@ public class CloseIssueTests : IssueTestsSetup
     [TestMethod]
     public async Task CloseSerieIssueWithInvalidIdReturnsNotFound()
     {
-        IActionResult result = await Controller.CloseSerieIssue(999999);
+        ActionResult result = await Controller.CloseSerieIssue(999999);
 
-        Assert.IsInstanceOfType<NotFoundResult>(result);
+        CheckTypeAndErrorCode<NotFoundObjectResult>(result, ErrorCode.IssueDoesNotExist);
     }
 
     [TestMethod]
@@ -66,7 +67,7 @@ public class CloseIssueTests : IssueTestsSetup
         int initialCount = Context.ReportedIssuesSerie.Count();
         IssueSerieReported issue = Context.ReportedIssuesSerie.First();
 
-        IActionResult result = await Controller.CloseSerieIssue(issue.Id);
+        ActionResult result = await Controller.CloseSerieIssue(issue.Id);
 
         Assert.IsInstanceOfType<OkResult>(result);
 
@@ -80,7 +81,7 @@ public class CloseIssueTests : IssueTestsSetup
         IssueChapterReported issueToDelete = Context.ReportedIssuesChapter.First();
         IssueChapterReported otherIssue = Context.ReportedIssuesChapter.First(i => i.Id != issueToDelete.Id);
 
-        IActionResult result = await Controller.CloseChapterIssue(issueToDelete.Id);
+        ActionResult result = await Controller.CloseChapterIssue(issueToDelete.Id);
 
         Assert.IsInstanceOfType<OkResult>(result);
 
@@ -97,7 +98,7 @@ public class CloseIssueTests : IssueTestsSetup
         IssueSerieReported issueToDelete = Context.ReportedIssuesSerie.First();
         IssueSerieReported otherIssue = Context.ReportedIssuesSerie.First(i => i.Id != issueToDelete.Id);
 
-        IActionResult result = await Controller.CloseSerieIssue(issueToDelete.Id);
+        ActionResult result = await Controller.CloseSerieIssue(issueToDelete.Id);
 
         Assert.IsInstanceOfType<OkResult>(result);
 

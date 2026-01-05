@@ -1,3 +1,4 @@
+using ManaxLibrary;
 using ManaxServer.Models.Chapter;
 using ManaxServer.Models.Read;
 using ManaxServer.Models.User;
@@ -28,7 +29,7 @@ public class UnReadTests : ReadTestsSetup
         Context.Reads.Add(existingRead);
         await Context.SaveChangesAsync();
 
-        IActionResult result = await Controller.Unread((int)chapter.Id);
+        ActionResult result = await Controller.Unread((int)chapter.Id);
 
         Assert.IsInstanceOfType<OkResult>(result);
 
@@ -42,7 +43,7 @@ public class UnReadTests : ReadTestsSetup
     {
         Chapter chapter = Context.Chapters.First();
 
-        IActionResult result = await Controller.Unread((int)chapter.Id);
+        ActionResult result = await Controller.Unread((int)chapter.Id);
 
         Assert.IsInstanceOfType<OkResult>(result);
     }
@@ -50,7 +51,7 @@ public class UnReadTests : ReadTestsSetup
     [TestMethod]
     public async Task UnreadWithInvalidChapterIdReturnsOk()
     {
-        IActionResult result = await Controller.Unread(999999);
+        ActionResult result = await Controller.Unread(999999);
 
         Assert.IsInstanceOfType<OkResult>(result);
     }
@@ -63,9 +64,9 @@ public class UnReadTests : ReadTestsSetup
             HttpContext = new DefaultHttpContext()
         };
 
-        IActionResult result = await Controller.Unread(1);
+        ActionResult result = await Controller.Unread(1);
 
-        Assert.IsInstanceOfType<UnauthorizedResult>(result);
+        CheckTypeAndErrorCode<UnauthorizedObjectResult>(result, ErrorCode.TokenRequired);
     }
 
     [TestMethod]
@@ -88,7 +89,7 @@ public class UnReadTests : ReadTestsSetup
 
         int initialCount = Context.Reads.Count();
 
-        IActionResult result = await Controller.Unread((int)chapter.Id);
+        ActionResult result = await Controller.Unread((int)chapter.Id);
 
         Assert.IsInstanceOfType<OkResult>(result);
 
@@ -126,7 +127,7 @@ public class UnReadTests : ReadTestsSetup
         Context.Reads.AddRange(userRead, otherUserRead);
         await Context.SaveChangesAsync();
 
-        IActionResult result = await Controller.Unread((int)chapter.Id);
+        ActionResult result = await Controller.Unread((int)chapter.Id);
 
         Assert.IsInstanceOfType<OkResult>(result);
 

@@ -28,7 +28,10 @@ public class RankController(
         if (!featureService.IsFeatureEnabled(FeatureType.Ranks))
             return BadRequest(ErrorCode.FeatureDisabled);
 
-        return await context.Ranks.Select(rank => rank.ToDto()).ToListAsync();
+        List<RankDto> ranks = await context.Ranks
+            .Select(rank => rank.ToDto())
+            .ToListAsync();
+        return Ok(ranks);
     }
 
     [HttpPost]
@@ -43,7 +46,7 @@ public class RankController(
         context.Ranks.Add(rank);
         await context.SaveChangesAsync();
         notificationService.NotifyRankCreatedAsync(rank.ToDto());
-        return rank.Id;
+        return Ok(rank.Id);
     }
 
     [HttpPut]
@@ -51,7 +54,7 @@ public class RankController(
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> UpdateRank(RankUpdateDto rankUpdate)
+    public async Task<ActionResult> UpdateRank(RankUpdateDto rankUpdate)
     {
         if (!featureService.IsFeatureEnabled(FeatureType.Ranks))
             return BadRequest(ErrorCode.FeatureDisabled);
@@ -70,7 +73,7 @@ public class RankController(
     [RequirePermission(Permission.DeleteRanks)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> DeleteRank(long id)
+    public async Task<ActionResult> DeleteRank(long id)
     {
         if (!featureService.IsFeatureEnabled(FeatureType.Ranks))
             return BadRequest(ErrorCode.FeatureDisabled);
@@ -87,7 +90,7 @@ public class RankController(
     [RequirePermission(Permission.SetMyRank)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<IActionResult> SetUserRank(UserRankCreateDto rank)
+    public async Task<ActionResult> SetUserRank(UserRankCreateDto rank)
     {
         if (!featureService.IsFeatureEnabled(FeatureType.Ranks))
             return BadRequest(ErrorCode.FeatureDisabled);
@@ -113,7 +116,7 @@ public class RankController(
         }
 
         await context.SaveChangesAsync();
-        return Ok();
+        return Created();
     }
 
     [HttpGet("/api/ranking")]
@@ -127,8 +130,10 @@ public class RankController(
 
         long? currentUserId = UserController.GetCurrentUserId(HttpContext);
         if (currentUserId == null) return Unauthorized(ErrorCode.TokenRequired);
-        return await context.UserRanks
+        List<UserRankDto> userRanks = await context.UserRanks
             .Where(r => r.UserId == currentUserId)
-            .Select(r => r.ToDto()).ToListAsync();
+            .Select(r => r.ToDto())
+            .ToListAsync();
+        return Ok(userRanks);
     }
 }

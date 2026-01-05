@@ -21,7 +21,7 @@ public class ReadController(ManaxContext context, INotificationService notificat
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<IActionResult> Read(ReadCreateDto readCreate)
+    public async Task<ActionResult> Read(ReadCreateDto readCreate)
     {
         long? userId = UserController.GetCurrentUserId(HttpContext);
         if (userId == null) return Unauthorized(ErrorCode.TokenRequired);
@@ -60,7 +60,7 @@ public class ReadController(ManaxContext context, INotificationService notificat
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<IActionResult> Unread(long chapterId)
+    public async Task<ActionResult> Unread(long chapterId)
     {
         long? currentUserId = UserController.GetCurrentUserId(HttpContext);
         if (currentUserId == null) return Unauthorized(ErrorCode.TokenRequired);

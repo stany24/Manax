@@ -1,3 +1,4 @@
+using ManaxLibrary;
 using ManaxLibrary.DTO.User;
 using ManaxServer.Models.User;
 using Microsoft.AspNetCore.Mvc;
@@ -42,7 +43,7 @@ public class GetUserTests : UserTestsSetup
     {
         ActionResult<UserDto> result = await Controller.GetUser(999999);
 
-        Assert.IsInstanceOfType<NotFoundResult>(result.Result);
+        TestSetup.CheckTypeAndErrorCode<NotFoundObjectResult>(result.Result, ErrorCode.UserDoesNotExist);
     }
 
     [TestMethod]

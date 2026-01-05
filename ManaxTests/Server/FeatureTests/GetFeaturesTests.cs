@@ -1,4 +1,5 @@
 using ManaxLibrary.DTO.Feature;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ManaxTests.Server.FeatureTests;
 
@@ -8,10 +9,14 @@ public class GetFeaturesTests : FeatureTestsSetup
     [TestMethod]
     public void GetFeaturesReturnsAllFeatures()
     {
-        List<Feature> result = Controller.GetFeatures();
+        ActionResult<List<Feature>> result = Controller.GetFeatures();
+        
+        OkObjectResult? okResult = result.Result as OkObjectResult;
+        Assert.IsNull(okResult);
 
         Assert.IsNotNull(result);
-        Assert.HasCount(3, result);
+        Assert.IsNotNull(result.Value);
+        Assert.HasCount(3, result.Value);
     }
 
     [TestMethod]
@@ -21,11 +26,15 @@ public class GetFeaturesTests : FeatureTestsSetup
         FeatureService.SetFeatureEnabled(FeatureType.AutomaticIssues, true);
         FeatureService.SetFeatureEnabled(FeatureType.ReportedIssues, true);
 
-        List<Feature> result = Controller.GetFeatures();
+        ActionResult<List<Feature>> result = Controller.GetFeatures();
 
+        OkObjectResult ? okResult = result.Result as OkObjectResult;
+        Assert.IsNull(okResult);
+        
         Assert.IsNotNull(result);
-        Assert.HasCount(3, result);
-        foreach (Feature feature in result) Assert.IsTrue(feature.Value);
+        Assert.IsNotNull(result.Value);
+        Assert.HasCount(3, result.Value);
+        foreach (Feature feature in result.Value) Assert.IsTrue(feature.Value);
     }
 
     [TestMethod]
@@ -33,7 +42,10 @@ public class GetFeaturesTests : FeatureTestsSetup
     {
         FeatureService.SetFeatureEnabled(FeatureType.Ranks, true);
 
-        List<Feature> result = Controller.GetFeatures();
+        ActionResult<List<Feature>> result = Controller.GetFeatures();
+        
+        OkObjectResult ? okResult = result.Result as OkObjectResult;
+        Assert.IsNull(okResult);
 
         Assert.IsNotNull(result);
         Assert.IsTrue(FeatureService.IsFeatureEnabled(FeatureType.Ranks));

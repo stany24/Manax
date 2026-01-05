@@ -34,7 +34,10 @@ public class UserController(
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<long>>> GetUsers()
     {
-        return await context.Users.Select(user => user.Id).ToListAsync();
+        List<long> users = await context.Users
+            .Select(user => user.Id)
+            .ToListAsync();
+        return Ok(users);
     }
 
     [HttpGet("{id:long}")]
@@ -53,7 +56,7 @@ public class UserController(
     [HttpPut("update")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> PutUser(UserUpdateDto userUpdate)
+    public async Task<ActionResult> PutUser(UserUpdateDto userUpdate)
     {
         long? userId = GetCurrentUserId(HttpContext);
         if (userId == null)
@@ -86,13 +89,13 @@ public class UserController(
         user.PasswordHash = hashService.HashPassword(newPassword);
         await context.SaveChangesAsync();
 
-        return newPassword;
+        return Ok(newPassword);
     }
 
     [HttpPost("create")]
     [RequirePermission(Permission.WriteUsers)]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<IActionResult> PostUser(UserCreateDto userCreate)
+    public async Task<ActionResult> PostUser(UserCreateDto userCreate)
     {
         if (!passwordValidationService.IsPasswordValid(userCreate.Password))
             return BadRequest(ErrorCode.InvalidPassword);
@@ -117,7 +120,7 @@ public class UserController(
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
-    public async Task<IActionResult> DeleteUser(long id)
+    public async Task<ActionResult> DeleteUser(long id)
     {
         User? userToDelete = await context.Users.FindAsync(id);
         if (userToDelete == null) return NotFound(ErrorCode.UserDoesNotExist);
@@ -126,14 +129,14 @@ public class UserController(
         if (selfId == null)
             return Unauthorized(ErrorCode.TokenRequired);
         if (selfId == id)
-            return StatusCode(StatusCodes.Status403Forbidden, ErrorCode.CannotDeleteSelf);
+            return Unauthorized(ErrorCode.CannotDeleteSelf);
 
         User? self = context.Users.FirstOrDefault(u => u.Id == selfId);
         if (self == null)
             return Unauthorized(ErrorCode.UserDoesNotExist);
 
         if (self.Role == UserRole.Admin && userToDelete.Role is UserRole.Admin or UserRole.Owner)
-            return StatusCode(StatusCodes.Status403Forbidden, ErrorCode.InsufficientPermissions);
+            return Unauthorized(ErrorCode.InsufficientPermissions);
 
         StringValues auths = Request.Headers.Authorization;
         foreach (string? token in auths) tokenService.RevokeToken(token);
@@ -181,7 +184,7 @@ public class UserController(
             Token = token,
             User = user.ToDto()
         };
-        return loginResult;
+        return Ok(loginResult);
     }
 
     [HttpPost("/api/claim")]
@@ -231,14 +234,14 @@ public class UserController(
                 Token = token,
                 User = user.ToDto()
             };
-            return loginResult;
+            return Ok(loginResult);
         }
     }
 
     [HttpPost("/api/logout")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<IActionResult> Logout()
+    public async Task<ActionResult> Logout()
     {
         long? userId = GetCurrentUserId(HttpContext);
         User? user = await context.Users.FindAsync(userId);
