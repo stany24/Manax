@@ -49,6 +49,7 @@ public class LibraryController(ManaxContext context, INotificationService notifi
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<ActionResult> PutLibrary(long id, LibraryUpdateDto libraryUpdate)
     {
+        if(libraryUpdate.Name.Trim() == string.Empty) return BadRequest(ErrorCode.InvalidLibraryData);
         Library? library = await context.Libraries.FindAsync(id);
         if (library == null) return NotFound(ErrorCode.LibraryDoesNotExist);
         library.Update(libraryUpdate);
@@ -66,6 +67,7 @@ public class LibraryController(ManaxContext context, INotificationService notifi
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<ActionResult<long>> PostLibrary(LibraryCreateDto libraryCreate)
     {
+        if (libraryCreate.Name.Trim() == string.Empty) { return BadRequest(ErrorCode.InvalidLibraryData);}
         Library library = Library.Create(libraryCreate);
         library.Creation = DateTime.UtcNow;
 

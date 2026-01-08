@@ -1,3 +1,4 @@
+using ManaxLibrary;
 using ManaxLibrary.DTO.User;
 using ManaxServer.Models.Claim;
 using ManaxServer.Models.User;
@@ -23,9 +24,9 @@ public class ClaimUserTests : UserTestsSetup
         ActionResult<UserLoginResultDto> result = Controller.Claim(claimRequest);
 
         OkObjectResult? okResult = result.Result as OkObjectResult;
-        Assert.IsNull(okResult);
+        Assert.IsNotNull(okResult);
 
-        UserLoginResultDto? claimResult = result.Value;
+        UserLoginResultDto? claimResult = okResult.Value as UserLoginResultDto;
         Assert.IsNotNull(claimResult);
 
         User? createdUser = Context.Users.FirstOrDefault(u => u.Username == "FirstOwner");
@@ -46,9 +47,8 @@ public class ClaimUserTests : UserTestsSetup
         };
 
         ActionResult<UserLoginResultDto> result = Controller.Claim(claimRequest);
-
-        Assert.IsInstanceOfType<UnauthorizedResult>(result.Result);
-
+        
+        CheckTypeAndErrorCode<UnauthorizedObjectResult>(result.Result, ErrorCode.ServerAlreadyClaimed);
         LoginAttempt? claimAttempt = Context.LoginAttempts.FirstOrDefault(la => la.Type == "Claim");
         Assert.IsNotNull(claimAttempt);
         Assert.IsFalse(claimAttempt.Success);
@@ -69,7 +69,10 @@ public class ClaimUserTests : UserTestsSetup
 
         ActionResult<UserLoginResultDto> result = Controller.Claim(claimRequest);
 
-        UserLoginResultDto? claimResult = result.Value;
+        OkObjectResult? okResult = result.Result as OkObjectResult;
+        Assert.IsNotNull(okResult);
+        
+        UserLoginResultDto? claimResult = okResult.Value as UserLoginResultDto;
         Assert.IsNotNull(claimResult);
 
         LoginAttempt? claimAttempt = Context.LoginAttempts.FirstOrDefault(la => la.Type == "Claim");
@@ -92,7 +95,10 @@ public class ClaimUserTests : UserTestsSetup
 
         ActionResult<UserLoginResultDto> result = Controller.Claim(claimRequest);
 
-        UserLoginResultDto? claimResult = result.Value;
+        OkObjectResult? okResult = result.Result as OkObjectResult;
+        Assert.IsNotNull(okResult);
+        
+        UserLoginResultDto? claimResult = okResult.Value as UserLoginResultDto;
         Assert.IsNotNull(claimResult);
 
         MockHashService.VerifyHashPasswordCalled("plainTextPassword");

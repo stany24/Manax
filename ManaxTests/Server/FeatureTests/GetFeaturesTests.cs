@@ -12,11 +12,12 @@ public class GetFeaturesTests : FeatureTestsSetup
         ActionResult<List<Feature>> result = Controller.GetFeatures();
         
         OkObjectResult? okResult = result.Result as OkObjectResult;
-        Assert.IsNull(okResult);
+        Assert.IsNotNull(okResult);
 
-        Assert.IsNotNull(result);
-        Assert.IsNotNull(result.Value);
-        Assert.HasCount(3, result.Value);
+        List<Feature>? features = okResult.Value as List<Feature>;
+        
+        Assert.IsNotNull(features);
+        Assert.HasCount(3, features);
     }
 
     [TestMethod]
@@ -29,12 +30,11 @@ public class GetFeaturesTests : FeatureTestsSetup
         ActionResult<List<Feature>> result = Controller.GetFeatures();
 
         OkObjectResult ? okResult = result.Result as OkObjectResult;
-        Assert.IsNull(okResult);
-        
-        Assert.IsNotNull(result);
-        Assert.IsNotNull(result.Value);
-        Assert.HasCount(3, result.Value);
-        foreach (Feature feature in result.Value) Assert.IsTrue(feature.Value);
+        Assert.IsNotNull(okResult);
+        List<Feature>? features = okResult.Value as List<Feature>;
+        Assert.IsNotNull(features);
+        Assert.HasCount(3, features);
+        foreach (Feature feature in features) Assert.IsTrue(feature.Value);
     }
 
     [TestMethod]
@@ -45,9 +45,8 @@ public class GetFeaturesTests : FeatureTestsSetup
         ActionResult<List<Feature>> result = Controller.GetFeatures();
         
         OkObjectResult ? okResult = result.Result as OkObjectResult;
-        Assert.IsNull(okResult);
-
-        Assert.IsNotNull(result);
+        Assert.IsNotNull(okResult);
+        
         Assert.IsTrue(FeatureService.IsFeatureEnabled(FeatureType.Ranks));
     }
 }

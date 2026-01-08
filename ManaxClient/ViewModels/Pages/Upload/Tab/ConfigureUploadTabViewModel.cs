@@ -11,7 +11,6 @@ using DynamicData;
 using ManaxClient.Manager;
 using ManaxClient.Models.Upload;
 using ManaxLibrary.Logging;
-using Microsoft.VisualBasic.FileIO;
 
 namespace ManaxClient.ViewModels.Pages.Upload.Tab;
 

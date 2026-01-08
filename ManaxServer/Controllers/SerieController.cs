@@ -131,6 +131,7 @@ public class SerieController(
     {
         Serie? serie = await context.Series.FindAsync(id);
         if (serie == null) return NotFound(ErrorCode.SerieDoesNotExist);
+        if (serieUpdate.Title.Trim() == string.Empty) { return BadRequest(ErrorCode.InvalidSerieData);}
         serie.Update(serieUpdate, context);
 
         try { await context.SaveChangesAsync(); }
@@ -149,6 +150,7 @@ public class SerieController(
     {
         SavePoint? savePoint = SelectSavePoint();
         if (savePoint == null) return BadRequest(ErrorCode.NoSavePointAvailable);
+        if (serieCreate.Title.Trim() == string.Empty) { return BadRequest(ErrorCode.InvalidSerieData);}
         
         string folderPath = savePoint.Path + Path.DirectorySeparatorChar + serieCreate.Title;
         if (System.IO.File.Exists(folderPath)) return BadRequest(ErrorCode.SerieAlreadyExists);

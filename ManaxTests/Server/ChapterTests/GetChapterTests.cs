@@ -29,9 +29,9 @@ public class GetChapterTests : ChapterTestsSetup
         ActionResult<ChapterDto> result = await Controller.GetChapter(chapter.Id);
 
         OkObjectResult? okResult = result.Result as OkObjectResult;
-        Assert.IsNull(okResult);
+        Assert.IsNotNull(okResult);
 
-        ChapterDto? returnedChapter = result.Value;
+        ChapterDto? returnedChapter = okResult.Value as ChapterDto;
         Assert.IsNotNull(returnedChapter);
         Assert.IsTrue(chapter.DtoEquals(returnedChapter));
     }
@@ -66,7 +66,7 @@ public class GetChapterTests : ChapterTestsSetup
         Chapter chapter = Context.Chapters.First();
         ActionResult result = await Controller.GetChapterPage(chapter.Id, 999);
 
-        CheckTypeAndErrorCode<NotFoundObjectResult>(result, ErrorCode.PageDoesNotExist);
+        CheckTypeAndErrorCode<BadRequestObjectResult>(result, ErrorCode.PageDoesNotExist);
     }
 
     [TestMethod]
@@ -75,7 +75,7 @@ public class GetChapterTests : ChapterTestsSetup
         Chapter chapter = Context.Chapters.First();
         ActionResult result = await Controller.GetChapterPage(chapter.Id, -1);
 
-        CheckTypeAndErrorCode<NotFoundObjectResult>(result, ErrorCode.PageDoesNotExist);
+        CheckTypeAndErrorCode<BadRequestObjectResult>(result, ErrorCode.PageDoesNotExist);
     }
 
     [TestMethod]
@@ -84,7 +84,10 @@ public class GetChapterTests : ChapterTestsSetup
         Chapter chapter = Context.Chapters.First();
         ActionResult<ChapterDto> result = await Controller.GetChapter(chapter.Id);
 
-        ChapterDto? returnedChapter = result.Value;
+        OkObjectResult? okResult = result.Result as OkObjectResult;
+        Assert.IsNotNull(okResult);
+        
+        ChapterDto? returnedChapter = okResult.Value as ChapterDto;
         Assert.IsNotNull(returnedChapter);
         Assert.IsTrue(chapter.DtoEquals(returnedChapter));
     }
@@ -95,7 +98,7 @@ public class GetChapterTests : ChapterTestsSetup
         Chapter chapter = Context.Chapters.First();
         ActionResult result = await Controller.GetChapterPage(chapter.Id, -1);
 
-        CheckTypeAndErrorCode<NotFoundObjectResult>(result, ErrorCode.PageDoesNotExist);
+        CheckTypeAndErrorCode<BadRequestObjectResult>(result, ErrorCode.PageDoesNotExist);
     }
 
     [TestMethod]

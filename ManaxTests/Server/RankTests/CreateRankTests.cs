@@ -22,7 +22,7 @@ public class CreateRankTests : RankTestsSetup
         OkObjectResult? okResult = result.Result as OkObjectResult;
         Assert.IsNotNull(okResult);
 
-        long? rankId = result.Value;
+        long? rankId = okResult.Value as long?;
         Assert.IsNotNull(rankId);
 
         Rank? createdRank = await Context.Ranks.FindAsync(rankId);

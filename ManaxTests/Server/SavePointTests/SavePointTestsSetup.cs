@@ -1,6 +1,5 @@
 using ManaxServer.Controllers;
 using ManaxServer.Models;
-using ManaxTests.Server.Mocks;
 
 namespace ManaxTests.Server.SavePointTests;
 

@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ManaxTests.Server.UserTests;
 
-public abstract class UserTestsSetup
+public abstract class UserTestsSetup:TestSetup
 {
     private IPasswordValidationService _mockPasswordValidationService = null!;
     private MockPermissionService _mockPermissionService = null!;

@@ -14,9 +14,9 @@ public class GetUserTests : UserTestsSetup
         ActionResult<IEnumerable<long>> result = await Controller.GetUsers();
 
         OkObjectResult? okResult = result.Result as OkObjectResult;
-        Assert.IsNull(okResult);
+        Assert.IsNotNull(okResult);
 
-        List<long>? returnedIds = result.Value as List<long>;
+        List<long>? returnedIds = okResult.Value as List<long>;
         Assert.IsNotNull(returnedIds);
         Assert.HasCount(Context.Users.Count(), returnedIds);
         foreach (User user in Context.Users) Assert.Contains(user.Id, returnedIds);

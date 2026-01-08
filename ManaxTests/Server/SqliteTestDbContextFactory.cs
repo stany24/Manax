@@ -1,3 +1,4 @@
+using ImageMagick;
 using ManaxLibrary.DTO.Issue.Automatic;
 using ManaxLibrary.DTO.Serie;
 using ManaxLibrary.DTO.User;
@@ -12,7 +13,7 @@ using ManaxServer.Models.Serie;
 using ManaxServer.Models.User;
 using Microsoft.EntityFrameworkCore;
 
-namespace ManaxTests.Server.Mocks;
+namespace ManaxTests.Server;
 
 public static class SqliteTestDbContextFactory
 {
@@ -26,7 +27,6 @@ public static class SqliteTestDbContextFactory
             .Options;
 
         string savePointPath = Path.Combine(Directory.GetCurrentDirectory(), "savepoint");
-        if (Directory.Exists(savePointPath)) Directory.Delete(savePointPath, true);
         Directory.CreateDirectory(savePointPath);
         List<SavePoint> savePoints =
         [
@@ -314,7 +314,61 @@ public static class SqliteTestDbContextFactory
         context.ReportedIssuesSerie.AddRange(reportedIssuesSerie);
         context.SaveChanges();
 
+        CreateChapterFiles(series, chapters, savePoints);
+
         return context;
+    }
+    
+    private static void CreateChapterFiles(List<Serie> series, List<Chapter> chapters, List<SavePoint> savePoints)
+    {
+        foreach (Chapter chapter in chapters)
+        {
+            Serie? serie = series.FirstOrDefault(s => s.Id == chapter.SerieId);
+            SavePoint? savePoint = savePoints.FirstOrDefault(sp => sp.Id == serie?.SavePointId);
+            if (serie != null && savePoint != null)
+            {
+                CreateChapter(savePoint.Path, serie.FolderName, chapter.Number, chapter.PageNumber);
+            }
+        }
+    }
+
+    private static void CreateChapter(string savePointPath, string serieFolderName, int chapterNumber, int pageCount)
+    {
+        string chapterPath = Path.Combine(savePointPath, serieFolderName, $"{chapterNumber}.cbz");
+        if(File.Exists(chapterPath)){return;}
+        string directory = Path.GetDirectoryName(chapterPath)!;
+        Directory.CreateDirectory(directory);
+
+        using MemoryStream memoryStream = new();
+        using (System.IO.Compression.ZipArchive archive = new(memoryStream, System.IO.Compression.ZipArchiveMode.Create, true))
+        {
+            Random random = new(chapterNumber);
+
+            for (int i = 1; i <= pageCount; i++)
+            {
+                System.IO.Compression.ZipArchiveEntry entry = archive.CreateEntry($"{i:D3}.webp");
+
+                using Stream entryStream = entry.Open();
+                byte[] imageData = GenerateWebPImage(random);
+                entryStream.Write(imageData, 0, imageData.Length);
+            }
+        }
+
+        memoryStream.Position = 0;
+        using FileStream fileStream = new(chapterPath, FileMode.Create);
+        memoryStream.CopyTo(fileStream);
+    }
+
+    private static byte[] GenerateWebPImage(Random random)
+    {
+        using MagickImage image = new(new MagickColor(
+            (byte)random.Next(256),
+            (byte)random.Next(256),
+            (byte)random.Next(256)
+        ), 1137, 800);
+
+        image.Format = MagickFormat.WebP;
+        return image.ToByteArray();
     }
 
     public static void CleanupTestDatabase(ManaxContext context)

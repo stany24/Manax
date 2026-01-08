@@ -13,9 +13,9 @@ public class GetRankTests : RankTestsSetup
         ActionResult<IEnumerable<UserRankDto>> result = await Controller.GetRanking();
 
         OkObjectResult? okResult = result.Result as OkObjectResult;
-        Assert.IsNull(okResult);
+        Assert.IsNotNull(okResult);
 
-        List<UserRankDto>? returnedRanks = result.Value as List<UserRankDto>;
+        List<UserRankDto>? returnedRanks = okResult.Value as List<UserRankDto>;
         Assert.IsNotNull(returnedRanks);
 
         List<UserRank> expectedUserRanks = Context.UserRanks.Where(ur => ur.UserId == 1).ToList();
@@ -36,9 +36,9 @@ public class GetRankTests : RankTestsSetup
         ActionResult<IEnumerable<RankDto>> result = await Controller.GetRanks();
 
         OkObjectResult? okResult = result.Result as OkObjectResult;
-        Assert.IsNull(okResult);
+        Assert.IsNotNull(okResult);
 
-        List<RankDto>? returnedRanks = result.Value as List<RankDto>;
+        List<RankDto>? returnedRanks = okResult.Value as List<RankDto>;
         Assert.IsNotNull(returnedRanks);
         Assert.HasCount(Context.Ranks.Count(), returnedRanks);
         foreach (Rank rank in Context.Ranks)
@@ -55,7 +55,10 @@ public class GetRankTests : RankTestsSetup
     {
         ActionResult<IEnumerable<RankDto>> result = await Controller.GetRanks();
 
-        List<RankDto>? returnedRanks = result.Value as List<RankDto>;
+        OkObjectResult? okResult = result.Result as OkObjectResult;
+        Assert.IsNotNull(okResult);
+        
+        List<RankDto>? returnedRanks = okResult.Value as List<RankDto>;
         Assert.IsNotNull(returnedRanks);
 
         Rank expectedRank = Context.Ranks.First();

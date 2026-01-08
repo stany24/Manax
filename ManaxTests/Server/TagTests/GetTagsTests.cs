@@ -12,11 +12,13 @@ public class GetTagsTests : TagTestsSetup
     {
         Tag tag1 = new() { Name = "Action", ColorArgb = -16776961 };
         Tag tag2 = new() { Name = "Comedy", ColorArgb = -65536 };
-        Context.Tags.AddRange(tag1, tag2);
+        Context.Tags.AddRange(tag1, tag2);  
         await Context.SaveChangesAsync();
 
         ActionResult<IEnumerable<TagDto>> result = await Controller.GetTags();
-        IEnumerable<TagDto>? value = result.Value;
+        OkObjectResult? okResult = result.Result as OkObjectResult;
+        Assert.IsNotNull(okResult);
+        IEnumerable<TagDto>? value = okResult.Value as IEnumerable<TagDto>;
         Assert.IsNotNull(value);
         List<TagDto> tags = value.ToList();
         Assert.HasCount(2, tags);
@@ -29,7 +31,10 @@ public class GetTagsTests : TagTestsSetup
     {
         ActionResult<IEnumerable<TagDto>> result = await Controller.GetTags();
 
-        IEnumerable<TagDto>? value = result.Value;
+        OkObjectResult? okResult = result.Result as OkObjectResult;
+        Assert.IsNotNull(okResult);
+        
+        IEnumerable<TagDto>? value = okResult.Value as IEnumerable<TagDto>;
         Assert.IsNotNull(value);
         List<TagDto> tags = value.ToList();
         Assert.IsEmpty(tags);
@@ -43,8 +48,11 @@ public class GetTagsTests : TagTestsSetup
         await Context.SaveChangesAsync();
 
         ActionResult<IEnumerable<TagDto>> result = await Controller.GetTags();
+        
+        OkObjectResult? okResult = result.Result as OkObjectResult;
+        Assert.IsNotNull(okResult);
 
-        IEnumerable<TagDto>? value = result.Value;
+        IEnumerable<TagDto>? value = okResult.Value as IEnumerable<TagDto>;
         Assert.IsNotNull(value);
         List<TagDto> tags = value.ToList();
         TagDto returnedTag = tags.First();
@@ -63,8 +71,11 @@ public class GetTagsTests : TagTestsSetup
         await Context.SaveChangesAsync();
 
         ActionResult<IEnumerable<TagDto>> result = await Controller.GetTags();
+        
+        OkObjectResult? okResult = result.Result as OkObjectResult;
+        Assert.IsNotNull(okResult);
 
-        IEnumerable<TagDto>? value = result.Value;
+        IEnumerable<TagDto>? value = okResult.Value as IEnumerable<TagDto>;
         Assert.IsNotNull(value);
         List<TagDto> tags = value.ToList();
         Assert.HasCount(3, tags);

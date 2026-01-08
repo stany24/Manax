@@ -66,6 +66,6 @@ public class UpdateLibraryTests : LibraryTestsSetup
 
         ActionResult result = await Controller.PutLibrary(library.Id, updateDto);
 
-        CheckTypeAndErrorCode<BadRequestObjectResult>(result, ErrorCode.LibraryDoesNotExist);
+        CheckTypeAndErrorCode<BadRequestObjectResult>(result, ErrorCode.InvalidLibraryData);
     }
 }
