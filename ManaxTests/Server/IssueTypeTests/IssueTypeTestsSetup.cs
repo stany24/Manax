@@ -23,7 +23,7 @@ public abstract class IssueTypeTestsSetup:TestSetup
         _mockFeatureService.SetFeatureEnabled(FeatureType.AutomaticIssues, true);
         _mockFeatureService.SetFeatureEnabled(FeatureType.ReportedIssues, true);
 
-        Controller = new IssueTypeController(Context, _mockFeatureService);
+        Controller = new IssueTypeController(Context);
 
         ClaimsPrincipal user = new(new ClaimsIdentity([
             new Claim(ClaimTypes.NameIdentifier, "1"),

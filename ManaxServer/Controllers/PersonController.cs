@@ -48,6 +48,7 @@ public class PersonController(ManaxContext context, INotificationService notific
     {
         Role? role = await context.Roles.FindAsync(personCreateDto.RoleId);
         if (role == null) return BadRequest(ErrorCode.RoleDoesNotExist);
+        if(!personCreateDto.IsValid()) return BadRequest(ErrorCode.InvalidPersonData);
 
         Person person = Person.Create(personCreateDto, context);
         person.Role = role;
@@ -65,9 +66,9 @@ public class PersonController(ManaxContext context, INotificationService notific
     {
         Person? person = await context.Persons.FindAsync(id);
         if (person == null) return NotFound(ErrorCode.PersonDoesNotExist);
-
         Role? role = await context.Roles.FindAsync(personUpdateDto.RoleId);
         if (role == null) return BadRequest(ErrorCode.RoleDoesNotExist);
+        if(!personUpdateDto.IsValid()) return BadRequest(ErrorCode.InvalidPersonData);
 
         person.Update(personUpdateDto, role);
         await context.SaveChangesAsync();

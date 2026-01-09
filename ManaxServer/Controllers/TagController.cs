@@ -31,6 +31,7 @@ public class TagController(ManaxContext context, INotificationService notificati
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult> CreateTag(TagCreateDto tagCreate)
     {
+        if(!tagCreate.IsValid()) return BadRequest(ErrorCode.InvalidTagData);
         Tag tag = Tag.Create(tagCreate);
         context.Tags.Add(tag);
         await context.SaveChangesAsync();
@@ -47,15 +48,11 @@ public class TagController(ManaxContext context, INotificationService notificati
     {
         Tag? tag = context.Tags.FirstOrDefault(r => r.Id == tagUpdate.Id);
         if (tag == null) return NotFound(ErrorCode.TagDoesNotExist);
+        if(!tagUpdate.IsValid()) return BadRequest(ErrorCode.InvalidTagData);
+        
         tag.Update(tagUpdate);
-        try
-        {
-            await context.SaveChangesAsync();
-        }
-        catch (DbUpdateException)
-        {
-            return BadRequest(ErrorCode.InvalidTagData);
-        }
+        try { await context.SaveChangesAsync(); }
+        catch { return BadRequest(ErrorCode.InvalidTagData); }
 
         notificationService.NotifyTagUpdatedAsync(tag.ToDto());
         return Ok();

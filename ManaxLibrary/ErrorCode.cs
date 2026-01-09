@@ -28,6 +28,7 @@ public enum ErrorCode
     InvalidTagData = 43,
     
     PersonDoesNotExist = 51,
+    InvalidPersonData = 51,
     
     RoleDoesNotExist = 61,
     

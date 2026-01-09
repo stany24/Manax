@@ -112,8 +112,7 @@ public class UploadController(
             return BadRequest(ErrorCode.SerieDoesNotExist);
 
         ImageFormat format = SettingsManager.DataDto.PosterFormat;
-        string path = Path.Combine(serie.SavePath,
-            Serie.PosterName + "." + format.ToString().ToLower(CultureInfo.InvariantCulture));
+        string path = serie.PosterPath;
         if (System.IO.File.Exists(path) && !replace) return BadRequest(ErrorCode.PosterDoesNotExist);
         try
         {

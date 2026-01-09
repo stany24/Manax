@@ -5,7 +5,6 @@ using ManaxLibrary.DTO.User;
 using ManaxServer.Attributes;
 using ManaxServer.Models;
 using ManaxServer.Models.Rank;
-using ManaxServer.Services.Feature;
 using ManaxServer.Services.Notification;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -16,18 +15,15 @@ namespace ManaxServer.Controllers;
 [ApiController]
 public class RankController(
     ManaxContext context,
-    INotificationService notificationService,
-    IFeatureService featureService)
+    INotificationService notificationService)
     : ControllerBase
 {
     [HttpGet("/api/ranks")]
     [RequirePermission(Permission.ReadRanks)]
+    [RequireFeature(FeatureType.Ranks)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<RankDto>>> GetRanks()
     {
-        if (!featureService.IsFeatureEnabled(FeatureType.Ranks))
-            return BadRequest(ErrorCode.FeatureDisabled);
-
         List<RankDto> ranks = await context.Ranks
             .Select(rank => rank.ToDto())
             .ToListAsync();
@@ -36,12 +32,12 @@ public class RankController(
 
     [HttpPost]
     [RequirePermission(Permission.WriteRanks)]
+    [RequireFeature(FeatureType.Ranks)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<long>> CreateRank(RankCreateDto rankCreate)
     {
-        if (!featureService.IsFeatureEnabled(FeatureType.Ranks))
-            return BadRequest(ErrorCode.FeatureDisabled);
-
+        if(!rankCreate.IsValid()) return BadRequest(ErrorCode.InvalidRankData);
+        
         Rank rank = Rank.Create(rankCreate);
         context.Ranks.Add(rank);
         await context.SaveChangesAsync();
@@ -51,35 +47,34 @@ public class RankController(
 
     [HttpPut]
     [RequirePermission(Permission.WriteRanks)]
+    [RequireFeature(FeatureType.Ranks)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult> UpdateRank(RankUpdateDto rankUpdate)
     {
-        if (!featureService.IsFeatureEnabled(FeatureType.Ranks))
-            return BadRequest(ErrorCode.FeatureDisabled);
-
         Rank? rank = context.Ranks.FirstOrDefault(r => r.Id == rankUpdate.Id);
         if (rank == null) return NotFound(ErrorCode.RankDoesNotExist);
+        if (!rankUpdate.IsValid()) return BadRequest(ErrorCode.InvalidRankData);
+
         rank.Update(rankUpdate);
-        
         try { await context.SaveChangesAsync(); }
-        catch { return BadRequest(ErrorCode.InvalidRankData); }
+        catch{ return BadRequest(ErrorCode.InvalidRankData); }
+        
         notificationService.NotifyRankUpdatedAsync(rank.ToDto());
         return Ok();
     }
 
     [HttpDelete("{id:long}")]
     [RequirePermission(Permission.DeleteRanks)]
+    [RequireFeature(FeatureType.Ranks)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> DeleteRank(long id)
     {
-        if (!featureService.IsFeatureEnabled(FeatureType.Ranks))
-            return BadRequest(ErrorCode.FeatureDisabled);
-
         Rank? rank = await context.Ranks.FindAsync(id);
         if (rank == null) return NotFound(ErrorCode.RankDoesNotExist);
+        
         context.Ranks.Remove(rank);
         await context.SaveChangesAsync();
         notificationService.NotifyRankDeletedAsync(id);
@@ -88,13 +83,11 @@ public class RankController(
 
     [HttpPost("set")]
     [RequirePermission(Permission.SetMyRank)]
+    [RequireFeature(FeatureType.Ranks)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult> SetUserRank(UserRankCreateDto rank)
     {
-        if (!featureService.IsFeatureEnabled(FeatureType.Ranks))
-            return BadRequest(ErrorCode.FeatureDisabled);
-
         long? userId = UserController.GetCurrentUserId(HttpContext);
         if (userId == null) return Unauthorized(ErrorCode.TokenRequired);
 
@@ -121,13 +114,11 @@ public class RankController(
 
     [HttpGet("/api/ranking")]
     [RequirePermission(Permission.ReadRanks)]
+    [RequireFeature(FeatureType.Ranks)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult<IEnumerable<UserRankDto>>> GetRanking()
     {
-        if (!featureService.IsFeatureEnabled(FeatureType.Ranks))
-            return BadRequest(ErrorCode.FeatureDisabled);
-
         long? currentUserId = UserController.GetCurrentUserId(HttpContext);
         if (currentUserId == null) return Unauthorized(ErrorCode.TokenRequired);
         List<UserRankDto> userRanks = await context.UserRanks

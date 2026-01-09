@@ -33,7 +33,6 @@ public class LibraryController(ManaxContext context, INotificationService notifi
     public async Task<ActionResult<LibraryDto>> GetLibrary(long id)
     {
         Library? library = await context.Libraries
-            .AsNoTracking()
             .FirstOrDefaultAsync(l => l.Id == id);
 
         if (library == null) return NotFound(ErrorCode.LibraryDoesNotExist);
@@ -49,7 +48,7 @@ public class LibraryController(ManaxContext context, INotificationService notifi
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<ActionResult> PutLibrary(long id, LibraryUpdateDto libraryUpdate)
     {
-        if(libraryUpdate.Name.Trim() == string.Empty) return BadRequest(ErrorCode.InvalidLibraryData);
+        if(!libraryUpdate.IsValid()) return BadRequest(ErrorCode.InvalidLibraryData);
         Library? library = await context.Libraries.FindAsync(id);
         if (library == null) return NotFound(ErrorCode.LibraryDoesNotExist);
         library.Update(libraryUpdate);
@@ -67,7 +66,7 @@ public class LibraryController(ManaxContext context, INotificationService notifi
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<ActionResult<long>> PostLibrary(LibraryCreateDto libraryCreate)
     {
-        if (libraryCreate.Name.Trim() == string.Empty) { return BadRequest(ErrorCode.InvalidLibraryData);}
+        if (!libraryCreate.IsValid()) { return BadRequest(ErrorCode.InvalidLibraryData);}
         Library library = Library.Create(libraryCreate);
         library.Creation = DateTime.UtcNow;
 
@@ -89,11 +88,9 @@ public class LibraryController(ManaxContext context, INotificationService notifi
         Library? library = await context.Libraries.FindAsync(id);
         if (library == null) return NotFound(ErrorCode.LibraryDoesNotExist);
 
-        List<Serie> seriesToUpdate = await context.Series
+        await context.Series
             .Where(s => s.Library != null && s.Library.Id == id)
-            .ToListAsync();
-
-        foreach (Serie serie in seriesToUpdate) serie.Library = null;
+            .ForEachAsync(s => s.Library = null);
 
         context.Libraries.Remove(library);
         await context.SaveChangesAsync();

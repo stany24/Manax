@@ -6,4 +6,9 @@ public class TagCreateDto
 {
     [Required] public string Name { get; init; } = null!;
     [Required] public int ColorArgb { get; init; }
+    
+    public bool IsValid()
+    {
+        return !string.IsNullOrWhiteSpace(Name);
+    }
 }

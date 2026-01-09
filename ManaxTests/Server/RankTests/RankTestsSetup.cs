@@ -24,7 +24,7 @@ public abstract class RankTestsSetup:TestSetup
         _mockFeatureService = new MockFeatureService();
         _mockFeatureService.SetFeatureEnabled(FeatureType.Ranks, true);
 
-        Controller = new RankController(Context, _mockNotificationService, _mockFeatureService);
+        Controller = new RankController(Context, _mockNotificationService);
 
         ClaimsPrincipal user = new(new ClaimsIdentity([
             new Claim(ClaimTypes.NameIdentifier, "1"),

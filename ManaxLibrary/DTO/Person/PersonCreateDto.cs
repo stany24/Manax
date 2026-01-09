@@ -8,4 +8,11 @@ public class PersonCreateDto
     [Required] public string LastName { get; init; } = string.Empty;
     [Required] public string Pseudonym { get; init; } = string.Empty;
     [Required] public long RoleId { get; init; }
+    
+    public bool IsValid()
+    {
+        return !string.IsNullOrWhiteSpace(FirstName) ||
+               !string.IsNullOrWhiteSpace(LastName) ||
+               !string.IsNullOrWhiteSpace(Pseudonym);
+    }
 }

@@ -95,12 +95,10 @@ public class SerieController(
             .Include(s => s.SavePoint)
             .FirstOrDefault(s => s.Id == id);
         if (serie == null) return NotFound(ErrorCode.SerieDoesNotExist);
-        string posterName = Serie.PosterName + "." +
-                            SettingsManager.DataDto.PosterFormat.ToString().ToLower(CultureInfo.InvariantCulture);
-        string posterPath = Path.Combine(serie.SavePath, posterName);
-        if (!System.IO.File.Exists(posterPath)) return NotFound(ErrorCode.SerieHasNoPoster);
-        byte[] readAllBytes = await System.IO.File.ReadAllBytesAsync(posterPath);
-        return File(readAllBytes, "image/webp", posterName);
+        string poster = serie.PosterPath;
+        if (!System.IO.File.Exists(poster)) return NotFound(ErrorCode.SerieHasNoPoster);
+        byte[] readAllBytes = await System.IO.File.ReadAllBytesAsync(poster);
+        return File(readAllBytes, "image/webp", Path.GetFileName(poster));
     }
 
     [HttpGet("{id:long}/banner")]
@@ -114,12 +112,10 @@ public class SerieController(
             .Include(s => s.SavePoint)
             .FirstOrDefault(s => s.Id == id);
         if (serie == null) return NotFound(ErrorCode.SerieDoesNotExist);
-        string bannerName = Serie.BannerName + "." +
-                            SettingsManager.DataDto.BannerFormat.ToString().ToLower(CultureInfo.InvariantCulture);
-        string bannerPath = Path.Combine(serie.SavePath, bannerName);
-        if (!System.IO.File.Exists(bannerPath)) return NotFound(ErrorCode.SerieHasNoBanner);
-        byte[] readAllBytes = await System.IO.File.ReadAllBytesAsync(bannerPath);
-        return File(readAllBytes, "image/webp", bannerName);
+        string banner = serie.BannerPath;
+        if (!System.IO.File.Exists(banner)) return NotFound(ErrorCode.SerieHasNoBanner);
+        byte[] readAllBytes = await System.IO.File.ReadAllBytesAsync(banner);
+        return File(readAllBytes, "image/webp", Path.GetFileName(banner));
     }
 
     [HttpPut("{id:long}")]
@@ -150,25 +146,13 @@ public class SerieController(
     {
         SavePoint? savePoint = SelectSavePoint();
         if (savePoint == null) return BadRequest(ErrorCode.NoSavePointAvailable);
-        if (serieCreate.Title.Trim() == string.Empty) { return BadRequest(ErrorCode.InvalidSerieData);}
-        
-        string folderPath = savePoint.Path + Path.DirectorySeparatorChar + serieCreate.Title;
+        if (!serieCreate.IsValid()) { return BadRequest(ErrorCode.InvalidSerieData);}
+        Serie serie = new(serieCreate, savePoint);
+        string folderPath = serie.SavePath;
         if (System.IO.File.Exists(folderPath)) return BadRequest(ErrorCode.SerieAlreadyExists);
-        Serie serie = new()
-        {
-            SavePoint = savePoint,
-            Title = serieCreate.Title,
-            FolderName = serieCreate.Title,
-            Description = "",
-            Status = Status.Ongoing,
-            Creation = DateTime.UtcNow,
-            LastModification = DateTime.UtcNow
-        };
+        
         context.Series.Add(serie);
-        
-        try { await context.SaveChangesAsync(); }
-        catch { return BadRequest(ErrorCode.InvalidSerieData); }
-        
+        await context.SaveChangesAsync();
         Directory.CreateDirectory(folderPath);
         notificationService.NotifySerieCreatedAsync(serie.ToDto());
         backgroundTaskService.AddTask(new FixSerieBackGroundTask(fixService, serie.Id));
