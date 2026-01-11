@@ -1,4 +1,3 @@
-using ManaxLibrary;
 using ManaxLibrary.DTO.Feature;
 using ManaxLibrary.DTO.Issue.Reported;
 using ManaxLibrary.DTO.User;

@@ -1,4 +1,3 @@
-using System.Globalization;
 using System.Text.RegularExpressions;
 using ManaxLibrary;
 using ManaxLibrary.DTO.Read;
@@ -12,7 +11,6 @@ using ManaxServer.Models.Serie;
 using ManaxServer.Services.BackgroundTask;
 using ManaxServer.Services.Fix;
 using ManaxServer.Services.Notification;
-using ManaxServer.Settings;
 using ManaxServer.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;

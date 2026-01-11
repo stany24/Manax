@@ -4,7 +4,6 @@ using ManaxLibrary.DTO.User;
 using ManaxServer.Attributes;
 using ManaxServer.Models;
 using ManaxServer.Models.Library;
-using ManaxServer.Models.Serie;
 using ManaxServer.Services.Notification;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;

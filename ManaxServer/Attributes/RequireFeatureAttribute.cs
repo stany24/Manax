@@ -1,8 +1,6 @@
 using ManaxLibrary;
 using ManaxLibrary.DTO.Feature;
-using ManaxLibrary.DTO.User;
 using ManaxServer.Services.Feature;
-using ManaxServer.Services.Token;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
