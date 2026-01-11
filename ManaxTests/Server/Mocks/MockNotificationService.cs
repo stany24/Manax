@@ -80,7 +80,7 @@ public class MockNotificationService : INotificationService
     {
     }
 
-    public void NotifyChapterUploadFailedAsync(long userId, string serieTitle, int number)
+    public void NotifyChapterUploadFailedAsync(long userId, string serieTitle, uint number)
     {
     }
 

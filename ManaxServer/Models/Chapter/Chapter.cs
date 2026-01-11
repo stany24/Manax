@@ -17,8 +17,8 @@ public class Chapter
     [ForeignKey(nameof(SerieId))] public Serie.Serie Serie { get; set; } = null!;
     public long UploaderId { get; set; }
     [ForeignKey(nameof(UploaderId))] public User.User Uploader { get; set; } = null!;
-    public int Number { get; set; }
-    public int PageNumber { get; set; }
+    public uint Number { get; set; }
+    public uint PageNumber { get; set; }
     public DateTime Creation { get; set; }
     public DateTime LastModification { get; set; }
 

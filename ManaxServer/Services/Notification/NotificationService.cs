@@ -95,7 +95,7 @@ public class NotificationService(IHubContext<NotificationService> hubContext, IP
             NotificationType.ChapterRemoved, chapterId);
     }
 
-    public void NotifyChapterUploadFailedAsync(long userId, string serieTitle, int number)
+    public void NotifyChapterUploadFailedAsync(long userId, string serieTitle, uint number)
     {
         TrySendToSingleClientAsync(userId, NotificationType.ChapterUploadFailed,
             serieTitle + Path.PathSeparator + number);

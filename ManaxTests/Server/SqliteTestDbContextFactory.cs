@@ -332,7 +332,7 @@ public static class SqliteTestDbContextFactory
         }
     }
 
-    private static void CreateChapter(string savePointPath, string serieFolderName, int chapterNumber, int pageCount)
+    private static void CreateChapter(string savePointPath, string serieFolderName, uint chapterNumber, uint pageCount)
     {
         string chapterPath = Path.Combine(savePointPath, serieFolderName, $"{chapterNumber}.cbz");
         if(File.Exists(chapterPath)){return;}
@@ -342,7 +342,7 @@ public static class SqliteTestDbContextFactory
         using MemoryStream memoryStream = new();
         using (System.IO.Compression.ZipArchive archive = new(memoryStream, System.IO.Compression.ZipArchiveMode.Create, true))
         {
-            Random random = new(chapterNumber);
+            Random random = new(Convert.ToInt32(chapterNumber));
 
             for (int i = 1; i <= pageCount; i++)
             {

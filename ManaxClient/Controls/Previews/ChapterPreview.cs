@@ -136,7 +136,7 @@ public class ChapterPreview : Button
             {
                 if (read == null) return Localizer.Get("Chapter.NotRead");
                 uint currentPage = read.Page + 1;
-                int totalPages = Chapter?.PageNumber ?? 0;
+                uint totalPages = Chapter?.PageNumber ?? 0;
                 return currentPage >= totalPages ? Localizer.Get("Chapter.Read") : $"{currentPage}/{totalPages}";
             })
         });

@@ -24,8 +24,8 @@ public partial class Chapter : ObservableObject, IDisposable
     [ObservableProperty] private DateTime _lastModification;
 
     private CancellationTokenSource? _loadPagesCts;
-    [ObservableProperty] private int _number;
-    [ObservableProperty] private int _pageNumber;
+    [ObservableProperty] private uint _number;
+    [ObservableProperty] private uint _pageNumber;
     [ObservableProperty] private ObservableCollection<Bitmap> _pages = [];
     [ObservableProperty] private ReadDto? _read;
     [ObservableProperty] private long _serieId;

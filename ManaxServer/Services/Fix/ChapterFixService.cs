@@ -71,7 +71,7 @@ public partial class FixService(
             }
         }
 
-        chapter.PageNumber = images.Length;
+        chapter.PageNumber = Convert.ToUInt32(images.Length);
         serie.LastModification = DateTime.UtcNow;
         chapter.LastModification = DateTime.UtcNow;
         manaxContext.SaveChanges();
@@ -95,7 +95,7 @@ public partial class FixService(
 
         ZipArchive archive = new(new MemoryStream(newChapter.Data));
         Chapter chapter = Chapter.FromDto(newChapter);
-        chapter.PageNumber = archive.Entries.Count;
+        chapter.PageNumber = Convert.ToUInt32(archive.Entries.Count);
         chapter.Serie = serie;
         
         ZipArchiveEntry[] entries = archive.Entries.ToArray();

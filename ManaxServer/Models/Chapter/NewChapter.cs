@@ -6,7 +6,7 @@ public class NewChapter
 {
     public long SerieId { get; private init; }
     public long UploaderId { get; set; }
-    public int Number { get; private init; }
+    public uint Number { get; private init; }
     public byte[] Data { get; init; } = [];
 
     public static NewChapter FromDto(NewChapterDto chapter)

@@ -32,7 +32,7 @@ public interface INotificationService
     void NotifyChapterAddedAsync(ChapterDto chapter);
     void NotifyChapterUpdatedAsync(ChapterDto chapter);
     void NotifyChapterRemovedAsync(long chapterId);
-    void NotifyChapterUploadFailedAsync(long userId, string serieTitle, int number);
+    void NotifyChapterUploadFailedAsync(long userId, string serieTitle, uint number);
 
     void NotifyRankCreatedAsync(RankDto rank);
     void NotifyRankUpdatedAsync(RankDto rank);

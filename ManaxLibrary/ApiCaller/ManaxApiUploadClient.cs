@@ -25,7 +25,7 @@ public static partial class ManaxApiUploadClient
     [GeneratedRegex(@"[^\d]")]
     private static partial Regex RegexNotNumber();
 
-    private static int ExtractChapterNumber(string fileName)
+    private static uint ExtractChapterNumber(string fileName)
     {
         foreach (string pattern in ChapterNumberPatterns)
         {
@@ -33,7 +33,7 @@ public static partial class ManaxApiUploadClient
             Match match = regex.Match(fileName);
             if (!match.Success) continue;
             string numberStr = RegexNotNumber().Replace(match.Value, "");
-            if (int.TryParse(numberStr, out int number)) return number;
+            if (uint.TryParse(numberStr, out uint number)) return number;
         }
 
         return 0;
