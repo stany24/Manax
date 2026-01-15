@@ -32,7 +32,7 @@ public class ResetPasswordTests : UserTestsSetup
     {
         ActionResult<string> result = await Controller.ResetPassword(999999);
 
-        TestSetup.CheckTypeAndErrorCode<NotFoundObjectResult>(result.Result, ErrorCode.UserDoesNotExist);
+        CheckTypeAndErrorCode<NotFoundObjectResult>(result.Result, ErrorCode.UserDoesNotExist);
         MockHashService.VerifyHashPasswordNotCalled();
     }
 }

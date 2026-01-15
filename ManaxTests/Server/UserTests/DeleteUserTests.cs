@@ -27,7 +27,7 @@ public class DeleteUserTests : UserTestsSetup
     {
         ActionResult result = await Controller.DeleteUser(999999);
 
-        TestSetup.CheckTypeAndErrorCode<NotFoundObjectResult>(result, ErrorCode.UserDoesNotExist);
+        CheckTypeAndErrorCode<NotFoundObjectResult>(result, ErrorCode.UserDoesNotExist);
     }
 
     [TestMethod]
@@ -49,7 +49,7 @@ public class DeleteUserTests : UserTestsSetup
 
         ActionResult result = await Controller.DeleteUser(1);
 
-        TestSetup.CheckTypeAndErrorCode<UnauthorizedObjectResult>(result, ErrorCode.CannotDeleteSelf);
+        CheckTypeAndErrorCode<UnauthorizedObjectResult>(result, ErrorCode.CannotDeleteSelf);
     }
 
     [TestMethod]
@@ -67,7 +67,7 @@ public class DeleteUserTests : UserTestsSetup
 
         ActionResult result = await Controller.DeleteUser(100);
 
-        TestSetup.CheckTypeAndErrorCode<UnauthorizedObjectResult>(result, ErrorCode.InsufficientPermissions);
+        CheckTypeAndErrorCode<UnauthorizedObjectResult>(result, ErrorCode.InsufficientPermissions);
     }
 
     [TestMethod]
@@ -85,7 +85,7 @@ public class DeleteUserTests : UserTestsSetup
 
         ActionResult result = await Controller.DeleteUser(101);
 
-        TestSetup.CheckTypeAndErrorCode<UnauthorizedObjectResult>(result, ErrorCode.InsufficientPermissions);
+        CheckTypeAndErrorCode<UnauthorizedObjectResult>(result, ErrorCode.InsufficientPermissions);
     }
 
     [TestMethod]
@@ -98,7 +98,7 @@ public class DeleteUserTests : UserTestsSetup
 
         ActionResult result = await Controller.DeleteUser(1);
 
-        TestSetup.CheckTypeAndErrorCode<UnauthorizedObjectResult>(result, ErrorCode.TokenRequired);
+        CheckTypeAndErrorCode<UnauthorizedObjectResult>(result, ErrorCode.TokenRequired);
     }
 
 
@@ -135,7 +135,7 @@ public class DeleteUserTests : UserTestsSetup
 
         ActionResult result = await Controller.DeleteUser(1);
 
-        TestSetup.CheckTypeAndErrorCode<UnauthorizedObjectResult>(result, ErrorCode.UserDoesNotExist);
+        CheckTypeAndErrorCode<UnauthorizedObjectResult>(result, ErrorCode.UserDoesNotExist);
     }
 
     [TestMethod]

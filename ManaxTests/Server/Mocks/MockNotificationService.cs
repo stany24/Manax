@@ -21,6 +21,9 @@ public class MockNotificationService : INotificationService
     public TagDto? TagCreated { get; private set; }
     public TagDto? TagUpdated { get; private set; }
     public long TagDeletedId { get; private set; }
+    public RoleDto? RoleCreated { get; private set; }
+    public RoleDto? RoleUpdated { get; private set; }
+    public long RoleDeletedId { get; private set; }
 
     public void NotifyPermissionModifiedAsync(long userId, List<Permission> permissions)
     {
@@ -158,13 +161,16 @@ public class MockNotificationService : INotificationService
 
     public void NotifyRoleCreatedAsync(RoleDto role)
     {
+        RoleCreated = role;
     }
 
     public void NotifyRoleUpdatedAsync(RoleDto role)
     {
+        RoleUpdated = role;
     }
 
     public void NotifyRoleDeletedAsync(long roleId)
     {
+        RoleDeletedId = roleId;
     }
 }

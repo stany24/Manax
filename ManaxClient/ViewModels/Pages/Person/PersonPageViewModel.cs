@@ -129,7 +129,6 @@ public class PersonPageViewModel : PageViewModel
     {
         RoleUpdateDto update = new()
         {
-            Id = role.Id,
             Name = role.Name
         };
         RoleEditViewModel content = new(update);
@@ -141,7 +140,7 @@ public class PersonPageViewModel : PageViewModel
             {
                 if (viewModel.Canceled()) return;
                 RoleUpdateDto result = content.GetResult();
-                Optional<bool> updateRoleAsync = await ManaxApiRoleClient.UpdateRoleAsync(result);
+                Optional<bool> updateRoleAsync = await ManaxApiRoleClient.UpdateRoleAsync(role.Id, result);
                 if (updateRoleAsync.Failed)
                     WeakReferenceMessenger.Default.Send(new NotificationMessage(updateRoleAsync.Error));
             }

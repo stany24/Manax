@@ -46,7 +46,7 @@ public class LoginUserTests : UserTestsSetup
 
         ActionResult<UserLoginResultDto> result = await Controller.Login(loginDto);
 
-        TestSetup.CheckTypeAndErrorCode<UnauthorizedObjectResult>(result.Result, ErrorCode.InvalidPassword);
+        CheckTypeAndErrorCode<UnauthorizedObjectResult>(result.Result, ErrorCode.InvalidPassword);
 
         LoginAttempt? loginAttempt = Context.LoginAttempts.FirstOrDefault(la => la.Username == "testuser");
         Assert.IsNotNull(loginAttempt);
@@ -65,7 +65,7 @@ public class LoginUserTests : UserTestsSetup
 
         ActionResult<UserLoginResultDto> result = await Controller.Login(loginDto);
 
-        TestSetup.CheckTypeAndErrorCode<UnauthorizedObjectResult>(result.Result, ErrorCode.InvalidPassword);
+        CheckTypeAndErrorCode<UnauthorizedObjectResult>(result.Result, ErrorCode.InvalidPassword);
 
         LoginAttempt? loginAttempt = Context.LoginAttempts.FirstOrDefault(la => la.Username == "nonexistent");
         Assert.IsNotNull(loginAttempt);

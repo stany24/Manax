@@ -43,7 +43,7 @@ public class PutUserTests : UserTestsSetup
 
         ActionResult result = await Controller.PutUser(userUpdate);
 
-        TestSetup.CheckTypeAndErrorCode<BadRequestObjectResult>(result, ErrorCode.InvalidPassword);
+        CheckTypeAndErrorCode<BadRequestObjectResult>(result, ErrorCode.InvalidPassword);
         MockHashService.VerifyHashPasswordNotCalled();
     }
 
@@ -60,7 +60,7 @@ public class PutUserTests : UserTestsSetup
 
         ActionResult result = await Controller.PutUser(userUpdate);
 
-        TestSetup.CheckTypeAndErrorCode<UnauthorizedObjectResult>(result, ErrorCode.TokenRequired);
+        CheckTypeAndErrorCode<UnauthorizedObjectResult>(result, ErrorCode.TokenRequired);
         MockHashService.VerifyHashPasswordNotCalled();
     }
 
@@ -88,7 +88,7 @@ public class PutUserTests : UserTestsSetup
     {
         ActionResult<string> result = await Controller.ResetPassword(999);
 
-        TestSetup.CheckTypeAndErrorCode<NotFoundObjectResult>(result.Result, ErrorCode.UserDoesNotExist);
+        CheckTypeAndErrorCode<NotFoundObjectResult>(result.Result, ErrorCode.UserDoesNotExist);
         MockHashService.VerifyHashPasswordNotCalled();
     }
 }

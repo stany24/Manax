@@ -43,7 +43,7 @@ public class GetUserTests : UserTestsSetup
     {
         ActionResult<UserDto> result = await Controller.GetUser(999999);
 
-        TestSetup.CheckTypeAndErrorCode<NotFoundObjectResult>(result.Result, ErrorCode.UserDoesNotExist);
+        CheckTypeAndErrorCode<NotFoundObjectResult>(result.Result, ErrorCode.UserDoesNotExist);
     }
 
     [TestMethod]

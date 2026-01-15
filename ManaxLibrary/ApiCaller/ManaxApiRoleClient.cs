@@ -14,9 +14,9 @@ public static class ManaxApiRoleClient
         return await ManaxApiClient.PostSuccessAsync("api/role", role);
     }
 
-    public static async Task<Optional<bool>> UpdateRoleAsync(RoleUpdateDto role)
+    public static async Task<Optional<bool>> UpdateRoleAsync(long id, RoleUpdateDto role)
     {
-        return await ManaxApiClient.PutSuccessAsync($"api/role/{role.Id}", role);
+        return await ManaxApiClient.PutSuccessAsync($"api/role/{id}", role);
     }
 
     public static async Task<Optional<bool>> DeleteRoleAsync(long id)

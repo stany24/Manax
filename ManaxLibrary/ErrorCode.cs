@@ -31,6 +31,7 @@ public enum ErrorCode
     InvalidPersonData = 51,
     
     RoleDoesNotExist = 61,
+    InvalidRoleData = 62,
     
     RankDoesNotExist = 71,
     InvalidRankData = 72,

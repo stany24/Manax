@@ -81,7 +81,7 @@ public class TestReadController : ReadTestsSetup
 
         ActionResult result = await Controller.Read(readCreateDto);
 
-        TestSetup.CheckTypeAndErrorCode<NotFoundObjectResult>(result, ErrorCode.ChapterDoesNotExist);
+        CheckTypeAndErrorCode<NotFoundObjectResult>(result, ErrorCode.ChapterDoesNotExist);
     }
 
     [TestMethod]
