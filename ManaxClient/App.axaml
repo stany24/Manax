@@ -2,9 +2,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="ManaxClient.App"
              xmlns:local="using:ManaxClient"
-             xmlns:controls="using:ManaxClient.Controls"
              xmlns:themes="clr-namespace:Material.Styles.Themes;assembly=Material.Styles"
-             xmlns:assists="clr-namespace:Material.Styles.Assists;assembly=Material.Styles"
              xmlns:icon="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              RequestedThemeVariant="Default">
 
@@ -19,123 +17,6 @@
 
         <Style Selector="Window">
             <Setter Property="FontFamily" Value="Segoe UI, Arial, sans-serif" />
-        </Style>
-
-        <Style Selector="Button">
-            <Setter Property="Padding" Value="12,8" />
-            <Setter Property="Margin" Value="4" />
-            <Setter Property="CornerRadius" Value="6" />
-            <Setter Property="BorderThickness" Value="0" />
-            <Setter Property="FontWeight" Value="Medium" />
-            <Setter Property="Foreground" Value="{DynamicResource MaterialBodyBrush}" />
-            <Setter Property="Transitions">
-                <Transitions>
-                    <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.15" />
-                    <BrushTransition Property="Background" Duration="0:0:0.15" />
-                </Transitions>
-            </Setter>
-        </Style>
-
-        <Style Selector="Button.danger">
-            <Setter Property="Foreground" Value="Red" />
-        </Style>
-        
-        <Style Selector="icon|MaterialIcon.icon">
-            <Setter Property="HorizontalAlignment" Value="Center"></Setter>
-            <Setter Property="VerticalAlignment" Value="Center"></Setter>
-            <Setter Property="Width" Value="24" />
-            <Setter Property="Height" Value="24" />
-        </Style>
-        
-        <Style Selector="icon|MaterialIcon.bigIcon">
-            <Setter Property="HorizontalAlignment" Value="Center"></Setter>
-            <Setter Property="VerticalAlignment" Value="Center"></Setter>
-            <Setter Property="Width" Value="48" />
-            <Setter Property="Height" Value="48" />
-        </Style>
-
-        <Style Selector="Button.primary">
-            <Setter Property="FontWeight" Value="Bold" />
-        </Style>
-
-        <Style Selector="Button.secondary">
-            <Setter Property="FontWeight" Value="SemiBold" />
-        </Style>
-
-        <Style Selector="Button:pointerover">
-            <Setter Property="RenderTransform" Value="scale(1.02)" />
-        </Style>
-
-        <Style Selector="controls|IconButton">
-            <Setter Property="Padding" Value="6"></Setter>
-            <Setter Property="BorderThickness" Value="2"></Setter>
-            <Setter Property="CornerRadius" Value="5"></Setter>
-            <Setter Property="HorizontalAlignment" Value="Center"></Setter>
-            <Setter Property="VerticalAlignment" Value="Center"></Setter>
-            <Setter Property="Transitions">
-                <Transitions>
-                    <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.1">
-                        <TransformOperationsTransition.Easing>
-                            <SineEaseInOut />
-                        </TransformOperationsTransition.Easing>
-                    </TransformOperationsTransition>
-                </Transitions>
-            </Setter>
-        </Style>
-
-        <Style Selector="controls|IconButton:pointerover">
-            <Setter Property="RenderTransform" Value="scale(1.02)" />
-        </Style>
-
-        <Style Selector="Button.sidebar">
-            <Setter Property="assists:ShadowAssist.ShadowDepth" Value="Depth0"></Setter>
-            <Setter Property="Background" Value="Transparent"></Setter>
-            <Setter Property="HorizontalAlignment" Value="Stretch" />
-            <Setter Property="HorizontalContentAlignment" Value="Left" />
-            <Setter Property="VerticalContentAlignment" Value="Center" />
-            <Setter Property="Padding" Value="10,6" />
-            <Setter Property="Margin" Value="2" />
-            <Setter Property="BorderThickness" Value="0" />
-            <Setter Property="CornerRadius" Value="8" />
-            <Style Selector="^:pointerover">
-                <Setter Property="Background" Value="{DynamicResource MaterialSecondaryMidBrush}"/>
-            </Style>
-        </Style>
-
-        <Style Selector="TextBlock.title">
-            <Setter Property="FontSize" Value="24" />
-            <Setter Property="FontWeight" Value="Bold" />
-            <Setter Property="Margin" Value="0,0,0,16" />
-        </Style>
-
-        <Style Selector="TextBlock.subtitle">
-            <Setter Property="FontSize" Value="18" />
-            <Setter Property="FontWeight" Value="SemiBold" />
-            <Setter Property="Margin" Value="0,0,0,12" />
-        </Style>
-
-        <Style Selector="Border.card">
-            <Setter Property="CornerRadius" Value="12" />
-            <Setter Property="BorderThickness" Value="1" />
-            <Setter Property="Padding" Value="20" />
-            <Setter Property="Margin" Value="8" />
-        </Style>
-
-        <Style Selector="StackPanel.sidebar">
-            <Setter Property="Margin" Value="0,0,4,0" />
-        </Style>
-
-        <Style Selector="Border.task-item">
-            <Setter Property="CornerRadius" Value="8" />
-            <Setter Property="BorderThickness" Value="1" />
-            <Setter Property="Padding" Value="12" />
-            <Setter Property="Margin" Value="4,2" />
-        </Style>
-
-        <Style Selector="Border.notification">
-            <Setter Property="BorderThickness" Value="2" />
-            <Setter Property="CornerRadius" Value="8" />
-            <Setter Property="Padding" Value="12,8" />
         </Style>
     </Application.Styles>
 </Application>
