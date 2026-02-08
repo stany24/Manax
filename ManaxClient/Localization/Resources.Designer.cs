@@ -189,12 +189,6 @@ namespace ManaxClient.Localization {
             }
         }
         
-        public static string HomePage_SeriesCount {
-            get {
-                return ResourceManager.GetString("HomePage.SeriesCount", resourceCulture);
-            }
-        }
-        
         public static string HomePage_SelectFolder {
             get {
                 return ResourceManager.GetString("HomePage.SelectFolder", resourceCulture);

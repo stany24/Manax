@@ -96,9 +96,6 @@
     <data name="HomePage.RecentSeries" xml:space="preserve">
         <value>Séries récentes</value>
     </data>
-    <data name="HomePage.SeriesCount" xml:space="preserve">
-        <value>{0} série(s)</value>
-    </data>
     <data name="HomePage.SelectFolder" xml:space="preserve">
         <value>Sélectionnez un dossier à uploader</value>
     </data>

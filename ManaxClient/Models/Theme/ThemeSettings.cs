@@ -1,4 +1,3 @@
-using System;
 using Avalonia;
 using Avalonia.Media;
 using CommunityToolkit.Mvvm.Messaging;
@@ -21,12 +20,9 @@ public static class ThemeSettings
             ? Material.Styles.Themes.Theme.Dark
             : Material.Styles.Themes.Theme.Light;
         
-        double offset = themeSettingsData.IsDark ? - 0.2 : 0.2;
-        
         HslColor secondaryHsl = new(themeSettingsData.AccentColor.A,
-            themeSettingsData.AccentColor.H,
-            themeSettingsData.AccentColor.S,
-            Math.Clamp(themeSettingsData.AccentColor.L + offset, 0, 1));
+            themeSettingsData.AccentColor.H + 180 % 360,
+            themeSettingsData.AccentColor.S,themeSettingsData.AccentColor.S);
         
         Material.Styles.Themes.Theme theme = Material.Styles.Themes.Theme.Create(mode,themeSettingsData.AccentColor.ToRgb(), secondaryHsl.ToRgb());
         MaterialThemeBase? themeBootstrap = Application.Current?.LocateMaterialTheme<MaterialThemeBase>();

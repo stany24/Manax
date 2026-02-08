@@ -7,74 +7,116 @@
     xmlns:page="clr-namespace:ManaxClient.ViewModels.Pages.Home"
     xmlns:viewModels="clr-namespace:ManaxClient.ViewModels"
     xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
-    xmlns:localization1="clr-namespace:ManaxClient.Localization"
     xmlns:controls="clr-namespace:ManaxClient.Controls"
+    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Pages.Home.HomePageView"
     x:DataType="page:HomePageViewModel">
+    
+    <UserControl.Styles>
+        <Style Selector="StackPanel.topbar">
+            <Setter Property="Background" Value="{DynamicResource MaterialCardBackgroundBrush}"/>
+        </Style>
+        
+        <Style Selector="TextBox.search">
+            <Setter Property="Margin" Value="7,0"/>
+        </Style>
+        
+        <Style Selector="Border.content">
+            <Setter Property="Padding" Value="7"/>
+            <Setter Property="Background" Value="{DynamicResource MaterialCardBackgroundBrush}"/>
+            <Setter Property="CornerRadius" Value="5"/>
+        </Style>
+        
+        <Style Selector="TextBlock.title">
+            <Setter Property="FontWeight" Value="DemiBold"/>
+            <Setter Property="FontSize" Value="24"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+        </Style>
+        
+        <Style Selector="TextBlock.description">
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+        </Style>
+        
+        <Style Selector="TextBlock.section-title">
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="Margin" Value="0,0,0,7"></Setter>
+        </Style>
+        
+        <Style Selector="controls|IconButton.add">
+            <Setter Property="BorderBrush" Value="{DynamicResource MaterialPrimaryMidBrush}"/>
+            <Setter Property="IconColor" Value="{DynamicResource MaterialPrimaryMidBrush}"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="4"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="5"/>
+        </Style>
+        
+        <Style Selector="controls|IconButton.light">
+            <Setter Property="Background" Value="{DynamicResource MaterialCardBackgroundBrush}"/>
+            <Style Selector="^:pointerover">
+                <Setter Property="Background" Value="{DynamicResource MaterialPaperBrush}"/>
+            </Style>
+        </Style>
+        
+        <Style Selector="controls|IconButton.dark">
+            <Setter Property="Background" Value="{DynamicResource MaterialPaperBrush}"/>
+            <Style Selector="^:pointerover">
+                <Setter Property="Background" Value="{DynamicResource MaterialCardBackgroundBrush}"/>
+            </Style>
+        </Style>
+    </UserControl.Styles>
 
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel Orientation="Vertical" Spacing="24">
 
-            <Grid ColumnDefinitions="*,Auto">
-                <StackPanel Grid.Column="0" Orientation="Vertical">
-                    <TextBlock Classes="title" Text="{localization:Localize HomePage.Welcome}" />
-                    <TextBlock Classes="subtitle"
-                               Text="{localization:Localize HomePage.Subtitle}" />
-                </StackPanel>
-
-                <controls:IconButton Grid.Column="1"
-                        IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWriteSeries}"
-                        Command="{Binding UploadSerie}"
-                        Text="{localization:Localize HomePage.AddSeries}"
-                        Icon="Add"/>
+            <Grid Classes="topbar"
+                  ColumnDefinitions="Auto,*,Auto">
+                <avalonia:MaterialIcon Grid.Column="0"
+                                       Kind="Search"/>
+                <TextBox Grid.Column="1"
+                         Classes="search"
+                         Text="Future search area"/>
+                <controls:IconButton Classes="add dark"
+                                     Grid.Column="2"
+                                     IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWriteSeries}"
+                                     Command="{Binding UploadSerie}"
+                                     Text="{localization:Localize HomePage.AddSeries}"
+                                     Icon="Add"/>
             </Grid>
 
-            <Border Classes="card" IsVisible="{Binding !Series.Count}">
-                <StackPanel Orientation="Vertical"
-                            Spacing="16"
-                            HorizontalAlignment="Center">
-                    <TextBlock Text="{localization:Localize HomePage.NoSeries}"
-                               FontSize="18"
-                               FontWeight="Medium"
-                               HorizontalAlignment="Center" />
-                    <TextBlock
-                        Text="{localization:Localize HomePage.NoSeries.Description}"
-                        TextAlignment="Center"
-                        TextWrapping="Wrap"
-                        MaxWidth="400" />
-                    <controls:IconButton IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWriteSeries}"
-                            Command="{Binding UploadSerie}"
-                            Text="{localization:Localize HomePage.AddFirstSeries}"
-                            Icon="Add"/>
+            <Border Classes="content"
+                    IsVisible="{Binding !Series.Count}">
+                <StackPanel>
+                    <TextBlock Classes="title"
+                               Text="{localization:Localize HomePage.NoSeries}" />
+                    <TextBlock Classes="description"
+                               Text="{localization:Localize HomePage.NoSeries.Description}"/>
+                    <controls:IconButton Classes="add light"
+                                         IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWriteSeries}"
+                                         Command="{Binding UploadSerie}"
+                                         Text="{localization:Localize HomePage.AddFirstSeries}"
+                                         Icon="Add"/>
                 </StackPanel>
             </Border>
-
-            <Border Classes="card" IsVisible="{Binding Series.Count}">
-                <StackPanel Orientation="Vertical" Spacing="16">
-                    <Grid ColumnDefinitions="*,Auto">
-                        <TextBlock Grid.Column="0"
-                                   Classes="subtitle"
-                                   Text="{localization:Localize HomePage.RecentSeries}"
-                                   Margin="0" />
-                        <TextBlock Grid.Column="1"
-                                   Text="{localization1:LocalizeFormat HomePage.SeriesCount,
-                                       Param1={Binding $parent[UserControl].((page:HomePageViewModel)DataContext).Series.Count}}"
-                                   VerticalAlignment="Center" />
-                    </Grid>
+            
+            <Border Classes="content"
+                    IsVisible="{Binding Series.Count}">
+                <StackPanel Orientation="Vertical">
+                    <TextBlock Classes="section-title"
+                               Text="{localization:Localize HomePage.RecentSeries}"/>
 
                     <ScrollViewer HorizontalScrollBarVisibility="Auto"
                                   VerticalScrollBarVisibility="Disabled">
                         <ItemsControl ItemsSource="{Binding Series}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <Border Background="Transparent"
-                                            Padding="8"
-                                            CornerRadius="12"
-                                            Margin="4">
+                                    <Border>
                                         <previews:SeriePreview
                                             Serie="{Binding .}"
-                                            BackGroundColor="{DynamicResource MaterialCardBackgroundBrush}"
+                                            BackGroundColor="{DynamicResource MaterialBackgroundBrush}"
                                             CommandParameter="{Binding .}" />
                                     </Border>
                                 </DataTemplate>
