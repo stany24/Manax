@@ -19,18 +19,10 @@
         <converters:ColorToSolidBrushConverter x:Key="ColorToBrushConverter" />
     </UserControl.Resources>
     
-    <UserControl.Styles>
-        <Style Selector="Border.tag-card">
-            <Setter Property="Background" Value="{DynamicResource MaterialPaperBrush}"/>
-            <Setter Property="Padding" Value="7"/>
-            <Setter Property="CornerRadius" Value="5"/>
-        </Style>
-    </UserControl.Styles>
-    
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel Orientation="Vertical" Spacing="24">
             <Border Classes="card">
-                <StackPanel Spacing="16">
+                <StackPanel>
                     <Grid ColumnDefinitions="Auto,*,Auto">
                         <TextBlock Grid.Column="0"
                                    Classes="section-title"
@@ -47,7 +39,7 @@
                     <ItemsControl ItemsSource="{Binding Tags}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <Border Classes="tag-card">
+                                <Border Classes="item-card">
                                     <Grid ColumnDefinitions="Auto,*,Auto,Auto" ColumnSpacing="16">
 
                                         <Border Grid.Column="0"

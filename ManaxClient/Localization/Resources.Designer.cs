@@ -411,39 +411,9 @@ namespace ManaxClient.Localization {
             }
         }
         
-        public static string PersonPage_PersonsCount {
-            get {
-                return ResourceManager.GetString("PersonPage.PersonsCount", resourceCulture);
-            }
-        }
-        
         public static string PersonPage_NewPerson {
             get {
                 return ResourceManager.GetString("PersonPage.NewPerson", resourceCulture);
-            }
-        }
-        
-        public static string PersonPage_NoPersons_Title {
-            get {
-                return ResourceManager.GetString("PersonPage.NoPersons.Title", resourceCulture);
-            }
-        }
-        
-        public static string PersonPage_NoPersons_Description {
-            get {
-                return ResourceManager.GetString("PersonPage.NoPersons.Description", resourceCulture);
-            }
-        }
-        
-        public static string PersonPage_CreateFirstPerson {
-            get {
-                return ResourceManager.GetString("PersonPage.CreateFirstPerson", resourceCulture);
-            }
-        }
-        
-        public static string PersonPage_PersonsList_Title {
-            get {
-                return ResourceManager.GetString("PersonPage.PersonsList.Title", resourceCulture);
             }
         }
         
@@ -1659,33 +1629,9 @@ namespace ManaxClient.Localization {
             }
         }
         
-        public static string RolePage_RolesCount {
-            get {
-                return ResourceManager.GetString("RolePage.RolesCount", resourceCulture);
-            }
-        }
-        
         public static string RolePage_NewRole {
             get {
                 return ResourceManager.GetString("RolePage.NewRole", resourceCulture);
-            }
-        }
-        
-        public static string RolePage_NoRoles_Title {
-            get {
-                return ResourceManager.GetString("RolePage.NoRoles.Title", resourceCulture);
-            }
-        }
-        
-        public static string RolePage_NoRoles_Description {
-            get {
-                return ResourceManager.GetString("RolePage.NoRoles.Description", resourceCulture);
-            }
-        }
-        
-        public static string RolePage_CreateFirstRole {
-            get {
-                return ResourceManager.GetString("RolePage.CreateFirstRole", resourceCulture);
             }
         }
         

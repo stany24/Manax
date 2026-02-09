@@ -15,19 +15,6 @@
     IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanReadUsers}">
     
     <UserControl.Styles>
-        <Style Selector="Border.user-card">
-            <Setter Property="Background" Value="{DynamicResource MaterialPaperBrush }"/>
-            <Setter Property="Padding" Value="7"/>
-            <Setter Property="CornerRadius" Value="5"/>
-        </Style>
-        
-        <Style Selector="icon|MaterialIcon.user-icon">
-            <Setter Property="Width" Value="25"/>
-            <Setter Property="Height" Value="25"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="Foreground" Value="{DynamicResource MaterialPrimaryMidBrush}"/>
-        </Style>
-        
         <Style Selector="Border.user-role">
             <Setter Property="CornerRadius" Value="18"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
@@ -41,7 +28,7 @@
         <StackPanel Orientation="Vertical" Spacing="24">
 
             <Border Classes="card">
-                <StackPanel Spacing="16">
+                <StackPanel>
                     
                     <Grid ColumnDefinitions="Auto,*,Auto">
                         <TextBlock Grid.Column="0"
@@ -60,10 +47,11 @@
                     <ItemsControl ItemsSource="{Binding Users}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <Border Classes="user-card">
-                                    <Grid ColumnDefinitions="Auto,Auto,Auto,*,Auto,Auto,Auto" ColumnSpacing="16">
+                                <Border Classes="item-card">
+                                    <Grid ColumnDefinitions="Auto,Auto,Auto,*,Auto,Auto,Auto"
+                                          ColumnSpacing="16">
                                         <icon:MaterialIcon Grid.Column="0"
-                                                           Classes="user-icon"
+                                                           Classes="icon"
                                                            Kind="UserOutline"/>
 
                                         <TextBlock Grid.Column="1"
@@ -106,7 +94,6 @@
                             </ItemsPanelTemplate>
                         </ItemsControl.ItemsPanel>
                     </ItemsControl>
-                    
                 </StackPanel>
             </Border>
         </StackPanel>

@@ -205,25 +205,10 @@
         <value>Niveau : {0}</value>
     </data>
     <data name="PersonPage.Title" xml:space="preserve">
-        <value>Gestion des Personnes</value>
-    </data>
-    <data name="PersonPage.PersonsCount" xml:space="preserve">
-        <value>{0} personne(s) configurée(s)</value>
+        <value>Liste des Personnes ({0})</value>
     </data>
     <data name="PersonPage.NewPerson" xml:space="preserve">
         <value>Nouvelle personne</value>
-    </data>
-    <data name="PersonPage.NoPersons.Title" xml:space="preserve">
-        <value>Aucune personne configurée</value>
-    </data>
-    <data name="PersonPage.NoPersons.Description" xml:space="preserve">
-        <value>Créez des personnes pour gérer les auteurs, artistes et contributeurs.</value>
-    </data>
-    <data name="PersonPage.CreateFirstPerson" xml:space="preserve">
-        <value>Créer la première personne</value>
-    </data>
-    <data name="PersonPage.PersonsList.Title" xml:space="preserve">
-        <value>Liste des personnes</value>
     </data>
     <data name="SeriePage.ChangeButton" xml:space="preserve">
         <value>Changer</value>
@@ -874,22 +859,10 @@
         <value>Continuer</value>
     </data>
     <data name="RolePage.Title" xml:space="preserve">
-        <value>Gestion des rôles</value>
-    </data>
-    <data name="RolePage.RolesCount" xml:space="preserve">
-        <value>{0} rôle(s) configuré(s)</value>
+        <value>Liste des rôles ({0})</value>
     </data>
     <data name="RolePage.NewRole" xml:space="preserve">
         <value>Nouveau rôle</value>
-    </data>
-    <data name="RolePage.NoRoles.Title" xml:space="preserve">
-        <value>Aucun rôle configuré</value>
-    </data>
-    <data name="RolePage.NoRoles.Description" xml:space="preserve">
-        <value>Créez des rôles pour organiser les personnes par leur fonction (auteur, artiste, etc.).</value>
-    </data>
-    <data name="RolePage.CreateFirstRole" xml:space="preserve">
-        <value>Créer le premier rôle</value>
     </data>
     <data name="RolePage.RolesList.Title" xml:space="preserve">
         <value>Liste des rôles</value>
