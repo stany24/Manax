@@ -282,9 +282,6 @@
     <data name="SettingsServerPage.Title" xml:space="preserve">
         <value>Paramètres du serveur</value>
     </data>
-    <data name="SettingsServerPage.Subtitle" xml:space="preserve">
-        <value>Configurez les paramètres globaux de votre serveur Manax</value>
-    </data>
     <data name="SettingsServerPage.AddSavePoint" xml:space="preserve">
         <value>Ajouter un point de sauvegarde</value>
     </data>
@@ -335,9 +332,6 @@
     </data>
     <data name="SettingsServerPage.MinDescriptionLength" xml:space="preserve">
         <value>Longueur min description</value>
-    </data>
-    <data name="SettingsServerPage.TipTitle" xml:space="preserve">
-        <value>Conseil</value>
     </data>
     <data name="SettingsServerPage.TipMessage" xml:space="preserve">
         <value>Les modifications seront appliquées après validation. Assurez-vous de tester les paramètres avant de les sauvegarder.</value>

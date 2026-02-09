@@ -23,9 +23,9 @@
         <StackPanel Orientation="Vertical" Spacing="24">
             <Border Classes="card">
                 <StackPanel>
-                    <Grid ColumnDefinitions="Auto,*,Auto">
+                    <Grid ColumnDefinitions="Auto,*,Auto"
+                          Classes="section-title">
                         <TextBlock Grid.Column="0"
-                                   Classes="section-title"
                                    Text="{localization1:LocalizeFormat TagPage.List,
                                         Param1={Binding $parent[UserControl].((tag:TagPageViewModel)DataContext).Tags.Count}}"/>
                         <controls:IconButton Grid.Column="2"

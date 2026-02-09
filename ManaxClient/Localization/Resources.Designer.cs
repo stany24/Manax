@@ -555,12 +555,6 @@ namespace ManaxClient.Localization {
             }
         }
         
-        public static string SettingsServerPage_Subtitle {
-            get {
-                return ResourceManager.GetString("SettingsServerPage.Subtitle", resourceCulture);
-            }
-        }
-        
         public static string SettingsServerPage_AddSavePoint {
             get {
                 return ResourceManager.GetString("SettingsServerPage.AddSavePoint", resourceCulture);
@@ -660,12 +654,6 @@ namespace ManaxClient.Localization {
         public static string SettingsServerPage_MinDescriptionLength {
             get {
                 return ResourceManager.GetString("SettingsServerPage.MinDescriptionLength", resourceCulture);
-            }
-        }
-        
-        public static string SettingsServerPage_TipTitle {
-            get {
-                return ResourceManager.GetString("SettingsServerPage.TipTitle", resourceCulture);
             }
         }
         

@@ -29,9 +29,9 @@
             
             <Border Classes="card">
                 <StackPanel Orientation="Vertical">
-                    <Grid ColumnDefinitions="Auto,*,Auto">
+                    <Grid ColumnDefinitions="Auto,*,Auto"
+                          Classes="section-title">
                         <TextBlock Grid.Column="0"
-                                   Classes="section-title"
                                    Text="{localization1:LocalizeFormat PersonPage.Title,
                                Param1={Binding $parent[UserControl].((page:PersonPageViewModel)DataContext).Persons.Count}}" />
 
@@ -102,9 +102,9 @@
             <!-- Roles Section -->
             <Border Classes="card">
                 <StackPanel Orientation="Vertical">
-                    <Grid ColumnDefinitions="Auto,*,Auto">
+                    <Grid ColumnDefinitions="Auto,*,Auto"
+                          Classes="section-title">
                         <TextBlock Grid.Column="0"
-                                   Classes="section-title"
                                    Text="{localization1:LocalizeFormat RolePage.Title,
                                    Param1={Binding $parent[UserControl].((page:PersonPageViewModel)DataContext).Roles.Count}}"
                                    VerticalAlignment="Center"/>
