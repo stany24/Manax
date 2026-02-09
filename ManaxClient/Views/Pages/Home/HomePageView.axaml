@@ -22,12 +22,6 @@
             <Setter Property="Margin" Value="7,0"/>
         </Style>
         
-        <Style Selector="Border.content">
-            <Setter Property="Padding" Value="7"/>
-            <Setter Property="Background" Value="{DynamicResource MaterialCardBackgroundBrush}"/>
-            <Setter Property="CornerRadius" Value="5"/>
-        </Style>
-        
         <Style Selector="TextBlock.title">
             <Setter Property="FontWeight" Value="DemiBold"/>
             <Setter Property="FontSize" Value="24"/>
@@ -36,36 +30,6 @@
         
         <Style Selector="TextBlock.description">
             <Setter Property="HorizontalAlignment" Value="Center"/>
-        </Style>
-        
-        <Style Selector="TextBlock.section-title">
-            <Setter Property="FontSize" Value="20"/>
-            <Setter Property="Margin" Value="0,0,0,7"></Setter>
-        </Style>
-        
-        <Style Selector="controls|IconButton.add">
-            <Setter Property="BorderBrush" Value="{DynamicResource MaterialPrimaryMidBrush}"/>
-            <Setter Property="IconColor" Value="{DynamicResource MaterialPrimaryMidBrush}"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="HorizontalAlignment" Value="Center"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="Padding" Value="4"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="CornerRadius" Value="5"/>
-        </Style>
-        
-        <Style Selector="controls|IconButton.light">
-            <Setter Property="Background" Value="{DynamicResource MaterialCardBackgroundBrush}"/>
-            <Style Selector="^:pointerover">
-                <Setter Property="Background" Value="{DynamicResource MaterialPaperBrush}"/>
-            </Style>
-        </Style>
-        
-        <Style Selector="controls|IconButton.dark">
-            <Setter Property="Background" Value="{DynamicResource MaterialPaperBrush}"/>
-            <Style Selector="^:pointerover">
-                <Setter Property="Background" Value="{DynamicResource MaterialCardBackgroundBrush}"/>
-            </Style>
         </Style>
     </UserControl.Styles>
 
@@ -79,7 +43,7 @@
                 <TextBox Grid.Column="1"
                          Classes="search"
                          Text="Future search area"/>
-                <controls:IconButton Classes="add dark"
+                <controls:IconButton Classes="icon-button dark"
                                      Grid.Column="2"
                                      IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWriteSeries}"
                                      Command="{Binding UploadSerie}"
@@ -87,14 +51,14 @@
                                      Icon="Add"/>
             </Grid>
 
-            <Border Classes="content"
+            <Border Classes="card"
                     IsVisible="{Binding !Series.Count}">
                 <StackPanel>
                     <TextBlock Classes="title"
                                Text="{localization:Localize HomePage.NoSeries}" />
                     <TextBlock Classes="description"
                                Text="{localization:Localize HomePage.NoSeries.Description}"/>
-                    <controls:IconButton Classes="add light"
+                    <controls:IconButton Classes="icon-button light"
                                          IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWriteSeries}"
                                          Command="{Binding UploadSerie}"
                                          Text="{localization:Localize HomePage.AddFirstSeries}"
@@ -102,7 +66,7 @@
                 </StackPanel>
             </Border>
             
-            <Border Classes="content"
+            <Border Classes="card"
                     IsVisible="{Binding Series.Count}">
                 <StackPanel Orientation="Vertical">
                     <TextBlock Classes="section-title"

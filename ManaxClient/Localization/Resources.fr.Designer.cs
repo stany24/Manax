@@ -1071,18 +1071,6 @@ namespace ManaxClient.Localization {
             }
         }
         
-        public static string UserPage_Management {
-            get {
-                return ResourceManager.GetString("UserPage.Management", resourceCulture);
-            }
-        }
-        
-        public static string UserPage_Count {
-            get {
-                return ResourceManager.GetString("UserPage.Count", resourceCulture);
-            }
-        }
-        
         public static string UserPage_Add {
             get {
                 return ResourceManager.GetString("UserPage.Add", resourceCulture);

@@ -537,12 +537,6 @@
     <data name="TagPage.DeleteError" xml:space="preserve">
         <value>Erreur lors de la suppression du tag</value>
     </data>
-    <data name="UserPage.Management" xml:space="preserve">
-        <value>Gestion des utilisateurs</value>
-    </data>
-    <data name="UserPage.Count" xml:space="preserve">
-        <value>{0} utilisateur(s) enregistré(s)</value>
-    </data>
     <data name="UserPage.Add" xml:space="preserve">
         <value>Ajouter</value>
     </data>
@@ -556,7 +550,7 @@
         <value>Créer un utilisateur</value>
     </data>
     <data name="UserPage.List" xml:space="preserve">
-        <value>Liste des utilisateurs</value>
+        <value>Liste des utilisateurs ({0})</value>
     </data>
     <data name="UserPage.Permissions" xml:space="preserve">
         <value>Permissions</value>
