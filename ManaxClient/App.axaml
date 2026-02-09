@@ -65,8 +65,14 @@
         
         <Style Selector="TextBlock.section-title">
             <Setter Property="HorizontalAlignment" Value="Center"/>
-            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="FontSize" Value="24"/>
             <Setter Property="Margin" Value="0,0,0,7"/>
+        </Style>
+        
+        <Style Selector="TextBlock.item-name">
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="16"/>
         </Style>
     </Application.Styles>
 </Application>

@@ -1005,33 +1005,9 @@ namespace ManaxClient.Localization {
             }
         }
         
-        public static string TagPage_Management {
-            get {
-                return ResourceManager.GetString("TagPage.Management", resourceCulture);
-            }
-        }
-        
-        public static string TagPage_Count {
-            get {
-                return ResourceManager.GetString("TagPage.Count", resourceCulture);
-            }
-        }
-        
         public static string TagPage_NewTag {
             get {
                 return ResourceManager.GetString("TagPage.NewTag", resourceCulture);
-            }
-        }
-        
-        public static string TagPage_NoTags {
-            get {
-                return ResourceManager.GetString("TagPage.NoTags", resourceCulture);
-            }
-        }
-        
-        public static string TagPage_NoTags_Description {
-            get {
-                return ResourceManager.GetString("TagPage.NoTags.Description", resourceCulture);
             }
         }
         

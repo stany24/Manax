@@ -28,12 +28,6 @@
             <Setter Property="Foreground" Value="{DynamicResource MaterialPrimaryMidBrush}"/>
         </Style>
         
-        <Style Selector="TextBlock.user-name">
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="FontWeight" Value="Bold"/>
-            <Setter Property="FontSize" Value="16"/>
-        </Style>
-        
         <Style Selector="Border.user-role">
             <Setter Property="CornerRadius" Value="18"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
@@ -73,7 +67,7 @@
                                                            Kind="UserOutline"/>
 
                                         <TextBlock Grid.Column="1"
-                                                   Classes="user-name"
+                                                   Classes="item-name"
                                                    Text="{Binding Username}"/>
 
                                         <Border Grid.Column="2"
