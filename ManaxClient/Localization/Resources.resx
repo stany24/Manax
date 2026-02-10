@@ -252,9 +252,6 @@
     <data name="SettingsAppPage.Title" xml:space="preserve">
         <value>Appearance Settings</value>
     </data>
-    <data name="SettingsAppPage.Subtitle" xml:space="preserve">
-        <value>Customize the appearance of your Manax application</value>
-    </data>
     <data name="SettingsAppPage.DisplayMode" xml:space="preserve">
         <value>Display mode</value>
     </data>

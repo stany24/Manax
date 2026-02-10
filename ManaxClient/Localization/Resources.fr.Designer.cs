@@ -501,12 +501,6 @@ namespace ManaxClient.Localization {
             }
         }
         
-        public static string SettingsAppPage_Subtitle {
-            get {
-                return ResourceManager.GetString("SettingsAppPage.Subtitle", resourceCulture);
-            }
-        }
-        
         public static string SettingsAppPage_DisplayMode {
             get {
                 return ResourceManager.GetString("SettingsAppPage.DisplayMode", resourceCulture);

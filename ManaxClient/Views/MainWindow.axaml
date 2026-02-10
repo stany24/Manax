@@ -22,7 +22,7 @@
     
     <Window.Styles>
         <Style Selector="StackPanel.sidebar">
-            <Setter Property="Background" Value="{DynamicResource MaterialCardBackgroundBrush}"></Setter>
+            <Setter Property="Background" Value="{DynamicResource MaterialCardBackgroundBrush}"/>
         </Style>
         
         <Style Selector="StackPanel.sidebar > controls|IconButton">
@@ -30,18 +30,18 @@
             <Setter Property="Padding" Value="6"/>
             <Setter Property="Margin" Value="4,4,12,4"/>
             <Setter Property="HorizontalContentAlignment" Value="Left"/>
-            <Setter Property="Background" Value="{DynamicResource MaterialCardBackgroundBrush}"></Setter>
-            <Setter Property="IconColor" Value="{DynamicResource MaterialPrimaryMidBrush}"></Setter>
+            <Setter Property="Background" Value="{DynamicResource MaterialCardBackgroundBrush}"/>
+            <Setter Property="IconColor" Value="{DynamicResource MaterialPrimaryMidBrush}"/>
         </Style>
         
         <Style Selector="StackPanel.sidebar > controls|IconButton:pointerover">
-            <Setter Property="Background" Value="{DynamicResource MaterialPaperBrush}"></Setter>
+            <Setter Property="Background" Value="{DynamicResource MaterialPaperBrush}"/>
         </Style>
         
         <Style Selector="StackPanel.sidebar > TextBlock">
             <Setter Property="FontWeight" Value="DemiBold"/>
             <Setter Property="FontSize" Value="18"/>
-            <Setter Property="Margin" Value="12,12,12,0"></Setter>
+            <Setter Property="Margin" Value="12,12,12,0"/>
         </Style>
     </Window.Styles>
 
@@ -60,7 +60,7 @@
                                HorizontalAlignment="Center"/>
 
                     <controls:IconButton Command="{Binding ChangePageHome}"
-                                         Icon="Home"
+                                         Icon="HomeOutline"
                                          Text="{localization:Localize MainWindow.Home}"/>
 
                     <TextBlock IsVisible="{Binding Libraries.Count}"
@@ -123,7 +123,7 @@
 
                     <controls:IconButton IsVisible="{Binding PermissionManager.CanUploadChapter}"
                                          Command="{Binding ChangeUploadPage}"
-                                         Icon="Upload"
+                                         Icon="UploadOutline"
                                          Text="{localization:Localize MainWindow.Upload}"/>
 
                     <controls:IconButton IsVisible="{Binding PermissionManager.CanReadPersons}"
@@ -135,11 +135,11 @@
 
                     <controls:IconButton IsVisible="{Binding PermissionManager.CanReadServerSettings}"
                                          Command="{Binding ChangePageSettings}"
-                                         Icon="Cog"
+                                         Icon="CogOutline"
                                          Text="{localization:Localize MainWindow.Parameters.Server}"/>
 
                     <controls:IconButton Command="{Binding ChangePageAppSettings}"
-                                         Icon="Cog"
+                                         Icon="CogOutline"
                                          Text="{localization:Localize MainWindow.Parameters.UI}"/>
 
                     <controls:IconButton IsVisible="{Binding PermissionManager.CanReadFeatures}"

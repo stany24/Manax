@@ -10,29 +10,42 @@
     x:Class="ManaxClient.Views.Pages.Settings.SettingsAppView"
     x:DataType="page:SettingsAppViewModel">
 
+    <UserControl.Styles>
+        <Style Selector="Grid.title">
+            <Setter Property="ColumnSpacing" Value="12"/>
+        </Style>
+        
+        <Style Selector="Grid.title > TextBlock">
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="24"/>
+        </Style>
+    </UserControl.Styles>
+    
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel Orientation="Vertical" Spacing="24">
 
-            <StackPanel Orientation="Vertical">
-                <TextBlock Classes="title" Text="{localization:Localize SettingsAppPage.Title}" />
-                <StackPanel Orientation="Horizontal">
-                    <icon:MaterialIcon Classes="icon"
-                                           Kind="Cog"/>
-                    <TextBlock Text="{localization:Localize SettingsAppPage.Subtitle}"
-                               VerticalAlignment="Center"
-                               Margin="5,0,0,0"/>
-                </StackPanel>
-                
-            </StackPanel>
+            <Border Classes="card">
+                <Grid Classes="title"
+                      ColumnDefinitions="Auto,Auto,*">
+                    <icon:MaterialIcon Grid.Column="0"
+                                       Classes="icon"
+                                       Kind="CogOutline"/>
+                    <TextBlock Grid.Column="1"
+                               Text="{localization:Localize SettingsAppPage.Title}" />
+                </Grid>
+            </Border>
 
             <Border Classes="card">
                 <StackPanel Spacing="20">
-                    <StackPanel Orientation="Horizontal" Spacing="12">
-                        <icon:MaterialIcon Classes="icon"
-                                               Kind="FlagVariantOutline"/>
-                        <TextBlock Classes="subtitle" Text="{localization:Localize SettingsAppPage.Language}"
+                    <Grid Classes="section-title"
+                          ColumnDefinitions="Auto,Auto,*">
+                        <icon:MaterialIcon Grid.Column="0"
+                                           Classes="icon"
+                                           Kind="FlagVariantOutline"/>
+                        <TextBlock Grid.Column="1"
+                                   Text="{localization:Localize SettingsAppPage.Language}"
                                    Margin="0" />
-                    </StackPanel>
+                    </Grid>
 
                     <Grid ColumnDefinitions="*" RowDefinitions="Auto" RowSpacing="16">
                         <StackPanel Grid.Column="0" Grid.Row="0" Spacing="6">
@@ -53,12 +66,15 @@
 
             <Border Classes="card">
                 <StackPanel Spacing="20">
-                    <StackPanel Orientation="Horizontal" Spacing="12">
-                        <icon:MaterialIcon Classes="icon"
-                                               Kind="MoonWaxingCrescent"/>
-                        <TextBlock Classes="subtitle" Text="{localization:Localize SettingsAppPage.DisplayMode}"
+                    <Grid Classes="section-title"
+                          ColumnDefinitions="Auto,Auto,*">
+                        <icon:MaterialIcon Grid.Column="0"
+                                           Classes="icon"
+                                           Kind="MoonWaxingCrescent"/>
+                        <TextBlock Grid.Column="1"
+                                   Text="{localization:Localize SettingsAppPage.DisplayMode}"
                                    Margin="0" />
-                    </StackPanel>
+                    </Grid>
 
                     <Grid ColumnDefinitions="*,*" RowDefinitions="Auto" ColumnSpacing="16" RowSpacing="16">
                         <StackPanel Grid.Column="0" Grid.Row="0" Spacing="6">
@@ -71,11 +87,15 @@
 
             <Border Classes="card">
                 <StackPanel Spacing="20">
-                    <StackPanel Orientation="Horizontal" Spacing="12">
-                        <TextBlock Text="🎨" FontSize="20" />
-                        <TextBlock Classes="subtitle" Text="{localization:Localize SettingsAppPage.AccentColor}"
+                    <Grid Classes="section-title"
+                          ColumnDefinitions="Auto,Auto,*">
+                        <icon:MaterialIcon Grid.Column="0"
+                                           Classes="icon"
+                                           Kind="PaletteOutline"/>
+                        <TextBlock Grid.Column="1"
+                                   Text="{localization:Localize SettingsAppPage.AccentColor}"
                                    Margin="0" />
-                    </StackPanel>
+                    </Grid>
 
                     <ColorView
                         HsvColor="{Binding ThemeColor}">
