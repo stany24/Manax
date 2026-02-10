@@ -28,22 +28,23 @@
         <StackPanel Orientation="Vertical" Spacing="24">
 
             <Border Classes="card">
-                <StackPanel>
-                    
-                    <Grid ColumnDefinitions="Auto,*,Auto"
-                          Classes="section-title">
-                        <TextBlock Grid.Column="0"
-                                   VerticalAlignment="Center"
-                                   Text="{localization1:LocalizeFormat UserPage.List,
+                <Grid ColumnDefinitions="Auto,*,Auto"
+                      Classes="title">
+                    <TextBlock Grid.Column="0"
+                               VerticalAlignment="Center"
+                               Text="{localization1:LocalizeFormat UserPage.List,
                                Param1={Binding $parent[UserControl].((page:UsersPageViewModel)DataContext).Users.Count}}" />
-                        <controls:IconButton Grid.Column="2"
-                                             Classes="icon-button light"
-                                             IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWriteUsers}"
-                                             Command="{Binding CreateUser}"
-                                             Text="{localization:Localize UserPage.Add}"
-                                             Icon="Add"/>
-                    </Grid>
-                    
+                    <controls:IconButton Grid.Column="2"
+                                         Classes="icon-button light"
+                                         IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWriteUsers}"
+                                         Command="{Binding CreateUser}"
+                                         Text="{localization:Localize UserPage.Add}"
+                                         Icon="Add"/>
+                </Grid>
+            </Border>
+            
+            <Border Classes="card">
+                <StackPanel>
                     <ItemsControl ItemsSource="{Binding Users}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>

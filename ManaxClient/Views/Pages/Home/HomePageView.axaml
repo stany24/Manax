@@ -14,62 +14,37 @@
     x:DataType="page:HomePageViewModel">
     
     <UserControl.Styles>
-        <Style Selector="StackPanel.topbar">
-            <Setter Property="Background" Value="{DynamicResource MaterialCardBackgroundBrush}"/>
-        </Style>
-        
         <Style Selector="TextBox.search">
             <Setter Property="Margin" Value="7,0"/>
         </Style>
-        
-        <Style Selector="TextBlock.title">
-            <Setter Property="FontWeight" Value="DemiBold"/>
-            <Setter Property="FontSize" Value="24"/>
-            <Setter Property="HorizontalAlignment" Value="Center"/>
-        </Style>
-        
-        <Style Selector="TextBlock.description">
-            <Setter Property="HorizontalAlignment" Value="Center"/>
-        </Style>
+
     </UserControl.Styles>
 
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel Orientation="Vertical" Spacing="24">
 
-            <Grid Classes="topbar"
-                  ColumnDefinitions="Auto,*,Auto">
-                <avalonia:MaterialIcon Grid.Column="0"
-                                       Kind="Search"/>
-                <TextBox Grid.Column="1"
-                         Classes="search"
-                         Text="Future search area"/>
-                <controls:IconButton Classes="icon-button dark"
-                                     Grid.Column="2"
-                                     IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWriteSeries}"
-                                     Command="{Binding UploadSerie}"
-                                     Text="{localization:Localize HomePage.AddSeries}"
-                                     Icon="Add"/>
-            </Grid>
-
-            <Border Classes="card"
-                    IsVisible="{Binding !Series.Count}">
-                <StackPanel>
-                    <TextBlock Classes="title"
-                               Text="{localization:Localize HomePage.NoSeries}" />
-                    <TextBlock Classes="description"
-                               Text="{localization:Localize HomePage.NoSeries.Description}"/>
-                    <controls:IconButton Classes="icon-button light"
+            <Border Classes="card">
+                <Grid Classes="title"
+                      ColumnDefinitions="Auto,*,Auto">
+                    <avalonia:MaterialIcon Grid.Column="0"
+                                           Classes="icon"
+                                           Kind="Search"/>
+                    <TextBox Grid.Column="1"
+                             Classes="search"
+                             Text="Future search area"/>
+                    <controls:IconButton Classes="icon-button dark"
+                                         Grid.Column="2"
                                          IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWriteSeries}"
                                          Command="{Binding UploadSerie}"
-                                         Text="{localization:Localize HomePage.AddFirstSeries}"
+                                         Text="{localization:Localize HomePage.AddSeries}"
                                          Icon="Add"/>
-                </StackPanel>
+                </Grid>
             </Border>
             
             <Border Classes="card"
                     IsVisible="{Binding Series.Count}">
                 <StackPanel Orientation="Vertical">
-                    <TextBlock Classes="section-title"
+                    <TextBlock Classes="item-name"
                                Text="{localization:Localize HomePage.RecentSeries}"/>
 
                     <ScrollViewer HorizontalScrollBarVisibility="Auto"

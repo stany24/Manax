@@ -22,20 +22,22 @@
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel Orientation="Vertical" Spacing="24">
             <Border Classes="card">
-                <StackPanel>
-                    <Grid ColumnDefinitions="Auto,*,Auto"
-                          Classes="section-title">
-                        <TextBlock Grid.Column="0"
-                                   Text="{localization1:LocalizeFormat TagPage.List,
+                <Grid ColumnDefinitions="Auto,*,Auto"
+                      Classes="title">
+                    <TextBlock Grid.Column="0"
+                               Text="{localization1:LocalizeFormat TagPage.List,
                                         Param1={Binding $parent[UserControl].((tag:TagPageViewModel)DataContext).Tags.Count}}"/>
-                        <controls:IconButton Grid.Column="2"
-                                             Classes="icon-button light"
-                                             IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWriteTags}"
-                                             Command="{Binding CreateTag}"
-                                             Text="{localization:Localize TagPage.NewTag}"
-                                             Icon="Add"/>
-                    </Grid>
-                    
+                    <controls:IconButton Grid.Column="2"
+                                         Classes="icon-button light"
+                                         IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWriteTags}"
+                                         Command="{Binding CreateTag}"
+                                         Text="{localization:Localize TagPage.NewTag}"
+                                         Icon="Add"/>
+                </Grid>
+            </Border>
+            
+            <Border Classes="card">
+                <StackPanel>
                     <ItemsControl ItemsSource="{Binding Tags}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>

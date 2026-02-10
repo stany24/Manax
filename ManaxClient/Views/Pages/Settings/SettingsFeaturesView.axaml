@@ -84,39 +84,40 @@
                 </StackPanel>
             </Border>
             
-            <ItemsControl ItemsSource="{Binding Features}">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Border Classes="card">
-                            <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto">
+            <Border Classes="card">
+                <ItemsControl ItemsSource="{Binding Features}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border Classes="item-card">
+                                <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto">
 
-                                <TextBlock Grid.Column="0"
-                                           Grid.Row="0"
-                                           Classes="feature-name"
-                                           Text="{Binding Name}" />
+                                    <TextBlock Grid.Column="0"
+                                               Grid.Row="0"
+                                               Classes="feature-name"
+                                               Text="{Binding Name}" />
 
-                                <ToggleSwitch Grid.Column="1"
-                                              Grid.Row="0"
-                                              Grid.RowSpan="2"
-                                              Classes="feature-toggle"
-                                              IsChecked="{Binding Value}" />
+                                    <ToggleSwitch Grid.Column="1"
+                                                  Grid.Row="0"
+                                                  Grid.RowSpan="2"
+                                                  Classes="feature-toggle"
+                                                  IsChecked="{Binding Value}" />
 
-                                <TextBlock Grid.Column="0"
-                                           Grid.Row="1"
-                                           Classes="feature-description"
-                                           Text="{Binding Description}" />
-                            </Grid>
-                        </Border>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <StackPanel Orientation="Vertical"
-                                    Spacing="8"/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-            </ItemsControl>
-
+                                    <TextBlock Grid.Column="0"
+                                               Grid.Row="1"
+                                               Classes="feature-description"
+                                               Text="{Binding Description}" />
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Vertical"
+                                        Spacing="8"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+            </Border>
         </StackPanel>
     </ScrollViewer>
 </UserControl>
