@@ -7,86 +7,123 @@
     xmlns:viewModels="clr-namespace:ManaxClient.ViewModels"
     xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
     xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    xmlns:controls="clr-namespace:ManaxClient.Controls"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="600"
     x:Class="ManaxClient.Views.Pages.Settings.SettingsFeaturesView"
     x:DataType="page:SettingsFeaturesViewModel"
     IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanReadFeatures}">
 
+    <UserControl.Styles>
+        <Style Selector="Grid.title">
+            <Setter Property="ColumnSpacing" Value="12"/>
+        </Style>
+        
+        <Style Selector="Grid.title > TextBlock">
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="24"/>
+        </Style>
+        
+        <Style Selector="StackPanel.result">
+            <Setter Property="Orientation" Value="Horizontal"/>
+            <Setter Property="Spacing" Value="12"/>
+        </Style>
+        
+        <Style Selector="StackPanel.result > TextBlock">
+            <Setter Property="FontWeight" Value="Medium"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+        
+        <Style Selector="TextBlock.feature-name">
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Margin" Value="0,0,0,8"/>
+        </Style>
+        
+        <Style Selector="TextBlock.feature-toggle">
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="16,0,0,0"/>
+        </Style>
+        
+        <Style Selector="TextBlock.feature-description">
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="FontSize" Value="14"/>
+        </Style>
+    </UserControl.Styles>
+    
     <ScrollViewer VerticalScrollBarVisibility="Auto">
-        <StackPanel Orientation="Vertical" Spacing="24" MaxWidth="800">
+        <StackPanel Orientation="Vertical"
+                    Spacing="24">
 
-            <StackPanel Orientation="Vertical">
-                <TextBlock Classes="title" Text="{localization:Localize SettingsFeaturesPage.Title}" />
-                <StackPanel Orientation="Horizontal">
-                    <avalonia:MaterialIcon Classes="icon"
-                                       Kind="Feather"/>
-                    <TextBlock Text="{localization:Localize SettingsFeaturesPage.Subtitle}" />
-                </StackPanel>
-                
-            </StackPanel>
+            <Border Classes="card">
+                <Grid Classes="title"
+                      ColumnDefinitions="Auto,Auto,*,Auto">
+                    <avalonia:MaterialIcon Grid.Column="0"
+                                           Classes="icon"
+                                           Kind="Feather"/>
+                    <TextBlock Grid.Column="1"
+                               Text="{localization:Localize SettingsFeaturesPage.Title}" />
+                    
+                    <controls:IconButton Grid.Column="3"
+                                         Classes="icon-button light"
+                                         IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWriteFeatures}"
+                                         Command="{Binding SaveFeatures}"
+                                         Text="{localization:Localize SettingsFeaturesPage.Save}"
+                                         Icon="ContentSaveOutline">
+                    </controls:IconButton>
+                </Grid>
+            </Border>
 
-            <!-- Success/Error Messages -->
             <Border Classes="card"
                     IsVisible="{Binding Success, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
-                <StackPanel Orientation="Horizontal" Spacing="12">
-                    <TextBlock Text="✅" FontSize="20" />
-                    <TextBlock Text="{Binding Success}"
-                               FontWeight="Medium" />
+                <StackPanel Classes="result">
+                    <avalonia:MaterialIcon Kind="CheckOutline"
+                                           Classes="icon"
+                                           Foreground="Green"/>
+                    <TextBlock Text="{Binding Success}" />
                 </StackPanel>
             </Border>
 
             <Border Classes="card"
                     IsVisible="{Binding Problem, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
-                <StackPanel Orientation="Horizontal" Spacing="12">
-                    <TextBlock Text="❌" FontSize="20" />
-                    <TextBlock Text="{Binding Problem}"
-                               FontWeight="Medium" />
+                <StackPanel Classes="result">
+                    <avalonia:MaterialIcon Kind="CrossOutline"
+                                           Classes="icon"
+                                           Foreground="Red"/>
+                    <TextBlock Text="{Binding Problem}" />
                 </StackPanel>
             </Border>
-
-            <!-- Save Button -->
-            <Border Classes="card">
-                <Button Classes="primary"
-                        IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWriteFeatures}"
-                        Command="{Binding SaveFeatures}"
-                        Padding="24,12"
-                        HorizontalAlignment="Left">
-                    <StackPanel Orientation="Horizontal" Spacing="8">
-                        <TextBlock Text="💾" />
-                        <TextBlock Text="{localization:Localize SettingsFeaturesPage.Save}" FontWeight="Medium" />
-                    </StackPanel>
-                </Button>
-            </Border>
-
-            <!-- Features List -->
+            
             <ItemsControl ItemsSource="{Binding Features}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Border Classes="card" Margin="0,0,0,12">
+                        <Border Classes="card">
                             <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto">
 
-                                <!-- Feature Name -->
-                                <TextBlock Grid.Column="0" Grid.Row="0"
-                                           Text="{Binding Name}"
-                                           FontSize="18"
-                                           FontWeight="SemiBold"
-                                           Margin="0,0,0,8" />
+                                <TextBlock Grid.Column="0"
+                                           Grid.Row="0"
+                                           Classes="feature-name"
+                                           Text="{Binding Name}" />
 
-                                <!-- Toggle Switch -->
-                                <ToggleSwitch Grid.Column="1" Grid.Row="0" Grid.RowSpan="2"
-                                              IsChecked="{Binding Value}"
-                                              VerticalAlignment="Center"
-                                              Margin="16,0,0,0" />
+                                <ToggleSwitch Grid.Column="1"
+                                              Grid.Row="0"
+                                              Grid.RowSpan="2"
+                                              Classes="feature-toggle"
+                                              IsChecked="{Binding Value}" />
 
-                                <!-- Feature Description -->
-                                <TextBlock Grid.Column="0" Grid.Row="1"
-                                           Text="{Binding Description}"
-                                           TextWrapping="Wrap"
-                                           FontSize="14" />
+                                <TextBlock Grid.Column="0"
+                                           Grid.Row="1"
+                                           Classes="feature-description"
+                                           Text="{Binding Description}" />
                             </Grid>
                         </Border>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Vertical"
+                                    Spacing="8"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
             </ItemsControl>
 
         </StackPanel>

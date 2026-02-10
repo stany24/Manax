@@ -693,12 +693,6 @@ namespace ManaxClient.Localization {
             }
         }
         
-        public static string SettingsFeaturesPage_Subtitle {
-            get {
-                return ResourceManager.GetString("SettingsFeaturesPage.Subtitle", resourceCulture);
-            }
-        }
-        
         public static string SettingsFeaturesPage_Save {
             get {
                 return ResourceManager.GetString("SettingsFeaturesPage.Save", resourceCulture);
