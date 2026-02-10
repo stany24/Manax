@@ -14,15 +14,6 @@
     IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanReadFeatures}">
 
     <UserControl.Styles>
-        <Style Selector="Grid.title">
-            <Setter Property="ColumnSpacing" Value="12"/>
-        </Style>
-        
-        <Style Selector="Grid.title > TextBlock">
-            <Setter Property="HorizontalAlignment" Value="Center"/>
-            <Setter Property="FontSize" Value="24"/>
-        </Style>
-        
         <Style Selector="StackPanel.result">
             <Setter Property="Orientation" Value="Horizontal"/>
             <Setter Property="Spacing" Value="12"/>

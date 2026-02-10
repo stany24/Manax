@@ -363,39 +363,9 @@ namespace ManaxClient.Localization {
             }
         }
         
-        public static string RankPage_RanksCount {
-            get {
-                return ResourceManager.GetString("RankPage.RanksCount", resourceCulture);
-            }
-        }
-        
         public static string RankPage_NewRank {
             get {
                 return ResourceManager.GetString("RankPage.NewRank", resourceCulture);
-            }
-        }
-        
-        public static string RankPage_NoRanks_Title {
-            get {
-                return ResourceManager.GetString("RankPage.NoRanks.Title", resourceCulture);
-            }
-        }
-        
-        public static string RankPage_NoRanks_Description {
-            get {
-                return ResourceManager.GetString("RankPage.NoRanks.Description", resourceCulture);
-            }
-        }
-        
-        public static string RankPage_CreateFirstRank {
-            get {
-                return ResourceManager.GetString("RankPage.CreateFirstRank", resourceCulture);
-            }
-        }
-        
-        public static string RankPage_RanksList_Title {
-            get {
-                return ResourceManager.GetString("RankPage.RanksList.Title", resourceCulture);
             }
         }
         

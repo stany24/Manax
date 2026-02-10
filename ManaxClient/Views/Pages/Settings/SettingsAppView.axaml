@@ -9,17 +9,6 @@
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Pages.Settings.SettingsAppView"
     x:DataType="page:SettingsAppViewModel">
-
-    <UserControl.Styles>
-        <Style Selector="Grid.title">
-            <Setter Property="ColumnSpacing" Value="12"/>
-        </Style>
-        
-        <Style Selector="Grid.title > TextBlock">
-            <Setter Property="HorizontalAlignment" Value="Center"/>
-            <Setter Property="FontSize" Value="24"/>
-        </Style>
-    </UserControl.Styles>
     
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel Orientation="Vertical" Spacing="24">

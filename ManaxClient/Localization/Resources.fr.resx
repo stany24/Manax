@@ -183,23 +183,8 @@
     <data name="RankPage.Title" xml:space="preserve">
         <value>Gestion des Rangs</value>
     </data>
-    <data name="RankPage.RanksCount" xml:space="preserve">
-        <value>{0} rang(s) configuré(s)</value>
-    </data>
     <data name="RankPage.NewRank" xml:space="preserve">
         <value>Nouveau rang</value>
-    </data>
-    <data name="RankPage.NoRanks.Title" xml:space="preserve">
-        <value>Aucun rang configuré</value>
-    </data>
-    <data name="RankPage.NoRanks.Description" xml:space="preserve">
-        <value>Créez des rangs pour organiser vos utilisateurs par niveau.</value>
-    </data>
-    <data name="RankPage.CreateFirstRank" xml:space="preserve">
-        <value>Créer le premier rang</value>
-    </data>
-    <data name="RankPage.RanksList.Title" xml:space="preserve">
-        <value>Liste des rangs</value>
     </data>
     <data name="RankPage.Level" xml:space="preserve">
         <value>Niveau : {0}</value>

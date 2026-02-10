@@ -63,6 +63,15 @@
             </Style>
         </Style>
         
+        <Style Selector="Grid.title">
+            <Setter Property="ColumnSpacing" Value="12"/>
+        </Style>
+        
+        <Style Selector="Grid.title > TextBlock">
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="24"/>
+        </Style>
+        
         <Style Selector="Grid.section-title">
             <Setter Property="Margin" Value="0,0,0,16"/>
             <Setter Property="ColumnSpacing" Value="12"/>

@@ -19,15 +19,6 @@
             <Setter Property="RowSpacing" Value="10"/>
         </Style>
         
-        <Style Selector="Grid.title">
-            <Setter Property="ColumnSpacing" Value="12"/>
-        </Style>
-        
-        <Style Selector="Grid.title > TextBlock">
-            <Setter Property="HorizontalAlignment" Value="Center"/>
-            <Setter Property="FontSize" Value="24"/>
-        </Style>
-        
         <Style Selector="TextBlock.save-info">
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="Margin" Value="10,0,0,0"></Setter>
