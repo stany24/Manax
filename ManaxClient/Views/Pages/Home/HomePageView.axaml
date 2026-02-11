@@ -11,7 +11,8 @@
     xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Pages.Home.HomePageView"
-    x:DataType="page:HomePageViewModel">
+    x:DataType="page:HomePageViewModel"
+    Margin="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).DefaultPageMargin}">
     
     <UserControl.Styles>
         <Style Selector="TextBox.search">

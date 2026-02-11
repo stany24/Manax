@@ -93,18 +93,6 @@ namespace ManaxClient.Localization {
             }
         }
         
-        public static string LoginPage_Tip_Title {
-            get {
-                return ResourceManager.GetString("LoginPage.Tip.Title", resourceCulture);
-            }
-        }
-        
-        public static string LoginPage_Tip_Message {
-            get {
-                return ResourceManager.GetString("LoginPage.Tip.Message", resourceCulture);
-            }
-        }
-        
         public static string ChapterPage_Pages {
             get {
                 return ResourceManager.GetString("ChapterPage.Pages", resourceCulture);

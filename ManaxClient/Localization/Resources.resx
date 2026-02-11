@@ -48,12 +48,6 @@
     <data name="LoginPage.SignIn" xml:space="preserve">
         <value>Sign in</value>
     </data>
-    <data name="LoginPage.Tip.Title" xml:space="preserve">
-        <value>Tip</value>
-    </data>
-    <data name="LoginPage.Tip.Message" xml:space="preserve">
-        <value>Make sure your Manax server is running and accessible from this network.</value>
-    </data>
     <data name="ChapterPage.Pages" xml:space="preserve">
         <value>{0} pages</value>
     </data>

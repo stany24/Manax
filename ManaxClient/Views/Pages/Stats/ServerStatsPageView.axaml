@@ -12,7 +12,8 @@
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Pages.Stats.ServerStatsPageView"
     x:DataType="page:ServerStatsPageViewModel"
-    IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanReadServerStats}">
+    IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanReadServerStats}"
+    Margin="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).DefaultPageMargin}">
 
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel Orientation="Vertical" Spacing="24">

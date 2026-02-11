@@ -12,7 +12,8 @@
     xmlns:icon="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Pages.Person.PersonPageView"
-    x:DataType="page:PersonPageViewModel">
+    x:DataType="page:PersonPageViewModel"
+    Margin="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).DefaultPageMargin}">
 
     <UserControl.Styles>
         <Style Selector="Border.person-role">
@@ -24,7 +25,8 @@
         </Style>
     </UserControl.Styles>
     
-    <ScrollViewer VerticalScrollBarVisibility="Auto">
+    <ScrollViewer VerticalScrollBarVisibility="Auto"
+                  HorizontalScrollBarVisibility="Disabled">
         <StackPanel Orientation="Vertical" Spacing="24">
             
             <Border Classes="card">

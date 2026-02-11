@@ -12,8 +12,6 @@
     x:DataType="vm:MainWindowViewModel"
     Icon="/Assets/avalonia-logo.ico"
     Title="{localization:Localize MainWindow.Title}"
-    MinWidth="900"
-    MinHeight="500"
     WindowStartupLocation="CenterScreen">
 
     <Window.Resources>
@@ -46,8 +44,7 @@
     </Window.Styles>
 
     <Panel>
-        <Grid
-            ColumnDefinitions="Auto,*">
+        <Grid ColumnDefinitions="Auto,*">
             <ScrollViewer Grid.Column="0"
                           HorizontalScrollBarVisibility="Disabled"
                           VerticalScrollBarVisibility="Hidden"
@@ -198,10 +195,8 @@
                 </StackPanel>
             </ScrollViewer>
 
-            <Border Grid.Column="1">
-                <ContentControl Content="{Binding CurrentPageViewModel}"
-                                Margin="{Binding PageMargin}" />
-            </Border>
+            <ContentControl Grid.Column="1"
+                            Content="{Binding CurrentPageViewModel}" />
         </Grid>
 
         <ContentControl HorizontalAlignment="Stretch"

@@ -26,7 +26,6 @@ public partial class ChapterPageViewModel : PageViewModel
             .SortAndBind(out _chapters, comparer)
             .Subscribe();
         ControlBarVisible = false;
-        HasMargin = false;
         Chapter = chapter;
         Chapter.LoadPages();
         PropertyChanged += HandleOffsetChanged;

@@ -6,9 +6,11 @@
     xmlns:page="clr-namespace:ManaxClient.ViewModels.Pages.Settings"
     xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
     xmlns:icon="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    xmlns:viewModels="clr-namespace:ManaxClient.ViewModels"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Pages.Settings.SettingsAppView"
-    x:DataType="page:SettingsAppViewModel">
+    x:DataType="page:SettingsAppViewModel"
+    Margin="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).DefaultPageMargin}">
     
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel Orientation="Vertical" Spacing="24">

@@ -12,7 +12,8 @@
     xmlns:icon="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Pages.Rank.RankPageView"
-    x:DataType="page:RankPageViewModel">
+    x:DataType="page:RankPageViewModel"
+    Margin="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).DefaultPageMargin}">
 
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel Orientation="Vertical" Spacing="24">

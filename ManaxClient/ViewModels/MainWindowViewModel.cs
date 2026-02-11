@@ -44,7 +44,6 @@ public partial class MainWindowViewModel : ObservableObject
     
     [ObservableProperty] private ObservableCollection<string> _infos = [];
     [ObservableProperty] private bool _isAdmin;
-    [ObservableProperty] private Thickness _pageMargin = new(0, 0, 0, 0);
     [ObservableProperty] private Controls.Popups.Popup? _popup;
     [ObservableProperty] private ObservableCollection<TaskItem> _runningTasks = new([]);
     [ObservableProperty] private FeatureManager _featureManager = new();
@@ -59,6 +58,8 @@ public partial class MainWindowViewModel : ObservableObject
     [ObservableProperty] private SerieSource _serieSource = new();
     [ObservableProperty] private TagSource _tagSource = new();
     [ObservableProperty] private UserSource _userSource = new();
+
+    [ObservableProperty] private Thickness _defaultPageMargin = new(16);
     
     public static MainWindowViewModel Instance { get; private set; } = new();
     
@@ -81,7 +82,6 @@ public partial class MainWindowViewModel : ObservableObject
             CurrentPageViewModel.PageChangedRequested += (_, e) => { SetPage(e); };
             CurrentPageViewModel.PreviousRequested += (_, _) => GoBack();
             CurrentPageViewModel.NextRequested += (_, _) => GoForward();
-            PageMargin = CurrentPageViewModel.HasMargin ? new Thickness(20) : new Thickness(0);
         };
 
         LoginPageViewModel loginPage = new();
@@ -301,7 +301,7 @@ public partial class MainWindowViewModel : ObservableObject
 
     public void ChangePageFeatures()
     {
-        SetPage(new SettingsFeaturesViewModel());
+        SetPage(new SettingsFeaturesPageViewModel());
     }
 
     public void ChangePageUserStats()

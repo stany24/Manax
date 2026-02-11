@@ -9,9 +9,10 @@
     xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     xmlns:controls="clr-namespace:ManaxClient.Controls"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="600"
-    x:Class="ManaxClient.Views.Pages.Settings.SettingsFeaturesView"
-    x:DataType="page:SettingsFeaturesViewModel"
-    IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanReadFeatures}">
+    x:Class="ManaxClient.Views.Pages.Settings.SettingsFeaturesPageView"
+    x:DataType="page:SettingsFeaturesPageViewModel"
+    IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanReadFeatures}"
+    Margin="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).DefaultPageMargin}">
 
     <UserControl.Styles>
         <Style Selector="StackPanel.result">

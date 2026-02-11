@@ -7,7 +7,6 @@ public abstract partial class PageViewModel : ObservableObject
 {
     [ObservableProperty] private bool _admin;
     [ObservableProperty] private bool _controlBarVisible = true;
-    [ObservableProperty] private bool _hasMargin = true;
     
     public EventHandler? NextRequested { get; set; }
     public EventHandler<PageViewModel>? PageChangedRequested { get; set; }

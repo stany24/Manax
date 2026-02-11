@@ -12,7 +12,8 @@
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Pages.User.UsersPageView"
     x:DataType="page:UsersPageViewModel"
-    IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanReadUsers}">
+    IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanReadUsers}"
+    Margin="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).DefaultPageMargin}">
     
     <UserControl.Styles>
         <Style Selector="Border.user-role">

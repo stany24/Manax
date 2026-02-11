@@ -17,6 +17,7 @@ using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTO.User;
 using ManaxLibrary.Logging;
+using Material.Icons;
 
 namespace ManaxClient.ViewModels.Pages.Login;
 
@@ -25,7 +26,7 @@ public sealed partial class LoginPageViewModel : PageViewModel
     private readonly ReadOnlyObservableCollection<Language> _languages;
 
     [ObservableProperty] private bool _canLogin = true;
-    [ObservableProperty] private string _emoji = "🔑";
+    [ObservableProperty] private MaterialIconKind _emoji = MaterialIconKind.KeyOutline;
     [ObservableProperty] private string _host = string.Empty;
     private bool _isAdmin;
     [ObservableProperty] private string _password = string.Empty;
@@ -86,14 +87,14 @@ public sealed partial class LoginPageViewModel : PageViewModel
     private void Block()
     {
         CanLogin = false;
-        Emoji = "⌛";
+        Emoji = MaterialIconKind.TimerOutline;
     }
 
     private void Release(string errorMessage)
     {
         WeakReferenceMessenger.Default.Send(new NotificationMessage(errorMessage));
         CanLogin = true;
-        Emoji = "🔑";
+        Emoji = MaterialIconKind.KeyOutline;
     }
 
     private void CheckToken(UserLoginResultDto result)

@@ -5,101 +5,76 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:page="clr-namespace:ManaxClient.ViewModels.Pages.Login"
     xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
-    xmlns:icon="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    xmlns:viewModels="clr-namespace:ManaxClient.ViewModels"
+    xmlns:controls="clr-namespace:ManaxClient.Controls"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Pages.Login.LoginPageView"
-    x:DataType="page:LoginPageViewModel">
+    x:DataType="page:LoginPageViewModel"
+    Margin="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).DefaultPageMargin}">
 
-    <Grid>
-        <ComboBox HorizontalAlignment="Right"
-                  VerticalAlignment="Top"
-                  Margin="20"
-                  MinWidth="120"
-                  ItemsSource="{Binding Languages}"
-                  SelectedItem="{Binding SelectedLanguage}"
-                  DisplayMemberBinding="{Binding DisplayName}"
-                  Padding="8,6"
-                  CornerRadius="6"
-                  BorderThickness="1" />
+    <Border Classes="card"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            MinWidth="300">
+        <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+                      VerticalScrollBarVisibility="Hidden">
+            <StackPanel Spacing="24">
+                <Grid ColumnDefinitions="Auto,*,Auto"
+                      Classes="title">
+                    <TextBlock Grid.Column="0"
+                               VerticalAlignment="Center"
+                               Text="{localization:Localize LoginPage.Title}"/>
+                    <ComboBox Grid.Column="2"
+                              ItemsSource="{Binding Languages}"
+                              SelectedItem="{Binding SelectedLanguage}"
+                              DisplayMemberBinding="{Binding DisplayName}" />
+                </Grid>
 
-        <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
-            <Border Classes="card" MaxWidth="400" MinWidth="350">
-                <ScrollViewer
-                    HorizontalScrollBarVisibility="Disabled"
-                    VerticalScrollBarVisibility="Hidden">
-                    <StackPanel Spacing="24">
-
-                        <StackPanel Spacing="8" HorizontalAlignment="Center">
-                            <TextBlock Classes="title" Text="{localization:Localize LoginPage.Title}"
-                                       HorizontalAlignment="Center" />
-                        </StackPanel>
-
-                        <StackPanel Spacing="16">
-                            <StackPanel Spacing="6">
-                                <TextBlock Text="{localization:Localize LoginPage.Username}"
-                                           FontWeight="Medium" />
-                                <TextBox Name="TbxUsername"
-                                         Loaded="TbxUsernameOnLoaded"
-                                         Text="{Binding Username}"
-                                         Watermark="{localization:Localize LoginPage.Username.Placeholder}"
-                                         Padding="12"
-                                         CornerRadius="8"
-                                         BorderThickness="1" />
-                            </StackPanel>
-
-                            <StackPanel Spacing="6">
-                                <TextBlock Text="{localization:Localize LoginPage.Password}"
-                                           FontWeight="Medium" />
-                                <TextBox Text="{Binding Password}"
-                                         PasswordChar="•"
-                                         Watermark="{localization:Localize LoginPage.Password.Placeholder}"
-                                         Padding="12"
-                                         CornerRadius="8"
-                                         BorderThickness="1" />
-                            </StackPanel>
-
-                            <StackPanel Spacing="6">
-                                <TextBlock Text="{localization:Localize LoginPage.Server}"
-                                           FontWeight="Medium" />
-                                <TextBox Text="{Binding Host}"
-                                         Watermark="{localization:Localize LoginPage.Server.Placeholder}"
-                                         Padding="12"
-                                         CornerRadius="8"
-                                         BorderThickness="1"
-                                         VerticalAlignment="Center" />
-                            </StackPanel>
-                        </StackPanel>
-
-                        <Button
-                            IsEnabled="{Binding CanLogin}"
-                            Classes="primary"
-                            Command="{Binding Login}"
-                            HorizontalAlignment="Stretch"
-                            Padding="16"
-                            FontSize="16"
-                            HotKey="Enter">
-                            <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center">
-                                <TextBlock Text="{Binding Emoji}" />
-                                <TextBlock Text="{localization:Localize LoginPage.SignIn}" FontWeight="Medium" />
-                            </StackPanel>
-                        </Button>
-
-                        <StackPanel Orientation="Vertical">
-                            <StackPanel Orientation="Horizontal">
-                                <icon:MaterialIcon Classes="icon"
-                                                       Kind="Lightbulb"/>
-                                <TextBlock Text="{localization:Localize LoginPage.Tip.Title}"
-                                           VerticalAlignment="Center"
-                                           FontWeight="Bold" />
-                            </StackPanel>
-                            <TextBlock Text="{localization:Localize LoginPage.Tip.Message}"
-                                       TextWrapping="Wrap"
-                                       FontSize="12" />
-                        </StackPanel>
+                <StackPanel Spacing="16">
+                    <StackPanel Spacing="6">
+                        <TextBlock Text="{localization:Localize LoginPage.Username}"
+                                   FontWeight="Medium" />
+                        <TextBox Name="TbxUsername"
+                                 Loaded="TbxUsernameOnLoaded"
+                                 Text="{Binding Username}"
+                                 Watermark="{localization:Localize LoginPage.Username.Placeholder}"
+                                 Padding="12"
+                                 CornerRadius="8"
+                                 BorderThickness="1" />
                     </StackPanel>
-                </ScrollViewer>
 
-            </Border>
-        </Grid>
-    </Grid>
+                    <StackPanel Spacing="6">
+                        <TextBlock Text="{localization:Localize LoginPage.Password}"
+                                   FontWeight="Medium" />
+                        <TextBox Text="{Binding Password}"
+                                 PasswordChar="•"
+                                 Watermark="{localization:Localize LoginPage.Password.Placeholder}"
+                                 Padding="12"
+                                 CornerRadius="8"
+                                 BorderThickness="1" />
+                    </StackPanel>
+
+                    <StackPanel Spacing="6">
+                        <TextBlock Text="{localization:Localize LoginPage.Server}"
+                                   FontWeight="Medium" />
+                        <TextBox Text="{Binding Host}"
+                                 Watermark="{localization:Localize LoginPage.Server.Placeholder}"
+                                 Padding="12"
+                                 CornerRadius="8"
+                                 BorderThickness="1"
+                                 VerticalAlignment="Center" />
+                    </StackPanel>
+                </StackPanel>
+
+                <controls:IconButton Classes="icon-button"
+                                     IsEnabled="{Binding CanLogin}"
+                                     Icon="{Binding Emoji}"
+                                     Text="{localization:Localize LoginPage.SignIn}" FontWeight="Medium"
+                                     Command="{Binding Login}"
+                                     HorizontalAlignment="Stretch"
+                                     HotKey="Enter">
+                </controls:IconButton>
+            </StackPanel>
+        </ScrollViewer>
+    </Border>
 </UserControl>

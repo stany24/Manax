@@ -14,13 +14,13 @@ using Feature = ManaxClient.Models.Feature;
 
 namespace ManaxClient.ViewModels.Pages.Settings;
 
-public partial class SettingsFeaturesViewModel : PageViewModel
+public partial class SettingsFeaturesPageViewModel : PageViewModel
 {
     [ObservableProperty] private ObservableCollection<Feature> _features = [];
     [ObservableProperty] private string _problem = string.Empty;
     [ObservableProperty] private string _success = string.Empty;
 
-    public SettingsFeaturesViewModel()
+    public SettingsFeaturesPageViewModel()
     {
         Task.Run(LoadFeatures);
     }

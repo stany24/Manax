@@ -13,7 +13,8 @@
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Pages.Tag.TagPageView"
     x:DataType="tag:TagPageViewModel"
-    IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanReadTags}">
+    IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanReadTags}"
+    Margin="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).DefaultPageMargin}">
 
     <UserControl.Resources>
         <converters:ColorToSolidBrushConverter x:Key="ColorToBrushConverter" />

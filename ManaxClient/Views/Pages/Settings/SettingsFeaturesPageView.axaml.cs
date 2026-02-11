@@ -2,9 +2,9 @@ using Avalonia.Controls;
 
 namespace ManaxClient.Views.Pages.Settings;
 
-public partial class SettingsFeaturesView : UserControl
+public partial class SettingsFeaturesPageView : UserControl
 {
-    public SettingsFeaturesView()
+    public SettingsFeaturesPageView()
     {
         InitializeComponent();
     }
