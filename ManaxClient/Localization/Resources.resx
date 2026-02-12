@@ -402,29 +402,26 @@
     <data name="UserStatsPage.Title" xml:space="preserve">
         <value>My Statistics</value>
     </data>
-    <data name="UserStatsPage.Subtitle" xml:space="preserve">
-        <value>Your activity and progress in Manax</value>
-    </data>
     <data name="UserStatsPage.SeriesProgress.Title" xml:space="preserve">
         <value>Series Progress</value>
     </data>
     <data name="UserStatsPage.SeriesProgress.Completed" xml:space="preserve">
-        <value>✅ Completed</value>
+        <value>Completed</value>
     </data>
     <data name="UserStatsPage.SeriesProgress.InProgress" xml:space="preserve">
-        <value>📖 In Progress</value>
+        <value>In Progress</value>
     </data>
     <data name="UserStatsPage.SeriesProgress.Remaining" xml:space="preserve">
-        <value>⏳ Remaining</value>
+        <value>Remaining</value>
     </data>
     <data name="UserStatsPage.ChaptersProgress.Title" xml:space="preserve">
         <value>Chapters Progress</value>
     </data>
     <data name="UserStatsPage.ChaptersProgress.Read" xml:space="preserve">
-        <value>✅ Read</value>
+        <value>Read</value>
     </data>
     <data name="UserStatsPage.ChaptersProgress.Remaining" xml:space="preserve">
-        <value>⏳ Remaining</value>
+        <value>Remaining</value>
     </data>
     <data name="UserStatsPage.RankDistribution.Title" xml:space="preserve">
         <value>Rank Distribution</value>

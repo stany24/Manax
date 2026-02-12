@@ -405,29 +405,26 @@
     <data name="UserStatsPage.Title" xml:space="preserve">
         <value>Mes statistiques</value>
     </data>
-    <data name="UserStatsPage.Subtitle" xml:space="preserve">
-        <value>Votre activité et progression dans Manax</value>
-    </data>
     <data name="UserStatsPage.SeriesProgress.Title" xml:space="preserve">
         <value>Progression des séries</value>
     </data>
     <data name="UserStatsPage.SeriesProgress.Completed" xml:space="preserve">
-        <value>✅ Terminées</value>
+        <value>Terminées</value>
     </data>
     <data name="UserStatsPage.SeriesProgress.InProgress" xml:space="preserve">
-        <value>📖 En cours</value>
+        <value>En cours</value>
     </data>
     <data name="UserStatsPage.SeriesProgress.Remaining" xml:space="preserve">
-        <value>⏳ Restantes</value>
+        <value>Restantes</value>
     </data>
     <data name="UserStatsPage.ChaptersProgress.Title" xml:space="preserve">
         <value>Progression des chapitres</value>
     </data>
     <data name="UserStatsPage.ChaptersProgress.Read" xml:space="preserve">
-        <value>✅ Lus</value>
+        <value>Lus</value>
     </data>
     <data name="UserStatsPage.ChaptersProgress.Remaining" xml:space="preserve">
-        <value>⏳ Restants</value>
+        <value>Restants</value>
     </data>
     <data name="UserStatsPage.RankDistribution.Title" xml:space="preserve">
         <value>Répartition par rang</value>

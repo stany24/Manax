@@ -801,12 +801,6 @@ namespace ManaxClient.Localization {
             }
         }
         
-        public static string UserStatsPage_Subtitle {
-            get {
-                return ResourceManager.GetString("UserStatsPage.Subtitle", resourceCulture);
-            }
-        }
-        
         public static string UserStatsPage_SeriesProgress_Title {
             get {
                 return ResourceManager.GetString("UserStatsPage.SeriesProgress.Title", resourceCulture);
