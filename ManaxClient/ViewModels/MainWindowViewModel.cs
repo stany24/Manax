@@ -58,8 +58,6 @@ public partial class MainWindowViewModel : ObservableObject
     [ObservableProperty] private SerieSource _serieSource = new();
     [ObservableProperty] private TagSource _tagSource = new();
     [ObservableProperty] private UserSource _userSource = new();
-
-    [ObservableProperty] private Thickness _defaultPageMargin = new(16);
     
     public static MainWindowViewModel Instance { get; private set; } = new();
     

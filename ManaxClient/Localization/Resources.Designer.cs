@@ -699,12 +699,6 @@ namespace ManaxClient.Localization {
             }
         }
         
-        public static string ServerStatsPage_Subtitle {
-            get {
-                return ResourceManager.GetString("ServerStatsPage.Subtitle", resourceCulture);
-            }
-        }
-        
         public static string ServerStatsPage_DiskUsage_Title {
             get {
                 return ResourceManager.GetString("ServerStatsPage.DiskUsage.Title", resourceCulture);

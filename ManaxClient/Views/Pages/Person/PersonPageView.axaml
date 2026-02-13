@@ -13,7 +13,7 @@
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Pages.Person.PersonPageView"
     x:DataType="page:PersonPageViewModel"
-    Margin="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).DefaultPageMargin}">
+    Classes="page">
 
     <UserControl.Styles>
         <Style Selector="Border.person-role">

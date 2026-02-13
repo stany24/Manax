@@ -351,26 +351,23 @@
     <data name="ServerStatsPage.Title" xml:space="preserve">
         <value>Server Statistics</value>
     </data>
-    <data name="ServerStatsPage.Subtitle" xml:space="preserve">
-        <value>Overview of server data and activity</value>
-    </data>
     <data name="ServerStatsPage.DiskUsage.Title" xml:space="preserve">
         <value>Disk Space Usage</value>
     </data>
     <data name="ServerStatsPage.DiskUsage.Used" xml:space="preserve">
-        <value>🔴 Used</value>
+        <value>Used</value>
     </data>
     <data name="ServerStatsPage.DiskUsage.Available" xml:space="preserve">
-        <value>🟢 Available</value>
+        <value>Available</value>
     </data>
     <data name="ServerStatsPage.UserActivity.Title" xml:space="preserve">
         <value>User Activity</value>
     </data>
     <data name="ServerStatsPage.UserActivity.Active" xml:space="preserve">
-        <value>🔵 Active</value>
+        <value>Active</value>
     </data>
     <data name="ServerStatsPage.UserActivity.Inactive" xml:space="preserve">
-        <value>⚫ Inactive</value>
+        <value>Inactive</value>
     </data>
     <data name="ServerStatsPage.Content.Title" xml:space="preserve">
         <value>Server Content</value>

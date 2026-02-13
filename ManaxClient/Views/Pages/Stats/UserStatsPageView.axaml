@@ -13,7 +13,7 @@
     x:Class="ManaxClient.Views.Pages.Stats.UserStatsPageView"
     x:DataType="page:UserStatsPageViewModel"
     IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanReadSelfStats}"
-    Margin="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).DefaultPageMargin}">
+    Classes="page">
 
     <UserControl.Styles>
         <Style Selector="avalonia|CartesianChart.chart">

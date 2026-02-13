@@ -20,6 +20,10 @@
             <Setter Property="FontFamily" Value="Segoe UI, Arial, sans-serif" />
         </Style>
         
+        <Style Selector=":is(UserControl).page">
+            <Setter Property="Margin" Value="16"/>
+        </Style>
+        
         <Style Selector="Border.card">
             <Setter Property="Padding" Value="7"/>
             <Setter Property="Background" Value="{DynamicResource MaterialCardBackgroundBrush}"/>

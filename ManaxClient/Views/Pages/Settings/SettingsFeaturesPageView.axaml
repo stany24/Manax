@@ -12,7 +12,7 @@
     x:Class="ManaxClient.Views.Pages.Settings.SettingsFeaturesPageView"
     x:DataType="page:SettingsFeaturesPageViewModel"
     IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanReadFeatures}"
-    Margin="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).DefaultPageMargin}">
+    Classes="page">
 
     <UserControl.Styles>
         <Style Selector="StackPanel.result">

@@ -354,26 +354,23 @@
     <data name="ServerStatsPage.Title" xml:space="preserve">
         <value>Statistiques du serveur</value>
     </data>
-    <data name="ServerStatsPage.Subtitle" xml:space="preserve">
-        <value>Vue d'ensemble des données et de l'activité du serveur</value>
-    </data>
     <data name="ServerStatsPage.DiskUsage.Title" xml:space="preserve">
         <value>Utilisation de l'espace disque</value>
     </data>
     <data name="ServerStatsPage.DiskUsage.Used" xml:space="preserve">
-        <value>🔴 Utilisé</value>
+        <value>Utilisé</value>
     </data>
     <data name="ServerStatsPage.DiskUsage.Available" xml:space="preserve">
-        <value>🟢 Disponible</value>
+        <value>Disponible</value>
     </data>
     <data name="ServerStatsPage.UserActivity.Title" xml:space="preserve">
         <value>Activité des utilisateurs</value>
     </data>
     <data name="ServerStatsPage.UserActivity.Active" xml:space="preserve">
-        <value>🔵 Actifs</value>
+        <value>Actifs</value>
     </data>
     <data name="ServerStatsPage.UserActivity.Inactive" xml:space="preserve">
-        <value>⚫ Inactifs</value>
+        <value>Inactifs</value>
     </data>
     <data name="ServerStatsPage.Content.Title" xml:space="preserve">
         <value>Contenu du serveur</value>

@@ -12,7 +12,7 @@
     x:Class="ManaxClient.Views.Pages.Settings.SettingsServerPageView"
     x:DataType="page:SettingsServerPageViewModel"
     IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanReadServerSettings}"
-    Margin="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).DefaultPageMargin}">
+    Classes="page">
 
     <UserControl.Styles>
         <Style Selector="Grid.setting-section">
