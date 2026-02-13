@@ -6,7 +6,7 @@
     xmlns:page="clr-namespace:ManaxClient.ViewModels.Pages.Settings"
     xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
     xmlns:icon="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-    xmlns:viewModels="clr-namespace:ManaxClient.ViewModels"
+    xmlns:controls="clr-namespace:ManaxClient.Controls"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Pages.Settings.SettingsAppView"
     x:DataType="page:SettingsAppViewModel"
@@ -25,74 +25,80 @@
                                Text="{localization:Localize SettingsAppPage.Title}" />
                 </Grid>
             </Border>
+            
+            <controls:StretchWrapPanel ItemSpacing="12"
+                                       LineSpacing="12">
+                <Border Classes="card">
+                    <StackPanel Spacing="20">
+                        <Grid Classes="section-title"
+                              ColumnDefinitions="Auto,Auto,*">
+                            <icon:MaterialIcon Grid.Column="0"
+                                               Classes="icon"
+                                               Kind="FlagVariantOutline"/>
+                            <TextBlock Grid.Column="1"
+                                       Text="{localization:Localize SettingsAppPage.Language}"
+                                       Margin="0" />
+                        </Grid>
 
-            <Border Classes="card">
-                <StackPanel Spacing="20">
-                    <Grid Classes="section-title"
-                          ColumnDefinitions="Auto,Auto,*">
-                        <icon:MaterialIcon Grid.Column="0"
-                                           Classes="icon"
-                                           Kind="FlagVariantOutline"/>
-                        <TextBlock Grid.Column="1"
-                                   Text="{localization:Localize SettingsAppPage.Language}"
-                                   Margin="0" />
-                    </Grid>
+                        <Border Classes="item-card">
+                            <StackPanel Spacing="6">
+                                <TextBlock Text="{localization:Localize SettingsAppPage.SelectedLanguage}"
+                                           FontWeight="Medium" />
+                                <ComboBox ItemsSource="{Binding Languages}"
+                                          SelectedItem="{Binding SelectedLanguage}"
+                                          DisplayMemberBinding="{Binding DisplayName}"
+                                          HorizontalAlignment="Stretch"
+                                          MinWidth="200"
+                                          Padding="8,6"
+                                          CornerRadius="6"
+                                          BorderThickness="1" />
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </Border>
 
-                    <Grid ColumnDefinitions="*" RowDefinitions="Auto" RowSpacing="16">
-                        <StackPanel Grid.Column="0" Grid.Row="0" Spacing="6">
-                            <TextBlock Text="{localization:Localize SettingsAppPage.SelectedLanguage}"
-                                       FontWeight="Medium" />
-                            <ComboBox ItemsSource="{Binding Languages}"
-                                      SelectedItem="{Binding SelectedLanguage}"
-                                      DisplayMemberBinding="{Binding DisplayName}"
-                                      HorizontalAlignment="Stretch"
-                                      MinWidth="200"
-                                      Padding="8,6"
-                                      CornerRadius="6"
-                                      BorderThickness="1" />
-                        </StackPanel>
-                    </Grid>
-                </StackPanel>
-            </Border>
+                <Border Classes="card">
+                    <StackPanel Spacing="20">
+                        <Grid Classes="section-title"
+                              ColumnDefinitions="Auto,Auto,*">
+                            <icon:MaterialIcon Grid.Column="0"
+                                               Classes="icon"
+                                               Kind="MoonWaxingCrescent"/>
+                            <TextBlock Grid.Column="1"
+                                       Text="{localization:Localize SettingsAppPage.DisplayMode}"
+                                       Margin="0" />
+                        </Grid>
 
-            <Border Classes="card">
-                <StackPanel Spacing="20">
-                    <Grid Classes="section-title"
-                          ColumnDefinitions="Auto,Auto,*">
-                        <icon:MaterialIcon Grid.Column="0"
-                                           Classes="icon"
-                                           Kind="MoonWaxingCrescent"/>
-                        <TextBlock Grid.Column="1"
-                                   Text="{localization:Localize SettingsAppPage.DisplayMode}"
-                                   Margin="0" />
-                    </Grid>
+                        <Border Classes="item-card">
+                            <StackPanel Spacing="6">
+                                <TextBlock Text="{localization:Localize SettingsAppPage.DarkMode}"
+                                           FontWeight="Medium" />
+                                <ToggleSwitch IsChecked="{Binding IsDarkMode}" />
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </Border>
 
-                    <Grid ColumnDefinitions="*,*" RowDefinitions="Auto" ColumnSpacing="16" RowSpacing="16">
-                        <StackPanel Grid.Column="0" Grid.Row="0" Spacing="6">
-                            <TextBlock Text="{localization:Localize SettingsAppPage.DarkMode}" FontWeight="Medium" />
-                            <ToggleSwitch IsChecked="{Binding IsDarkMode}" />
-                        </StackPanel>
-                    </Grid>
-                </StackPanel>
-            </Border>
+                <Border Classes="card">
+                    <StackPanel Spacing="20">
+                        <Grid Classes="section-title"
+                              ColumnDefinitions="Auto,Auto,*">
+                            <icon:MaterialIcon Grid.Column="0"
+                                               Classes="icon"
+                                               Kind="PaletteOutline"/>
+                            <TextBlock Grid.Column="1"
+                                       Text="{localization:Localize SettingsAppPage.AccentColor}"
+                                       Margin="0" />
+                        </Grid>
 
-            <Border Classes="card">
-                <StackPanel Spacing="20">
-                    <Grid Classes="section-title"
-                          ColumnDefinitions="Auto,Auto,*">
-                        <icon:MaterialIcon Grid.Column="0"
-                                           Classes="icon"
-                                           Kind="PaletteOutline"/>
-                        <TextBlock Grid.Column="1"
-                                   Text="{localization:Localize SettingsAppPage.AccentColor}"
-                                   Margin="0" />
-                    </Grid>
-
-                    <ColorView
-                        HsvColor="{Binding ThemeColor}">
-                    </ColorView>
-                </StackPanel>
-            </Border>
+                        <Border Classes="item-card">
+                            <ColorView
+                                HsvColor="{Binding ThemeColor}">
+                            </ColorView>
+                        </Border>
+                    </StackPanel>
+                </Border>
+            </controls:StretchWrapPanel>
         </StackPanel>
     </ScrollViewer>
 </UserControl>

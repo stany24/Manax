@@ -24,6 +24,10 @@
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="Margin" Value="10,0,0,0"></Setter>
         </Style>
+        
+        <Style Selector="NumericUpDown.input">
+            <Setter Property="Background" Value="Transparent"/>
+        </Style>
     </UserControl.Styles>
     
     <ScrollViewer VerticalScrollBarVisibility="Auto">
@@ -55,177 +59,237 @@
                 </Grid>
             </Border>
 
-            <Border Classes="card">
-                <StackPanel>
-                    <Grid Classes="section-title"
-                          ColumnDefinitions="Auto,Auto,*">
-                        <icon:MaterialIcon Grid.Column="0"
-                                           Kind="ImageAlbum"
-                                           Classes="icon"/>
-                        <TextBlock Grid.Column="1"
-                                   Text="{localization:Localize SettingsServerPage.PosterConfig}"
-                                   Margin="0" />
-                    </Grid>
+            <controls:StretchWrapPanel ItemSpacing="12"
+                                       LineSpacing="12">
+                <Border Classes="card">
+                    <StackPanel>
+                        <Grid Classes="section-title"
+                              ColumnDefinitions="Auto,Auto,*">
+                            <icon:MaterialIcon Grid.Column="0"
+                                               Kind="ImageAlbum"
+                                               Classes="icon"/>
+                            <TextBlock Grid.Column="1"
+                                       Text="{localization:Localize SettingsServerPage.PosterConfig}"
+                                       Margin="0" />
+                        </Grid>
 
-                    <Grid Classes="setting-section"
-                          ColumnDefinitions="*,*"
-                          RowDefinitions="Auto,Auto">
+                        <Grid Classes="setting-section"
+                              ColumnDefinitions="*,*"
+                              RowDefinitions="Auto,Auto">
 
-                        <StackPanel Grid.Column="0" Grid.Row="0" Spacing="6">
-                            <TextBlock Text="{localization:Localize SettingsServerPage.ImageFormat}"
-                                       FontWeight="Medium" />
-                            <ComboBox SelectedItem="{Binding Settings.PosterFormat}"
-                                      ItemsSource="{Binding AllImageFormats}"
-                                      HorizontalAlignment="Stretch" />
-                        </StackPanel>
+                            <Border Classes="item-card"
+                                    Grid.Column="0"
+                                    Grid.Row="0">
+                                <StackPanel Spacing="6">
+                                    <TextBlock Text="{localization:Localize SettingsServerPage.ImageFormat}"
+                                               FontWeight="Medium" />
+                                    <ComboBox SelectedItem="{Binding Settings.PosterFormat}"
+                                              ItemsSource="{Binding AllImageFormats}"
+                                              HorizontalAlignment="Stretch" />
+                                </StackPanel>
+                            </Border>
+                            
+                            <Border Classes="item-card"
+                                    Grid.Column="1"
+                                    Grid.Row="0">
+                                <StackPanel Spacing="6">
+                                    <TextBlock Text="{localization:Localize SettingsServerPage.Quality}" FontWeight="Medium" />
+                                    <NumericUpDown Classes="input"
+                                                   FormatString="0"
+                                                   Value="{Binding Settings.PosterQuality}"
+                                                   Maximum="100"
+                                                   Minimum="1" />
+                                </StackPanel>
+                            </Border>
 
-                        <StackPanel Grid.Column="1" Grid.Row="0" Spacing="6">
-                            <TextBlock Text="{localization:Localize SettingsServerPage.Quality}" FontWeight="Medium" />
-                            <NumericUpDown FormatString="0"
-                                           Value="{Binding Settings.PosterQuality}"
-                                           Maximum="100"
-                                           Minimum="1" />
-                        </StackPanel>
+                            <Border Classes="item-card"
+                                    Grid.Column="0"
+                                    Grid.Row="1">
+                                <StackPanel Spacing="6">
+                                    <TextBlock Text="{localization:Localize SettingsServerPage.MaxWidth}" FontWeight="Medium" />
+                                    <NumericUpDown Classes="input"
+                                                   FormatString="0"
+                                                   Value="{Binding Settings.MaxPosterWidth}"
+                                                   Minimum="{Binding Settings.MinPosterWidth}" />
+                                </StackPanel>
+                            </Border>
 
-                        <StackPanel Grid.Column="0" Grid.Row="1" Spacing="6">
-                            <TextBlock Text="{localization:Localize SettingsServerPage.MaxWidth}" FontWeight="Medium" />
-                            <NumericUpDown FormatString="0"
-                                           Value="{Binding Settings.MaxPosterWidth}"
-                                           Minimum="{Binding Settings.MinPosterWidth}" />
-                        </StackPanel>
+                            <Border Classes="item-card"
+                                    Grid.Column="1"
+                                    Grid.Row="1">
+                                <StackPanel Spacing="6">
+                                    <TextBlock Text="{localization:Localize SettingsServerPage.MinWidth}" FontWeight="Medium" />
+                                    <NumericUpDown Classes="input"
+                                                   FormatString="0"
+                                                   Value="{Binding Settings.MinPosterWidth}"
+                                                   Maximum="{Binding Settings.MaxPosterWidth}"
+                                                   Minimum="1" />
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+                    </StackPanel>
+                </Border>
 
-                        <StackPanel Grid.Column="1" Grid.Row="1" Spacing="6">
-                            <TextBlock Text="{localization:Localize SettingsServerPage.MinWidth}" FontWeight="Medium" />
-                            <NumericUpDown FormatString="0"
-                                           Value="{Binding Settings.MinPosterWidth}"
-                                           Maximum="{Binding Settings.MaxPosterWidth}"
-                                           Minimum="1" />
-                        </StackPanel>
-                    </Grid>
-                </StackPanel>
-            </Border>
+                <Border Classes="card">
+                    <StackPanel>
+                        <Grid Classes="section-title"
+                              ColumnDefinitions="Auto,Auto,*">
+                            <icon:MaterialIcon Grid.Column="0"
+                                               Kind="ImageArea"
+                                               Classes="icon"/>
+                            <TextBlock Grid.Column="1"
+                                       Text="{localization:Localize SettingsServerPage.BannerConfig}"
+                                       Margin="0" />
+                        </Grid>
 
-            <Border Classes="card">
-                <StackPanel>
-                    <Grid Classes="section-title"
-                          ColumnDefinitions="Auto,Auto,*">
-                        <icon:MaterialIcon Grid.Column="0"
-                                           Kind="ImageArea"
-                                           Classes="icon"/>
-                        <TextBlock Grid.Column="1"
-                                   Text="{localization:Localize SettingsServerPage.BannerConfig}"
-                                   Margin="0" />
-                    </Grid>
+                        <Grid Classes="setting-section"
+                              ColumnDefinitions="*,*"
+                              RowDefinitions="Auto,Auto">
+                            <Border Classes="item-card"
+                                    Grid.Column="0"
+                                    Grid.Row="0">
+                                <StackPanel Spacing="6">
+                                    <TextBlock Text="{localization:Localize SettingsServerPage.ImageFormat}"
+                                               FontWeight="Medium" />
+                                    <ComboBox SelectedItem="{Binding Settings.BannerFormat}"
+                                              ItemsSource="{Binding AllImageFormats}"
+                                              HorizontalAlignment="Stretch" />
+                                </StackPanel>
+                            </Border>
 
-                    <Grid Classes="setting-section"
-                          ColumnDefinitions="*,*"
-                          RowDefinitions="Auto,Auto">
-                        <StackPanel Grid.Column="0" Grid.Row="0" Spacing="6">
-                            <TextBlock Text="{localization:Localize SettingsServerPage.ImageFormat}"
-                                       FontWeight="Medium" />
-                            <ComboBox SelectedItem="{Binding Settings.BannerFormat}"
-                                      ItemsSource="{Binding AllImageFormats}"
-                                      HorizontalAlignment="Stretch" />
-                        </StackPanel>
+                            <Border Classes="item-card"
+                                    Grid.Column="1"
+                                    Grid.Row="0">
+                                <StackPanel Spacing="6">
+                                    <TextBlock Text="{localization:Localize SettingsServerPage.Quality}" FontWeight="Medium" />
+                                    <NumericUpDown Classes="input"
+                                                   FormatString="0"
+                                                   Value="{Binding Settings.BannerQuality}"
+                                                   Maximum="100"
+                                                   Minimum="1" />
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+                    </StackPanel>
+                </Border>
 
-                        <StackPanel Grid.Column="1" Grid.Row="0" Spacing="6">
-                            <TextBlock Text="{localization:Localize SettingsServerPage.Quality}" FontWeight="Medium" />
-                            <NumericUpDown FormatString="0"
-                                           Value="{Binding Settings.BannerQuality}"
-                                           Maximum="100"
-                                           Minimum="1" />
-                        </StackPanel>
-                    </Grid>
-                </StackPanel>
-            </Border>
+                <Border Classes="card">
+                    <StackPanel>
+                        <Grid Classes="section-title"
+                              ColumnDefinitions="Auto,Auto,*">
+                            <icon:MaterialIcon Grid.Column="0"
+                                               Classes="icon"
+                                               Kind="BookOpenVariantOutline"/>
+                            <TextBlock Grid.Column="1"
+                                       Text="{localization:Localize SettingsServerPage.ChapterConfig}"
+                                       Margin="0" />
+                        </Grid>
 
-            <Border Classes="card">
-                <StackPanel>
-                    <Grid Classes="section-title"
-                          ColumnDefinitions="Auto,Auto,*">
-                        <icon:MaterialIcon Grid.Column="0"
-                                           Classes="icon"
-                                           Kind="BookOpenVariantOutline"/>
-                        <TextBlock Grid.Column="1"
-                                   Text="{localization:Localize SettingsServerPage.ChapterConfig}"
-                                   Margin="0" />
-                    </Grid>
+                        <Grid Classes="setting-section"
+                              ColumnDefinitions="*,*"
+                              RowDefinitions="Auto,Auto">
 
-                    <Grid Classes="setting-section"
-                          ColumnDefinitions="*,*"
-                          RowDefinitions="Auto,Auto">
+                            <Border Classes="item-card"
+                                    Grid.Column="0"
+                                    Grid.Row="0">
+                                <StackPanel Spacing="6">
+                                    <TextBlock Text="{localization:Localize SettingsServerPage.MaxPageWidth}"
+                                               FontWeight="Medium" />
+                                    <NumericUpDown Classes="input"
+                                                   FormatString="0"
+                                                   Value="{Binding Settings.MaxChapterWidth}"
+                                                   Minimum="{Binding Settings.MinChapterWidth}" />
+                                </StackPanel>
+                            </Border>
 
-                        <StackPanel Grid.Column="0" Grid.Row="0" Spacing="6">
-                            <TextBlock Text="{localization:Localize SettingsServerPage.MaxPageWidth}"
-                                       FontWeight="Medium" />
-                            <NumericUpDown FormatString="0"
-                                           Value="{Binding Settings.MaxChapterWidth}"
-                                           Minimum="{Binding Settings.MinChapterWidth}" />
-                        </StackPanel>
+                            <Border Classes="item-card"
+                                    Grid.Column="1"
+                                    Grid.Row="0">
+                                <StackPanel Spacing="6">
+                                    <TextBlock Text="{localization:Localize SettingsServerPage.MinPageWidth}"
+                                               FontWeight="Medium" />
+                                    <NumericUpDown Classes="input"
+                                                   Value="{Binding Settings.MinChapterWidth}"
+                                                   Maximum="{Binding Settings.MaxChapterWidth}"
+                                                   Minimum="1" />
+                                </StackPanel>
+                            </Border>
 
-                        <StackPanel Grid.Column="1" Grid.Row="0" Spacing="6">
-                            <TextBlock Text="{localization:Localize SettingsServerPage.MinPageWidth}"
-                                       FontWeight="Medium" />
-                            <NumericUpDown Value="{Binding Settings.MinChapterWidth}"
-                                           Maximum="{Binding Settings.MaxChapterWidth}"
-                                           Minimum="1" />
-                        </StackPanel>
+                            <Border Classes="item-card"
+                                    Grid.Column="0"
+                                    Grid.Row="1">
+                                <StackPanel Spacing="6">
+                                    <TextBlock Text="{localization:Localize SettingsServerPage.ImageFormat}"
+                                               FontWeight="Medium" />
+                                    <ComboBox SelectedItem="{Binding Settings.ImageFormat}"
+                                              ItemsSource="{Binding AllImageFormats}"
+                                              HorizontalAlignment="Stretch" />
+                                </StackPanel>
+                            </Border>
 
-                        <StackPanel Grid.Column="0" Grid.Row="1" Spacing="6">
-                            <TextBlock Text="{localization:Localize SettingsServerPage.ImageFormat}"
-                                       FontWeight="Medium" />
-                            <ComboBox SelectedItem="{Binding Settings.ImageFormat}"
-                                      ItemsSource="{Binding AllImageFormats}"
-                                      HorizontalAlignment="Stretch" />
-                        </StackPanel>
 
-                        <StackPanel Grid.Column="1" Grid.Row="1" Spacing="6">
-                            <TextBlock Text="{localization:Localize SettingsServerPage.ArchiveFormat}"
-                                       FontWeight="Medium" />
-                            <ComboBox SelectedItem="{Binding Settings.ArchiveFormat}"
-                                      ItemsSource="{Binding AllArchiveFormats}"
-                                      HorizontalAlignment="Stretch" />
-                        </StackPanel>
-                    </Grid>
-                </StackPanel>
-            </Border>
+                            <Border Classes="item-card"
+                                    Grid.Column="1"
+                                    Grid.Row="1">
+                                <StackPanel Spacing="6">
+                                    <TextBlock Text="{localization:Localize SettingsServerPage.ArchiveFormat}"
+                                               FontWeight="Medium" />
+                                    <ComboBox SelectedItem="{Binding Settings.ArchiveFormat}"
+                                              ItemsSource="{Binding AllArchiveFormats}"
+                                              HorizontalAlignment="Stretch" />
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+                    </StackPanel>
+                </Border>
 
-            <Border Classes="card">
-                <StackPanel>
-                    <Grid Classes="section-title"
-                          ColumnDefinitions="Auto,Auto,*">
-                        <icon:MaterialIcon Grid.Column="0"
-                                           Classes="icon"
-                                           Kind="Bookshelf"/>
-                        <TextBlock Grid.Column="1"
-                                   Text="{localization:Localize SettingsServerPage.SeriesConfig}"
-                                   Margin="0" />
-                    </Grid>
+                <Border Classes="card">
+                    <StackPanel>
+                        <Grid Classes="section-title"
+                              ColumnDefinitions="Auto,Auto,*">
+                            <icon:MaterialIcon Grid.Column="0"
+                                               Classes="icon"
+                                               Kind="Bookshelf"/>
+                            <TextBlock Grid.Column="1"
+                                       Text="{localization:Localize SettingsServerPage.SeriesConfig}"
+                                       Margin="0" />
+                        </Grid>
 
-                    <Grid Classes="setting-section"
-                          ColumnDefinitions="*,*"
-                          RowDefinitions="Auto,Auto">
+                        <Grid Classes="setting-section"
+                              ColumnDefinitions="*,*"
+                              RowDefinitions="Auto,Auto">
 
-                        <StackPanel Grid.Column="0" Grid.Row="0" Spacing="6">
-                            <TextBlock Text="{localization:Localize SettingsServerPage.MaxDescriptionLength}"
-                                       FontWeight="Medium" />
-                            <NumericUpDown FormatString="0"
-                                           Value="{Binding Settings.MaxDescriptionLength}"
-                                           Minimum="{Binding Settings.MinDescriptionLength}" />
-                        </StackPanel>
+                            <Border Classes="item-card"
+                                    Grid.Column="0"
+                                    Grid.Row="0">
+                                <StackPanel Spacing="6">
+                                    <TextBlock Text="{localization:Localize SettingsServerPage.MaxDescriptionLength}"
+                                               FontWeight="Medium" />
+                                    <NumericUpDown Classes="input"
+                                                   FormatString="0"
+                                                   Value="{Binding Settings.MaxDescriptionLength}"
+                                                   Minimum="{Binding Settings.MinDescriptionLength}" />
+                                </StackPanel>
+                            </Border>
 
-                        <StackPanel Grid.Column="1" Grid.Row="0" Spacing="6">
-                            <TextBlock Text="{localization:Localize SettingsServerPage.MinDescriptionLength}"
-                                       FontWeight="Medium" />
-                            <NumericUpDown FormatString="0"
-                                           Value="{Binding Settings.MinDescriptionLength}"
-                                           Maximum="{Binding Settings.MaxDescriptionLength}"
-                                           Minimum="0" />
-                        </StackPanel>
-                    </Grid>
-                </StackPanel>
-            </Border>
-
+                            <Border Classes="item-card"
+                                    Grid.Column="1"
+                                    Grid.Row="0">
+                                <StackPanel Spacing="6">
+                                    <TextBlock Text="{localization:Localize SettingsServerPage.MinDescriptionLength}"
+                                               FontWeight="Medium" />
+                                    <NumericUpDown Classes="input"
+                                                   FormatString="0"
+                                                   Value="{Binding Settings.MinDescriptionLength}"
+                                                   Maximum="{Binding Settings.MaxDescriptionLength}"
+                                                   Minimum="0" />
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+            </controls:StretchWrapPanel>
+            
             <Border Classes="card">
                 <Grid ColumnDefinitions="Auto,*">
                     <controls:IconButton Grid.Column="0"
