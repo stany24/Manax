@@ -723,9 +723,6 @@
     <data name="ConfigureUploadPage.NoFolderSelected" xml:space="preserve">
         <value>No folder selected</value>
     </data>
-    <data name="ConfigureUploadPage.Information" xml:space="preserve">
-        <value>Information</value>
-    </data>
     <data name="ConfigureUploadPage.Information.Text1" xml:space="preserve">
         <value>The processing folder is where files from source folders will be copied for processing.</value>
     </data>
@@ -894,9 +891,6 @@
     <data name="ConfigureUploadPage.RemoveSource" xml:space="preserve">
         <value>Remove</value>
     </data>
-    <data name="ConfigureUploadPage.NoSources" xml:space="preserve">
-        <value>No source folders configured. Click "Add Source" to get started.</value>
-    </data>
     <data name="ConfigureUploadPage.ProcessingFolder" xml:space="preserve">
         <value>Processing Folder</value>
     </data>
@@ -908,9 +902,6 @@
     </data>
     <data name="ConfigureUploadPage.OpenFolder" xml:space="preserve">
         <value>Open Folder</value>
-    </data>
-    <data name="ConfigureUploadPage.CurrentPath" xml:space="preserve">
-        <value>Current Path</value>
     </data>
     <data name="ConfigureUploadPage.SelectFolder" xml:space="preserve">
         <value>Select Folder</value>

@@ -738,9 +738,6 @@
     <data name="ConfigureUploadPage.RemoveSource" xml:space="preserve">
         <value>Supprimer</value>
     </data>
-    <data name="ConfigureUploadPage.NoSources" xml:space="preserve">
-        <value>Aucun dossier source configuré. Cliquez sur "Ajouter une source" pour commencer.</value>
-    </data>
     <data name="ConfigureUploadPage.ProcessingFolder" xml:space="preserve">
         <value>Dossier de traitement</value>
     </data>
@@ -753,9 +750,6 @@
     <data name="ConfigureUploadPage.OpenFolder" xml:space="preserve">
         <value>Ouvrir le dossier</value>
     </data>
-    <data name="ConfigureUploadPage.CurrentPath" xml:space="preserve">
-        <value>Chemin actuel</value>
-    </data>
     <data name="ConfigureUploadPage.SelectFolder" xml:space="preserve">
         <value>Sélectionner un dossier</value>
     </data>
@@ -767,9 +761,6 @@
     </data>
     <data name="ConfigureUploadPage.NoFolderSelected" xml:space="preserve">
         <value>Aucun dossier sélectionné</value>
-    </data>
-    <data name="ConfigureUploadPage.Information" xml:space="preserve">
-        <value>Information</value>
     </data>
     <data name="ConfigureUploadPage.Information.Text1" xml:space="preserve">
         <value>Le dossier de traitement est l'endroit où les fichiers des dossiers sources seront copiés pour traitement.</value>

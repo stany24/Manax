@@ -1473,12 +1473,6 @@ namespace ManaxClient.Localization {
             }
         }
         
-        public static string ConfigureUploadPage_NoSources {
-            get {
-                return ResourceManager.GetString("ConfigureUploadPage.NoSources", resourceCulture);
-            }
-        }
-        
         public static string ConfigureUploadPage_ProcessingFolder {
             get {
                 return ResourceManager.GetString("ConfigureUploadPage.ProcessingFolder", resourceCulture);
@@ -1503,12 +1497,6 @@ namespace ManaxClient.Localization {
             }
         }
         
-        public static string ConfigureUploadPage_CurrentPath {
-            get {
-                return ResourceManager.GetString("ConfigureUploadPage.CurrentPath", resourceCulture);
-            }
-        }
-        
         public static string ConfigureUploadPage_SelectFolder {
             get {
                 return ResourceManager.GetString("ConfigureUploadPage.SelectFolder", resourceCulture);
@@ -1530,12 +1518,6 @@ namespace ManaxClient.Localization {
         public static string ConfigureUploadPage_NoFolderSelected {
             get {
                 return ResourceManager.GetString("ConfigureUploadPage.NoFolderSelected", resourceCulture);
-            }
-        }
-        
-        public static string ConfigureUploadPage_Information {
-            get {
-                return ResourceManager.GetString("ConfigureUploadPage.Information", resourceCulture);
             }
         }
         
