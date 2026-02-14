@@ -1461,12 +1461,6 @@ namespace ManaxClient.Localization {
             }
         }
         
-        public static string AutoCleanupPage_Subtitle {
-            get {
-                return ResourceManager.GetString("AutoCleanupPage.Subtitle", resourceCulture);
-            }
-        }
-        
         public static string AutoCleanupPage_ArchiveProcessing {
             get {
                 return ResourceManager.GetString("AutoCleanupPage.ArchiveProcessing", resourceCulture);

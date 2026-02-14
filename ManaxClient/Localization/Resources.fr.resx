@@ -771,9 +771,6 @@
     <data name="AutoCleanupPage.Title" xml:space="preserve">
         <value>Nettoyage automatique</value>
     </data>
-    <data name="AutoCleanupPage.Subtitle" xml:space="preserve">
-        <value>Traiter et optimiser automatiquement les archives manga</value>
-    </data>
     <data name="AutoCleanupPage.ArchiveProcessing" xml:space="preserve">
         <value>Traitement des archives</value>
     </data>
