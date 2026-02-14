@@ -31,7 +31,7 @@
                 <Border Classes="card">
                     <StackPanel Spacing="20">
                         <Grid Classes="section-title"
-                              ColumnDefinitions="Auto,Auto,*">
+                              ColumnDefinitions="Auto,Auto">
                             <icon:MaterialIcon Grid.Column="0"
                                                Classes="icon"
                                                Kind="FlagVariantOutline"/>
@@ -46,12 +46,7 @@
                                            FontWeight="Medium" />
                                 <ComboBox ItemsSource="{Binding Languages}"
                                           SelectedItem="{Binding SelectedLanguage}"
-                                          DisplayMemberBinding="{Binding DisplayName}"
-                                          HorizontalAlignment="Stretch"
-                                          MinWidth="200"
-                                          Padding="8,6"
-                                          CornerRadius="6"
-                                          BorderThickness="1" />
+                                          DisplayMemberBinding="{Binding DisplayName}"/>
                             </StackPanel>
                         </Border>
                     </StackPanel>

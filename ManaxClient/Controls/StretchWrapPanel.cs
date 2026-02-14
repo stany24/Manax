@@ -74,26 +74,25 @@ namespace ManaxClient.Controls
             {
                 double availablePrimary = horizontal ? size.Width : size.Height;
                 
-                // Count visible children and their total desired size
+                // Count visible children
                 int visibleCount = 0;
-                double totalDesiredSize = 0;
                 
                 for (int i = start; i < end; i++)
                 {
                     if (!children[i].IsVisible) continue;
                     visibleCount++;
-                    double childSize = horizontal
-                        ? itemWidthSet ? itemWidth : children[i].DesiredSize.Width
-                        : itemHeightSet ? itemHeight : children[i].DesiredSize.Height;
-                    totalDesiredSize += childSize;
                 }
                 
-                // Calculate spacing and extra space
-                double totalSpacing = visibleCount > 1 ? itemSpacing * (visibleCount - 1) : 0;
-                double extraSpace = Max(0, availablePrimary - totalDesiredSize - totalSpacing);
-                double stretchPerChild = visibleCount > 0 ? extraSpace / visibleCount : 0;
+                if (visibleCount == 0) return;
                 
-                // Arrange children
+                // Calculate spacing and available space for stretching
+                double totalSpacing = visibleCount > 1 ? itemSpacing * (visibleCount - 1) : 0;
+                double remainingSpace = availablePrimary - totalSpacing;
+                
+                // Calculate uniform size for each child (equal distribution)
+                double uniformSize = remainingSpace / visibleCount;
+                
+                // Arrange children with uniform size
                 double primaryPos = 0;
                 
                 for (int i = start; i < end; i++)
@@ -106,18 +105,13 @@ namespace ManaxClient.Controls
                         continue;
                     }
                     
-                    double desiredPrimary = horizontal
-                        ? itemWidthSet ? itemWidth : child.DesiredSize.Width
-                        : itemHeightSet ? itemHeight : child.DesiredSize.Height;
-                    
-                    double actualPrimary = desiredPrimary + stretchPerChild;
-                    
+                    // Use uniform size for all children in the line
                     Rect rect = horizontal
-                        ? new Rect(primaryPos, secondaryPos, actualPrimary, lineSecondarySize)
-                        : new Rect(secondaryPos, primaryPos, lineSecondarySize, actualPrimary);
+                        ? new Rect(primaryPos, secondaryPos, uniformSize, lineSecondarySize)
+                        : new Rect(secondaryPos, primaryPos, lineSecondarySize, uniformSize);
                     
                     child.Arrange(rect);
-                    primaryPos += actualPrimary + itemSpacing;
+                    primaryPos += uniformSize + itemSpacing;
                 }
             }
         }
