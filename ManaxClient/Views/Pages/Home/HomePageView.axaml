@@ -33,7 +33,7 @@
                     <TextBox Grid.Column="1"
                              Classes="search"
                              Text="Future search area"/>
-                    <controls:IconButton Classes="icon-button dark"
+                    <controls:IconButton Classes="icon-button light"
                                          Grid.Column="2"
                                          IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWriteSeries}"
                                          Command="{Binding UploadSerie}"

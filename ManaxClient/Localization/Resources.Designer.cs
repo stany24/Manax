@@ -1611,60 +1611,6 @@ namespace ManaxClient.Localization {
             }
         }
         
-        public static string FetchFromSourcePage_ProgressOverview {
-            get {
-                return ResourceManager.GetString("FetchFromSourcePage.ProgressOverview", resourceCulture);
-            }
-        }
-        
-        public static string FetchFromSourcePage_OverallProgress {
-            get {
-                return ResourceManager.GetString("FetchFromSourcePage.OverallProgress", resourceCulture);
-            }
-        }
-        
-        public static string FetchFromSourcePage_TotalSources {
-            get {
-                return ResourceManager.GetString("FetchFromSourcePage.TotalSources", resourceCulture);
-            }
-        }
-        
-        public static string FetchFromSourcePage_Completed {
-            get {
-                return ResourceManager.GetString("FetchFromSourcePage.Completed", resourceCulture);
-            }
-        }
-        
-        public static string FetchFromSourcePage_InProgress {
-            get {
-                return ResourceManager.GetString("FetchFromSourcePage.InProgress", resourceCulture);
-            }
-        }
-        
-        public static string FetchFromSourcePage_SourceDetails {
-            get {
-                return ResourceManager.GetString("FetchFromSourcePage.SourceDetails", resourceCulture);
-            }
-        }
-        
-        public static string FetchFromSourcePage_Active {
-            get {
-                return ResourceManager.GetString("FetchFromSourcePage.Active", resourceCulture);
-            }
-        }
-        
-        public static string FetchFromSourcePage_FilesProcessed {
-            get {
-                return ResourceManager.GetString("FetchFromSourcePage.FilesProcessed", resourceCulture);
-            }
-        }
-        
-        public static string FetchFromSourcePage_Progress {
-            get {
-                return ResourceManager.GetString("FetchFromSourcePage.Progress", resourceCulture);
-            }
-        }
-        
         public static string FetchFromSourcePage_ProcessingFolder {
             get {
                 return ResourceManager.GetString("FetchFromSourcePage.ProcessingFolder", resourceCulture);

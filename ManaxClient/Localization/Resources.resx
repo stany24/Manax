@@ -807,33 +807,6 @@
     <data name="FetchFromSourcePage.ClearAll" xml:space="preserve">
         <value>Clear All</value>
     </data>
-    <data name="FetchFromSourcePage.ProgressOverview" xml:space="preserve">
-        <value>Progress Overview</value>
-    </data>
-    <data name="FetchFromSourcePage.OverallProgress" xml:space="preserve">
-        <value>Overall Progress</value>
-    </data>
-    <data name="FetchFromSourcePage.TotalSources" xml:space="preserve">
-        <value>Total Sources</value>
-    </data>
-    <data name="FetchFromSourcePage.Completed" xml:space="preserve">
-        <value>Completed</value>
-    </data>
-    <data name="FetchFromSourcePage.InProgress" xml:space="preserve">
-        <value>In Progress</value>
-    </data>
-    <data name="FetchFromSourcePage.SourceDetails" xml:space="preserve">
-        <value>Source Details</value>
-    </data>
-    <data name="FetchFromSourcePage.Active" xml:space="preserve">
-        <value>Active</value>
-    </data>
-    <data name="FetchFromSourcePage.FilesProcessed" xml:space="preserve">
-        <value>Files Processed</value>
-    </data>
-    <data name="FetchFromSourcePage.Progress" xml:space="preserve">
-        <value>Progress</value>
-    </data>
     <data name="FetchFromSourcePage.ProcessingFolder" xml:space="preserve">
         <value>Processing Folder</value>
     </data>
