@@ -9,10 +9,46 @@
     mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="600"
     x:Class="ManaxClient.Views.Popup.ConfirmCancel.Content.UserCreateView"
     x:DataType="content:UserCreateViewModel">
-    <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" RowSpacing="16" Margin="16">
-        <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="12" Margin="0,0,0,8">
+    
+    <UserControl.Styles>
+        <Style Selector="Border.input">
+            <Setter Property="Background" Value="{DynamicResource MaterialPaperBrush}"/>
+            <Setter Property="Padding" Value="8"/>
+            <Setter Property="CornerRadius" Value="8"/>
+        </Style>
+        
+        <Style Selector="Border.input > StackPanel">
+            <Setter Property="Orientation" Value="Vertical"/>
+        </Style>
+        
+        <Style Selector="Border.input > TextBlock">
+            <Setter Property="Padding" Value="12"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+        </Style>
+        
+        <Style Selector="Border.input > TextBox">
+            <Setter Property="Padding" Value="12"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+        </Style>
+        
+        <Style Selector="Border.input > ComboBox">
+            <Setter Property="Padding" Value="12"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        </Style>
+        
+    </UserControl.Styles>
+    
+    <StackPanel Spacing="8"
+                HorizontalAlignment="Stretch">
+        
+        <StackPanel Orientation="Horizontal"
+                    Spacing="12"
+                    Margin="0,0,0,8">
             <avalonia:MaterialIcon Classes="icon"
-                               Kind="UserOutline"/>
+                                   Kind="UserOutline"/>
             <StackPanel Spacing="4">
                 <TextBlock
                     Text="{localization:Localize UserCreatePopup.Title}"
@@ -24,58 +60,45 @@
             </StackPanel>
         </StackPanel>
 
-        <StackPanel Grid.Row="1" Spacing="8">
-            <TextBlock
-                Text="{localization:Localize UserCreatePopup.Username}"
-                FontWeight="Medium" />
-            <TextBox
-                Text="{Binding Username}"
-                Watermark="{localization:Localize UserCreatePopup.Username.Placeholder}"
-                Padding="12"
-                CornerRadius="8"
-                BorderThickness="1"
-                FontSize="14" />
-        </StackPanel>
-
-        <StackPanel Grid.Row="2" Spacing="8">
-            <TextBlock
-                Text="{localization:Localize UserCreatePopup.Password}"
-                FontWeight="Medium" />
-            <TextBox
-                Text="{Binding Password}"
-                Watermark="{localization:Localize UserCreatePopup.Password.Placeholder}"
-                PasswordChar="•"
-                Padding="12"
-                CornerRadius="8"
-                BorderThickness="1"
-                FontSize="14" />
-        </StackPanel>
-
-        <StackPanel Grid.Row="3" Spacing="8">
-            <TextBlock
-                Text="{localization:Localize UserCreatePopup.Role}"
-                FontWeight="Medium" />
-            <ComboBox
-                ItemsSource="{Binding Roles}"
-                SelectedItem="{Binding SelectedRole}"
-                HorizontalAlignment="Stretch"
-                Padding="12"
-                CornerRadius="8"
-                BorderThickness="1" />
-        </StackPanel>
-
-        <Border
-            Grid.Row="4"
-            BorderThickness="1"
-            CornerRadius="8"
-            Padding="12">
-            <StackPanel Orientation="Horizontal" Spacing="8">
-                <TextBlock Text="⚠️" FontSize="14" VerticalAlignment="Top" />
+        <Border Classes="input">
+            <StackPanel>
                 <TextBlock
-                    Text="{localization:Localize UserCreatePopup.Tip}"
-                    TextWrapping="Wrap"
-                    FontSize="12" />
+                    Text="{localization:Localize UserCreatePopup.Username}" />
+                <TextBox
+                    Text="{Binding Username}"
+                    Watermark="{localization:Localize UserCreatePopup.Username.Placeholder}" />
             </StackPanel>
         </Border>
-    </Grid>
+
+        <Border Classes="input">
+            <StackPanel Classes="input">
+                <TextBlock
+                    Text="{localization:Localize UserCreatePopup.Password}" />
+                <TextBox
+                    Text="{Binding Password}"
+                    Watermark="{localization:Localize UserCreatePopup.Password.Placeholder}"
+                    PasswordChar="*"/>
+            </StackPanel>
+        </Border>
+        
+        <Border Classes="input">
+            <StackPanel Classes="input">
+                <TextBlock
+                    Text="{localization:Localize UserCreatePopup.Role}" />
+                <ComboBox
+                    ItemsSource="{Binding Roles}"
+                    SelectedItem="{Binding SelectedRole}"
+                    DisplayMemberBinding="{Binding DisplayName}"/>
+            </StackPanel>
+        </Border>
+
+        <Grid ColumnDefinitions="Auto,*"
+              ColumnSpacing="8">
+            <avalonia:MaterialIcon Grid.Column="0"
+                                   Kind="WarningOutline"/>
+            <TextBlock Grid.Column="1"
+                       Text="{localization:Localize UserCreatePopup.Tip}"
+                       TextWrapping="Wrap"/>
+        </Grid>
+    </StackPanel>
 </UserControl>

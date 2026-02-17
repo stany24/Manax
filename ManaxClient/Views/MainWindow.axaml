@@ -203,7 +203,9 @@
                         VerticalAlignment="Stretch"
                         VerticalContentAlignment="Center"
                         HorizontalContentAlignment="Center"
-                        Content="{Binding Popup}" />
+                        MaxHeight="{Binding $parent[Window].Height}"
+                        MaxWidth="{Binding $parent[Window].Width}"
+                        Content="{Binding Popup}"/>
 
         <StackPanel Orientation="Vertical"
                     Spacing="8"
