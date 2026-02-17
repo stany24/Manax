@@ -1844,5 +1844,17 @@ namespace ManaxClient.Localization {
                 return ResourceManager.GetString("ManualCleanupPage.ClearSelected", resourceCulture);
             }
         }
+        
+        public static string UserPermissionsEdit_Title {
+            get {
+                return ResourceManager.GetString("UserPermissionsEdit.Title", resourceCulture);
+            }
+        }
+        
+        public static string UserPermissionsEdit_Description {
+            get {
+                return ResourceManager.GetString("UserPermissionsEdit.Description", resourceCulture);
+            }
+        }
     }
 }

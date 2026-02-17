@@ -924,4 +924,10 @@
     <data name="ManualCleanupPage.ClearSelected" xml:space="preserve">
         <value>Clear selected images</value>
     </data>
+    <data name="UserPermissionsEdit.Title" xml:space="preserve">
+        <value>Edit User Permissions</value>
+    </data>
+    <data name="UserPermissionsEdit.Description" xml:space="preserve">
+        <value>Manage read, write, delete and other permissions for this user</value>
+    </data>
 </root>
