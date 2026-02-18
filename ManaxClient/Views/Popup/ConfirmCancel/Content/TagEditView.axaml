@@ -9,49 +9,36 @@
     mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="250"
     x:Class="ManaxClient.Views.Popup.ConfirmCancel.Content.TagEditView"
     x:DataType="content:TagEditViewModel">
-    <Grid RowDefinitions="Auto,Auto,Auto,Auto" RowSpacing="16" Margin="16">
-        <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="12" Margin="0,0,0,8">
+    <StackPanel Orientation="Vertical"
+                Spacing="8">
+        <StackPanel Orientation="Horizontal"
+                    Spacing="12">
             <icon:MaterialIcon Classes="icon"
                                Kind="Tag"/>
-            <StackPanel Spacing="4">
-                <TextBlock
-                    Text="{localization:Localize TagEditPopup.Title}"
-                    FontSize="18"
-                    FontWeight="Bold" />
-                <TextBlock
-                    Text="{localization:Localize TagEditPopup.Description}"
-                    FontSize="12" />
+            <StackPanel Orientation="Vertical"
+                        Spacing="4">
+                <TextBlock Text="{localization:Localize TagEditPopup.Title}"
+                           FontSize="18"
+                           FontWeight="Bold" />
+                <TextBlock Text="{localization:Localize TagEditPopup.Description}"
+                           FontSize="12" />
             </StackPanel>
         </StackPanel>
 
-        <StackPanel Grid.Row="1" Spacing="8">
-            <TextBlock
-                Text="{localization:Localize TagEditPopup.Name}"
-                FontWeight="Medium" />
-            <TextBox
-                Text="{Binding Name}"
-                Watermark="{localization:Localize TagEditPopup.Name.Placeholder}"
-                Padding="12"
-                CornerRadius="8"
-                BorderThickness="1"
-                FontSize="14" />
-        </StackPanel>
 
-        <StackPanel Grid.Row="2" Spacing="8">
-            <TextBlock
-                Text="{localization:Localize TagEditPopup.Color}"
-                FontWeight="Medium" />
-            <ColorPicker
-                Color="{Binding Color,Mode=TwoWay}" />
-        </StackPanel>
-        <Border
-            Grid.Row="3"
-            HorizontalAlignment="Left"
-            CornerRadius="5">
-            <TextBlock
-                Margin="5"
-                Text="{Binding Name}" />
+        <Border Classes="input">
+            <StackPanel Spacing="8">
+                <TextBlock Text="{localization:Localize TagEditPopup.Name}" />
+                <TextBox Text="{Binding Name}"
+                         Watermark="{localization:Localize TagEditPopup.Name.Placeholder}" />
+            </StackPanel>
         </Border>
 
-    </Grid>
+        <Border Classes="input">
+            <StackPanel Spacing="8">
+                <TextBlock Text="{localization:Localize TagEditPopup.Color}" />
+                <ColorView Color="{Binding Color,Mode=TwoWay}" />
+            </StackPanel>
+        </Border>
+    </StackPanel>
 </UserControl>

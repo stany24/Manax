@@ -24,6 +24,32 @@
             <Setter Property="Margin" Value="16"/>
         </Style>
         
+        <Style Selector="Border.input">
+            <Setter Property="Background" Value="{DynamicResource MaterialPaperBrush}"/>
+            <Setter Property="Padding" Value="8"/>
+            <Setter Property="CornerRadius" Value="8"/>
+        </Style>
+        
+        <Style Selector="Border.input > StackPanel">
+            <Setter Property="Orientation" Value="Vertical"/>
+            <Setter Property="Spacing" Value="0"/>
+        </Style>
+        
+        <Style Selector="Border.input > StackPanel > TextBlock">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+        </Style>
+        
+        <Style Selector="Border.input > StackPanel > TextBox">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+        </Style>
+        
+        <Style Selector="Border.input > StackPanel > ComboBox">
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        </Style>
+        
         <Style Selector="Border.card">
             <Setter Property="Padding" Value="7"/>
             <Setter Property="Background" Value="{DynamicResource MaterialCardBackgroundBrush}"/>

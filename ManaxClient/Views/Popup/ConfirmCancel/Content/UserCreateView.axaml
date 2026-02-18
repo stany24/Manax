@@ -10,37 +10,6 @@
     x:Class="ManaxClient.Views.Popup.ConfirmCancel.Content.UserCreateView"
     x:DataType="content:UserCreateViewModel">
     
-    <UserControl.Styles>
-        <Style Selector="Border.input">
-            <Setter Property="Background" Value="{DynamicResource MaterialPaperBrush}"/>
-            <Setter Property="Padding" Value="8"/>
-            <Setter Property="CornerRadius" Value="8"/>
-        </Style>
-        
-        <Style Selector="Border.input > StackPanel">
-            <Setter Property="Orientation" Value="Vertical"/>
-        </Style>
-        
-        <Style Selector="Border.input > TextBlock">
-            <Setter Property="Padding" Value="12"/>
-            <Setter Property="FontSize" Value="14"/>
-            <Setter Property="FontWeight" Value="Medium"/>
-            <Setter Property="TextWrapping" Value="Wrap"/>
-        </Style>
-        
-        <Style Selector="Border.input > TextBox">
-            <Setter Property="Padding" Value="12"/>
-            <Setter Property="FontSize" Value="14"/>
-            <Setter Property="TextWrapping" Value="Wrap"/>
-        </Style>
-        
-        <Style Selector="Border.input > ComboBox">
-            <Setter Property="Padding" Value="12"/>
-            <Setter Property="HorizontalAlignment" Value="Stretch"/>
-        </Style>
-        
-    </UserControl.Styles>
-    
     <StackPanel Spacing="8"
                 HorizontalAlignment="Stretch">
         
