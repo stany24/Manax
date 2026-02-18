@@ -15,19 +15,17 @@ namespace ManaxClient.Controls.Previews;
 public class SeriePreview : Button
 {
     public static readonly AttachedProperty<Serie?> SerieProperty =
-        AvaloniaProperty.RegisterAttached<SeriePreview, Grid, Serie?>(
+        AvaloniaProperty.RegisterAttached<SeriePreview, SeriePreview, Serie?>(
             "Serie", null, false, BindingMode.OneTime);
 
     public static readonly AttachedProperty<SolidColorBrush> BackGroundColorProperty =
-        AvaloniaProperty.RegisterAttached<SeriePreview, Grid, SolidColorBrush>(
+        AvaloniaProperty.RegisterAttached<SeriePreview, SeriePreview, SolidColorBrush>(
             "BackGroundColor", new SolidColorBrush(), false, BindingMode.OneTime);
 
     public SeriePreview()
     {
         Width = 150;
         Height = Width * 1.6;
-        Padding = new Thickness(0);
-        BorderThickness = new Thickness(0);
         CornerRadius = new CornerRadius(12);
 
         Click += (_, _) =>

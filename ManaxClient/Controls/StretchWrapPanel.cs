@@ -94,11 +94,11 @@ namespace ManaxClient.Controls
                 // Calculate target uniform size for each child (equal distribution)
                 double uniformSize = remainingSpace / visibleCount;
                 
-                // Check if uniform size respects minimum sizes
+                // Check if uniform size respects minimum and maximum sizes
                 // If total minimum size exceeds available space, we need to adjust
                 double[] childSizes = new double[end - start];
+                bool[] isFlexible = new bool[end - start];
                 int flexibleChildCount = 0;
-                double allocatedSpace = 0;
                 
                 // First pass: assign sizes, respecting minimums
                 for (int i = start; i < end; i++)
@@ -114,36 +114,58 @@ namespace ManaxClient.Controls
                     {
                         // Child can use uniform size
                         childSizes[i - start] = uniformSize;
-                        allocatedSpace += uniformSize;
+                        isFlexible[i - start] = true;
                         flexibleChildCount++;
                     }
                     else
                     {
                         // Child needs its minimum size
                         childSizes[i - start] = minSize;
-                        allocatedSpace += minSize;
+                        isFlexible[i - start] = false;
                     }
                 }
                 
-                // Second pass: redistribute remaining space among flexible children
-                if (flexibleChildCount > 0 && Abs(allocatedSpace - remainingSpace) > 0.01)
+                // Iteratively redistribute space, respecting maximum sizes
+                bool hasChanges = true;
+                while (flexibleChildCount > 0 && hasChanges)
                 {
-                    double extraSpace = remainingSpace - allocatedSpace;
-                    double extraPerChild = extraSpace / flexibleChildCount;
+                    hasChanges = false;
                     
+                    // Calculate how much space should go to flexible children
+                    double spaceForFlexible = remainingSpace;
+                    for (int i = start; i < end; i++)
+                    {
+                        if (!children[i].IsVisible) continue;
+                        if (!isFlexible[i - start])
+                        {
+                            spaceForFlexible -= childSizes[i - start];
+                        }
+                    }
+                    
+                    double sizePerFlexible = spaceForFlexible / flexibleChildCount;
+                    
+                    // Check if any flexible child would exceed its max size
                     for (int i = start; i < end; i++)
                     {
                         Control child = children[i];
-                        if (!child.IsVisible) continue;
+                        if (!child.IsVisible || !isFlexible[i - start]) continue;
                         
-                        double minSize = horizontal
-                            ? itemWidthSet ? itemWidth : child.DesiredSize.Width
-                            : itemHeightSet ? itemHeight : child.DesiredSize.Height;
+                        double maxSize = horizontal
+                            ? double.IsNaN(child.MaxWidth) ? double.PositiveInfinity : child.MaxWidth
+                            : double.IsNaN(child.MaxHeight) ? double.PositiveInfinity : child.MaxHeight;
                         
-                        // Only add extra space to flexible children
-                        if (uniformSize >= minSize)
+                        if (sizePerFlexible > maxSize)
                         {
-                            childSizes[i - start] += extraPerChild;
+                            // This child reached its maximum size
+                            childSizes[i - start] = maxSize;
+                            isFlexible[i - start] = false;
+                            flexibleChildCount--;
+                            hasChanges = true;
+                        }
+                        else
+                        {
+                            // Child can take the calculated size
+                            childSizes[i - start] = sizePerFlexible;
                         }
                     }
                 }

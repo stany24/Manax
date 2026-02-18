@@ -375,21 +375,9 @@ namespace ManaxClient.Localization {
             }
         }
         
-        public static string SeriePage_ChangeButton {
-            get {
-                return ResourceManager.GetString("SeriePage.ChangeButton", resourceCulture);
-            }
-        }
-        
         public static string SeriePage_SerieRating {
             get {
                 return ResourceManager.GetString("SeriePage.SerieRating", resourceCulture);
-            }
-        }
-        
-        public static string SeriePage_Chapters {
-            get {
-                return ResourceManager.GetString("SeriePage.Chapters", resourceCulture);
             }
         }
         

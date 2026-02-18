@@ -9,82 +9,71 @@
     xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
     xmlns:localization1="clr-namespace:ManaxClient.Localization"
     xmlns:converters="clr-namespace:ManaxClient.Converters"
-    xmlns:data="clr-namespace:ManaxClient.Models.Server.Data"
     xmlns:icon="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    xmlns:controls="clr-namespace:ManaxClient.Controls"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Pages.Serie.SeriePageView"
-    x:DataType="page:SeriePageViewModel">
+    x:DataType="page:SeriePageViewModel"
+    Classes="page">
 
     <UserControl.Resources>
         <converters:ColorToSolidBrushConverter x:Key="ColorToBrushConverter" />
     </UserControl.Resources>
+    
+    <UserControl.Styles>
+        <Style Selector="TextBlock.title">
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="Padding" Value="0,0,0,10"/>
+        </Style>
+    </UserControl.Styles>
 
     <ScrollViewer VerticalScrollBarVisibility="Auto">
-        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="16">
-            <Border Grid.Column="0" >
-                <StackPanel Width="180">
-                    <TextBlock Classes="title" Text="{Binding Serie.Title}" />
+        <controls:StretchWrapPanel ItemSpacing="8"
+                                   LineSpacing="8">
+            <Border Classes="card"
+                    VerticalAlignment="Top"
+                    MaxWidth="300">
+                <StackPanel>
+                    <Grid ColumnDefinitions="*,Auto">
+                        <TextBlock Grid.Column="0"
+                                   Classes="title"
+                                   Text="{Binding Serie.Title}" />
+                    
+                        <controls:IconButton Grid.Column="1"
+                                             Classes="icon-button light"
+                                             IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWriteSeries}"
+                                             Command="{Binding UpdateSerie}"
+                                             IsEnabled="{Binding !IsFilePickerOpen}"
+                                             Icon="PencilOutline"
+                                             VerticalAlignment="Top"/>
+                    </Grid>
                     
                     <Border CornerRadius="12" ClipToBounds="True">
                         <Image Source="{Binding Serie.Poster}"
                                Stretch="UniformToFill" />
                     </Border>
 
-                    <Border>
-                        <TextBlock Text="{Binding Serie.Description}"
-                                   TextWrapping="Wrap" />
-                    </Border>
+                    <TextBlock Text="{Binding Serie.Description}"
+                               TextWrapping="Wrap" />
 
-                    <StackPanel
-                        Orientation="Horizontal">
-                        <Button Classes="secondary"
-                                IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWriteSeries}"
-                                Command="{Binding ReplacePoster}"
-                                IsEnabled="{Binding !IsFilePickerOpen}"
-                                HorizontalAlignment="Stretch">
-                            <TextBlock Text="🖼️" />
-                        </Button>
-
-                        <Button Classes="secondary"
-                                IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWriteSeries}"
-                                Command="{Binding UpdateSerie}"
-                                IsEnabled="{Binding !IsFilePickerOpen}"
-                                HorizontalAlignment="Stretch">
-                            <TextBlock Text="{localization:Localize SeriePage.ChangeButton}" />
-                        </Button>
-                    </StackPanel>
-
-                    <StackPanel Spacing="8" 
-                                IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).FeatureManager.RankFeatureEnabled}">
-                        <TextBlock Text="{localization:Localize SeriePage.SerieRating}" FontWeight="Medium" />
+                    <StackPanel IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).FeatureManager.RankFeatureEnabled}">
+                        <TextBlock Text="{localization:Localize SeriePage.SerieRating}" />
                         <ComboBox ItemsSource="{Binding Ranks}"
                                   SelectedItem="{Binding SelectedRank}"
-                                  HorizontalAlignment="Stretch">
-                            <ComboBox.ItemTemplate>
-                                <DataTemplate x:DataType="data:Rank">
-                                    <TextBlock Text="{Binding Name}" />
-                                </DataTemplate>
-                            </ComboBox.ItemTemplate>
+                                  DisplayMemberBinding="{Binding Name}">
                         </ComboBox>
                     </StackPanel>
 
-                    <StackPanel Orientation="Horizontal" Spacing="8">
-                        <Border CornerRadius="12"
-                                Padding="8,4"
-                                HorizontalAlignment="Left">
-                            <TextBlock Text="{Binding Serie.Status}"
-                                       FontSize="12"
-                                       FontWeight="Medium" />
-                        </Border>
+                    <TextBlock Text="{Binding Serie.Status}"/>
 
-                        <TextBlock
-                            Text="{localization1:LocalizeFormat SeriePage.ChapterCount,
-                                           Param1={Binding $parent[UserControl].((page:SeriePageViewModel)DataContext).Serie.Chapters.Count}}" />
-                    </StackPanel>
+                    <TextBlock Text="{localization1:LocalizeFormat SeriePage.ChapterCount,
+                                        Param1={Binding $parent[UserControl].((page:SeriePageViewModel)DataContext).Serie.Chapters.Count}}" />
                     
                     <Border IsVisible="{Binding Serie.Tags.Count}">
                         <StackPanel>
-                            <TextBlock Classes="subtitle" Text="{localization:Localize SeriePage.Tags}" Margin="0" />
+                            <TextBlock Text="{localization:Localize SeriePage.Tags}" />
 
                             <ItemsControl ItemsSource="{Binding Serie.Tags}"
                                           IsVisible="{Binding Serie.Tags.Count}">
@@ -95,15 +84,12 @@
                                 </ItemsControl.ItemsPanel>
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
-                                        <Border
-                                            BorderBrush="{Binding Color, Converter={StaticResource ColorToBrushConverter}}"
-                                            BorderThickness="1"
-                                            CornerRadius="16"
-                                            Margin="2"
-                                            Padding="6,3">
-                                            <TextBlock Text="{Binding Name}"
-                                                       FontSize="13"
-                                                       FontWeight="Medium" />
+                                        <Border BorderBrush="{Binding Color, Converter={StaticResource ColorToBrushConverter}}"
+                                                BorderThickness="1"
+                                                CornerRadius="16"
+                                                Margin="2"
+                                                Padding="6,3">
+                                            <TextBlock Text="{Binding Name}" />
                                         </Border>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
@@ -112,8 +98,8 @@
                     </Border>
 
                     <Border IsVisible="{Binding Serie.Persons.Count}">
-                        <StackPanel Spacing="12">
-                            <TextBlock Classes="subtitle" Text="{localization:Localize SeriePage.Persons}" Margin="0" />
+                        <StackPanel>
+                            <TextBlock Text="{localization:Localize SeriePage.Persons}" />
                             <ItemsControl ItemsSource="{Binding Serie.Persons}">
                                 <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate>
@@ -127,11 +113,8 @@
                                                 Margin="4"
                                                 Padding="12,6">
                                             <StackPanel Spacing="4">
-                                                <TextBlock Text="{Binding FullName}"
-                                                           FontSize="13"
-                                                           FontWeight="Medium" />
-                                                <TextBlock Text="{Binding Role.Name}"
-                                                           FontSize="11" />
+                                                <TextBlock Text="{Binding FullName}" />
+                                                <TextBlock Text="{Binding Role.Name}" />
                                             </StackPanel>
                                         </Border>
                                     </DataTemplate>
@@ -143,20 +126,13 @@
                 </StackPanel>
             </Border>
 
-            <Border Grid.Column="1" Classes="card">
-                <StackPanel Spacing="16">
-                    <TextBlock Classes="subtitle" Text="{localization:Localize SeriePage.Chapters}" Margin="0" />
-
-                    <Border CornerRadius="8"
-                            Padding="12"
-                            IsVisible="{Binding !Serie.Chapters.Count}">
-                        <StackPanel Spacing="8" HorizontalAlignment="Center">
-                            <icon:MaterialIcon Classes="icon"
-                                                   Kind="BookOpenVariantOutline"/>
-                            <TextBlock Text="{localization:Localize SeriePage.NoChaptersAvailable}"
-                                       FontWeight="Medium" />
-                            <TextBlock Text="{localization:Localize SeriePage.NoChaptersDescription}"
-                                       FontSize="12" />
+            <Border Classes="card">
+                <StackPanel>
+                    <Border IsVisible="{Binding !Serie.Chapters.Count}">
+                        <StackPanel>
+                            <icon:MaterialIcon Kind="BookOpenVariantOutline"/>
+                            <TextBlock Text="{localization:Localize SeriePage.NoChaptersAvailable}"/>
+                            <TextBlock Text="{localization:Localize SeriePage.NoChaptersDescription}" />
                         </StackPanel>
                     </Border>
 
@@ -164,10 +140,7 @@
                                   IsVisible="{Binding Serie.Chapters.Count}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <Border Background="Transparent"
-                                        Padding="8"
-                                        CornerRadius="8"
-                                        Margin="0,2">
+                                <Border Classes="item-card">
                                     <previews:ChapterPreview
                                         Chapter="{Binding .}"/>
                                 </Border>
@@ -181,6 +154,6 @@
                     </ItemsControl>
                 </StackPanel>
             </Border>
-        </Grid>
+        </controls:StretchWrapPanel>
     </ScrollViewer>
 </UserControl>

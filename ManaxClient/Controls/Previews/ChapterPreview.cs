@@ -32,8 +32,6 @@ public class ChapterPreview : Button
 
     public ChapterPreview()
     {
-        BorderThickness = new Thickness(0);
-        Padding = new Thickness(0);
         HorizontalAlignment = HorizontalAlignment.Stretch;
         HorizontalContentAlignment = HorizontalAlignment.Stretch;
         
@@ -48,8 +46,7 @@ public class ChapterPreview : Button
         Border border = new()
         {
             BorderThickness = new Thickness(1),
-            CornerRadius = new CornerRadius(8),
-            Padding = new Thickness(16, 12)
+            CornerRadius = new CornerRadius(8)
         };
 
         Grid mainGrid = new()
@@ -90,6 +87,7 @@ public class ChapterPreview : Button
 
         TextBlock chapterName = new()
         {
+            VerticalAlignment = VerticalAlignment.Center,
             FontWeight = FontWeight.Medium,
             FontSize = 14,
             TextTrimming = TextTrimming.CharacterEllipsis
@@ -104,14 +102,14 @@ public class ChapterPreview : Button
         {
             Source = this,
             Mode = BindingMode.OneWay,
-            Converter = new FuncValueConverter<int, string>(fileName => $"Chapitre {fileName}")
+            Converter = new FuncValueConverter<uint, string>(chapterNumber => $"Chapitre {chapterNumber}")
         });
 
         chapterDetails.Bind(TextBlock.TextProperty, new Binding(nameof(Chapter) + "." + nameof(Chapter.PageNumber))
         {
             Source = this,
             Mode = BindingMode.OneWay,
-            Converter = new FuncValueConverter<int, string>(pages => $"{pages} page(s)")
+            Converter = new FuncValueConverter<uint, string>(pages => $"{pages} page(s)")
         });
 
         Border progressBadge = new()

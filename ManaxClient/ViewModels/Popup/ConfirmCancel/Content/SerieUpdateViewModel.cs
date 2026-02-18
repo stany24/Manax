@@ -2,9 +2,19 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
+using Jeek.Avalonia.Localization;
+using ManaxClient.Event;
+using ManaxLibrary;
+using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTO.Serie;
+using ManaxLibrary.Logging;
 using Library = ManaxClient.Models.Server.Data.Library;
 using Person = ManaxClient.Models.Server.Data.Person;
 using Serie = ManaxClient.Models.Server.Data.Serie;
@@ -24,6 +34,7 @@ public partial class SerieUpdateViewModel : ConfirmCancelContentViewModel
     [ObservableProperty] private Tag? _selectedTag;
     [ObservableProperty] private string _tagSearchText = "";
     [ObservableProperty] private string _title;
+    [ObservableProperty] private bool _isFilePickerOpen;
 
     public SerieUpdateViewModel(Serie serie)
     {
@@ -171,5 +182,58 @@ public partial class SerieUpdateViewModel : ConfirmCancelContentViewModel
             TagIds = SelectedTags.Select(t => t.Id).ToList(),
             PersonIds = SelectedPersons.Select(p => p.Id).ToList()
         };
+    }
+    
+        public async void ReplacePoster()
+    {
+        try
+        {
+            if (IsFilePickerOpen) return;
+            IsFilePickerOpen = true;
+
+            Window? window = Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop
+                ? desktop.MainWindow
+                : null;
+            if (window?.StorageProvider == null) return;
+
+            IReadOnlyList<IStorageFile> files = await window.StorageProvider.OpenFilePickerAsync(
+                new FilePickerOpenOptions
+                {
+                    Title = Localizer.Get("SeriePage.SelectPosterImage"),
+                    AllowMultiple = false,
+                    FileTypeFilter =
+                    [
+                        new FilePickerFileType("Images")
+                        {
+                            Patterns = ["*.jpg", "*.webp", "*.jpeg", "*.png", "*.bmp", "*.gif"]
+                        }
+                    ]
+                });
+            IsFilePickerOpen = false;
+
+            if (files.Count == 0) return;
+            string filePath = files[0].Path.LocalPath;
+            if (string.IsNullOrEmpty(filePath)) return;
+
+            Optional<bool> replacePosterResponse = await ManaxApiUploadClient.ReplacePosterAsync(
+                filePath,
+                files[0].Name,
+                _originalSerie.Id);
+
+            if (replacePosterResponse.Failed)
+            {
+                WeakReferenceMessenger.Default.Send(new NotificationMessage(replacePosterResponse.Error));
+            }
+            else
+            {
+                WeakReferenceMessenger.Default.Send(new NotificationMessage(Localizer.Get("SeriePage.PosterReplacedSuccess")));
+                Logger.LogInfo("Poster replaced successfully for serie ID: " + _originalSerie.Id);
+            }
+        }
+        catch (Exception e)
+        {
+            WeakReferenceMessenger.Default.Send(new NotificationMessage(Localizer.Get("SeriePage.ErrorReplacingPoster")));
+            Logger.LogError("Error replacing poster for serie ID: " + _originalSerie.Id, e);
+        }
     }
 }

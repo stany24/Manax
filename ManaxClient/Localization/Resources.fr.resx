@@ -189,14 +189,8 @@
     <data name="PersonPage.NewPerson" xml:space="preserve">
         <value>Nouvelle personne</value>
     </data>
-    <data name="SeriePage.ChangeButton" xml:space="preserve">
-        <value>Changer</value>
-    </data>
     <data name="SeriePage.SerieRating" xml:space="preserve">
         <value>Note de la série</value>
-    </data>
-    <data name="SeriePage.Chapters" xml:space="preserve">
-        <value>Chapitres</value>
     </data>
     <data name="SeriePage.NoChaptersAvailable" xml:space="preserve">
         <value>Aucun chapitre disponible</value>

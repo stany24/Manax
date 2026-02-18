@@ -53,12 +53,10 @@
                         <ItemsControl ItemsSource="{Binding Series}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <Border>
-                                        <previews:SeriePreview
-                                            Serie="{Binding .}"
-                                            BackGroundColor="{DynamicResource MaterialBackgroundBrush}"
-                                            CommandParameter="{Binding .}" />
-                                    </Border>
+                                    <previews:SeriePreview
+                                        Serie="{Binding .}"
+                                        BackGroundColor="{DynamicResource MaterialBackgroundBrush}"
+                                        CommandParameter="{Binding .}" />
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                             <ItemsControl.ItemsPanel>
