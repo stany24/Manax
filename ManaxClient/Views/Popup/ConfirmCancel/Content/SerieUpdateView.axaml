@@ -7,6 +7,7 @@
     xmlns:converters="clr-namespace:ManaxClient.Converters"
     xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
     xmlns:icon="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    xmlns:controls="clr-namespace:ManaxClient.Controls"
     mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="500"
     x:Class="ManaxClient.Views.Popup.ConfirmCancel.Content.SerieUpdateView"
     x:DataType="content:SerieUpdateViewModel"
@@ -15,12 +16,27 @@
     <UserControl.Resources>
         <converters:ColorToSolidBrushConverter x:Key="ColorToBrushConverter" />
     </UserControl.Resources>
+    
+    <UserControl.Styles>
+        <Style Selector="StackPanel.tag-person-item">
+            <Setter Property="Orientation" Value="Horizontal"/>
+            <Setter Property="Spacing" Value="4"/>
+        </Style>
+        
+        <Style Selector="StackPanel.tag-person-item > Button">
+            <Setter Property="Width" Value="16"/>
+            <Setter Property="Height" Value="16"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="FontSize" Value="10"/>
+            <Setter Property="Foreground" Value="Red" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+    </UserControl.Styles>
 
-    <Grid Name="MainGrid"
-          RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto"
-          ColumnDefinitions="*" RowSpacing="16" Margin="16">
-        <StackPanel Grid.Row="0"
-                    Orientation="Horizontal"
+    <StackPanel Spacing="8">
+        <StackPanel Orientation="Horizontal"
                     Spacing="12"
                     Margin="0,0,0,8">
             <icon:MaterialIcon Classes="icon"
@@ -36,225 +52,117 @@
             </StackPanel>
         </StackPanel>
 
-        <StackPanel Grid.Row="1" Spacing="8">
-            <TextBlock
-                Text="{localization:Localize SerieUpdatePopup.Serie.Title}"
-                FontWeight="Medium" />
-            <TextBox
-                Text="{Binding Title}"
-                Watermark="{localization:Localize SerieUpdatePopup.Serie.Title.Placeholder}"
-                Padding="12"
-                CornerRadius="8"
-                BorderThickness="1"
-                FontSize="14" />
-        </StackPanel>
-
-        <StackPanel Grid.Row="2" Spacing="8">
-            <TextBlock
-                Text="{localization:Localize SerieUpdatePopup.Serie.Description}"
-                FontWeight="Medium" />
-            <TextBox
-                Text="{Binding Description}"
-                Watermark="{localization:Localize SerieUpdatePopup.Serie.Description.Placeholder}"
-                AcceptsReturn="True"
-                TextWrapping="Wrap"
-                Height="80"
-                Padding="12"
-                CornerRadius="8"
-                BorderThickness="1"
-                FontSize="14" />
-        </StackPanel>
-
-        <StackPanel Grid.Row="3" Orientation="Horizontal" Spacing="16">
-            <StackPanel Spacing="8" HorizontalAlignment="Left" Width="240">
-                <TextBlock
-                    Text="{localization:Localize SerieUpdatePopup.Status}"
-                    FontWeight="Medium" />
-                <ComboBox
-                    ItemsSource="{Binding StatusOptions}"
-                    SelectedItem="{Binding SelectedStatus}"
-                    HorizontalAlignment="Stretch"
-                    Padding="12"
-                    CornerRadius="8"
-                    BorderThickness="1" />
+        <Border Classes="input">
+            <StackPanel>
+                <TextBlock Text="{localization:Localize SerieUpdatePopup.Serie.Title}" />
+                <TextBox Text="{Binding Title}"
+                         Watermark="{localization:Localize SerieUpdatePopup.Serie.Title.Placeholder}"/>
             </StackPanel>
+        </Border>
 
-            <StackPanel Spacing="8" HorizontalAlignment="Left" Width="240">
-                <TextBlock
-                    Text="{localization:Localize SerieUpdatePopup.Library}"
-                    FontWeight="Medium" />
-                <ComboBox
-                    ItemsSource="{Binding Libraries}"
-                    SelectedItem="{Binding SelectedLibrary}"
-                    HorizontalAlignment="Stretch"
-                    Padding="12"
-                    CornerRadius="8"
-                    BorderThickness="1">
-                    <ComboBox.ItemTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding Name}" />
-                        </DataTemplate>
-                    </ComboBox.ItemTemplate>
-                </ComboBox>
+        <Border Classes="input">
+            <StackPanel>
+                <TextBlock Text="{localization:Localize SerieUpdatePopup.Serie.Description}"/>
+                <TextBox Text="{Binding Description}"
+                         Watermark="{localization:Localize SerieUpdatePopup.Serie.Description.Placeholder}"/>
             </StackPanel>
-        </StackPanel>
-
-        <StackPanel Grid.Row="4" Spacing="8">
-            <TextBlock
-                Text="{localization:Localize SerieUpdatePopup.Tags}"
-                FontWeight="Medium"
-                VerticalAlignment="Center" />
-            <ComboBox
-                Width="200"
-                ItemsSource="{Binding AvailableTags}"
-                SelectedItem="{Binding SelectedTag, Mode=TwoWay}"
-                PlaceholderText="{localization:Localize SerieUpdatePopup.Tags.Placeholder}"
-                Padding="8"
-                CornerRadius="6"
-                BorderThickness="1"
-                FontSize="12">
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding Name}" />
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
-            </ComboBox>
-        </StackPanel>
-
-        <Border Grid.Row="5"
-                BorderThickness="1"
-                CornerRadius="8"
-                Padding="8"
-                MinHeight="60">
-            <ItemsControl ItemsSource="{Binding SelectedTags}"
-                          HorizontalAlignment="Stretch">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <WrapPanel Orientation="Horizontal" MaxWidth="460" />
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Border
-                            BorderBrush="{Binding Color, Converter={StaticResource ColorToBrushConverter}}"
-                            BorderThickness="2"
-                            CornerRadius="16"
-                            Margin="2"
-                            Padding="8,4">
-                            <StackPanel Orientation="Horizontal" Spacing="4">
-                                <TextBlock
-                                    Text="{Binding Name}"
-                                    FontSize="12"
-                                    VerticalAlignment="Center" />
-                                <Button
-                                    Content="✕"
-                                    VerticalContentAlignment="Center"
-                                    HorizontalContentAlignment="Center"
-                                    FontSize="10"
-                                    Width="16"
-                                    Height="16"
-                                    Padding="0"
-                                    Background="Transparent"
-                                    BorderThickness="0"
-                                    Command="{Binding $parent[UserControl].((content:SerieUpdateViewModel)DataContext).RemoveTag}"
-                                    CommandParameter="{Binding}" />
-                            </StackPanel>
-                        </Border>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
         </Border>
-        <TextBlock
-            Grid.Row="5"
-            Text="{localization:Localize SerieUpdatePopup.NoTags}"
-            FontSize="12"
-            HorizontalAlignment="Center"
-            Margin="0,8,0,0"
-            IsVisible="{Binding !SelectedTags.Count}" />
-
-        <StackPanel Grid.Row="6" Spacing="8">
-            <TextBlock
-                Text="{localization:Localize SerieUpdatePopup.Persons}"
-                FontWeight="Medium"
-                VerticalAlignment="Center" />
-            <ComboBox
-                Width="200"
-                ItemsSource="{Binding AvailablePersons}"
-                SelectedItem="{Binding SelectedPerson, Mode=TwoWay}"
-                PlaceholderText="{localization:Localize SerieUpdatePopup.Persons.Placeholder}"
-                Padding="8"
-                CornerRadius="6"
-                BorderThickness="1"
-                FontSize="12">
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding FullName}" />
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
-                <ComboBox.Styles>
-                    <Style Selector="ComboBox:pointerover">
-                        <Setter Property="BorderBrush" Value="#007ACC" />
-                    </Style>
-                    <Style Selector="ComboBox:focus">
-                        <Setter Property="BorderBrush" Value="#007ACC" />
-                    </Style>
-                </ComboBox.Styles>
-            </ComboBox>
-        </StackPanel>
-
-        <Border Grid.Row="7"
-                BorderThickness="1"
-                CornerRadius="8"
-                Padding="8"
-                MinHeight="60">
-            <ItemsControl ItemsSource="{Binding SelectedPersons}"
-                          HorizontalAlignment="Stretch">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <WrapPanel Orientation="Horizontal" MaxWidth="460" />
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Border
-                            BorderThickness="2"
-                            CornerRadius="16"
-                            Margin="2"
-                            Padding="8,4">
-                            <StackPanel Orientation="Horizontal" Spacing="4">
-                                <TextBlock
-                                    Text="{Binding FullName}"
-                                    FontSize="12" />
-                                <Button
-                                    Content="✕"
-                                    VerticalContentAlignment="Center"
-                                    HorizontalContentAlignment="Center"
-                                    FontSize="10"
-                                    Width="16"
-                                    Height="16"
-                                    Padding="0"
-                                    Background="Transparent"
-                                    BorderThickness="0"
-                                    Command="{Binding $parent[UserControl].((content:SerieUpdateViewModel)DataContext).RemovePerson}"
-                                    CommandParameter="{Binding}">
-                                    <Button.Styles>
-                                        <Style Selector="Button:pointerover">
-                                            <Setter Property="Foreground" Value="Red" />
-                                        </Style>
-                                    </Button.Styles>
-                                </Button>
-                            </StackPanel>
-                        </Border>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </Border>
-        <TextBlock
-            Grid.Row="7"
-            Text="{localization:Localize SerieUpdatePopup.NoPersons}"
-            FontSize="12"
-            HorizontalAlignment="Center"
-            Margin="0,8,0,0"
-            IsVisible="{Binding !SelectedPersons.Count}" />
-    </Grid>
+        
+        <controls:StretchWrapPanel  ItemSpacing="8"
+                                    LineSpacing="8">
+            <Border Classes="input">
+                <StackPanel>
+                    <TextBlock Text="{localization:Localize SerieUpdatePopup.Status}" />
+                    <ComboBox ItemsSource="{Binding StatusOptions}"
+                              SelectedItem="{Binding SelectedStatus}" />
+                </StackPanel>
+            </Border>
+            
+            <Border Classes="input">
+                <StackPanel>
+                    <TextBlock Text="{localization:Localize SerieUpdatePopup.Library}" />
+                    <ComboBox ItemsSource="{Binding Libraries}"
+                              SelectedItem="{Binding SelectedLibrary}"
+                              DisplayMemberBinding="{Binding Name}">
+                    </ComboBox>
+                </StackPanel>
+            </Border>
+        </controls:StretchWrapPanel>
+        
+        <controls:StretchWrapPanel ItemSpacing="8"
+                                   LineSpacing="8">
+            <Border Classes="input">
+                <StackPanel Spacing="8">
+                    <TextBlock Text="{localization:Localize SerieUpdatePopup.Tags}" />
+                    
+                    <ComboBox ItemsSource="{Binding AvailableTags}"
+                              SelectedItem="{Binding SelectedTag, Mode=TwoWay}"
+                              PlaceholderText="{localization:Localize SerieUpdatePopup.Tags.Placeholder}"
+                              DisplayMemberBinding="{Binding Name}">
+                    </ComboBox>
+                    
+                    <ItemsControl ItemsSource="{Binding SelectedTags}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel Orientation="Horizontal"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border BorderBrush="{Binding Color, Converter={StaticResource ColorToBrushConverter}}"
+                                        BorderThickness="1"
+                                        CornerRadius="16"
+                                        Padding="4">
+                                    <StackPanel Classes="tag-person-item">
+                                        <TextBlock Text="{Binding Name}" />
+                                        <Button Content="✕"
+                                                Command="{Binding $parent[UserControl].((content:SerieUpdateViewModel)DataContext).RemoveTag}"
+                                                CommandParameter="{Binding}" />
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                    
+                    <TextBlock Text="{localization:Localize SerieUpdatePopup.NoTags}"
+                               IsVisible="{Binding !SelectedTags.Count}" />
+                </StackPanel>
+            </Border>
+            
+            <Border Classes="input">
+                <StackPanel Spacing="8">
+                    <TextBlock Text="{localization:Localize SerieUpdatePopup.Persons}" />
+                    
+                    <ComboBox ItemsSource="{Binding AvailablePersons}"
+                              SelectedItem="{Binding SelectedPerson, Mode=TwoWay}"
+                              PlaceholderText="{localization:Localize SerieUpdatePopup.Persons.Placeholder}"
+                              DisplayMemberBinding="{Binding FullName}"/>
+                    
+                    <ItemsControl ItemsSource="{Binding SelectedPersons}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border>
+                                    <StackPanel Classes="tag-person-item">
+                                        <TextBlock Text="{Binding FullName}" />
+                                        <Button Content="✕"
+                                                Command="{Binding $parent[UserControl].((content:SerieUpdateViewModel)DataContext).RemovePerson}"
+                                                CommandParameter="{Binding}">
+                                        </Button>
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                    
+                    <TextBlock Text="{localization:Localize SerieUpdatePopup.NoPersons}"
+                               IsVisible="{Binding !SelectedPersons.Count}" />
+                </StackPanel>
+            </Border>
+        </controls:StretchWrapPanel>
+    </StackPanel>
 </UserControl>

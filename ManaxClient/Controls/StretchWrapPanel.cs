@@ -79,7 +79,9 @@ namespace ManaxClient.Controls
                 
                 for (int i = start; i < end; i++)
                 {
-                    if (!children[i].IsVisible) continue;
+                    Control child = children[i];
+                    if (!child.IsVisible) continue;
+                    
                     visibleCount++;
                 }
                 
@@ -89,10 +91,64 @@ namespace ManaxClient.Controls
                 double totalSpacing = visibleCount > 1 ? itemSpacing * (visibleCount - 1) : 0;
                 double remainingSpace = availablePrimary - totalSpacing;
                 
-                // Calculate uniform size for each child (equal distribution)
+                // Calculate target uniform size for each child (equal distribution)
                 double uniformSize = remainingSpace / visibleCount;
                 
-                // Arrange children with uniform size
+                // Check if uniform size respects minimum sizes
+                // If total minimum size exceeds available space, we need to adjust
+                double[] childSizes = new double[end - start];
+                int flexibleChildCount = 0;
+                double allocatedSpace = 0;
+                
+                // First pass: assign sizes, respecting minimums
+                for (int i = start; i < end; i++)
+                {
+                    Control child = children[i];
+                    if (!child.IsVisible) continue;
+                    
+                    double minSize = horizontal
+                        ? itemWidthSet ? itemWidth : child.DesiredSize.Width
+                        : itemHeightSet ? itemHeight : child.DesiredSize.Height;
+                    
+                    if (uniformSize >= minSize)
+                    {
+                        // Child can use uniform size
+                        childSizes[i - start] = uniformSize;
+                        allocatedSpace += uniformSize;
+                        flexibleChildCount++;
+                    }
+                    else
+                    {
+                        // Child needs its minimum size
+                        childSizes[i - start] = minSize;
+                        allocatedSpace += minSize;
+                    }
+                }
+                
+                // Second pass: redistribute remaining space among flexible children
+                if (flexibleChildCount > 0 && Abs(allocatedSpace - remainingSpace) > 0.01)
+                {
+                    double extraSpace = remainingSpace - allocatedSpace;
+                    double extraPerChild = extraSpace / flexibleChildCount;
+                    
+                    for (int i = start; i < end; i++)
+                    {
+                        Control child = children[i];
+                        if (!child.IsVisible) continue;
+                        
+                        double minSize = horizontal
+                            ? itemWidthSet ? itemWidth : child.DesiredSize.Width
+                            : itemHeightSet ? itemHeight : child.DesiredSize.Height;
+                        
+                        // Only add extra space to flexible children
+                        if (uniformSize >= minSize)
+                        {
+                            childSizes[i - start] += extraPerChild;
+                        }
+                    }
+                }
+                
+                // Arrange children with calculated sizes
                 double primaryPos = 0;
                 
                 for (int i = start; i < end; i++)
@@ -105,13 +161,14 @@ namespace ManaxClient.Controls
                         continue;
                     }
                     
-                    // Use uniform size for all children in the line
+                    double childSize = childSizes[i - start];
+                    
                     Rect rect = horizontal
-                        ? new Rect(primaryPos, secondaryPos, uniformSize, lineSecondarySize)
-                        : new Rect(secondaryPos, primaryPos, lineSecondarySize, uniformSize);
+                        ? new Rect(primaryPos, secondaryPos, childSize, lineSecondarySize)
+                        : new Rect(secondaryPos, primaryPos, lineSecondarySize, childSize);
                     
                     child.Arrange(rect);
-                    primaryPos += uniformSize + itemSpacing;
+                    primaryPos += childSize + itemSpacing;
                 }
             }
         }
