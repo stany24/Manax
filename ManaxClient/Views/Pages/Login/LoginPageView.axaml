@@ -13,13 +13,12 @@
 
     <Border Classes="card"
             HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            MinWidth="300">
+            VerticalAlignment="Center">
         <ScrollViewer HorizontalScrollBarVisibility="Disabled"
                       VerticalScrollBarVisibility="Hidden">
-            <StackPanel Spacing="24">
-                <Grid ColumnDefinitions="Auto,*,Auto"
-                      Classes="title">
+            <StackPanel Spacing="12">
+                <Grid Classes="title"
+                      ColumnDefinitions="Auto,*,Auto">
                     <TextBlock Grid.Column="0"
                                VerticalAlignment="Center"
                                Text="{localization:Localize LoginPage.Title}"/>
@@ -29,40 +28,34 @@
                               DisplayMemberBinding="{Binding DisplayName}" />
                 </Grid>
 
-                <StackPanel Spacing="16">
-                    <StackPanel Spacing="6">
-                        <TextBlock Text="{localization:Localize LoginPage.Username}"
-                                   FontWeight="Medium" />
-                        <TextBox Name="TbxUsername"
-                                 Loaded="TbxUsernameOnLoaded"
-                                 Text="{Binding Username}"
-                                 Watermark="{localization:Localize LoginPage.Username.Placeholder}"
-                                 Padding="12"
-                                 CornerRadius="8"
-                                 BorderThickness="1" />
-                    </StackPanel>
+                <StackPanel Spacing="8">
+                    <Border Classes="input">
+                        <StackPanel Spacing="6">
+                            <TextBlock Text="{localization:Localize LoginPage.Username}" />
+                            <TextBox Name="TbxUsername"
+                                     Text="{Binding Username}"
+                                     Watermark="{localization:Localize LoginPage.Username.Placeholder}"/>
+                        </StackPanel>
+                    </Border>
 
-                    <StackPanel Spacing="6">
-                        <TextBlock Text="{localization:Localize LoginPage.Password}"
-                                   FontWeight="Medium" />
-                        <TextBox Text="{Binding Password}"
-                                 PasswordChar="•"
-                                 Watermark="{localization:Localize LoginPage.Password.Placeholder}"
-                                 Padding="12"
-                                 CornerRadius="8"
-                                 BorderThickness="1" />
-                    </StackPanel>
+                    <Border Classes="input">
+                        <StackPanel Spacing="6">
+                            <TextBlock Text="{localization:Localize LoginPage.Password}" />
+                            <TextBox Name="TbxPassword"
+                                     Text="{Binding Password}"
+                                     Loaded="TbxPasswordOnLoaded"
+                                     PasswordChar="•"
+                                     Watermark="{localization:Localize LoginPage.Password.Placeholder}" />
+                        </StackPanel>
+                    </Border>
 
-                    <StackPanel Spacing="6">
-                        <TextBlock Text="{localization:Localize LoginPage.Server}"
-                                   FontWeight="Medium" />
-                        <TextBox Text="{Binding Host}"
-                                 Watermark="{localization:Localize LoginPage.Server.Placeholder}"
-                                 Padding="12"
-                                 CornerRadius="8"
-                                 BorderThickness="1"
-                                 VerticalAlignment="Center" />
-                    </StackPanel>
+                    <Border Classes="input">
+                        <StackPanel Spacing="6">
+                            <TextBlock Text="{localization:Localize LoginPage.Server}" />
+                            <TextBox Text="{Binding Host}"
+                                     Watermark="{localization:Localize LoginPage.Server.Placeholder}" />
+                        </StackPanel>
+                    </Border>
                 </StackPanel>
 
                 <controls:IconButton Classes="icon-button"
