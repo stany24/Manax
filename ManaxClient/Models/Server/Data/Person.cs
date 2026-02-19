@@ -20,7 +20,7 @@ public partial class Person : ObservableObject
         FromDto(dto);
     }
 
-    public string FullName => $"{FirstName} ({Pseudonym}) {LastName}";
+    public string FullName => $"{FirstName} '{Pseudonym}' {LastName}";
 
     ~Person()
     {

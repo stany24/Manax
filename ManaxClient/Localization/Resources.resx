@@ -190,7 +190,7 @@
         <value>New person</value>
     </data>
     <data name="SeriePage.SerieRating" xml:space="preserve">
-        <value>Series rating</value>
+        <value>Your rating</value>
     </data>
     <data name="SeriePage.NoChaptersAvailable" xml:space="preserve">
         <value>No chapters available</value>
@@ -215,12 +215,6 @@
     </data>
     <data name="SeriePage.RankSetCorrectly" xml:space="preserve">
         <value>Rank set correctly</value>
-    </data>
-    <data name="SeriePage.Tags" xml:space="preserve">
-        <value>Tags</value>
-    </data>
-    <data name="SeriePage.Persons" xml:space="preserve">
-        <value>Persons</value>
     </data>
     <data name="SettingsAppPage.Title" xml:space="preserve">
         <value>Appearance Settings</value>

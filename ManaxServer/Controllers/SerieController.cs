@@ -123,7 +123,10 @@ public class SerieController(
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult> PutSerie(long id, SerieUpdateDto serieUpdate)
     {
-        Serie? serie = await context.Series.FindAsync(id);
+        Serie? serie = await context.Series
+            .Include(s => s.Tags)
+            .Include(s => s.Persons)
+            .FirstOrDefaultAsync(s => s.Id == id);
         if (serie == null) return NotFound(ErrorCode.SerieDoesNotExist);
         if (serieUpdate.Title.Trim() == string.Empty) { return BadRequest(ErrorCode.InvalidSerieData);}
         serie.Update(serieUpdate, context);

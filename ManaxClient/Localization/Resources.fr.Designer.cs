@@ -429,18 +429,6 @@ namespace ManaxClient.Localization {
             }
         }
         
-        public static string SeriePage_Tags {
-            get {
-                return ResourceManager.GetString("SeriePage.Tags", resourceCulture);
-            }
-        }
-        
-        public static string SeriePage_Persons {
-            get {
-                return ResourceManager.GetString("SeriePage.Persons", resourceCulture);
-            }
-        }
-        
         public static string SettingsAppPage_Title {
             get {
                 return ResourceManager.GetString("SettingsAppPage.Title", resourceCulture);

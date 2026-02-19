@@ -35,7 +35,7 @@
             <Border Classes="card"
                     VerticalAlignment="Top"
                     MaxWidth="300">
-                <StackPanel>
+                <StackPanel Spacing="8">
                     <Grid ColumnDefinitions="*,Auto">
                         <TextBlock Grid.Column="0"
                                    Classes="title"
@@ -58,25 +58,27 @@
                     <TextBlock Text="{Binding Serie.Description}"
                                TextWrapping="Wrap" />
 
-                    <StackPanel IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).FeatureManager.RankFeatureEnabled}">
-                        <TextBlock Text="{localization:Localize SeriePage.SerieRating}" />
+                    <StackPanel IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).FeatureManager.RankFeatureEnabled}"
+                                Orientation="Horizontal">
+                        <TextBlock Text="{localization:Localize SeriePage.SerieRating}"
+                                   VerticalAlignment="Center"/>
                         <ComboBox ItemsSource="{Binding Ranks}"
                                   SelectedItem="{Binding SelectedRank}"
                                   DisplayMemberBinding="{Binding Name}">
                         </ComboBox>
                     </StackPanel>
 
-                    <TextBlock Text="{Binding Serie.Status}"/>
-
-                    <TextBlock Text="{localization1:LocalizeFormat SeriePage.ChapterCount,
+                    <StackPanel Orientation="Horizontal"
+                                Spacing="20">
+                        <TextBlock Text="{localization1:LocalizeFormat SeriePage.ChapterCount,
                                         Param1={Binding $parent[UserControl].((page:SeriePageViewModel)DataContext).Serie.Chapters.Count}}" />
+                        
+                        <TextBlock Text="{Binding Serie.Status}"/>
+                    </StackPanel>
                     
                     <Border IsVisible="{Binding Serie.Tags.Count}">
                         <StackPanel>
-                            <TextBlock Text="{localization:Localize SeriePage.Tags}" />
-
-                            <ItemsControl ItemsSource="{Binding Serie.Tags}"
-                                          IsVisible="{Binding Serie.Tags.Count}">
+                            <ItemsControl ItemsSource="{Binding Serie.Tags}">
                                 <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate>
                                         <WrapPanel Orientation="Horizontal" />
@@ -99,22 +101,24 @@
 
                     <Border IsVisible="{Binding Serie.Persons.Count}">
                         <StackPanel>
-                            <TextBlock Text="{localization:Localize SeriePage.Persons}" />
                             <ItemsControl ItemsSource="{Binding Serie.Persons}">
                                 <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate>
-                                        <WrapPanel Orientation="Horizontal" />
+                                        <WrapPanel Orientation="Horizontal"
+                                                   ItemSpacing="8"
+                                                   LineSpacing="8"/>
                                     </ItemsPanelTemplate>
                                 </ItemsControl.ItemsPanel>
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
-                                        <Border BorderThickness="2"
-                                                CornerRadius="16"
-                                                Margin="4"
-                                                Padding="12,6">
+                                        <Border CornerRadius="12"
+                                                BorderThickness="1"
+                                                Padding="5"
+                                                BorderBrush="{DynamicResource MaterialPrimaryMidBrush}">
                                             <StackPanel Spacing="4">
                                                 <TextBlock Text="{Binding FullName}" />
-                                                <TextBlock Text="{Binding Role.Name}" />
+                                                <TextBlock Text="{Binding Role.Name}"
+                                                           HorizontalAlignment="Center"/>
                                             </StackPanel>
                                         </Border>
                                     </DataTemplate>
