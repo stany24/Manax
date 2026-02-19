@@ -23,7 +23,7 @@
             <Setter Property="Background" Value="{DynamicResource MaterialCardBackgroundBrush}"/>
         </Style>
         
-        <Style Selector="StackPanel.sidebar > controls|IconButton">
+        <Style Selector="StackPanel.sidebar controls|IconButton">
             <Setter Property="CornerRadius" Value="7"/>
             <Setter Property="Padding" Value="6"/>
             <Setter Property="Margin" Value="4,4,12,4"/>
@@ -32,7 +32,7 @@
             <Setter Property="IconColor" Value="{DynamicResource MaterialPrimaryMidBrush}"/>
         </Style>
         
-        <Style Selector="StackPanel.sidebar > controls|IconButton:pointerover">
+        <Style Selector="StackPanel.sidebar controls|IconButton:pointerover">
             <Setter Property="Background" Value="{DynamicResource MaterialPaperBrush}"/>
         </Style>
         
@@ -63,24 +63,21 @@
                     <TextBlock IsVisible="{Binding Libraries.Count}"
                                Text="{localization:Localize MainWindow.Libraries}"/>
 
-                    <ScrollViewer MaxHeight="300" VerticalScrollBarVisibility="Auto">
-                        <ItemsControl ItemsSource="{Binding Libraries}">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <controls:IconButton Background="Transparent"
-                                                         Command="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).ShowLibrary}"
-                                                         CommandParameter="{Binding }"
-                                                         Icon="Bookshelf"
-                                                         Text="{Binding Name}" />
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                            <ItemsControl.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <StackPanel Spacing="2" />
-                                </ItemsPanelTemplate>
-                            </ItemsControl.ItemsPanel>
-                        </ItemsControl>
-                    </ScrollViewer>
+                    <ItemsControl ItemsSource="{Binding Libraries}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <controls:IconButton Command="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).ShowLibrary}"
+                                                     CommandParameter="{Binding }"
+                                                     Icon="Bookshelf"
+                                                     Text="{Binding Name}" />
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Spacing="2" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ItemsControl>
 
                     <TextBlock Text="{localization:Localize MainWindow.Admin}"
                                IsVisible="{Binding IsAdmin}" />
