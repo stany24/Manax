@@ -38,7 +38,7 @@
                                Param1={Binding $parent[UserControl].((page:PersonPageViewModel)DataContext).Persons.Count}}" />
 
                         <controls:IconButton Grid.Column="2"
-                                             Classes="icon-button dark"
+                                             Classes="icon-button light"
                                              IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWritePersons}"
                                              Command="{Binding CreatePerson}"
                                              Text="{localization:Localize PersonPage.NewPerson}"
@@ -112,7 +112,7 @@
                                    VerticalAlignment="Center"/>
 
                         <controls:IconButton Grid.Column="2"
-                                             Classes="icon-button dark"
+                                             Classes="icon-button light"
                                              IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWriteRoles}"
                                              Command="{Binding CreateRole}"
                                              Text="{localization:Localize RolePage.NewRole}"
