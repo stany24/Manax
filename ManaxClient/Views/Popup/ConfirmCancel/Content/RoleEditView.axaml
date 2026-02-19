@@ -9,8 +9,10 @@
     mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="250"
     x:Class="ManaxClient.Views.Popup.ConfirmCancel.Content.RoleEditView"
     x:DataType="content:RoleEditViewModel">
-    <Grid RowDefinitions="Auto,Auto" RowSpacing="16">
-        <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="12">
+    <StackPanel Orientation="Vertical"
+                Spacing="16">
+        <StackPanel Orientation="Horizontal"
+                    Spacing="12">
             <avalonia:MaterialIcon Classes="icon"
                                    Kind="ClipboardAccountOutline"/>
             <StackPanel Spacing="4">
@@ -22,8 +24,7 @@
             </StackPanel>
         </StackPanel>
 
-        <Border Grid.Row="1"
-                Classes="input">
+        <Border Classes="input">
             <StackPanel>
                 <TextBlock Text="{localization:Localize RoleEditPopup.Name}" />
                 <TextBox Text="{Binding Name}"
@@ -31,5 +32,5 @@
                 </TextBox>
             </StackPanel>
         </Border>
-    </Grid>
+    </StackPanel>
 </UserControl>
