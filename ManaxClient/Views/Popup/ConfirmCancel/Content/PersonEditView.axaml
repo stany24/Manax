@@ -9,96 +9,59 @@
     mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="400"
     x:Class="ManaxClient.Views.Popup.ConfirmCancel.Content.PersonEditView"
     x:DataType="content:PersonEditViewModel">
-    <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" RowSpacing="16" Margin="16">
-        <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="12" Margin="0,0,0,8">
+    <StackPanel Orientation="Vertical"
+                Spacing="16">
+        <StackPanel Orientation="Horizontal"
+                    Spacing="12">
             <icon:MaterialIcon Classes="icon"
                                Kind="UserOutline"/>
             <StackPanel Spacing="4">
-                <TextBlock
-                    Text="{localization:Localize PersonEditPopup.Title}"
-                    FontSize="18"
-                    FontWeight="Bold" />
-                <TextBlock
-                    Text="{localization:Localize PersonEditPopup.Description}"
-                    FontSize="12" />
+                <TextBlock Text="{localization:Localize PersonEditPopup.Title}"
+                           FontSize="18"
+                           FontWeight="Bold" />
+                <TextBlock Text="{localization:Localize PersonEditPopup.Description}"
+                           FontSize="12" />
             </StackPanel>
         </StackPanel>
 
-        <StackPanel Grid.Row="1" Spacing="8">
-            <TextBlock
-                Text="{localization:Localize PersonEditPopup.FirstName}"
-                FontWeight="Medium" />
-            <TextBox
-                Text="{Binding FirstName}"
-                Watermark="{localization:Localize PersonEditPopup.FirstName.Placeholder}"
-                Padding="12"
-                CornerRadius="8"
-                BorderThickness="1"
-                FontSize="14">
-                <TextBox.Styles>
-                    <Style Selector="TextBox:pointerover">
-                        <Setter Property="BorderBrush" Value="#007ACC" />
-                    </Style>
-                    <Style Selector="TextBox:focus">
-                        <Setter Property="BorderBrush" Value="#007ACC" />
-                    </Style>
-                </TextBox.Styles>
-            </TextBox>
-        </StackPanel>
+        <Border Classes="input">
+            <StackPanel>
+                <TextBlock Text="{localization:Localize PersonEditPopup.FirstName}"
+                           FontWeight="Medium" />
+                <TextBox Text="{Binding FirstName}"
+                         Watermark="{localization:Localize PersonEditPopup.FirstName.Placeholder}">
+                </TextBox>
+            </StackPanel>
+        </Border>
 
-        <StackPanel Grid.Row="2" Spacing="8">
-            <TextBlock
-                Text="{localization:Localize PersonEditPopup.LastName}"
-                FontWeight="Medium" />
-            <TextBox
-                Text="{Binding LastName}"
-                Watermark="{localization:Localize PersonEditPopup.LastName.Placeholder}"
-                Padding="12"
-                CornerRadius="8"
-                BorderThickness="1"
-                FontSize="14">
-                <TextBox.Styles>
-                    <Style Selector="TextBox:pointerover">
-                        <Setter Property="BorderBrush" Value="#007ACC" />
-                    </Style>
-                    <Style Selector="TextBox:focus">
-                        <Setter Property="BorderBrush" Value="#007ACC" />
-                    </Style>
-                </TextBox.Styles>
-            </TextBox>
-        </StackPanel>
+        <Border Classes="input">
+            <StackPanel>
+                <TextBlock Text="{localization:Localize PersonEditPopup.LastName}"
+                           FontWeight="Medium" />
+                <TextBox Text="{Binding LastName}"
+                         Watermark="{localization:Localize PersonEditPopup.LastName.Placeholder}">
+                </TextBox>
+            </StackPanel>
+        </Border>
 
-        <StackPanel Grid.Row="3" Spacing="8">
-            <TextBlock
-                Text="{localization:Localize PersonEditPopup.Pseudonym}"
-                FontWeight="Medium" />
-            <TextBox
-                Text="{Binding Pseudonym}"
-                Watermark="{localization:Localize PersonEditPopup.Pseudonym.Placeholder}"
-                Padding="12"
-                CornerRadius="8"
-                BorderThickness="1"
-                BorderBrush="#DEE2E6"
-                FontSize="14">
-                <TextBox.Styles>
-                    <Style Selector="TextBox:pointerover">
-                        <Setter Property="BorderBrush" Value="#007ACC" />
-                    </Style>
-                    <Style Selector="TextBox:focus">
-                        <Setter Property="BorderBrush" Value="#007ACC" />
-                    </Style>
-                </TextBox.Styles>
-            </TextBox>
-        </StackPanel>
+        <Border Classes="input">
+            <StackPanel>
+                <TextBlock Text="{localization:Localize PersonEditPopup.Pseudonym}"
+                           FontWeight="Medium" />
+                <TextBox Text="{Binding Pseudonym}"
+                         Watermark="{localization:Localize PersonEditPopup.Pseudonym.Placeholder}">
+                </TextBox>
+            </StackPanel>
+        </Border>
 
-        <StackPanel Grid.Row="4" Spacing="8">
-            <TextBlock
-                Text="{localization:Localize PersonEditPopup.Role}"
-                FontWeight="Medium" />
-            <ComboBox
-                SelectedItem="{Binding Role}"
-                ItemsSource="{Binding Roles}"
-                DisplayMemberBinding="{Binding Name}" />
-        </StackPanel>
-    </Grid>
+        <Border Classes="input">
+            <StackPanel>
+                <TextBlock Text="{localization:Localize PersonEditPopup.Role}"
+                           FontWeight="Medium" />
+                <ComboBox SelectedItem="{Binding Role}"
+                          ItemsSource="{Binding Roles}"
+                          DisplayMemberBinding="{Binding Name}" />
+            </StackPanel>
+        </Border>
+    </StackPanel>
 </UserControl>
