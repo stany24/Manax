@@ -6,54 +6,52 @@
     xmlns:content="clr-namespace:ManaxClient.ViewModels.Popup.ConfirmCancel.Content"
     xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
     xmlns:controls="clr-namespace:ManaxClient.Controls"
+    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="300"
     x:Class="ManaxClient.Views.Popup.ConfirmCancel.Content.SavePointCreateView"
     x:DataType="content:SavePointCreateViewModel">
-    <Grid RowDefinitions="Auto,Auto,Auto" RowSpacing="16" Margin="16">
-        <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="12" Margin="0,0,0,8">
-            <TextBlock Text="💾" FontSize="24" VerticalAlignment="Center" />
-            <StackPanel Spacing="4">
-                <TextBlock
-                    Text="{localization:Localize SavePointCreatePopup.Title}"
-                    FontSize="18"
-                    FontWeight="Bold" />
-                <TextBlock
-                    Text="{localization:Localize SavePointCreatePopup.Description}"
-                    FontSize="12" />
+    <StackPanel Orientation="Vertical"
+                Spacing="12">
+        <StackPanel Orientation="Horizontal"
+                    Spacing="12">
+            <avalonia:MaterialIcon Classes="icon"
+                                   Kind="ContentSaveOutline"/>
+            <StackPanel Orientation="Vertical"
+                        Spacing="4">
+                <TextBlock Text="{localization:Localize SavePointCreatePopup.Title}"
+                           FontSize="18"
+                           FontWeight="Bold" />
+                <TextBlock Text="{localization:Localize SavePointCreatePopup.Description}"
+                           FontSize="12" />
             </StackPanel>
         </StackPanel>
 
-        <StackPanel Grid.Row="1" Spacing="8">
-            <TextBlock
-                Text="{localization:Localize SavePointCreatePopup.Path}"
-                FontWeight="Medium" />
-            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
-                <TextBox
-                    Grid.Column="0"
-                    Text="{Binding Path}"
-                    Watermark="{localization:Localize SavePointCreatePopup.Path.Placeholder}"
-                    Padding="12"
-                    CornerRadius="8"
-                    BorderThickness="1"
-                    FontSize="14" />
-                <controls:IconButton
-                    Grid.Column="1"
-                    Icon="FolderOpenOutline"/>
-            </Grid>
-        </StackPanel>
-
-        <Border
-            Grid.Row="2"
-            BorderThickness="1"
-            CornerRadius="8"
-            Padding="12">
-            <StackPanel Orientation="Horizontal" Spacing="8">
-                <TextBlock Text="ℹ️" FontSize="14" VerticalAlignment="Top" />
-                <TextBlock
-                    Text="{localization:Localize SavePointCreatePopup.Tip}"
-                    TextWrapping="Wrap"
-                    FontSize="12" />
+        <Border Classes="input">
+            <StackPanel>
+                <TextBlock Text="{localization:Localize SavePointCreatePopup.Path}"/>
+                <Grid ColumnDefinitions="*,Auto"
+                      ColumnSpacing="8">
+                    <TextBox Grid.Column="0"
+                             Text="{Binding Path}"
+                             Watermark="{localization:Localize SavePointCreatePopup.Path.Placeholder}"/>
+                    <controls:IconButton Grid.Column="1"
+                                         Classes="icon-button dark"
+                                         Icon="FolderOpen"/>
+                </Grid>
             </StackPanel>
         </Border>
-    </Grid>
+
+        <Border BorderThickness="1"
+                CornerRadius="8"
+                Padding="12">
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <avalonia:MaterialIcon Classes="icon"
+                                       Kind="InformationOutline"/>
+                <TextBlock Text="{localization:Localize SavePointCreatePopup.Tip}"
+                           TextWrapping="Wrap"
+                           VerticalAlignment="Center"
+                           FontSize="12" />
+            </StackPanel>
+        </Border>
+    </StackPanel>
 </UserControl>
