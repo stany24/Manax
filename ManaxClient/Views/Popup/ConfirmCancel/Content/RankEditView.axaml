@@ -10,16 +10,12 @@
     x:Class="ManaxClient.Views.Popup.ConfirmCancel.Content.RankEditView"
     x:DataType="content:RankEditViewModel">
     <StackPanel Spacing="16">
-        <StackPanel Orientation="Horizontal"
-                    Spacing="12">
+        <StackPanel Classes="popup-title">
             <icon:MaterialIcon Classes="icon"
                                Kind="ChevronTripleUp"/>
-            <StackPanel Spacing="4">
-                <TextBlock Text="{localization:Localize RankEditPopup.Title}"
-                           FontSize="18"
-                           FontWeight="Bold" />
-                <TextBlock Text="{localization:Localize RankEditPopup.Description}"
-                           FontSize="12" />
+            <StackPanel>
+                <TextBlock Text="{localization:Localize RankEditPopup.Title}" />
+                <TextBlock Text="{localization:Localize RankEditPopup.Description}" />
             </StackPanel>
         </StackPanel>
         

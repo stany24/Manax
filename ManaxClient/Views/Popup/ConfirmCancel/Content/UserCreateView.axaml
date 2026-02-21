@@ -13,19 +13,12 @@
     <StackPanel Spacing="8"
                 HorizontalAlignment="Stretch">
         
-        <StackPanel Orientation="Horizontal"
-                    Spacing="12"
-                    Margin="0,0,0,8">
+        <StackPanel Classes="popup-title">
             <avalonia:MaterialIcon Classes="icon"
                                    Kind="UserOutline"/>
-            <StackPanel Spacing="4">
-                <TextBlock
-                    Text="{localization:Localize UserCreatePopup.Title}"
-                    FontSize="18"
-                    FontWeight="Bold" />
-                <TextBlock
-                    Text="{localization:Localize UserCreatePopup.Description}"
-                    FontSize="12" />
+            <StackPanel>
+                <TextBlock Text="{localization:Localize UserCreatePopup.Title}" />
+                <TextBlock Text="{localization:Localize UserCreatePopup.Description}" />
             </StackPanel>
         </StackPanel>
 

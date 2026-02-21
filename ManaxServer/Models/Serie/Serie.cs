@@ -25,13 +25,15 @@ public class Serie
     public Status Status { get; set; }
     public DateTime Creation { get; set; }
     public DateTime LastModification { get; set; }
-    public string SavePath => SavePoint.Path + Path.DirectorySeparatorChar + FolderName;
+    public string SavePath => Path.Combine(SavePoint.Path, FolderName);
 
-    public string PosterPath => SavePath + PosterName + "." +
-                                SettingsManager.DataDto.PosterFormat.ToString().ToLower(CultureInfo.InvariantCulture);
+    public string PosterPath => Path.Combine(SavePath, PosterName + "." +
+                                             SettingsManager.DataDto.PosterFormat.ToString()
+                                                 .ToLower(CultureInfo.InvariantCulture));
 
-    public string BannerPath => SavePath + BannerName + "." +
-                                SettingsManager.DataDto.BannerFormat.ToString().ToLower(CultureInfo.InvariantCulture);
+    public string BannerPath => Path.Combine(SavePath + BannerName + "." +
+                                             SettingsManager.DataDto.BannerFormat.ToString()
+                                                 .ToLower(CultureInfo.InvariantCulture));
 
     public Serie(SerieCreateDto serieCreate, SavePoint.SavePoint savePoint)
     {

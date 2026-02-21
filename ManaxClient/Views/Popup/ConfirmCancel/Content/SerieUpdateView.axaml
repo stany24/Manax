@@ -39,19 +39,12 @@
     <StackPanel Spacing="8">
         <Grid ColumnDefinitions="*,Auto">
             <StackPanel Grid.Column="0"
-                        Orientation="Horizontal"
-                        Spacing="12"
-                        Margin="0,0,0,8">
+                        Classes="popup-title">
                 <icon:MaterialIcon Classes="icon"
                                    Kind="BookOpenVariantOutline"/>
-                <StackPanel Spacing="4">
-                    <TextBlock
-                        Text="{localization:Localize SerieUpdatePopup.Title}"
-                        FontSize="18"
-                        FontWeight="Bold" />
-                    <TextBlock
-                        Text="{localization:Localize SerieUpdatePopup.Description}"
-                        FontSize="12" />
+                <StackPanel>
+                    <TextBlock Text="{localization:Localize SerieUpdatePopup.Title}" />
+                    <TextBlock Text="{localization:Localize SerieUpdatePopup.Description}" />
                 </StackPanel>
             </StackPanel>
             

@@ -113,6 +113,24 @@
     </Application.Styles>
     
     <Application.Styles>
+        <Style Selector="StackPanel.popup-title">
+            <Setter Property="Orientation" Value="Horizontal"/>
+            <Setter Property="Spacing" Value="12"/>
+        </Style>
+        
+        <Style Selector="StackPanel.popup-title > StackPanel">
+            <Setter Property="Spacing" Value="4"/>
+        </Style>
+        
+        <Style Selector="StackPanel.popup-title > StackPanel > TextBlock:nth-child(1)">
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+        
+        <Style Selector="StackPanel.popup-title > StackPanel > TextBlock:nth-child(2)">
+            <Setter Property="FontSize" Value="12"/>
+        </Style>
+        
         <Style Selector="Border.input">
             <Setter Property="Background" Value="{DynamicResource MaterialPaperBrush}"/>
             <Setter Property="Padding" Value="8"/>
