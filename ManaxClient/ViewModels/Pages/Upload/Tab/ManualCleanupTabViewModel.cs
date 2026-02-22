@@ -56,6 +56,12 @@ public partial class ManualCleanupTabViewModel : TabViewModel
         if (!ImagesToEdit.Contains(imagePath)) ImagesToEdit.Add(imagePath);
         OnPropertyChanged(nameof(ImagesToEdit));
     }
+    
+    public void RemoveImageToEdit(string imagePath)
+    {
+        ImagesToEdit.Remove(imagePath);
+        OnPropertyChanged(nameof(ImagesToEdit));
+    }
 
     public void Edit()
     {

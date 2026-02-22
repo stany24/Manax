@@ -11,60 +11,69 @@
     mc:Ignorable="d" d:DesignWidth="1200" d:DesignHeight="600"
     x:Class="ManaxClient.Views.Pages.Upload.Tab.ManualCleanupTabView"
     x:DataType="tab:ManualCleanupTabViewModel"
-    IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanUploadChapter}">
-    <Grid ColumnDefinitions="200,*,200" RowDefinitions="*" Margin="8">
-
-        <!-- Left Panel: Serie Folders with Chapters -->
-        <Border Grid.Column="0" Grid.Row="0" Classes="card" Margin="0,0,4,0">
-            <StackPanel Orientation="Vertical" Spacing="8">
-                <TextBlock Text="{localization:Localize ManualCleanupPage.SerieFolders}"
-                           FontWeight="SemiBold"
-                           FontSize="14"
-                           Margin="8,8,8,0" />
-                <ScrollViewer VerticalScrollBarVisibility="Auto">
+    IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanUploadChapter}"
+    Classes="page">
+    
+    <UserControl.Styles>
+        <Style Selector="Button.wide">
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        </Style>
+        
+        <Style Selector="Button.wide > TextBlock">
+            <Setter Property="TextWrapping" Value="Wrap"/>
+        </Style>
+        
+        <Style Selector="TextBlock.title">
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+        </Style>
+        
+        <Style Selector="TextBlock.sub-title">
+            <Setter Property="FontWeight" Value="DemiBold"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+        </Style>
+    </UserControl.Styles>
+    
+    <Grid ColumnDefinitions="200,*,250"
+          RowDefinitions="*"
+          ColumnSpacing="8">
+        <Border Grid.Column="0"
+                Classes="card">
+            <Grid RowDefinitions="Auto,*" RowSpacing="8">
+                <TextBlock Grid.Row="0"
+                           Classes="title"
+                           Text="{localization:Localize ManualCleanupPage.SerieFolders}" />
+                <ScrollViewer Grid.Row="1"
+                              VerticalScrollBarVisibility="Auto"
+                              HorizontalScrollBarVisibility="Disabled">
                     <ItemsControl ItemsSource="{Binding SerieFolders}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate x:DataType="upload:SerieFolder">
-                                <StackPanel Orientation="Vertical" Spacing="2">
-                                    <!-- Serie Header -->
-                                    <TextBlock Text="{Binding Name}"
-                                               TextWrapping="Wrap"
-                                               FontWeight="SemiBold"
-                                               FontSize="13"
-                                               Margin="8,8,8,4" />
-
-                                    <!-- Chapter List -->
-                                    <ItemsControl ItemsSource="{Binding Chapters}">
-                                        <ItemsControl.ItemTemplate>
-                                            <DataTemplate x:DataType="upload:ChapterFolder">
-                                                <Button Classes="sidebar"
-                                                        Command="{Binding $parent[UserControl].((tab:ManualCleanupTabViewModel)DataContext).SetSelectedChapterFolder}"
-                                                        CommandParameter="{Binding}"
-                                                        HorizontalAlignment="Stretch"
-                                                        Padding="16,6"
-                                                        Margin="8,0,0,0">
-                                                    <StackPanel Orientation="Vertical" Spacing="2">
-                                                        <TextBlock Text="{Binding Name}"
-                                                                   TextWrapping="Wrap"
-                                                                   FontWeight="Medium"
-                                                                   FontSize="12" />
-                                                        <StackPanel Orientation="Horizontal" Spacing="4">
-                                                            <TextBlock Text="📷" FontSize="10" />
-                                                            <TextBlock Text="{Binding Images.Count}"
-                                                                       FontSize="11"
-                                                                       Opacity="0.7" />
-                                                        </StackPanel>
-                                                    </StackPanel>
-                                                </Button>
-                                            </DataTemplate>
-                                        </ItemsControl.ItemTemplate>
-                                        <ItemsControl.ItemsPanel>
-                                            <ItemsPanelTemplate>
-                                                <StackPanel Spacing="2" />
-                                            </ItemsPanelTemplate>
-                                        </ItemsControl.ItemsPanel>
-                                    </ItemsControl>
-                                </StackPanel>
+                                <Border Classes="item-card">
+                                    <StackPanel Orientation="Vertical">
+                                        <TextBlock Classes="sub-title"
+                                                   Text="{Binding Name}" />
+                                        <ItemsControl ItemsSource="{Binding Chapters}">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate x:DataType="upload:ChapterFolder">
+                                                    <Button Classes="button light wide"
+                                                            Command="{Binding $parent[UserControl].((tab:ManualCleanupTabViewModel)DataContext).SetSelectedChapterFolder}"
+                                                            CommandParameter="{Binding}"
+                                                            Content="{Binding Name}">
+                                                    </Button>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                            <ItemsControl.ItemsPanel>
+                                                <ItemsPanelTemplate>
+                                                    <StackPanel Spacing="2" />
+                                                </ItemsPanelTemplate>
+                                            </ItemsControl.ItemsPanel>
+                                        </ItemsControl>
+                                    </StackPanel>
+                                </Border>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                         <ItemsControl.ItemsPanel>
@@ -74,20 +83,17 @@
                         </ItemsControl.ItemsPanel>
                     </ItemsControl>
                 </ScrollViewer>
-            </StackPanel>
+            </Grid>
         </Border>
 
-        <!-- Middle Panel: Images in Selected Chapter -->
-        <Border Grid.Column="1" Grid.Row="0" Classes="card" Margin="4,0">
+        <Border Grid.Column="1"
+                Classes="card">
             <DockPanel>
-                <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Spacing="8" Margin="8,8,8,8">
-                    <TextBlock Text="{localization:Localize ManualCleanupPage.Images}"
-                               FontWeight="SemiBold"
-                               FontSize="14"
-                               VerticalAlignment="Center" />
-                    <TextBlock Text="{Binding SelectedChapterFolder.Name}"
-                               Opacity="0.7"
-                               VerticalAlignment="Center"
+                <StackPanel DockPanel.Dock="Top">
+                    <TextBlock Classes="title"
+                               Text="{localization:Localize ManualCleanupPage.Images}"/>
+                    <TextBlock Classes="sub-title"
+                               Text="{Binding SelectedChapterFolder.Name}"
                                IsVisible="{Binding SelectedChapterFolder, Converter={x:Static ObjectConverters.IsNotNull}}" />
                 </StackPanel>
                 <ScrollViewer HorizontalScrollBarVisibility="Disabled"
@@ -97,31 +103,17 @@
                                   VerticalAlignment="Top">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <Border Margin="4"
-                                        BorderBrush="{DynamicResource SystemControlForegroundBaseMediumLowBrush}"
-                                        BorderThickness="1"
-                                        CornerRadius="4"
-                                        ClipToBounds="True"
-                                        Cursor="Hand">
-                                    <Button Classes="sidebar"
+                                <Border>
+                                    <Button PointerPressed="PointerPressedHandler"
                                             Background="Transparent"
-                                            PointerPressed="PointerPressedHandler"
+                                            Padding="0"
                                             Command="{Binding $parent[UserControl].((tab:ManualCleanupTabViewModel)DataContext).AddImageToEdit}"
-                                            CommandParameter="{Binding Path}"
-                                            HorizontalAlignment="Stretch"
-                                            HorizontalContentAlignment="Stretch"
-                                            Padding="0">
-                                        <StackPanel Orientation="Vertical" Spacing="4">
-                                            <Image Source="{Binding Preview}"
-                                                   Stretch="Uniform"
-                                                   HorizontalAlignment="Center" />
+                                            CommandParameter="{Binding Path}">
+                                        <StackPanel Orientation="Vertical">
+                                            <Image Source="{Binding Preview}" />
                                             <TextBlock Text="{Binding FileName}"
-                                                       FontSize="10"
-                                                       Opacity="0.7"
-                                                       TextTrimming="CharacterEllipsis"
-                                                       Margin="4"
-                                                       TextWrapping="Wrap"
-                                                       TextAlignment="Center" />
+                                                       HorizontalAlignment="Center"
+                                                       Foreground="{DynamicResource MaterialBodyBrush}"/>
                                         </StackPanel>
                                     </Button>
                                 </Border>
@@ -130,6 +122,8 @@
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <controls:BestFitGrid
+                                    ColumnSpacing="8"
+                                    RowSpacing="8"
                                     Columns="{Binding $parent[UserControl].((tab:ManualCleanupTabViewModel)DataContext).NbColumns}"
                                     VerticalAlignment="Top" />
                             </ItemsPanelTemplate>
@@ -139,79 +133,67 @@
             </DockPanel>
         </Border>
 
-        <!-- Right Panel: Images to Edit -->
-        <Border Grid.Column="2" Grid.Row="0" Classes="card" Margin="4,0,0,0">
+        <Border Grid.Column="2"
+                Classes="card">
             <Grid RowDefinitions="Auto,*,Auto">
                 <TextBlock Grid.Row="0"
-                           Text="{localization:Localize ManualCleanupPage.ToEdit}"
-                           FontWeight="SemiBold"
-                           FontSize="14"
-                           Margin="8,8,8,0" />
+                           Classes="title"
+                           Text="{localization:Localize ManualCleanupPage.ToEdit}"/>
                 <ScrollViewer Grid.Row="1"
                               HorizontalScrollBarVisibility="Disabled"
                               VerticalScrollBarVisibility="Auto">
                     <ItemsControl ItemsSource="{Binding ImagesToEdit}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate x:DataType="x:String">
-                                <Border Margin="4"
-                                        BorderBrush="{DynamicResource SystemControlForegroundBaseMediumLowBrush}"
-                                        BorderThickness="1"
-                                        CornerRadius="4"
-                                        ClipToBounds="True">
-                                    <StackPanel Orientation="Vertical" Spacing="4">
-                                        <Image Source="{Binding}"
-                                               Stretch="Uniform"
-                                               MaxHeight="150"
-                                               HorizontalAlignment="Center" />
-                                        <TextBlock Text="{Binding}"
-                                                   FontSize="10"
-                                                   Opacity="0.7"
-                                                   TextTrimming="CharacterEllipsis"
-                                                   Margin="4"
-                                                   TextWrapping="Wrap" />
-                                    </StackPanel>
+                                <Border Classes="item-card">
+                                    <Grid ColumnDefinitions="*,Auto">
+                                        <TextBlock Grid.Column="0"
+                                                   Text="{Binding .}"
+                                                   TextWrapping="Wrap"/>
+                                        <controls:IconButton Grid.Column="1"
+                                                             Classes="icon-button light"
+                                                             Icon="DeleteOutline"
+                                                             Command="{Binding $parent[UserControl].((tab:ManualCleanupTabViewModel)DataContext).RemoveImageToEdit}"
+                                                             CommandParameter="{Binding .}"/>
+                                    </Grid>
                                 </Border>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
-                                <StackPanel Orientation="Vertical" Spacing="4" />
+                                <StackPanel Spacing="8" />
                             </ItemsPanelTemplate>
                         </ItemsControl.ItemsPanel>
                     </ItemsControl>
                 </ScrollViewer>
-                <StackPanel Grid.Row="2">
-                    <Button
-                        Content="{localization:Localize ManualCleanupPage.EditSelected}"
-                        Command="{Binding Edit}" />
-                    <Button
-                        Content="{localization:Localize ManualCleanupPage.ClearSelected}"
-                        Command="{Binding Clear}" />
-                    <Button
-                        Content="{localization:Localize ManualCleanupPage.Next}"
-                        Command="{Binding Next}" />
-                    <Button
-                        Content="{localization:Localize ManualCleanupPage.RestoreLastImage}"
-                        IsVisible="False"
-                        Command="{Binding SelectedChapterFolder.RestoreLastImage}"
-                        HotKey="Ctrl+z" />
-                    <Button
-                        Content="{localization:Localize ManualCleanupPage.RestoreLastImage}"
-                        IsVisible="False"
-                        Command="{Binding NextChapter}"
-                        HotKey="Right" />
-                    <Button
-                        IsVisible="False"
-                        Command="{Binding PreviousChapter}"
-                        HotKey="Left" />
-                    <Button
-                        IsVisible="False"
-                        Command="{Binding MoveDown}"
-                        HotKey="Down" />
-                    <Button
-                        IsVisible="False"
-                        Command="{Binding MoveUp}"
-                        HotKey="Up" />
+                <StackPanel Grid.Row="2"
+                            Spacing="8">
+                    <Button Classes="button light wide"
+                            Content="{localization:Localize ManualCleanupPage.EditSelected}"
+                            Command="{Binding Edit}" />
+                    <Button Classes="button light wide"
+                            Content="{localization:Localize ManualCleanupPage.ClearSelected}"
+                            Command="{Binding Clear}" />
+                    <Button Classes="button light wide"
+                            Content="{localization:Localize ManualCleanupPage.Next}"
+                            Command="{Binding Next}" />
+                    <Button Content="{localization:Localize ManualCleanupPage.RestoreLastImage}"
+                            IsVisible="False"
+                            Command="{Binding SelectedChapterFolder.RestoreLastImage}"
+                            HotKey="Ctrl+z" />
+                    <Button Content="{localization:Localize ManualCleanupPage.RestoreLastImage}"
+                            IsVisible="False"
+                            Command="{Binding NextChapter}"
+                            HotKey="Right" />
+                    <Button IsVisible="False"
+                            Command="{Binding PreviousChapter}"
+                            HotKey="Left" />
+                    <Button IsVisible="False"
+                            Command="{Binding MoveDown}"
+                            HotKey="Down" />
+                    <Button IsVisible="False"
+                            Command="{Binding MoveUp}"
+                            HotKey="Up" />
                 </StackPanel>
             </Grid>
         </Border>
