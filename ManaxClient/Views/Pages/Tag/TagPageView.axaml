@@ -37,7 +37,8 @@
                 </Grid>
             </Border>
             
-            <Border Classes="card">
+            <Border Classes="card"
+                    IsVisible="{Binding Tags.Count}">
                 <StackPanel>
                     <ItemsControl ItemsSource="{Binding Tags}">
                         <ItemsControl.ItemTemplate>
@@ -85,5 +86,4 @@
             </Border>
         </StackPanel>
     </ScrollViewer>
-
 </UserControl>

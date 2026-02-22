@@ -16,7 +16,7 @@
 
     <UserControl.Styles>
         <Style Selector="Grid.setting-section">
-            <Setter Property="ColumnSpacing" Value="16"/>
+            <Setter Property="ColumnSpacing" Value="10"/>
             <Setter Property="RowSpacing" Value="10"/>
         </Style>
         
@@ -80,7 +80,7 @@
                             <Border Classes="item-card"
                                     Grid.Column="0"
                                     Grid.Row="0">
-                                <StackPanel Spacing="6">
+                                <StackPanel>
                                     <TextBlock Text="{localization:Localize SettingsServerPage.ImageFormat}"
                                                FontWeight="Medium" />
                                     <ComboBox SelectedItem="{Binding Settings.PosterFormat}"
@@ -92,7 +92,7 @@
                             <Border Classes="item-card"
                                     Grid.Column="1"
                                     Grid.Row="0">
-                                <StackPanel Spacing="6">
+                                <StackPanel>
                                     <TextBlock Text="{localization:Localize SettingsServerPage.Quality}" FontWeight="Medium" />
                                     <NumericUpDown Classes="input"
                                                    FormatString="0"
@@ -105,7 +105,7 @@
                             <Border Classes="item-card"
                                     Grid.Column="0"
                                     Grid.Row="1">
-                                <StackPanel Spacing="6">
+                                <StackPanel>
                                     <TextBlock Text="{localization:Localize SettingsServerPage.MaxWidth}" FontWeight="Medium" />
                                     <NumericUpDown Classes="input"
                                                    FormatString="0"
@@ -117,7 +117,7 @@
                             <Border Classes="item-card"
                                     Grid.Column="1"
                                     Grid.Row="1">
-                                <StackPanel Spacing="6">
+                                <StackPanel>
                                     <TextBlock Text="{localization:Localize SettingsServerPage.MinWidth}" FontWeight="Medium" />
                                     <NumericUpDown Classes="input"
                                                    FormatString="0"
@@ -148,7 +148,7 @@
                             <Border Classes="item-card"
                                     Grid.Column="0"
                                     Grid.Row="0">
-                                <StackPanel Spacing="6">
+                                <StackPanel>
                                     <TextBlock Text="{localization:Localize SettingsServerPage.ImageFormat}"
                                                FontWeight="Medium" />
                                     <ComboBox SelectedItem="{Binding Settings.BannerFormat}"
@@ -160,7 +160,7 @@
                             <Border Classes="item-card"
                                     Grid.Column="1"
                                     Grid.Row="0">
-                                <StackPanel Spacing="6">
+                                <StackPanel>
                                     <TextBlock Text="{localization:Localize SettingsServerPage.Quality}" FontWeight="Medium" />
                                     <NumericUpDown Classes="input"
                                                    FormatString="0"
@@ -192,7 +192,7 @@
                             <Border Classes="item-card"
                                     Grid.Column="0"
                                     Grid.Row="0">
-                                <StackPanel Spacing="6">
+                                <StackPanel>
                                     <TextBlock Text="{localization:Localize SettingsServerPage.MaxPageWidth}"
                                                FontWeight="Medium" />
                                     <NumericUpDown Classes="input"
@@ -205,7 +205,7 @@
                             <Border Classes="item-card"
                                     Grid.Column="1"
                                     Grid.Row="0">
-                                <StackPanel Spacing="6">
+                                <StackPanel>
                                     <TextBlock Text="{localization:Localize SettingsServerPage.MinPageWidth}"
                                                FontWeight="Medium" />
                                     <NumericUpDown Classes="input"
@@ -218,7 +218,7 @@
                             <Border Classes="item-card"
                                     Grid.Column="0"
                                     Grid.Row="1">
-                                <StackPanel Spacing="6">
+                                <StackPanel>
                                     <TextBlock Text="{localization:Localize SettingsServerPage.ImageFormat}"
                                                FontWeight="Medium" />
                                     <ComboBox SelectedItem="{Binding Settings.ImageFormat}"
@@ -231,7 +231,7 @@
                             <Border Classes="item-card"
                                     Grid.Column="1"
                                     Grid.Row="1">
-                                <StackPanel Spacing="6">
+                                <StackPanel>
                                     <TextBlock Text="{localization:Localize SettingsServerPage.ArchiveFormat}"
                                                FontWeight="Medium" />
                                     <ComboBox SelectedItem="{Binding Settings.ArchiveFormat}"
@@ -262,7 +262,7 @@
                             <Border Classes="item-card"
                                     Grid.Column="0"
                                     Grid.Row="0">
-                                <StackPanel Spacing="6">
+                                <StackPanel>
                                     <TextBlock Text="{localization:Localize SettingsServerPage.MaxDescriptionLength}"
                                                FontWeight="Medium" />
                                     <NumericUpDown Classes="input"
@@ -275,7 +275,7 @@
                             <Border Classes="item-card"
                                     Grid.Column="1"
                                     Grid.Row="0">
-                                <StackPanel Spacing="6">
+                                <StackPanel>
                                     <TextBlock Text="{localization:Localize SettingsServerPage.MinDescriptionLength}"
                                                FontWeight="Medium" />
                                     <NumericUpDown Classes="input"

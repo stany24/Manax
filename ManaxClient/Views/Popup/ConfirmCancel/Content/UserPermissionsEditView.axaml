@@ -21,7 +21,8 @@
     
     <ScrollViewer HorizontalScrollBarVisibility="Disabled"
                   VerticalScrollBarVisibility="Auto">
-        <StackPanel Orientation="Vertical">
+        <StackPanel Orientation="Vertical"
+                    Spacing="16">
             <StackPanel Classes="popup-title">
                 <avalonia:MaterialIcon Classes="icon"
                                        Kind="UserOutline"/>
@@ -34,7 +35,7 @@
             <controls:StretchWrapPanel ItemSpacing="8"
                                        LineSpacing="8">
                 <Border Classes="item-card">
-                    <StackPanel Margin="5">
+                    <StackPanel>
                         <TextBlock Text="Read"
                                    Classes="column-name" />
                         <ItemsControl ItemsSource="{Binding ReadPermissions}">
@@ -50,7 +51,7 @@
                 </Border>
 
                 <Border Classes="item-card">
-                    <StackPanel Margin="5">
+                    <StackPanel>
                         <TextBlock Text="Write"
                                    Classes="column-name" />
                         <ItemsControl ItemsSource="{Binding WritePermissions}">
@@ -66,7 +67,7 @@
                 </Border>
 
                 <Border Classes="item-card">
-                    <StackPanel Margin="5">
+                    <StackPanel>
                         <TextBlock Text="Delete"
                                    Classes="column-name" />
                         <ItemsControl ItemsSource="{Binding DeletePermissions}">
@@ -82,7 +83,7 @@
                 </Border>
 
                 <Border Classes="item-card">
-                    <StackPanel Margin="5">
+                    <StackPanel>
                         <TextBlock Text="Others"
                                    Classes="column-name" />
                         <ItemsControl ItemsSource="{Binding OtherPermissions}">

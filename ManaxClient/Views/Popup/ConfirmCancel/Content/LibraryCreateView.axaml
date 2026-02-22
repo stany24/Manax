@@ -12,37 +12,30 @@
     <StackPanel Spacing="16">
         <StackPanel Classes="popup-title">
             <icon:MaterialIcon Classes="icon"
-                               Kind="BookOpenVariantOutline"/>
+                               Kind="LibraryShelves"/>
             <StackPanel>
                 <TextBlock Text="{localization:Localize LibraryCreatePopup.NewLibrary}"/>
                 <TextBlock Text="{localization:Localize LibraryCreatePopup.Description}" />
             </StackPanel>
         </StackPanel>
 
-        <StackPanel Spacing="8">
-            <TextBlock
-                Text="{localization:Localize LibraryCreatePopup.Name}"
-                FontWeight="Medium" />
-            <TextBox
-                Text="{Binding Name}"
-                Watermark="{localization:Localize LibraryCreatePopup.Name.Placeholder}"
-                Padding="12"
-                CornerRadius="8"
-                BorderThickness="1"
-                FontSize="14" />
-        </StackPanel>
-
-        <Border BorderThickness="1"
-                CornerRadius="8"
-                Padding="12">
-            <StackPanel Orientation="Horizontal" Spacing="8">
-                <icon:MaterialIcon Classes="icon"
-                                   Kind="Lightbulb"/>
-                <TextBlock
-                    Text="{localization:Localize LibraryCreatePopup.Info}"
-                    TextWrapping="Wrap"
-                    FontSize="12" />
+        <Border Classes="input">
+            <StackPanel>
+                <TextBlock Text="{localization:Localize LibraryCreatePopup.Name}"/>
+                <TextBox Text="{Binding Name}"
+                         Watermark="{localization:Localize LibraryCreatePopup.Name.Placeholder}"/>
             </StackPanel>
         </Border>
+        
+        <Grid ColumnDefinitions="Auto,*"
+              ColumnSpacing="8">
+            <icon:MaterialIcon Grid.Column="0"
+                               Classes="icon"
+                               Kind="Lightbulb"/>
+            <TextBlock Grid.Column="1"
+                       Text="{localization:Localize LibraryCreatePopup.Info}"
+                       TextWrapping="Wrap"
+                       VerticalAlignment="Center" />
+        </Grid>
     </StackPanel>
 </UserControl>
