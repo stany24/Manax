@@ -327,18 +327,6 @@ namespace ManaxClient.Localization {
             }
         }
         
-        public static string LibraryPage_EmptyLibrary_Title {
-            get {
-                return ResourceManager.GetString("LibraryPage.EmptyLibrary.Title", resourceCulture);
-            }
-        }
-        
-        public static string LibraryPage_EmptyLibrary_Description {
-            get {
-                return ResourceManager.GetString("LibraryPage.EmptyLibrary.Description", resourceCulture);
-            }
-        }
-        
         public static string LibraryPage_LibrarySeries_Title {
             get {
                 return ResourceManager.GetString("LibraryPage.LibrarySeries.Title", resourceCulture);
