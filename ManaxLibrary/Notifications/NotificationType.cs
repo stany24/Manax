@@ -45,7 +45,7 @@ public enum NotificationType
     RoleCreated = 100,
     RoleUpdated = 101,
     RoleDeleted = 102,
-    
+
     RunningTasks = 110,
     FeatureModified = 111,
     Connected = 112

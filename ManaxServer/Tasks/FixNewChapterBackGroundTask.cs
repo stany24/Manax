@@ -25,8 +25,8 @@ public class FixNewChapterBackGroundTask(IFixService fixService, NewChapter chap
     public override bool Equals(object? obj)
     {
         if (obj is not FixNewChapterBackGroundTask fixChapterTask) return false;
-        return fixChapterTask._chapter.Number == _chapter.Number 
-               && fixChapterTask._chapter.SerieId == _chapter.SerieId 
+        return fixChapterTask._chapter.Number == _chapter.Number
+               && fixChapterTask._chapter.SerieId == _chapter.SerieId
                && fixChapterTask._chapter.UploaderId == _chapter.UploaderId;
     }
 

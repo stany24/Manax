@@ -12,7 +12,7 @@ public class GetTagsTests : TagTestsSetup
     {
         Tag tag1 = new() { Name = "Action", ColorArgb = -16776961 };
         Tag tag2 = new() { Name = "Comedy", ColorArgb = -65536 };
-        Context.Tags.AddRange(tag1, tag2);  
+        Context.Tags.AddRange(tag1, tag2);
         await Context.SaveChangesAsync();
 
         ActionResult<IEnumerable<TagDto>> result = await Controller.GetTags();
@@ -33,7 +33,7 @@ public class GetTagsTests : TagTestsSetup
 
         OkObjectResult? okResult = result.Result as OkObjectResult;
         Assert.IsNotNull(okResult);
-        
+
         IEnumerable<TagDto>? value = okResult.Value as IEnumerable<TagDto>;
         Assert.IsNotNull(value);
         List<TagDto> tags = value.ToList();
@@ -48,7 +48,7 @@ public class GetTagsTests : TagTestsSetup
         await Context.SaveChangesAsync();
 
         ActionResult<IEnumerable<TagDto>> result = await Controller.GetTags();
-        
+
         OkObjectResult? okResult = result.Result as OkObjectResult;
         Assert.IsNotNull(okResult);
 
@@ -71,7 +71,7 @@ public class GetTagsTests : TagTestsSetup
         await Context.SaveChangesAsync();
 
         ActionResult<IEnumerable<TagDto>> result = await Controller.GetTags();
-        
+
         OkObjectResult? okResult = result.Result as OkObjectResult;
         Assert.IsNotNull(okResult);
 

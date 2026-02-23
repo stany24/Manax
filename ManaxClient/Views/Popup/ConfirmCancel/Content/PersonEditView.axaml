@@ -13,7 +13,7 @@
                 Spacing="16">
         <StackPanel Classes="popup-title">
             <icon:MaterialIcon Classes="icon"
-                               Kind="UserOutline"/>
+                               Kind="UserOutline" />
             <StackPanel>
                 <TextBlock Text="{localization:Localize PersonEditPopup.Title}" />
                 <TextBlock Text="{localization:Localize PersonEditPopup.Description}" />
@@ -25,8 +25,7 @@
                 <TextBlock Text="{localization:Localize PersonEditPopup.FirstName}"
                            FontWeight="Medium" />
                 <TextBox Text="{Binding FirstName}"
-                         Watermark="{localization:Localize PersonEditPopup.FirstName.Placeholder}">
-                </TextBox>
+                         Watermark="{localization:Localize PersonEditPopup.FirstName.Placeholder}" />
             </StackPanel>
         </Border>
 
@@ -35,8 +34,7 @@
                 <TextBlock Text="{localization:Localize PersonEditPopup.LastName}"
                            FontWeight="Medium" />
                 <TextBox Text="{Binding LastName}"
-                         Watermark="{localization:Localize PersonEditPopup.LastName.Placeholder}">
-                </TextBox>
+                         Watermark="{localization:Localize PersonEditPopup.LastName.Placeholder}" />
             </StackPanel>
         </Border>
 
@@ -45,8 +43,7 @@
                 <TextBlock Text="{localization:Localize PersonEditPopup.Pseudonym}"
                            FontWeight="Medium" />
                 <TextBox Text="{Binding Pseudonym}"
-                         Watermark="{localization:Localize PersonEditPopup.Pseudonym.Placeholder}">
-                </TextBox>
+                         Watermark="{localization:Localize PersonEditPopup.Pseudonym.Placeholder}" />
             </StackPanel>
         </Border>
 

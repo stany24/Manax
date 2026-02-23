@@ -17,32 +17,32 @@
 
     <UserControl.Styles>
         <Style Selector="avalonia|CartesianChart.chart">
-            <Setter Property="Background" Value="{DynamicResource MaterialCardBackgroundBrush}"/>
-            <Setter Property="HorizontalAlignment" Value="Stretch"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="Height" Value="300"/>
-            <Setter Property="MinWidth" Value="400"/>
+            <Setter Property="Background" Value="{DynamicResource MaterialCardBackgroundBrush}" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Height" Value="300" />
+            <Setter Property="MinWidth" Value="400" />
         </Style>
-        
+
         <Style Selector="avalonia|PieChart.chart">
-            <Setter Property="Background" Value="{DynamicResource MaterialCardBackgroundBrush}"/>
-            <Setter Property="HorizontalAlignment" Value="Stretch"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="Height" Value="300"/>
-            <Setter Property="MinWidth" Value="300"/>
+            <Setter Property="Background" Value="{DynamicResource MaterialCardBackgroundBrush}" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Height" Value="300" />
+            <Setter Property="MinWidth" Value="300" />
         </Style>
-        
+
         <Style Selector="TextBlock.name">
-            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="HorizontalAlignment" Value="Center" />
         </Style>
-        
+
         <Style Selector="TextBlock.number">
-            <Setter Property="FontSize" Value="16"/>
-            <Setter Property="FontWeight" Value="Bold"/>
-            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
         </Style>
     </UserControl.Styles>
-    
+
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel Orientation="Vertical" Spacing="24">
 
@@ -51,7 +51,7 @@
                       ColumnDefinitions="Auto,Auto,*">
                     <icon:MaterialIcon Grid.Column="0"
                                        Classes="icon"
-                                       Kind="ChartLine"/>
+                                       Kind="ChartLine" />
                     <TextBlock Grid.Column="1"
                                Text="{localization:Localize UserStatsPage.Title}" />
                 </Grid>
@@ -66,7 +66,7 @@
                               Classes="section-title">
                             <icon:MaterialIcon Grid.Column="0"
                                                Classes="icon"
-                                               Kind="Bookshelf"/>
+                                               Kind="Bookshelf" />
                             <TextBlock Grid.Column="1"
                                        Text="{localization:Localize UserStatsPage.SeriesProgress.Title}" />
                         </Grid>
@@ -77,14 +77,14 @@
                         <Grid ColumnDefinitions="*,*,*" ColumnSpacing="8">
                             <Border Classes="item-card"
                                     Grid.Column="0">
-                                <StackPanel Spacing="4" >
+                                <StackPanel Spacing="4">
                                     <TextBlock Classes="name"
                                                Text="{localization:Localize UserStatsPage.SeriesProgress.Completed}" />
                                     <TextBlock Classes="number"
-                                               Text="{Binding UserStats.SeriesCompleted}"/>
+                                               Text="{Binding UserStats.SeriesCompleted}" />
                                 </StackPanel>
                             </Border>
-                            
+
                             <Border Classes="item-card"
                                     Grid.Column="1">
                                 <StackPanel Spacing="4">
@@ -94,7 +94,7 @@
                                                Text="{Binding UserStats.SeriesInProgress}" />
                                 </StackPanel>
                             </Border>
-                            
+
                             <Border Classes="item-card"
                                     Grid.Column="2">
                                 <StackPanel Spacing="4">
@@ -107,23 +107,23 @@
                         </Grid>
                     </StackPanel>
                 </Border>
-            
+
                 <Border Classes="card">
                     <StackPanel Spacing="20">
                         <Grid Classes="section-title"
                               ColumnDefinitions="Auto,Auto,*">
                             <icon:MaterialIcon Grid.Column="0"
                                                Classes="icon"
-                                               Kind="BookOpenVariantOutline"/>
+                                               Kind="BookOpenVariantOutline" />
                             <TextBlock Grid.Column="1"
-                                       Text="{localization:Localize UserStatsPage.ChaptersProgress.Title}"/>
+                                       Text="{localization:Localize UserStatsPage.ChaptersProgress.Title}" />
                         </Grid>
 
                         <avalonia:PieChart Classes="chart"
                                            Series="{Binding ChaptersSeries}" />
 
                         <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
-                            
+
                             <Border Classes="item-card"
                                     Grid.Column="0">
                                 <StackPanel Spacing="4">
@@ -133,7 +133,7 @@
                                                Text="{Binding UserStats.ChaptersRead}" />
                                 </StackPanel>
                             </Border>
-                            
+
                             <Border Classes="item-card"
                                     Grid.Column="1">
                                 <StackPanel Spacing="4">
@@ -153,7 +153,7 @@
                               ColumnDefinitions="Auto,Auto,*">
                             <icon:MaterialIcon Grid.Column="0"
                                                Classes="icon"
-                                               Kind="ChevronTripleUp"/>
+                                               Kind="ChevronTripleUp" />
                             <TextBlock Grid.Column="1"
                                        Text="{localization:Localize UserStatsPage.RankDistribution.Title}" />
                         </Grid>
@@ -170,7 +170,7 @@
                               ColumnDefinitions="Auto,Auto,*">
                             <icon:MaterialIcon Grid.Column="0"
                                                Classes="icon"
-                                               Kind="ChartLine"/>
+                                               Kind="ChartLine" />
                             <TextBlock Grid.Column="1"
                                        Text="{localization:Localize UserStatsPage.ReadsPerDay.Title}" />
                         </Grid>

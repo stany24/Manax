@@ -45,7 +45,7 @@ public class RoleController(ManaxContext context, INotificationService notificat
     [ProducesResponseType(StatusCodes.Status201Created)]
     public async Task<ActionResult> CreateRole(RoleCreateDto roleCreateDto)
     {
-        if (!roleCreateDto.IsValid()) { return BadRequest(ErrorCode.InvalidRoleData); }
+        if (!roleCreateDto.IsValid()) return BadRequest(ErrorCode.InvalidRoleData);
         Role role = Role.Create(roleCreateDto);
         context.Roles.Add(role);
         await context.SaveChangesAsync();
@@ -59,7 +59,7 @@ public class RoleController(ManaxContext context, INotificationService notificat
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> UpdateRole(long id, RoleUpdateDto roleUpdateDto)
     {
-        if(!roleUpdateDto.IsValid()) { return BadRequest(ErrorCode.InvalidRoleData); }
+        if (!roleUpdateDto.IsValid()) return BadRequest(ErrorCode.InvalidRoleData);
         Role? role = await context.Roles.FindAsync(id);
         if (role == null) return NotFound(ErrorCode.RoleDoesNotExist);
         role.Update(roleUpdateDto);

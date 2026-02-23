@@ -12,13 +12,13 @@
     <StackPanel Spacing="16">
         <StackPanel Classes="popup-title">
             <icon:MaterialIcon Classes="icon"
-                               Kind="ChevronTripleUp"/>
+                               Kind="ChevronTripleUp" />
             <StackPanel>
                 <TextBlock Text="{localization:Localize RankEditPopup.Title}" />
                 <TextBlock Text="{localization:Localize RankEditPopup.Description}" />
             </StackPanel>
         </StackPanel>
-        
+
         <Border Classes="input">
             <StackPanel Spacing="8">
                 <TextBlock Text="{localization:Localize RankEditPopup.Name}" />

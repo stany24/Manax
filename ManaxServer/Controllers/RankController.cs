@@ -36,8 +36,8 @@ public class RankController(
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<long>> CreateRank(RankCreateDto rankCreate)
     {
-        if(!rankCreate.IsValid()) return BadRequest(ErrorCode.InvalidRankData);
-        
+        if (!rankCreate.IsValid()) return BadRequest(ErrorCode.InvalidRankData);
+
         Rank rank = Rank.Create(rankCreate);
         context.Ranks.Add(rank);
         await context.SaveChangesAsync();
@@ -58,9 +58,15 @@ public class RankController(
         if (!rankUpdate.IsValid()) return BadRequest(ErrorCode.InvalidRankData);
 
         rank.Update(rankUpdate);
-        try { await context.SaveChangesAsync(); }
-        catch{ return BadRequest(ErrorCode.InvalidRankData); }
-        
+        try
+        {
+            await context.SaveChangesAsync();
+        }
+        catch
+        {
+            return BadRequest(ErrorCode.InvalidRankData);
+        }
+
         notificationService.NotifyRankUpdatedAsync(rank.ToDto());
         return Ok();
     }
@@ -74,7 +80,7 @@ public class RankController(
     {
         Rank? rank = await context.Ranks.FindAsync(id);
         if (rank == null) return NotFound(ErrorCode.RankDoesNotExist);
-        
+
         context.Ranks.Remove(rank);
         await context.SaveChangesAsync();
         notificationService.NotifyRankDeletedAsync(id);

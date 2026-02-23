@@ -67,7 +67,7 @@ public class RankPageViewModel : PageViewModel
             try
             {
                 Optional<bool> deleteRankResponse = await ManaxApiRankClient.DeleteRankAsync(rank.Id);
-                if (deleteRankResponse.Failed) 
+                if (deleteRankResponse.Failed)
                     WeakReferenceMessenger.Default.Send(new NotificationMessage(deleteRankResponse.Error));
             }
             catch (Exception e)

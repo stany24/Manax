@@ -58,12 +58,14 @@ public class UsersPageViewModel : PageViewModel
                 List<Permission> perms = content.GetSelectedPermissions();
                 Optional<bool> postUserResponse = await ManaxApiPermissionClient.SetPermissionsAsync(userId, perms);
                 if (postUserResponse.Failed)
-                    WeakReferenceMessenger.Default.Send(new NotificationMessage(Localizer.Get("UserPage.UpdatePermissionsError")));
+                    WeakReferenceMessenger.Default.Send(
+                        new NotificationMessage(Localizer.Get("UserPage.UpdatePermissionsError")));
             }
             catch (Exception e)
             {
                 Logger.LogError("Error updating user permissions", e);
-                WeakReferenceMessenger.Default.Send(new NotificationMessage(Localizer.Get("UserPage.UpdatePermissionsError")));
+                WeakReferenceMessenger.Default.Send(
+                    new NotificationMessage(Localizer.Get("UserPage.UpdatePermissionsError")));
             }
         };
     }
@@ -81,7 +83,7 @@ public class UsersPageViewModel : PageViewModel
                 if (context.Canceled()) return;
                 UserCreateDto user = content.GetResult();
                 Optional<bool> postUserResponse = await ManaxApiUserClient.PostUserAsync(user);
-                if (postUserResponse.Failed) 
+                if (postUserResponse.Failed)
                     WeakReferenceMessenger.Default.Send(new NotificationMessage(Localizer.Get("UserPage.CreateError")));
             }
             catch (Exception e)

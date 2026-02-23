@@ -34,7 +34,7 @@ public class ChapterPreview : Button
     {
         HorizontalAlignment = HorizontalAlignment.Stretch;
         HorizontalContentAlignment = HorizontalAlignment.Stretch;
-        
+
         Click += (_, _) =>
         {
             Chapter? chapter = GetChapter(this);
@@ -202,10 +202,7 @@ public class ChapterPreview : Button
         popup.Closed += (_, _) =>
         {
             string actionName = viewmodel.GetResult();
-            if (actionName == signalIssue)
-            {
-                ReportIssue();
-            }
+            if (actionName == signalIssue) ReportIssue();
         };
 
         WeakReferenceMessenger.Default.Send(new PopupChangeMessage(popup));
@@ -231,7 +228,8 @@ public class ChapterPreview : Button
             }
             catch (Exception e)
             {
-                WeakReferenceMessenger.Default.Send(new NotificationMessage(Localizer.Get("ChapterPreview.ReportFailed")));
+                WeakReferenceMessenger.Default.Send(
+                    new NotificationMessage(Localizer.Get("ChapterPreview.ReportFailed")));
                 Logger.LogError($"Error while creating chapter issue for chapter {Chapter.Id}", e);
             }
         };

@@ -13,25 +13,25 @@
 
     <UserControl.Styles>
         <Style Selector="TextBlock.column-name">
-            <Setter Property="FontWeight" Value="Bold"/>
-            <Setter Property="HorizontalAlignment" Value="Center"/>
-            <Setter Property="Margin" Value="0,0,0,10"/>
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="Margin" Value="0,0,0,10" />
         </Style>
     </UserControl.Styles>
-    
+
     <ScrollViewer HorizontalScrollBarVisibility="Disabled"
                   VerticalScrollBarVisibility="Auto">
         <StackPanel Orientation="Vertical"
                     Spacing="16">
             <StackPanel Classes="popup-title">
                 <avalonia:MaterialIcon Classes="icon"
-                                       Kind="UserOutline"/>
+                                       Kind="UserOutline" />
                 <StackPanel>
                     <TextBlock Text="{localization:Localize UserPermissionsEdit.Title}" />
                     <TextBlock Text="{localization:Localize UserPermissionsEdit.Description}" />
                 </StackPanel>
             </StackPanel>
-            
+
             <controls:StretchWrapPanel ItemSpacing="8"
                                        LineSpacing="8">
                 <Border Classes="item-card">

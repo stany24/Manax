@@ -12,7 +12,7 @@ public class IconButton : Button
 {
     public static readonly StyledProperty<MaterialIconKind?> IconProperty =
         AvaloniaProperty.Register<IconButton, MaterialIconKind?>(nameof(Icon), MaterialIconKind.Error);
-    
+
     public static readonly StyledProperty<IBrush?> IconColorProperty =
         AvaloniaProperty.Register<IconButton, IBrush?>(nameof(Icon));
 
@@ -29,7 +29,7 @@ public class IconButton : Button
             [!MaterialIcon.KindProperty] = this[!IconProperty],
             [!ForegroundProperty] = this[!IconColorProperty]
         };
-        
+
         TextBlock textBlock = new()
         {
             VerticalAlignment = VerticalAlignment.Center
@@ -37,11 +37,11 @@ public class IconButton : Button
         textBlock.Bind(TextBlock.TextProperty, this.GetObservable(TextProperty));
         this.GetObservable(TextProperty).Subscribe(text =>
         {
-            icon.Margin = string.IsNullOrEmpty(text) 
-                ? new Thickness(0) 
+            icon.Margin = string.IsNullOrEmpty(text)
+                ? new Thickness(0)
                 : new Thickness(0, 0, 5, 0);
         });
-        
+
         StackPanel stackPanel = new()
         {
             Orientation = Orientation.Horizontal,
@@ -50,17 +50,17 @@ public class IconButton : Button
         };
         stackPanel.Children.Add(icon);
         stackPanel.Children.Add(textBlock);
-        
+
         Content = stackPanel;
         RenderTransformOrigin = new RelativePoint(0.5, 0.5, RelativeUnit.Relative);
     }
-    
+
     public IBrush? IconColor
     {
         get => GetValue(IconColorProperty);
         set => SetValue(IconColorProperty, value);
     }
-    
+
     public MaterialIconKind? Icon
     {
         get => GetValue(IconProperty);

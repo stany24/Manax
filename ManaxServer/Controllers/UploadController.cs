@@ -41,7 +41,7 @@ public class UploadController(
         Serie? serie = context.Series
             .Include(s => s.SavePoint)
             .FirstOrDefault(s => s.Id == chapterDto.SerieId);
-        
+
         if (serie == null)
             return BadRequest(ErrorCode.SerieDoesNotExist);
         if (context.Chapters.Any(s => s.SerieId == chapterDto.SerieId && s.Number == chapterDto.Number))

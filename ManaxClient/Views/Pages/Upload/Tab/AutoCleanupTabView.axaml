@@ -15,13 +15,13 @@
 
     <StackPanel Orientation="Vertical"
                 Spacing="24">
-        
+
         <Border Classes="card">
             <Grid Classes="title"
                   ColumnDefinitions="Auto,Auto,*,Auto">
                 <avalonia:MaterialIcon Grid.Column="0"
                                        Classes="icon"
-                                       Kind="Broom"/>
+                                       Kind="Broom" />
                 <TextBlock Grid.Column="1"
                            Text="{localization:Localize AutoCleanupPage.Title}" />
                 <Button Grid.Column="3"
@@ -30,7 +30,7 @@
                         Command="{Binding Skip}" />
             </Grid>
         </Border>
-        
+
         <Border Classes="card">
             <StackPanel Spacing="12">
                 <Border Classes="item-card">
@@ -53,7 +53,7 @@
                                      ShowProgressText="False" />
                     </StackPanel>
                 </Border>
-                
+
                 <Border Classes="item-card">
                     <StackPanel Spacing="8">
                         <Grid ColumnDefinitions="*,Auto">
@@ -87,7 +87,7 @@
                                    FontWeight="Medium"
                                    VerticalAlignment="Center"
                                    IsVisible="{Binding !IsProcessing}" />
-                        
+
                         <avalonia:MaterialIcon Classes="icon"
                                                Kind="TimerSand"
                                                IsVisible="{Binding IsProcessing}" />
@@ -99,7 +99,7 @@
                 </Button>
             </StackPanel>
         </Border>
-        
+
         <Border Classes="card"
                 HorizontalAlignment="Center"
                 IsVisible="{Binding Errors.Count}">

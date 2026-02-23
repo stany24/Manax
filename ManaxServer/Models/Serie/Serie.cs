@@ -12,6 +12,22 @@ public class Serie
 {
     public const string PosterName = "poster";
     public const string BannerName = "banner";
+
+    public Serie(SerieCreateDto serieCreate, SavePoint.SavePoint savePoint)
+    {
+        SavePoint = savePoint;
+        Title = serieCreate.Title;
+        FolderName = serieCreate.Title;
+        Description = "";
+        Status = Status.Ongoing;
+        Creation = DateTime.UtcNow;
+        LastModification = DateTime.UtcNow;
+    }
+
+    public Serie()
+    {
+    }
+
     public long Id { get; set; }
     public List<Person.Person> Persons { get; set; } = [];
     public List<Tag.Tag> Tags { get; set; } = [];
@@ -28,26 +44,13 @@ public class Serie
     public string SavePath => Path.Combine(SavePoint.Path, FolderName);
 
     public string PosterPath => Path.Combine(SavePath, PosterName + "." +
-                                             SettingsManager.DataDto.PosterFormat.ToString()
-                                                 .ToLower(CultureInfo.InvariantCulture));
+                                                       SettingsManager.DataDto.PosterFormat.ToString()
+                                                           .ToLower(CultureInfo.InvariantCulture));
 
     public string BannerPath => Path.Combine(SavePath + BannerName + "." +
                                              SettingsManager.DataDto.BannerFormat.ToString()
                                                  .ToLower(CultureInfo.InvariantCulture));
 
-    public Serie(SerieCreateDto serieCreate, SavePoint.SavePoint savePoint)
-    {
-        SavePoint = savePoint;
-        Title = serieCreate.Title;
-        FolderName = serieCreate.Title;
-        Description = "";
-        Status = Status.Ongoing;
-        Creation = DateTime.UtcNow;
-        LastModification = DateTime.UtcNow;
-    }
-    
-    public Serie() { }
-    
     public SerieDto ToDto()
     {
         return new SerieDto

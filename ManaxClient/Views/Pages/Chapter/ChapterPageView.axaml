@@ -88,7 +88,7 @@
                         BorderThickness="1">
                     <StackPanel Orientation="Horizontal" Spacing="8">
                         <icon:MaterialIcon Classes="icon"
-                                               Kind="SkipPrevious"/>
+                                           Kind="SkipPrevious" />
                         <TextBlock Text="{localization:Localize ChapterPage.Previous}" />
                     </StackPanel>
                 </Button>
@@ -113,7 +113,7 @@
                     <StackPanel Orientation="Horizontal" Spacing="8">
                         <TextBlock Text="{localization:Localize ChapterPage.Next}" />
                         <icon:MaterialIcon Classes="icon"
-                                               Kind="SkipNext"/>
+                                           Kind="SkipNext" />
                     </StackPanel>
                 </Button>
             </Grid>

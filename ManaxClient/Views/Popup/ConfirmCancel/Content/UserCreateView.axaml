@@ -9,13 +9,13 @@
     mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="600"
     x:Class="ManaxClient.Views.Popup.ConfirmCancel.Content.UserCreateView"
     x:DataType="content:UserCreateViewModel">
-    
+
     <StackPanel Spacing="8"
                 HorizontalAlignment="Stretch">
-        
+
         <StackPanel Classes="popup-title">
             <avalonia:MaterialIcon Classes="icon"
-                                   Kind="UserOutline"/>
+                                   Kind="UserOutline" />
             <StackPanel>
                 <TextBlock Text="{localization:Localize UserCreatePopup.Title}" />
                 <TextBlock Text="{localization:Localize UserCreatePopup.Description}" />
@@ -39,10 +39,10 @@
                 <TextBox
                     Text="{Binding Password}"
                     Watermark="{localization:Localize UserCreatePopup.Password.Placeholder}"
-                    PasswordChar="*"/>
+                    PasswordChar="*" />
             </StackPanel>
         </Border>
-        
+
         <Border Classes="input">
             <StackPanel Classes="input">
                 <TextBlock
@@ -50,17 +50,17 @@
                 <ComboBox
                     ItemsSource="{Binding Roles}"
                     SelectedItem="{Binding SelectedRole}"
-                    DisplayMemberBinding="{Binding DisplayName}"/>
+                    DisplayMemberBinding="{Binding DisplayName}" />
             </StackPanel>
         </Border>
 
         <Grid ColumnDefinitions="Auto,*"
               ColumnSpacing="8">
             <avalonia:MaterialIcon Grid.Column="0"
-                                   Kind="WarningOutline"/>
+                                   Kind="WarningOutline" />
             <TextBlock Grid.Column="1"
                        Text="{localization:Localize UserCreatePopup.Tip}"
-                       TextWrapping="Wrap"/>
+                       TextWrapping="Wrap" />
         </Grid>
     </StackPanel>
 </UserControl>

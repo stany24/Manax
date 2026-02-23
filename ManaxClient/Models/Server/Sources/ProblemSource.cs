@@ -24,7 +24,9 @@ public class ProblemSource
         FeatureManager.FeatureChanged += (_, features) =>
         {
             if (features is { Key: FeatureType.Ranks, Value: true })
+            {
                 LoadProblems();
+            }
             else
             {
                 ChapterProblems.Clear();
@@ -37,7 +39,7 @@ public class ProblemSource
     {
         Task.Run(async () =>
         {
-            Optional<List<IssueChapterReportedTypeDto>> chapterResponse = 
+            Optional<List<IssueChapterReportedTypeDto>> chapterResponse =
                 await ManaxApiIssueClient.GetAllReportedChapterIssueTypesAsync();
             if (chapterResponse.Failed)
             {

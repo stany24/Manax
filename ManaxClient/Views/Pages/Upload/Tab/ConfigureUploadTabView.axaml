@@ -17,30 +17,30 @@
 
     <UserControl.Styles>
         <Style Selector="TextBlock.description">
-            <Setter Property="FontSize" Value="12"/>
-            <Setter Property="Opacity" Value="0.8"/>
-            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="Opacity" Value="0.8" />
+            <Setter Property="TextWrapping" Value="Wrap" />
         </Style>
-        
+
         <Style Selector="TextBox.processing-path">
-            <Setter Property="TextWrapping" Value="Wrap"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="TextWrapping" Value="Wrap" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="FontSize" Value="12" />
             <Style Selector="^:empty">
                 <Setter Property="Text" Value="{localization:Localize ConfigureUploadPage.NoFolderSelected}" />
                 <Setter Property="Opacity" Value="0.5" />
                 <Setter Property="FontStyle" Value="Italic" />
             </Style>
         </Style>
-        
+
         <Style Selector="TextBlock.item-name">
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="FontWeight" Value="SemiBold"/>
-            <Setter Property="FontSize" Value="12"/>
-            <Setter Property="Margin" Value="12,0"/>
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="Margin" Value="12,0" />
         </Style>
     </UserControl.Styles>
-    
+
     <ScrollViewer VerticalScrollBarVisibility="Auto"
                   HorizontalScrollBarVisibility="Disabled">
         <StackPanel Orientation="Vertical"
@@ -48,17 +48,17 @@
             <Border Classes="card">
                 <Grid Classes="title"
                       ColumnDefinitions="Auto,*,Auto">
-                    
+
                     <TextBlock Grid.Column="0"
-                               Text="{localization:Localize ConfigureUploadPage.Title}"/>
-                    
+                               Text="{localization:Localize ConfigureUploadPage.Title}" />
+
                     <Button Grid.Column="2"
                             Classes="button light"
                             Content="{localization:Localize ConfigureUploadPage.Next}"
-                            Command="{Binding Next}"/>
+                            Command="{Binding Next}" />
                 </Grid>
             </Border>
-            
+
             <controls:StretchWrapPanel ItemSpacing="12"
                                        LineSpacing="12">
                 <Border Classes="card">
@@ -70,7 +70,7 @@
                                        FontWeight="SemiBold"
                                        FontSize="16" />
                             <TextBlock Classes="description"
-                                       Text="{localization:Localize ConfigureUploadPage.SourceFolders.Description}"/>
+                                       Text="{localization:Localize ConfigureUploadPage.SourceFolders.Description}" />
                         </StackPanel>
 
                         <ItemsControl Grid.Row="1"
@@ -81,18 +81,18 @@
                                     <Border Classes="item-card">
                                         <Grid ColumnDefinitions="Auto,*,Auto">
                                             <icon:MaterialIcon Classes="icon"
-                                                               Kind="FolderOpenOutline"/>
+                                                               Kind="FolderOpenOutline" />
                                             <TextBlock Grid.Column="1"
                                                        Classes="item-name"
                                                        Text="{Binding Path}"
                                                        ToolTip.Tip="{Binding Path}" />
-                                                
+
                                             <controls:IconButton Grid.Column="2"
                                                                  Classes="icon-button dark"
                                                                  Text="{localization:Localize ConfigureUploadPage.RemoveSource}"
                                                                  Command="{Binding $parent[UserControl].((tab:ConfigureUploadTabViewModel)DataContext).RemoveSource}"
                                                                  CommandParameter="{Binding}"
-                                                                 Icon="DeleteOutline"/>
+                                                                 Icon="DeleteOutline" />
                                         </Grid>
                                     </Border>
                                 </DataTemplate>
@@ -103,7 +103,7 @@
                                 Classes="button light"
                                 Content="{localization:Localize ConfigureUploadPage.AddSource}"
                                 HorizontalAlignment="Stretch"
-                                Command="{Binding AddSource}"/>
+                                Command="{Binding AddSource}" />
                     </Grid>
                 </Border>
 
@@ -116,7 +116,7 @@
                                        FontWeight="SemiBold"
                                        FontSize="16" />
                             <TextBlock Classes="description"
-                                       Text="{localization:Localize ConfigureUploadPage.ProcessingFolder.Description}"/>
+                                       Text="{localization:Localize ConfigureUploadPage.ProcessingFolder.Description}" />
                         </StackPanel>
 
                         <Border Grid.Row="1"
@@ -125,16 +125,16 @@
                             <Grid ColumnDefinitions="Auto,Auto,*,Auto">
                                 <icon:MaterialIcon Grid.Column="0"
                                                    Classes="icon"
-                                                   Kind="FolderOpenOutline"/>
+                                                   Kind="FolderOpenOutline" />
                                 <TextBlock Grid.Column="1"
                                            Classes="processing-path item-name"
-                                           Text="{Binding ProcessingFolder}"/>
-                                
+                                           Text="{Binding ProcessingFolder}" />
+
                                 <controls:IconButton Grid.Column="3"
                                                      Classes="icon-button dark"
                                                      Text="{localization:Localize ConfigureUploadPage.Browse}"
                                                      Icon="FolderOpenOutline"
-                                                     Command="{Binding UpdateProcessingFolder}"/>
+                                                     Command="{Binding UpdateProcessingFolder}" />
                             </Grid>
                         </Border>
 

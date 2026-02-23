@@ -13,7 +13,7 @@
                 Spacing="16">
         <StackPanel Classes="popup-title">
             <avalonia:MaterialIcon Classes="icon"
-                                   Kind="ClipboardAccountOutline"/>
+                                   Kind="ClipboardAccountOutline" />
             <StackPanel>
                 <TextBlock Text="{localization:Localize RoleEditPopup.Title}" />
                 <TextBlock Text="{localization:Localize RoleEditPopup.Description}" />
@@ -24,8 +24,7 @@
             <StackPanel>
                 <TextBlock Text="{localization:Localize RoleEditPopup.Name}" />
                 <TextBox Text="{Binding Name}"
-                         Watermark="{localization:Localize RoleEditPopup.Name.Placeholder}">
-                </TextBox>
+                         Watermark="{localization:Localize RoleEditPopup.Name.Placeholder}" />
             </StackPanel>
         </Border>
     </StackPanel>

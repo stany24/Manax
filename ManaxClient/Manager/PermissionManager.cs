@@ -13,9 +13,15 @@ using ManaxLibrary.Notifications;
 
 namespace ManaxClient.Manager;
 
-public class PermissionManager:ObservableObject
+public class PermissionManager : ObservableObject
 {
     private List<Permission> _permissions = [];
+
+    public PermissionManager()
+    {
+        WeakReferenceMessenger.Default.Register<LoggedInMessage>(this, (_, _) => { Task.Run(LoadPermissions); });
+        NotificationReceiver.OnPermissionModified += OnPermissionModified;
+    }
 
     // Permission permissions
     public bool CanReadPermissions => _permissions.Contains(Permission.ReadPermissions);
@@ -87,17 +93,11 @@ public class PermissionManager:ObservableObject
     public bool CanWriteRoles => _permissions.Contains(Permission.WriteRoles);
     public bool CanDeleteRoles => _permissions.Contains(Permission.DeleteRoles);
 
-    public PermissionManager()
-    {
-        WeakReferenceMessenger.Default.Register<LoggedInMessage>(this, (_, _) => { Task.Run(LoadPermissions); });
-        NotificationReceiver.OnPermissionModified += OnPermissionModified;
-    }
-
     ~PermissionManager()
     {
         NotificationReceiver.OnPermissionModified -= OnPermissionModified;
     }
-    
+
     private async void LoadPermissions()
     {
         try
@@ -133,7 +133,8 @@ public class PermissionManager:ObservableObject
             {
                 OnPropertyChanged(propertyInfo.Name);
                 bool value = propertyInfo.GetValue(this) as bool? ?? false;
-                WeakReferenceMessenger.Default.Send(new PermissionChangedMessage(new KeyValuePair<string, bool>(propertyInfo.Name,value)));
+                WeakReferenceMessenger.Default.Send(
+                    new PermissionChangedMessage(new KeyValuePair<string, bool>(propertyInfo.Name, value)));
             }
     }
 }

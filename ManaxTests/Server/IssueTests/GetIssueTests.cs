@@ -101,7 +101,7 @@ public class GetIssueTests : IssueTestsSetup
 
         OkObjectResult? okResult = result.Result as OkObjectResult;
         Assert.IsNotNull(okResult);
-        
+
         List<IssueChapterAutomaticDto>? returnedIssues = okResult.Value as List<IssueChapterAutomaticDto>;
         Assert.IsNotNull(returnedIssues);
 
@@ -121,7 +121,7 @@ public class GetIssueTests : IssueTestsSetup
 
         OkObjectResult? okResult = result.Result as OkObjectResult;
         Assert.IsNotNull(okResult);
-        
+
         List<IssueSerieAutomaticDto>? returnedIssues = okResult.Value as List<IssueSerieAutomaticDto>;
         Assert.IsNotNull(returnedIssues);
 

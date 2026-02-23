@@ -74,6 +74,6 @@ public class UpdateRoleTests : RoleTestsSetup
 
         ActionResult result = await Controller.UpdateRole(role.Id, roleUpdate);
 
-        CheckTypeAndErrorCode<BadRequestObjectResult>(result,ErrorCode.InvalidRoleData);
+        CheckTypeAndErrorCode<BadRequestObjectResult>(result, ErrorCode.InvalidRoleData);
     }
 }

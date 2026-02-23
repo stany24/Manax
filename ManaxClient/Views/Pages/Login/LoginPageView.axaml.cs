@@ -18,6 +18,7 @@ public partial class LoginPageView : UserControl
             TbxUsername.Focus();
             return;
         }
+
         TbxPassword.Focus();
     }
 }

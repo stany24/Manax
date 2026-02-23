@@ -1,5 +1,6 @@
 using CommunityToolkit.Mvvm.Messaging.Messages;
+using ManaxClient.Controls.Popups;
 
 namespace ManaxClient.Event;
 
-public class PopupChangeMessage(Controls.Popups.Popup popup) : ValueChangedMessage<Controls.Popups.Popup>(popup);
+public class PopupChangeMessage(Popup popup) : ValueChangedMessage<Popup>(popup);

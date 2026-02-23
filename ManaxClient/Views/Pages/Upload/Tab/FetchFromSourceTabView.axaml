@@ -12,16 +12,16 @@
     x:DataType="tab:FetchFromSourceTabViewModel"
     IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanUploadChapter}"
     Classes="page">
-    
+
     <UserControl.Styles>
         <Style Selector="TextBlock.name">
-            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="HorizontalAlignment" Value="Center" />
         </Style>
-        
+
         <Style Selector="TextBlock.number">
-            <Setter Property="FontSize" Value="16"/>
-            <Setter Property="FontWeight" Value="Bold"/>
-            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
         </Style>
     </UserControl.Styles>
 
@@ -33,14 +33,14 @@
                   ColumnDefinitions="Auto,*,Auto">
                 <TextBlock Grid.Column="0"
                            Text="{localization:Localize FetchFromSourcePage.Title}" />
-                
+
                 <Button Grid.Column="2"
                         Classes="button light"
                         Content="{localization:Localize FetchFromSourcePage.Skip}"
                         Command="{Binding Skip}" />
             </Grid>
         </Border>
-        
+
         <Border Classes="card">
             <Grid RowDefinitions="Auto,*,Auto"
                   RowSpacing="12">
@@ -51,7 +51,7 @@
                                Text="{localization:Localize FetchFromSourcePage.Sources}"
                                Margin="0" />
                 </Grid>
-                
+
                 <ItemsControl Grid.Row="1" ItemsSource="{Binding SourceFolders}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate x:DataType="upload:Source">
@@ -82,7 +82,7 @@
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
-                
+
                 <Button Grid.Row="2"
                         Classes="button light"
                         HorizontalAlignment="Stretch"

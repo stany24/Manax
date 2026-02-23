@@ -17,10 +17,10 @@ namespace ManaxClient.Models.Server.Sources;
 
 public class LibrarySource
 {
+    private readonly Lock _librariesLock = new();
+    private readonly Lock _loadLock = new();
     public readonly SourceCache<Library, long> Libraries = new(x => x.Id);
     private bool _loaded;
-    private readonly Lock _loadLock = new();
-    private readonly Lock _librariesLock = new();
 
     public LibrarySource()
     {

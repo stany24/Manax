@@ -27,6 +27,7 @@ public partial class SerieUpdateViewModel : ConfirmCancelContentViewModel
     private readonly Serie _originalSerie;
 
     [ObservableProperty] private string _description;
+    [ObservableProperty] private bool _isFilePickerOpen;
     [ObservableProperty] private string _personSearchText = "";
     [ObservableProperty] private Library? _selectedLibrary;
     [ObservableProperty] private Person? _selectedPerson;
@@ -34,7 +35,6 @@ public partial class SerieUpdateViewModel : ConfirmCancelContentViewModel
     [ObservableProperty] private Tag? _selectedTag;
     [ObservableProperty] private string _tagSearchText = "";
     [ObservableProperty] private string _title;
-    [ObservableProperty] private bool _isFilePickerOpen;
 
     public SerieUpdateViewModel(Serie serie)
     {
@@ -183,8 +183,8 @@ public partial class SerieUpdateViewModel : ConfirmCancelContentViewModel
             PersonIds = SelectedPersons.Select(p => p.Id).ToList()
         };
     }
-    
-        public async void ReplacePoster()
+
+    public async void ReplacePoster()
     {
         try
         {
@@ -226,13 +226,15 @@ public partial class SerieUpdateViewModel : ConfirmCancelContentViewModel
             }
             else
             {
-                WeakReferenceMessenger.Default.Send(new NotificationMessage(Localizer.Get("SeriePage.PosterReplacedSuccess")));
+                WeakReferenceMessenger.Default.Send(
+                    new NotificationMessage(Localizer.Get("SeriePage.PosterReplacedSuccess")));
                 Logger.LogInfo("Poster replaced successfully for serie ID: " + _originalSerie.Id);
             }
         }
         catch (Exception e)
         {
-            WeakReferenceMessenger.Default.Send(new NotificationMessage(Localizer.Get("SeriePage.ErrorReplacingPoster")));
+            WeakReferenceMessenger.Default.Send(
+                new NotificationMessage(Localizer.Get("SeriePage.ErrorReplacingPoster")));
             Logger.LogError("Error replacing poster for serie ID: " + _originalSerie.Id, e);
         }
     }

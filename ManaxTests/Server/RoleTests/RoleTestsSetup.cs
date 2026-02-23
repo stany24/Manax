@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ManaxTests.Server.RoleTests;
 
-public abstract class RoleTestsSetup:TestSetup
+public abstract class RoleTestsSetup : TestSetup
 {
     protected ManaxContext Context { get; private set; } = null!;
     protected RoleController Controller { get; private set; } = null!;

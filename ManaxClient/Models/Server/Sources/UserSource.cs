@@ -17,9 +17,9 @@ namespace ManaxClient.Models.Server.Sources;
 
 public class UserSource
 {
-    public readonly SourceCache<User, long> Users = new(x => x.Id);
     private readonly Lock _usersLock = new();
-    private bool _loaded = false;
+    public readonly SourceCache<User, long> Users = new(x => x.Id);
+    private bool _loaded;
 
     public UserSource()
     {
@@ -29,10 +29,15 @@ public class UserSource
         {
             if (!MainWindowViewModel.Instance.PermissionManager.CanReadUsers)
             {
-                lock (_usersLock) { Users.Clear(); }
+                lock (_usersLock)
+                {
+                    Users.Clear();
+                }
+
                 return;
             }
-            if(!_loaded) LoadUsers();
+
+            if (!_loaded) LoadUsers();
         });
     }
 

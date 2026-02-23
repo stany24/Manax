@@ -15,8 +15,10 @@ public static class ManaxApiUserClient
             if (!response.IsSuccessStatusCode)
                 return response.StatusCode switch
                 {
-                    HttpStatusCode.Unauthorized => Optional<UserLoginResultDto>.Failure("Invalid username or password."),
-                    HttpStatusCode.BadRequest => Optional<UserLoginResultDto>.Failure("User and password are required."),
+                    HttpStatusCode.Unauthorized =>
+                        Optional<UserLoginResultDto>.Failure("Invalid username or password."),
+                    HttpStatusCode.BadRequest =>
+                        Optional<UserLoginResultDto>.Failure("User and password are required."),
                     _ => Optional<UserLoginResultDto>.Failure(response)
                 };
             UserLoginResultDto? user = await response.Content.ReadFromJsonAsync<UserLoginResultDto>();

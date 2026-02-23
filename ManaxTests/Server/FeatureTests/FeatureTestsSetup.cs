@@ -4,7 +4,7 @@ using ManaxTests.Server.Mocks;
 
 namespace ManaxTests.Server.FeatureTests;
 
-public abstract class FeatureTestsSetup: TestSetup
+public abstract class FeatureTestsSetup : TestSetup
 {
     private MockNotificationService _mockNotificationService = null!;
     protected FeatureController Controller { get; private set; } = null!;

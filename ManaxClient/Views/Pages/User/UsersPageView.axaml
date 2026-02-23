@@ -14,14 +14,14 @@
     x:DataType="page:UsersPageViewModel"
     IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanReadUsers}"
     Classes="page">
-    
+
     <UserControl.Styles>
         <Style Selector="Border.user-role">
-            <Setter Property="CornerRadius" Value="18"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="BorderBrush" Value="{DynamicResource MaterialPrimaryMidBrush}"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="Padding" Value="4"/>
+            <Setter Property="CornerRadius" Value="18" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="BorderBrush" Value="{DynamicResource MaterialPrimaryMidBrush}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Padding" Value="4" />
         </Style>
     </UserControl.Styles>
 
@@ -40,10 +40,10 @@
                                          IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWriteUsers}"
                                          Command="{Binding CreateUser}"
                                          Text="{localization:Localize UserPage.Add}"
-                                         Icon="Add"/>
+                                         Icon="Add" />
                 </Grid>
             </Border>
-            
+
             <Border Classes="card">
                 <StackPanel>
                     <ItemsControl ItemsSource="{Binding Users}">
@@ -54,15 +54,15 @@
                                           ColumnSpacing="16">
                                         <icon:MaterialIcon Grid.Column="0"
                                                            Classes="icon"
-                                                           Kind="UserOutline"/>
+                                                           Kind="UserOutline" />
 
                                         <TextBlock Grid.Column="1"
                                                    Classes="item-name"
-                                                   Text="{Binding Username}"/>
+                                                   Text="{Binding Username}" />
 
                                         <Border Grid.Column="2"
                                                 Classes="user-role">
-                                            <TextBlock Text="{Binding Role}"/>
+                                            <TextBlock Text="{Binding Role}" />
                                         </Border>
 
                                         <Button Grid.Column="4"
@@ -72,19 +72,18 @@
                                                 CommandParameter="{Binding Id}"
                                                 Padding="8"
                                                 VerticalAlignment="Center"
-                                                Content="{localization:Localize UserPage.Permissions}">
-                                        </Button>
+                                                Content="{localization:Localize UserPage.Permissions}" />
 
                                         <controls:IconButton Grid.Column="5"
                                                              Classes="icon-button dark"
-                                                             Icon="PencilOutline"/>
+                                                             Icon="PencilOutline" />
 
                                         <controls:IconButton Grid.Column="6"
                                                              Classes="icon-button dark"
                                                              IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanDeleteUsers}"
                                                              Command="{Binding $parent[UserControl].((page:UsersPageViewModel)DataContext).DeleteUser}"
                                                              CommandParameter="{Binding .}"
-                                                             Icon="DeleteOutline"/>
+                                                             Icon="DeleteOutline" />
                                     </Grid>
                                 </Border>
                             </DataTemplate>
@@ -92,7 +91,7 @@
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <StackPanel Orientation="Vertical"
-                                            Spacing="8"/>
+                                            Spacing="8" />
                             </ItemsPanelTemplate>
                         </ItemsControl.ItemsPanel>
                     </ItemsControl>

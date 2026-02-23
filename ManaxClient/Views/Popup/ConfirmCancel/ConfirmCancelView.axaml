@@ -20,7 +20,7 @@
 
             <ContentControl Grid.Row="0"
                             Grid.Column="0"
-                            Content="{Binding Content}"/>
+                            Content="{Binding Content}" />
 
             <Grid Grid.Row="2"
                   Grid.Column="0"

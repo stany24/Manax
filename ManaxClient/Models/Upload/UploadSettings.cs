@@ -43,7 +43,7 @@ public static class UploadSettings
 
     private static void Save()
     {
-        StorageManager.Save(StorageManager.UploadFile,Settings);
+        StorageManager.Save(StorageManager.UploadFile, Settings);
         SettingsChanged?.Invoke(null, EventArgs.Empty);
     }
 }

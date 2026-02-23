@@ -25,23 +25,29 @@ public partial class ChapterFolder : ObservableObject
         Images = new ObservableCollection<ImageFile>(images);
     }
 
+    public ObservableCollection<ImageFile> Images { get; set; }
+
     ~ChapterFolder()
     {
         foreach (KeyValuePair<string, string> keyValuePair in _deletedImages)
-        {
-            try { File.Delete(keyValuePair.Value); }
-            catch { /*Ignored*/ }
-        }
+            try
+            {
+                File.Delete(keyValuePair.Value);
+            }
+            catch
+            {
+                /*Ignored*/
+            }
     }
-
-    public ObservableCollection<ImageFile> Images { get; set; }
 
     public void DeleteImage(ImageFile image)
     {
         Images.Remove(image);
-        if (!Directory.Exists(Path.Combine(StorageManager.TrashFolder, Name))) Directory.CreateDirectory(Path.Combine(StorageManager.TrashFolder, Name));
+        if (!Directory.Exists(Path.Combine(StorageManager.TrashFolder, Name)))
+            Directory.CreateDirectory(Path.Combine(StorageManager.TrashFolder, Name));
 
-        string trashImagePath = Path.Combine(StorageManager.TrashFolder, Name, Path.GetFileName(image.Path) + Guid.NewGuid());
+        string trashImagePath =
+            Path.Combine(StorageManager.TrashFolder, Name, Path.GetFileName(image.Path) + Guid.NewGuid());
         File.Move(image.Path, trashImagePath);
         _deletedImages.Add(new KeyValuePair<string, string>(image.Path, trashImagePath));
         OnPropertyChanged(nameof(Images));

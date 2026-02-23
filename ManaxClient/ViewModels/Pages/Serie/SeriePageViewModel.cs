@@ -1,11 +1,6 @@
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
-using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
 using DynamicData;
@@ -38,7 +33,7 @@ public partial class SeriePageViewModel : PageViewModel
             .Connect()
             .SortAndBind(out _ranks, comparer)
             .Subscribe();
-        
+
         Serie.LoadInfo();
         Serie.LoadChapters();
         Serie.LoadPoster();
@@ -78,12 +73,14 @@ public partial class SeriePageViewModel : PageViewModel
                 SerieUpdateDto serie = content.GetResult();
                 Optional<bool> serieResponse = await ManaxApiSerieClient.PutSerieAsync(Serie.Id, serie);
                 if (!serieResponse.Failed) return;
-                WeakReferenceMessenger.Default.Send(new NotificationMessage(Localizer.Get("SeriePage.ErrorUpdatingSerie")));
+                WeakReferenceMessenger.Default.Send(
+                    new NotificationMessage(Localizer.Get("SeriePage.ErrorUpdatingSerie")));
                 Logger.LogFailure("Failed to update serie with ID: " + Serie.Id);
             }
             catch (Exception e)
             {
-                WeakReferenceMessenger.Default.Send(new NotificationMessage(Localizer.Get("SeriePage.ErrorUpdatingSerie")));
+                WeakReferenceMessenger.Default.Send(
+                    new NotificationMessage(Localizer.Get("SeriePage.ErrorUpdatingSerie")));
                 Logger.LogError("Failed to update serie with ID: " + Serie.Id, e);
             }
         };

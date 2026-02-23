@@ -17,10 +17,10 @@ namespace ManaxClient.Models.Server.Sources;
 
 public class RoleSource
 {
-    public readonly SourceCache<Role, long> Roles = new(x => x.Id);
-    private bool _loaded;
     private readonly Lock _loadLock = new();
     private readonly Lock _rolesLock = new();
+    public readonly SourceCache<Role, long> Roles = new(x => x.Id);
+    private bool _loaded;
 
     public RoleSource()
     {

@@ -25,8 +25,14 @@ public class SavePointController(ManaxContext context) : ControllerBase
         SavePoint savePoint = SavePoint.Create(savePointCreate);
         context.SavePoints.Add(savePoint);
 
-        try { await context.SaveChangesAsync(); }
-        catch { return Conflict(ErrorCode.SavePointAlreadyExists); }
+        try
+        {
+            await context.SaveChangesAsync();
+        }
+        catch
+        {
+            return Conflict(ErrorCode.SavePointAlreadyExists);
+        }
 
         Logger.LogInfo("Created new save point with ID " + savePoint.Id + " at: " + savePoint.Path);
         return Ok(savePoint.Id);

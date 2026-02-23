@@ -15,33 +15,19 @@ public class SettingsDataDto
     public ImageFormat BannerFormat { get; init; } = ImageFormat.Webp;
     public ImageFormat ImageFormat { get; init; } = ImageFormat.Webp;
     public ArchiveFormat ArchiveFormat { get; init; } = ArchiveFormat.Cbz;
-    
+
     public string? Validate()
     {
-        if (MaxPosterWidth < MinPosterWidth)
-        {
-            return "MaxPosterWidth cannot be less than MinPosterWidth.";
-        }
+        if (MaxPosterWidth < MinPosterWidth) return "MaxPosterWidth cannot be less than MinPosterWidth.";
 
-        if (MaxChapterWidth < MinChapterWidth)
-        {
-            return "MaxChapterWidth cannot be less than MinChapterWidth.";
-        }
+        if (MaxChapterWidth < MinChapterWidth) return "MaxChapterWidth cannot be less than MinChapterWidth.";
 
         if (MaxDescriptionLength < MinDescriptionLength)
-        {
             return "MaxDescriptionLength cannot be less than MinDescriptionLength.";
-        }
 
-        if (ImageQuality is < 1 or > 100)
-        {
-            return "ImageQuality must be between 1 and 100.";
-        }
+        if (ImageQuality is < 1 or > 100) return "ImageQuality must be between 1 and 100.";
 
-        if (PosterQuality is < 1 or > 100)
-        {
-            return "PosterQuality must be between 1 and 100.";
-        }
+        if (PosterQuality is < 1 or > 100) return "PosterQuality must be between 1 and 100.";
 
         return null;
     }

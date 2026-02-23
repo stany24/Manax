@@ -5,14 +5,6 @@ namespace ManaxClient.Models.Theme;
 
 public class ThemeSettingsData
 {
-    public bool IsDark { get; set; }
-    [JsonIgnore] public HslColor AccentColor
-    {
-        get => Color.FromUInt32(AccentColorString).ToHsl();
-        init => AccentColorString = value.ToRgb().ToUInt32();
-    }
-    [JsonInclude] private uint AccentColorString { get; set; }
-    
     public ThemeSettingsData()
     {
     }
@@ -22,4 +14,15 @@ public class ThemeSettingsData
         AccentColorString = accent.ToRgb().ToUInt32();
         IsDark = isDark;
     }
+
+    public bool IsDark { get; set; }
+
+    [JsonIgnore]
+    public HslColor AccentColor
+    {
+        get => Color.FromUInt32(AccentColorString).ToHsl();
+        init => AccentColorString = value.ToRgb().ToUInt32();
+    }
+
+    [JsonInclude] private uint AccentColorString { get; set; }
 }

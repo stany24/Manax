@@ -11,7 +11,7 @@
     x:Class="ManaxClient.Views.Pages.Settings.SettingsAppView"
     x:DataType="page:SettingsAppViewModel"
     Classes="page">
-    
+
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel Orientation="Vertical" Spacing="24">
 
@@ -20,12 +20,12 @@
                       ColumnDefinitions="Auto,Auto,*">
                     <icon:MaterialIcon Grid.Column="0"
                                        Classes="icon"
-                                       Kind="CogOutline"/>
+                                       Kind="CogOutline" />
                     <TextBlock Grid.Column="1"
                                Text="{localization:Localize SettingsAppPage.Title}" />
                 </Grid>
             </Border>
-            
+
             <controls:StretchWrapPanel ItemSpacing="12"
                                        LineSpacing="12">
                 <Border Classes="card">
@@ -34,7 +34,7 @@
                               ColumnDefinitions="Auto,Auto">
                             <icon:MaterialIcon Grid.Column="0"
                                                Classes="icon"
-                                               Kind="FlagVariantOutline"/>
+                                               Kind="FlagVariantOutline" />
                             <TextBlock Grid.Column="1"
                                        Text="{localization:Localize SettingsAppPage.Language}"
                                        Margin="0" />
@@ -46,7 +46,7 @@
                                            FontWeight="Medium" />
                                 <ComboBox ItemsSource="{Binding Languages}"
                                           SelectedItem="{Binding SelectedLanguage}"
-                                          DisplayMemberBinding="{Binding DisplayName}"/>
+                                          DisplayMemberBinding="{Binding DisplayName}" />
                             </StackPanel>
                         </Border>
                     </StackPanel>
@@ -58,7 +58,7 @@
                               ColumnDefinitions="Auto,Auto,*">
                             <icon:MaterialIcon Grid.Column="0"
                                                Classes="icon"
-                                               Kind="MoonWaxingCrescent"/>
+                                               Kind="MoonWaxingCrescent" />
                             <TextBlock Grid.Column="1"
                                        Text="{localization:Localize SettingsAppPage.DisplayMode}"
                                        Margin="0" />
@@ -80,7 +80,7 @@
                               ColumnDefinitions="Auto,Auto,*">
                             <icon:MaterialIcon Grid.Column="0"
                                                Classes="icon"
-                                               Kind="PaletteOutline"/>
+                                               Kind="PaletteOutline" />
                             <TextBlock Grid.Column="1"
                                        Text="{localization:Localize SettingsAppPage.AccentColor}"
                                        Margin="0" />
@@ -88,8 +88,7 @@
 
                         <Border Classes="item-card">
                             <ColorView
-                                HsvColor="{Binding ThemeColor}">
-                            </ColorView>
+                                HsvColor="{Binding ThemeColor}" />
                         </Border>
                     </StackPanel>
                 </Border>

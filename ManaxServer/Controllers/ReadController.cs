@@ -51,7 +51,7 @@ public class ReadController(ManaxContext context, INotificationService notificat
             await context.SaveChangesAsync();
             notification.NotifyReadCreated(read.ToDto());
         }
-        
+
         return Ok();
     }
 

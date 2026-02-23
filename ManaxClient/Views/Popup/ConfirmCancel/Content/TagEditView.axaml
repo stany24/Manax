@@ -13,7 +13,7 @@
                 Spacing="8">
         <StackPanel Classes="popup-title">
             <icon:MaterialIcon Classes="icon"
-                               Kind="Tag"/>
+                               Kind="Tag" />
             <StackPanel>
                 <TextBlock Text="{localization:Localize TagEditPopup.Title}" />
                 <TextBlock Text="{localization:Localize TagEditPopup.Description}" />

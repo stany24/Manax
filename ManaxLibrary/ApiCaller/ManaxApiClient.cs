@@ -11,7 +11,7 @@ public static class ManaxApiClient
         BaseAddress = new Uri("http://127.0.0.1:5246/"),
         Timeout = TimeSpan.FromSeconds(5)
     };
-    
+
     internal static HttpClient UploadClient = new()
     {
         BaseAddress = new Uri("http://127.0.0.1:5246/"),
@@ -89,7 +89,8 @@ public static class ManaxApiClient
         });
     }
 
-    internal static async Task<Optional<TResult>> PostAsync<TResult, TBody>(string endpoint, TBody body, string? errorMessage = null)
+    internal static async Task<Optional<TResult>> PostAsync<TResult, TBody>(string endpoint, TBody body,
+        string? errorMessage = null)
     {
         return await ExecuteWithErrorHandlingAsync(async () =>
         {
@@ -97,7 +98,8 @@ public static class ManaxApiClient
             if (!response.IsSuccessStatusCode) return Optional<TResult>.Failure(response);
             TResult? data = await response.Content.ReadFromJsonAsync<TResult>();
             return data == null
-                ? Optional<TResult>.Failure(errorMessage ?? $"Failed to deserialize {typeof(TResult).Name} from API response.")
+                ? Optional<TResult>.Failure(errorMessage ??
+                                            $"Failed to deserialize {typeof(TResult).Name} from API response.")
                 : Optional<TResult>.Success(data);
         });
     }
@@ -124,7 +126,8 @@ public static class ManaxApiClient
         });
     }
 
-    internal static async Task<Optional<TResult>> PutAsync<TResult, TBody>(string endpoint, TBody body, string? errorMessage = null)
+    internal static async Task<Optional<TResult>> PutAsync<TResult, TBody>(string endpoint, TBody body,
+        string? errorMessage = null)
     {
         return await ExecuteWithErrorHandlingAsync(async () =>
         {
@@ -132,7 +135,8 @@ public static class ManaxApiClient
             if (!response.IsSuccessStatusCode) return Optional<TResult>.Failure(response);
             TResult? data = await response.Content.ReadFromJsonAsync<TResult>();
             return data == null
-                ? Optional<TResult>.Failure(errorMessage ?? $"Failed to deserialize {typeof(TResult).Name} from API response.")
+                ? Optional<TResult>.Failure(errorMessage ??
+                                            $"Failed to deserialize {typeof(TResult).Name} from API response.")
                 : Optional<TResult>.Success(data);
         });
     }

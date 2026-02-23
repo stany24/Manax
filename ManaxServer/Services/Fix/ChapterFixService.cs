@@ -38,11 +38,10 @@ public partial class FixService(
 
         ZipArchive archive = new(new MemoryStream(newChapter.Data));
         ZipArchiveEntry[] entries = archive.Entries.ToArray();
-        Array.Sort(entries, (a,b) => string.Compare(b.FullName, a.FullName, StringComparison.Ordinal));
+        Array.Sort(entries, (a, b) => string.Compare(b.FullName, a.FullName, StringComparison.Ordinal));
         MagickImage[] images = new MagickImage[archive.Entries.Count];
-        
+
         for (int i = 0; i < entries.Length; i++)
-        {
             try
             {
                 MagickImage magickImage = new(entries[i].Open());
@@ -50,10 +49,10 @@ public partial class FixService(
             }
             catch (Exception)
             {
-                notificationService.NotifyChapterUploadFailedAsync(newChapter.UploaderId, serie.Title, newChapter.Number);
+                notificationService.NotifyChapterUploadFailedAsync(newChapter.UploaderId, serie.Title,
+                    newChapter.Number);
                 return;
             }
-        }
 
         FixWidthOfChapter(chapter.Id, images);
         FixChapterFilesFormat(images);
@@ -97,13 +96,12 @@ public partial class FixService(
         Chapter chapter = Chapter.FromDto(newChapter);
         chapter.PageNumber = Convert.ToUInt32(archive.Entries.Count);
         chapter.Serie = serie;
-        
+
         ZipArchiveEntry[] entries = archive.Entries.ToArray();
-        Array.Sort(entries, (a,b) => string.Compare(a.FullName, b.FullName, StringComparison.Ordinal));
+        Array.Sort(entries, (a, b) => string.Compare(a.FullName, b.FullName, StringComparison.Ordinal));
         MagickImage[] images = new MagickImage[archive.Entries.Count];
-        
+
         for (int i = 0; i < entries.Length; i++)
-        {
             try
             {
                 MagickImage magickImage = new(entries[i].Open());
@@ -111,14 +109,14 @@ public partial class FixService(
             }
             catch (Exception)
             {
-                notificationService.NotifyChapterUploadFailedAsync(newChapter.UploaderId, serie.Title, newChapter.Number);
+                notificationService.NotifyChapterUploadFailedAsync(newChapter.UploaderId, serie.Title,
+                    newChapter.Number);
                 return;
             }
-        }
 
         FixWidthOfChapter(chapter.Id, images);
         FixChapterFilesFormat(images);
-        
+
         using (FileStream fs = new(chapter.Path(), FileMode.Create, FileAccess.Write, FileShare.None))
         using (ZipArchive chapterFile = new(fs, ZipArchiveMode.Create))
         {
@@ -141,7 +139,8 @@ public partial class FixService(
 
     private void FixWidthOfChapter(long id, MagickImage[] images)
     {
-        foreach (MagickImage image in images){
+        foreach (MagickImage image in images)
+        {
             uint min = SettingsManager.DataDto.MinChapterWidth;
             uint max = SettingsManager.DataDto.MaxChapterWidth;
             issueService.ManageChapterIssue(id, IssueChapterAutomaticType.ImageTooSmall, image.Width < min);

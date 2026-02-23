@@ -86,13 +86,14 @@ public partial class SettingsServerPageViewModel : PageViewModel
                 if (viewModel.Canceled()) return;
                 SavePointCreateDto savePoint = content.GetResult();
                 Optional<long> postLibraryResponse = await ManaxApiSavePointClient.PostSavePointAsync(savePoint);
-                if (postLibraryResponse.Failed) 
+                if (postLibraryResponse.Failed)
                     WeakReferenceMessenger.Default.Send(new NotificationMessage(postLibraryResponse.Error));
             }
             catch (Exception e)
             {
                 Logger.LogError("Error creating save point", e);
-                WeakReferenceMessenger.Default.Send(new NotificationMessage(Localizer.Get("SettingsServerPage.ErrorCreatingSavePoint")));
+                WeakReferenceMessenger.Default.Send(
+                    new NotificationMessage(Localizer.Get("SettingsServerPage.ErrorCreatingSavePoint")));
             }
         };
         WeakReferenceMessenger.Default.Send(new PopupChangeMessage(popup));
@@ -110,13 +111,14 @@ public partial class SettingsServerPageViewModel : PageViewModel
                 if (viewModel.Canceled()) return;
                 LibraryCreateDto library = content.GetResult();
                 Optional<long> postLibraryResponse = await ManaxApiLibraryClient.PostLibraryAsync(library);
-                if (postLibraryResponse.Failed) 
+                if (postLibraryResponse.Failed)
                     WeakReferenceMessenger.Default.Send(new NotificationMessage(postLibraryResponse.Error));
             }
             catch (Exception e)
             {
                 Logger.LogError("Error creating library", e);
-                WeakReferenceMessenger.Default.Send(new NotificationMessage(Localizer.Get("SettingsServerPage.ErrorCreatingLibrary")));
+                WeakReferenceMessenger.Default.Send(
+                    new NotificationMessage(Localizer.Get("SettingsServerPage.ErrorCreatingLibrary")));
             }
         };
         WeakReferenceMessenger.Default.Send(new PopupChangeMessage(popup));

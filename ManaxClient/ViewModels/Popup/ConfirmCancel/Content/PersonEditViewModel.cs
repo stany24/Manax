@@ -31,7 +31,7 @@ public partial class PersonEditViewModel : ConfirmCancelContentViewModel
         MainWindowViewModel.Instance.RoleSource.Roles.Connect()
             .SortAndBind(out _roles, roleComparer)
             .Subscribe();
-        
+
         _role = _roles.FirstOrDefault(r => r.Id == person.RoleId);
 
         PropertyChanged += (_, args) =>

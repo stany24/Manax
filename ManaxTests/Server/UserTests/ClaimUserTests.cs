@@ -47,7 +47,7 @@ public class ClaimUserTests : UserTestsSetup
         };
 
         ActionResult<UserLoginResultDto> result = Controller.Claim(claimRequest);
-        
+
         CheckTypeAndErrorCode<UnauthorizedObjectResult>(result.Result, ErrorCode.ServerAlreadyClaimed);
         LoginAttempt? claimAttempt = Context.LoginAttempts.FirstOrDefault(la => la.Type == "Claim");
         Assert.IsNotNull(claimAttempt);
@@ -71,7 +71,7 @@ public class ClaimUserTests : UserTestsSetup
 
         OkObjectResult? okResult = result.Result as OkObjectResult;
         Assert.IsNotNull(okResult);
-        
+
         UserLoginResultDto? claimResult = okResult.Value as UserLoginResultDto;
         Assert.IsNotNull(claimResult);
 
@@ -97,7 +97,7 @@ public class ClaimUserTests : UserTestsSetup
 
         OkObjectResult? okResult = result.Result as OkObjectResult;
         Assert.IsNotNull(okResult);
-        
+
         UserLoginResultDto? claimResult = okResult.Value as UserLoginResultDto;
         Assert.IsNotNull(claimResult);
 

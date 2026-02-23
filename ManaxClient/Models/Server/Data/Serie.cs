@@ -111,7 +111,7 @@ public partial class Serie : ObservableObject, IDisposable
             try
             {
                 Optional<SerieDto> serieInfoResponse = await ManaxApiSerieClient.GetSerieInfoAsync(Id);
-                if (serieInfoResponse.Failed) 
+                if (serieInfoResponse.Failed)
                     WeakReferenceMessenger.Default.Send(new NotificationMessage(serieInfoResponse.Error));
 
                 FromSerieDto(serieInfoResponse.GetValue());

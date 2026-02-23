@@ -17,16 +17,16 @@ namespace ManaxClient.Models.Server.Sources;
 
 public class SerieSource
 {
+    private readonly Lock _loadLock = new();
+    private readonly Lock _seriesLock = new();
     public readonly SourceCache<Serie, long> Series = new(serie => serie.Id);
     private bool _isLoaded;
-    private readonly Lock _seriesLock = new();
-    private readonly Lock _loadLock = new();
 
     public SerieSource()
     {
         NotificationReceiver.OnSerieCreated += OnSerieCreated;
         NotificationReceiver.OnSerieDeleted += OnSerieDeleted;
-        WeakReferenceMessenger.Default.Register<LoggedInMessage>(this, (_,_) => LoadSeries());
+        WeakReferenceMessenger.Default.Register<LoggedInMessage>(this, (_, _) => LoadSeries());
     }
 
     private void OnSerieCreated(SerieDto dto)

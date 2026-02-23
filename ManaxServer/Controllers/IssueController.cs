@@ -34,7 +34,6 @@ public class IssueController(
     [HttpGet("serie/automatic")]
     [RequirePermission(Permission.ReadAllIssues)]
     [RequireFeature(FeatureType.AutomaticIssues)]
-
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<IssueSerieAutomaticDto>>> GetAllAutomaticSerieIssues()
     {
@@ -47,7 +46,6 @@ public class IssueController(
     [HttpGet("chapter/reported")]
     [RequirePermission(Permission.ReadAllIssues)]
     [RequireFeature(FeatureType.ReportedIssues)]
-
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<IssueChapterReportedDto>>> GetAllReportedChapterIssues()
     {
@@ -85,8 +83,15 @@ public class IssueController(
         issue.CreatedAt = DateTime.UtcNow;
 
         context.ReportedIssuesChapter.Add(issue);
-        try { await context.SaveChangesAsync(); }
-        catch { return Conflict(ErrorCode.IssueAlreadyExists); }
+        try
+        {
+            await context.SaveChangesAsync();
+        }
+        catch
+        {
+            return Conflict(ErrorCode.IssueAlreadyExists);
+        }
+
         notificationService.NotifyChapterIssueCreatedAsync(issue.ToDto());
 
         return Created();
@@ -106,8 +111,15 @@ public class IssueController(
         IssueSerieReported issue = IssueSerieReported.Create(issueSerieReportedCreate, (long)currentUserId);
 
         context.ReportedIssuesSerie.Add(issue);
-        try { await context.SaveChangesAsync(); }
-        catch { return Conflict(ErrorCode.IssueAlreadyExists); }
+        try
+        {
+            await context.SaveChangesAsync();
+        }
+        catch
+        {
+            return Conflict(ErrorCode.IssueAlreadyExists);
+        }
+
         notificationService.NotifySerieIssueCreatedAsync(issue.ToDto());
 
         return Created();

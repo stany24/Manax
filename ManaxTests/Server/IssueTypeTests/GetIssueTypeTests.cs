@@ -55,7 +55,7 @@ public class GetIssueTypeTests : IssueTypeTestsSetup
 
         OkObjectResult? okResult = result.Result as OkObjectResult;
         Assert.IsNotNull(okResult);
-        
+
         List<IssueChapterReportedTypeDto>? returnedTypes = okResult.Value as List<IssueChapterReportedTypeDto>;
         Assert.IsNotNull(returnedTypes);
         Assert.HasCount(3, returnedTypes);
@@ -65,7 +65,7 @@ public class GetIssueTypeTests : IssueTypeTestsSetup
     public async Task GetAllReportedSerieIssuesTypesVerifyCorrectCount()
     {
         ActionResult<IEnumerable<IssueSerieReportedTypeDto>> result = await Controller.GetAllReportedSerieIssuesTypes();
-        
+
         OkObjectResult? okResult = result.Result as OkObjectResult;
         Assert.IsNotNull(okResult);
 

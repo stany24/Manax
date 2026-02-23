@@ -90,7 +90,8 @@ public partial class Chapter : ObservableObject, IDisposable
                 if (chapterPageResponse.Failed)
                 {
                     WeakReferenceMessenger.Default.Send(new NotificationMessage(chapterPageResponse.Error));
-                    Logger.LogFailure("Loading page " + i+ " for chapter " + Id + " failed: " + chapterPageResponse.Error);
+                    Logger.LogFailure("Loading page " + i + " for chapter " + Id + " failed: " +
+                                      chapterPageResponse.Error);
                     continue;
                 }
 
@@ -103,8 +104,9 @@ public partial class Chapter : ObservableObject, IDisposable
                 }
                 catch (Exception e)
                 {
-                    WeakReferenceMessenger.Default.Send(new NotificationMessage(string.Format(Localizer.Get("Chapter.LoadPageFailed"),i)));
-                    Logger.LogError("Loading page " + i+ " for chapter " + Id + " failed", e);
+                    WeakReferenceMessenger.Default.Send(
+                        new NotificationMessage(string.Format(Localizer.Get("Chapter.LoadPageFailed"), i)));
+                    Logger.LogError("Loading page " + i + " for chapter " + Id + " failed", e);
                 }
             }
         }), token);

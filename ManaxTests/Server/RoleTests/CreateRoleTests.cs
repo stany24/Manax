@@ -12,7 +12,7 @@ public class CreateRoleTests : RoleTestsSetup
     {
         Name = "Author"
     };
-    
+
     [TestMethod]
     public async Task CreateRoleWithValidDataCreatesNewRole()
     {

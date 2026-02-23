@@ -57,7 +57,7 @@ public class GetRankTests : RankTestsSetup
 
         OkObjectResult? okResult = result.Result as OkObjectResult;
         Assert.IsNotNull(okResult);
-        
+
         List<RankDto>? returnedRanks = okResult.Value as List<RankDto>;
         Assert.IsNotNull(returnedRanks);
 

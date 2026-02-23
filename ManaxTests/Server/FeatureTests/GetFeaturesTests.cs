@@ -10,12 +10,12 @@ public class GetFeaturesTests : FeatureTestsSetup
     public void GetFeaturesReturnsAllFeatures()
     {
         ActionResult<List<Feature>> result = Controller.GetFeatures();
-        
+
         OkObjectResult? okResult = result.Result as OkObjectResult;
         Assert.IsNotNull(okResult);
 
         List<Feature>? features = okResult.Value as List<Feature>;
-        
+
         Assert.IsNotNull(features);
         Assert.HasCount(3, features);
     }
@@ -29,7 +29,7 @@ public class GetFeaturesTests : FeatureTestsSetup
 
         ActionResult<List<Feature>> result = Controller.GetFeatures();
 
-        OkObjectResult ? okResult = result.Result as OkObjectResult;
+        OkObjectResult? okResult = result.Result as OkObjectResult;
         Assert.IsNotNull(okResult);
         List<Feature>? features = okResult.Value as List<Feature>;
         Assert.IsNotNull(features);
@@ -43,10 +43,10 @@ public class GetFeaturesTests : FeatureTestsSetup
         FeatureService.SetFeatureEnabled(FeatureType.Ranks, true);
 
         ActionResult<List<Feature>> result = Controller.GetFeatures();
-        
-        OkObjectResult ? okResult = result.Result as OkObjectResult;
+
+        OkObjectResult? okResult = result.Result as OkObjectResult;
         Assert.IsNotNull(okResult);
-        
+
         Assert.IsTrue(FeatureService.IsFeatureEnabled(FeatureType.Ranks));
     }
 }

@@ -14,8 +14,8 @@ namespace ManaxClient.ViewModels.Pages.Settings;
 public partial class SettingsAppViewModel : PageViewModel
 {
     private readonly ReadOnlyObservableCollection<Language> _languages;
-    [ObservableProperty] private Language? _selectedLanguage;
     private bool _isDarkMode;
+    [ObservableProperty] private Language? _selectedLanguage;
     private HsvColor _themeColor;
 
     public SettingsAppViewModel()
@@ -33,7 +33,7 @@ public partial class SettingsAppViewModel : PageViewModel
     }
 
     public ReadOnlyObservableCollection<Language> Languages => _languages;
-    
+
 
     public bool IsDarkMode
     {
@@ -43,7 +43,7 @@ public partial class SettingsAppViewModel : PageViewModel
             if (SetProperty(ref _isDarkMode, value)) UpdateTheme();
         }
     }
-    
+
     public HsvColor ThemeColor
     {
         get => _themeColor;

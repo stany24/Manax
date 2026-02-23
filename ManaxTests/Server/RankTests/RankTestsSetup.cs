@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ManaxTests.Server.RankTests;
 
-public abstract class RankTestsSetup:TestSetup
+public abstract class RankTestsSetup : TestSetup
 {
     private MockFeatureService _mockFeatureService = null!;
     private MockNotificationService _mockNotificationService = null!;

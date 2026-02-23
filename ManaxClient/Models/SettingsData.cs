@@ -3,24 +3,24 @@ using ManaxLibrary.DTO.Setting;
 
 namespace ManaxClient.Models;
 
-public partial class SettingsData:ObservableObject
+public partial class SettingsData : ObservableObject
 {
-    [ObservableProperty] private bool _isValid;
-    [ObservableProperty] private string _issue = string.Empty;
-    [ObservableProperty] private uint _maxPosterWidth;
-    [ObservableProperty] private uint _minPosterWidth;
-    [ObservableProperty] private uint _maxChapterWidth;
-    [ObservableProperty] private uint _minChapterWidth;
-    [ObservableProperty] private uint _maxDescriptionLength;
-    [ObservableProperty] private uint _minDescriptionLength;
-    [ObservableProperty] private uint _imageQuality;
-    [ObservableProperty] private uint _posterQuality;
-    [ObservableProperty] private uint _bannerQuality;
-    [ObservableProperty] private ImageFormat _posterFormat;
-    [ObservableProperty] private ImageFormat _bannerFormat;
-    [ObservableProperty] private ImageFormat _imageFormat;
     [ObservableProperty] private ArchiveFormat _archiveFormat;
-    
+    [ObservableProperty] private ImageFormat _bannerFormat;
+    [ObservableProperty] private uint _bannerQuality;
+    [ObservableProperty] private ImageFormat _imageFormat;
+    [ObservableProperty] private uint _imageQuality;
+    [ObservableProperty] private string _issue = string.Empty;
+    [ObservableProperty] private bool _isValid;
+    [ObservableProperty] private uint _maxChapterWidth;
+    [ObservableProperty] private uint _maxDescriptionLength;
+    [ObservableProperty] private uint _maxPosterWidth;
+    [ObservableProperty] private uint _minChapterWidth;
+    [ObservableProperty] private uint _minDescriptionLength;
+    [ObservableProperty] private uint _minPosterWidth;
+    [ObservableProperty] private ImageFormat _posterFormat;
+    [ObservableProperty] private uint _posterQuality;
+
     public static SettingsData FromDto(SettingsDataDto dto)
     {
         return new SettingsData

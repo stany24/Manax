@@ -5,7 +5,7 @@ namespace ManaxTests.Server;
 
 public class TestSetup
 {
-    internal static void CheckTypeAndErrorCode<T>(ActionResult? result,ErrorCode code) where T : ObjectResult
+    internal static void CheckTypeAndErrorCode<T>(ActionResult? result, ErrorCode code) where T : ObjectResult
     {
         Assert.IsNotNull(result);
         Assert.IsInstanceOfType<T>(result);

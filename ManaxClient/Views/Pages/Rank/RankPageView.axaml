@@ -21,10 +21,10 @@
             <Border Classes="card">
                 <Grid Classes="title"
                       ColumnDefinitions="Auto,Auto,*,Auto">
-                    
+
                     <icon:MaterialIcon Grid.Column="0"
                                        Classes="icon"
-                                       Kind="ChevronTripleUp"/>
+                                       Kind="ChevronTripleUp" />
                     <TextBlock Grid.Column="1"
                                Text="{localization:Localize RankPage.Title}" />
 
@@ -34,10 +34,10 @@
                                          Command="{Binding CreateRank}"
                                          VerticalAlignment="Center"
                                          Text="{localization:Localize RankPage.NewRank}"
-                                         Icon="Add"/>
+                                         Icon="Add" />
                 </Grid>
             </Border>
-            
+
             <Border Classes="card">
                 <StackPanel>
                     <ItemsControl ItemsSource="{Binding Ranks}">
@@ -48,7 +48,7 @@
 
                                         <icon:MaterialIcon Grid.Column="0"
                                                            Classes="icon"
-                                                           Kind="ChevronTripleUp"/>
+                                                           Kind="ChevronTripleUp" />
 
                                         <StackPanel Grid.Column="1" Orientation="Vertical" VerticalAlignment="Center">
                                             <TextBlock Text="{Binding Name}"
@@ -66,14 +66,14 @@
                                                              IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWriteRanks}"
                                                              Command="{Binding $parent[UserControl].((page:RankPageViewModel)DataContext).UpdateRank}"
                                                              CommandParameter="{Binding .}"
-                                                             Icon="PencilOutline"/>
+                                                             Icon="PencilOutline" />
 
                                         <controls:IconButton Grid.Column="3"
                                                              Classes="icon-button dark"
                                                              IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanDeleteRanks}"
                                                              Command="{Binding $parent[UserControl].((page:RankPageViewModel)DataContext).DeleteRank}"
                                                              CommandParameter="{Binding .}"
-                                                             Icon="DeleteOutline"/>
+                                                             Icon="DeleteOutline" />
                                     </Grid>
                                 </Border>
                             </DataTemplate>
@@ -81,7 +81,7 @@
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <StackPanel Orientation="Vertical"
-                                            Spacing="8"/>
+                                            Spacing="8" />
                             </ItemsPanelTemplate>
                         </ItemsControl.ItemsPanel>
                     </ItemsControl>

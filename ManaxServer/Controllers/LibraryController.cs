@@ -47,13 +47,19 @@ public class LibraryController(ManaxContext context, INotificationService notifi
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<ActionResult> PutLibrary(long id, LibraryUpdateDto libraryUpdate)
     {
-        if(!libraryUpdate.IsValid()) return BadRequest(ErrorCode.InvalidLibraryData);
+        if (!libraryUpdate.IsValid()) return BadRequest(ErrorCode.InvalidLibraryData);
         Library? library = await context.Libraries.FindAsync(id);
         if (library == null) return NotFound(ErrorCode.LibraryDoesNotExist);
         library.Update(libraryUpdate);
 
-        try { await context.SaveChangesAsync(); }
-        catch { return Conflict(ErrorCode.InvalidLibraryData); }
+        try
+        {
+            await context.SaveChangesAsync();
+        }
+        catch
+        {
+            return Conflict(ErrorCode.InvalidLibraryData);
+        }
 
         notificationService.NotifyLibraryUpdatedAsync(library.ToDto());
         return Ok();
@@ -65,14 +71,20 @@ public class LibraryController(ManaxContext context, INotificationService notifi
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<ActionResult<long>> PostLibrary(LibraryCreateDto libraryCreate)
     {
-        if (!libraryCreate.IsValid()) { return BadRequest(ErrorCode.InvalidLibraryData);}
+        if (!libraryCreate.IsValid()) return BadRequest(ErrorCode.InvalidLibraryData);
         Library library = Library.Create(libraryCreate);
         library.Creation = DateTime.UtcNow;
 
         context.Libraries.Add(library);
 
-        try { await context.SaveChangesAsync(); }
-        catch { return Conflict(ErrorCode.InvalidLibraryData); }
+        try
+        {
+            await context.SaveChangesAsync();
+        }
+        catch
+        {
+            return Conflict(ErrorCode.InvalidLibraryData);
+        }
 
         notificationService.NotifyLibraryCreatedAsync(library.ToDto());
         return Ok(library.Id);

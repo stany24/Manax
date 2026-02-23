@@ -18,47 +18,47 @@
 
     <UserControl.Styles>
         <Style Selector="avalonia|CartesianChart.chart">
-            <Setter Property="Background" Value="{DynamicResource MaterialCardBackgroundBrush}"/>
-            <Setter Property="HorizontalAlignment" Value="Stretch"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="Height" Value="300"/>
-            <Setter Property="MinWidth" Value="400"/>
+            <Setter Property="Background" Value="{DynamicResource MaterialCardBackgroundBrush}" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Height" Value="300" />
+            <Setter Property="MinWidth" Value="400" />
         </Style>
-        
+
         <Style Selector="avalonia|PieChart.chart">
-            <Setter Property="Background" Value="{DynamicResource MaterialCardBackgroundBrush}"/>
-            <Setter Property="HorizontalAlignment" Value="Stretch"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="Height" Value="300"/>
-            <Setter Property="MinWidth" Value="300"/>
+            <Setter Property="Background" Value="{DynamicResource MaterialCardBackgroundBrush}" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Height" Value="300" />
+            <Setter Property="MinWidth" Value="300" />
         </Style>
-        
+
         <Style Selector="TextBlock.name">
-            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="HorizontalAlignment" Value="Center" />
         </Style>
-        
+
         <Style Selector="TextBlock.number">
-            <Setter Property="FontSize" Value="16"/>
-            <Setter Property="FontWeight" Value="Bold"/>
-            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
         </Style>
     </UserControl.Styles>
-    
+
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel Orientation="Vertical" Spacing="24">
 
-            
+
             <Border Classes="card">
                 <Grid Classes="title"
                       ColumnDefinitions="Auto,Auto,*">
                     <icon:MaterialIcon Grid.Column="0"
                                        Classes="icon"
-                                       Kind="ChartLine"/>
+                                       Kind="ChartLine" />
                     <TextBlock Grid.Column="1"
                                Text="{localization:Localize ServerStatsPage.Title}" />
                 </Grid>
             </Border>
-            
+
             <controls:StretchWrapPanel ItemSpacing="12"
                                        LineSpacing="12">
                 <Border Classes="card">
@@ -66,32 +66,33 @@
                         <Grid Classes="section-title"
                               ColumnDefinitions="Auto,Auto,*">
                             <TextBlock Grid.Column="0"
-                                       Text="💾"/>
+                                       Text="💾" />
                             <TextBlock Grid.Column="1"
-                                       Text="{localization:Localize ServerStatsPage.DiskUsage.Title}"/>
+                                       Text="{localization:Localize ServerStatsPage.DiskUsage.Title}" />
                         </Grid>
 
                         <avalonia:PieChart Classes="chart"
-                                           Series="{Binding DiskUsageSeries}"/>
+                                           Series="{Binding DiskUsageSeries}" />
 
                         <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
                             <Border Classes="item-card"
                                     Grid.Column="0">
                                 <StackPanel Spacing="4">
                                     <TextBlock Classes="name"
-                                               Text="{localization:Localize ServerStatsPage.DiskUsage.Used}" FontSize="12" />
+                                               Text="{localization:Localize ServerStatsPage.DiskUsage.Used}"
+                                               FontSize="12" />
                                     <TextBlock Classes="number"
-                                               Text="{Binding DiskSizeInGb, StringFormat={}{0:F1} GB}"/>
+                                               Text="{Binding DiskSizeInGb, StringFormat={}{0:F1} GB}" />
                                 </StackPanel>
                             </Border>
-                            
+
                             <Border Classes="item-card"
                                     Grid.Column="1">
                                 <StackPanel Spacing="4">
                                     <TextBlock Classes="name"
                                                Text="{localization:Localize ServerStatsPage.DiskUsage.Available}" />
                                     <TextBlock Classes="number"
-                                               Text="{Binding AvailableDiskSizeInGb, StringFormat={}{0:F1} GB}"/>
+                                               Text="{Binding AvailableDiskSizeInGb, StringFormat={}{0:F1} GB}" />
                                 </StackPanel>
                             </Border>
                         </Grid>
@@ -104,25 +105,25 @@
                               ColumnDefinitions="Auto,Auto,*">
                             <icon:MaterialIcon Grid.Column="0"
                                                Classes="icon"
-                                               Kind="AccountGroupOutline"/>
+                                               Kind="AccountGroupOutline" />
                             <TextBlock Grid.Column="1"
                                        Text="{localization:Localize ServerStatsPage.UserActivity.Title}" />
                         </Grid>
 
                         <avalonia:PieChart Classes="chart"
-                                           Series="{Binding UserActivitySeries}"/>
+                                           Series="{Binding UserActivitySeries}" />
 
                         <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
                             <Border Classes="item-card"
                                     Grid.Column="0">
                                 <StackPanel Spacing="4">
                                     <TextBlock Classes="name"
-                                               Text="{localization:Localize ServerStatsPage.UserActivity.Active}"/>
+                                               Text="{localization:Localize ServerStatsPage.UserActivity.Active}" />
                                     <TextBlock Classes="number"
                                                Text="{Binding ServerStats.ActiveUsers}" />
                                 </StackPanel>
                             </Border>
-                            
+
                             <Border Classes="item-card"
                                     Grid.Column="1">
                                 <StackPanel Spacing="4">
@@ -135,16 +136,16 @@
                         </Grid>
                     </StackPanel>
                 </Border>
-                
+
                 <Border Classes="card">
                     <StackPanel Spacing="20">
                         <Grid Classes="section-title"
                               ColumnDefinitions="Auto,Auto,*">
                             <icon:MaterialIcon Grid.Column="0"
                                                Classes="icon"
-                                               Kind="Bookshelf"/>
+                                               Kind="Bookshelf" />
                             <TextBlock Grid.Column="1"
-                                       Text="{localization:Localize ServerStatsPage.Content.Title}"/>
+                                       Text="{localization:Localize ServerStatsPage.Content.Title}" />
                         </Grid>
 
                         <Grid RowDefinitions="Auto,Auto" RowSpacing="16">
@@ -159,7 +160,7 @@
 
                             <StackPanel Grid.Row="1" Spacing="4" HorizontalAlignment="Center">
                                 <icon:MaterialIcon Classes="icon"
-                                                   Kind="BookOpenVariantOutline"/>
+                                                   Kind="BookOpenVariantOutline" />
                                 <TextBlock Text="{localization:Localize ServerStatsPage.Content.Chapters}"
                                            FontSize="14" FontWeight="Medium" />
                                 <TextBlock Text="{Binding ServerStats.Chapters}"
@@ -177,13 +178,13 @@
                               ColumnDefinitions="Auto,Auto,*">
                             <icon:MaterialIcon Grid.Column="0"
                                                Classes="icon"
-                                               Kind="Bookshelf"/>
+                                               Kind="Bookshelf" />
                             <TextBlock Grid.Column="1"
-                                       Text="{localization:Localize ServerStatsPage.LibraryDistribution.Title}"/>
+                                       Text="{localization:Localize ServerStatsPage.LibraryDistribution.Title}" />
                         </Grid>
 
                         <avalonia:PieChart Classes="chart"
-                                           Series="{Binding LibraryDistributionSeries}"/>
+                                           Series="{Binding LibraryDistributionSeries}" />
                     </StackPanel>
                 </Border>
             </controls:StretchWrapPanel>
@@ -195,7 +196,7 @@
                         <TextBlock Grid.Column="0"
                                    Text="🚫" />
                         <TextBlock Grid.Column="1"
-                                   Text="{localization:Localize ServerStatsPage.NeverRead.Title}"/>
+                                   Text="{localization:Localize ServerStatsPage.NeverRead.Title}" />
                     </Grid>
 
                     <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">

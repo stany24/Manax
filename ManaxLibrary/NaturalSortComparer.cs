@@ -5,9 +5,6 @@ namespace ManaxLibrary;
 public partial class NaturalSortComparer : IComparer<string>
 {
     private static readonly Regex Regex = NumbersRegex();
-    
-    [GeneratedRegex(@"\d+", RegexOptions.Compiled)]
-    private static partial Regex NumbersRegex();
 
     public int Compare(string? x, string? y)
     {
@@ -39,6 +36,9 @@ public partial class NaturalSortComparer : IComparer<string>
 
         return partsX.Count.CompareTo(partsY.Count);
     }
+
+    [GeneratedRegex(@"\d+", RegexOptions.Compiled)]
+    private static partial Regex NumbersRegex();
 
     private static List<string> SplitIntoParts(string s)
     {

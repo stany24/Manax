@@ -19,13 +19,13 @@
     <UserControl.Resources>
         <converters:ColorToSolidBrushConverter x:Key="ColorToBrushConverter" />
     </UserControl.Resources>
-    
+
     <UserControl.Styles>
         <Style Selector="TextBlock.title">
-            <Setter Property="FontWeight" Value="Bold"/>
-            <Setter Property="FontSize" Value="20"/>
-            <Setter Property="TextWrapping" Value="Wrap"/>
-            <Setter Property="Padding" Value="0,0,0,10"/>
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="FontSize" Value="20" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+            <Setter Property="Padding" Value="0,0,0,10" />
         </Style>
     </UserControl.Styles>
 
@@ -40,16 +40,16 @@
                         <TextBlock Grid.Column="0"
                                    Classes="title"
                                    Text="{Binding Serie.Title}" />
-                    
+
                         <controls:IconButton Grid.Column="1"
                                              Classes="icon-button light"
                                              IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWriteSeries}"
                                              Command="{Binding UpdateSerie}"
                                              IsEnabled="{Binding !IsFilePickerOpen}"
                                              Icon="PencilOutline"
-                                             VerticalAlignment="Top"/>
+                                             VerticalAlignment="Top" />
                     </Grid>
-                    
+
                     <Border CornerRadius="12" ClipToBounds="True">
                         <Image Source="{Binding Serie.Poster}"
                                Stretch="UniformToFill" />
@@ -58,24 +58,25 @@
                     <TextBlock Text="{Binding Serie.Description}"
                                TextWrapping="Wrap" />
 
-                    <StackPanel IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).FeatureManager.RankFeatureEnabled}"
-                                Orientation="Horizontal">
+                    <StackPanel
+                        IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).FeatureManager.RankFeatureEnabled}"
+                        Orientation="Horizontal">
                         <TextBlock Text="{localization:Localize SeriePage.SerieRating}"
-                                   VerticalAlignment="Center"/>
+                                   VerticalAlignment="Center" />
                         <ComboBox ItemsSource="{Binding Ranks}"
                                   SelectedItem="{Binding SelectedRank}"
-                                  DisplayMemberBinding="{Binding Name}">
-                        </ComboBox>
+                                  DisplayMemberBinding="{Binding Name}" />
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal"
                                 Spacing="20">
-                        <TextBlock Text="{localization1:LocalizeFormat SeriePage.ChapterCount,
+                        <TextBlock
+                            Text="{localization1:LocalizeFormat SeriePage.ChapterCount,
                                         Param1={Binding $parent[UserControl].((page:SeriePageViewModel)DataContext).Serie.Chapters.Count}}" />
-                        
-                        <TextBlock Text="{Binding Serie.Status}"/>
+
+                        <TextBlock Text="{Binding Serie.Status}" />
                     </StackPanel>
-                    
+
                     <Border IsVisible="{Binding Serie.Tags.Count}">
                         <StackPanel>
                             <ItemsControl ItemsSource="{Binding Serie.Tags}">
@@ -86,11 +87,12 @@
                                 </ItemsControl.ItemsPanel>
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
-                                        <Border BorderBrush="{Binding Color, Converter={StaticResource ColorToBrushConverter}}"
-                                                BorderThickness="1"
-                                                CornerRadius="16"
-                                                Margin="2"
-                                                Padding="6,3">
+                                        <Border
+                                            BorderBrush="{Binding Color, Converter={StaticResource ColorToBrushConverter}}"
+                                            BorderThickness="1"
+                                            CornerRadius="16"
+                                            Margin="2"
+                                            Padding="6,3">
                                             <TextBlock Text="{Binding Name}" />
                                         </Border>
                                     </DataTemplate>
@@ -106,7 +108,7 @@
                                     <ItemsPanelTemplate>
                                         <WrapPanel Orientation="Horizontal"
                                                    ItemSpacing="8"
-                                                   LineSpacing="8"/>
+                                                   LineSpacing="8" />
                                     </ItemsPanelTemplate>
                                 </ItemsControl.ItemsPanel>
                                 <ItemsControl.ItemTemplate>
@@ -118,7 +120,7 @@
                                             <StackPanel Spacing="4">
                                                 <TextBlock Text="{Binding FullName}" />
                                                 <TextBlock Text="{Binding Role.Name}"
-                                                           HorizontalAlignment="Center"/>
+                                                           HorizontalAlignment="Center" />
                                             </StackPanel>
                                         </Border>
                                     </DataTemplate>
@@ -126,7 +128,7 @@
                             </ItemsControl>
                         </StackPanel>
                     </Border>
-                    
+
                 </StackPanel>
             </Border>
 
@@ -134,8 +136,8 @@
                 <StackPanel>
                     <Border IsVisible="{Binding !Serie.Chapters.Count}">
                         <StackPanel>
-                            <icon:MaterialIcon Kind="BookOpenVariantOutline"/>
-                            <TextBlock Text="{localization:Localize SeriePage.NoChaptersAvailable}"/>
+                            <icon:MaterialIcon Kind="BookOpenVariantOutline" />
+                            <TextBlock Text="{localization:Localize SeriePage.NoChaptersAvailable}" />
                             <TextBlock Text="{localization:Localize SeriePage.NoChaptersDescription}" />
                         </StackPanel>
                     </Border>
@@ -146,7 +148,7 @@
                             <DataTemplate>
                                 <Border Classes="item-card">
                                     <previews:ChapterPreview
-                                        Chapter="{Binding .}"/>
+                                        Chapter="{Binding .}" />
                                 </Border>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>

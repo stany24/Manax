@@ -26,14 +26,19 @@ namespace ManaxClient.ViewModels.Pages.Stats;
 
 public partial class ServerStatsPageViewModel : PageViewModel
 {
+    private readonly Subject<Unit> _filterRefresh = new();
+    private readonly ReadOnlyObservableCollection<Models.Server.Data.Serie> _neverReadSeries;
     [ObservableProperty] private double _availableDiskSizeInGb;
     [ObservableProperty] private double _diskSizeInGb;
+
+    private ObservableCollection<long> _neverReadSerieIds = [];
     [ObservableProperty] private ServerStats? _serverStats;
 
     public ServerStatsPageViewModel()
     {
         Task.Run(LoadServerStats);
-        SortExpressionComparer<Models.Server.Data.Serie> comparer = SortExpressionComparer<Models.Server.Data.Serie>.Ascending(serie => serie.Title);
+        SortExpressionComparer<Models.Server.Data.Serie> comparer =
+            SortExpressionComparer<Models.Server.Data.Serie>.Ascending(serie => serie.Title);
         MainWindowViewModel.Instance.SerieSource.Series
             .Connect()
             .AutoRefresh()
@@ -50,9 +55,6 @@ public partial class ServerStatsPageViewModel : PageViewModel
             });
     }
 
-    private ObservableCollection<long> _neverReadSerieIds = [];
-    private readonly Subject<Unit> _filterRefresh = new();
-    private readonly ReadOnlyObservableCollection<Models.Server.Data.Serie> _neverReadSeries;
     public ReadOnlyObservableCollection<Models.Server.Data.Serie> NeverReadSeries => _neverReadSeries;
     public ObservableCollection<ISeries> UserActivitySeries { get; set; } = new([]);
     public ObservableCollection<ISeries> LibraryDistributionSeries { get; set; } = new([]);
@@ -66,7 +68,8 @@ public partial class ServerStatsPageViewModel : PageViewModel
             if (serverStats.Failed)
             {
                 Logger.LogFailure($"Failed to load server stats: {serverStats.Error}");
-                WeakReferenceMessenger.Default.Send(new NotificationMessage($"Failed to load server stats: {serverStats.Error}"));
+                WeakReferenceMessenger.Default.Send(
+                    new NotificationMessage($"Failed to load server stats: {serverStats.Error}"));
                 return;
             }
 
@@ -79,7 +82,8 @@ public partial class ServerStatsPageViewModel : PageViewModel
         catch (Exception e)
         {
             Logger.LogError($"An error occurred while loading server stats: {e.Message}", e);
-            WeakReferenceMessenger.Default.Send(new NotificationMessage($"An error occurred while loading server stats: {e.Message}"));
+            WeakReferenceMessenger.Default.Send(
+                new NotificationMessage($"An error occurred while loading server stats: {e.Message}"));
         }
     }
 
@@ -91,7 +95,7 @@ public partial class ServerStatsPageViewModel : PageViewModel
         AvailableDiskSizeInGb = ServerStats.AvailableDiskSize / 1024.0 / 1024.0 / 1024.0;
         _neverReadSerieIds = new ObservableCollection<long>(ServerStats.NeverReadSerieIds);
         _filterRefresh.OnNext(Unit.Default);
-        
+
         DiskUsageSeries.Add(new PieSeries<double>
         {
             Values = [DiskSizeInGb],

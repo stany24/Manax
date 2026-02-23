@@ -13,10 +13,10 @@
     x:Class="ManaxClient.Views.Pages.Home.HomePageView"
     x:DataType="page:HomePageViewModel"
     Classes="page">
-    
+
     <UserControl.Styles>
         <Style Selector="TextBox.search">
-            <Setter Property="Margin" Value="7,0"/>
+            <Setter Property="Margin" Value="7,0" />
         </Style>
 
     </UserControl.Styles>
@@ -29,24 +29,24 @@
                       ColumnDefinitions="Auto,*,Auto">
                     <avalonia:MaterialIcon Grid.Column="0"
                                            Classes="icon"
-                                           Kind="Search"/>
+                                           Kind="Search" />
                     <TextBox Grid.Column="1"
                              Classes="search"
-                             Text="Future search area"/>
+                             Text="Future search area" />
                     <controls:IconButton Classes="icon-button light"
                                          Grid.Column="2"
                                          IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWriteSeries}"
                                          Command="{Binding UploadSerie}"
                                          Text="{localization:Localize HomePage.AddSeries}"
-                                         Icon="Add"/>
+                                         Icon="Add" />
                 </Grid>
             </Border>
-            
+
             <Border Classes="card"
                     IsVisible="{Binding Series.Count}">
                 <StackPanel Orientation="Vertical">
                     <TextBlock Classes="item-name"
-                               Text="{localization:Localize HomePage.RecentSeries}"/>
+                               Text="{localization:Localize HomePage.RecentSeries}" />
 
                     <ScrollViewer HorizontalScrollBarVisibility="Auto"
                                   VerticalScrollBarVisibility="Disabled">

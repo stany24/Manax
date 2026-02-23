@@ -40,7 +40,7 @@ public class GetChapterTests : ChapterTestsSetup
     public async Task GetChapterWithInvalidIdReturnsNotFound()
     {
         ActionResult<ChapterDto> result = await Controller.GetChapter(999999);
-        
+
         CheckTypeAndErrorCode<NotFoundObjectResult>(result.Result, ErrorCode.ChapterDoesNotExist);
     }
 
@@ -86,7 +86,7 @@ public class GetChapterTests : ChapterTestsSetup
 
         OkObjectResult? okResult = result.Result as OkObjectResult;
         Assert.IsNotNull(okResult);
-        
+
         ChapterDto? returnedChapter = okResult.Value as ChapterDto;
         Assert.IsNotNull(returnedChapter);
         Assert.IsTrue(chapter.DtoEquals(returnedChapter));

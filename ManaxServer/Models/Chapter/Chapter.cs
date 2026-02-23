@@ -40,7 +40,7 @@ public class Chapter
             LastModification = LastModification
         };
     }
-    
+
     public bool DtoEquals(ChapterDto dto)
     {
         return Id == dto.Id &&
@@ -50,7 +50,7 @@ public class Chapter
                Creation == dto.Creation &&
                LastModification == dto.LastModification;
     }
-    
+
     public static Chapter FromDto(NewChapter dto)
     {
         return new Chapter
@@ -59,7 +59,7 @@ public class Chapter
             UploaderId = dto.UploaderId,
             Number = dto.Number,
             Creation = DateTime.UtcNow,
-            LastModification = DateTime.UtcNow,
+            LastModification = DateTime.UtcNow
         };
     }
 }

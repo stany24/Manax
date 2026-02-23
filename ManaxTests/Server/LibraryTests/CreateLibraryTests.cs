@@ -53,7 +53,7 @@ public class CreateLibraryTests : LibraryTestsSetup
 
         ActionResult<long> result = await Controller.PostLibrary(createDto);
 
-        CheckTypeAndErrorCode<BadRequestObjectResult>(result.Result,ErrorCode.InvalidLibraryData);
+        CheckTypeAndErrorCode<BadRequestObjectResult>(result.Result, ErrorCode.InvalidLibraryData);
     }
 
     [TestMethod]
@@ -70,7 +70,7 @@ public class CreateLibraryTests : LibraryTestsSetup
 
         OkObjectResult? okResult = result.Result as OkObjectResult;
         Assert.IsNotNull(okResult);
-        
+
         long? libraryId = okResult.Value as long?;
         Assert.IsNotNull(libraryId);
 

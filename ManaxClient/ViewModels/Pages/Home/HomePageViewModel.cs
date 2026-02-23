@@ -73,9 +73,9 @@ public partial class HomePageViewModel : PageViewModel
             {
                 string format1 = string.Format(CultureInfo.InvariantCulture, Localizer.Get("HomePage.UploadFailure"),
                     Path.GetDirectoryName(folderPath));
-                
+
                 WeakReferenceMessenger.Default.Send(new NotificationMessage(format1));
-                    
+
                 Logger.LogFailure("Failed to upload series: " + uploadSerieResponse.Error);
                 return;
             }

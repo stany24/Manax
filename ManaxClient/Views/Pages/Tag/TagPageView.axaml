@@ -19,7 +19,7 @@
     <UserControl.Resources>
         <converters:ColorToSolidBrushConverter x:Key="ColorToBrushConverter" />
     </UserControl.Resources>
-    
+
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel Orientation="Vertical" Spacing="24">
             <Border Classes="card">
@@ -27,16 +27,16 @@
                       Classes="title">
                     <TextBlock Grid.Column="0"
                                Text="{localization1:LocalizeFormat TagPage.List,
-                                        Param1={Binding $parent[UserControl].((tag:TagPageViewModel)DataContext).Tags.Count}}"/>
+                                        Param1={Binding $parent[UserControl].((tag:TagPageViewModel)DataContext).Tags.Count}}" />
                     <controls:IconButton Grid.Column="2"
                                          Classes="icon-button light"
                                          IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWriteTags}"
                                          Command="{Binding CreateTag}"
                                          Text="{localization:Localize TagPage.NewTag}"
-                                         Icon="Add"/>
+                                         Icon="Add" />
                 </Grid>
             </Border>
-            
+
             <Border Classes="card"
                     IsVisible="{Binding Tags.Count}">
                 <StackPanel>
@@ -51,26 +51,26 @@
                                                 CornerRadius="20"
                                                 Width="40"
                                                 Height="40">
-                                            <icon:MaterialIcon Kind="TagOutline"/>
+                                            <icon:MaterialIcon Kind="TagOutline" />
                                         </Border>
 
                                         <TextBlock Grid.Column="1"
                                                    Classes="item-name"
-                                                   Text="{Binding Name}"/>
+                                                   Text="{Binding Name}" />
 
                                         <controls:IconButton Grid.Column="2"
                                                              Classes="icon-button dark"
                                                              IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWriteTags}"
                                                              Command="{Binding $parent[UserControl].((tag:TagPageViewModel)DataContext).UpdateTag}"
                                                              CommandParameter="{Binding .}"
-                                                             Icon="PencilOutline"/>
+                                                             Icon="PencilOutline" />
 
                                         <controls:IconButton Grid.Column="3"
                                                              Classes="icon-button dark"
                                                              IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanDeleteTags}"
                                                              Command="{Binding $parent[UserControl].((tag:TagPageViewModel)DataContext).DeleteTag}"
                                                              CommandParameter="{Binding .}"
-                                                             Icon="DeleteOutline"/>
+                                                             Icon="DeleteOutline" />
                                     </Grid>
                                 </Border>
                             </DataTemplate>
@@ -78,7 +78,7 @@
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <StackPanel Orientation="Vertical"
-                                            Spacing="8"/>
+                                            Spacing="8" />
                             </ItemsPanelTemplate>
                         </ItemsControl.ItemsPanel>
                     </ItemsControl>

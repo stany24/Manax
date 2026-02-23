@@ -2,25 +2,32 @@ namespace ManaxLibrary;
 
 public class Optional<TReturn>
 {
-    public string Error { get; } = string.Empty;
-    public bool Failed => Error != string.Empty;
-    public bool Succeeded => !Failed;
     private readonly TReturn? _value;
 
     private Optional(TReturn value)
     {
         _value = value;
     }
-    
+
     private Optional(string error)
     {
         Error = error;
     }
-    
-    public static Optional<TReturn> Success(TReturn value) => new(value);
-    
-    public static Optional<TReturn> Failure(string error) => new(error);
-    
+
+    public string Error { get; } = string.Empty;
+    public bool Failed => Error != string.Empty;
+    public bool Succeeded => !Failed;
+
+    public static Optional<TReturn> Success(TReturn value)
+    {
+        return new Optional<TReturn>(value);
+    }
+
+    public static Optional<TReturn> Failure(string error)
+    {
+        return new Optional<TReturn>(error);
+    }
+
     public static Optional<TReturn> Failure(HttpResponseMessage response)
     {
         string error = response.StatusCode + ": " + response.Content.ReadAsStringAsync().Result;

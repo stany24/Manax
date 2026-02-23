@@ -194,7 +194,7 @@ public class PostSavePointTests : SavePointTestsSetup
         OkObjectResult? okResult1 = result1.Result as OkObjectResult;
         Assert.IsNotNull(okResult1);
         long? savePointId1 = okResult1.Value as long?;
-        
+
         OkObjectResult? okResult2 = result2.Result as OkObjectResult;
         Assert.IsNotNull(okResult2);
         long? savePointId2 = okResult2.Value as long?;

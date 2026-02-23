@@ -161,7 +161,7 @@ public class PersonPageViewModel : PageViewModel
             try
             {
                 Optional<bool> deleteRoleResponse = await ManaxApiRoleClient.DeleteRoleAsync(role.Id);
-                if (deleteRoleResponse.Failed) 
+                if (deleteRoleResponse.Failed)
                     WeakReferenceMessenger.Default.Send(new NotificationMessage(deleteRoleResponse.Error));
             }
             catch (Exception e)

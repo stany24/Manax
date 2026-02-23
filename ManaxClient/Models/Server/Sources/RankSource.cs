@@ -19,10 +19,10 @@ namespace ManaxClient.Models.Server.Sources;
 
 public class RankSource
 {
-    public readonly SourceCache<Rank, long> Ranks = new(x => x.Id);
-    private bool _loaded;
     private readonly Lock _loadLock = new();
     private readonly Lock _ranksLock = new();
+    public readonly SourceCache<Rank, long> Ranks = new(x => x.Id);
+    private bool _loaded;
 
     public RankSource()
     {

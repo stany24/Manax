@@ -12,26 +12,26 @@
     <StackPanel Spacing="16">
         <StackPanel Classes="popup-title">
             <icon:MaterialIcon Classes="icon"
-                               Kind="LibraryShelves"/>
+                               Kind="LibraryShelves" />
             <StackPanel>
-                <TextBlock Text="{localization:Localize LibraryCreatePopup.NewLibrary}"/>
+                <TextBlock Text="{localization:Localize LibraryCreatePopup.NewLibrary}" />
                 <TextBlock Text="{localization:Localize LibraryCreatePopup.Description}" />
             </StackPanel>
         </StackPanel>
 
         <Border Classes="input">
             <StackPanel>
-                <TextBlock Text="{localization:Localize LibraryCreatePopup.Name}"/>
+                <TextBlock Text="{localization:Localize LibraryCreatePopup.Name}" />
                 <TextBox Text="{Binding Name}"
-                         Watermark="{localization:Localize LibraryCreatePopup.Name.Placeholder}"/>
+                         Watermark="{localization:Localize LibraryCreatePopup.Name.Placeholder}" />
             </StackPanel>
         </Border>
-        
+
         <Grid ColumnDefinitions="Auto,*"
               ColumnSpacing="8">
             <icon:MaterialIcon Grid.Column="0"
                                Classes="icon"
-                               Kind="Lightbulb"/>
+                               Kind="Lightbulb" />
             <TextBlock Grid.Column="1"
                        Text="{localization:Localize LibraryCreatePopup.Info}"
                        TextWrapping="Wrap"

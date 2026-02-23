@@ -60,15 +60,18 @@ public class SettingsController(
         scope.Dispose();
     }
 
-    private void HandleSerieModifications(SettingsDataDto newDataDto, SettingsDataDto oldDataDto, ManaxContext manaxContext)
+    private void HandleSerieModifications(SettingsDataDto newDataDto, SettingsDataDto oldDataDto,
+        ManaxContext manaxContext)
     {
     }
 
-    private void HandleBannerModifications(SettingsDataDto newDataDto, SettingsDataDto oldDataDto, ManaxContext manaxContext)
+    private void HandleBannerModifications(SettingsDataDto newDataDto, SettingsDataDto oldDataDto,
+        ManaxContext manaxContext)
     {
     }
 
-    private void HandleChapterModifications(SettingsDataDto newDataDto, SettingsDataDto oldDataDto, ManaxContext manaxContext)
+    private void HandleChapterModifications(SettingsDataDto newDataDto, SettingsDataDto oldDataDto,
+        ManaxContext manaxContext)
     {
         if (newDataDto.ImageFormat != oldDataDto.ImageFormat ||
             newDataDto.ImageQuality != oldDataDto.ImageQuality ||
@@ -83,7 +86,8 @@ public class SettingsController(
 
     private void HandlePosterModifications(SettingsDataDto newDataDto, SettingsDataDto oldDataDto, ManaxContext context)
     {
-        if (newDataDto.MaxPosterWidth != oldDataDto.MaxPosterWidth || newDataDto.MinPosterWidth != oldDataDto.MinPosterWidth ||
+        if (newDataDto.MaxPosterWidth != oldDataDto.MaxPosterWidth ||
+            newDataDto.MinPosterWidth != oldDataDto.MinPosterWidth ||
             newDataDto.PosterQuality != oldDataDto.PosterQuality)
             foreach (long serieId in context.Series.Select(serie => serie.Id))
                 backgroundTaskService.AddTask(new FixPosterBackGroundTask(fixService, serieId));

@@ -125,7 +125,7 @@ public sealed partial class LoginPageViewModel : PageViewModel
             Host = Host,
             Username = Username
         };
-        StorageManager.Save(StorageManager.LoginFile,loginValues);
+        StorageManager.Save(StorageManager.LoginFile, loginValues);
     }
 
     private void TryLoadSavedLogin()

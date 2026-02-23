@@ -16,7 +16,7 @@ public class TagUpdateDto
         get => Color.FromArgb(ColorArgb);
         init => ColorArgb = value.ToArgb();
     }
-    
+
     public bool IsValid()
     {
         return !string.IsNullOrWhiteSpace(Name);

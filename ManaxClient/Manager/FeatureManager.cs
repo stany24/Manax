@@ -15,15 +15,22 @@ using ManaxLibrary.Notifications;
 
 namespace ManaxClient.Manager;
 
-public class FeatureManager: ObservableObject
+public class FeatureManager : ObservableObject
 {
-    private List<Feature> Features { get; set; } = [];
-
     public FeatureManager()
     {
         WeakReferenceMessenger.Default.Register<LoggedInMessage>(this, (_, _) => { Task.Run(LoadFeatures); });
         NotificationReceiver.OnFeatureModified += OnFeatureModified;
     }
+
+    private List<Feature> Features { get; set; } = [];
+
+    public static EventHandler<Feature>? FeatureChanged { get; set; }
+
+    public bool RankFeatureEnabled => IsEnabled(FeatureType.Ranks);
+    public bool AutomaticIssuesFeatureEnabled => IsEnabled(FeatureType.AutomaticIssues);
+
+    public bool ReportedIssuesFeatureEnabled => IsEnabled(FeatureType.ReportedIssues);
 
     ~FeatureManager()
     {
@@ -34,13 +41,6 @@ public class FeatureManager: ObservableObject
     {
         return Features.FirstOrDefault(f => f.Key == feature)?.Value ?? false;
     }
-    
-    public static EventHandler<Feature>? FeatureChanged { get; set; }
-
-    public bool RankFeatureEnabled => IsEnabled(FeatureType.Ranks);
-    public bool AutomaticIssuesFeatureEnabled => IsEnabled(FeatureType.AutomaticIssues);
-
-    public bool ReportedIssuesFeatureEnabled => IsEnabled(FeatureType.ReportedIssues);
 
     private async Task<List<Feature>> LoadFeatures()
     {
@@ -54,10 +54,7 @@ public class FeatureManager: ObservableObject
             }
 
             Features = featureResponse.GetValue();
-            foreach (Feature feature in Features)
-            {
-                OnFeatureModified(feature);
-            }
+            foreach (Feature feature in Features) OnFeatureModified(feature);
         }
         catch (Exception e)
         {
@@ -85,8 +82,6 @@ public class FeatureManager: ObservableObject
         foreach (PropertyInfo propertyInfo in propertyInfos)
             if (propertyInfo.PropertyType == typeof(bool) &&
                 propertyInfo.Name.EndsWith("FeatureEnabled", StringComparison.InvariantCulture))
-            {
                 OnPropertyChanged(propertyInfo.Name);
-            }
     }
 }

@@ -128,12 +128,18 @@ public class SerieController(
             .Include(s => s.Persons)
             .FirstOrDefaultAsync(s => s.Id == id);
         if (serie == null) return NotFound(ErrorCode.SerieDoesNotExist);
-        if (serieUpdate.Title.Trim() == string.Empty) { return BadRequest(ErrorCode.InvalidSerieData);}
+        if (serieUpdate.Title.Trim() == string.Empty) return BadRequest(ErrorCode.InvalidSerieData);
         serie.Update(serieUpdate, context);
 
-        try { await context.SaveChangesAsync(); }
-        catch { return BadRequest(ErrorCode.InvalidSerieData); }
-        
+        try
+        {
+            await context.SaveChangesAsync();
+        }
+        catch
+        {
+            return BadRequest(ErrorCode.InvalidSerieData);
+        }
+
         backgroundTaskService.AddTask(new FixSerieBackGroundTask(fixService, serie.Id));
         notificationService.NotifySerieUpdatedAsync(serie.ToDto());
         return Ok();
@@ -147,11 +153,11 @@ public class SerieController(
     {
         SavePoint? savePoint = SelectSavePoint();
         if (savePoint == null) return BadRequest(ErrorCode.NoSavePointAvailable);
-        if (!serieCreate.IsValid()) { return BadRequest(ErrorCode.InvalidSerieData);}
+        if (!serieCreate.IsValid()) return BadRequest(ErrorCode.InvalidSerieData);
         Serie serie = new(serieCreate, savePoint);
         string folderPath = serie.SavePath;
         if (System.IO.File.Exists(folderPath)) return BadRequest(ErrorCode.SerieAlreadyExists);
-        
+
         context.Series.Add(serie);
         await context.SaveChangesAsync();
         Directory.CreateDirectory(folderPath);

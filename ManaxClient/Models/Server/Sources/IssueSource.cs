@@ -20,14 +20,15 @@ namespace ManaxClient.Models.Server.Sources;
 
 public class IssueSource
 {
+    private readonly Lock _issueLock = new();
+
     public readonly SourceCache<IssueChapterAutomatic, long> IssueChapterAutomatic =
         new(issue => issue.Chapter.Id);
 
-    public readonly SourceCache<IssueSerieAutomatic, long> IssueSerieAutomatic = new(issue => issue.Serie.Id);
     public readonly SourceCache<IssueChapterReported, long> IssueChapterReported = new(issue => issue.Id);
-    public readonly SourceCache<IssueSerieReported, long> IssueSerieReported = new(serie => serie.Id);
 
-    private readonly Lock _issueLock = new();
+    public readonly SourceCache<IssueSerieAutomatic, long> IssueSerieAutomatic = new(issue => issue.Serie.Id);
+    public readonly SourceCache<IssueSerieReported, long> IssueSerieReported = new(serie => serie.Id);
 
     public IssueSource()
     {

@@ -21,7 +21,7 @@
                       ColumnDefinitions="Auto,*,Auto">
                     <TextBlock Grid.Column="0"
                                VerticalAlignment="Center"
-                               Text="{localization:Localize LoginPage.Title}"/>
+                               Text="{localization:Localize LoginPage.Title}" />
                     <ComboBox Grid.Column="2"
                               ItemsSource="{Binding Languages}"
                               SelectedItem="{Binding SelectedLanguage}"
@@ -34,7 +34,7 @@
                             <TextBlock Text="{localization:Localize LoginPage.Username}" />
                             <TextBox Name="TbxUsername"
                                      Text="{Binding Username}"
-                                     Watermark="{localization:Localize LoginPage.Username.Placeholder}"/>
+                                     Watermark="{localization:Localize LoginPage.Username.Placeholder}" />
                         </StackPanel>
                     </Border>
 
@@ -64,8 +64,7 @@
                                      Text="{localization:Localize LoginPage.SignIn}" FontWeight="Medium"
                                      Command="{Binding Login}"
                                      HorizontalAlignment="Stretch"
-                                     HotKey="Enter">
-                </controls:IconButton>
+                                     HotKey="Enter" />
             </StackPanel>
         </ScrollViewer>
     </Border>

@@ -13,30 +13,30 @@
     x:DataType="tab:ManualCleanupTabViewModel"
     IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanUploadChapter}"
     Classes="page">
-    
+
     <UserControl.Styles>
         <Style Selector="Button.wide">
-            <Setter Property="HorizontalAlignment" Value="Stretch"/>
-            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
         </Style>
-        
+
         <Style Selector="Button.wide > TextBlock">
-            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="TextWrapping" Value="Wrap" />
         </Style>
-        
+
         <Style Selector="TextBlock.title">
-            <Setter Property="FontWeight" Value="SemiBold"/>
-            <Setter Property="FontSize" Value="18"/>
-            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="FontSize" Value="18" />
+            <Setter Property="TextWrapping" Value="Wrap" />
         </Style>
-        
+
         <Style Selector="TextBlock.sub-title">
-            <Setter Property="FontWeight" Value="DemiBold"/>
-            <Setter Property="FontSize" Value="14"/>
-            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="FontWeight" Value="DemiBold" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="TextWrapping" Value="Wrap" />
         </Style>
     </UserControl.Styles>
-    
+
     <Grid ColumnDefinitions="200,*,250"
           RowDefinitions="*"
           ColumnSpacing="8">
@@ -62,8 +62,7 @@
                                                     <Button Classes="button light wide"
                                                             Command="{Binding $parent[UserControl].((tab:ManualCleanupTabViewModel)DataContext).SetSelectedChapterFolder}"
                                                             CommandParameter="{Binding}"
-                                                            Content="{Binding Name}">
-                                                    </Button>
+                                                            Content="{Binding Name}" />
                                                 </DataTemplate>
                                             </ItemsControl.ItemTemplate>
                                             <ItemsControl.ItemsPanel>
@@ -91,7 +90,7 @@
             <DockPanel>
                 <StackPanel DockPanel.Dock="Top">
                     <TextBlock Classes="title"
-                               Text="{localization:Localize ManualCleanupPage.Images}"/>
+                               Text="{localization:Localize ManualCleanupPage.Images}" />
                     <TextBlock Classes="sub-title"
                                Text="{Binding SelectedChapterFolder.Name}"
                                IsVisible="{Binding SelectedChapterFolder, Converter={x:Static ObjectConverters.IsNotNull}}" />
@@ -113,7 +112,7 @@
                                             <Image Source="{Binding Preview}" />
                                             <TextBlock Text="{Binding FileName}"
                                                        HorizontalAlignment="Center"
-                                                       Foreground="{DynamicResource MaterialBodyBrush}"/>
+                                                       Foreground="{DynamicResource MaterialBodyBrush}" />
                                         </StackPanel>
                                     </Button>
                                 </Border>
@@ -138,7 +137,7 @@
             <Grid RowDefinitions="Auto,*,Auto">
                 <TextBlock Grid.Row="0"
                            Classes="title"
-                           Text="{localization:Localize ManualCleanupPage.ToEdit}"/>
+                           Text="{localization:Localize ManualCleanupPage.ToEdit}" />
                 <ScrollViewer Grid.Row="1"
                               HorizontalScrollBarVisibility="Disabled"
                               VerticalScrollBarVisibility="Auto">
@@ -149,12 +148,12 @@
                                     <Grid ColumnDefinitions="*,Auto">
                                         <TextBlock Grid.Column="0"
                                                    Text="{Binding .}"
-                                                   TextWrapping="Wrap"/>
+                                                   TextWrapping="Wrap" />
                                         <controls:IconButton Grid.Column="1"
                                                              Classes="icon-button light"
                                                              Icon="DeleteOutline"
                                                              Command="{Binding $parent[UserControl].((tab:ManualCleanupTabViewModel)DataContext).RemoveImageToEdit}"
-                                                             CommandParameter="{Binding .}"/>
+                                                             CommandParameter="{Binding .}" />
                                     </Grid>
                                 </Border>
                             </DataTemplate>

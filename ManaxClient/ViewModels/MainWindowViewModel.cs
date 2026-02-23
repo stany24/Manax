@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading;
 using System.Threading.Tasks;
-using Avalonia;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
@@ -13,6 +12,7 @@ using ManaxClient.Event;
 using ManaxClient.Manager;
 using ManaxClient.Models;
 using ManaxClient.Models.History;
+using ManaxClient.Models.Server.Data;
 using ManaxClient.Models.Server.Sources;
 using ManaxClient.ViewModels.Pages;
 using ManaxClient.ViewModels.Pages.Home;
@@ -30,43 +30,40 @@ using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.Logging;
 using ManaxLibrary.Notifications;
-using ManaxClient.Models.Server.Data;
 
 namespace ManaxClient.ViewModels;
 
 public partial class MainWindowViewModel : ObservableObject
 {
     private readonly PageHistoryManager _history = new();
+    private readonly Lock _infoCancellationLock = new();
+    private readonly Dictionary<string, CancellationTokenSource> _infoCancellationTokens = new();
     private readonly ReadOnlyObservableCollection<Library> _libraries;
     private readonly IDisposable _librariesSubscription;
-    private readonly Dictionary<string, CancellationTokenSource> _infoCancellationTokens = new();
-    private readonly Lock _infoCancellationLock = new();
-    
+    [ObservableProperty] private ChapterSource _chapterSource = new();
+    [ObservableProperty] private FeatureManager _featureManager = new();
+
     [ObservableProperty] private ObservableCollection<string> _infos = [];
     [ObservableProperty] private bool _isAdmin;
-    [ObservableProperty] private Controls.Popups.Popup? _popup;
-    [ObservableProperty] private ObservableCollection<TaskItem> _runningTasks = new([]);
-    [ObservableProperty] private FeatureManager _featureManager = new();
-    [ObservableProperty] private PermissionManager _permissionManager = new();
-    [ObservableProperty] private ChapterSource _chapterSource = new();
     [ObservableProperty] private IssueSource _issueSource = new();
     [ObservableProperty] private LibrarySource _librarySource = new();
+    [ObservableProperty] private PermissionManager _permissionManager = new();
     [ObservableProperty] private PersonSource _personSource = new();
+    [ObservableProperty] private Controls.Popups.Popup? _popup;
     [ObservableProperty] private ProblemSource _problemSource = new();
     [ObservableProperty] private RankSource _rankSource = new();
     [ObservableProperty] private RoleSource _roleSource = new();
+    [ObservableProperty] private ObservableCollection<TaskItem> _runningTasks = new([]);
     [ObservableProperty] private SerieSource _serieSource = new();
     [ObservableProperty] private TagSource _tagSource = new();
     [ObservableProperty] private UserSource _userSource = new();
-    
-    public static MainWindowViewModel Instance { get; private set; } = new();
-    
+
     public MainWindowViewModel()
     {
         Instance = this;
         WeakReferenceMessenger.Default.Register<NotificationMessage>(this, (_, m) => { ShowInfo(m.Value); });
         WeakReferenceMessenger.Default.Register<PopupChangeMessage>(this, (_, m) => { SetPopup(m.Value); });
-        WeakReferenceMessenger.Default.Register<PageChangeMessage>(this, (_, m) => { SetPage(m.Value);});
+        WeakReferenceMessenger.Default.Register<PageChangeMessage>(this, (_, m) => { SetPage(m.Value); });
         SortExpressionComparer<Library> comparer = SortExpressionComparer<Library>.Descending(library => library.Name);
         _librariesSubscription = LibrarySource.Libraries
             .Connect()
@@ -97,6 +94,8 @@ public partial class MainWindowViewModel : ObservableObject
         SetPage(loginPage);
     }
 
+    public static MainWindowViewModel Instance { get; private set; } = new();
+
     public ReadOnlyObservableCollection<Library> Libraries => _libraries;
 
     public bool CanGoBack => _history.CanGoBack;
@@ -108,7 +107,7 @@ public partial class MainWindowViewModel : ObservableObject
         NotificationReceiver.OnRunningTasks -= OnRunningTasks;
         NotificationReceiver.OnChapterUploadFailed -= OnChapterUploadFailed;
         _librariesSubscription.Dispose();
-        
+
         lock (_infoCancellationLock)
         {
             foreach (CancellationTokenSource cts in _infoCancellationTokens.Values)
@@ -116,6 +115,7 @@ public partial class MainWindowViewModel : ObservableObject
                 cts.Cancel();
                 cts.Dispose();
             }
+
             _infoCancellationTokens.Clear();
         }
     }
@@ -168,9 +168,10 @@ public partial class MainWindowViewModel : ObservableObject
                 cts.Cancel();
                 cts.Dispose();
             }
+
             _infoCancellationTokens.Clear();
         }
-        
+
         Dispatcher.UIThread.Post(() => { Infos.Clear(); });
     }
 
@@ -186,21 +187,21 @@ public partial class MainWindowViewModel : ObservableObject
     private void ShowInfo(string info)
     {
         Dispatcher.UIThread.Post(() => { Infos.Add(info); });
-        
+
         CancellationTokenSource cts = new();
         lock (_infoCancellationLock)
         {
             _infoCancellationTokens[info] = cts;
         }
-        
+
         Task.Run(async () =>
         {
             try
             {
                 await Task.Delay(TimeSpan.FromSeconds(10), cts.Token);
-                
-                Dispatcher.UIThread.Post(() => 
-                { 
+
+                Dispatcher.UIThread.Post(() =>
+                {
                     Infos.Remove(info);
                     lock (_infoCancellationLock)
                     {
@@ -230,7 +231,7 @@ public partial class MainWindowViewModel : ObservableObject
                 _infoCancellationTokens.Remove(info);
             }
         }
-        
+
         Dispatcher.UIThread.Post(() => { Infos.Remove(info); });
     }
 

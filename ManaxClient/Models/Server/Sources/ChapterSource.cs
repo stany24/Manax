@@ -19,8 +19,8 @@ namespace ManaxClient.Models.Server.Sources;
 
 public class ChapterSource
 {
-    public readonly SourceCache<Chapter, long> Chapters = new(x => x.Id);
     private readonly Lock _chaptersLock = new();
+    public readonly SourceCache<Chapter, long> Chapters = new(x => x.Id);
 
     public ChapterSource()
     {
@@ -89,7 +89,7 @@ public class ChapterSource
 
             lock (_chaptersLock)
             {
-                Dispatcher.UIThread.Post(() => {Chapters.AddOrUpdate(new Chapter(response.GetValue()));});
+                Dispatcher.UIThread.Post(() => { Chapters.AddOrUpdate(new Chapter(response.GetValue())); });
             }
         }
         catch (Exception e)

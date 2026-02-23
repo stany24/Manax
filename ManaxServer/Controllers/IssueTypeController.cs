@@ -18,7 +18,7 @@ public class IssueTypeController(ManaxContext context) : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<IssueChapterReportedTypeDto>>> GetAllReportedChapterIssuesTypes()
     {
-        List<IssueChapterReportedTypeDto> types =  await context.ReportedIssueChapterTypes
+        List<IssueChapterReportedTypeDto> types = await context.ReportedIssueChapterTypes
             .Select(i => i.ToDto())
             .ToListAsync();
         return Ok(types);

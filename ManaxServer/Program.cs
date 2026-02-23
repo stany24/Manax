@@ -52,19 +52,19 @@ public static class Program
         builder.Services.AddSingleton<IHashService, HashService>();
         builder.Services.AddSingleton<IPermissionService, PermissionService>();
         builder.Services.AddSingleton<ITokenService, TokenService>();
-        builder.Services.AddSingleton<IPasswordValidationService>(_ => 
+        builder.Services.AddSingleton<IPasswordValidationService>(_ =>
             new PasswordValidationService(builder.Environment.IsProduction()));
-        
+
         builder.Services.AddSingleton<INotificationService, NotificationService>();
         builder.Services.AddSingleton<IBackgroundTaskService, BackgroundTaskService>();
         builder.Services.AddSingleton<IIssueService, IssueService>();
         builder.Services.AddSingleton<IFixService, FixService>();
-        
+
         FeatureFileManager featureFileManager = new();
         builder.Services.AddSingleton<IFeatureLoader>(featureFileManager);
         builder.Services.AddSingleton<IFeatureSaver>(featureFileManager);
         builder.Services.AddSingleton<IFeatureService, FeatureService>();
-        
+
         AddAuthentication(builder);
         AddRateLimiting(builder);
 
@@ -184,7 +184,6 @@ public static class Program
 
     private static void AddAuthentication(WebApplicationBuilder builder)
     {
-
         builder.Services.AddAuthentication()
             .AddBearerToken(options => { options.BearerTokenExpiration = TimeSpan.FromHours(12); });
     }

@@ -91,7 +91,7 @@ public class ChapterController(ManaxContext context, INotificationService notifi
             .ThenInclude(s => s.SavePoint)
             .FirstOrDefault(c => c.Id == id);
         if (chapter == null) return NotFound(ErrorCode.ChapterDoesNotExist);
-        
+
         string filePath = chapter.Path();
         if (string.IsNullOrEmpty(filePath) || !System.IO.File.Exists(filePath))
             return NotFound(ErrorCode.ChapterFileDoesNotExist);
