@@ -48,26 +48,8 @@
     <data name="LoginPage.SignIn" xml:space="preserve">
         <value>Sign in</value>
     </data>
-    <data name="ChapterPage.Pages" xml:space="preserve">
-        <value>{0} pages</value>
-    </data>
-    <data name="ChapterPage.Back" xml:space="preserve">
-        <value>Back</value>
-    </data>
-    <data name="ChapterPage.Previous" xml:space="preserve">
-        <value>Previous</value>
-    </data>
     <data name="ChapterPage.Chapter" xml:space="preserve">
         <value>Chapter</value>
-    </data>
-    <data name="ChapterPage.Next" xml:space="preserve">
-        <value>Next</value>
-    </data>
-    <data name="ChapterPage.PreviousPage" xml:space="preserve">
-        <value>Previous page</value>
-    </data>
-    <data name="ChapterPage.NextPage" xml:space="preserve">
-        <value>Next page</value>
     </data>
     <data name="HomePage.Welcome" xml:space="preserve">
         <value>Welcome to Manax</value>

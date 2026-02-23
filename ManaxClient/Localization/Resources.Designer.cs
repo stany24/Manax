@@ -93,45 +93,9 @@ namespace ManaxClient.Localization {
             }
         }
         
-        public static string ChapterPage_Pages {
-            get {
-                return ResourceManager.GetString("ChapterPage.Pages", resourceCulture);
-            }
-        }
-        
-        public static string ChapterPage_Back {
-            get {
-                return ResourceManager.GetString("ChapterPage.Back", resourceCulture);
-            }
-        }
-        
-        public static string ChapterPage_Previous {
-            get {
-                return ResourceManager.GetString("ChapterPage.Previous", resourceCulture);
-            }
-        }
-        
         public static string ChapterPage_Chapter {
             get {
                 return ResourceManager.GetString("ChapterPage.Chapter", resourceCulture);
-            }
-        }
-        
-        public static string ChapterPage_Next {
-            get {
-                return ResourceManager.GetString("ChapterPage.Next", resourceCulture);
-            }
-        }
-        
-        public static string ChapterPage_PreviousPage {
-            get {
-                return ResourceManager.GetString("ChapterPage.PreviousPage", resourceCulture);
-            }
-        }
-        
-        public static string ChapterPage_NextPage {
-            get {
-                return ResourceManager.GetString("ChapterPage.NextPage", resourceCulture);
             }
         }
         
