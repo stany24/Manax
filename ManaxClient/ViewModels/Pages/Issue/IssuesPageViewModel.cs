@@ -68,7 +68,7 @@ public partial class IssuesPageViewModel : PageViewModel
 
     public void OpenSeriePage(Models.Server.Data.Serie serie)
     {
-        PageChangedRequested?.Invoke(this, new SeriePageViewModel(serie));
+        WeakReferenceMessenger.Default.Send(new PageChangeMessage(new SeriePageViewModel(serie)));
     }
 
     public void OnChapterIssueClicked(ChapterDto chapter)

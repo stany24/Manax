@@ -1,28 +1,28 @@
 using System;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
+using ManaxClient.Event;
 
 namespace ManaxClient.ViewModels.Pages;
 
 public abstract partial class PageViewModel : ObservableObject
 {
-    [ObservableProperty] private bool _admin;
     [ObservableProperty] private bool _controlBarVisible = true;
 
-    public EventHandler? NextRequested { get; set; }
-    public EventHandler<PageViewModel>? PageChangedRequested { get; set; }
-    public EventHandler? PreviousRequested { get; set; }
+    public EventHandler? PageClosed { get; set; }
 
     public void Previous()
     {
-        PreviousRequested?.Invoke(this, EventArgs.Empty);
+        WeakReferenceMessenger.Default.Send(new PreviousPageMessage());
     }
 
     public void Next()
     {
-        NextRequested?.Invoke(this, EventArgs.Empty);
+        WeakReferenceMessenger.Default.Send(new NextPageMessage());
     }
 
     public virtual void OnPageClosed()
     {
+        PageClosed?.Invoke(this, EventArgs.Empty);
     }
 }

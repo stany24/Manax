@@ -67,6 +67,11 @@ public class SerieSource
                     lock (_seriesLock)
                     {
                         Series.AddOrUpdate(seriesIds.Select(serieId => new Serie(serieId)));
+                        foreach (Serie serie in Series.Items)
+                        {
+                            serie.LoadInfo();
+                            serie.LoadPoster();
+                        }
                         _isLoaded = true;
                     }
                 }

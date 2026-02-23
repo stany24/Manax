@@ -24,6 +24,7 @@ public class LibrarySource
 
     public LibrarySource()
     {
+        WeakReferenceMessenger.Default.Register<LoggedInMessage>(this, (_, _) => LoadLibraries());
         NotificationReceiver.OnLibraryCreated += OnLibraryCreated;
         NotificationReceiver.OnLibraryDeleted += OnLibraryDeleted;
     }
@@ -44,7 +45,7 @@ public class LibrarySource
         }
     }
 
-    public void LoadLibraries()
+    private void LoadLibraries()
     {
         Task.Run(() =>
         {

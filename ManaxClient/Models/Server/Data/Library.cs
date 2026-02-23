@@ -26,15 +26,7 @@ public partial class Library : ObservableObject
             .AutoRefresh()
             .Filter(serie => serie.LibraryId == Id)
             .SortAndBind(out _series, comparer)
-            .Subscribe(changes =>
-            {
-                foreach (Change<Serie, long> change in changes)
-                {
-                    if (change.Reason != ChangeReason.Add) continue;
-                    change.Current.LoadInfo();
-                    change.Current.LoadPoster();
-                }
-            });
+            .Subscribe();
     }
 
     public ReadOnlyObservableCollection<Serie> Series => _series;

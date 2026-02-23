@@ -24,6 +24,7 @@ public class PersonSource
 
     public PersonSource()
     {
+        WeakReferenceMessenger.Default.Register<LoggedInMessage>(this, (_, _) => LoadPersons());
         NotificationReceiver.OnPersonCreated += OnPersonCreated;
         NotificationReceiver.OnPersonDeleted += OnPersonDeleted;
     }
@@ -44,7 +45,7 @@ public class PersonSource
         }
     }
 
-    public void LoadPersons()
+    private void LoadPersons()
     {
         Task.Run(() =>
         {

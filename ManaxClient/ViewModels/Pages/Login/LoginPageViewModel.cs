@@ -28,7 +28,6 @@ public sealed partial class LoginPageViewModel : PageViewModel
     [ObservableProperty] private bool _canLogin = true;
     [ObservableProperty] private MaterialIconKind _emoji = MaterialIconKind.KeyOutline;
     [ObservableProperty] private string _host = string.Empty;
-    private bool _isAdmin;
     [ObservableProperty] private string _password = string.Empty;
     [ObservableProperty] private Language _selectedLanguage;
     [ObservableProperty] private string _username = string.Empty;
@@ -104,13 +103,12 @@ public sealed partial class LoginPageViewModel : PageViewModel
             ManaxApiClient.SetToken(result.Token);
             WeakReferenceMessenger.Default.Send(new LoggedInMessage(result.Token));
             UserDto self = result.User;
-            _isAdmin = self.Role is UserRole.Admin or UserRole.Owner;
             string format = string.Format(CultureInfo.InvariantCulture, Localizer.Get("LoginPage.Connected"),
                 self.Username, self.Role);
             WeakReferenceMessenger.Default.Send(new NotificationMessage(format));
             Logger.LogInfo(format);
             SaveLoginValues();
-            PageChangedRequested?.Invoke(this, new HomePageViewModel());
+            WeakReferenceMessenger.Default.Send(new PageChangeMessage(new HomePageViewModel()));
         }
         catch (Exception)
         {
@@ -134,10 +132,5 @@ public sealed partial class LoginPageViewModel : PageViewModel
         if (loginValues == null) return;
         Host = loginValues.Host;
         Username = loginValues.Username;
-    }
-
-    public bool IsAdmin()
-    {
-        return _isAdmin;
     }
 }

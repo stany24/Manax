@@ -24,11 +24,12 @@ public class TagSource
 
     public TagSource()
     {
+        WeakReferenceMessenger.Default.Register<LoggedInMessage>(this, (_, _) => LoadTags());
         NotificationReceiver.OnTagCreated += OnTagCreated;
         NotificationReceiver.OnTagDeleted += OnTagDeleted;
     }
 
-    public void LoadTags()
+    private void LoadTags()
     {
         Task.Run(() =>
         {

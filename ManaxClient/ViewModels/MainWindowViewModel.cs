@@ -14,7 +14,6 @@ using ManaxClient.Models;
 using ManaxClient.Models.History;
 using ManaxClient.Models.Server.Data;
 using ManaxClient.Models.Server.Sources;
-using ManaxClient.ViewModels.Pages;
 using ManaxClient.ViewModels.Pages.Home;
 using ManaxClient.ViewModels.Pages.Issue;
 using ManaxClient.ViewModels.Pages.Library;
@@ -35,16 +34,14 @@ namespace ManaxClient.ViewModels;
 
 public partial class MainWindowViewModel : ObservableObject
 {
-    private readonly PageHistoryManager _history = new();
     private readonly Lock _infoCancellationLock = new();
     private readonly Dictionary<string, CancellationTokenSource> _infoCancellationTokens = new();
     private readonly ReadOnlyObservableCollection<Library> _libraries;
     private readonly IDisposable _librariesSubscription;
     [ObservableProperty] private ChapterSource _chapterSource = new();
     [ObservableProperty] private FeatureManager _featureManager = new();
-
+    [ObservableProperty] private PageHistoryManager _history;
     [ObservableProperty] private ObservableCollection<string> _infos = [];
-    [ObservableProperty] private bool _isAdmin;
     [ObservableProperty] private IssueSource _issueSource = new();
     [ObservableProperty] private LibrarySource _librarySource = new();
     [ObservableProperty] private PermissionManager _permissionManager = new();
@@ -63,44 +60,20 @@ public partial class MainWindowViewModel : ObservableObject
         Instance = this;
         WeakReferenceMessenger.Default.Register<NotificationMessage>(this, (_, m) => { ShowInfo(m.Value); });
         WeakReferenceMessenger.Default.Register<PopupChangeMessage>(this, (_, m) => { SetPopup(m.Value); });
-        WeakReferenceMessenger.Default.Register<PageChangeMessage>(this, (_, m) => { SetPage(m.Value); });
+        WeakReferenceMessenger.Default.Register<LoggedInMessage>(this, (_, _) => OnLogin());
+        WeakReferenceMessenger.Default.Register<LoggedOutMessage>(this, (_, _) => OnLogout());
         SortExpressionComparer<Library> comparer = SortExpressionComparer<Library>.Descending(library => library.Name);
         _librariesSubscription = LibrarySource.Libraries
             .Connect()
             .SortAndBind(out _libraries, comparer)
             .Subscribe();
-
-        _history.OnPageChanged += _ =>
-        {
-            if (CurrentPageViewModel == null) return;
-            CurrentPageViewModel.Admin = IsAdmin;
-            CurrentPageViewModel.PageChangedRequested += (_, e) => { SetPage(e); };
-            CurrentPageViewModel.PreviousRequested += (_, _) => GoBack();
-            CurrentPageViewModel.NextRequested += (_, _) => GoForward();
-        };
-
-        LoginPageViewModel loginPage = new();
-        loginPage.PageChangedRequested += (_, _) =>
-        {
-            IsAdmin = loginPage.IsAdmin();
-            NotificationReceiver.OnRunningTasks += OnRunningTasks;
-            NotificationReceiver.OnChapterUploadFailed += OnChapterUploadFailed;
-
-            RoleSource.LoadRoles();
-            LibrarySource.LoadLibraries();
-            PersonSource.LoadPersons();
-            TagSource.LoadTags();
-        };
-        SetPage(loginPage);
+        
+        History = new PageHistoryManager(new LoginPageViewModel());
     }
 
-    public static MainWindowViewModel Instance { get; private set; } = new();
+    public static MainWindowViewModel Instance { get; private set; } = null!;
 
     public ReadOnlyObservableCollection<Library> Libraries => _libraries;
-
-    public bool CanGoBack => _history.CanGoBack;
-    public bool CanGoForward => _history.CanGoForward;
-    public PageViewModel? CurrentPageViewModel => _history.CurrentPage;
 
     ~MainWindowViewModel()
     {
@@ -118,6 +91,18 @@ public partial class MainWindowViewModel : ObservableObject
 
             _infoCancellationTokens.Clear();
         }
+    }
+
+    private void OnLogin()
+    {
+        NotificationReceiver.OnRunningTasks += OnRunningTasks;
+        NotificationReceiver.OnChapterUploadFailed += OnChapterUploadFailed;
+    }
+
+    private void OnLogout()
+    {
+        NotificationReceiver.OnRunningTasks -= OnRunningTasks;
+        NotificationReceiver.OnChapterUploadFailed -= OnChapterUploadFailed;
     }
 
     private void OnRunningTasks(Dictionary<string, int> tasks)
@@ -149,7 +134,8 @@ public partial class MainWindowViewModel : ObservableObject
             }
 
             ClearAllNotifications();
-            SetPage(new LoginPageViewModel());
+            WeakReferenceMessenger.Default.Send(new LoggedOutMessage());
+            WeakReferenceMessenger.Default.Send(new PageChangeMessage(new LoginPageViewModel()));
         }
         catch (Exception e)
         {
@@ -235,86 +221,68 @@ public partial class MainWindowViewModel : ObservableObject
         Dispatcher.UIThread.Post(() => { Infos.Remove(info); });
     }
 
-    public void GoBack()
-    {
-        _history.GoBack();
-        OnPropertyChanged(nameof(CurrentPageViewModel));
-    }
-
-    public void GoForward()
-    {
-        _history.GoForward();
-        OnPropertyChanged(nameof(CurrentPageViewModel));
-    }
-
-    private void SetPage(PageViewModel pageViewModel)
-    {
-        _history.SetPage(pageViewModel);
-        OnPropertyChanged(nameof(CurrentPageViewModel));
-    }
-
     public void ShowLibrary(Library library)
     {
-        SetPage(new LibraryPageViewModel(library));
+        WeakReferenceMessenger.Default.Send(new PageChangeMessage(new LibraryPageViewModel(library)));
     }
 
     public void ChangePageHome()
     {
-        SetPage(new HomePageViewModel());
+        WeakReferenceMessenger.Default.Send(new PageChangeMessage(new HomePageViewModel()));
     }
 
     public void ChangePageIssues()
     {
-        SetPage(new IssuesPageViewModel());
+        WeakReferenceMessenger.Default.Send(new PageChangeMessage(new IssuesPageViewModel()));
     }
 
     public void ChangePageUsers()
     {
-        SetPage(new UsersPageViewModel());
+        WeakReferenceMessenger.Default.Send(new PageChangeMessage(new UsersPageViewModel()));
     }
 
     public void ChangePageRanks()
     {
-        SetPage(new RankPageViewModel());
+        WeakReferenceMessenger.Default.Send(new PageChangeMessage(new RankPageViewModel()));
     }
 
     public void ChangePageTags()
     {
-        SetPage(new TagPageViewModel());
+        WeakReferenceMessenger.Default.Send(new PageChangeMessage(new TagPageViewModel()));
     }
 
     public void ChangePagePersons()
     {
-        SetPage(new PersonPageViewModel());
+        WeakReferenceMessenger.Default.Send(new PageChangeMessage(new PersonPageViewModel()));
     }
 
     public void ChangePageSettings()
     {
-        SetPage(new SettingsServerPageViewModel());
+        WeakReferenceMessenger.Default.Send(new PageChangeMessage(new SettingsServerPageViewModel()));
     }
 
     public void ChangePageAppSettings()
     {
-        SetPage(new SettingsAppViewModel());
+        WeakReferenceMessenger.Default.Send(new PageChangeMessage(new SettingsAppViewModel()));
     }
 
     public void ChangePageFeatures()
     {
-        SetPage(new SettingsFeaturesPageViewModel());
+        WeakReferenceMessenger.Default.Send(new PageChangeMessage(new SettingsFeaturesPageViewModel()));
     }
 
     public void ChangePageUserStats()
     {
-        SetPage(new UserStatsPageViewModel());
+        WeakReferenceMessenger.Default.Send(new PageChangeMessage(new UserStatsPageViewModel()));
     }
 
     public void ChangePageServerStats()
     {
-        SetPage(new ServerStatsPageViewModel());
+        WeakReferenceMessenger.Default.Send(new PageChangeMessage(new ServerStatsPageViewModel()));
     }
 
     public void ChangeUploadPage()
     {
-        SetPage(new UploadPageViewModel());
+        WeakReferenceMessenger.Default.Send(new PageChangeMessage(new UploadPageViewModel()));
     }
 }

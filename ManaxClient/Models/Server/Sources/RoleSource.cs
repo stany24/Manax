@@ -24,6 +24,7 @@ public class RoleSource
 
     public RoleSource()
     {
+        WeakReferenceMessenger.Default.Register<LoggedInMessage>(this, (_, _) => LoadRoles());
         NotificationReceiver.OnRoleCreated += OnRoleCreated;
         NotificationReceiver.OnRoleDeleted += OnRoleDeleted;
     }
@@ -44,7 +45,7 @@ public class RoleSource
         }
     }
 
-    public void LoadRoles()
+    private void LoadRoles()
     {
         Task.Run(() =>
         {

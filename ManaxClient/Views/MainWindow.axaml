@@ -50,7 +50,7 @@
                           VerticalScrollBarVisibility="Hidden"
                           Background="{DynamicResource MaterialCardBackgroundBrush}">
                 <StackPanel Classes="sidebar"
-                            IsVisible="{Binding CurrentPageViewModel.ControlBarVisible}"
+                            IsVisible="{Binding History.CurrentPage.ControlBarVisible}"
                             Orientation="Vertical">
 
                     <TextBlock Text="{localization:Localize MainWindow.Title}"
@@ -80,8 +80,7 @@
                         </ItemsControl.ItemsPanel>
                     </ItemsControl>
 
-                    <TextBlock Text="{localization:Localize MainWindow.Admin}"
-                               IsVisible="{Binding IsAdmin}" />
+                    <TextBlock Text="{localization:Localize MainWindow.Admin}" />
 
                     <controls:IconButton Command="{Binding ChangePageIssues}"
                                          Icon="WarningOutline"
@@ -194,7 +193,7 @@
             </ScrollViewer>
 
             <ContentControl Grid.Column="1"
-                            Content="{Binding CurrentPageViewModel}" />
+                            Content="{Binding History.CurrentPage}" />
         </Grid>
 
         <ContentControl HorizontalAlignment="Stretch"
