@@ -1,4 +1,3 @@
-using System.Globalization;
 using ImageMagick;
 using ManaxLibrary;
 using ManaxLibrary.DTO.Chapter;
@@ -47,8 +46,7 @@ public class UploadController(
         if (context.Chapters.Any(s => s.SerieId == chapterDto.SerieId && s.Number == chapterDto.Number))
             return BadRequest(ErrorCode.ChapterAlreadyExists);
 
-        string filePath = Path.Combine(serie.SavePath, chapterDto.Number.ToString(CultureInfo.InvariantCulture),
-            SettingsManager.DataDto.ArchiveFormat.ToString().ToLower(CultureInfo.InvariantCulture));
+        string filePath = serie.ChapterPath(chapterDto.Number);
         if (Directory.Exists(filePath) || System.IO.File.Exists(filePath))
             return BadRequest(ErrorCode.ChapterFileAlreadyExists);
 

@@ -8,14 +8,12 @@ using ManaxClient.ViewModels.Pages.Login;
 
 namespace ManaxClient.Models.History;
 
-public partial class PageHistoryManager: ObservableObject
+public partial class PageHistoryManager : ObservableObject
 {
     private readonly Stack<PageViewModel> _backStack = new();
     private readonly Stack<PageViewModel> _forwardStack = new();
     private readonly Lock _lock = new();
     [ObservableProperty] private PageViewModel _currentPage;
-    public bool CanGoBack => _backStack.Count > 0;
-    public bool CanGoForward => _forwardStack.Count > 0;
 
     public PageHistoryManager(PageViewModel pageViewModel)
     {
@@ -24,6 +22,9 @@ public partial class PageHistoryManager: ObservableObject
         WeakReferenceMessenger.Default.Register<NextPageMessage>(this, (_, _) => { GoForward(); });
         CurrentPage = pageViewModel;
     }
+
+    public bool CanGoBack => _backStack.Count > 0;
+    public bool CanGoForward => _forwardStack.Count > 0;
 
     private void SetCurrent(PageViewModel pageViewModel)
     {
@@ -49,7 +50,7 @@ public partial class PageHistoryManager: ObservableObject
         PageViewModel previous = _backStack.Pop();
         SetCurrent(previous);
     }
-    
+
     private void GoForward()
     {
         if (!CanGoForward) return;

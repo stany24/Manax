@@ -52,6 +52,7 @@ public partial class MainWindowViewModel : ObservableObject
     [ObservableProperty] private RoleSource _roleSource = new();
     [ObservableProperty] private ObservableCollection<TaskItem> _runningTasks = new([]);
     [ObservableProperty] private SerieSource _serieSource = new();
+    [ObservableProperty] private bool _sideBarVisible = true;
     [ObservableProperty] private TagSource _tagSource = new();
     [ObservableProperty] private UserSource _userSource = new();
 
@@ -67,7 +68,7 @@ public partial class MainWindowViewModel : ObservableObject
             .Connect()
             .SortAndBind(out _libraries, comparer)
             .Subscribe();
-        
+
         History = new PageHistoryManager(new LoginPageViewModel());
     }
 
@@ -219,6 +220,16 @@ public partial class MainWindowViewModel : ObservableObject
         }
 
         Dispatcher.UIThread.Post(() => { Infos.Remove(info); });
+    }
+
+    public void OpenSideBar()
+    {
+        SideBarVisible = true;
+    }
+
+    public void CloseSideBar()
+    {
+        SideBarVisible = false;
     }
 
     public void ShowLibrary(Library library)
