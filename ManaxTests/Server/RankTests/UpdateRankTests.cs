@@ -1,3 +1,4 @@
+using ManaxLibrary;
 using ManaxLibrary.DTO.Rank;
 using ManaxServer.Models.Rank;
 using Microsoft.AspNetCore.Mvc;
@@ -18,7 +19,7 @@ public class UpdateRankTests : RankTestsSetup
             Name = "Updated Rank"
         };
 
-        IActionResult result = await Controller.UpdateRank(updateRank);
+        ActionResult result = await Controller.UpdateRank(updateRank);
 
         Assert.IsInstanceOfType<OkResult>(result);
 
@@ -38,9 +39,9 @@ public class UpdateRankTests : RankTestsSetup
             Name = "Updated Rank"
         };
 
-        IActionResult result = await Controller.UpdateRank(updateRank);
+        ActionResult result = await Controller.UpdateRank(updateRank);
 
-        Assert.IsInstanceOfType<NotFoundObjectResult>(result);
+        CheckTypeAndErrorCode<NotFoundObjectResult>(result, ErrorCode.RankDoesNotExist);
     }
 
     [TestMethod]
@@ -57,7 +58,7 @@ public class UpdateRankTests : RankTestsSetup
             Name = "Updated Name"
         };
 
-        IActionResult result = await Controller.UpdateRank(updateRank);
+        ActionResult result = await Controller.UpdateRank(updateRank);
 
         Assert.IsInstanceOfType<BadRequestObjectResult>(result);
     }
@@ -76,7 +77,7 @@ public class UpdateRankTests : RankTestsSetup
             Name = secondRank.Name
         };
 
-        IActionResult result = await Controller.UpdateRank(updateRank);
+        ActionResult result = await Controller.UpdateRank(updateRank);
 
         Assert.IsInstanceOfType<BadRequestObjectResult>(result);
     }

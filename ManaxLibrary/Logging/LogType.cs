@@ -2,8 +2,8 @@ namespace ManaxLibrary.Logging;
 
 public enum LogType
 {
-    Info,
-    Warning,
-    Failure,
-    Error
+    Info = 0,
+    Warning = 1,
+    Failure = 2,
+    Error = 3
 }

@@ -5,105 +5,94 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:page="clr-namespace:ManaxClient.ViewModels.Pages.Settings"
     xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
+    xmlns:icon="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    xmlns:controls="clr-namespace:ManaxClient.Controls"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Pages.Settings.SettingsAppView"
-    x:DataType="page:SettingsAppViewModel">
+    x:DataType="page:SettingsAppViewModel"
+    Classes="page">
 
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel Orientation="Vertical" Spacing="24">
 
-            <StackPanel Orientation="Vertical">
-                <TextBlock Classes="title" Text="{localization:Localize SettingsAppPage.Title}" />
-                <TextBlock Text="{localization:Localize SettingsAppPage.Subtitle}" />
-            </StackPanel>
-            
             <Border Classes="card">
-                <StackPanel Spacing="20">
-                    <StackPanel Orientation="Horizontal" Spacing="12">
-                        <TextBlock Text="🌍" FontSize="20" />
-                        <TextBlock Classes="subtitle" Text="{localization:Localize SettingsAppPage.Language}" Margin="0" />
-                    </StackPanel>
-
-                    <Grid ColumnDefinitions="*" RowDefinitions="Auto" RowSpacing="16">
-                        <StackPanel Grid.Column="0" Grid.Row="0" Spacing="6">
-                            <TextBlock Text="{localization:Localize SettingsAppPage.SelectedLanguage}" FontWeight="Medium" />
-                            <ComboBox ItemsSource="{Binding AvailableLanguages}"
-                                      SelectedItem="{Binding SelectedLanguage}"
-                                      DisplayMemberBinding="{Binding DisplayName}"
-                                      HorizontalAlignment="Stretch"
-                                      MinWidth="200"
-                                      Padding="8,6"
-                                      CornerRadius="6"
-                                      BorderThickness="1"/>
-                        </StackPanel>
-                    </Grid>
-                </StackPanel>
+                <Grid Classes="title"
+                      ColumnDefinitions="Auto,Auto,*">
+                    <icon:MaterialIcon Grid.Column="0"
+                                       Classes="icon"
+                                       Kind="CogOutline" />
+                    <TextBlock Grid.Column="1"
+                               Text="{localization:Localize SettingsAppPage.Title}" />
+                </Grid>
             </Border>
 
-            <Border Classes="card">
-                <StackPanel Spacing="20">
-                    <StackPanel Orientation="Horizontal" Spacing="12">
-                        <TextBlock Text="🌙" FontSize="20" />
-                        <TextBlock Classes="subtitle" Text="{localization:Localize SettingsAppPage.DisplayMode}" Margin="0" />
+            <controls:StretchWrapPanel ItemSpacing="12"
+                                       LineSpacing="12">
+                <Border Classes="card">
+                    <StackPanel Spacing="20">
+                        <Grid Classes="section-title"
+                              ColumnDefinitions="Auto,Auto">
+                            <icon:MaterialIcon Grid.Column="0"
+                                               Classes="icon"
+                                               Kind="FlagVariantOutline" />
+                            <TextBlock Grid.Column="1"
+                                       Text="{localization:Localize SettingsAppPage.Language}"
+                                       Margin="0" />
+                        </Grid>
+
+                        <Border Classes="item-card">
+                            <StackPanel Spacing="6">
+                                <TextBlock Text="{localization:Localize SettingsAppPage.SelectedLanguage}"
+                                           FontWeight="Medium" />
+                                <ComboBox ItemsSource="{Binding Languages}"
+                                          SelectedItem="{Binding SelectedLanguage}"
+                                          DisplayMemberBinding="{Binding DisplayName}" />
+                            </StackPanel>
+                        </Border>
                     </StackPanel>
+                </Border>
 
-                    <Grid ColumnDefinitions="*,*" RowDefinitions="Auto" ColumnSpacing="16" RowSpacing="16">
-                        <StackPanel Grid.Column="0" Grid.Row="0" Spacing="6">
-                            <TextBlock Text="{localization:Localize SettingsAppPage.DarkMode}" FontWeight="Medium" />
-                            <ToggleSwitch IsChecked="{Binding IsDarkMode}" />
-                        </StackPanel>
-                    </Grid>
-                </StackPanel>
-            </Border>
+                <Border Classes="card">
+                    <StackPanel Spacing="20">
+                        <Grid Classes="section-title"
+                              ColumnDefinitions="Auto,Auto,*">
+                            <icon:MaterialIcon Grid.Column="0"
+                                               Classes="icon"
+                                               Kind="MoonWaxingCrescent" />
+                            <TextBlock Grid.Column="1"
+                                       Text="{localization:Localize SettingsAppPage.DisplayMode}"
+                                       Margin="0" />
+                        </Grid>
 
-            <Border Classes="card">
-                <StackPanel Spacing="20">
-                    <StackPanel Orientation="Horizontal" Spacing="12">
-                        <TextBlock Text="🎨" FontSize="20" />
-                        <TextBlock Classes="subtitle" Text="{localization:Localize SettingsAppPage.ColorTheme}" Margin="0" />
+                        <Border Classes="item-card">
+                            <StackPanel Spacing="6">
+                                <TextBlock Text="{localization:Localize SettingsAppPage.DarkMode}"
+                                           FontWeight="Medium" />
+                                <ToggleSwitch IsChecked="{Binding IsDarkMode}" />
+                            </StackPanel>
+                        </Border>
                     </StackPanel>
+                </Border>
 
-                    <Grid ColumnDefinitions="*" RowDefinitions="Auto,Auto" RowSpacing="16">
-                        <StackPanel Grid.Column="0" Grid.Row="0" Spacing="6">
-                            <TextBlock Text="{localization:Localize SettingsAppPage.SelectedTheme}" FontWeight="Medium" />
-                            <ComboBox SelectedItem="{Binding SelectedThemeSettingsData}"
-                                      ItemsSource="{Binding AvailableThemes}"
-                                      HorizontalAlignment="Stretch">
-                                <ComboBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <StackPanel Orientation="Horizontal" Spacing="8">
-                                            <Border Width="16" Height="16" CornerRadius="8"/>
-                                            <TextBlock Text="{Binding Name}" />
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </ComboBox.ItemTemplate>
-                            </ComboBox>
-                        </StackPanel>
+                <Border Classes="card">
+                    <StackPanel Spacing="20">
+                        <Grid Classes="section-title"
+                              ColumnDefinitions="Auto,Auto,*">
+                            <icon:MaterialIcon Grid.Column="0"
+                                               Classes="icon"
+                                               Kind="PaletteOutline" />
+                            <TextBlock Grid.Column="1"
+                                       Text="{localization:Localize SettingsAppPage.AccentColor}"
+                                       Margin="0" />
+                        </Grid>
 
-                        <StackPanel Grid.Column="0" Grid.Row="1" Spacing="12">
-                            <TextBlock Text="{localization:Localize SettingsAppPage.ColorPreview}" FontWeight="Medium" />
-                            <WrapPanel Orientation="Horizontal" ItemWidth="150" ItemHeight="80">
-                                <Border Classes="card" Margin="4" Width="140" Height="70">
-                                    <StackPanel Spacing="4">
-                                        <TextBlock Text="{localization:Localize SettingsAppPage.PrimaryColor}" FontSize="12" FontWeight="Medium" />
-                                        <Rectangle Height="20" Fill="{Binding SelectedThemeSettingsData.PrimaryColor}" />
-                                        <TextBlock Text="{Binding SelectedThemeSettingsData.PrimaryColor.Color}" FontSize="10" />
-                                    </StackPanel>
-                                </Border>
-
-                                <Border Classes="card" Margin="4" Width="140" Height="70">
-                                    <StackPanel Spacing="4">
-                                        <TextBlock Text="{localization:Localize SettingsAppPage.SecondaryColor}" FontSize="12" FontWeight="Medium" />
-                                        <Rectangle Height="20" Fill="{Binding SelectedThemeSettingsData.SecondaryColor}" />
-                                        <TextBlock Text="{Binding SelectedThemeSettingsData.SecondaryColor.Color}" FontSize="10" />
-                                    </StackPanel>
-                                </Border>
-                            </WrapPanel>
-                        </StackPanel>
-                    </Grid>
-                </StackPanel>
-            </Border>
+                        <Border Classes="item-card">
+                            <ColorView
+                                HsvColor="{Binding ThemeColor}" />
+                        </Border>
+                    </StackPanel>
+                </Border>
+            </controls:StretchWrapPanel>
         </StackPanel>
     </ScrollViewer>
-
 </UserControl>

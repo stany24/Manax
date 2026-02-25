@@ -7,71 +7,43 @@
     xmlns:converters="clr-namespace:ManaxClient.Converters"
     xmlns:viewModels="clr-namespace:ManaxClient.ViewModels"
     xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
+    xmlns:controls="clr-namespace:ManaxClient.Controls"
+    xmlns:icon="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     xmlns:localization1="clr-namespace:ManaxClient.Localization"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Pages.Tag.TagPageView"
     x:DataType="tag:TagPageViewModel"
-    IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).CanReadTags}">
+    IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanReadTags}"
+    Classes="page">
 
     <UserControl.Resources>
         <converters:ColorToSolidBrushConverter x:Key="ColorToBrushConverter" />
     </UserControl.Resources>
+
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel Orientation="Vertical" Spacing="24">
-
-            <Grid ColumnDefinitions="*,Auto">
-                <StackPanel Grid.Column="0" Orientation="Vertical">
-                    <TextBlock Classes="title" Text="{localization:Localize TagPage.Management}" />
-                    <TextBlock Text="{localization1:LocalizeFormat LibraryPage.SeriesCount,
-                                   Param1={Binding $parent[UserControl].((tag:TagPageViewModel)DataContext).Tags.Count}}"/>
-                </StackPanel>
-
-                <Button Grid.Column="1"
-                        IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).CanWriteTags}"
-                        Classes="primary"
-                        Command="{Binding CreateTag}"
-                        VerticalAlignment="Center">
-                    <StackPanel Orientation="Horizontal" Spacing="8">
-                        <TextBlock Text="➕" />
-                        <TextBlock Text="{localization:Localize TagPage.NewTag}" />
-                    </StackPanel>
-                </Button>
-            </Grid>
-
-            <Border Classes="card" IsVisible="{Binding !Tags.Count}">
-                <StackPanel Orientation="Vertical"
-                            Spacing="16"
-                            HorizontalAlignment="Center">
-                    <TextBlock Text="🏷️" FontSize="48" HorizontalAlignment="Center" />
-                    <TextBlock Text="{localization:Localize TagPage.NoTags}"
-                               FontSize="18"
-                               FontWeight="Medium"
-                               HorizontalAlignment="Center" />
-                    <TextBlock Text="{localization:Localize TagPage.NoTags.Description}"
-                               TextAlignment="Center"/>
-                    <Button Classes="primary"
-                            IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).CanWriteTags}"
-                            Command="{Binding CreateTag}"
-                            HorizontalAlignment="Center">
-                        <StackPanel Orientation="Horizontal" Spacing="8">
-                            <TextBlock Text="➕" />
-                            <TextBlock Text="{localization:Localize TagPage.CreateFirst}" />
-                        </StackPanel>
-                    </Button>
-                </StackPanel>
+            <Border Classes="card">
+                <Grid ColumnDefinitions="Auto,*,Auto"
+                      Classes="title">
+                    <TextBlock Grid.Column="0"
+                               Text="{localization1:LocalizeFormat TagPage.List,
+                                        Param1={Binding $parent[UserControl].((tag:TagPageViewModel)DataContext).Tags.Count}}" />
+                    <controls:IconButton Grid.Column="2"
+                                         Classes="icon-button light"
+                                         IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWriteTags}"
+                                         Command="{Binding CreateTag}"
+                                         Text="{localization:Localize TagPage.NewTag}"
+                                         Icon="Add" />
+                </Grid>
             </Border>
 
-            <Border Classes="card" IsVisible="{Binding Tags.Count}">
-                <StackPanel Spacing="16">
-                    <TextBlock Classes="subtitle" Text="{localization:Localize TagPage.List}" />
-
+            <Border Classes="card"
+                    IsVisible="{Binding Tags.Count}">
+                <StackPanel>
                     <ItemsControl ItemsSource="{Binding Tags}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <Border BorderThickness="1"
-                                        CornerRadius="8"
-                                        Padding="16"
-                                        Margin="0,4">
+                                <Border Classes="item-card">
                                     <Grid ColumnDefinitions="Auto,*,Auto,Auto" ColumnSpacing="16">
 
                                         <Border Grid.Column="0"
@@ -79,44 +51,39 @@
                                                 CornerRadius="20"
                                                 Width="40"
                                                 Height="40">
-                                            <TextBlock Text="🏷️"
-                                                       FontSize="16"
-                                                       HorizontalAlignment="Center"
-                                                       VerticalAlignment="Center" />
+                                            <icon:MaterialIcon Kind="TagOutline" />
                                         </Border>
 
                                         <TextBlock Grid.Column="1"
-                                                   Text="{Binding Name}"
-                                                   FontWeight="Bold"
-                                                   FontSize="16" />
+                                                   Classes="item-name"
+                                                   Text="{Binding Name}" />
 
-                                        <Button Grid.Column="2"
-                                                IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).CanWriteTags}"
-                                                Classes="secondary"
-                                                Command="{Binding $parent[UserControl].((tag:TagPageViewModel)DataContext).UpdateTag}"
-                                                CommandParameter="{Binding .}"
-                                                Padding="8"
-                                                VerticalAlignment="Center">
-                                            <TextBlock Text="✏️" />
-                                        </Button>
+                                        <controls:IconButton Grid.Column="2"
+                                                             Classes="icon-button dark"
+                                                             IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWriteTags}"
+                                                             Command="{Binding $parent[UserControl].((tag:TagPageViewModel)DataContext).UpdateTag}"
+                                                             CommandParameter="{Binding .}"
+                                                             Icon="PencilOutline" />
 
-                                        <Button Grid.Column="3"
-                                                IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).CanDeleteTags}"
-                                                Classes="danger"
-                                                Command="{Binding $parent[UserControl].((tag:TagPageViewModel)DataContext).DeleteTag}"
-                                                CommandParameter="{Binding .}"
-                                                Padding="8"
-                                                VerticalAlignment="Center">
-                                            <TextBlock Text="🗑️" />
-                                        </Button>
+                                        <controls:IconButton Grid.Column="3"
+                                                             Classes="icon-button dark"
+                                                             IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanDeleteTags}"
+                                                             Command="{Binding $parent[UserControl].((tag:TagPageViewModel)DataContext).DeleteTag}"
+                                                             CommandParameter="{Binding .}"
+                                                             Icon="DeleteOutline" />
                                     </Grid>
                                 </Border>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Vertical"
+                                            Spacing="8" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
                     </ItemsControl>
                 </StackPanel>
             </Border>
         </StackPanel>
     </ScrollViewer>
-
 </UserControl>

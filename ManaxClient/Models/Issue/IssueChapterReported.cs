@@ -2,8 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
 using DynamicData;
-using ManaxClient.Models.Sources;
+using ManaxClient.Event;
+using ManaxClient.Models.Server.Data;
+using ManaxClient.ViewModels;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTO.Issue.Reported;
@@ -30,11 +33,8 @@ public partial class IssueChapterReported : ObservableObject
     {
         Task.Run(async () =>
         {
-            Optional<bool> response =await ManaxApiIssueClient.CloseChapterIssueAsync(Id);
-            if (response.Failed)
-            {
-                IssueSource.ErrorEmitted?.Invoke(this, response.Error);
-            }
+            Optional<bool> response = await ManaxApiIssueClient.CloseChapterIssueAsync(Id);
+            if (response.Failed) WeakReferenceMessenger.Default.Send(new NotificationMessage(response.Error));
         });
     }
 
@@ -44,7 +44,7 @@ public partial class IssueChapterReported : ObservableObject
         CreatedAt = dto.CreatedAt;
 
         _subscriptionChapter?.Dispose();
-        _subscriptionChapter = ChapterSource.Chapters
+        _subscriptionChapter = MainWindowViewModel.Instance.ChapterSource.Chapters
             .Connect()
             .AutoRefresh()
             .Filter(o => o.Id == dto.ChapterId)
@@ -55,7 +55,7 @@ public partial class IssueChapterReported : ObservableObject
             });
 
         _subscriptionUser?.Dispose();
-        _subscriptionUser = UserSource.Users
+        _subscriptionUser = MainWindowViewModel.Instance.UserSource.Users
             .Connect()
             .AutoRefresh()
             .Filter(o => o.Id == dto.UserId)
@@ -66,7 +66,7 @@ public partial class IssueChapterReported : ObservableObject
             });
 
         _subscriptionProblem?.Dispose();
-        _subscriptionProblem = ProblemSource.ChapterProblems
+        _subscriptionProblem = MainWindowViewModel.Instance.ProblemSource.ChapterProblems
             .Connect()
             .AutoRefresh()
             .Filter(o => o.Id == dto.ProblemId)

@@ -3,15 +3,17 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading;
 using System.Threading.Tasks;
-using Avalonia;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
 using DynamicData;
 using DynamicData.Binding;
+using ManaxClient.Event;
+using ManaxClient.Manager;
 using ManaxClient.Models;
 using ManaxClient.Models.History;
-using ManaxClient.Models.Sources;
-using ManaxClient.ViewModels.Pages;
+using ManaxClient.Models.Server.Data;
+using ManaxClient.Models.Server.Sources;
 using ManaxClient.ViewModels.Pages.Home;
 using ManaxClient.ViewModels.Pages.Issue;
 using ManaxClient.ViewModels.Pages.Library;
@@ -32,85 +34,91 @@ namespace ManaxClient.ViewModels;
 
 public partial class MainWindowViewModel : ObservableObject
 {
-    private readonly PageHistoryManager _history = new();
-
+    private readonly Lock _infoCancellationLock = new();
+    private readonly Dictionary<string, CancellationTokenSource> _infoCancellationTokens = new();
     private readonly ReadOnlyObservableCollection<Library> _libraries;
-
     private readonly IDisposable _librariesSubscription;
+    [ObservableProperty] private ChapterSource _chapterSource = new();
+    [ObservableProperty] private FeatureManager _featureManager = new();
+    [ObservableProperty] private PageHistoryManager _history;
     [ObservableProperty] private ObservableCollection<string> _infos = [];
-    [ObservableProperty] private bool _isAdmin;
-    [ObservableProperty] private Thickness _pageMargin = new(0, 0, 0, 0);
+    [ObservableProperty] private IssueSource _issueSource = new();
+    [ObservableProperty] private LibrarySource _librarySource = new();
+    [ObservableProperty] private PermissionManager _permissionManager = new();
+    [ObservableProperty] private PersonSource _personSource = new();
     [ObservableProperty] private Controls.Popups.Popup? _popup;
+    [ObservableProperty] private ProblemSource _problemSource = new();
+    [ObservableProperty] private RankSource _rankSource = new();
+    [ObservableProperty] private RoleSource _roleSource = new();
     [ObservableProperty] private ObservableCollection<TaskItem> _runningTasks = new([]);
+    [ObservableProperty] private SerieSource _serieSource = new();
+    [ObservableProperty] private TagSource _tagSource = new();
+    [ObservableProperty] private UserSource _userSource = new();
 
     public MainWindowViewModel()
     {
+        Instance = this;
+        WeakReferenceMessenger.Default.Register<NotificationMessage>(this, (_, m) => { ShowInfo(m.Value); });
+        WeakReferenceMessenger.Default.Register<PopupChangeMessage>(this, (_, m) => { SetPopup(m.Value); });
+        WeakReferenceMessenger.Default.Register<LoggedInMessage>(this, (_, _) => OnLogin());
+        WeakReferenceMessenger.Default.Register<LoggedOutMessage>(this, (_, _) => OnLogout());
         SortExpressionComparer<Library> comparer = SortExpressionComparer<Library>.Descending(library => library.Name);
         _librariesSubscription = LibrarySource.Libraries
             .Connect()
             .SortAndBind(out _libraries, comparer)
             .Subscribe();
-
-        _history.OnPageChanged += _ =>
-        {
-            if (CurrentPageViewModel == null) return;
-            CurrentPageViewModel.Admin = IsAdmin;
-            CurrentPageViewModel.PageChangedRequested += (_, e) => { SetPage(e); };
-            CurrentPageViewModel.PopupRequested += (_, e) => { SetPopup(e); };
-            CurrentPageViewModel.InfoEmitted += (_, e) => { ShowInfo(e); };
-            CurrentPageViewModel.PreviousRequested += (_, _) => GoBack();
-            CurrentPageViewModel.NextRequested += (_, _) => GoForward();
-            PageMargin = CurrentPageViewModel.HasMargin ? new Thickness(20) : new Thickness(0);
-        };
         
-        LoginPageViewModel loginPage = new();
-        loginPage.PageChangedRequested += (_, _) =>
-        {
-            Library.ErrorEmitted += (_, e) => ShowInfo(e);
-            Serie.ErrorEmitted += (_, e) => ShowInfo(e);
-            Chapter.ErrorEmitted += (_, e) => ShowInfo(e);
-            RankSource.ErrorEmitted += (_, e) => ShowInfo(e);
-            TagSource.ErrorEmitted += (_, e) => ShowInfo(e);
-            UserSource.ErrorEmitted += (_, e) => ShowInfo(e);
-            IssueSource.ErrorEmitted += (_, e) => ShowInfo(e);
-            IsAdmin = loginPage.IsAdmin();
-            ServerNotification.OnRunningTasks += OnRunningTasks;
-            ServerNotification.OnPermissionModified += OnPermissionModified;
-            ServerNotification.OnFeatureModified += OnFeatureModified;
-            Task.Run(LoadPermissions);
-            Task.Run(LoadFeatures);
-            
-            RoleSource.LoadRoles();
-            LibrarySource.LoadLibraries();
-            PersonSource.LoadPersons();
-            TagSource.LoadTags();
-            RankSource.LoadRanks();
-        };
-        SetPage(loginPage);
+        History = new PageHistoryManager(new LoginPageViewModel());
     }
+
+    public static MainWindowViewModel Instance { get; private set; } = null!;
 
     public ReadOnlyObservableCollection<Library> Libraries => _libraries;
 
-    public bool CanGoBack => _history.CanGoBack;
-    public bool CanGoForward => _history.CanGoForward;
-    public PageViewModel? CurrentPageViewModel => _history.CurrentPage;
-
     ~MainWindowViewModel()
     {
-        ServerNotification.OnRunningTasks -= OnRunningTasks;
-        ServerNotification.OnPermissionModified -= OnPermissionModified;
+        NotificationReceiver.OnRunningTasks -= OnRunningTasks;
+        NotificationReceiver.OnChapterUploadFailed -= OnChapterUploadFailed;
         _librariesSubscription.Dispose();
+
+        lock (_infoCancellationLock)
+        {
+            foreach (CancellationTokenSource cts in _infoCancellationTokens.Values)
+            {
+                cts.Cancel();
+                cts.Dispose();
+            }
+
+            _infoCancellationTokens.Clear();
+        }
+    }
+
+    private void OnLogin()
+    {
+        NotificationReceiver.OnRunningTasks += OnRunningTasks;
+        NotificationReceiver.OnChapterUploadFailed += OnChapterUploadFailed;
+    }
+
+    private void OnLogout()
+    {
+        NotificationReceiver.OnRunningTasks -= OnRunningTasks;
+        NotificationReceiver.OnChapterUploadFailed -= OnChapterUploadFailed;
     }
 
     private void OnRunningTasks(Dictionary<string, int> tasks)
     {
-        Dispatcher.UIThread.Invoke(() =>
+        Dispatcher.UIThread.Post(() =>
         {
             RunningTasks.Clear();
 
             foreach (KeyValuePair<string, int> task in tasks)
                 RunningTasks.Add(new TaskItem { TaskName = task.Key, Number = task.Value });
         });
+    }
+
+    private void OnChapterUploadFailed(string chapterPath)
+    {
+        ShowInfo($"Chapter upload failed: {chapterPath}");
     }
 
     public async void Logout()
@@ -124,7 +132,10 @@ public partial class MainWindowViewModel : ObservableObject
                 ShowInfo(logoutAsync.Error);
                 return;
             }
-            SetPage(new LoginPageViewModel());
+
+            ClearAllNotifications();
+            WeakReferenceMessenger.Default.Send(new LoggedOutMessage());
+            WeakReferenceMessenger.Default.Send(new PageChangeMessage(new LoginPageViewModel()));
         }
         catch (Exception e)
         {
@@ -134,105 +145,144 @@ public partial class MainWindowViewModel : ObservableObject
         }
     }
 
+    private void ClearAllNotifications()
+    {
+        lock (_infoCancellationLock)
+        {
+            foreach (CancellationTokenSource cts in _infoCancellationTokens.Values)
+            {
+                cts.Cancel();
+                cts.Dispose();
+            }
+
+            _infoCancellationTokens.Clear();
+        }
+
+        Dispatcher.UIThread.Post(() => { Infos.Clear(); });
+    }
+
     private void SetPopup(Controls.Popups.Popup? popup)
     {
-        Dispatcher.UIThread.Invoke(() =>
+        Dispatcher.UIThread.Post(() =>
         {
             Popup = popup;
-            if (Popup is not null) Popup.Closed += (_, _) => Popup = null;
+            Popup?.Closed += (_, _) => Popup = null;
         });
     }
 
     private void ShowInfo(string info)
     {
-        Dispatcher.UIThread.Invoke(() => { Infos.Add(info); });
-        Task.Run(() =>
+        Dispatcher.UIThread.Post(() => { Infos.Add(info); });
+
+        CancellationTokenSource cts = new();
+        lock (_infoCancellationLock)
         {
-            Thread.Sleep(10000);
-            Dispatcher.UIThread.Invoke(() => { Infos.Remove(info); });
-        });
+            _infoCancellationTokens[info] = cts;
+        }
+
+        Task.Run(async () =>
+        {
+            try
+            {
+                await Task.Delay(TimeSpan.FromSeconds(10), cts.Token);
+
+                Dispatcher.UIThread.Post(() =>
+                {
+                    Infos.Remove(info);
+                    lock (_infoCancellationLock)
+                    {
+                        _infoCancellationTokens.Remove(info);
+                    }
+                });
+            }
+            catch (OperationCanceledException)
+            {
+                // Ignored
+            }
+            finally
+            {
+                cts.Dispose();
+            }
+        }, cts.Token);
     }
 
-    public void GoBack()
+    public void DismissNotification(string info)
     {
-        _history.GoBack();
-        OnPropertyChanged(nameof(CurrentPageViewModel));
-    }
+        lock (_infoCancellationLock)
+        {
+            if (_infoCancellationTokens.TryGetValue(info, out CancellationTokenSource? cts))
+            {
+                cts.Cancel();
+                cts.Dispose();
+                _infoCancellationTokens.Remove(info);
+            }
+        }
 
-    public void GoForward()
-    {
-        _history.GoForward();
-        OnPropertyChanged(nameof(CurrentPageViewModel));
-    }
-
-    private void SetPage(PageViewModel pageViewModel)
-    {
-        _history.SetPage(pageViewModel);
-        OnPropertyChanged(nameof(CurrentPageViewModel));
+        Dispatcher.UIThread.Post(() => { Infos.Remove(info); });
     }
 
     public void ShowLibrary(Library library)
     {
-        SetPage(new LibraryPageViewModel(library));
+        WeakReferenceMessenger.Default.Send(new PageChangeMessage(new LibraryPageViewModel(library)));
     }
 
     public void ChangePageHome()
     {
-        SetPage(new HomePageViewModel());
+        WeakReferenceMessenger.Default.Send(new PageChangeMessage(new HomePageViewModel()));
     }
 
     public void ChangePageIssues()
     {
-        SetPage(new IssuesPageViewModel());
+        WeakReferenceMessenger.Default.Send(new PageChangeMessage(new IssuesPageViewModel()));
     }
 
     public void ChangePageUsers()
     {
-        SetPage(new UsersPageViewModel());
+        WeakReferenceMessenger.Default.Send(new PageChangeMessage(new UsersPageViewModel()));
     }
 
     public void ChangePageRanks()
     {
-        SetPage(new RankPageViewModel());
+        WeakReferenceMessenger.Default.Send(new PageChangeMessage(new RankPageViewModel()));
     }
 
     public void ChangePageTags()
     {
-        SetPage(new TagPageViewModel());
+        WeakReferenceMessenger.Default.Send(new PageChangeMessage(new TagPageViewModel()));
     }
 
-    public void ChangePagePeople()
+    public void ChangePagePersons()
     {
-        SetPage(new PersonPageViewModel());
+        WeakReferenceMessenger.Default.Send(new PageChangeMessage(new PersonPageViewModel()));
     }
 
     public void ChangePageSettings()
     {
-        SetPage(new SettingsServerPageViewModel());
+        WeakReferenceMessenger.Default.Send(new PageChangeMessage(new SettingsServerPageViewModel()));
     }
 
     public void ChangePageAppSettings()
     {
-        SetPage(new SettingsAppViewModel());
+        WeakReferenceMessenger.Default.Send(new PageChangeMessage(new SettingsAppViewModel()));
     }
 
     public void ChangePageFeatures()
     {
-        SetPage(new SettingsFeaturesViewModel());
+        WeakReferenceMessenger.Default.Send(new PageChangeMessage(new SettingsFeaturesPageViewModel()));
     }
 
     public void ChangePageUserStats()
     {
-        SetPage(new UserStatsPageViewModel());
+        WeakReferenceMessenger.Default.Send(new PageChangeMessage(new UserStatsPageViewModel()));
     }
 
     public void ChangePageServerStats()
     {
-        SetPage(new ServerStatsPageViewModel());
+        WeakReferenceMessenger.Default.Send(new PageChangeMessage(new ServerStatsPageViewModel()));
     }
-    
+
     public void ChangeUploadPage()
     {
-        SetPage(new UploadPageViewModel());
+        WeakReferenceMessenger.Default.Send(new PageChangeMessage(new UploadPageViewModel()));
     }
 }

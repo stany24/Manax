@@ -1,3 +1,4 @@
+using ManaxLibrary;
 using ManaxLibrary.DTO.Library;
 using ManaxServer.Models.Library;
 using Microsoft.AspNetCore.Mvc;
@@ -13,9 +14,9 @@ public class GetLibraryTests : LibraryTestsSetup
         ActionResult<IEnumerable<long>> result = await Controller.GetLibraries();
 
         OkObjectResult? okResult = result.Result as OkObjectResult;
-        Assert.IsNull(okResult);
+        Assert.IsNotNull(okResult);
 
-        List<long>? returnedIds = result.Value as List<long>;
+        List<long>? returnedIds = okResult.Value as List<long>;
         Assert.IsNotNull(returnedIds);
         Assert.HasCount(Context.Libraries.Count(), returnedIds);
         foreach (Library library in Context.Libraries) Assert.Contains(library.Id, returnedIds);
@@ -28,9 +29,9 @@ public class GetLibraryTests : LibraryTestsSetup
         ActionResult<LibraryDto> result = await Controller.GetLibrary(library.Id);
 
         OkObjectResult? okResult = result.Result as OkObjectResult;
-        Assert.IsNull(okResult);
+        Assert.IsNotNull(okResult);
 
-        LibraryDto? returnedLibrary = result.Value;
+        LibraryDto? returnedLibrary = okResult.Value as LibraryDto;
         Assert.IsNotNull(returnedLibrary);
         Assert.AreEqual(library.Id, returnedLibrary.Id);
         Assert.AreEqual(library.Name, returnedLibrary.Name);
@@ -42,6 +43,6 @@ public class GetLibraryTests : LibraryTestsSetup
     {
         ActionResult<LibraryDto> result = await Controller.GetLibrary(999999);
 
-        Assert.IsInstanceOfType<NotFoundObjectResult>(result.Result);
+        CheckTypeAndErrorCode<NotFoundObjectResult>(result.Result, ErrorCode.LibraryDoesNotExist);
     }
 }

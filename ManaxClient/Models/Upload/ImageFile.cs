@@ -5,20 +5,19 @@ using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace ManaxClient.Models.Upload;
 
-public partial class ImageFile: ObservableObject
+public partial class ImageFile : ObservableObject
 {
-    [ObservableProperty] private string _path;
     [ObservableProperty] private string _fileName;
+    [ObservableProperty] private string _path;
     [ObservableProperty] private Bitmap? _preview;
 
     public ImageFile(string path)
     {
         Path = path;
         FileName = System.IO.Path.GetFileName(path);
-        LoadPreview();
     }
 
-    private void LoadPreview()
+    public void LoadPreview()
     {
         Task.Run(() =>
         {
@@ -32,5 +31,10 @@ public partial class ImageFile: ObservableObject
                 // ignored
             }
         });
+    }
+
+    public void UnloadPreview()
+    {
+        Preview = null;
     }
 }

@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using ManaxLibrary;
 using ManaxLibrary.DTO.Issue.Reported;
 using ManaxServer.Models.Issue.Reported;
 using Microsoft.AspNetCore.Http;
@@ -47,7 +48,7 @@ public class CreateIssueTests : IssueTestsSetup
 
         ActionResult result = await Controller.CreateChapterIssue(createDto);
 
-        Assert.IsInstanceOfType<UnauthorizedResult>(result);
+        CheckTypeAndErrorCode<UnauthorizedObjectResult>(result, ErrorCode.TokenRequired);
     }
 
     [TestMethod]
@@ -109,7 +110,7 @@ public class CreateIssueTests : IssueTestsSetup
 
         ActionResult result = await Controller.CreateSerieIssue(createDto);
 
-        Assert.IsInstanceOfType<UnauthorizedResult>(result);
+        CheckTypeAndErrorCode<UnauthorizedObjectResult>(result, ErrorCode.TokenRequired);
     }
 
     [TestMethod]
@@ -230,7 +231,7 @@ public class CreateIssueTests : IssueTestsSetup
         ActionResult secondResult = await Controller.CreateChapterIssue(createDto);
 
         Assert.IsInstanceOfType<CreatedResult>(firstResult);
-        Assert.IsInstanceOfType<ConflictObjectResult>(secondResult);
+        CheckTypeAndErrorCode<ConflictObjectResult>(secondResult, ErrorCode.IssueAlreadyExists);
     }
 
     [TestMethod]
@@ -246,6 +247,6 @@ public class CreateIssueTests : IssueTestsSetup
         ActionResult secondResult = await Controller.CreateSerieIssue(createDto);
 
         Assert.IsInstanceOfType<CreatedResult>(firstResult);
-        Assert.IsInstanceOfType<ConflictObjectResult>(secondResult);
+        CheckTypeAndErrorCode<ConflictObjectResult>(secondResult, ErrorCode.IssueAlreadyExists);
     }
 }

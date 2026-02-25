@@ -2,11 +2,23 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
-using ManaxClient.Models;
-using ManaxClient.Models.Sources;
+using CommunityToolkit.Mvvm.Messaging;
+using Jeek.Avalonia.Localization;
+using ManaxClient.Event;
+using ManaxLibrary;
+using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTO.Serie;
+using ManaxLibrary.Logging;
+using Library = ManaxClient.Models.Server.Data.Library;
+using Person = ManaxClient.Models.Server.Data.Person;
+using Serie = ManaxClient.Models.Server.Data.Serie;
+using Tag = ManaxClient.Models.Server.Data.Tag;
 
 namespace ManaxClient.ViewModels.Popup.ConfirmCancel.Content;
 
@@ -15,12 +27,13 @@ public partial class SerieUpdateViewModel : ConfirmCancelContentViewModel
     private readonly Serie _originalSerie;
 
     [ObservableProperty] private string _description;
+    [ObservableProperty] private bool _isFilePickerOpen;
+    [ObservableProperty] private string _personSearchText = "";
     [ObservableProperty] private Library? _selectedLibrary;
+    [ObservableProperty] private Person? _selectedPerson;
     [ObservableProperty] private Status _selectedStatus;
     [ObservableProperty] private Tag? _selectedTag;
-    [ObservableProperty] private Person? _selectedPerson;
     [ObservableProperty] private string _tagSearchText = "";
-    [ObservableProperty] private string _personSearchText = "";
     [ObservableProperty] private string _title;
 
     public SerieUpdateViewModel(Serie serie)
@@ -48,6 +61,7 @@ public partial class SerieUpdateViewModel : ConfirmCancelContentViewModel
                         AddTag(SelectedTag);
                         SelectedTag = null;
                     }
+
                     break;
                 case nameof(SelectedPerson):
                     if (SelectedPerson != null)
@@ -55,6 +69,7 @@ public partial class SerieUpdateViewModel : ConfirmCancelContentViewModel
                         AddPerson(SelectedPerson);
                         SelectedPerson = null;
                     }
+
                     break;
             }
         };
@@ -89,7 +104,7 @@ public partial class SerieUpdateViewModel : ConfirmCancelContentViewModel
             AvailableTags.Add(tag);
         });
     }
-    
+
     private void AddPerson(Person person)
     {
         Dispatcher.UIThread.Post(() =>
@@ -113,7 +128,7 @@ public partial class SerieUpdateViewModel : ConfirmCancelContentViewModel
     {
         Dispatcher.UIThread.Post(() =>
         {
-            foreach (Library library in LibrarySource.Libraries.Items.ToList())
+            foreach (Library library in MainWindowViewModel.Instance.LibrarySource.Libraries.Items.ToList())
             {
                 Libraries.Add(library);
                 if (library.Id == _originalSerie.LibraryId)
@@ -124,7 +139,7 @@ public partial class SerieUpdateViewModel : ConfirmCancelContentViewModel
 
     private void LoadTags()
     {
-        List<Tag> allTags = TagSource.Tags.Items.ToList();
+        List<Tag> allTags = MainWindowViewModel.Instance.TagSource.Tags.Items.ToList();
         Dispatcher.UIThread.Post(() =>
         {
             SelectedTags.Clear();
@@ -138,10 +153,10 @@ public partial class SerieUpdateViewModel : ConfirmCancelContentViewModel
             foreach (Tag tag in allTags) AvailableTags.Add(tag);
         });
     }
-    
+
     private void LoadPersons()
     {
-        List<Person> allPersons = PersonSource.Persons.Items.ToList();
+        List<Person> allPersons = MainWindowViewModel.Instance.PersonSource.Persons.Items.ToList();
         Dispatcher.UIThread.Post(() =>
         {
             SelectedPersons.Clear();
@@ -164,8 +179,63 @@ public partial class SerieUpdateViewModel : ConfirmCancelContentViewModel
             Description = Description.Trim(),
             Status = SelectedStatus,
             LibraryId = SelectedLibrary?.Id ?? _originalSerie.LibraryId,
-            Tags = SelectedTags.Select(t => t.ToTagDto()).ToList(),
-            Persons = SelectedPersons.Select(p => p.ToPersonDto()).ToList()
+            TagIds = SelectedTags.Select(t => t.Id).ToList(),
+            PersonIds = SelectedPersons.Select(p => p.Id).ToList()
         };
+    }
+
+    public async void ReplacePoster()
+    {
+        try
+        {
+            if (IsFilePickerOpen) return;
+            IsFilePickerOpen = true;
+
+            Window? window = Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop
+                ? desktop.MainWindow
+                : null;
+            if (window?.StorageProvider == null) return;
+
+            IReadOnlyList<IStorageFile> files = await window.StorageProvider.OpenFilePickerAsync(
+                new FilePickerOpenOptions
+                {
+                    Title = Localizer.Get("SeriePage.SelectPosterImage"),
+                    AllowMultiple = false,
+                    FileTypeFilter =
+                    [
+                        new FilePickerFileType("Images")
+                        {
+                            Patterns = ["*.jpg", "*.webp", "*.jpeg", "*.png", "*.bmp", "*.gif"]
+                        }
+                    ]
+                });
+            IsFilePickerOpen = false;
+
+            if (files.Count == 0) return;
+            string filePath = files[0].Path.LocalPath;
+            if (string.IsNullOrEmpty(filePath)) return;
+
+            Optional<bool> replacePosterResponse = await ManaxApiUploadClient.ReplacePosterAsync(
+                filePath,
+                files[0].Name,
+                _originalSerie.Id);
+
+            if (replacePosterResponse.Failed)
+            {
+                WeakReferenceMessenger.Default.Send(new NotificationMessage(replacePosterResponse.Error));
+            }
+            else
+            {
+                WeakReferenceMessenger.Default.Send(
+                    new NotificationMessage(Localizer.Get("SeriePage.PosterReplacedSuccess")));
+                Logger.LogInfo("Poster replaced successfully for serie ID: " + _originalSerie.Id);
+            }
+        }
+        catch (Exception e)
+        {
+            WeakReferenceMessenger.Default.Send(
+                new NotificationMessage(Localizer.Get("SeriePage.ErrorReplacingPoster")));
+            Logger.LogError("Error replacing poster for serie ID: " + _originalSerie.Id, e);
+        }
     }
 }

@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using ManaxLibrary;
 using ManaxLibrary.DTO.User;
 using ManaxServer.Models.User;
 using Microsoft.AspNetCore.Http;
@@ -13,7 +14,7 @@ public class DeleteUserTests : UserTestsSetup
     public async Task DeleteUserWithValidIdRemovesUser()
     {
         User user = Context.Users.First();
-        IActionResult result = await Controller.DeleteUser(user.Id);
+        ActionResult result = await Controller.DeleteUser(user.Id);
 
         Assert.IsInstanceOfType<OkResult>(result);
 
@@ -24,9 +25,9 @@ public class DeleteUserTests : UserTestsSetup
     [TestMethod]
     public async Task DeleteUserWithInvalidIdReturnsNotFound()
     {
-        IActionResult result = await Controller.DeleteUser(999999);
+        ActionResult result = await Controller.DeleteUser(999999);
 
-        Assert.IsInstanceOfType<NotFoundObjectResult>(result);
+        CheckTypeAndErrorCode<NotFoundObjectResult>(result, ErrorCode.UserDoesNotExist);
     }
 
     [TestMethod]
@@ -46,9 +47,9 @@ public class DeleteUserTests : UserTestsSetup
             }
         };
 
-        IActionResult result = await Controller.DeleteUser(1);
+        ActionResult result = await Controller.DeleteUser(1);
 
-        Assert.IsInstanceOfType<ForbidResult>(result);
+        CheckTypeAndErrorCode<UnauthorizedObjectResult>(result, ErrorCode.CannotDeleteSelf);
     }
 
     [TestMethod]
@@ -64,9 +65,9 @@ public class DeleteUserTests : UserTestsSetup
         Context.Users.Add(ownerUser);
         await Context.SaveChangesAsync();
 
-        IActionResult result = await Controller.DeleteUser(100);
+        ActionResult result = await Controller.DeleteUser(100);
 
-        Assert.IsInstanceOfType<ForbidResult>(result);
+        CheckTypeAndErrorCode<UnauthorizedObjectResult>(result, ErrorCode.InsufficientPermissions);
     }
 
     [TestMethod]
@@ -82,9 +83,9 @@ public class DeleteUserTests : UserTestsSetup
         Context.Users.Add(anotherAdmin);
         await Context.SaveChangesAsync();
 
-        IActionResult result = await Controller.DeleteUser(101);
+        ActionResult result = await Controller.DeleteUser(101);
 
-        Assert.IsInstanceOfType<ForbidResult>(result);
+        CheckTypeAndErrorCode<UnauthorizedObjectResult>(result, ErrorCode.InsufficientPermissions);
     }
 
     [TestMethod]
@@ -95,10 +96,11 @@ public class DeleteUserTests : UserTestsSetup
             HttpContext = new DefaultHttpContext()
         };
 
-        IActionResult result = await Controller.DeleteUser(1);
+        ActionResult result = await Controller.DeleteUser(1);
 
-        Assert.IsInstanceOfType<UnauthorizedObjectResult>(result);
+        CheckTypeAndErrorCode<UnauthorizedObjectResult>(result, ErrorCode.TokenRequired);
     }
+
 
     [TestMethod]
     public async Task DeleteUserVerifyUserCountDecreases()
@@ -106,7 +108,7 @@ public class DeleteUserTests : UserTestsSetup
         int initialCount = Context.Users.Count();
         User user = Context.Users.First();
 
-        IActionResult result = await Controller.DeleteUser(user.Id);
+        ActionResult result = await Controller.DeleteUser(user.Id);
 
         Assert.IsInstanceOfType<OkResult>(result);
 
@@ -131,9 +133,9 @@ public class DeleteUserTests : UserTestsSetup
             }
         };
 
-        IActionResult result = await Controller.DeleteUser(1);
+        ActionResult result = await Controller.DeleteUser(1);
 
-        Assert.IsInstanceOfType<UnauthorizedObjectResult>(result);
+        CheckTypeAndErrorCode<UnauthorizedObjectResult>(result, ErrorCode.UserDoesNotExist);
     }
 
     [TestMethod]
@@ -164,7 +166,7 @@ public class DeleteUserTests : UserTestsSetup
         };
 
         User adminUser = Context.Users.First(u => u.Role == UserRole.Admin);
-        IActionResult result = await Controller.DeleteUser(adminUser.Id);
+        ActionResult result = await Controller.DeleteUser(adminUser.Id);
 
         Assert.IsInstanceOfType<OkResult>(result);
     }

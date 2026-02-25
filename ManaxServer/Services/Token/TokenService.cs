@@ -74,11 +74,10 @@ public class TokenService(IPermissionService permissionService) : Service, IToke
         if (!_activeBearerTokens.TryGetValue(token, out TokenInfo? tokenInfo))
             return false;
 
-        if (DateTime.UtcNow <= tokenInfo.Expiry) 
+        if (DateTime.UtcNow <= tokenInfo.Expiry)
             return tokenInfo.Permissions.Contains(permission);
         _activeBearerTokens.Remove(token);
         return false;
-
     }
 
     public TokenInfo? GetTokenInfo(string token)
@@ -92,6 +91,5 @@ public class TokenService(IPermissionService permissionService) : Service, IToke
         if (DateTime.UtcNow <= tokenInfo.Expiry) return tokenInfo;
         _activeBearerTokens.Remove(token);
         return null;
-
     }
 }

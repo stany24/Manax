@@ -5,228 +5,159 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:page="clr-namespace:ManaxClient.ViewModels.Pages.Person"
     xmlns:viewModels="clr-namespace:ManaxClient.ViewModels"
-    xmlns:models="clr-namespace:ManaxClient.Models"
     xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
     xmlns:localization1="clr-namespace:ManaxClient.Localization"
+    xmlns:data="clr-namespace:ManaxClient.Models.Server.Data"
+    xmlns:controls="clr-namespace:ManaxClient.Controls"
+    xmlns:icon="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Pages.Person.PersonPageView"
-    x:DataType="page:PersonPageViewModel">
+    x:DataType="page:PersonPageViewModel"
+    Classes="page">
 
-    <ScrollViewer VerticalScrollBarVisibility="Auto">
+    <UserControl.Styles>
+        <Style Selector="Border.person-role">
+            <Setter Property="CornerRadius" Value="18" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="BorderBrush" Value="{DynamicResource MaterialPrimaryMidBrush}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Padding" Value="4" />
+        </Style>
+    </UserControl.Styles>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto"
+                  HorizontalScrollBarVisibility="Disabled">
         <StackPanel Orientation="Vertical" Spacing="24">
 
-            <Grid ColumnDefinitions="*,Auto">
-                <StackPanel Grid.Column="0" Orientation="Vertical">
-                    <TextBlock Classes="title" Text="{localization:Localize PersonPage.Title}" />
-                    <TextBlock Text="{localization1:LocalizeFormat PersonPage.PersonsCount,
-                                   Param1={Binding $parent[UserControl].((page:PersonPageViewModel)DataContext).Persons.Count}}"/>
-                </StackPanel>
+            <Border Classes="card">
+                <StackPanel Orientation="Vertical">
+                    <Grid ColumnDefinitions="Auto,*,Auto"
+                          Classes="section-title">
+                        <TextBlock Grid.Column="0"
+                                   Text="{localization1:LocalizeFormat PersonPage.Title,
+                               Param1={Binding $parent[UserControl].((page:PersonPageViewModel)DataContext).Persons.Count}}" />
 
-                <Button Grid.Column="1"
-                        IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).CanWritePeople}"
-                        Classes="primary"
-                        Command="{Binding CreatePerson}"
-                        VerticalAlignment="Center">
-                    <StackPanel Orientation="Horizontal" Spacing="8">
-                        <TextBlock Text="➕" />
-                        <TextBlock Text="{localization:Localize PersonPage.NewPerson}" />
-                    </StackPanel>
-                </Button>
-            </Grid>
+                        <controls:IconButton Grid.Column="2"
+                                             Classes="icon-button light"
+                                             IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWritePersons}"
+                                             Command="{Binding CreatePerson}"
+                                             Text="{localization:Localize PersonPage.NewPerson}"
+                                             Icon="Add" />
+                    </Grid>
 
-            <Border Classes="card" IsVisible="{Binding !Persons.Count}">
-                <StackPanel Orientation="Vertical"
-                            Spacing="16"
-                            HorizontalAlignment="Center">
-                    <TextBlock Text="👤" FontSize="48" HorizontalAlignment="Center" />
-                    <TextBlock Text="{localization:Localize PersonPage.NoPersons.Title}"
-                               FontSize="18"
-                               FontWeight="Medium"
-                               HorizontalAlignment="Center" />
-                    <TextBlock Text="{localization:Localize PersonPage.NoPersons.Description}"
-                               TextAlignment="Center"/>
-                    <Button Classes="primary"
-                            IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).CanWritePeople}"
-                            Command="{Binding CreatePerson}"
-                            HorizontalAlignment="Center">
-                        <StackPanel Orientation="Horizontal" Spacing="8">
-                            <TextBlock Text="➕" />
-                            <TextBlock Text="{localization:Localize PersonPage.CreateFirstPerson}" />
-                        </StackPanel>
-                    </Button>
-                </StackPanel>
-            </Border>
+                    <StackPanel>
+                        <ItemsControl ItemsSource="{Binding Persons}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate x:DataType="data:Person">
+                                    <Border Classes="item-card">
+                                        <Grid ColumnDefinitions="Auto,Auto,Auto,*,Auto,Auto" ColumnSpacing="16">
 
-            <Border Classes="card" IsVisible="{Binding Persons.Count}">
-                <StackPanel Spacing="16">
-                    <TextBlock Classes="subtitle" Text="{localization:Localize PersonPage.PersonsList.Title}" />
+                                            <icon:MaterialIcon Grid.Column="0"
+                                                               Classes="icon"
+                                                               Kind="AccountOutline" />
 
-                    <ItemsControl ItemsSource="{Binding Persons}">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate x:DataType="models:Person">
-                                <Border BorderThickness="1"
-                                        CornerRadius="8"
-                                        Padding="16"
-                                        Margin="0,4">
-                                    <Grid ColumnDefinitions="Auto,*,Auto,Auto,Auto" ColumnSpacing="16">
-
-                                        <Border Grid.Column="0"
-                                                CornerRadius="20"
-                                                Width="40"
-                                                Height="40">
-                                            <TextBlock Text="👤"
-                                                       FontSize="16"
-                                                       HorizontalAlignment="Center"
-                                                       VerticalAlignment="Center" />
-                                        </Border>
-
-                                        <StackPanel Grid.Column="1" Orientation="Vertical" VerticalAlignment="Center">
-                                            <TextBlock FontWeight="Bold" FontSize="16">
+                                            <TextBlock Grid.Column="1"
+                                                       Classes="item-name">
                                                 <TextBlock.Text>
-                                                    <MultiBinding StringFormat="{}{0} {1}">
+                                                    <MultiBinding StringFormat="{}{0} '{1}' {2}">
                                                         <Binding Path="FirstName" />
+                                                        <Binding Path="Pseudonym" />
                                                         <Binding Path="LastName" />
                                                     </MultiBinding>
                                                 </TextBlock.Text>
                                             </TextBlock>
-                                            <TextBlock Text="{Binding Pseudonym}"
-                                                       IsVisible="{Binding Pseudonym, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
-                                                       FontSize="12"
-                                                       FontStyle="Italic" />
-                                        </StackPanel>
 
-                                        <Border Grid.Column="2"
-                                                CornerRadius="12"
-                                                Padding="8,4"
-                                                VerticalAlignment="Center">
-                                            <TextBlock Text="{Binding Role.Name}"
-                                                       FontSize="12"
-                                                       FontWeight="Bold" />
-                                        </Border>
+                                            <Border Grid.Column="2"
+                                                    Classes="person-role">
+                                                <TextBlock Text="{Binding Role.Name}" />
+                                            </Border>
 
-                                        <Button Grid.Column="3"
-                                                IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).CanWritePeople}"
-                                                Classes="secondary"
-                                                Command="{Binding $parent[UserControl].((page:PersonPageViewModel)DataContext).UpdatePerson}"
-                                                CommandParameter="{Binding .}"
-                                                Padding="8"
-                                                VerticalAlignment="Center">
-                                            <TextBlock Text="✏️" />
-                                        </Button>
+                                            <controls:IconButton Grid.Column="4"
+                                                                 Classes="icon-button dark"
+                                                                 IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWritePersons}"
+                                                                 Command="{Binding $parent[UserControl].((page:PersonPageViewModel)DataContext).UpdatePerson}"
+                                                                 CommandParameter="{Binding .}"
+                                                                 Icon="PencilOutline" />
 
-                                        <Button Grid.Column="4"
-                                                IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).CanDeletePeople}"
-                                                Classes="danger"
-                                                Command="{Binding $parent[UserControl].((page:PersonPageViewModel)DataContext).DeletePerson}"
-                                                CommandParameter="{Binding .}"
-                                                Padding="8"
-                                                VerticalAlignment="Center">
-                                            <TextBlock Text="🗑️" />
-                                        </Button>
-                                    </Grid>
-                                </Border>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
+                                            <controls:IconButton Grid.Column="5"
+                                                                 Classes="icon-button dark"
+                                                                 IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanDeletePersons}"
+                                                                 Command="{Binding $parent[UserControl].((page:PersonPageViewModel)DataContext).DeletePerson}"
+                                                                 CommandParameter="{Binding .}"
+                                                                 Icon="DeleteOutline" />
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Orientation="Vertical"
+                                                Spacing="8" />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                        </ItemsControl>
+                    </StackPanel>
                 </StackPanel>
             </Border>
+
 
             <!-- Roles Section -->
-            <Grid ColumnDefinitions="*,Auto">
-                <StackPanel Grid.Column="0" Orientation="Vertical">
-                    <TextBlock Classes="title" Text="{localization:Localize RolePage.Title}" />
-                    <TextBlock Text="{localization1:LocalizeFormat RolePage.RolesCount,
-                                   Param1={Binding $parent[UserControl].((page:PersonPageViewModel)DataContext).Roles.Count}}"/>
-                </StackPanel>
+            <Border Classes="card">
+                <StackPanel Orientation="Vertical">
+                    <Grid ColumnDefinitions="Auto,*,Auto"
+                          Classes="section-title">
+                        <TextBlock Grid.Column="0"
+                                   Text="{localization1:LocalizeFormat RolePage.Title,
+                                   Param1={Binding $parent[UserControl].((page:PersonPageViewModel)DataContext).Roles.Count}}"
+                                   VerticalAlignment="Center" />
 
-                <Button Grid.Column="1"
-                        IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).CanWriteRoles}"
-                        Classes="primary"
-                        Command="{Binding CreateRole}"
-                        VerticalAlignment="Center">
-                    <StackPanel Orientation="Horizontal" Spacing="8">
-                        <TextBlock Text="➕" />
-                        <TextBlock Text="{localization:Localize RolePage.NewRole}" />
+                        <controls:IconButton Grid.Column="2"
+                                             Classes="icon-button light"
+                                             IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWriteRoles}"
+                                             Command="{Binding CreateRole}"
+                                             Text="{localization:Localize RolePage.NewRole}"
+                                             Icon="Add" />
+                    </Grid>
+
+                    <StackPanel>
+                        <ItemsControl ItemsSource="{Binding Roles}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate x:DataType="data:Role">
+                                    <Border Classes="item-card">
+                                        <Grid ColumnDefinitions="Auto,*,Auto,Auto" ColumnSpacing="16">
+
+                                            <icon:MaterialIcon Grid.Column="0"
+                                                               Classes="icon"
+                                                               Kind="ClipboardAccountOutline" />
+                                            <TextBlock Grid.Column="1"
+                                                       Classes="item-name"
+                                                       Text="{Binding Name}" />
+
+                                            <controls:IconButton Grid.Column="2"
+                                                                 Classes="icon-button dark"
+                                                                 IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWriteRoles}"
+                                                                 Command="{Binding $parent[UserControl].((page:PersonPageViewModel)DataContext).UpdateRole}"
+                                                                 CommandParameter="{Binding .}"
+                                                                 Icon="PencilOutline" />
+
+                                            <controls:IconButton Grid.Column="3"
+                                                                 Classes="icon-button dark"
+                                                                 IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanDeleteRoles}"
+                                                                 Command="{Binding $parent[UserControl].((page:PersonPageViewModel)DataContext).DeleteRole}"
+                                                                 CommandParameter="{Binding .}"
+                                                                 Icon="DeleteOutline" />
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Orientation="Vertical"
+                                                Spacing="8" />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                        </ItemsControl>
                     </StackPanel>
-                </Button>
-            </Grid>
-
-            <Border Classes="card" IsVisible="{Binding !Roles.Count}">
-                <StackPanel Orientation="Vertical"
-                            Spacing="16"
-                            HorizontalAlignment="Center">
-                    <TextBlock Text="👔" FontSize="48" HorizontalAlignment="Center" />
-                    <TextBlock Text="{localization:Localize RolePage.NoRoles.Title}"
-                               FontSize="18"
-                               FontWeight="Medium"
-                               HorizontalAlignment="Center" />
-                    <TextBlock Text="{localization:Localize RolePage.NoRoles.Description}"
-                               TextAlignment="Center"/>
-                    <Button Classes="primary"
-                            IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).CanWriteRoles}"
-                            Command="{Binding CreateRole}"
-                            HorizontalAlignment="Center">
-                        <StackPanel Orientation="Horizontal" Spacing="8">
-                            <TextBlock Text="➕" />
-                            <TextBlock Text="{localization:Localize RolePage.CreateFirstRole}" />
-                        </StackPanel>
-                    </Button>
-                </StackPanel>
-            </Border>
-
-            <Border Classes="card" IsVisible="{Binding Roles.Count}">
-                <StackPanel Spacing="16">
-                    <TextBlock Classes="subtitle" Text="{localization:Localize RolePage.RolesList.Title}" />
-
-                    <ItemsControl ItemsSource="{Binding Roles}">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate x:DataType="models:Role">
-                                <Border BorderThickness="1"
-                                        CornerRadius="8"
-                                        Padding="16"
-                                        Margin="0,4">
-                                    <Grid ColumnDefinitions="Auto,*,Auto,Auto" ColumnSpacing="16">
-
-                                        <Border Grid.Column="0"
-                                                CornerRadius="20"
-                                                Width="40"
-                                                Height="40">
-                                            <TextBlock Text="👔"
-                                                       FontSize="16"
-                                                       HorizontalAlignment="Center"
-                                                       VerticalAlignment="Center" />
-                                        </Border>
-
-                                        <StackPanel Grid.Column="1" Orientation="Vertical" VerticalAlignment="Center">
-                                            <TextBlock Text="{Binding Name}"
-                                                       FontWeight="Bold"
-                                                       FontSize="16" />
-                                        </StackPanel>
-
-                                        <Button Grid.Column="2"
-                                                IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).CanWriteRoles}"
-                                                Classes="secondary"
-                                                Command="{Binding $parent[UserControl].((page:PersonPageViewModel)DataContext).UpdateRole}"
-                                                CommandParameter="{Binding .}"
-                                                Padding="8"
-                                                VerticalAlignment="Center">
-                                            <TextBlock Text="✏️" />
-                                        </Button>
-
-                                        <Button Grid.Column="3"
-                                                IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).CanDeleteRoles}"
-                                                Classes="danger"
-                                                Command="{Binding $parent[UserControl].((page:PersonPageViewModel)DataContext).DeleteRole}"
-                                                CommandParameter="{Binding .}"
-                                                Padding="8"
-                                                VerticalAlignment="Center">
-                                            <TextBlock Text="🗑️" />
-                                        </Button>
-                                    </Grid>
-                                </Border>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
                 </StackPanel>
             </Border>
         </StackPanel>

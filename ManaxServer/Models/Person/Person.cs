@@ -1,5 +1,6 @@
 // ReSharper disable PropertyCanBeMadeInitOnly.Global
 
+using System.ComponentModel.DataAnnotations;
 using ManaxLibrary.DTO.Person;
 
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
@@ -10,11 +11,11 @@ public class Person
 {
     public long Id { get; set; }
     public List<Serie.Serie> Series { get; set; } = [];
-    public string FirstName { get; set; }
-    public string LastName { get; set; }
-    public string Pseudonym { get; set; }
+    [MaxLength(50)] public string FirstName { get; set; }
+    [MaxLength(50)] public string LastName { get; set; }
+    [MaxLength(50)] public string Pseudonym { get; set; }
     public Role Role { get; set; }
-    
+
     public PersonDto ToDto()
     {
         return new PersonDto
@@ -28,7 +29,7 @@ public class Person
         };
     }
 
-    public static Person Create(PersonCreateDto personCreateDto,ManaxContext context)
+    public static Person Create(PersonCreateDto personCreateDto, ManaxContext context)
     {
         return new Person
         {

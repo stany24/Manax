@@ -1,11 +1,18 @@
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
+using System.ComponentModel.DataAnnotations;
 
 namespace ManaxLibrary.DTO.Person;
 
 public class PersonCreateDto
 {
-    public string FirstName { get; set; }
-    public string LastName { get; set; }
-    public string Pseudonym { get; set; }
-    public long RoleId { get; set; }
+    [Required] public string FirstName { get; init; } = string.Empty;
+    [Required] public string LastName { get; init; } = string.Empty;
+    [Required] public string Pseudonym { get; init; } = string.Empty;
+    [Required] public long RoleId { get; init; }
+
+    public bool IsValid()
+    {
+        return !string.IsNullOrWhiteSpace(FirstName) ||
+               !string.IsNullOrWhiteSpace(LastName) ||
+               !string.IsNullOrWhiteSpace(Pseudonym);
+    }
 }

@@ -2,52 +2,51 @@ namespace ManaxLibrary.Notifications;
 
 public enum NotificationType
 {
-    PermissionModified,
+    PermissionModified = 0,
 
-    LibraryCreated,
-    LibraryDeleted,
-    LibraryUpdated,
+    LibraryCreated = 10,
+    LibraryDeleted = 11,
+    LibraryUpdated = 12,
 
-    SerieCreated,
-    SerieUpdated,
-    SerieDeleted,
-    PosterUpdated,
+    SerieCreated = 20,
+    SerieUpdated = 21,
+    SerieDeleted = 22,
+    PosterUpdated = 23,
 
-    RankCreated,
-    RankUpdated,
-    RankDeleted,
+    RankCreated = 30,
+    RankUpdated = 31,
+    RankDeleted = 32,
 
-    ChapterAdded,
-    ChapterUpdated,
-    ChapterRemoved,
+    ChapterAdded = 40,
+    ChapterUpdated = 41,
+    ChapterRemoved = 42,
+    ChapterUploadFailed = 43,
 
-    UserCreated,
-    UserUpdated,
-    UserDeleted,
+    UserCreated = 50,
+    UserUpdated = 51,
+    UserDeleted = 52,
 
-    RunningTasks,
+    ReadCreated = 60,
+    ReadDeleted = 61,
 
-    Connected,
+    ReportedChapterIssueCreated = 70,
+    ReportedChapterIssueDeleted = 71,
+    ReportedSerieIssueCreated = 72,
+    ReportedSerieIssueDeleted = 73,
 
-    ReadCreated,
-    ReadDeleted,
+    TagCreated = 80,
+    TagUpdated = 81,
+    TagDeleted = 82,
 
-    ReportedChapterIssueCreated,
-    ReportedChapterIssueDeleted,
-    ReportedSerieIssueCreated,
-    ReportedSerieIssueDeleted,
+    PersonCreated = 90,
+    PersonUpdated = 91,
+    PersonDeleted = 92,
 
-    TagCreated,
-    TagUpdated,
-    TagDeleted,
-    
-    FeatureModified,
-    
-    PersonCreated,
-    PersonUpdated,
-    PersonDeleted,
-    
-    RoleCreated,
-    RoleUpdated,
-    RoleDeleted
+    RoleCreated = 100,
+    RoleUpdated = 101,
+    RoleDeleted = 102,
+
+    RunningTasks = 110,
+    FeatureModified = 111,
+    Connected = 112
 }

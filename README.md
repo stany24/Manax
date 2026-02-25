@@ -4,14 +4,14 @@
 
 ### Executable Linux/Windows
 
-1. Install [.NET Runtime 8.0](https://dotnet.microsoft.com/en-us/download/dotnet/8.0) on your system
+1. Install [.NET Runtime 10.0](https://dotnet.microsoft.com/en-us/download/dotnet/10.0) on your system
 2. Verify the installation
 3. Download the latest release for your system: [releases](https://github.com/stany24/Manax/releases)
 4. Run the ManaxServer executable in a console
 
 ### systemd Linux only
 
-1. Install [.NET Runtime 8.0](https://dotnet.microsoft.com/en-us/download/dotnet/8.0) on your system
+1. Install [.NET Runtime 10.0](https://dotnet.microsoft.com/en-us/download/dotnet/10.0) on your system
 2. Verify the installation
 3. Download the latest release for Linux: [releases](https://github.com/stany24/Manax/releases)
 4. Place this file in /etc/systemd/system/
@@ -39,7 +39,7 @@
 
 ## Installation
 
-1. Install [.NET Runtime 8.0](https://dotnet.microsoft.com/en-us/download/dotnet/8.0) on your system
+1. Install [.NET Runtime 10.0](https://dotnet.microsoft.com/en-us/download/dotnet/10.0) on your system
 2. Verify the installation
 3. Download the latest release from [releases](https://github.com/stany24/Manax/releases)
 4. Run the ManaxClient executable

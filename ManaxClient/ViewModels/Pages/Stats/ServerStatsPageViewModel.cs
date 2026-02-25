@@ -1,14 +1,21 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Reactive;
+using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
+using DynamicData;
+using DynamicData.Binding;
 using Jeek.Avalonia.Localization;
 using LiveChartsCore;
 using LiveChartsCore.Measure;
 using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Painting;
+using ManaxClient.Event;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTO.Stats;
@@ -19,17 +26,36 @@ namespace ManaxClient.ViewModels.Pages.Stats;
 
 public partial class ServerStatsPageViewModel : PageViewModel
 {
+    private readonly Subject<Unit> _filterRefresh = new();
+    private readonly ReadOnlyObservableCollection<Models.Server.Data.Serie> _neverReadSeries;
     [ObservableProperty] private double _availableDiskSizeInGb;
     [ObservableProperty] private double _diskSizeInGb;
+
+    private ObservableCollection<long> _neverReadSerieIds = [];
     [ObservableProperty] private ServerStats? _serverStats;
 
     public ServerStatsPageViewModel()
     {
         Task.Run(LoadServerStats);
+        SortExpressionComparer<Models.Server.Data.Serie> comparer =
+            SortExpressionComparer<Models.Server.Data.Serie>.Ascending(serie => serie.Title);
+        MainWindowViewModel.Instance.SerieSource.Series
+            .Connect()
+            .AutoRefresh()
+            .FilterOnObservable(f => _filterRefresh.Select(_ => _neverReadSerieIds.Contains(f.Id)))
+            .SortAndBind(out _neverReadSeries, comparer)
+            .Subscribe(changes =>
+            {
+                foreach (Change<Models.Server.Data.Serie, long> change in changes)
+                {
+                    if (change.Reason != ChangeReason.Add) continue;
+                    change.Current.LoadInfo();
+                    change.Current.LoadPoster();
+                }
+            });
     }
 
-
-    public ObservableCollection<Models.Serie> NeverReadSeries { get; set; } = new([]);
+    public ReadOnlyObservableCollection<Models.Server.Data.Serie> NeverReadSeries => _neverReadSeries;
     public ObservableCollection<ISeries> UserActivitySeries { get; set; } = new([]);
     public ObservableCollection<ISeries> LibraryDistributionSeries { get; set; } = new([]);
     public ObservableCollection<ISeries> DiskUsageSeries { get; set; } = new([]);
@@ -42,11 +68,12 @@ public partial class ServerStatsPageViewModel : PageViewModel
             if (serverStats.Failed)
             {
                 Logger.LogFailure($"Failed to load server stats: {serverStats.Error}");
-                InfoEmitted?.Invoke(this, $"Failed to load server stats: {serverStats.Error}");
+                WeakReferenceMessenger.Default.Send(
+                    new NotificationMessage($"Failed to load server stats: {serverStats.Error}"));
                 return;
             }
 
-            await Dispatcher.UIThread.InvokeAsync(() =>
+            Dispatcher.UIThread.Post(() =>
             {
                 ServerStats = serverStats.GetValue();
                 UpdateChartData();
@@ -55,7 +82,8 @@ public partial class ServerStatsPageViewModel : PageViewModel
         catch (Exception e)
         {
             Logger.LogError($"An error occurred while loading server stats: {e.Message}", e);
-            InfoEmitted?.Invoke(this, $"An error occurred while loading server stats: {e.Message}");
+            WeakReferenceMessenger.Default.Send(
+                new NotificationMessage($"An error occurred while loading server stats: {e.Message}"));
         }
     }
 
@@ -65,6 +93,8 @@ public partial class ServerStatsPageViewModel : PageViewModel
 
         DiskSizeInGb = ServerStats.DiskSize / 1024.0 / 1024.0 / 1024.0;
         AvailableDiskSizeInGb = ServerStats.AvailableDiskSize / 1024.0 / 1024.0 / 1024.0;
+        _neverReadSerieIds = new ObservableCollection<long>(ServerStats.NeverReadSerieIds);
+        _filterRefresh.OnNext(Unit.Default);
 
         DiskUsageSeries.Add(new PieSeries<double>
         {
@@ -127,8 +157,5 @@ public partial class ServerStatsPageViewModel : PageViewModel
             });
             colorIndex++;
         }
-
-        foreach (Models.Serie serie in ServerStats.NeverReadSeries.ConvertAll(s => new Models.Serie(s)))
-            NeverReadSeries.Add(serie);
     }
 }

@@ -1,3 +1,4 @@
+using ManaxLibrary;
 using ManaxLibrary.DTO.Library;
 using ManaxServer.Models.Library;
 using Microsoft.AspNetCore.Mvc;
@@ -16,7 +17,7 @@ public class UpdateLibraryTests : LibraryTestsSetup
             Name = "Updated Library Name"
         };
 
-        IActionResult result = await Controller.PutLibrary(library.Id, updateDto);
+        ActionResult result = await Controller.PutLibrary(library.Id, updateDto);
 
         Assert.IsInstanceOfType<OkResult>(result);
 
@@ -33,9 +34,9 @@ public class UpdateLibraryTests : LibraryTestsSetup
             Name = "Updated Library Name"
         };
 
-        IActionResult result = await Controller.PutLibrary(999999, updateDto);
+        ActionResult result = await Controller.PutLibrary(999999, updateDto);
 
-        Assert.IsInstanceOfType<NotFoundObjectResult>(result);
+        CheckTypeAndErrorCode<NotFoundObjectResult>(result, ErrorCode.LibraryDoesNotExist);
     }
 
     [TestMethod]
@@ -49,9 +50,9 @@ public class UpdateLibraryTests : LibraryTestsSetup
             Name = secondLibrary.Name
         };
 
-        IActionResult result = await Controller.PutLibrary(firstLibrary.Id, updateDto);
+        ActionResult result = await Controller.PutLibrary(firstLibrary.Id, updateDto);
 
-        Assert.IsInstanceOfType<ConflictObjectResult>(result);
+        CheckTypeAndErrorCode<ConflictObjectResult>(result, ErrorCode.InvalidLibraryData);
     }
 
     [TestMethod]
@@ -63,8 +64,8 @@ public class UpdateLibraryTests : LibraryTestsSetup
             Name = ""
         };
 
-        IActionResult result = await Controller.PutLibrary(library.Id, updateDto);
+        ActionResult result = await Controller.PutLibrary(library.Id, updateDto);
 
-        Assert.IsInstanceOfType<BadRequestObjectResult>(result);
+        CheckTypeAndErrorCode<BadRequestObjectResult>(result, ErrorCode.InvalidLibraryData);
     }
 }

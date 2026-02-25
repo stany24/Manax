@@ -13,7 +13,6 @@ using ManaxLibrary.DTO.Tag;
 using ManaxLibrary.DTO.User;
 using ManaxLibrary.Logging;
 using ManaxLibrary.Notifications;
-using ManaxServer.Localization;
 using ManaxServer.Services.Permission;
 using Microsoft.AspNetCore.SignalR;
 
@@ -84,7 +83,7 @@ public class NotificationService(IHubContext<NotificationService> hubContext, IP
             NotificationType.ChapterAdded, chapter);
     }
 
-    public void NotifyChapterModifiedAsync(ChapterDto chapter)
+    public void NotifyChapterUpdatedAsync(ChapterDto chapter)
     {
         TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadChapters,
             NotificationType.ChapterUpdated, chapter);
@@ -94,6 +93,12 @@ public class NotificationService(IHubContext<NotificationService> hubContext, IP
     {
         TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadChapters,
             NotificationType.ChapterRemoved, chapterId);
+    }
+
+    public void NotifyChapterUploadFailedAsync(long userId, string serieTitle, uint number)
+    {
+        TrySendToSingleClientAsync(userId, NotificationType.ChapterUploadFailed,
+            serieTitle + Path.PathSeparator + number);
     }
 
     public void NotifyPermissionModifiedAsync(long userId, List<ManaxLibrary.DTO.User.Permission> permissions)
@@ -138,7 +143,7 @@ public class NotificationService(IHubContext<NotificationService> hubContext, IP
 
     public void NotifyReadRemoved(ReadDto existingRead)
     {
-        TrySendToSingleClientAsync(existingRead.UserId, NotificationType.ReadCreated, existingRead.ChapterId);
+        TrySendToSingleClientAsync(existingRead.UserId, NotificationType.ReadDeleted, existingRead.ChapterId);
     }
 
     public void NotifySerieIssueCreatedAsync(IssueSerieReportedDto issue)
@@ -186,42 +191,45 @@ public class NotificationService(IHubContext<NotificationService> hubContext, IP
     public void NotifyFeatureChanged(ManaxLibrary.DTO.Feature.Feature feature)
     {
         TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadFeatures,
-            NotificationType.FeatureModified,feature);
+            NotificationType.FeatureModified, feature);
     }
-    
+
     public void NotifyPersonCreatedAsync(PersonDto person)
     {
-        TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadPeople, NotificationType.PersonCreated,
+        TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadPersons,
+            NotificationType.PersonCreated,
             person);
     }
 
     public void NotifyPersonUpdatedAsync(PersonDto person)
     {
-        TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadPeople, NotificationType.PersonUpdated,
+        TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadPersons,
+            NotificationType.PersonUpdated,
             person);
     }
 
     public void NotifyPersonDeletedAsync(long personId)
     {
-        TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadPeople, NotificationType.PersonDeleted,
+        TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadPersons,
+            NotificationType.PersonDeleted,
             personId);
     }
-    
+
     public void NotifyRoleCreatedAsync(RoleDto role)
     {
-        TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadPeople, NotificationType.RoleCreated,
+        TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadPersons, NotificationType.RoleCreated,
             role);
     }
 
     public void NotifyRoleUpdatedAsync(RoleDto role)
     {
-        TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadPeople, NotificationType.RoleUpdated,
+        TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadPersons, NotificationType.RoleUpdated,
             role);
     }
 
     public void NotifyRoleDeletedAsync(long roleId)
     {
-        TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadPeople, NotificationType.RoleDeleted,
+        TrySendToClientsWithPermissionAsync(ManaxLibrary.DTO.User.Permission.ReadPersons, NotificationType.RoleDeleted,
             roleId);
     }
 
@@ -229,18 +237,18 @@ public class NotificationService(IHubContext<NotificationService> hubContext, IP
     {
         try
         {
-            Logger.LogInfo(Localizer.HubConnected(Context.ConnectionId, Context.User?.Identity?.Name ?? "Unknown"));
+            Logger.LogInfo("Hub connected: " + Context.ConnectionId + ", User: " + Context.User?.Identity?.Name);
 
             if (Context.User?.Identity?.IsAuthenticated == true)
                 if (long.TryParse(Context.User.FindFirst(ClaimTypes.NameIdentifier)?.Value, out long userId))
                     Connections.TryAdd(Context.ConnectionId, userId);
 
             await base.OnConnectedAsync();
-            await Clients.Caller.SendAsync("Connected", Localizer.HubConnectionSuccess());
+            await Clients.Caller.SendAsync("Connected");
         }
         catch (Exception ex)
         {
-            Logger.LogError(Localizer.HubConnectionError(Context.ConnectionId), ex);
+            Logger.LogError("Error during connection of " + Context.ConnectionId, ex);
         }
     }
 
@@ -251,15 +259,15 @@ public class NotificationService(IHubContext<NotificationService> hubContext, IP
             Connections.TryRemove(Context.ConnectionId, out _);
 
             if (exception != null)
-                Logger.LogError(Localizer.HubDisconnectedError(Context.ConnectionId), exception);
+                Logger.LogError("Hub disconnected with error: " + Context.ConnectionId, exception);
             else
-                Logger.LogInfo(Localizer.HubDisconnected(Context.ConnectionId));
+                Logger.LogInfo("Hub disconnected: " + Context.ConnectionId);
 
             await base.OnDisconnectedAsync(exception);
         }
         catch (Exception ex)
         {
-            Logger.LogError(Localizer.HubDisconnectedError(Context.ConnectionId), ex);
+            Logger.LogError("Error during disconnection of " + Context.ConnectionId, ex);
         }
     }
 
@@ -275,12 +283,12 @@ public class NotificationService(IHubContext<NotificationService> hubContext, IP
                     connectionIds.Add(connection.Key);
 
             if (connectionIds.Count <= 0) return;
-            hubContext.Clients.Clients(connectionIds).SendAsync(methodName, arg);
-            Logger.LogInfo(Localizer.HubMessageSent(methodName));
+            _ = hubContext.Clients.Clients(connectionIds).SendAsync(methodName, arg);
+            Logger.LogInfo("Message sent to " + connectionIds.Count + " clients: " + methodName);
         }
         catch (Exception ex)
         {
-            Logger.LogError(Localizer.HubMessageError(methodName), ex);
+            Logger.LogError("Error sending message to clients: " + methodName, ex);
         }
     }
 
@@ -289,12 +297,12 @@ public class NotificationService(IHubContext<NotificationService> hubContext, IP
         string methodName = type.ToString();
         try
         {
-            hubContext.Clients.User(id.ToString(CultureInfo.InvariantCulture)).SendAsync(methodName, arg);
-            Logger.LogInfo(Localizer.HubMessageSentSingle(id, methodName));
+            _ = hubContext.Clients.User(id.ToString(CultureInfo.InvariantCulture)).SendAsync(methodName, arg);
+            Logger.LogInfo("Message sent to user " + id + ": " + methodName);
         }
         catch (Exception ex)
         {
-            Logger.LogError(Localizer.HubMessageErrorSingle(id, methodName), ex);
+            Logger.LogError("Error sending message to user " + id + ": " + methodName, ex);
         }
     }
 }

@@ -1,3 +1,4 @@
+using ManaxLibrary;
 using ManaxServer.Models.User;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,8 +15,11 @@ public class ResetPasswordTests : UserTestsSetup
 
         ActionResult<string> result = await Controller.ResetPassword(user.Id);
 
-        Assert.IsNotNull(result.Value);
-        Assert.AreEqual("MockPassword123!", result.Value);
+        OkObjectResult? okResult = result.Result as OkObjectResult;
+        Assert.IsNotNull(okResult);
+        string? newPassword = okResult.Value as string;
+        Assert.IsNotNull(newPassword);
+        Assert.AreEqual("MockPassword123!", newPassword);
 
         User? updatedUser = await Context.Users.FindAsync(user.Id);
         Assert.IsNotNull(updatedUser);
@@ -28,7 +32,7 @@ public class ResetPasswordTests : UserTestsSetup
     {
         ActionResult<string> result = await Controller.ResetPassword(999999);
 
-        Assert.IsInstanceOfType<NotFoundObjectResult>(result.Result);
+        CheckTypeAndErrorCode<NotFoundObjectResult>(result.Result, ErrorCode.UserDoesNotExist);
         MockHashService.VerifyHashPasswordNotCalled();
     }
 }

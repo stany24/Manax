@@ -5,50 +5,36 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:content="clr-namespace:ManaxClient.ViewModels.Popup.ConfirmCancel.Content"
     xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
+    xmlns:icon="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="300"
     x:Class="ManaxClient.Views.Popup.ConfirmCancel.Content.RankEditView"
     x:DataType="content:RankEditViewModel">
-    <Grid RowDefinitions="Auto,Auto,Auto" RowSpacing="16" Margin="16">
-        <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="12" Margin="0,0,0,8">
-            <TextBlock Text="🏆" FontSize="24" VerticalAlignment="Center" />
-            <StackPanel Spacing="4">
-                <TextBlock
-                    Text="{localization:Localize RankEditPopup.Title}"
-                    FontSize="18"
-                    FontWeight="Bold"/>
-                <TextBlock
-                    Text="{localization:Localize RankEditPopup.Description}"
-                    FontSize="12"/>
+    <StackPanel Spacing="16">
+        <StackPanel Classes="popup-title">
+            <icon:MaterialIcon Classes="icon"
+                               Kind="ChevronTripleUp" />
+            <StackPanel>
+                <TextBlock Text="{localization:Localize RankEditPopup.Title}" />
+                <TextBlock Text="{localization:Localize RankEditPopup.Description}" />
             </StackPanel>
         </StackPanel>
 
-        <StackPanel Grid.Row="1" Spacing="8">
-            <TextBlock
-                Text="{localization:Localize RankEditPopup.Name}"
-                FontWeight="Medium"/>
-            <TextBox
-                Text="{Binding Name}"
-                Watermark="{localization:Localize RankEditPopup.Name.Placeholder}"
-                Padding="12"
-                CornerRadius="8"
-                BorderThickness="1"
-                FontSize="14">
-            </TextBox>
-        </StackPanel>
+        <Border Classes="input">
+            <StackPanel Spacing="8">
+                <TextBlock Text="{localization:Localize RankEditPopup.Name}" />
+                <TextBox Text="{Binding Name}"
+                         Watermark="{localization:Localize RankEditPopup.Name.Placeholder}" />
+            </StackPanel>
+        </Border>
 
-        <StackPanel Grid.Row="2" Spacing="8">
-            <TextBlock
-                Text="{localization:Localize RankEditPopup.Value}"
-                FontWeight="Medium"/>
-            <NumericUpDown
-                Value="{Binding Value}"
-                Minimum="0"
-                Maximum="100"
-                Increment="1"
-                Padding="12"
-                CornerRadius="8"
-                BorderThickness="1">
-            </NumericUpDown>
-        </StackPanel>
-    </Grid>
+        <Border Classes="input">
+            <StackPanel Spacing="8">
+                <TextBlock Text="{localization:Localize RankEditPopup.Value}" />
+                <NumericUpDown Value="{Binding Value}"
+                               Minimum="0"
+                               Maximum="100"
+                               Increment="1" />
+            </StackPanel>
+        </Border>
+    </StackPanel>
 </UserControl>

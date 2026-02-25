@@ -1,3 +1,4 @@
+using ManaxLibrary;
 using ManaxLibrary.DTO.Library;
 using ManaxServer.Models.Library;
 using Microsoft.AspNetCore.Mvc;
@@ -18,9 +19,9 @@ public class CreateLibraryTests : LibraryTestsSetup
         ActionResult<long> result = await Controller.PostLibrary(createDto);
 
         OkObjectResult? okResult = result.Result as OkObjectResult;
-        Assert.IsNull(okResult);
+        Assert.IsNotNull(okResult);
 
-        long? libraryId = result.Value;
+        long? libraryId = okResult.Value as long?;
         Assert.IsNotNull(libraryId);
 
         Library? createdLibrary = await Context.Libraries.FindAsync(libraryId);
@@ -52,7 +53,7 @@ public class CreateLibraryTests : LibraryTestsSetup
 
         ActionResult<long> result = await Controller.PostLibrary(createDto);
 
-        Assert.IsInstanceOfType<BadRequestObjectResult>(result.Result);
+        CheckTypeAndErrorCode<BadRequestObjectResult>(result.Result, ErrorCode.InvalidLibraryData);
     }
 
     [TestMethod]
@@ -67,10 +68,13 @@ public class CreateLibraryTests : LibraryTestsSetup
         ActionResult<long> result = await Controller.PostLibrary(createDto);
         DateTime afterCreation = DateTime.UtcNow;
 
-        long? libraryId = result.Value;
+        OkObjectResult? okResult = result.Result as OkObjectResult;
+        Assert.IsNotNull(okResult);
+
+        long? libraryId = okResult.Value as long?;
         Assert.IsNotNull(libraryId);
 
-        Library? createdLibrary = await Context.Libraries.FindAsync(libraryId);
+        Library? createdLibrary = Context.Libraries.FirstOrDefault(l => l.Id == libraryId);
         Assert.IsNotNull(createdLibrary);
         Assert.IsTrue(createdLibrary.Creation >= beforeCreation);
         Assert.IsTrue(createdLibrary.Creation <= afterCreation);

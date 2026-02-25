@@ -1,18 +1,14 @@
-// ReSharper disable PropertyCanBeMadeInitOnly.Global
-
-using ManaxLibrary.DTO.Serie;
-
 namespace ManaxLibrary.DTO.Stats;
 
 public class ServerStats
 {
-    public long DiskSize { get; set; }
-    public long AvailableDiskSize { get; set; }
-    public int Series { get; set; }
-    public Dictionary<string, int> SeriesInLibraries { get; set; } = [];
-    public List<SerieDto> NeverReadSeries { get; set; } = [];
-    public int Chapters { get; set; }
-    public int Users { get; set; }
-    public int ActiveUsers { get; set; }
+    public long DiskSize { get; init; }
+    public long AvailableDiskSize { get; init; }
+    public int Series { get; init; }
+    public Dictionary<string, int> SeriesInLibraries { get; init; } = [];
+    public List<long> NeverReadSerieIds { get; init; } = [];
+    public int Chapters { get; init; }
+    public int Users { get; init; }
+    public int ActiveUsers { get; init; }
     public int InactiveUsers => Users - ActiveUsers;
 }

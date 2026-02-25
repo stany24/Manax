@@ -1,59 +1,39 @@
-using System.Collections.Generic;
+using System;
+using System.Collections.ObjectModel;
 using System.Linq;
+using Avalonia.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
+using DynamicData;
+using DynamicData.Binding;
 using Jeek.Avalonia.Localization;
-using ManaxClient.Models;
+using ManaxClient.Localization;
 using ManaxClient.Models.Theme;
 
 namespace ManaxClient.ViewModels.Pages.Settings;
 
 public partial class SettingsAppViewModel : PageViewModel
 {
-    [ObservableProperty] private List<ThemeSettingsData> _availableThemes;
-    [ObservableProperty] private List<LanguageItem> _availableLanguages = [];
-    [ObservableProperty] private LanguageItem? _selectedLanguage;
-
+    private readonly ReadOnlyObservableCollection<Language> _languages;
     private bool _isDarkMode;
-    private ThemeSettingsData _selectedThemeSettingsData;
+    [ObservableProperty] private Language? _selectedLanguage;
+    private HsvColor _themeColor;
 
     public SettingsAppViewModel()
     {
-        _availableThemes = ThemeSettings.GetPresets();
-        _selectedThemeSettingsData = AvailableThemes
-            .FirstOrDefault(t => t.Name == ThemeSettings.Current.Name) ?? AvailableThemes[0];
-        IsDarkMode = ThemeSettings.Current.IsDark;
-        InitializeLanguages();
-    }
+        _isDarkMode = ThemeSettings.Current.IsDark;
+        _themeColor = ThemeSettings.Current.AccentColor.ToHsv();
 
-    private void InitializeLanguages()
-    {
-        AvailableLanguages = 
-        [
-            new LanguageItem { Code = "en", DisplayName = "English" },
-            new LanguageItem { Code = "fr", DisplayName = "Français" }
-        ];
-        
+        LanguageSource.Languages
+            .Connect()
+            .SortAndBind(out _languages, SortExpressionComparer<Language>.Ascending(lang => lang.Code))
+            .Subscribe();
         string currentLanguage = Localizer.Language;
-        if (string.IsNullOrEmpty(currentLanguage)) {currentLanguage = "en";}
-        SelectedLanguage = AvailableLanguages.FirstOrDefault(l => l.Code == currentLanguage);
+        if (string.IsNullOrEmpty(currentLanguage)) currentLanguage = "en";
+        SelectedLanguage = Languages.FirstOrDefault(l => l.Code == currentLanguage) ?? Languages.First();
     }
 
-    partial void OnSelectedLanguageChanged(LanguageItem? value)
-    {
-        if (value != null && value.Code != Localizer.Language)
-        {
-            Localizer.Language = value.Code;
-        }
-    }
+    public ReadOnlyObservableCollection<Language> Languages => _languages;
 
-    public ThemeSettingsData SelectedThemeSettingsData
-    {
-        get => _selectedThemeSettingsData;
-        set
-        {
-            if (SetProperty(ref _selectedThemeSettingsData, value)) UpdateTheme();
-        }
-    }
 
     public bool IsDarkMode
     {
@@ -64,9 +44,22 @@ public partial class SettingsAppViewModel : PageViewModel
         }
     }
 
+    public HsvColor ThemeColor
+    {
+        get => _themeColor;
+        set
+        {
+            if (SetProperty(ref _themeColor, value)) UpdateTheme();
+        }
+    }
+
+    partial void OnSelectedLanguageChanged(Language? value)
+    {
+        if (value != null && value.Code != Localizer.Language) Localizer.Language = value.Code;
+    }
+
     private void UpdateTheme()
     {
-        SelectedThemeSettingsData.IsDark = IsDarkMode;
-        ThemeSettings.UpdateTheme(SelectedThemeSettingsData);
+        ThemeSettings.UpdateTheme(new ThemeSettingsData(ThemeColor.ToHsl(), IsDarkMode));
     }
 }

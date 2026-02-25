@@ -5,38 +5,24 @@ namespace ManaxClient.Models.Theme;
 
 public class ThemeSettingsData
 {
-    public string Name { get; set; } = string.Empty;
-    
-    // Serializable color strings
-    public string PrimaryColorHex { get; set; } = "#0000FF";
-    public string SecondaryColorHex { get; set; } = "#808080";
-    
-    // Non-serializable brushes
-    [JsonIgnore]
-    public SolidColorBrush PrimaryColor 
-    { 
-        get => new(Color.Parse(PrimaryColorHex)); 
-        set => PrimaryColorHex = value.Color.ToString(); 
-    }
-    
-    [JsonIgnore]
-    public SolidColorBrush SecondaryColor 
-    { 
-        get => new(Color.Parse(SecondaryColorHex)); 
-        set => SecondaryColorHex = value.Color.ToString(); 
-    }
-    
-    public bool IsDark { get; set; }
-    
     public ThemeSettingsData()
     {
     }
-    
-    public ThemeSettingsData(string name, Color primary, Color secondary, bool isDark = false)
+
+    public ThemeSettingsData(HslColor accent, bool isDark = false)
     {
-        Name = name;
-        PrimaryColorHex = primary.ToString();
-        SecondaryColorHex = secondary.ToString();
+        AccentColorString = accent.ToRgb().ToUInt32();
         IsDark = isDark;
     }
+
+    public bool IsDark { get; set; }
+
+    [JsonIgnore]
+    public HslColor AccentColor
+    {
+        get => Color.FromUInt32(AccentColorString).ToHsl();
+        init => AccentColorString = value.ToRgb().ToUInt32();
+    }
+
+    [JsonInclude] private uint AccentColorString { get; set; }
 }

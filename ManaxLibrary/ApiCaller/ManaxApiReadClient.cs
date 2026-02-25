@@ -1,4 +1,3 @@
-using System.Net.Http.Json;
 using ManaxLibrary.DTO.Read;
 
 namespace ManaxLibrary.ApiCaller;
@@ -7,23 +6,11 @@ public static class ManaxApiReadClient
 {
     public static async Task<Optional<bool>> MarkAsRead(ReadCreateDto readCreateDto)
     {
-        return await ManaxApiClient.ExecuteWithErrorHandlingAsync(async () =>
-        {
-            HttpResponseMessage response = await ManaxApiClient.Client.PutAsJsonAsync("api/read/read", readCreateDto);
-            return response.IsSuccessStatusCode
-                ? new Optional<bool>(true)
-                : new Optional<bool>(response);
-        });
+        return await ManaxApiClient.PutSuccessAsync("api/read/read", readCreateDto);
     }
 
     public static async Task<Optional<bool>> MarkAsUnread(long chapterId)
     {
-        return await ManaxApiClient.ExecuteWithErrorHandlingAsync(async () =>
-        {
-            HttpResponseMessage response = await ManaxApiClient.Client.PutAsJsonAsync("api/read/unread", chapterId);
-            return response.IsSuccessStatusCode
-                ? new Optional<bool>(true)
-                : new Optional<bool>(response);
-        });
+        return await ManaxApiClient.PutSuccessAsync("api/read/unread", chapterId);
     }
 }

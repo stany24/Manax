@@ -1,8 +1,8 @@
 using System.Security.Claims;
+using ManaxLibrary;
 using ManaxLibrary.DTO.User;
 using ManaxLibrary.Logging;
 using ManaxServer.Attributes;
-using ManaxServer.Localization;
 using ManaxServer.Models;
 using ManaxServer.Models.Claim;
 using ManaxServer.Models.User;
@@ -27,18 +27,19 @@ public class UserController(
     IPermissionService permissionService,
     IPasswordValidationService passwordValidationService) : ControllerBase
 {
-    private readonly object _claimLock = new();
+    private readonly Lock _claimLock = new();
 
-    // GET: api/Users
     [HttpGet("/api/users")]
     [RequirePermission(Permission.ReadUsers)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<long>>> GetUsers()
     {
-        return await context.Users.Select(user => user.Id).ToListAsync();
+        List<long> users = await context.Users
+            .Select(user => user.Id)
+            .ToListAsync();
+        return Ok(users);
     }
 
-    // GET: api/User/5
     [HttpGet("{id:long}")]
     [RequirePermission(Permission.ReadUsers)]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -47,7 +48,7 @@ public class UserController(
     {
         User? user = await context.Users.FindAsync(id);
 
-        if (user == null) return NotFound(Localizer.UserNotFound(id));
+        if (user == null) return NotFound(ErrorCode.UserDoesNotExist);
 
         return user.ToDto();
     }
@@ -55,19 +56,20 @@ public class UserController(
     [HttpPut("update")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> PutUser(UserUpdateDto userUpdate)
+    public async Task<ActionResult> PutUser(UserUpdateDto userUpdate)
     {
         long? userId = GetCurrentUserId(HttpContext);
         if (userId == null)
-            return Unauthorized(Localizer.Unauthorized());
+            return Unauthorized(ErrorCode.TokenRequired);
 
         User? user = await context.Users.FindAsync(userId);
-        if (user == null) return NotFound(Localizer.UserNotFound((long)userId));
+        if (user == null) return NotFound(ErrorCode.UserDoesNotExist);
 
-        if (!passwordValidationService.IsPasswordValid(userUpdate.Password, out string? errorMessage))
-            return BadRequest(errorMessage);
+        if (!passwordValidationService.IsPasswordValid(userUpdate.Password))
+            return BadRequest(ErrorCode.InvalidPassword);
 
         user.PasswordHash = hashService.HashPassword(userUpdate.Password);
+        user.Username = userUpdate.Username;
         notificationService.NotifyUserUpdatedAsync(user.ToDto());
         await context.SaveChangesAsync();
         return Ok();
@@ -80,24 +82,23 @@ public class UserController(
     public async Task<ActionResult<string>> ResetPassword(long id)
     {
         User? user = await context.Users.FindAsync(id);
-        if (user == null) return NotFound(Localizer.UserNotFound(id));
+        if (user == null) return NotFound(ErrorCode.UserDoesNotExist);
 
         string newPassword = passwordValidationService.GenerateValidPassword();
 
         user.PasswordHash = hashService.HashPassword(newPassword);
         await context.SaveChangesAsync();
 
-        return newPassword;
+        return Ok(newPassword);
     }
 
-    // POST: api/User
     [HttpPost("create")]
     [RequirePermission(Permission.WriteUsers)]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<IActionResult> PostUser(UserCreateDto userCreate)
+    public async Task<ActionResult> PostUser(UserCreateDto userCreate)
     {
-        if (!passwordValidationService.IsPasswordValid(userCreate.Password, out string? errorMessage))
-            return BadRequest(errorMessage);
+        if (!passwordValidationService.IsPasswordValid(userCreate.Password))
+            return BadRequest(ErrorCode.InvalidPassword);
         User user = Models.User.User.Create(userCreate);
         user.Creation = DateTime.UtcNow;
         user.PasswordHash = hashService.HashPassword(userCreate.Password);
@@ -113,30 +114,29 @@ public class UserController(
         return Ok();
     }
 
-    // DELETE: api/User/5
     [HttpDelete("{id:long}")]
     [RequirePermission(Permission.DeleteUsers)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
-    public async Task<IActionResult> DeleteUser(long id)
+    public async Task<ActionResult> DeleteUser(long id)
     {
         User? userToDelete = await context.Users.FindAsync(id);
-        if (userToDelete == null) return NotFound(Localizer.UserNotFound(id));
+        if (userToDelete == null) return NotFound(ErrorCode.UserDoesNotExist);
 
         long? selfId = GetCurrentUserId(HttpContext);
         if (selfId == null)
-            return Unauthorized(Localizer.UserMustBeLoggedInDelete());
+            return Unauthorized(ErrorCode.TokenRequired);
         if (selfId == id)
-            return Forbid(Localizer.UserCannotDeleteSelf());
+            return Unauthorized(ErrorCode.CannotDeleteSelf);
 
         User? self = context.Users.FirstOrDefault(u => u.Id == selfId);
         if (self == null)
-            return Unauthorized(Localizer.UserMustBeLoggedInDelete());
+            return Unauthorized(ErrorCode.UserDoesNotExist);
 
         if (self.Role == UserRole.Admin && userToDelete.Role is UserRole.Admin or UserRole.Owner)
-            return Forbid(Localizer.UserCannotDeleteAdminOrOwner());
+            return Unauthorized(ErrorCode.InsufficientPermissions);
 
         StringValues auths = Request.Headers.Authorization;
         foreach (string? token in auths) tokenService.RevokeToken(token);
@@ -148,7 +148,6 @@ public class UserController(
         return Ok();
     }
 
-    // POST: api/User/login
     [HttpPost("/api/login")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -170,7 +169,7 @@ public class UserController(
             Logger.LogWarning("Failed login attempt for user " + loginDto.Username + " from " + loginAttempt.Origin);
             context.LoginAttempts.Add(loginAttempt);
             await context.SaveChangesAsync();
-            return Unauthorized(Localizer.UserInvalidLogin());
+            return Unauthorized(ErrorCode.InvalidPassword);
         }
 
         user.LastLogin = DateTime.UtcNow;
@@ -185,7 +184,7 @@ public class UserController(
             Token = token,
             User = user.ToDto()
         };
-        return loginResult;
+        return Ok(loginResult);
     }
 
     [HttpPost("/api/claim")]
@@ -193,8 +192,8 @@ public class UserController(
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public ActionResult<UserLoginResultDto> Claim(ClaimRequest request)
     {
-        if (!passwordValidationService.IsPasswordValid(request.Password, out string? errorMessage))
-            return BadRequest(errorMessage);
+        if (!passwordValidationService.IsPasswordValid(request.Password))
+            return BadRequest(ErrorCode.InvalidPassword);
         LoginAttempt loginAttempt = new()
         {
             Origin = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "Unknown",
@@ -210,7 +209,7 @@ public class UserController(
             {
                 context.LoginAttempts.Add(loginAttempt);
                 context.SaveChanges();
-                return Unauthorized(Localizer.UserClaimNotAllowed());
+                return Unauthorized(ErrorCode.ServerAlreadyClaimed);
             }
 
             User user = new()
@@ -235,23 +234,19 @@ public class UserController(
                 Token = token,
                 User = user.ToDto()
             };
-            return loginResult;
+            return Ok(loginResult);
         }
     }
 
-    // POST: api/User/logout
     [HttpPost("/api/logout")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<IActionResult> Logout()
+    public async Task<ActionResult> Logout()
     {
         long? userId = GetCurrentUserId(HttpContext);
-        if (userId == null)
-            return Unauthorized(Localizer.Unauthorized());
-
         User? user = await context.Users.FindAsync(userId);
-        if (user == null)
-            return Unauthorized(Localizer.UserNotFound((long)userId));
+        if (userId == null || user == null)
+            return Unauthorized(ErrorCode.TokenRequired);
 
         StringValues auths = Request.Headers.Authorization;
         foreach (string? token in auths) tokenService.RevokeToken(token);

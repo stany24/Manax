@@ -9,55 +9,38 @@
     x:Class="ManaxClient.Views.Popup.ConfirmCancel.ConfirmCancelView"
     x:DataType="confirmCancel:ConfirmCancelViewModel"
     Background="{DynamicResource MaterialCardBackgroundBrush}"
-    CornerRadius="5">
-    <Grid
-        HorizontalAlignment="Center"
-        VerticalAlignment="Center"
-        RowDefinitions="Auto,10,Auto"
-        ColumnDefinitions="Auto">
+    CornerRadius="5"
+    Padding="16">
+    <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+                  VerticalScrollBarVisibility="Auto">
+        <Grid HorizontalAlignment="Stretch"
+              VerticalAlignment="Center"
+              RowDefinitions="Auto,10,Auto"
+              ColumnDefinitions="*">
 
-        <ContentControl
-            Grid.Row="0"
-            Grid.Column="0"
-            Content="{Binding Content}" />
+            <ContentControl Grid.Row="0"
+                            Grid.Column="0"
+                            Content="{Binding Content}" />
 
-        <Border
-            Grid.Column="0"
-            Grid.Row="1"
-            Height="1"
-            Margin="0,16,0,16" />
-
-        <Grid
-            Grid.Row="2"
-            Grid.Column="0"
-            ColumnDefinitions="*,16,*">
-            <Button
-                Grid.Column="0"
-                Content="{localization:Localize ConfirmCancelPopup.Cancel}"
-                HorizontalAlignment="Stretch"
-                HorizontalContentAlignment="Center"
-                BorderThickness="0"
-                CornerRadius="8"
-                Padding="16,12"
-                FontWeight="Medium"
-                MinWidth="100"
-                IsEnabled="{Binding Content.CanCancel}"
-                Command="{Binding Cancel}">
-            </Button>
-            <Button
-                Grid.Column="2"
-                Content="{localization:Localize ConfirmCancelPopup.Confirm}"
-                HorizontalAlignment="Stretch"
-                HorizontalContentAlignment="Center"
-                BorderThickness="0"
-                CornerRadius="8"
-                Padding="16,12"
-                FontWeight="Medium"
-                MinWidth="100"
-                IsEnabled="{Binding Content.CanConfirm}"
-                Command="{Binding Confirm}"
-                HotKey="Enter">
-            </Button>
+            <Grid Grid.Row="2"
+                  Grid.Column="0"
+                  ColumnDefinitions="*,16,*">
+                <Button Grid.Column="0"
+                        Classes="button light"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Center"
+                        Content="{localization:Localize ConfirmCancelPopup.Cancel}"
+                        IsEnabled="{Binding Content.CanCancel}"
+                        Command="{Binding Cancel}" />
+                <Button Grid.Column="2"
+                        Classes="button light"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Center"
+                        Content="{localization:Localize ConfirmCancelPopup.Confirm}"
+                        IsEnabled="{Binding Content.CanConfirm}"
+                        Command="{Binding Confirm}"
+                        HotKey="Enter" />
+            </Grid>
         </Grid>
-    </Grid>
+    </ScrollViewer>
 </UserControl>

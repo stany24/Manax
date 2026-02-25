@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <root>
-    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"
+                id="root"
+                xmlns="">
         <xsd:element name="root" msdata:IsDataSet="true">
-            
+
         </xsd:element>
     </xsd:schema>
     <resheader name="resmimetype">
@@ -13,16 +15,17 @@
         <value>1.3</value>
     </resheader>
     <resheader name="reader">
-        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral,
+            PublicKeyToken=b77a5c561934e089
+        </value>
     </resheader>
     <resheader name="writer">
-        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral,
+            PublicKeyToken=b77a5c561934e089
+        </value>
     </resheader>
     <data name="LoginPage.Title" xml:space="preserve">
         <value>Manax</value>
-    </data>
-    <data name="LoginPage.Subtitle" xml:space="preserve">
-        <value>Sign in to your account</value>
     </data>
     <data name="LoginPage.Username" xml:space="preserve">
         <value>Username</value>
@@ -45,32 +48,8 @@
     <data name="LoginPage.SignIn" xml:space="preserve">
         <value>Sign in</value>
     </data>
-    <data name="LoginPage.Tip.Title" xml:space="preserve">
-        <value>💡 Tip</value>
-    </data>
-    <data name="LoginPage.Tip.Message" xml:space="preserve">
-        <value>Make sure your Manax server is running and accessible from this network.</value>
-    </data>
-    <data name="ChapterPage.Pages" xml:space="preserve">
-        <value>{0} pages</value>
-    </data>
-    <data name="ChapterPage.Back" xml:space="preserve">
-        <value>Back</value>
-    </data>
-    <data name="ChapterPage.Previous" xml:space="preserve">
-        <value>Previous</value>
-    </data>
     <data name="ChapterPage.Chapter" xml:space="preserve">
         <value>Chapter</value>
-    </data>
-    <data name="ChapterPage.Next" xml:space="preserve">
-        <value>Next</value>
-    </data>
-    <data name="ChapterPage.PreviousPage" xml:space="preserve">
-        <value>Previous page</value>
-    </data>
-    <data name="ChapterPage.NextPage" xml:space="preserve">
-        <value>Next page</value>
     </data>
     <data name="HomePage.Welcome" xml:space="preserve">
         <value>Welcome to Manax</value>
@@ -88,13 +67,10 @@
         <value>Start by adding your first series to discover all the features of Manax.</value>
     </data>
     <data name="HomePage.AddFirstSeries" xml:space="preserve">
-        <value>Add my first series</value>
+        <value>Add first serie</value>
     </data>
     <data name="HomePage.RecentSeries" xml:space="preserve">
         <value>Recent series</value>
-    </data>
-    <data name="HomePage.SeriesCount" xml:space="preserve">
-        <value>{0} series</value>
     </data>
     <data name="HomePage.SelectFolder" xml:space="preserve">
         <value>Select a folder to upload</value>
@@ -171,68 +147,26 @@
     <data name="LibraryPage.Delete" xml:space="preserve">
         <value>Delete</value>
     </data>
-    <data name="LibraryPage.EmptyLibrary.Title" xml:space="preserve">
-        <value>Empty library</value>
-    </data>
-    <data name="LibraryPage.EmptyLibrary.Description" xml:space="preserve">
-        <value>This library doesn't contain any series yet.</value>
-    </data>
     <data name="LibraryPage.LibrarySeries.Title" xml:space="preserve">
         <value>Library series</value>
     </data>
     <data name="RankPage.Title" xml:space="preserve">
         <value>Rank Management</value>
     </data>
-    <data name="RankPage.RanksCount" xml:space="preserve">
-        <value>🏆 {0} rank(s) configured</value>
-    </data>
     <data name="RankPage.NewRank" xml:space="preserve">
         <value>New rank</value>
-    </data>
-    <data name="RankPage.NoRanks.Title" xml:space="preserve">
-        <value>No ranks configured</value>
-    </data>
-    <data name="RankPage.NoRanks.Description" xml:space="preserve">
-        <value>Create ranks to organize your users by level.</value>
-    </data>
-    <data name="RankPage.CreateFirstRank" xml:space="preserve">
-        <value>Create the first rank</value>
-    </data>
-    <data name="RankPage.RanksList.Title" xml:space="preserve">
-        <value>Ranks list</value>
     </data>
     <data name="RankPage.Level" xml:space="preserve">
         <value>Level: {0}</value>
     </data>
     <data name="PersonPage.Title" xml:space="preserve">
-        <value>Person Management</value>
-    </data>
-    <data name="PersonPage.PersonsCount" xml:space="preserve">
-        <value>👤 {0} person(s) configured</value>
+        <value>Person List ({0})</value>
     </data>
     <data name="PersonPage.NewPerson" xml:space="preserve">
         <value>New person</value>
     </data>
-    <data name="PersonPage.NoPersons.Title" xml:space="preserve">
-        <value>No persons configured</value>
-    </data>
-    <data name="PersonPage.NoPersons.Description" xml:space="preserve">
-        <value>Create persons to manage authors, artists, and contributors.</value>
-    </data>
-    <data name="PersonPage.CreateFirstPerson" xml:space="preserve">
-        <value>Create the first person</value>
-    </data>
-    <data name="PersonPage.PersonsList.Title" xml:space="preserve">
-        <value>Persons list</value>
-    </data>
-    <data name="SeriePage.ChangeButton" xml:space="preserve">
-        <value>Change</value>
-    </data>
     <data name="SeriePage.SerieRating" xml:space="preserve">
-        <value>Series rating</value>
-    </data>
-    <data name="SeriePage.Chapters" xml:space="preserve">
-        <value>Chapters</value>
+        <value>Your rating</value>
     </data>
     <data name="SeriePage.NoChaptersAvailable" xml:space="preserve">
         <value>No chapters available</value>
@@ -253,28 +187,13 @@
         <value>Error replacing poster</value>
     </data>
     <data name="SeriePage.ErrorUpdatingSerie" xml:space="preserve">
-        <value>Error updating series</value>
+        <value>Error updating serie</value>
     </data>
     <data name="SeriePage.RankSetCorrectly" xml:space="preserve">
         <value>Rank set correctly</value>
     </data>
-    <data name="SeriePage.Tags" xml:space="preserve">
-        <value>Tags</value>
-    </data>
-    <data name="SeriePage.NoTags" xml:space="preserve">
-        <value>No tags assigned</value>
-    </data>
-    <data name="SeriePage.Persons" xml:space="preserve">
-        <value>Persons</value>
-    </data>
-    <data name="SeriePage.NoPersons" xml:space="preserve">
-        <value>No persons assigned</value>
-    </data>
     <data name="SettingsAppPage.Title" xml:space="preserve">
         <value>Appearance Settings</value>
-    </data>
-    <data name="SettingsAppPage.Subtitle" xml:space="preserve">
-        <value>🎨 Customize the appearance of your Manax application</value>
     </data>
     <data name="SettingsAppPage.DisplayMode" xml:space="preserve">
         <value>Display mode</value>
@@ -288,15 +207,6 @@
     <data name="SettingsAppPage.SelectedTheme" xml:space="preserve">
         <value>Selected theme</value>
     </data>
-    <data name="SettingsAppPage.ColorPreview" xml:space="preserve">
-        <value>Color preview</value>
-    </data>
-    <data name="SettingsAppPage.PrimaryColor" xml:space="preserve">
-        <value>Primary</value>
-    </data>
-    <data name="SettingsAppPage.SecondaryColor" xml:space="preserve">
-        <value>Secondary</value>
-    </data>
     <data name="SettingsAppPage.TertiaryColor" xml:space="preserve">
         <value>Tertiary</value>
     </data>
@@ -309,9 +219,6 @@
     <data name="SettingsServerPage.Title" xml:space="preserve">
         <value>Server Settings</value>
     </data>
-    <data name="SettingsServerPage.Subtitle" xml:space="preserve">
-        <value>⚙️ Configure the global settings of your Manax server</value>
-    </data>
     <data name="SettingsServerPage.AddSavePoint" xml:space="preserve">
         <value>Add save point</value>
     </data>
@@ -323,6 +230,12 @@
     </data>
     <data name="SettingsServerPage.PosterName" xml:space="preserve">
         <value>Poster filename</value>
+    </data>
+    <data name="SettingsServerPage.BannerConfig" xml:space="preserve">
+        <value>Banner configuration</value>
+    </data>
+    <data name="SettingsServerPage.BannerName" xml:space="preserve">
+        <value>Banner filename</value>
     </data>
     <data name="SettingsServerPage.ImageFormat" xml:space="preserve">
         <value>Image format</value>
@@ -357,9 +270,6 @@
     <data name="SettingsServerPage.MinDescriptionLength" xml:space="preserve">
         <value>Min description length</value>
     </data>
-    <data name="SettingsServerPage.TipTitle" xml:space="preserve">
-        <value>💡 Tip</value>
-    </data>
     <data name="SettingsServerPage.TipMessage" xml:space="preserve">
         <value>Changes will be applied after validation. Make sure to test the settings before saving them.</value>
     </data>
@@ -377,9 +287,6 @@
     </data>
     <data name="SettingsFeaturesPage.Title" xml:space="preserve">
         <value>Features Management</value>
-    </data>
-    <data name="SettingsFeaturesPage.Subtitle" xml:space="preserve">
-        <value>🎛️ Enable or disable server features</value>
     </data>
     <data name="SettingsFeaturesPage.Save" xml:space="preserve">
         <value>Save Features</value>
@@ -408,26 +315,23 @@
     <data name="ServerStatsPage.Title" xml:space="preserve">
         <value>Server Statistics</value>
     </data>
-    <data name="ServerStatsPage.Subtitle" xml:space="preserve">
-        <value>📊 Overview of server data and activity</value>
-    </data>
     <data name="ServerStatsPage.DiskUsage.Title" xml:space="preserve">
         <value>Disk Space Usage</value>
     </data>
     <data name="ServerStatsPage.DiskUsage.Used" xml:space="preserve">
-        <value>🔴 Used</value>
+        <value>Used</value>
     </data>
     <data name="ServerStatsPage.DiskUsage.Available" xml:space="preserve">
-        <value>🟢 Available</value>
+        <value>Available</value>
     </data>
     <data name="ServerStatsPage.UserActivity.Title" xml:space="preserve">
         <value>User Activity</value>
     </data>
     <data name="ServerStatsPage.UserActivity.Active" xml:space="preserve">
-        <value>🔵 Active</value>
+        <value>Active</value>
     </data>
     <data name="ServerStatsPage.UserActivity.Inactive" xml:space="preserve">
-        <value>⚫ Inactive</value>
+        <value>Inactive</value>
     </data>
     <data name="ServerStatsPage.Content.Title" xml:space="preserve">
         <value>Server Content</value>
@@ -436,7 +340,7 @@
         <value>📖 Series</value>
     </data>
     <data name="ServerStatsPage.Content.Chapters" xml:space="preserve">
-        <value>📄 Chapters</value>
+        <value>Chapters</value>
     </data>
     <data name="ServerStatsPage.LibraryDistribution.Title" xml:space="preserve">
         <value>Library Distribution</value>
@@ -459,29 +363,26 @@
     <data name="UserStatsPage.Title" xml:space="preserve">
         <value>My Statistics</value>
     </data>
-    <data name="UserStatsPage.Subtitle" xml:space="preserve">
-        <value>📊 Your activity and progress in Manax</value>
-    </data>
     <data name="UserStatsPage.SeriesProgress.Title" xml:space="preserve">
         <value>Series Progress</value>
     </data>
     <data name="UserStatsPage.SeriesProgress.Completed" xml:space="preserve">
-        <value>✅ Completed</value>
+        <value>Completed</value>
     </data>
     <data name="UserStatsPage.SeriesProgress.InProgress" xml:space="preserve">
-        <value>📖 In Progress</value>
+        <value>In Progress</value>
     </data>
     <data name="UserStatsPage.SeriesProgress.Remaining" xml:space="preserve">
-        <value>⏳ Remaining</value>
+        <value>Remaining</value>
     </data>
     <data name="UserStatsPage.ChaptersProgress.Title" xml:space="preserve">
         <value>Chapters Progress</value>
     </data>
     <data name="UserStatsPage.ChaptersProgress.Read" xml:space="preserve">
-        <value>✅ Read</value>
+        <value>Read</value>
     </data>
     <data name="UserStatsPage.ChaptersProgress.Remaining" xml:space="preserve">
-        <value>⏳ Remaining</value>
+        <value>Remaining</value>
     </data>
     <data name="UserStatsPage.RankDistribution.Title" xml:space="preserve">
         <value>Rank Distribution</value>
@@ -510,26 +411,14 @@
     <data name="UserStatsPage.Charts.DailyReads" xml:space="preserve">
         <value>Daily reads</value>
     </data>
-    <data name="TagPage.Management" xml:space="preserve">
-        <value>Tag Management</value>
-    </data>
-    <data name="TagPage.Count" xml:space="preserve">
-        <value>🏷️ {0} tag(s) configured</value>
-    </data>
     <data name="TagPage.NewTag" xml:space="preserve">
         <value>New tag</value>
-    </data>
-    <data name="TagPage.NoTags" xml:space="preserve">
-        <value>No tags configured</value>
-    </data>
-    <data name="TagPage.NoTags.Description" xml:space="preserve">
-        <value>Create tags to organize and categorize your series.</value>
     </data>
     <data name="TagPage.CreateFirst" xml:space="preserve">
         <value>Create the first tag</value>
     </data>
     <data name="TagPage.List" xml:space="preserve">
-        <value>Tag list</value>
+        <value>Tag list ({0})</value>
     </data>
     <data name="TagPage.DefaultName" xml:space="preserve">
         <value>New Tag</value>
@@ -542,12 +431,6 @@
     </data>
     <data name="TagPage.DeleteError" xml:space="preserve">
         <value>Error deleting tag</value>
-    </data>
-    <data name="UserPage.Management" xml:space="preserve">
-        <value>User Management</value>
-    </data>
-    <data name="UserPage.Count" xml:space="preserve">
-        <value>👥 {0} user(s) registered</value>
     </data>
     <data name="UserPage.Add" xml:space="preserve">
         <value>Add</value>
@@ -562,7 +445,7 @@
         <value>Create a user</value>
     </data>
     <data name="UserPage.List" xml:space="preserve">
-        <value>User list</value>
+        <value>User list ({0})</value>
     </data>
     <data name="UserPage.Permissions" xml:space="preserve">
         <value>Permissions</value>
@@ -804,9 +687,6 @@
     <data name="ConfigureUploadPage.NoFolderSelected" xml:space="preserve">
         <value>No folder selected</value>
     </data>
-    <data name="ConfigureUploadPage.Information" xml:space="preserve">
-        <value>ℹ️ Information</value>
-    </data>
     <data name="ConfigureUploadPage.Information.Text1" xml:space="preserve">
         <value>The processing folder is where files from source folders will be copied for processing.</value>
     </data>
@@ -815,9 +695,6 @@
     </data>
     <data name="AutoCleanupPage.Title" xml:space="preserve">
         <value>Auto Cleanup</value>
-    </data>
-    <data name="AutoCleanupPage.Subtitle" xml:space="preserve">
-        <value>Automatically process and optimize manga archives</value>
     </data>
     <data name="AutoCleanupPage.ArchiveProcessing" xml:space="preserve">
         <value>Archive Processing</value>
@@ -856,22 +733,10 @@
         <value>Next</value>
     </data>
     <data name="RolePage.Title" xml:space="preserve">
-        <value>Role Management</value>
-    </data>
-    <data name="RolePage.RolesCount" xml:space="preserve">
-        <value>👔 {0} role(s) configured</value>
+        <value>Role List ({0})</value>
     </data>
     <data name="RolePage.NewRole" xml:space="preserve">
         <value>New role</value>
-    </data>
-    <data name="RolePage.NoRoles.Title" xml:space="preserve">
-        <value>No roles configured</value>
-    </data>
-    <data name="RolePage.NoRoles.Description" xml:space="preserve">
-        <value>Create roles to organize people by their function (author, artist, etc.).</value>
-    </data>
-    <data name="RolePage.CreateFirstRole" xml:space="preserve">
-        <value>Create the first role</value>
     </data>
     <data name="RolePage.RolesList.Title" xml:space="preserve">
         <value>Roles list</value>
@@ -903,33 +768,6 @@
     <data name="FetchFromSourcePage.ClearAll" xml:space="preserve">
         <value>Clear All</value>
     </data>
-    <data name="FetchFromSourcePage.ProgressOverview" xml:space="preserve">
-        <value>Progress Overview</value>
-    </data>
-    <data name="FetchFromSourcePage.OverallProgress" xml:space="preserve">
-        <value>Overall Progress</value>
-    </data>
-    <data name="FetchFromSourcePage.TotalSources" xml:space="preserve">
-        <value>Total Sources</value>
-    </data>
-    <data name="FetchFromSourcePage.Completed" xml:space="preserve">
-        <value>Completed</value>
-    </data>
-    <data name="FetchFromSourcePage.InProgress" xml:space="preserve">
-        <value>In Progress</value>
-    </data>
-    <data name="FetchFromSourcePage.SourceDetails" xml:space="preserve">
-        <value>Source Details</value>
-    </data>
-    <data name="FetchFromSourcePage.Active" xml:space="preserve">
-        <value>Active</value>
-    </data>
-    <data name="FetchFromSourcePage.FilesProcessed" xml:space="preserve">
-        <value>Files Processed</value>
-    </data>
-    <data name="FetchFromSourcePage.Progress" xml:space="preserve">
-        <value>Progress</value>
-    </data>
     <data name="FetchFromSourcePage.ProcessingFolder" xml:space="preserve">
         <value>Processing Folder</value>
     </data>
@@ -956,9 +794,6 @@
     </data>
     <data name="FetchFromSourcePage.Size" xml:space="preserve">
         <value>Size:</value>
-    </data>
-    <data name="FetchFromSourcePage.Tip" xml:space="preserve">
-        <value>💡 Files will be copied from source folders to this processing location.</value>
     </data>
     <data name="FetchFromSourcePage.OpenFolder" xml:space="preserve">
         <value>Open Folder</value>
@@ -990,9 +825,6 @@
     <data name="ConfigureUploadPage.RemoveSource" xml:space="preserve">
         <value>Remove</value>
     </data>
-    <data name="ConfigureUploadPage.NoSources" xml:space="preserve">
-        <value>No source folders configured. Click "Add Source" to get started.</value>
-    </data>
     <data name="ConfigureUploadPage.ProcessingFolder" xml:space="preserve">
         <value>Processing Folder</value>
     </data>
@@ -1005,9 +837,6 @@
     <data name="ConfigureUploadPage.OpenFolder" xml:space="preserve">
         <value>Open Folder</value>
     </data>
-    <data name="ConfigureUploadPage.CurrentPath" xml:space="preserve">
-        <value>Current Path</value>
-    </data>
     <data name="ConfigureUploadPage.SelectFolder" xml:space="preserve">
         <value>Select Folder</value>
     </data>
@@ -1016,5 +845,53 @@
     </data>
     <data name="ConfigureUploadPage.SaveSettings" xml:space="preserve">
         <value>Settings are saved automatically</value>
+    </data>
+    <data name="MainWindow.Upload" xml:space="preserve">
+        <value>Upload pipeline</value>
+    </data>
+    <data name="FetchFromSourcePage.Skip" xml:space="preserve">
+        <value>Skip</value>
+    </data>
+    <data name="AutoCleanupPage.Skip" xml:space="preserve">
+        <value>Skip</value>
+    </data>
+    <data name="en" xml:space="preserve">
+        <value>English</value>
+    </data>
+    <data name="fr" xml:space="preserve">
+        <value>French</value>
+    </data>
+    <data name="LoginPage.Connected" xml:space="preserve">
+        <value>Logged in as {0} ({1})</value>
+    </data>
+    <data name="ChapterPreview.ReportFailed" xml:space="preserve">
+        <value>Failed to create issue</value>
+    </data>
+    <data name="Chapter.LoadPageFailed" xml:space="preserve">
+        <value>Failed to load page {0}</value>
+    </data>
+    <data name="Choice.SignalIssue" xml:space="preserve">
+        <value>Report an issue</value>
+    </data>
+    <data name="MainWindow.Persons" xml:space="preserve">
+        <value>People</value>
+    </data>
+    <data name="SettingsAppPage.AccentColor" xml:space="preserve">
+        <value>Color accent</value>
+    </data>
+    <data name="Chapter.NotRead" xml:space="preserve">
+        <value>Not read</value>
+    </data>
+    <data name="Chapter.Read" xml:space="preserve">
+        <value>Read</value>
+    </data>
+    <data name="ManualCleanupPage.ClearSelected" xml:space="preserve">
+        <value>Clear selected images</value>
+    </data>
+    <data name="UserPermissionsEdit.Title" xml:space="preserve">
+        <value>Edit User Permissions</value>
+    </data>
+    <data name="UserPermissionsEdit.Description" xml:space="preserve">
+        <value>Manage read, write, delete and other permissions for this user</value>
     </data>
 </root>

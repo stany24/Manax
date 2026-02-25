@@ -5,44 +5,27 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:content="clr-namespace:ManaxClient.ViewModels.Popup.ConfirmCancel.Content"
     xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
+    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="250"
     x:Class="ManaxClient.Views.Popup.ConfirmCancel.Content.RoleEditView"
     x:DataType="content:RoleEditViewModel">
-    <Grid RowDefinitions="Auto,Auto" RowSpacing="16" Margin="16">
-        <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="12" Margin="0,0,0,8">
-            <TextBlock Text="👔" FontSize="24" VerticalAlignment="Center" />
-            <StackPanel Spacing="4">
-                <TextBlock
-                    Text="{localization:Localize RoleEditPopup.Title}"
-                    FontSize="18"
-                    FontWeight="Bold"/>
-                <TextBlock
-                    Text="{localization:Localize RoleEditPopup.Description}"
-                    FontSize="12"/>
+    <StackPanel Orientation="Vertical"
+                Spacing="16">
+        <StackPanel Classes="popup-title">
+            <avalonia:MaterialIcon Classes="icon"
+                                   Kind="ClipboardAccountOutline" />
+            <StackPanel>
+                <TextBlock Text="{localization:Localize RoleEditPopup.Title}" />
+                <TextBlock Text="{localization:Localize RoleEditPopup.Description}" />
             </StackPanel>
         </StackPanel>
 
-        <StackPanel Grid.Row="1" Spacing="8">
-            <TextBlock
-                Text="{localization:Localize RoleEditPopup.Name}"
-                FontWeight="Medium"/>
-            <TextBox
-                Text="{Binding Name}"
-                Watermark="{localization:Localize RoleEditPopup.Name.Placeholder}"
-                Padding="12"
-                CornerRadius="8"
-                BorderThickness="1"
-                FontSize="14">
-                <TextBox.Styles>
-                    <Style Selector="TextBox:pointerover">
-                        <Setter Property="BorderBrush" Value="#007ACC" />
-                    </Style>
-                    <Style Selector="TextBox:focus">
-                        <Setter Property="BorderBrush" Value="#007ACC" />
-                    </Style>
-                </TextBox.Styles>
-            </TextBox>
-        </StackPanel>
-    </Grid>
+        <Border Classes="input">
+            <StackPanel>
+                <TextBlock Text="{localization:Localize RoleEditPopup.Name}" />
+                <TextBox Text="{Binding Name}"
+                         Watermark="{localization:Localize RoleEditPopup.Name.Placeholder}" />
+            </StackPanel>
+        </Border>
+    </StackPanel>
 </UserControl>
-

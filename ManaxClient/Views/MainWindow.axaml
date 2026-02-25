@@ -6,210 +6,160 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
     xmlns:converters="clr-namespace:ManaxClient.Converters"
+    xmlns:controls="clr-namespace:ManaxClient.Controls"
     mc:Ignorable="d" d:DesignWidth="1200" d:DesignHeight="800"
     x:Class="ManaxClient.Views.MainWindow"
     x:DataType="vm:MainWindowViewModel"
     Icon="/Assets/avalonia-logo.ico"
     Title="{localization:Localize MainWindow.Title}"
-    MinWidth="960"
-    MinHeight="500"
     WindowStartupLocation="CenterScreen">
-    
+
     <Window.Resources>
         <converters:IssuePageVisibleConverter x:Key="IssuePageVisibleConverter" />
     </Window.Resources>
 
+    <Window.Styles>
+        <Style Selector="StackPanel.sidebar">
+            <Setter Property="Background" Value="{DynamicResource MaterialCardBackgroundBrush}" />
+        </Style>
+
+        <Style Selector="StackPanel.sidebar controls|IconButton">
+            <Setter Property="CornerRadius" Value="7" />
+            <Setter Property="Padding" Value="6" />
+            <Setter Property="Margin" Value="4,4,12,4" />
+            <Setter Property="HorizontalContentAlignment" Value="Left" />
+            <Setter Property="Background" Value="{DynamicResource MaterialCardBackgroundBrush}" />
+            <Setter Property="IconColor" Value="{DynamicResource MaterialPrimaryMidBrush}" />
+        </Style>
+
+        <Style Selector="StackPanel.sidebar controls|IconButton:pointerover">
+            <Setter Property="Background" Value="{DynamicResource MaterialPaperBrush}" />
+        </Style>
+
+        <Style Selector="StackPanel.sidebar > TextBlock">
+            <Setter Property="FontWeight" Value="DemiBold" />
+            <Setter Property="FontSize" Value="18" />
+            <Setter Property="Margin" Value="12,12,12,0" />
+        </Style>
+    </Window.Styles>
+
     <Panel>
-        <Grid
-            ColumnDefinitions="Auto,*">
+        <Grid ColumnDefinitions="Auto,*">
             <ScrollViewer Grid.Column="0"
                           HorizontalScrollBarVisibility="Disabled"
-                          VerticalScrollBarVisibility="Hidden">
+                          VerticalScrollBarVisibility="Hidden"
+                          Background="{DynamicResource MaterialCardBackgroundBrush}">
                 <StackPanel Classes="sidebar"
-                            IsVisible="{Binding CurrentPageViewModel.ControlBarVisible}"
+                            IsVisible="{Binding History.CurrentPage.ControlBarVisible}"
                             Orientation="Vertical">
 
-                    <TextBlock Classes="title"
-                               Text="{localization:Localize MainWindow.Title}"
-                               HorizontalAlignment="Center"
-                               Margin="0,0,0,24" />
+                    <TextBlock Text="{localization:Localize MainWindow.Title}"
+                               HorizontalAlignment="Center" />
 
-                    <Button Classes="sidebar"
-                            Command="{Binding ChangePageHome}">
-                        <StackPanel Orientation="Horizontal" Spacing="12">
-                            <TextBlock Text="🏠" FontSize="16" />
-                            <TextBlock Text="{localization:Localize MainWindow.Home}" />
-                        </StackPanel>
-                    </Button>
+                    <controls:IconButton Command="{Binding ChangePageHome}"
+                                         Icon="HomeOutline"
+                                         Text="{localization:Localize MainWindow.Home}" />
 
-                    <TextBlock Classes="subtitle"
-                               IsVisible="{Binding Libraries.Count}"
-                               Text="{localization:Localize MainWindow.Libraries}"
-                               Margin="16,8" />
+                    <TextBlock IsVisible="{Binding Libraries.Count}"
+                               Text="{localization:Localize MainWindow.Libraries}" />
 
-                    <ScrollViewer MaxHeight="300" VerticalScrollBarVisibility="Auto">
-                        <ItemsControl ItemsSource="{Binding Libraries}">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <Button Classes="sidebar"
-                                            Command="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).ShowLibrary}"
-                                            CommandParameter="{Binding }">
-                                        <StackPanel Orientation="Horizontal" Spacing="12">
-                                            <TextBlock Text="📚" FontSize="14" />
-                                            <TextBlock Text="{Binding Name}" TextTrimming="CharacterEllipsis" />
-                                        </StackPanel>
-                                    </Button>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                            <ItemsControl.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <StackPanel Spacing="2" />
-                                </ItemsPanelTemplate>
-                            </ItemsControl.ItemsPanel>
-                        </ItemsControl>
-                    </ScrollViewer>
-                    
-                    <TextBlock Classes="subtitle"
-                               Text="{localization:Localize MainWindow.Admin}"
-                               Margin="16,8"
-                               IsVisible="{Binding IsAdmin}" />
+                    <ItemsControl ItemsSource="{Binding Libraries}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <controls:IconButton
+                                    Command="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).ShowLibrary}"
+                                    CommandParameter="{Binding }"
+                                    Icon="Bookshelf"
+                                    Text="{Binding Name}" />
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Spacing="2" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ItemsControl>
 
-                    <Button Classes="sidebar"
-                            Command="{Binding ChangePageIssues}">
-                        <Button.IsVisible>
+                    <TextBlock Text="{localization:Localize MainWindow.Admin}" />
+
+                    <controls:IconButton Command="{Binding ChangePageIssues}"
+                                         Icon="WarningOutline"
+                                         Text="{localization:Localize MainWindow.Issues}">
+                        <controls:IconButton.IsVisible>
                             <MultiBinding Converter="{StaticResource  IssuePageVisibleConverter}">
-                                <Binding Path="AutomaticIssuesFeatureEnabled" />
-                                <Binding Path="ReportedIssuesFeatureEnabled" />
-                                <Binding Path="CanReadAllIssues" />
+                                <Binding Path="FeatureManager.AutomaticIssuesFeatureEnabled" />
+                                <Binding Path="FeatureManager.ReportedIssuesFeatureEnabled" />
+                                <Binding Path="PermissionManager.CanReadAllIssues" />
                             </MultiBinding>
-                        </Button.IsVisible>
-                        <StackPanel Orientation="Horizontal" Spacing="12">
-                            <TextBlock Text="⚙️" FontSize="14" />
-                            <TextBlock Text="{localization:Localize MainWindow.Issues}" />
-                        </StackPanel>
-                    </Button>
+                        </controls:IconButton.IsVisible>
+                    </controls:IconButton>
 
-                    <Button Classes="sidebar"
-                            IsVisible="{Binding CanReadUsers}"
-                            Command="{Binding ChangePageUsers}">
-                        <StackPanel Orientation="Horizontal" Spacing="12">
-                            <TextBlock Text="👥" FontSize="14" />
-                            <TextBlock Text="{localization:Localize MainWindow.Users}" />
-                        </StackPanel>
-                    </Button>
+                    <controls:IconButton IsVisible="{Binding PermissionManager.CanReadUsers}"
+                                         Command="{Binding ChangePageUsers}"
+                                         Icon="AccountGroupOutline"
+                                         Text="{localization:Localize MainWindow.Users}" />
 
-                    <Button Classes="sidebar"
-                            Command="{Binding ChangePageRanks}">
-                        <Button.IsVisible>
+                    <controls:IconButton Command="{Binding ChangePageRanks}"
+                                         Icon="ChevronTripleUp"
+                                         Text="{localization:Localize MainWindow.Ranks}">
+                        <controls:IconButton.IsVisible>
                             <MultiBinding Converter="{x:Static BoolConverters.And}">
-                                <Binding Path="RankFeatureEnabled" />
-                                <Binding Path="CanReadRanks" />
+                                <Binding Path="FeatureManager.RankFeatureEnabled" />
+                                <Binding Path="PermissionManager.CanReadRanks" />
                             </MultiBinding>
-                        </Button.IsVisible>
-                        <StackPanel Orientation="Horizontal" Spacing="12">
-                            <TextBlock Text="🏆" FontSize="14" />
-                            <TextBlock Text="{localization:Localize MainWindow.Ranks}" />
-                        </StackPanel>
-                    </Button>
+                        </controls:IconButton.IsVisible>
+                    </controls:IconButton>
 
-                    <Button Classes="sidebar"
-                            IsVisible="{Binding CanReadTags}"
-                            Command="{Binding ChangePageTags}">
-                        <StackPanel Orientation="Horizontal" Spacing="12">
-                            <TextBlock Text="🏷️" FontSize="14" />
-                            <TextBlock Text="{localization:Localize MainWindow.Tags}" />
-                        </StackPanel>
-                    </Button>
+                    <controls:IconButton IsVisible="{Binding PermissionManager.CanReadTags}"
+                                         Command="{Binding ChangePageTags}"
+                                         Icon="TagOutline"
+                                         Text="{localization:Localize MainWindow.Tags}" />
 
-                    <Button Classes="sidebar"
-                            IsVisible="{Binding CanUploadChapter}"
-                            Command="{Binding ChangeUploadPage}">
-                        <StackPanel Orientation="Horizontal" Spacing="12">
-                            <TextBlock Text="📤" FontSize="14" />
-                            <TextBlock Text="{localization:Localize MainWindow.Upload}" />
-                        </StackPanel>
-                    </Button>
-                    
-                    <Button Classes="sidebar"
-                            IsVisible="{Binding CanReadPeople}"
-                            Command="{Binding ChangePagePeople}">
-                        <StackPanel Orientation="Horizontal" Spacing="12">
-                            <TextBlock Text="👥" FontSize="14" />
-                            <TextBlock Text="People" />
-                        </StackPanel>
-                    </Button>
-                    
-                    <Button Classes="sidebar"
-                            IsVisible="{Binding CanReadPeople}"
-                            Command="{Binding ChangePagePeople}">
-                        <StackPanel Orientation="Horizontal" Spacing="12">
-                            <TextBlock Text="👥" FontSize="14" />
-                            <TextBlock Text="People" />
-                        </StackPanel>
-                    </Button>
+                    <controls:IconButton IsVisible="{Binding PermissionManager.CanUploadChapter}"
+                                         Command="{Binding ChangeUploadPage}"
+                                         Icon="UploadOutline"
+                                         Text="{localization:Localize MainWindow.Upload}" />
 
-                    <TextBlock Classes="subtitle"
-                               Text="{localization:Localize MainWindow.Parameters}"
-                               Margin="16,8" />
+                    <controls:IconButton IsVisible="{Binding PermissionManager.CanReadPersons}"
+                                         Command="{Binding ChangePagePersons}"
+                                         Icon="AccountGroupOutline"
+                                         Text="{localization:Localize MainWindow.Persons}" />
 
-                    <Button Classes="sidebar"
-                            IsVisible="{Binding CanReadServerSettings}"
-                            Command="{Binding ChangePageSettings}">
-                        <StackPanel Orientation="Horizontal" Spacing="12">
-                            <TextBlock Text="⚙️" FontSize="14" />
-                            <TextBlock Text="{localization:Localize MainWindow.Parameters.Server}" />
-                        </StackPanel>
-                    </Button>
+                    <TextBlock Text="{localization:Localize MainWindow.Parameters}" />
 
-                    <Button Classes="sidebar"
-                            Command="{Binding ChangePageAppSettings}">
-                        <StackPanel Orientation="Horizontal" Spacing="12">
-                            <TextBlock Text="🎨" FontSize="14" />
-                            <TextBlock Text="{localization:Localize MainWindow.Parameters.UI}" />
-                        </StackPanel>
-                    </Button>
+                    <controls:IconButton IsVisible="{Binding PermissionManager.CanReadServerSettings}"
+                                         Command="{Binding ChangePageSettings}"
+                                         Icon="CogOutline"
+                                         Text="{localization:Localize MainWindow.Parameters.Server}" />
 
-                    <Button Classes="sidebar"
-                            IsVisible="{Binding CanReadFeatures}"
-                            Command="{Binding ChangePageFeatures}">
-                        <StackPanel Orientation="Horizontal" Spacing="12">
-                            <TextBlock Text="🎛️" FontSize="14" />
-                            <TextBlock Text="{localization:Localize MainWindow.Parameters.Features}" />
-                        </StackPanel>
-                    </Button>
+                    <controls:IconButton Command="{Binding ChangePageAppSettings}"
+                                         Icon="CogOutline"
+                                         Text="{localization:Localize MainWindow.Parameters.UI}" />
 
-                    <TextBlock Classes="subtitle"
-                               Text="{localization:Localize MainWindow.Stats}"
-                               Margin="16,8" />
+                    <controls:IconButton IsVisible="{Binding PermissionManager.CanReadFeatures}"
+                                         Command="{Binding ChangePageFeatures}"
+                                         Icon="Feather"
+                                         Text="{localization:Localize MainWindow.Parameters.Features}" />
 
-                    <Button Classes="sidebar"
-                            Command="{Binding ChangePageUserStats}">
-                        <StackPanel Orientation="Horizontal" Spacing="12">
-                            <TextBlock Text="📊" FontSize="14" />
-                            <TextBlock Text="{localization:Localize MainWindow.Stats.User}" />
-                        </StackPanel>
-                    </Button>
+                    <TextBlock Text="{localization:Localize MainWindow.Stats}" />
 
-                    <Button Classes="sidebar"
-                            IsVisible="{Binding CanReadServerStats}"
-                            Command="{Binding ChangePageServerStats}">
-                        <StackPanel Orientation="Horizontal" Spacing="12">
-                            <TextBlock Text="🖥️" FontSize="14" />
-                            <TextBlock Text="{localization:Localize MainWindow.Stats.Server}" />
-                        </StackPanel>
-                    </Button>
+                    <controls:IconButton Command="{Binding ChangePageUserStats}"
+                                         Icon="ChartLine"
+                                         Text="{localization:Localize MainWindow.Stats.User}" />
 
-                    <Button
-                        Classes="sidebar"
-                        Command="{Binding Logout}"
-                        Content="{localization:Localize MainWindow.Logout}"/>
+                    <controls:IconButton IsVisible="{Binding PermissionManager.CanReadServerStats}"
+                                         Command="{Binding ChangePageServerStats}"
+                                         Icon="ChartLine"
+                                         Text="{localization:Localize MainWindow.Stats.Server}" />
 
-                    <Border Classes="card"
-                            Margin="8,16,8,8"
+                    <controls:IconButton Command="{Binding Logout}"
+                                         Icon="Logout"
+                                         Text="{localization:Localize MainWindow.Logout}" />
+
+                    <Border Margin="8,16,8,8"
                             IsVisible="{Binding RunningTasks.Count}">
                         <StackPanel>
-                            <TextBlock Classes="subtitle"
-                                       Text="{localization:Localize MainWindow.RunningTasks}"
+                            <TextBlock Text="{localization:Localize MainWindow.RunningTasks}"
                                        HorizontalAlignment="Center"
                                        Margin="0,0,0,12" />
 
@@ -217,7 +167,7 @@
                                 <ItemsControl ItemsSource="{Binding RunningTasks}">
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate>
-                                            <Border Classes="task-item">
+                                            <Border>
                                                 <Grid ColumnDefinitions="*,Auto">
                                                     <TextBlock Grid.Column="0"
                                                                Text="{Binding TaskName}"
@@ -242,16 +192,16 @@
                 </StackPanel>
             </ScrollViewer>
 
-            <Border Grid.Column="1">
-                <ContentControl Content="{Binding CurrentPageViewModel}"
-                                Margin="{Binding PageMargin}" />
-            </Border>
+            <ContentControl Grid.Column="1"
+                            Content="{Binding History.CurrentPage}" />
         </Grid>
 
         <ContentControl HorizontalAlignment="Stretch"
                         VerticalAlignment="Stretch"
                         VerticalContentAlignment="Center"
                         HorizontalContentAlignment="Center"
+                        MaxHeight="{Binding $parent[Window].Height}"
+                        MaxWidth="{Binding $parent[Window].Width}"
                         Content="{Binding Popup}" />
 
         <StackPanel Orientation="Vertical"
@@ -262,7 +212,7 @@
             <ItemsControl ItemsSource="{Binding Infos}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Border Classes="notification">
+                        <Border>
                             <Border Background="{DynamicResource MaterialCardBackgroundBrush}"
                                     CornerRadius="5"
                                     BorderThickness="2"

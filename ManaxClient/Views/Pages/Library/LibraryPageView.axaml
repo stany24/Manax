@@ -8,83 +8,57 @@
     xmlns:viewModels="clr-namespace:ManaxClient.ViewModels"
     xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
     xmlns:localization1="clr-namespace:ManaxClient.Localization"
+    xmlns:controls="clr-namespace:ManaxClient.Controls"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Pages.Library.LibraryPageView"
     x:DataType="page:LibraryPageViewModel"
-    IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).CanReadLibraries}">
+    IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanReadLibraries}"
+    Classes="page">
 
-    <ScrollViewer VerticalScrollBarVisibility="Auto">
+    <ScrollViewer VerticalScrollBarVisibility="Auto"
+                  HorizontalScrollBarVisibility="Disabled">
         <StackPanel Orientation="Vertical" Spacing="24">
 
-            <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto">
-                <StackPanel Grid.Column="0" Grid.Row="0" Orientation="Vertical">
-                    <TextBlock Classes="title" Text="{Binding Library.Name}" />
-                    <TextBlock
-                        Text="{localization1:LocalizeFormat LibraryPage.SeriesCount,
-                                   Param1={Binding $parent[UserControl].((page:LibraryPageViewModel)DataContext).Library.Series.Count}}"
-                        FontSize="14" />
-                </StackPanel>
-
-                <Button Grid.Column="1" Grid.Row="0"
-                        IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).CanDeleteLibraries}"
-                        Classes="danger"
-                        Command="{Binding DeleteLibrary}"
-                        VerticalAlignment="Top"
-                        Padding="12,8">
-                    <StackPanel Orientation="Horizontal" Spacing="8">
-                        <TextBlock Text="🗑️" FontSize="14" />
-                        <TextBlock Text="{localization:Localize LibraryPage.Delete}" FontWeight="Medium" />
+            <Border Classes="card">
+                <Grid Classes=""
+                      ColumnDefinitions="*,Auto"
+                      RowDefinitions="Auto,Auto">
+                    <StackPanel Grid.Column="0"
+                                Grid.Row="0"
+                                Orientation="Vertical">
+                        <TextBlock Text="{Binding Library.Name}" />
+                        <TextBlock
+                            Text="{localization1:LocalizeFormat LibraryPage.SeriesCount,
+                                   Param1={Binding $parent[UserControl].((page:LibraryPageViewModel)DataContext).Library.Series.Count}}" />
                     </StackPanel>
-                </Button>
-            </Grid>
 
-            <Border Classes="card" IsVisible="{Binding !Library.Series.Count}">
-                <StackPanel Orientation="Vertical"
-                            Spacing="16"
-                            HorizontalAlignment="Center">
-                    <TextBlock Text="📚" FontSize="48" HorizontalAlignment="Center" />
-                    <TextBlock Text="{localization:Localize LibraryPage.EmptyLibrary.Title}"
-                               FontSize="18"
-                               FontWeight="Medium"
-                               HorizontalAlignment="Center" />
-                    <TextBlock Text="{localization:Localize LibraryPage.EmptyLibrary.Description}"
-                               TextAlignment="Center"
-                               TextWrapping="Wrap"
-                               MaxWidth="400" />
-                </StackPanel>
+                    <controls:IconButton Grid.Column="1"
+                                         Grid.Row="0"
+                                         Classes="icon-button light"
+                                         IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanDeleteLibraries}"
+                                         Command="{Binding DeleteLibrary}"
+                                         Text="{localization:Localize LibraryPage.Delete}"
+                                         Icon="DeleteOutline" />
+                </Grid>
             </Border>
 
-            <Border Classes="card" IsVisible="{Binding Library.Series.Count}">
-                <StackPanel Orientation="Vertical" Spacing="20">
-                    <TextBlock Classes="subtitle"
-                               Text="{localization:Localize LibraryPage.LibrarySeries}"
-                               Margin="0"
-                               VerticalAlignment="Center" />
+            <Border Classes="card"
+                    IsVisible="{Binding Library.Series.Count}">
+                <StackPanel Orientation="Vertical"
+                            Spacing="20">
+                    <TextBlock Text="{localization:Localize LibraryPage.LibrarySeries}" />
 
                     <ItemsControl ItemsSource="{Binding Library.Series}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <Border Background="Transparent"
-                                        Padding="12"
-                                        CornerRadius="12"
-                                        Margin="8">
-                                    <Border.Transitions>
-                                        <Transitions>
-                                            <TransformOperationsTransition Property="RenderTransform"
-                                                                           Duration="0:0:0.2" />
-                                            <BrushTransition Property="Background" Duration="0:0:0.2" />
-                                        </Transitions>
-                                    </Border.Transitions>
-                                    <previews:SeriePreview
-                                        Serie="{Binding .}"
-                                        Command="{Binding $parent[UserControl].((page:LibraryPageViewModel)DataContext).MoveToSeriePage}"
-                                        CommandParameter="{Binding .}" />
-                                </Border>
+                                <previews:SeriePreview
+                                    Serie="{Binding .}"
+                                    CommandParameter="{Binding .}" />
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
-                                <WrapPanel ItemSpacing="12" />
+                                <WrapPanel ItemSpacing="8" />
                             </ItemsPanelTemplate>
                         </ItemsControl.ItemsPanel>
                     </ItemsControl>

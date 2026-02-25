@@ -1,5 +1,6 @@
 using System.Net;
 using System.Security.Claims;
+using ManaxLibrary;
 using ManaxServer.Middleware;
 using ManaxServer.Services.Token;
 
@@ -60,13 +61,13 @@ public class BearerAuthenticationMiddlewareTests : BearerAuthenticationMiddlewar
         HttpContext.Response.Body.Position = 0;
         using StreamReader reader = new(HttpContext.Response.Body);
         string responseBody = await reader.ReadToEndAsync();
-        Assert.AreEqual("Token has been revoked", responseBody);
+        Assert.AreEqual(nameof(ErrorCode.TokenRevoked), responseBody);
     }
 
     [TestMethod]
     public async Task InvokeAsyncInvalidTokenReturnsUnauthorized()
     {
-        string token = "invalid-token";
+        const string token = "invalid-token";
         HttpContext.Request.Headers.Authorization = $"Bearer {token}";
         HttpContext.Response.Body = new MemoryStream();
         BearerAuthenticationMiddleware middleware = new(Next, TokenService);
@@ -79,7 +80,7 @@ public class BearerAuthenticationMiddlewareTests : BearerAuthenticationMiddlewar
         HttpContext.Response.Body.Position = 0;
         using StreamReader reader = new(HttpContext.Response.Body);
         string responseBody = await reader.ReadToEndAsync();
-        Assert.AreEqual("Invalid or expired token", responseBody);
+        Assert.AreEqual(nameof(ErrorCode.InvalidToken), responseBody);
     }
 
     [TestMethod]

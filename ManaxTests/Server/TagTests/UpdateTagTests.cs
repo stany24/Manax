@@ -1,3 +1,4 @@
+using ManaxLibrary;
 using ManaxLibrary.DTO.Tag;
 using ManaxServer.Models.Tag;
 using Microsoft.AspNetCore.Mvc;
@@ -21,7 +22,7 @@ public class UpdateTagTests : TagTestsSetup
             ColorArgb = -65536
         };
 
-        IActionResult result = await Controller.UpdateTag(tagUpdate);
+        ActionResult result = await Controller.UpdateTag(tagUpdate);
 
         Assert.IsInstanceOfType<OkResult>(result);
 
@@ -41,9 +42,9 @@ public class UpdateTagTests : TagTestsSetup
             ColorArgb = -1
         };
 
-        IActionResult result = await Controller.UpdateTag(tagUpdate);
+        ActionResult result = await Controller.UpdateTag(tagUpdate);
 
-        Assert.IsInstanceOfType<NotFoundObjectResult>(result);
+        TestSetup.CheckTypeAndErrorCode<NotFoundObjectResult>(result, ErrorCode.TagDoesNotExist);
     }
 
     [TestMethod]
@@ -60,7 +61,7 @@ public class UpdateTagTests : TagTestsSetup
             ColorArgb = -16711681
         };
 
-        IActionResult result = await Controller.UpdateTag(tagUpdate);
+        ActionResult result = await Controller.UpdateTag(tagUpdate);
 
         Assert.IsInstanceOfType<OkResult>(result);
         Assert.IsNotNull(MockNotificationService.TagUpdated);
@@ -83,7 +84,7 @@ public class UpdateTagTests : TagTestsSetup
             ColorArgb = -3
         };
 
-        IActionResult result = await Controller.UpdateTag(tagUpdate);
+        ActionResult result = await Controller.UpdateTag(tagUpdate);
 
         Assert.IsInstanceOfType<BadRequestObjectResult>(result);
     }
@@ -102,7 +103,7 @@ public class UpdateTagTests : TagTestsSetup
             ColorArgb = tag.ColorArgb
         };
 
-        IActionResult result = await Controller.UpdateTag(tagUpdate);
+        ActionResult result = await Controller.UpdateTag(tagUpdate);
 
         Assert.IsInstanceOfType<OkResult>(result);
 
@@ -126,7 +127,7 @@ public class UpdateTagTests : TagTestsSetup
             ColorArgb = -65536
         };
 
-        IActionResult result = await Controller.UpdateTag(tagUpdate);
+        ActionResult result = await Controller.UpdateTag(tagUpdate);
 
         Assert.IsInstanceOfType<OkResult>(result);
 
@@ -152,7 +153,7 @@ public class UpdateTagTests : TagTestsSetup
             ColorArgb = -2
         };
 
-        IActionResult result = await Controller.UpdateTag(tagUpdate);
+        ActionResult result = await Controller.UpdateTag(tagUpdate);
 
         Assert.IsInstanceOfType<OkResult>(result);
 
@@ -170,9 +171,9 @@ public class UpdateTagTests : TagTestsSetup
             ColorArgb = -1
         };
 
-        IActionResult result = await Controller.UpdateTag(tagUpdate);
+        ActionResult result = await Controller.UpdateTag(tagUpdate);
 
-        Assert.IsInstanceOfType<NotFoundObjectResult>(result);
+        TestSetup.CheckTypeAndErrorCode<NotFoundObjectResult>(result, ErrorCode.TagDoesNotExist);
     }
 
     [TestMethod]
@@ -185,8 +186,8 @@ public class UpdateTagTests : TagTestsSetup
             ColorArgb = -1
         };
 
-        IActionResult result = await Controller.UpdateTag(tagUpdate);
+        ActionResult result = await Controller.UpdateTag(tagUpdate);
 
-        Assert.IsInstanceOfType<NotFoundObjectResult>(result);
+        TestSetup.CheckTypeAndErrorCode<NotFoundObjectResult>(result, ErrorCode.TagDoesNotExist);
     }
 }

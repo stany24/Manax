@@ -1,5 +1,6 @@
 // ReSharper disable PropertyCanBeMadeInitOnly.Global
 
+using System.ComponentModel.DataAnnotations;
 using ManaxLibrary.DTO.Tag;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,9 +11,9 @@ public class Tag
 {
     public long Id { get; set; }
     public List<Serie.Serie> Series { get; set; } = [];
-    public string Name { get; set; } = null!;
+    [MaxLength(50)] public string Name { get; set; } = null!;
     public int ColorArgb { get; set; }
-    
+
     public TagDto ToDto()
     {
         return new TagDto
@@ -23,7 +24,7 @@ public class Tag
             ColorArgb = ColorArgb
         };
     }
-    
+
     public void Update(TagUpdateDto tagUpdate)
     {
         Name = tagUpdate.Name;

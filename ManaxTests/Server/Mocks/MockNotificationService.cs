@@ -21,7 +21,9 @@ public class MockNotificationService : INotificationService
     public TagDto? TagCreated { get; private set; }
     public TagDto? TagUpdated { get; private set; }
     public long TagDeletedId { get; private set; }
-    public Feature? FeatureChanged { get; set; }
+    public RoleDto? RoleCreated { get; private set; }
+    public RoleDto? RoleUpdated { get; private set; }
+    public long RoleDeletedId { get; private set; }
 
     public void NotifyPermissionModifiedAsync(long userId, List<Permission> permissions)
     {
@@ -73,11 +75,15 @@ public class MockNotificationService : INotificationService
     {
     }
 
-    public void NotifyChapterModifiedAsync(ChapterDto chapter)
+    public void NotifyChapterUpdatedAsync(ChapterDto chapter)
     {
     }
 
     public void NotifyChapterRemovedAsync(long chapterId)
+    {
+    }
+
+    public void NotifyChapterUploadFailedAsync(long userId, string serieTitle, uint number)
     {
     }
 
@@ -139,7 +145,6 @@ public class MockNotificationService : INotificationService
 
     public void NotifyFeatureChanged(Feature feature)
     {
-        FeatureChanged = feature;
     }
 
     public void NotifyPersonCreatedAsync(PersonDto person)
@@ -156,13 +161,16 @@ public class MockNotificationService : INotificationService
 
     public void NotifyRoleCreatedAsync(RoleDto role)
     {
+        RoleCreated = role;
     }
 
     public void NotifyRoleUpdatedAsync(RoleDto role)
     {
+        RoleUpdated = role;
     }
 
     public void NotifyRoleDeletedAsync(long roleId)
     {
+        RoleDeletedId = roleId;
     }
 }

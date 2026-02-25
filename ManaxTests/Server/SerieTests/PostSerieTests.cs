@@ -1,3 +1,4 @@
+using ManaxLibrary;
 using ManaxLibrary.DTO.Serie;
 using ManaxServer.Models.Serie;
 using Microsoft.AspNetCore.Mvc;
@@ -18,9 +19,8 @@ public class PostSerieTests : SerieTestsSetup
         ActionResult<long> result = await Controller.PostSerie(createDto);
 
         OkObjectResult? okResult = result.Result as OkObjectResult;
-        Assert.IsNull(okResult);
-
-        long? serieId = result.Value;
+        Assert.IsNotNull(okResult);
+        long? serieId = okResult.Value as long?;
         Assert.IsNotNull(serieId);
 
         Serie? createdSerie = await Context.Series.FindAsync(serieId);
@@ -38,7 +38,7 @@ public class PostSerieTests : SerieTestsSetup
 
         ActionResult<long> result = await Controller.PostSerie(createDto);
 
-        Assert.IsInstanceOfType<BadRequestObjectResult>(result.Result);
+        TestSetup.CheckTypeAndErrorCode<BadRequestObjectResult>(result.Result, ErrorCode.InvalidSerieData);
     }
 
     [TestMethod]
@@ -53,7 +53,9 @@ public class PostSerieTests : SerieTestsSetup
         ActionResult<long> result = await Controller.PostSerie(createDto);
         DateTime afterCreation = DateTime.UtcNow;
 
-        long? serieId = result.Value;
+        OkObjectResult? okResult = result.Result as OkObjectResult;
+        Assert.IsNotNull(okResult);
+        long? serieId = okResult.Value as long?;
         Assert.IsNotNull(serieId);
 
         Serie? createdSerie = await Context.Series.FindAsync(serieId);

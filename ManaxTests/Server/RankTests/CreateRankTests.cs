@@ -20,9 +20,9 @@ public class CreateRankTests : RankTestsSetup
         ActionResult<long> result = await Controller.CreateRank(createDto);
 
         OkObjectResult? okResult = result.Result as OkObjectResult;
-        Assert.IsNull(okResult);
+        Assert.IsNotNull(okResult);
 
-        long? rankId = result.Value;
+        long? rankId = okResult.Value as long?;
         Assert.IsNotNull(rankId);
 
         Rank? createdRank = await Context.Ranks.FindAsync(rankId);

@@ -1,4 +1,3 @@
-using ManaxServer.Localization;
 using ManaxServer.Services.Fix;
 
 namespace ManaxServer.Tasks;
@@ -14,7 +13,7 @@ public class FixPosterBackGroundTask(IFixService fixService, long serieId) : IBa
 
     public string GetName()
     {
-        return Localizer.TaskPosterFix();
+        return "Poster fix";
     }
 
     public TaskPriority GetPriority()

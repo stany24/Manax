@@ -1,9 +1,10 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.Messaging;
 using DynamicData;
 using DynamicData.Binding;
-using ManaxClient.Models.Sources;
+using ManaxClient.Event;
 using ManaxClient.ViewModels.Popup.ConfirmCancel;
 using ManaxClient.ViewModels.Popup.ConfirmCancel.Content;
 using ManaxLibrary;
@@ -15,19 +16,20 @@ namespace ManaxClient.ViewModels.Pages.Rank;
 
 public class RankPageViewModel : PageViewModel
 {
-    private readonly ReadOnlyObservableCollection<Models.Rank> _ranks;
+    private readonly ReadOnlyObservableCollection<Models.Server.Data.Rank> _ranks;
 
     public RankPageViewModel()
     {
-        SortExpressionComparer<Models.Rank> comparer = SortExpressionComparer<Models.Rank>.Descending(t => t.Value);
-        RankSource.Ranks.Connect()
+        SortExpressionComparer<Models.Server.Data.Rank> comparer =
+            SortExpressionComparer<Models.Server.Data.Rank>.Descending(t => t.Value);
+        MainWindowViewModel.Instance.RankSource.Ranks.Connect()
             .SortAndBind(out _ranks, comparer)
             .Subscribe();
     }
 
-    public ReadOnlyObservableCollection<Models.Rank> Ranks => _ranks;
+    public ReadOnlyObservableCollection<Models.Server.Data.Rank> Ranks => _ranks;
 
-    public void UpdateRank(Models.Rank rank)
+    public void UpdateRank(Models.Server.Data.Rank rank)
     {
         RankUpdateDto update = new()
         {
@@ -46,30 +48,33 @@ public class RankPageViewModel : PageViewModel
                 RankUpdateDto result = content.GetResult();
                 Optional<bool> updateRankAsync = await ManaxApiRankClient.UpdateRankAsync(result);
                 if (updateRankAsync.Failed)
-                    InfoEmitted?.Invoke(this, updateRankAsync.Error);
+                    WeakReferenceMessenger.Default.Send(new NotificationMessage(updateRankAsync.Error));
             }
             catch (Exception e)
             {
-                InfoEmitted?.Invoke(this, "Failed to update rank on server");
-                Logger.LogError("Failed to update rank on server", e);
+                const string error = "Failed to update rank on server";
+                WeakReferenceMessenger.Default.Send(new NotificationMessage(error));
+                Logger.LogError(error, e);
             }
         };
-        PopupRequested?.Invoke(this, popup);
+        WeakReferenceMessenger.Default.Send(new PopupChangeMessage(popup));
     }
 
-    public void DeleteRank(Models.Rank rank)
+    public void DeleteRank(Models.Server.Data.Rank rank)
     {
         Task.Run(async () =>
         {
             try
             {
                 Optional<bool> deleteRankResponse = await ManaxApiRankClient.DeleteRankAsync(rank.Id);
-                if (deleteRankResponse.Failed) InfoEmitted?.Invoke(this, deleteRankResponse.Error);
+                if (deleteRankResponse.Failed)
+                    WeakReferenceMessenger.Default.Send(new NotificationMessage(deleteRankResponse.Error));
             }
             catch (Exception e)
             {
-                InfoEmitted?.Invoke(this, "Failed to delete rank on server");
-                Logger.LogError("Failed to delete rank on server", e);
+                const string error = "Failed to delete rank on server";
+                WeakReferenceMessenger.Default.Send(new NotificationMessage(error));
+                Logger.LogError(error, e);
             }
         });
     }
@@ -89,14 +94,15 @@ public class RankPageViewModel : PageViewModel
                     { Name = result.Name, Value = result.Value });
 
                 if (rankResponse.Failed)
-                    InfoEmitted?.Invoke(this, rankResponse.Error);
+                    WeakReferenceMessenger.Default.Send(new NotificationMessage(rankResponse.Error));
             }
             catch (Exception e)
             {
-                InfoEmitted?.Invoke(this, "Failed to create rank on server");
-                Logger.LogError("Failed to create rank on server", e);
+                const string error = "Failed to create rank on server";
+                WeakReferenceMessenger.Default.Send(new NotificationMessage(error));
+                Logger.LogError(error, e);
             }
         };
-        PopupRequested?.Invoke(this, popup);
+        WeakReferenceMessenger.Default.Send(new PopupChangeMessage(popup));
     }
 }

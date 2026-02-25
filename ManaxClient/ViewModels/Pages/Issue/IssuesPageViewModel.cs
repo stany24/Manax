@@ -5,11 +5,13 @@ using System.IO;
 using System.IO.Compression;
 using System.Net.Http;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
 using DynamicData;
 using DynamicData.Binding;
 using Jeek.Avalonia.Localization;
+using ManaxClient.Event;
+using ManaxClient.Manager;
 using ManaxClient.Models.Issue;
-using ManaxClient.Models.Sources;
 using ManaxClient.ViewModels.Pages.Serie;
 using ManaxClient.ViewModels.Popup.ConfirmCancel;
 using ManaxClient.ViewModels.Popup.ConfirmCancel.Content;
@@ -40,20 +42,20 @@ public partial class IssuesPageViewModel : PageViewModel
             SortExpressionComparer<IssueChapterReported>.Descending(t => t.CreatedAt);
         SortExpressionComparer<IssueSerieReported> comparer4 =
             SortExpressionComparer<IssueSerieReported>.Descending(t => t.CreatedAt);
-        
-        IssueSource.IssueChapterAutomatic
+
+        MainWindowViewModel.Instance.IssueSource.IssueChapterAutomatic
             .Connect()
             .SortAndBind(out _issueChapterAutomatic, comparer1)
             .Subscribe();
-        IssueSource.IssueSerieAutomatic
+        MainWindowViewModel.Instance.IssueSource.IssueSerieAutomatic
             .Connect()
             .SortAndBind(out _issueSerieAutomatic, comparer2)
             .Subscribe();
-        IssueSource.IssueChapterReported
+        MainWindowViewModel.Instance.IssueSource.IssueChapterReported
             .Connect()
             .SortAndBind(out _issueChapterReported, comparer3)
             .Subscribe();
-        IssueSource.IssueSerieReported
+        MainWindowViewModel.Instance.IssueSource.IssueSerieReported
             .Connect()
             .SortAndBind(out _issueSerieReported, comparer4)
             .Subscribe();
@@ -64,24 +66,25 @@ public partial class IssuesPageViewModel : PageViewModel
     public ReadOnlyObservableCollection<IssueChapterReported> IssueChapterReported => _issueChapterReported;
     public ReadOnlyObservableCollection<IssueSerieReported> IssueSerieReported => _issueSerieReported;
 
-    public void OpenSeriePage(Models.Serie serie)
+    public void OpenSeriePage(Models.Server.Data.Serie serie)
     {
-        PageChangedRequested?.Invoke(this, new SeriePageViewModel(serie));
+        WeakReferenceMessenger.Default.Send(new PageChangeMessage(new SeriePageViewModel(serie)));
     }
 
     public void OnChapterIssueClicked(ChapterDto chapter)
     {
-        string serieFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Manax",
+        string serieFolder = Path.Combine(StorageManager.ConfigFolder,
             chapter.SerieId.ToString(CultureInfo.InvariantCulture));
         if (!Directory.Exists(serieFolder)) Directory.CreateDirectory(serieFolder);
-        string saveFile = Path.Combine(serieFolder, chapter.FileName);
-        string saveFolder = Path.Combine(serieFolder, Path.GetFileNameWithoutExtension(chapter.FileName));
+        string saveFile = Path.Combine(serieFolder, chapter.Number.ToString(CultureInfo.InvariantCulture));
+        string saveFolder = Path.Combine(serieFolder,
+            Path.GetFileNameWithoutExtension(chapter.Number.ToString(CultureInfo.InvariantCulture)));
 
         ReplaceChapterViewModel content = new(saveFolder);
         ConfirmCancelViewModel viewModel = new(content);
         Controls.Popups.Popup popup = new(viewModel);
         popup.Closed += (_, _) => { PopupClosed(viewModel, saveFile, saveFolder, chapter); };
-        PopupRequested?.Invoke(this, popup);
+        WeakReferenceMessenger.Default.Send(new PopupChangeMessage(popup));
 
         DownloadChapter(saveFile, saveFolder, chapter, content);
     }
@@ -94,7 +97,7 @@ public partial class IssuesPageViewModel : PageViewModel
             Optional<byte[]> chapterPagesAsync = await ManaxApiChapterClient.GetChapterPagesAsync(chapter.Id);
             if (chapterPagesAsync.Failed)
             {
-                InfoEmitted?.Invoke(this, chapterPagesAsync.Error);
+                WeakReferenceMessenger.Default.Send(new NotificationMessage(chapterPagesAsync.Error));
                 return;
             }
 
@@ -102,13 +105,13 @@ public partial class IssuesPageViewModel : PageViewModel
             await fileStream.WriteAsync(chapterPagesAsync.GetValue());
             await fileStream.DisposeAsync();
             fileStream.Close();
-            ZipFile.ExtractToDirectory(saveFile, saveFolder);
+            await ZipFile.ExtractToDirectoryAsync(saveFile, saveFolder);
             File.Delete(saveFile);
             content.CanConfirm = true;
         }
         catch (Exception e)
         {
-            InfoEmitted?.Invoke(this, e.Message);
+            WeakReferenceMessenger.Default.Send(new NotificationMessage(e.Message));
             Logger.LogError("Error downloading chapter", e);
         }
     }
@@ -121,15 +124,16 @@ public partial class IssuesPageViewModel : PageViewModel
             if (viewModel.Canceled()) return;
 
             if (File.Exists(saveFile)) File.Delete(saveFile);
-            ZipFile.CreateFromDirectory(saveFolder, saveFile);
+            await ZipFile.CreateFromDirectoryAsync(saveFolder, saveFile);
             byte[] data = await File.ReadAllBytesAsync(saveFile);
 
             Optional<bool> request =
-                await ManaxApiUploadClient.ReplaceChapterAsync(new ByteArrayContent(data), chapter.FileName,
+                await ManaxApiUploadClient.ReplaceChapterAsync(new ByteArrayContent(data),
+                    chapter.Number.ToString(CultureInfo.InvariantCulture),
                     chapter.SerieId);
             if (request.Failed)
             {
-                InfoEmitted?.Invoke(this, request.Error);
+                WeakReferenceMessenger.Default.Send(new NotificationMessage(request.Error));
                 Logger.LogFailure("Replace chapter failed");
                 return;
             }
@@ -137,14 +141,14 @@ public partial class IssuesPageViewModel : PageViewModel
             File.Delete(saveFile);
             Directory.Delete(saveFolder, true);
 
-            string message = request.GetValue() 
-                ? Localizer.Get("IssuesPage.ReplacementSuccessful") 
+            string message = request.GetValue()
+                ? Localizer.Get("IssuesPage.ReplacementSuccessful")
                 : Localizer.Get("IssuesPage.ReplacementFailed");
-            InfoEmitted?.Invoke(this, message);
+            WeakReferenceMessenger.Default.Send(new NotificationMessage(message));
         }
         catch (Exception e)
         {
-            InfoEmitted?.Invoke(this, e.Message);
+            WeakReferenceMessenger.Default.Send(new NotificationMessage(e.Message));
             Logger.LogError("Error replacing chapter", e);
         }
     }

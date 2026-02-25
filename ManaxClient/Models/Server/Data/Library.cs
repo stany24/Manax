@@ -1,0 +1,51 @@
+using System;
+using System.Collections.ObjectModel;
+using CommunityToolkit.Mvvm.ComponentModel;
+using DynamicData;
+using DynamicData.Binding;
+using ManaxClient.ViewModels;
+using ManaxLibrary.DTO.Library;
+using ManaxLibrary.Notifications;
+
+namespace ManaxClient.Models.Server.Data;
+
+public partial class Library : ObservableObject
+{
+    private readonly ReadOnlyObservableCollection<Serie> _series;
+    [ObservableProperty] private DateTime _creation;
+    [ObservableProperty] private long _id;
+    [ObservableProperty] private string _name = string.Empty;
+
+    public Library(LibraryDto dto)
+    {
+        NotificationReceiver.OnLibraryUpdated += OnLibraryUpdated;
+        FromLibraryDto(dto);
+        SortExpressionComparer<Serie> comparer = SortExpressionComparer<Serie>.Ascending(serie => serie.Title);
+        MainWindowViewModel.Instance.SerieSource.Series
+            .Connect()
+            .AutoRefresh()
+            .Filter(serie => serie.LibraryId == Id)
+            .SortAndBind(out _series, comparer)
+            .Subscribe();
+    }
+
+    public ReadOnlyObservableCollection<Serie> Series => _series;
+
+    ~Library()
+    {
+        NotificationReceiver.OnLibraryUpdated -= OnLibraryUpdated;
+    }
+
+    private void FromLibraryDto(LibraryDto dto)
+    {
+        Id = dto.Id;
+        Name = dto.Name;
+        Creation = dto.Creation;
+    }
+
+    private void OnLibraryUpdated(LibraryDto dto)
+    {
+        if (dto.Id != Id) return;
+        FromLibraryDto(dto);
+    }
+}

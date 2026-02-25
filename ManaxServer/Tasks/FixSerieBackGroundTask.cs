@@ -1,4 +1,3 @@
-using ManaxServer.Localization;
 using ManaxServer.Services.Fix;
 
 namespace ManaxServer.Tasks;
@@ -14,7 +13,7 @@ public class FixSerieBackGroundTask(IFixService fixService, long serieId) : IBac
 
     public string GetName()
     {
-        return Localizer.TaskSerieFix();
+        return "Serie fix";
     }
 
     public TaskPriority GetPriority()

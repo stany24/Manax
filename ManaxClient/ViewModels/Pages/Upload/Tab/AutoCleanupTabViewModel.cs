@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 using Aspose.Zip.Rar;
 using CommunityToolkit.Mvvm.ComponentModel;
 using ImageMagick;
-using ManaxClient.Models;
 using ManaxClient.Models.Upload;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
@@ -18,44 +17,50 @@ using ManaxLibrary.Logging;
 
 namespace ManaxClient.ViewModels.Pages.Upload.Tab;
 
-public partial class AutoCleanupTabViewModel:TabViewModel
+public partial class AutoCleanupTabViewModel : TabViewModel
 {
-    private string _processingFolder;
-    [ObservableProperty] private int _nbArchive;
+    private readonly List<string> _archivesFormats = ["cbr", "cbz", "zip"];
+
+    private readonly string[] _formatToDelete = ["xml", "gif", "bin", "js", "css", "html"];
+    private readonly string[] _imagesFormats = ["jpg", "jpeg", "png", "webp", "heif", "heic", "avif"];
+    private readonly string[] _sourceFormats = ["(EN)", "(ALL)"];
     [ObservableProperty] private int _currentArchive;
-    [ObservableProperty] private int _nbImage;
     [ObservableProperty] private int _currentImage;
     [ObservableProperty] private bool _isProcessing;
-    
-    private readonly string[] _formatToDelete = ["xml", "gif", "bin", "js", "css", "html"];
-    private readonly List<string> _archivesFormats = ["cbr", "cbz","zip"];
-    private readonly string[] _sourceFormats = ["(EN)", "(ALL)"];
-    private readonly string[] _imagesFormats = ["jpg", "jpeg", "png", "webp", "heif", "heic","avif"];
-    public ObservableCollection<string> Errors { get; } = [];
-    private SettingsData? _settings;
+    [ObservableProperty] private int _nbArchive;
+    [ObservableProperty] private int _nbImage;
+    private string _processingFolder;
+    private SettingsDataDto? _settings;
 
     public AutoCleanupTabViewModel()
     {
         _processingFolder = UploadSettings.ProcessingFolder;
-        UploadSettings.SettingsChanged += (_, _) => {_processingFolder = UploadSettings.ProcessingFolder;};
+        UploadSettings.SettingsChanged += (_, _) => { _processingFolder = UploadSettings.ProcessingFolder; };
     }
-    
+
+    public ObservableCollection<string> Errors { get; } = [];
+
     public void Clean()
     {
         IsProcessing = true;
         CurrentArchive = 0;
         CurrentImage = 0;
         Errors.Clear();
-        
-        Task.Run(() =>
+
+        Task.Run(async () =>
         {
+            await LoadSettings();
             MoveSeriesToRoot();
             DecompressFiles();
             ScaleAndConvertImages();
             RemoveUnwantedFiles();
-            LoadSettings();
             NextRequested?.Invoke(this, new ManualCleanupTabViewModel());
         });
+    }
+
+    public void Skip()
+    {
+        NextRequested?.Invoke(this, new ManualCleanupTabViewModel());
     }
 
     private void MoveSeriesToRoot()
@@ -68,7 +73,7 @@ public partial class AutoCleanupTabViewModel:TabViewModel
             Directory.Delete(source);
         }
     }
-    
+
     private void MoveMangaOutOfSource(string source)
     {
         foreach (string manga in Directory.GetDirectories(source, "*", SearchOption.TopDirectoryOnly))
@@ -85,10 +90,11 @@ public partial class AutoCleanupTabViewModel:TabViewModel
                 string fileName = _processingFolder + mangaName + file.Replace(manga, "");
                 File.Move(file, fileName);
             }
+
             Directory.Delete(manga);
         }
     }
-    
+
     private void DecompressFiles()
     {
         string[] compressedFiles = _archivesFormats
@@ -108,10 +114,11 @@ public partial class AutoCleanupTabViewModel:TabViewModel
                     ExtractZipInPlace(file);
                     break;
             }
+
             CurrentArchive++;
         });
     }
-    
+
     private void ExtractRarInPlace(string file)
     {
         try
@@ -143,7 +150,6 @@ public partial class AutoCleanupTabViewModel:TabViewModel
 
     private void ScaleAndConvertImages()
     {
-        LoadSettings();
         string[] imagesToConvert = _imagesFormats.AsParallel().SelectMany(ext =>
             Directory.GetFiles(_processingFolder, "*." + ext, SearchOption.AllDirectories)).ToArray();
         NbImage = imagesToConvert.Length;
@@ -164,25 +170,26 @@ public partial class AutoCleanupTabViewModel:TabViewModel
 
     private void ConvertImage(string file)
     {
-        if(_settings == null){return;}
+        if (_settings == null) return;
         using MagickImage image = new(file);
-        if (file.EndsWith("." + _settings.ImageFormat,StringComparison.InvariantCulture) &&
+        if (file.EndsWith("." + _settings.ImageFormat, StringComparison.InvariantCulture) &&
             image.Quality <= _settings.ImageQuality && image.Width <= _settings.MaxChapterWidth) return;
         if (image.Quality >= _settings.ImageQuality) image.Quality = _settings.ImageQuality;
         if (image.Width > _settings.MaxChapterWidth) image.Resize(_settings.MaxChapterWidth, 0);
 
         image.HasAlpha = false;
         image.Strip();
-        string newFileName = Path.ChangeExtension(file, _settings.ImageFormat.ToString().ToLower(CultureInfo.InvariantCulture));
+        string newFileName =
+            Path.ChangeExtension(file, _settings.ImageFormat.ToString().ToLower(CultureInfo.InvariantCulture));
         File.Delete(file);
         image.Write(newFileName);
     }
-    
-    private void LoadSettings()
+
+    private async Task LoadSettings()
     {
         try
         {
-            Optional<SettingsData> settingsAsync = ManaxApiSettingsClient.GetSettingsAsync().Result;
+            Optional<SettingsDataDto> settingsAsync = await ManaxApiSettingsClient.GetSettingsAsync();
             if (settingsAsync.Failed)
             {
                 Logger.LogFailure("Failed to load settings");
@@ -204,7 +211,7 @@ public partial class AutoCleanupTabViewModel:TabViewModel
         uselessFiles.ForEach(File.Delete);
         RemoveEmptyFolders(_processingFolder);
     }
-    
+
     private static void RemoveEmptyFolders(string folders)
     {
         foreach (string folder in Directory.GetDirectories(folders))

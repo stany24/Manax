@@ -9,7 +9,7 @@
     x:DataType="selectChoice:ChooseActionViewModel"
     Background="{DynamicResource MaterialCardBackgroundBrush}"
     CornerRadius="5">
-    
+
     <StackPanel Spacing="16" Margin="16">
         <TextBlock
             Text="Actions"
@@ -24,12 +24,10 @@
                         Content="{Binding}"
                         HorizontalAlignment="Stretch"
                         HorizontalContentAlignment="Left"
-                        Background="Transparent"
                         BorderThickness="0"
                         Padding="12,8"
                         Command="{Binding $parent[UserControl].((selectChoice:ChooseActionViewModel)DataContext).SelectAction}"
-                        CommandParameter="{Binding}">
-                    </Button>
+                        CommandParameter="{Binding}" />
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>

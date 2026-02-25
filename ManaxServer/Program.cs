@@ -12,18 +12,16 @@ using ManaxServer.Services.Hash;
 using ManaxServer.Services.Issue;
 using ManaxServer.Services.Notification;
 using ManaxServer.Services.Permission;
-using ManaxServer.Services.Renaming;
 using ManaxServer.Services.Token;
 using ManaxServer.Services.Validation;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
-using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 
 namespace ManaxServer;
 
-public class Program
-    
+public static class Program
+
 {
     public static void Main(string[] args)
     {
@@ -51,28 +49,23 @@ public class Program
         builder.Services.AddDbContext<ManaxContext>(opt =>
             opt.UseSqlite($"Data Source={Path.Combine(AppContext.BaseDirectory, "database.db")}"));
 
-        AddAuthentication(builder);
-
-        // Services
-        builder.Services.AddSingleton<INotificationService>(provider =>
-            new NotificationService(
-                provider.GetRequiredService<IHubContext<NotificationService>>(),
-                provider.GetRequiredService<IPermissionService>()));
-        builder.Services.AddSingleton<IHashService>(_ => new HashService());
-        builder.Services.AddSingleton<IRenamingService>(provider =>
-            new RenamingService(provider.GetRequiredService<IServiceScopeFactory>()));
-        builder.Services.AddSingleton<IBackgroundTaskService>(provider =>
-            new BackgroundTaskService(provider.GetRequiredService<INotificationService>()));
-        builder.Services.AddSingleton<IIssueService>(provider =>
-            new IssueService(provider.GetRequiredService<IServiceScopeFactory>()));
-        builder.Services.AddSingleton<IFixService>(provider =>
-            new FixService(provider.GetRequiredService<IServiceScopeFactory>(),
-                provider.GetRequiredService<IIssueService>()));
+        builder.Services.AddSingleton<IHashService, HashService>();
+        builder.Services.AddSingleton<IPermissionService, PermissionService>();
+        builder.Services.AddSingleton<ITokenService, TokenService>();
         builder.Services.AddSingleton<IPasswordValidationService>(_ =>
             new PasswordValidationService(builder.Environment.IsProduction()));
+
+        builder.Services.AddSingleton<INotificationService, NotificationService>();
+        builder.Services.AddSingleton<IBackgroundTaskService, BackgroundTaskService>();
+        builder.Services.AddSingleton<IIssueService, IssueService>();
+        builder.Services.AddSingleton<IFixService, FixService>();
+
         FeatureFileManager featureFileManager = new();
-        builder.Services.AddSingleton<IFeatureService>(provider =>
-            new FeatureService(featureFileManager,featureFileManager,provider.GetRequiredService<INotificationService>()));
+        builder.Services.AddSingleton<IFeatureLoader>(featureFileManager);
+        builder.Services.AddSingleton<IFeatureSaver>(featureFileManager);
+        builder.Services.AddSingleton<IFeatureService, FeatureService>();
+
+        AddAuthentication(builder);
         AddRateLimiting(builder);
 
         builder.Services.Configure<KestrelServerOptions>(options =>
@@ -153,7 +146,7 @@ public class Program
                 new IssueSerieReportedType { Name = "Wrong name" });
             manaxContext.SaveChanges();
         }
-        
+
         if (!manaxContext.Roles.Any())
         {
             manaxContext.Roles.AddRange(
@@ -191,14 +184,6 @@ public class Program
 
     private static void AddAuthentication(WebApplicationBuilder builder)
     {
-        builder.Services.AddSingleton<IPermissionService>(provider =>
-            new PermissionService(provider.GetRequiredService<IServiceScopeFactory>()));
-
-        IPermissionService permissionService =
-            builder.Services.BuildServiceProvider().GetRequiredService<IPermissionService>();
-        TokenService tokenService = new(permissionService);
-        builder.Services.AddSingleton<ITokenService>(tokenService);
-
         builder.Services.AddAuthentication()
             .AddBearerToken(options => { options.BearerTokenExpiration = TimeSpan.FromHours(12); });
     }

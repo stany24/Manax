@@ -4,65 +4,100 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:content="clr-namespace:ManaxClient.ViewModels.Popup.ConfirmCancel.Content"
+    xmlns:controls="clr-namespace:ManaxClient.Controls"
+    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
     mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="600"
     x:Class="ManaxClient.Views.Popup.ConfirmCancel.Content.UserPermissionsEditView"
     x:DataType="content:UserPermissionsEditViewModel">
 
-    <ScrollViewer>
-        <Grid Margin="10" ColumnDefinitions="*,*,*,*">
+    <UserControl.Styles>
+        <Style Selector="TextBlock.column-name">
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="Margin" Value="0,0,0,10" />
+        </Style>
+    </UserControl.Styles>
 
-            <StackPanel Grid.Column="0" Margin="5">
-                <TextBlock Text="Read" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,10" />
-                <ItemsControl ItemsSource="{Binding ReadPermissions}">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <CheckBox IsChecked="{Binding IsEnabled}"
-                                      Content="{Binding DisplayName}"
-                                      Margin="0,2" />
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
+    <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+                  VerticalScrollBarVisibility="Auto">
+        <StackPanel Orientation="Vertical"
+                    Spacing="16">
+            <StackPanel Classes="popup-title">
+                <avalonia:MaterialIcon Classes="icon"
+                                       Kind="UserOutline" />
+                <StackPanel>
+                    <TextBlock Text="{localization:Localize UserPermissionsEdit.Title}" />
+                    <TextBlock Text="{localization:Localize UserPermissionsEdit.Description}" />
+                </StackPanel>
             </StackPanel>
 
-            <StackPanel Grid.Column="1" Margin="5">
-                <TextBlock Text="Write" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,10" />
-                <ItemsControl ItemsSource="{Binding WritePermissions}">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <CheckBox IsChecked="{Binding IsEnabled}"
-                                      Content="{Binding DisplayName}"
-                                      Margin="0,2" />
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-            </StackPanel>
+            <controls:StretchWrapPanel ItemSpacing="8"
+                                       LineSpacing="8">
+                <Border Classes="item-card">
+                    <StackPanel>
+                        <TextBlock Text="Read"
+                                   Classes="column-name" />
+                        <ItemsControl ItemsSource="{Binding ReadPermissions}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <CheckBox IsChecked="{Binding IsEnabled}"
+                                              Content="{Binding DisplayName}"
+                                              Margin="0,2" />
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </Border>
 
-            <StackPanel Grid.Column="2" Margin="5">
-                <TextBlock Text="Delete" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,10" />
-                <ItemsControl ItemsSource="{Binding DeletePermissions}">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <CheckBox IsChecked="{Binding IsEnabled}"
-                                      Content="{Binding DisplayName}"
-                                      Margin="0,2" />
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-            </StackPanel>
+                <Border Classes="item-card">
+                    <StackPanel>
+                        <TextBlock Text="Write"
+                                   Classes="column-name" />
+                        <ItemsControl ItemsSource="{Binding WritePermissions}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <CheckBox IsChecked="{Binding IsEnabled}"
+                                              Content="{Binding DisplayName}"
+                                              Margin="0,2" />
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </Border>
 
-            <StackPanel Grid.Column="3" Margin="5">
-                <TextBlock Text="Others" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,10" />
-                <ItemsControl ItemsSource="{Binding OtherPermissions}">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <CheckBox IsChecked="{Binding IsEnabled}"
-                                      Content="{Binding DisplayName}"
-                                      Margin="0,2" />
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-            </StackPanel>
-        </Grid>
+                <Border Classes="item-card">
+                    <StackPanel>
+                        <TextBlock Text="Delete"
+                                   Classes="column-name" />
+                        <ItemsControl ItemsSource="{Binding DeletePermissions}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <CheckBox IsChecked="{Binding IsEnabled}"
+                                              Content="{Binding DisplayName}"
+                                              Margin="0,2" />
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </Border>
+
+                <Border Classes="item-card">
+                    <StackPanel>
+                        <TextBlock Text="Others"
+                                   Classes="column-name" />
+                        <ItemsControl ItemsSource="{Binding OtherPermissions}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <CheckBox IsChecked="{Binding IsEnabled}"
+                                              Content="{Binding DisplayName}"
+                                              Margin="0,2" />
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </Border>
+            </controls:StretchWrapPanel>
+        </StackPanel>
     </ScrollViewer>
-
 </UserControl>

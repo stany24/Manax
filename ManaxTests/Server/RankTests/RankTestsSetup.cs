@@ -8,12 +8,12 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ManaxTests.Server.RankTests;
 
-public abstract class RankTestsSetup
+public abstract class RankTestsSetup : TestSetup
 {
-    private MockNotificationService _mockNotificationService = null!;
     private MockFeatureService _mockFeatureService = null!;
-    protected ManaxContext Context = null!;
-    protected RankController Controller = null!;
+    private MockNotificationService _mockNotificationService = null!;
+    protected ManaxContext Context { get; private set; } = null!;
+    protected RankController Controller { get; private set; } = null!;
 
     [TestInitialize]
     public void Setup()
@@ -22,9 +22,9 @@ public abstract class RankTestsSetup
 
         _mockNotificationService = new MockNotificationService();
         _mockFeatureService = new MockFeatureService();
-        _mockFeatureService.SetFeatureEnabled(FeatureType.Ranks,true);
+        _mockFeatureService.SetFeatureEnabled(FeatureType.Ranks, true);
 
-        Controller = new RankController(Context, _mockNotificationService,_mockFeatureService);
+        Controller = new RankController(Context, _mockNotificationService);
 
         ClaimsPrincipal user = new(new ClaimsIdentity([
             new Claim(ClaimTypes.NameIdentifier, "1"),

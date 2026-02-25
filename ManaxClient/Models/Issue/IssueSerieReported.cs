@@ -2,8 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
 using DynamicData;
-using ManaxClient.Models.Sources;
+using ManaxClient.Event;
+using ManaxClient.Models.Server.Data;
+using ManaxClient.ViewModels;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTO.Issue.Reported;
@@ -31,10 +34,7 @@ public partial class IssueSerieReported : ObservableObject
         Task.Run(async () =>
         {
             Optional<bool> response = await ManaxApiIssueClient.CloseSerieIssueAsync(Id);
-            if (response.Failed)
-            {
-                IssueSource.ErrorEmitted?.Invoke(this, response.Error);
-            }
+            if (response.Failed) WeakReferenceMessenger.Default.Send(new NotificationMessage(response.Error));
         });
     }
 
@@ -44,7 +44,7 @@ public partial class IssueSerieReported : ObservableObject
         CreatedAt = dto.CreatedAt;
 
         _subscriptionSerie?.Dispose();
-        _subscriptionSerie = SerieSource.Series
+        _subscriptionSerie = MainWindowViewModel.Instance.SerieSource.Series
             .Connect()
             .AutoRefresh(o => o)
             .Filter(o => o.Id == dto.SerieId)
@@ -55,7 +55,7 @@ public partial class IssueSerieReported : ObservableObject
             });
 
         _subscriptionUser?.Dispose();
-        _subscriptionUser = UserSource.Users
+        _subscriptionUser = MainWindowViewModel.Instance.UserSource.Users
             .Connect()
             .AutoRefresh(o => o)
             .Filter(o => o.Id == dto.UserId)
@@ -66,7 +66,7 @@ public partial class IssueSerieReported : ObservableObject
             });
 
         _subscriptionProblem?.Dispose();
-        _subscriptionProblem = ProblemSource.ChapterProblems
+        _subscriptionProblem = MainWindowViewModel.Instance.ProblemSource.ChapterProblems
             .Connect()
             .AutoRefresh(o => o)
             .Filter(o => o.Id == dto.ProblemId)

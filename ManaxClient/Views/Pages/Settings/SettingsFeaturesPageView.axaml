@@ -1,0 +1,123 @@
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:page="clr-namespace:ManaxClient.ViewModels.Pages.Settings"
+    xmlns:viewModels="clr-namespace:ManaxClient.ViewModels"
+    xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
+    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    xmlns:controls="clr-namespace:ManaxClient.Controls"
+    mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="600"
+    x:Class="ManaxClient.Views.Pages.Settings.SettingsFeaturesPageView"
+    x:DataType="page:SettingsFeaturesPageViewModel"
+    IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanReadFeatures}"
+    Classes="page">
+
+    <UserControl.Styles>
+        <Style Selector="StackPanel.result">
+            <Setter Property="Orientation" Value="Horizontal" />
+            <Setter Property="Spacing" Value="12" />
+        </Style>
+
+        <Style Selector="StackPanel.result > TextBlock">
+            <Setter Property="FontWeight" Value="Medium" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+
+        <Style Selector="TextBlock.feature-name">
+            <Setter Property="FontSize" Value="18" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Margin" Value="0,0,0,8" />
+        </Style>
+
+        <Style Selector="TextBlock.feature-toggle">
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Margin" Value="16,0,0,0" />
+        </Style>
+
+        <Style Selector="TextBlock.feature-description">
+            <Setter Property="TextWrapping" Value="Wrap" />
+            <Setter Property="FontSize" Value="14" />
+        </Style>
+    </UserControl.Styles>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Orientation="Vertical"
+                    Spacing="24">
+
+            <Border Classes="card">
+                <Grid Classes="title"
+                      ColumnDefinitions="Auto,Auto,*,Auto">
+                    <avalonia:MaterialIcon Grid.Column="0"
+                                           Classes="icon"
+                                           Kind="Feather" />
+                    <TextBlock Grid.Column="1"
+                               Text="{localization:Localize SettingsFeaturesPage.Title}" />
+
+                    <controls:IconButton Grid.Column="3"
+                                         Classes="icon-button light"
+                                         IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWriteFeatures}"
+                                         Command="{Binding SaveFeatures}"
+                                         Text="{localization:Localize SettingsFeaturesPage.Save}"
+                                         Icon="ContentSaveOutline" />
+                </Grid>
+            </Border>
+
+            <Border Classes="card"
+                    IsVisible="{Binding Success, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+                <StackPanel Classes="result">
+                    <avalonia:MaterialIcon Kind="CheckOutline"
+                                           Classes="icon"
+                                           Foreground="Green" />
+                    <TextBlock Text="{Binding Success}" />
+                </StackPanel>
+            </Border>
+
+            <Border Classes="card"
+                    IsVisible="{Binding Problem, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+                <StackPanel Classes="result">
+                    <avalonia:MaterialIcon Kind="CrossOutline"
+                                           Classes="icon"
+                                           Foreground="Red" />
+                    <TextBlock Text="{Binding Problem}" />
+                </StackPanel>
+            </Border>
+
+            <Border Classes="card">
+                <ItemsControl ItemsSource="{Binding Features}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border Classes="item-card">
+                                <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto">
+
+                                    <TextBlock Grid.Column="0"
+                                               Grid.Row="0"
+                                               Classes="feature-name"
+                                               Text="{Binding Name}" />
+
+                                    <ToggleSwitch Grid.Column="1"
+                                                  Grid.Row="0"
+                                                  Grid.RowSpan="2"
+                                                  Classes="feature-toggle"
+                                                  IsChecked="{Binding Value}" />
+
+                                    <TextBlock Grid.Column="0"
+                                               Grid.Row="1"
+                                               Classes="feature-description"
+                                               Text="{Binding Description}" />
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Vertical"
+                                        Spacing="8" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

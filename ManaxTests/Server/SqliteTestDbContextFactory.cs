@@ -1,0 +1,380 @@
+using System.IO.Compression;
+using ImageMagick;
+using ManaxLibrary.DTO.Issue.Automatic;
+using ManaxLibrary.DTO.Serie;
+using ManaxLibrary.DTO.User;
+using ManaxServer.Models;
+using ManaxServer.Models.Chapter;
+using ManaxServer.Models.Issue.Automatic;
+using ManaxServer.Models.Issue.Reported;
+using ManaxServer.Models.Library;
+using ManaxServer.Models.Rank;
+using ManaxServer.Models.SavePoint;
+using ManaxServer.Models.Serie;
+using ManaxServer.Models.User;
+using Microsoft.EntityFrameworkCore;
+
+namespace ManaxTests.Server;
+
+public static class SqliteTestDbContextFactory
+{
+    public static ManaxContext CreateTestContext(string? dbName = null)
+    {
+        dbName ??= Guid.NewGuid().ToString();
+        string dbPath = Path.Combine(Path.GetTempPath(), $"test_{dbName}.db");
+
+        DbContextOptions<ManaxContext> options = new DbContextOptionsBuilder<ManaxContext>()
+            .UseSqlite($"Data Source={dbPath}")
+            .Options;
+
+        string savePointPath = Path.Combine(Directory.GetCurrentDirectory(), "savepoint");
+        Directory.CreateDirectory(savePointPath);
+        List<SavePoint> savePoints =
+        [
+            new()
+            {
+                Id = 1,
+                Path = savePointPath,
+                Creation = DateTime.UtcNow
+            }
+        ];
+
+        List<Library> libraries =
+        [
+            new()
+            {
+                Id = 1,
+                Name = "Library 1",
+                Creation = DateTime.UtcNow
+            },
+
+            new()
+            {
+                Id = 2,
+                Name = "Library 2",
+                Creation = DateTime.UtcNow
+            }
+        ];
+
+        List<Serie> series =
+        [
+            new()
+            {
+                Id = 1,
+                Library = libraries[0],
+                FolderName = "serie1",
+                Title = "Serie 1",
+                Description = "Description for Serie 1",
+                SavePoint = savePoints[0],
+                Status = Status.Ongoing,
+                Creation = DateTime.UtcNow,
+                LastModification = DateTime.UtcNow
+            },
+
+            new()
+            {
+                Id = 2,
+                Library = libraries[0],
+                FolderName = "serie2",
+                Title = "Serie 2",
+                Description = "Description for Serie 2",
+                SavePoint = savePoints[0],
+                Status = Status.Completed,
+                Creation = DateTime.UtcNow,
+                LastModification = DateTime.UtcNow
+            },
+
+            new()
+            {
+                Id = 3,
+                Library = libraries[0],
+                FolderName = "serie3",
+                Title = "Serie 3",
+                Description = "Description for Serie 3",
+                SavePoint = savePoints[0],
+                Status = Status.Completed,
+                Creation = DateTime.UtcNow,
+                LastModification = DateTime.UtcNow
+            }
+        ];
+
+        List<Chapter> chapters =
+        [
+            new()
+            {
+                Id = 1,
+                SerieId = 1,
+                UploaderId = 1,
+                Number = 1,
+                PageNumber = 24,
+                Creation = DateTime.UtcNow,
+                LastModification = DateTime.UtcNow
+            },
+
+            new()
+            {
+                Id = 2,
+                SerieId = 1,
+                UploaderId = 1,
+                Number = 2,
+                PageNumber = 30,
+                Creation = DateTime.UtcNow,
+                LastModification = DateTime.UtcNow
+            },
+
+            new()
+            {
+                Id = 3,
+                SerieId = 2,
+                UploaderId = 2,
+                Number = 1,
+                PageNumber = 25,
+                Creation = DateTime.UtcNow,
+                LastModification = DateTime.UtcNow
+            }
+        ];
+
+        List<User> users =
+        [
+            new()
+            {
+                Id = 1,
+                Username = "TestUser1",
+                Role = UserRole.User,
+                Creation = DateTime.UtcNow
+            },
+            new()
+            {
+                Id = 2,
+                Username = "TestAdmin",
+                Role = UserRole.Admin,
+                Creation = DateTime.UtcNow
+            }
+        ];
+
+        List<Rank> ranks =
+        [
+            new()
+            {
+                Id = 1,
+                Value = 1,
+                Name = "Terrible"
+            },
+            new()
+            {
+                Id = 2,
+                Value = 5,
+                Name = "Average"
+            },
+            new()
+            {
+                Id = 3,
+                Value = 10,
+                Name = "Excellent"
+            }
+        ];
+
+        List<UserRank> userRanks =
+        [
+            new()
+            {
+                UserId = 1,
+                SerieId = 1,
+                RankId = 2
+            },
+            new()
+            {
+                UserId = 1,
+                SerieId = 2,
+                RankId = 3
+            }
+        ];
+
+        List<IssueChapterAutomatic> automaticIssuesChapter =
+        [
+            new()
+            {
+                ChapterId = 1,
+                Problem = IssueChapterAutomaticType.ImageTooSmall,
+                CreatedAt = DateTime.UtcNow
+            }
+        ];
+
+        List<AutomaticIssueSerie> automaticIssuesSerie =
+        [
+            new()
+            {
+                SerieId = 1,
+                Problem = IssueSerieAutomaticType.PosterMissing,
+                CreatedAt = DateTime.UtcNow
+            },
+            new()
+            {
+                SerieId = 2,
+                Problem = IssueSerieAutomaticType.DescriptionTooShort,
+                CreatedAt = DateTime.UtcNow
+            }
+        ];
+
+        List<IssueChapterReportedType> reportedIssueChapterTypes =
+        [
+            new()
+            {
+                Id = 1,
+                Name = "Missing Pages"
+            },
+            new()
+            {
+                Id = 2,
+                Name = "Wrong Order"
+            },
+            new()
+            {
+                Id = 3,
+                Name = "Corrupted File"
+            }
+        ];
+
+        List<IssueSerieReportedType> reportedIssueSerieTypes =
+        [
+            new()
+            {
+                Id = 1,
+                Name = "Wrong Title"
+            },
+            new()
+            {
+                Id = 2,
+                Name = "Incorrect Description"
+            },
+            new()
+            {
+                Id = 3,
+                Name = "Missing Cover"
+            }
+        ];
+
+        List<IssueChapterReported> reportedIssuesChapter =
+        [
+            new()
+            {
+                Id = 1,
+                ChapterId = 1,
+                UserId = 1,
+                ProblemId = 1,
+                CreatedAt = DateTime.UtcNow
+            },
+            new()
+            {
+                Id = 2,
+                ChapterId = 2,
+                UserId = 1,
+                ProblemId = 1,
+                CreatedAt = DateTime.UtcNow
+            }
+        ];
+
+        List<IssueSerieReported> reportedIssuesSerie =
+        [
+            new()
+            {
+                Id = 1,
+                SerieId = 1,
+                UserId = 1,
+                ProblemId = 1,
+                CreatedAt = DateTime.UtcNow
+            },
+            new()
+            {
+                Id = 2,
+                SerieId = 2,
+                UserId = 1,
+                ProblemId = 1,
+                CreatedAt = DateTime.UtcNow
+            }
+        ];
+
+        ManaxContext context = new(options);
+
+        if (File.Exists(dbPath)) File.Delete(dbPath);
+
+        context.Database.Migrate();
+
+        context.Libraries.AddRange(libraries);
+        context.Series.AddRange(series);
+        context.Chapters.AddRange(chapters);
+        context.SavePoints.AddRange(savePoints);
+        context.Users.AddRange(users);
+        context.Ranks.AddRange(ranks);
+        context.UserRanks.AddRange(userRanks);
+        context.AutomaticIssuesChapter.AddRange(automaticIssuesChapter);
+        context.AutomaticIssuesSerie.AddRange(automaticIssuesSerie);
+        context.ReportedIssueChapterTypes.AddRange(reportedIssueChapterTypes);
+        context.ReportedIssueSerieTypes.AddRange(reportedIssueSerieTypes);
+        context.ReportedIssuesChapter.AddRange(reportedIssuesChapter);
+        context.ReportedIssuesSerie.AddRange(reportedIssuesSerie);
+        context.SaveChanges();
+
+        CreateChapterFiles(series, chapters, savePoints);
+
+        return context;
+    }
+
+    private static void CreateChapterFiles(List<Serie> series, List<Chapter> chapters, List<SavePoint> savePoints)
+    {
+        foreach (Chapter chapter in chapters)
+        {
+            Serie? serie = series.FirstOrDefault(s => s.Id == chapter.SerieId);
+            SavePoint? savePoint = savePoints.FirstOrDefault(sp => sp.Id == serie?.SavePointId);
+            if (serie != null && savePoint != null)
+                CreateChapter(savePoint.Path, serie.FolderName, chapter.Number, chapter.PageNumber);
+        }
+    }
+
+    private static void CreateChapter(string savePointPath, string serieFolderName, uint chapterNumber, uint pageCount)
+    {
+        string chapterPath = Path.Combine(savePointPath, serieFolderName, $"{chapterNumber}.cbz");
+        if (File.Exists(chapterPath)) return;
+        string directory = Path.GetDirectoryName(chapterPath)!;
+        Directory.CreateDirectory(directory);
+
+        using MemoryStream memoryStream = new();
+        using (ZipArchive archive = new(memoryStream, ZipArchiveMode.Create, true))
+        {
+            Random random = new(Convert.ToInt32(chapterNumber));
+
+            for (int i = 1; i <= pageCount; i++)
+            {
+                ZipArchiveEntry entry = archive.CreateEntry($"{i:D3}.webp");
+
+                using Stream entryStream = entry.Open();
+                byte[] imageData = GenerateWebPImage(random);
+                entryStream.Write(imageData, 0, imageData.Length);
+            }
+        }
+
+        memoryStream.Position = 0;
+        using FileStream fileStream = new(chapterPath, FileMode.Create);
+        memoryStream.CopyTo(fileStream);
+    }
+
+    private static byte[] GenerateWebPImage(Random random)
+    {
+        using MagickImage image = new(new MagickColor(
+            (byte)random.Next(256),
+            (byte)random.Next(256),
+            (byte)random.Next(256)
+        ), 1137, 800);
+
+        image.Format = MagickFormat.WebP;
+        return image.ToByteArray();
+    }
+
+    public static void CleanupTestDatabase(ManaxContext context)
+    {
+        string? dbPath = context.Database.GetConnectionString()?.Split('=')[1];
+        context.Dispose();
+
+        if (!string.IsNullOrEmpty(dbPath) && File.Exists(dbPath)) File.Delete(dbPath);
+    }
+}

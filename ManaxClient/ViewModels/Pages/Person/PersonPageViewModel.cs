@@ -1,9 +1,10 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.Messaging;
 using DynamicData;
 using DynamicData.Binding;
-using ManaxClient.Models.Sources;
+using ManaxClient.Event;
 using ManaxClient.ViewModels.Popup.ConfirmCancel;
 using ManaxClient.ViewModels.Popup.ConfirmCancel.Content;
 using ManaxLibrary;
@@ -11,33 +12,35 @@ using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTO.Person;
 using ManaxLibrary.DTO.Role;
 using ManaxLibrary.Logging;
+using Role = ManaxClient.Models.Server.Data.Role;
 
 namespace ManaxClient.ViewModels.Pages.Person;
 
 public class PersonPageViewModel : PageViewModel
 {
-    public ReadOnlyObservableCollection<Models.Person> Persons => _persons;
-    private readonly ReadOnlyObservableCollection<Models.Person> _persons;
-    public ReadOnlyObservableCollection<Models.Role> Roles => _roles;
-    private readonly ReadOnlyObservableCollection<Models.Role> _roles;
+    private readonly ReadOnlyObservableCollection<Models.Server.Data.Person> _persons;
+    private readonly ReadOnlyObservableCollection<Role> _roles;
 
     public PersonPageViewModel()
     {
-        SortExpressionComparer<Models.Person> comparer = SortExpressionComparer<Models.Person>
+        SortExpressionComparer<Models.Server.Data.Person> comparer = SortExpressionComparer<Models.Server.Data.Person>
             .Ascending(p => p.LastName)
             .ThenByAscending(p => p.FirstName);
-        PersonSource.Persons.Connect()
+        MainWindowViewModel.Instance.PersonSource.Persons.Connect()
             .SortAndBind(out _persons, comparer)
             .Subscribe();
 
-        SortExpressionComparer<Models.Role> roleComparer = SortExpressionComparer<Models.Role>
+        SortExpressionComparer<Role> roleComparer = SortExpressionComparer<Role>
             .Ascending(r => r.Name);
-        RoleSource.Roles.Connect()
+        MainWindowViewModel.Instance.RoleSource.Roles.Connect()
             .SortAndBind(out _roles, roleComparer)
             .Subscribe();
     }
 
-    public void UpdatePerson(Models.Person person)
+    public ReadOnlyObservableCollection<Models.Server.Data.Person> Persons => _persons;
+    public ReadOnlyObservableCollection<Role> Roles => _roles;
+
+    public void UpdatePerson(Models.Server.Data.Person person)
     {
         PersonUpdateDto update = new()
         {
@@ -58,30 +61,33 @@ public class PersonPageViewModel : PageViewModel
                 long personId = content.GetPersonId();
                 Optional<bool> updatePersonAsync = await ManaxApiPersonClient.UpdatePersonAsync(personId, result);
                 if (updatePersonAsync.Failed)
-                    InfoEmitted?.Invoke(this, updatePersonAsync.Error);
+                    WeakReferenceMessenger.Default.Send(new NotificationMessage(updatePersonAsync.Error));
             }
             catch (Exception e)
             {
-                InfoEmitted?.Invoke(this, "Failed to update person on server");
-                Logger.LogError("Failed to update person on server", e);
+                const string error = "Failed to update person on server";
+                WeakReferenceMessenger.Default.Send(new NotificationMessage(error));
+                Logger.LogError(error, e);
             }
         };
-        PopupRequested?.Invoke(this, popup);
+        WeakReferenceMessenger.Default.Send(new PopupChangeMessage(popup));
     }
 
-    public void DeletePerson(Models.Person person)
+    public void DeletePerson(Models.Server.Data.Person person)
     {
         Task.Run(async () =>
         {
             try
             {
                 Optional<bool> deletePersonResponse = await ManaxApiPersonClient.DeletePersonAsync(person.Id);
-                if (deletePersonResponse.Failed) InfoEmitted?.Invoke(this, deletePersonResponse.Error);
+                if (deletePersonResponse.Failed)
+                    WeakReferenceMessenger.Default.Send(new NotificationMessage(deletePersonResponse.Error));
             }
             catch (Exception e)
             {
-                InfoEmitted?.Invoke(this, "Failed to delete person on server");
-                Logger.LogError("Failed to delete person on server", e);
+                const string error = "Failed to delete person on server";
+                WeakReferenceMessenger.Default.Send(new NotificationMessage(error));
+                Logger.LogError(error, e);
             }
         });
     }
@@ -107,22 +113,22 @@ public class PersonPageViewModel : PageViewModel
                 Optional<bool> personResponse = await ManaxApiPersonClient.CreatePersonAsync(result);
 
                 if (personResponse.Failed)
-                    InfoEmitted?.Invoke(this, personResponse.Error);
+                    WeakReferenceMessenger.Default.Send(new NotificationMessage(personResponse.Error));
             }
             catch (Exception e)
             {
-                InfoEmitted?.Invoke(this, "Failed to create person on server");
-                Logger.LogError("Failed to create person on server", e);
+                const string error = "Failed to create person on server";
+                WeakReferenceMessenger.Default.Send(new NotificationMessage(error));
+                Logger.LogError(error, e);
             }
         };
-        PopupRequested?.Invoke(this, popup);
+        WeakReferenceMessenger.Default.Send(new PopupChangeMessage(popup));
     }
 
-    public void UpdateRole(Models.Role role)
+    public void UpdateRole(Role role)
     {
         RoleUpdateDto update = new()
         {
-            Id = role.Id,
             Name = role.Name
         };
         RoleEditViewModel content = new(update);
@@ -134,32 +140,35 @@ public class PersonPageViewModel : PageViewModel
             {
                 if (viewModel.Canceled()) return;
                 RoleUpdateDto result = content.GetResult();
-                Optional<bool> updateRoleAsync = await ManaxApiRoleClient.UpdateRoleAsync(result);
+                Optional<bool> updateRoleAsync = await ManaxApiRoleClient.UpdateRoleAsync(role.Id, result);
                 if (updateRoleAsync.Failed)
-                    InfoEmitted?.Invoke(this, updateRoleAsync.Error);
+                    WeakReferenceMessenger.Default.Send(new NotificationMessage(updateRoleAsync.Error));
             }
             catch (Exception e)
             {
-                InfoEmitted?.Invoke(this, "Failed to update role on server");
-                Logger.LogError("Failed to update role on server", e);
+                const string error = "Failed to update role on server";
+                WeakReferenceMessenger.Default.Send(new NotificationMessage(error));
+                Logger.LogError(error, e);
             }
         };
-        PopupRequested?.Invoke(this, popup);
+        WeakReferenceMessenger.Default.Send(new PopupChangeMessage(popup));
     }
 
-    public void DeleteRole(Models.Role role)
+    public void DeleteRole(Role role)
     {
         Task.Run(async () =>
         {
             try
             {
                 Optional<bool> deleteRoleResponse = await ManaxApiRoleClient.DeleteRoleAsync(role.Id);
-                if (deleteRoleResponse.Failed) InfoEmitted?.Invoke(this, deleteRoleResponse.Error);
+                if (deleteRoleResponse.Failed)
+                    WeakReferenceMessenger.Default.Send(new NotificationMessage(deleteRoleResponse.Error));
             }
             catch (Exception e)
             {
-                InfoEmitted?.Invoke(this, "Failed to delete role on server");
-                Logger.LogError("Failed to delete role on server", e);
+                const string error = "Failed to delete role on server";
+                WeakReferenceMessenger.Default.Send(new NotificationMessage(error));
+                Logger.LogError(error, e);
             }
         });
     }
@@ -179,14 +188,15 @@ public class PersonPageViewModel : PageViewModel
                     { Name = result.Name });
 
                 if (roleResponse.Failed)
-                    InfoEmitted?.Invoke(this, roleResponse.Error);
+                    WeakReferenceMessenger.Default.Send(new NotificationMessage(roleResponse.Error));
             }
             catch (Exception e)
             {
-                InfoEmitted?.Invoke(this, "Failed to create role on server");
-                Logger.LogError("Failed to create role on server", e);
+                const string error = "Failed to create role on server";
+                WeakReferenceMessenger.Default.Send(new NotificationMessage(error));
+                Logger.LogError(error, e);
             }
         };
-        PopupRequested?.Invoke(this, popup);
+        WeakReferenceMessenger.Default.Send(new PopupChangeMessage(popup));
     }
 }

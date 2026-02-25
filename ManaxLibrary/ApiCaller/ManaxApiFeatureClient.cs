@@ -5,34 +5,26 @@ namespace ManaxLibrary.ApiCaller;
 
 public static class ManaxApiFeatureClient
 {
-    public static async Task<Optional<FeaturesManager>> GetEnabledFeaturesAsync()
+    public static async Task<Optional<List<Feature>>> GetEnabledFeaturesAsync()
     {
         return await ManaxApiClient.ExecuteWithErrorHandlingAsync(async () =>
         {
             HttpResponseMessage response = await ManaxApiClient.Client.GetAsync("api/features");
-            if (!response.IsSuccessStatusCode) return new Optional<FeaturesManager>(response);
+            if (!response.IsSuccessStatusCode) return Optional<List<Feature>>.Failure(response);
             List<Feature>? permissions = await response.Content.ReadFromJsonAsync<List<Feature>>();
             return permissions == null
-                ? new Optional<FeaturesManager>("Failed to read permissions from response.")
-                : new Optional<FeaturesManager>(new FeaturesManager(permissions));
+                ? Optional<List<Feature>>.Failure("Failed to read permissions from response.")
+                : Optional<List<Feature>>.Success(permissions);
         });
     }
-    
+
     public static async Task<Optional<bool>> SetFeatureEnabledAsync(Feature feature)
     {
-        return await ManaxApiClient.ExecuteWithErrorHandlingAsync(async () =>
-        {
-            HttpResponseMessage response = await ManaxApiClient.Client.PostAsJsonAsync("api/feature", feature);
-            return !response.IsSuccessStatusCode ? new Optional<bool>(response) : new Optional<bool>(true);
-        });
+        return await ManaxApiClient.PostSuccessAsync("api/feature", feature);
     }
-    
+
     public static async Task<Optional<bool>> SetFeaturesAsync(List<Feature> features)
     {
-        return await ManaxApiClient.ExecuteWithErrorHandlingAsync(async () =>
-        {
-            HttpResponseMessage response = await ManaxApiClient.Client.PutAsJsonAsync("api/features", features);
-            return !response.IsSuccessStatusCode ? new Optional<bool>(response) : new Optional<bool>(true);
-        });
+        return await ManaxApiClient.PutSuccessAsync("api/features", features);
     }
 }

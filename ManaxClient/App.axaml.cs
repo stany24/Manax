@@ -20,7 +20,7 @@ public class App : Application
     public override void OnFrameworkInitializationCompleted()
     {
         Localizer.SetLocalizer(new ResXLocalizer());
-        
+
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
             // Line below is needed to remove Avalonia data validation.

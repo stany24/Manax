@@ -1,3 +1,4 @@
+using ManaxLibrary;
 using ManaxServer.Models.Tag;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,7 +14,7 @@ public class DeleteTagTests : TagTestsSetup
         Context.Tags.Add(tag);
         await Context.SaveChangesAsync();
 
-        IActionResult result = await Controller.DeleteTag(tag.Id);
+        ActionResult result = await Controller.DeleteTag(tag.Id);
 
         Assert.IsInstanceOfType<OkResult>(result);
 
@@ -24,9 +25,9 @@ public class DeleteTagTests : TagTestsSetup
     [TestMethod]
     public async Task DeleteTagWithNonExistentIdReturnsNotFound()
     {
-        IActionResult result = await Controller.DeleteTag(999999);
+        ActionResult result = await Controller.DeleteTag(999999);
 
-        Assert.IsInstanceOfType<NotFoundObjectResult>(result);
+        TestSetup.CheckTypeAndErrorCode<NotFoundObjectResult>(result, ErrorCode.TagDoesNotExist);
     }
 
     [TestMethod]
@@ -38,7 +39,7 @@ public class DeleteTagTests : TagTestsSetup
 
         long tagId = tag.Id;
 
-        IActionResult result = await Controller.DeleteTag(tagId);
+        ActionResult result = await Controller.DeleteTag(tagId);
 
         Assert.IsInstanceOfType<OkResult>(result);
         Assert.AreEqual(tagId, MockNotificationService.TagDeletedId);
@@ -53,7 +54,7 @@ public class DeleteTagTests : TagTestsSetup
 
         int initialCount = Context.Tags.Count();
 
-        IActionResult result = await Controller.DeleteTag(tag.Id);
+        ActionResult result = await Controller.DeleteTag(tag.Id);
 
         Assert.IsInstanceOfType<OkResult>(result);
 
@@ -64,17 +65,17 @@ public class DeleteTagTests : TagTestsSetup
     [TestMethod]
     public async Task DeleteTagWithZeroIdReturnsNotFound()
     {
-        IActionResult result = await Controller.DeleteTag(0);
+        ActionResult result = await Controller.DeleteTag(0);
 
-        Assert.IsInstanceOfType<NotFoundObjectResult>(result);
+        TestSetup.CheckTypeAndErrorCode<NotFoundObjectResult>(result, ErrorCode.TagDoesNotExist);
     }
 
     [TestMethod]
     public async Task DeleteTagWithNegativeIdReturnsNotFound()
     {
-        IActionResult result = await Controller.DeleteTag(-1);
+        ActionResult result = await Controller.DeleteTag(-1);
 
-        Assert.IsInstanceOfType<NotFoundObjectResult>(result);
+        TestSetup.CheckTypeAndErrorCode<NotFoundObjectResult>(result, ErrorCode.TagDoesNotExist);
     }
 
     [TestMethod]
@@ -86,7 +87,7 @@ public class DeleteTagTests : TagTestsSetup
         Context.Tags.AddRange(tag1, tag2, tag3);
         await Context.SaveChangesAsync();
 
-        IActionResult result = await Controller.DeleteTag(tag2.Id);
+        ActionResult result = await Controller.DeleteTag(tag2.Id);
 
         Assert.IsInstanceOfType<OkResult>(result);
 
@@ -109,11 +110,11 @@ public class DeleteTagTests : TagTestsSetup
 
         long tagId = tag.Id;
 
-        IActionResult result1 = await Controller.DeleteTag(tagId);
+        ActionResult result1 = await Controller.DeleteTag(tagId);
         Assert.IsInstanceOfType<OkResult>(result1);
 
-        IActionResult result2 = await Controller.DeleteTag(tagId);
-        Assert.IsInstanceOfType<NotFoundObjectResult>(result2);
+        ActionResult result2 = await Controller.DeleteTag(tagId);
+        TestSetup.CheckTypeAndErrorCode<NotFoundObjectResult>(result2, ErrorCode.TagDoesNotExist);
     }
 
     [TestMethod]
@@ -124,7 +125,7 @@ public class DeleteTagTests : TagTestsSetup
         Context.Tags.AddRange(tag1, tag2);
         await Context.SaveChangesAsync();
 
-        IActionResult result = await Controller.DeleteTag(tag1.Id);
+        ActionResult result = await Controller.DeleteTag(tag1.Id);
 
         Assert.IsInstanceOfType<OkResult>(result);
 

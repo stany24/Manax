@@ -6,11 +6,11 @@ namespace ManaxClient.Models;
 
 public partial class Feature : ObservableObject
 {
-    [ObservableProperty] private FeatureType _key;
-    [ObservableProperty] private bool _value;
-    [ObservableProperty] private string _name = string.Empty;
     [ObservableProperty] private string _description = string.Empty;
-    
+    [ObservableProperty] private FeatureType _key;
+    [ObservableProperty] private string _name = string.Empty;
+    [ObservableProperty] private bool _value;
+
     public static string GetFeatureName(FeatureType featureType)
     {
         return featureType switch

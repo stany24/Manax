@@ -2,7 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
 using Jeek.Avalonia.Localization;
+using ManaxClient.Event;
+using ManaxClient.Models;
 using ManaxClient.ViewModels.Popup.ConfirmCancel;
 using ManaxClient.ViewModels.Popup.ConfirmCancel.Content;
 using ManaxLibrary;
@@ -26,7 +29,7 @@ public partial class SettingsServerPageViewModel : PageViewModel
     {
         AllImageFormats = new List<ImageFormat>(Enum.GetValues<ImageFormat>());
         AllArchiveFormats = new List<ArchiveFormat>(Enum.GetValues<ArchiveFormat>());
-        
+
         Task.Run(LoadSettings);
     }
 
@@ -34,7 +37,7 @@ public partial class SettingsServerPageViewModel : PageViewModel
     {
         try
         {
-            Optional<bool> updateTask = await ManaxApiSettingsClient.UpdateSettingsAsync(Settings);
+            Optional<bool> updateTask = await ManaxApiSettingsClient.UpdateSettingsAsync(Settings.ToDto());
             if (updateTask.Failed)
             {
                 Problem = updateTask.Error;
@@ -55,7 +58,7 @@ public partial class SettingsServerPageViewModel : PageViewModel
     {
         try
         {
-            Optional<SettingsData> settingsAsync = await ManaxApiSettingsClient.GetSettingsAsync();
+            Optional<SettingsDataDto> settingsAsync = await ManaxApiSettingsClient.GetSettingsAsync();
             if (settingsAsync.Failed)
             {
                 Problem = settingsAsync.Error;
@@ -63,7 +66,7 @@ public partial class SettingsServerPageViewModel : PageViewModel
                 return;
             }
 
-            Settings = settingsAsync.GetValue();
+            Settings = SettingsData.FromDto(settingsAsync.GetValue());
         }
         catch (Exception e)
         {
@@ -83,15 +86,17 @@ public partial class SettingsServerPageViewModel : PageViewModel
                 if (viewModel.Canceled()) return;
                 SavePointCreateDto savePoint = content.GetResult();
                 Optional<long> postLibraryResponse = await ManaxApiSavePointClient.PostSavePointAsync(savePoint);
-                if (postLibraryResponse.Failed) InfoEmitted?.Invoke(this, postLibraryResponse.Error);
+                if (postLibraryResponse.Failed)
+                    WeakReferenceMessenger.Default.Send(new NotificationMessage(postLibraryResponse.Error));
             }
             catch (Exception e)
             {
                 Logger.LogError("Error creating save point", e);
-                InfoEmitted?.Invoke(this, Localizer.Get("SettingsServerPage.ErrorCreatingSavePoint"));
+                WeakReferenceMessenger.Default.Send(
+                    new NotificationMessage(Localizer.Get("SettingsServerPage.ErrorCreatingSavePoint")));
             }
         };
-        PopupRequested?.Invoke(this, popup);
+        WeakReferenceMessenger.Default.Send(new PopupChangeMessage(popup));
     }
 
     public void CreateLibrary()
@@ -106,14 +111,16 @@ public partial class SettingsServerPageViewModel : PageViewModel
                 if (viewModel.Canceled()) return;
                 LibraryCreateDto library = content.GetResult();
                 Optional<long> postLibraryResponse = await ManaxApiLibraryClient.PostLibraryAsync(library);
-                if (postLibraryResponse.Failed) InfoEmitted?.Invoke(this, postLibraryResponse.Error);
+                if (postLibraryResponse.Failed)
+                    WeakReferenceMessenger.Default.Send(new NotificationMessage(postLibraryResponse.Error));
             }
             catch (Exception e)
             {
                 Logger.LogError("Error creating library", e);
-                InfoEmitted?.Invoke(this, Localizer.Get("SettingsServerPage.ErrorCreatingLibrary"));
+                WeakReferenceMessenger.Default.Send(
+                    new NotificationMessage(Localizer.Get("SettingsServerPage.ErrorCreatingLibrary")));
             }
         };
-        PopupRequested?.Invoke(this, popup);
+        WeakReferenceMessenger.Default.Send(new PopupChangeMessage(popup));
     }
 }

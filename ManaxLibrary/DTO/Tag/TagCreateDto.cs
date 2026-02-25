@@ -1,19 +1,14 @@
-// ReSharper disable UnusedAutoPropertyAccessor.Global
-
-using System.Drawing;
-using System.Text.Json.Serialization;
+using System.ComponentModel.DataAnnotations;
 
 namespace ManaxLibrary.DTO.Tag;
 
 public class TagCreateDto
 {
-    public string Name { get; set; } = null!;
-    public int ColorArgb { get; set; }
+    [Required] public string Name { get; init; } = null!;
+    [Required] public int ColorArgb { get; init; }
 
-    [JsonIgnore]
-    public Color Color
+    public bool IsValid()
     {
-        get => Color.FromArgb(ColorArgb);
-        set => ColorArgb = value.ToArgb();
+        return !string.IsNullOrWhiteSpace(Name);
     }
 }

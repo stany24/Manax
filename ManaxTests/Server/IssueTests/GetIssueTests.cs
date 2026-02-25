@@ -15,9 +15,9 @@ public class GetIssueTests : IssueTestsSetup
         ActionResult<IEnumerable<IssueChapterAutomaticDto>> result = await Controller.GetAllAutomaticChapterIssues();
 
         OkObjectResult? okResult = result.Result as OkObjectResult;
-        Assert.IsNull(okResult);
+        Assert.IsNotNull(okResult);
 
-        List<IssueChapterAutomaticDto>? returnedIssues = result.Value as List<IssueChapterAutomaticDto>;
+        List<IssueChapterAutomaticDto>? returnedIssues = okResult.Value as List<IssueChapterAutomaticDto>;
         Assert.IsNotNull(returnedIssues);
         Assert.HasCount(Context.AutomaticIssuesChapter.Count(), returnedIssues);
 
@@ -36,9 +36,9 @@ public class GetIssueTests : IssueTestsSetup
         ActionResult<IEnumerable<IssueSerieAutomaticDto>> result = await Controller.GetAllAutomaticSerieIssues();
 
         OkObjectResult? okResult = result.Result as OkObjectResult;
-        Assert.IsNull(okResult);
+        Assert.IsNotNull(okResult);
 
-        List<IssueSerieAutomaticDto>? returnedIssues = result.Value as List<IssueSerieAutomaticDto>;
+        List<IssueSerieAutomaticDto>? returnedIssues = okResult.Value as List<IssueSerieAutomaticDto>;
         Assert.IsNotNull(returnedIssues);
         Assert.HasCount(Context.AutomaticIssuesSerie.Count(), returnedIssues);
 
@@ -56,9 +56,9 @@ public class GetIssueTests : IssueTestsSetup
         ActionResult<IEnumerable<IssueChapterReportedDto>> result = await Controller.GetAllReportedChapterIssues();
 
         OkObjectResult? okResult = result.Result as OkObjectResult;
-        Assert.IsNull(okResult);
+        Assert.IsNotNull(okResult);
 
-        List<IssueChapterReportedDto>? returnedIssues = result.Value as List<IssueChapterReportedDto>;
+        List<IssueChapterReportedDto>? returnedIssues = okResult.Value as List<IssueChapterReportedDto>;
         Assert.IsNotNull(returnedIssues);
         Assert.HasCount(Context.ReportedIssuesChapter.Count(), returnedIssues);
 
@@ -73,33 +73,14 @@ public class GetIssueTests : IssueTestsSetup
     }
 
     [TestMethod]
-    public async Task GetAllReportedChapterIssuesTypesReturnsAllTypes()
-    {
-        ActionResult<IEnumerable<IssueChapterReportedTypeDto>> result = await Controller.GetAllReportedChapterIssuesTypes();
-        OkObjectResult? okResult = result.Result as OkObjectResult;
-        Assert.IsNull(okResult);
-
-        List<IssueChapterReportedTypeDto>? returnedTypes = result.Value as List<IssueChapterReportedTypeDto>;
-        Assert.IsNotNull(returnedTypes);
-        Assert.HasCount(Context.ReportedIssueChapterTypes.Count(), returnedTypes);
-
-        foreach (IssueChapterReportedType type in Context.ReportedIssueChapterTypes)
-        {
-            IssueChapterReportedTypeDto? returnedType = returnedTypes.FirstOrDefault(t => t.Id == type.Id);
-            Assert.IsNotNull(returnedType);
-            Assert.AreEqual(type.Name, returnedType.Name);
-        }
-    }
-
-    [TestMethod]
     public async Task GetAllReportedSerieIssuesReturnsAllIssues()
     {
         ActionResult<IEnumerable<IssueSerieReportedDto>> result = await Controller.GetAllReportedSerieIssues();
 
         OkObjectResult? okResult = result.Result as OkObjectResult;
-        Assert.IsNull(okResult);
+        Assert.IsNotNull(okResult);
 
-        List<IssueSerieReportedDto>? returnedIssues = result.Value as List<IssueSerieReportedDto>;
+        List<IssueSerieReportedDto>? returnedIssues = okResult.Value as List<IssueSerieReportedDto>;
         Assert.IsNotNull(returnedIssues);
         Assert.HasCount(Context.ReportedIssuesSerie.Count(), returnedIssues);
 
@@ -114,31 +95,14 @@ public class GetIssueTests : IssueTestsSetup
     }
 
     [TestMethod]
-    public async Task GetAllReportedSerieIssuesTypesReturnsAllTypes()
-    {
-        ActionResult<IEnumerable<IssueSerieReportedTypeDto>> result = await Controller.GetAllReportedSerieIssuesTypes();
-
-        OkObjectResult? okResult = result.Result as OkObjectResult;
-        Assert.IsNull(okResult);
-
-        List<IssueSerieReportedTypeDto>? returnedTypes = result.Value as List<IssueSerieReportedTypeDto>;
-        Assert.IsNotNull(returnedTypes);
-        Assert.HasCount(Context.ReportedIssueSerieTypes.Count(), returnedTypes);
-
-        foreach (IssueSerieReportedType type in Context.ReportedIssueSerieTypes)
-        {
-            IssueSerieReportedTypeDto? returnedType = returnedTypes.FirstOrDefault(t => t.Id == type.Id);
-            Assert.IsNotNull(returnedType);
-            Assert.AreEqual(type.Name, returnedType.Name);
-        }
-    }
-
-    [TestMethod]
     public async Task GetAllAutomaticChapterIssuesVerifyCorrectMapping()
     {
         ActionResult<IEnumerable<IssueChapterAutomaticDto>> result = await Controller.GetAllAutomaticChapterIssues();
 
-        List<IssueChapterAutomaticDto>? returnedIssues = result.Value as List<IssueChapterAutomaticDto>;
+        OkObjectResult? okResult = result.Result as OkObjectResult;
+        Assert.IsNotNull(okResult);
+
+        List<IssueChapterAutomaticDto>? returnedIssues = okResult.Value as List<IssueChapterAutomaticDto>;
         Assert.IsNotNull(returnedIssues);
 
         IssueChapterAutomatic expectedIssue = Context.AutomaticIssuesChapter.First();
@@ -155,7 +119,10 @@ public class GetIssueTests : IssueTestsSetup
     {
         ActionResult<IEnumerable<IssueSerieAutomaticDto>> result = await Controller.GetAllAutomaticSerieIssues();
 
-        List<IssueSerieAutomaticDto>? returnedIssues = result.Value as List<IssueSerieAutomaticDto>;
+        OkObjectResult? okResult = result.Result as OkObjectResult;
+        Assert.IsNotNull(okResult);
+
+        List<IssueSerieAutomaticDto>? returnedIssues = okResult.Value as List<IssueSerieAutomaticDto>;
         Assert.IsNotNull(returnedIssues);
 
         AutomaticIssueSerie expectedIssue = Context.AutomaticIssuesSerie.First();
@@ -164,25 +131,5 @@ public class GetIssueTests : IssueTestsSetup
         Assert.AreEqual(expectedIssue.SerieId, returnedIssue.SerieId);
         Assert.AreEqual(expectedIssue.Problem, returnedIssue.Problem);
         Assert.AreEqual(expectedIssue.CreatedAt, returnedIssue.CreatedAt);
-    }
-
-    [TestMethod]
-    public async Task GetAllReportedChapterIssuesTypesVerifyCorrectCount()
-    {
-        ActionResult<IEnumerable<IssueChapterReportedTypeDto>> result = await Controller.GetAllReportedChapterIssuesTypes();
-
-        List<IssueChapterReportedTypeDto>? returnedTypes = result.Value as List<IssueChapterReportedTypeDto>;
-        Assert.IsNotNull(returnedTypes);
-        Assert.HasCount(3, returnedTypes);
-    }
-
-    [TestMethod]
-    public async Task GetAllReportedSerieIssuesTypesVerifyCorrectCount()
-    {
-        ActionResult<IEnumerable<IssueSerieReportedTypeDto>> result = await Controller.GetAllReportedSerieIssuesTypes();
-
-        List<IssueSerieReportedTypeDto>? returnedTypes = result.Value as List<IssueSerieReportedTypeDto>;
-        Assert.IsNotNull(returnedTypes);
-        Assert.HasCount(3, returnedTypes);
     }
 }

@@ -1,3 +1,4 @@
+using ManaxLibrary;
 using ManaxLibrary.DTO.User;
 using ManaxServer.Attributes;
 using ManaxServer.Services.Notification;
@@ -11,7 +12,6 @@ namespace ManaxServer.Controllers;
 public class PermissionController(IPermissionService permissionService, INotificationService notificationService)
     : ControllerBase
 {
-    // POST: api/Permission/{userId}
     [HttpPost("{userId:long}")]
     [RequirePermission(Permission.WritePermissions)]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -23,18 +23,16 @@ public class PermissionController(IPermissionService permissionService, INotific
         return Ok();
     }
 
-    // GET: api/Permission/self
     [HttpGet("self")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<List<Permission>>> GetMyPermissions()
     {
         long? currentUserId = UserController.GetCurrentUserId(HttpContext);
-        if (currentUserId == null) return Unauthorized();
+        if (currentUserId == null) return Unauthorized(ErrorCode.TokenRequired);
         IEnumerable<Permission> permissions = await permissionService.GetUserPermissionsAsync((long)currentUserId);
         return Ok(permissions);
     }
 
-    // GET: api/Permission/{userId}
     [HttpGet("{userId:long}")]
     [RequirePermission(Permission.ReadPermissions)]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -55,7 +53,7 @@ public class PermissionController(IPermissionService permissionService, INotific
             Permission.ReadRanks,
             Permission.ReadTags,
             Permission.ReadFeatures,
-            Permission.ReadPeople,
+            Permission.ReadPersons,
 
             Permission.WriteIssues,
             Permission.SetMyRank,
@@ -90,7 +88,7 @@ public class PermissionController(IPermissionService permissionService, INotific
             Permission.WriteLibraries,
             Permission.WriteTags,
             Permission.WriteFeatures,
-            Permission.WritePeople,
+            Permission.WritePersons,
 
             Permission.DeleteTags,
             Permission.DeleteSeries,
@@ -98,7 +96,7 @@ public class PermissionController(IPermissionService permissionService, INotific
             Permission.DeleteLibraries,
             Permission.DeleteUsers,
             Permission.ResetPasswords,
-            Permission.DeletePeople
+            Permission.DeletePersons
         ]).ToArray();
 
         return role switch

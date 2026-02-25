@@ -3,7 +3,7 @@ using ManaxServer.Services.Feature;
 
 namespace ManaxTests.Server.Mocks;
 
-public class MockFeatureLoader:IFeatureLoader
+public class MockFeatureLoader : IFeatureLoader
 {
     public List<Feature> Load()
     {

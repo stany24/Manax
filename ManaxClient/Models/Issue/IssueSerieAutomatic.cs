@@ -1,26 +1,37 @@
 using System;
 using System.Globalization;
+using System.Text;
 using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData;
 using Jeek.Avalonia.Localization;
-using ManaxClient.Models.Sources;
+using ManaxClient.Models.Server.Data;
+using ManaxClient.ViewModels;
 using ManaxLibrary.DTO.Issue.Automatic;
 
 namespace ManaxClient.Models.Issue;
 
 public partial class IssueSerieAutomatic : ObservableObject
 {
-    [ObservableProperty] private Serie _serie = null!;
+    private static CompositeFormat? _serieInfoFormat;
     [ObservableProperty] private DateTime _createdAt;
     [ObservableProperty] private IssueSerieAutomaticType _problem;
+    [ObservableProperty] private Serie _serie = null!;
     private IDisposable? _subscription;
-
-    public static string AutomaticBadgeText => Localizer.Get("IssuesPage.Automatic");
-    public string FormattedInfo => string.Format(CultureInfo.InvariantCulture, Localizer.Get("IssuesPage.SeriesInfo"), Serie?.Title ?? "", CreatedAt);
 
     public IssueSerieAutomatic(IssueSerieAutomaticDto dto)
     {
         FromDto(dto);
+    }
+
+    public static string AutomaticBadgeText => Localizer.Get("IssuesPage.Automatic");
+
+    public string FormattedInfo
+    {
+        get
+        {
+            _serieInfoFormat ??= CompositeFormat.Parse(Localizer.Get("IssuesPage.SeriesInfo"));
+            return string.Format(CultureInfo.InvariantCulture, _serieInfoFormat, Serie.Title, CreatedAt);
+        }
     }
 
     private void FromDto(IssueSerieAutomaticDto dto)
@@ -28,7 +39,7 @@ public partial class IssueSerieAutomatic : ObservableObject
         CreatedAt = dto.CreatedAt;
         Problem = dto.Problem;
         _subscription?.Dispose();
-        _subscription = SerieSource.Series
+        _subscription = MainWindowViewModel.Instance.SerieSource.Series
             .Connect()
             .AutoRefresh()
             .Filter(o => o.Id == dto.SerieId)

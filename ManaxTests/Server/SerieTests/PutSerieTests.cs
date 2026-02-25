@@ -1,3 +1,4 @@
+using ManaxLibrary;
 using ManaxLibrary.DTO.Serie;
 using ManaxServer.Models.Serie;
 using Microsoft.AspNetCore.Mvc;
@@ -18,7 +19,7 @@ public class PutSerieTests : SerieTestsSetup
             Status = Status.Completed
         };
 
-        IActionResult result = await Controller.PutSerie(serie.Id, updateDto);
+        ActionResult result = await Controller.PutSerie(serie.Id, updateDto);
 
         Assert.IsInstanceOfType<OkResult>(result);
 
@@ -39,9 +40,9 @@ public class PutSerieTests : SerieTestsSetup
             Status = Status.Completed
         };
 
-        IActionResult result = await Controller.PutSerie(999999, updateDto);
+        ActionResult result = await Controller.PutSerie(999999, updateDto);
 
-        Assert.IsInstanceOfType<NotFoundObjectResult>(result);
+        TestSetup.CheckTypeAndErrorCode<NotFoundObjectResult>(result, ErrorCode.SerieDoesNotExist);
     }
 
     [TestMethod]
@@ -55,9 +56,9 @@ public class PutSerieTests : SerieTestsSetup
             Status = Status.Completed
         };
 
-        IActionResult result = await Controller.PutSerie(serie.Id, updateDto);
+        ActionResult result = await Controller.PutSerie(serie.Id, updateDto);
 
-        Assert.IsInstanceOfType<BadRequestObjectResult>(result);
+        TestSetup.CheckTypeAndErrorCode<BadRequestObjectResult>(result, ErrorCode.InvalidSerieData);
     }
 
     [TestMethod]
@@ -75,7 +76,7 @@ public class PutSerieTests : SerieTestsSetup
 
         await Task.Delay(10);
 
-        IActionResult result = await Controller.PutSerie(serie.Id, updateDto);
+        ActionResult result = await Controller.PutSerie(serie.Id, updateDto);
 
         Assert.IsInstanceOfType<OkResult>(result);
 

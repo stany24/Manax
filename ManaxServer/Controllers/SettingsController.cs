@@ -1,11 +1,11 @@
+using ManaxLibrary;
 using ManaxLibrary.DTO.Setting;
 using ManaxLibrary.DTO.User;
 using ManaxServer.Attributes;
-using ManaxServer.Localization;
 using ManaxServer.Models;
+using ManaxServer.Models.Chapter;
 using ManaxServer.Services.BackgroundTask;
 using ManaxServer.Services.Fix;
-using ManaxServer.Services.Renaming;
 using ManaxServer.Settings;
 using ManaxServer.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -17,67 +17,79 @@ namespace ManaxServer.Controllers;
 public class SettingsController(
     IServiceProvider serviceProvider,
     IBackgroundTaskService backgroundTaskService,
-    IFixService fixService,
-    IRenamingService renamingService) : ControllerBase
+    IFixService fixService) : ControllerBase
 {
-    private readonly object _lock = new();
+    private readonly Lock _lock = new();
 
     [HttpGet]
     [RequirePermission(Permission.ReadServerSettings)]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public SettingsData GetSettings()
+    public ActionResult<SettingsDataDto> GetSettings()
     {
-        return SettingsManager.Data;
+        return Ok(SettingsManager.DataDto);
     }
 
     [HttpPut]
     [RequirePermission(Permission.WriteServerSettings)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public IActionResult ChangeSettings(SettingsData data)
+    public ActionResult ChangeSettings(SettingsDataDto dataDto)
     {
         lock (_lock)
         {
-            SettingsData oldData = SettingsManager.Data;
-            if (!data.IsValid) return BadRequest(Localizer.SettingsUpdateNotForced());
-            SettingsManager.OverwriteSettings(data);
+            SettingsDataDto oldDataDto = SettingsManager.DataDto;
+            if (dataDto.Validate() != null) return BadRequest(ErrorCode.InvalidSettings);
+            SettingsManager.OverwriteSettings(dataDto);
             IServiceScope scope = serviceProvider.CreateScope();
-            Task.Run(() => CheckModifications(data, oldData, scope));
+            Task.Run(() => CheckModifications(dataDto, oldDataDto, scope));
             return Ok();
         }
     }
 
-    private void CheckModifications(SettingsData newData, SettingsData oldData, IServiceScope scope)
+    private void CheckModifications(SettingsDataDto newDataDto, SettingsDataDto oldDataDto, IServiceScope scope)
     {
         ManaxContext manaxContext = scope.ServiceProvider.GetRequiredService<ManaxContext>();
         lock (_lock)
         {
-            HandlePosterModifications(newData, oldData, manaxContext);
-            HandleChapterModifications(newData, oldData, manaxContext);
+            HandlePosterModifications(newDataDto, oldDataDto, manaxContext);
+            HandleBannerModifications(newDataDto, oldDataDto, manaxContext);
+            HandleChapterModifications(newDataDto, oldDataDto, manaxContext);
+            HandleSerieModifications(newDataDto, oldDataDto, manaxContext);
         }
 
         scope.Dispose();
     }
 
-    private void HandleChapterModifications(SettingsData newData, SettingsData oldData, ManaxContext manaxContext)
+    private void HandleSerieModifications(SettingsDataDto newDataDto, SettingsDataDto oldDataDto,
+        ManaxContext manaxContext)
     {
-        if (newData.ImageFormat != oldData.ImageFormat ||
-            newData.ImageQuality != oldData.ImageQuality ||
-            newData.MaxChapterWidth != oldData.MaxChapterWidth ||
-            newData.MinChapterWidth != oldData.MinChapterWidth)
-            foreach (long chapterId in manaxContext.Chapters.Select(chapter => chapter.Id))
-                _ = backgroundTaskService.AddTaskAsync(new FixChapterBackGroundTask(fixService, chapterId));
     }
 
-    private void HandlePosterModifications(SettingsData newData, SettingsData oldData, ManaxContext context)
+    private void HandleBannerModifications(SettingsDataDto newDataDto, SettingsDataDto oldDataDto,
+        ManaxContext manaxContext)
     {
-        if (newData.PosterName != oldData.PosterName || newData.PosterFormat != oldData.PosterFormat)
-            renamingService.RenamePosters(oldData.PosterName, newData.PosterName, oldData.PosterFormat,
-                newData.PosterFormat);
+    }
 
-        if (newData.MaxPosterWidth != oldData.MaxPosterWidth || newData.MinPosterWidth != oldData.MinPosterWidth ||
-            newData.PosterQuality != oldData.PosterQuality)
+    private void HandleChapterModifications(SettingsDataDto newDataDto, SettingsDataDto oldDataDto,
+        ManaxContext manaxContext)
+    {
+        if (newDataDto.ImageFormat != oldDataDto.ImageFormat ||
+            newDataDto.ImageQuality != oldDataDto.ImageQuality ||
+            newDataDto.MaxChapterWidth != oldDataDto.MaxChapterWidth ||
+            newDataDto.MinChapterWidth != oldDataDto.MinChapterWidth)
+            foreach (long chapterId in manaxContext.Chapters.Select(chapter => chapter.Id))
+            {
+                Chapter? chapter = manaxContext.Chapters.Find(chapterId);
+                if (chapter == null) continue;
+            }
+    }
+
+    private void HandlePosterModifications(SettingsDataDto newDataDto, SettingsDataDto oldDataDto, ManaxContext context)
+    {
+        if (newDataDto.MaxPosterWidth != oldDataDto.MaxPosterWidth ||
+            newDataDto.MinPosterWidth != oldDataDto.MinPosterWidth ||
+            newDataDto.PosterQuality != oldDataDto.PosterQuality)
             foreach (long serieId in context.Series.Select(serie => serie.Id))
-                _ = backgroundTaskService.AddTaskAsync(new FixPosterBackGroundTask(fixService, serieId));
+                backgroundTaskService.AddTask(new FixPosterBackGroundTask(fixService, serieId));
     }
 }

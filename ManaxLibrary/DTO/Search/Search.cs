@@ -1,21 +1,19 @@
-// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
-// ReSharper disable PropertyCanBeMadeInitOnly.Global
-// ReSharper disable UnusedAutoPropertyAccessor.Global
-
+using System.ComponentModel.DataAnnotations;
 using ManaxLibrary.DTO.Serie;
 
 namespace ManaxLibrary.DTO.Search;
 
 public class Search
 {
-    public List<long> IncludedLibraries { get; set; } = [];
-    public List<long> ExcludedLibraries { get; set; } = [];
+    [Required] public List<long> IncludedLibraries { get; init; } = [];
+    [Required] public List<long> ExcludedLibraries { get; init; } = [];
 
-    public List<Status> IncludedStatuses { get; set; } =
+    [Required]
+    public List<Status> IncludedStatuses { get; init; } =
         [Status.Cancelled, Status.Ongoing, Status.Completed, Status.Hiatus];
 
-    public List<Status> ExcludedStatuses { get; set; } = [];
-    public string RegexSearch { get; set; } = @"[\s\S]*";
-    public int MinChapters { get; set; }
-    public int MaxChapters { get; set; } = int.MaxValue;
+    [Required] public List<Status> ExcludedStatuses { get; init; } = [];
+    [Required] public string RegexSearch { get; init; } = @"[\s\S]*";
+    [Required] public int MinChapters { get; init; } = 0;
+    [Required] public int MaxChapters { get; init; } = int.MaxValue;
 }

@@ -5,55 +5,36 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:content="clr-namespace:ManaxClient.ViewModels.Popup.ConfirmCancel.Content"
     xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
+    xmlns:icon="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="200"
     x:Class="ManaxClient.Views.Popup.ConfirmCancel.Content.CreateChapterIssueView"
     x:DataType="content:CreateChapterIssueViewModel">
-    <Grid RowDefinitions="Auto,Auto,Auto" RowSpacing="16" Margin="16">
-        <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="12" Margin="0,0,0,8">
-            <TextBlock Text="❗" FontSize="24" VerticalAlignment="Center" />
-            <StackPanel Spacing="4">
-                <TextBlock
-                    Text="{localization:Localize CreateChapterIssuePopup.Title}"
-                    FontSize="18"
-                    FontWeight="Bold"/>
-                <TextBlock
-                    Text="{localization:Localize CreateChapterIssuePopup.Select}"
-                    FontSize="12"/>
+    <StackPanel Spacing="16">
+        <StackPanel Classes="popup-title">
+            <icon:MaterialIcon Classes="icon"
+                               Kind="AlertCircleOutline" />
+            <StackPanel>
+                <TextBlock Text="{localization:Localize CreateChapterIssuePopup.Title}" />
+                <TextBlock Text="{localization:Localize CreateChapterIssuePopup.Description}" />
             </StackPanel>
         </StackPanel>
 
-        <StackPanel Grid.Row="1" Spacing="8">
-            <TextBlock
-                Text="{localization:Localize CreateChapterIssuePopup.ProblemType}"
-                FontWeight="Medium"/>
-            <ComboBox
-                ItemsSource="{Binding Issues}"
-                SelectedItem="{Binding SelectedIssue, Mode=TwoWay}"
-                Padding="12"
-                CornerRadius="8"
-                BorderThickness="1"
-                FontSize="14"
-                HorizontalAlignment="Stretch">
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding Name}" Padding="4" />
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
-            </ComboBox>
-        </StackPanel>
-
-        <Border
-            Grid.Row="2"
-            BorderThickness="1"
-            CornerRadius="8"
-            Padding="12">
-            <StackPanel Orientation="Horizontal" Spacing="8">
-                <TextBlock Text="💡" FontSize="14" VerticalAlignment="Top" />
-                <TextBlock
-                    Text="{localization:Localize CreateChapterIssuePopup.Info}"
-                    TextWrapping="Wrap"
-                    FontSize="12"/>
+        <Border Classes="input">
+            <StackPanel>
+                <TextBlock Text="{localization:Localize CreateChapterIssuePopup.Type}" />
+                <ComboBox ItemsSource="{Binding Issues}"
+                          SelectedItem="{Binding SelectedIssue, Mode=TwoWay}"
+                          DisplayMemberBinding="{Binding Name}" />
             </StackPanel>
         </Border>
-    </Grid>
+
+
+        <Border>
+            <StackPanel Orientation="Horizontal">
+                <icon:MaterialIcon Classes="icon"
+                                   Kind="Lightbulb" />
+                <TextBlock Text="{localization:Localize CreateChapterIssuePopup.Tip}" />
+            </StackPanel>
+        </Border>
+    </StackPanel>
 </UserControl>

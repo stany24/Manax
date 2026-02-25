@@ -3,7 +3,9 @@ using ManaxServer.Services.Feature;
 
 namespace ManaxTests.Server.Mocks;
 
-public class MockFeatureSaver:IFeatureSaver
+public class MockFeatureSaver : IFeatureSaver
 {
-    public void Save(List<Feature> features) { }
+    public void Save(List<Feature> features)
+    {
+    }
 }

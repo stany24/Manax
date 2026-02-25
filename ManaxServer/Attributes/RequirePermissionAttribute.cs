@@ -1,3 +1,4 @@
+using ManaxLibrary;
 using ManaxLibrary.DTO.User;
 using ManaxServer.Services.Token;
 using Microsoft.AspNetCore.Mvc;
@@ -14,7 +15,7 @@ public class RequirePermissionAttribute(params Permission[] permissions) : Attri
         string? token = context.HttpContext.Items["BearerToken"] as string;
         if (string.IsNullOrEmpty(token))
         {
-            context.Result = new UnauthorizedResult();
+            context.Result = new UnauthorizedObjectResult(nameof(ErrorCode.TokenRequired));
             return;
         }
 
@@ -23,6 +24,6 @@ public class RequirePermissionAttribute(params Permission[] permissions) : Attri
         bool hasAllPermissions = permissions.All(permission =>
             tokenService.TokenHasPermission(token, permission));
 
-        if (!hasAllPermissions) context.Result = new ForbidResult();
+        if (!hasAllPermissions) context.Result = new ForbidResult(nameof(ErrorCode.TokenDoesNotHavePermission));
     }
 }

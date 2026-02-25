@@ -5,122 +5,85 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:page="clr-namespace:ManaxClient.ViewModels.Pages.Rank"
     xmlns:viewModels="clr-namespace:ManaxClient.ViewModels"
-    xmlns:models="clr-namespace:ManaxClient.Models"
     xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
     xmlns:localization1="clr-namespace:ManaxClient.Localization"
+    xmlns:data="clr-namespace:ManaxClient.Models.Server.Data"
+    xmlns:controls="clr-namespace:ManaxClient.Controls"
+    xmlns:icon="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Pages.Rank.RankPageView"
-    x:DataType="page:RankPageViewModel">
+    x:DataType="page:RankPageViewModel"
+    Classes="page">
 
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel Orientation="Vertical" Spacing="24">
 
-            <Grid ColumnDefinitions="*,Auto">
-                <StackPanel Grid.Column="0" Orientation="Vertical">
-                    <TextBlock Classes="title" Text="{localization:Localize RankPage.Title}" />
-                    <TextBlock Text="{localization1:LocalizeFormat RankPage.RanksCount,
-                                   Param1={Binding $parent[UserControl].((page:RankPageViewModel)DataContext).Ranks.Count}}"/>
-                </StackPanel>
+            <Border Classes="card">
+                <Grid Classes="title"
+                      ColumnDefinitions="Auto,Auto,*,Auto">
 
-                <Button Grid.Column="1"
-                        IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).CanWriteRanks}"
-                        Classes="primary"
-                        Command="{Binding CreateRank}"
-                        VerticalAlignment="Center">
-                    <StackPanel Orientation="Horizontal" Spacing="8">
-                        <TextBlock Text="➕" />
-                        <TextBlock Text="{localization:Localize RankPage.NewRank}" />
-                    </StackPanel>
-                </Button>
-            </Grid>
+                    <icon:MaterialIcon Grid.Column="0"
+                                       Classes="icon"
+                                       Kind="ChevronTripleUp" />
+                    <TextBlock Grid.Column="1"
+                               Text="{localization:Localize RankPage.Title}" />
 
-            <Border Classes="card" IsVisible="{Binding !Ranks.Count}">
-                <StackPanel Orientation="Vertical"
-                            Spacing="16"
-                            HorizontalAlignment="Center">
-                    <TextBlock Text="🏆" FontSize="48" HorizontalAlignment="Center" />
-                    <TextBlock Text="{localization:Localize RankPage.NoRanks.Title}"
-                               FontSize="18"
-                               FontWeight="Medium"
-                               HorizontalAlignment="Center" />
-                    <TextBlock Text="{localization:Localize RankPage.NoRanks.Description}"
-                               TextAlignment="Center"/>
-                    <Button Classes="primary"
-                            IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).CanWriteRanks}"
-                            Command="{Binding CreateRank}"
-                            HorizontalAlignment="Center">
-                        <StackPanel Orientation="Horizontal" Spacing="8">
-                            <TextBlock Text="➕" />
-                            <TextBlock Text="{localization:Localize RankPage.CreateFirstRank}" />
-                        </StackPanel>
-                    </Button>
-                </StackPanel>
+                    <controls:IconButton Grid.Column="3"
+                                         Classes="icon-button light"
+                                         IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWriteRanks}"
+                                         Command="{Binding CreateRank}"
+                                         VerticalAlignment="Center"
+                                         Text="{localization:Localize RankPage.NewRank}"
+                                         Icon="Add" />
+                </Grid>
             </Border>
 
-            <Border Classes="card" IsVisible="{Binding Ranks.Count}">
-                <StackPanel Spacing="16">
-                    <TextBlock Classes="subtitle" Text="{localization:Localize RankPage.RanksList.Title}" />
-
+            <Border Classes="card">
+                <StackPanel>
                     <ItemsControl ItemsSource="{Binding Ranks}">
                         <ItemsControl.ItemTemplate>
-                            <DataTemplate x:DataType="models:Rank">
-                                <Border BorderThickness="1"
-                                        CornerRadius="8"
-                                        Padding="16"
-                                        Margin="0,4">
-                                    <Grid ColumnDefinitions="Auto,*,Auto,Auto,Auto" ColumnSpacing="16">
+                            <DataTemplate x:DataType="data:Rank">
+                                <Border Classes="item-card">
+                                    <Grid ColumnDefinitions="Auto,*,Auto,Auto" ColumnSpacing="16">
 
-                                        <Border Grid.Column="0"
-                                                CornerRadius="20"
-                                                Width="40"
-                                                Height="40">
-                                            <TextBlock Text="🏆"
-                                                       FontSize="16"
-                                                       HorizontalAlignment="Center"
-                                                       VerticalAlignment="Center" />
-                                        </Border>
+                                        <icon:MaterialIcon Grid.Column="0"
+                                                           Classes="icon"
+                                                           Kind="ChevronTripleUp" />
 
                                         <StackPanel Grid.Column="1" Orientation="Vertical" VerticalAlignment="Center">
                                             <TextBlock Text="{Binding Name}"
                                                        FontWeight="Bold"
                                                        FontSize="16" />
-                                            <TextBlock Text="{localization1:LocalizeFormat RankPage.Level,
+                                            <TextBlock
+                                                Text="{localization1:LocalizeFormat RankPage.Level,
                                                            Param1={Binding Value}}"
-                                                       FontSize="12" />
+                                                FontSize="12" />
                                         </StackPanel>
 
-                                        <Border Grid.Column="2"
-                                                CornerRadius="12"
-                                                Padding="8,4"
-                                                VerticalAlignment="Center">
-                                            <TextBlock Text="{Binding Value}"
-                                                       FontSize="12"
-                                                       FontWeight="Bold" />
-                                        </Border>
 
-                                        <Button Grid.Column="3"
-                                                IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).CanWriteRanks}"
-                                                Classes="secondary"
-                                                Command="{Binding $parent[UserControl].((page:RankPageViewModel)DataContext).UpdateRank}"
-                                                CommandParameter="{Binding .}"
-                                                Padding="8"
-                                                VerticalAlignment="Center">
-                                            <TextBlock Text="✏️" />
-                                        </Button>
+                                        <controls:IconButton Grid.Column="2"
+                                                             Classes="icon-button dark"
+                                                             IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWriteRanks}"
+                                                             Command="{Binding $parent[UserControl].((page:RankPageViewModel)DataContext).UpdateRank}"
+                                                             CommandParameter="{Binding .}"
+                                                             Icon="PencilOutline" />
 
-                                        <Button Grid.Column="4"
-                                                IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).CanDeleteRanks}"
-                                                Classes="danger"
-                                                Command="{Binding $parent[UserControl].((page:RankPageViewModel)DataContext).DeleteRank}"
-                                                CommandParameter="{Binding .}"
-                                                Padding="8"
-                                                VerticalAlignment="Center">
-                                            <TextBlock Text="🗑️" />
-                                        </Button>
+                                        <controls:IconButton Grid.Column="3"
+                                                             Classes="icon-button dark"
+                                                             IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanDeleteRanks}"
+                                                             Command="{Binding $parent[UserControl].((page:RankPageViewModel)DataContext).DeleteRank}"
+                                                             CommandParameter="{Binding .}"
+                                                             Icon="DeleteOutline" />
                                     </Grid>
                                 </Border>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Vertical"
+                                            Spacing="8" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
                     </ItemsControl>
                 </StackPanel>
             </Border>

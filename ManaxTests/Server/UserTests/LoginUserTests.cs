@@ -1,4 +1,5 @@
 using System.Net;
+using ManaxLibrary;
 using ManaxLibrary.DTO.User;
 using ManaxServer.Models.User;
 using Microsoft.AspNetCore.Mvc;
@@ -24,9 +25,8 @@ public class LoginUserTests : UserTestsSetup
         ActionResult<UserLoginResultDto> result = await Controller.Login(loginDto);
 
         OkObjectResult? okResult = result.Result as OkObjectResult;
-        Assert.IsNull(okResult);
-
-        UserLoginResultDto? loginResult = result.Value;
+        Assert.IsNotNull(okResult);
+        UserLoginResultDto? loginResult = okResult.Value as UserLoginResultDto;
         Assert.IsNotNull(loginResult);
         Assert.AreEqual($"{user.Id}-jwt-token", loginResult.Token);
         Assert.IsNotNull(loginResult.User);
@@ -46,7 +46,7 @@ public class LoginUserTests : UserTestsSetup
 
         ActionResult<UserLoginResultDto> result = await Controller.Login(loginDto);
 
-        Assert.IsInstanceOfType<UnauthorizedObjectResult>(result.Result);
+        CheckTypeAndErrorCode<UnauthorizedObjectResult>(result.Result, ErrorCode.InvalidPassword);
 
         LoginAttempt? loginAttempt = Context.LoginAttempts.FirstOrDefault(la => la.Username == "testuser");
         Assert.IsNotNull(loginAttempt);
@@ -65,7 +65,7 @@ public class LoginUserTests : UserTestsSetup
 
         ActionResult<UserLoginResultDto> result = await Controller.Login(loginDto);
 
-        Assert.IsInstanceOfType<UnauthorizedObjectResult>(result.Result);
+        CheckTypeAndErrorCode<UnauthorizedObjectResult>(result.Result, ErrorCode.InvalidPassword);
 
         LoginAttempt? loginAttempt = Context.LoginAttempts.FirstOrDefault(la => la.Username == "nonexistent");
         Assert.IsNotNull(loginAttempt);
@@ -90,7 +90,9 @@ public class LoginUserTests : UserTestsSetup
 
         ActionResult<UserLoginResultDto> result = await Controller.Login(loginDto);
 
-        UserLoginResultDto? loginResult = result.Value;
+        OkObjectResult? okResult = result.Result as OkObjectResult;
+        Assert.IsNotNull(okResult);
+        UserLoginResultDto? loginResult = okResult.Value as UserLoginResultDto;
         Assert.IsNotNull(loginResult);
 
         User? updatedUser = await Context.Users.FindAsync(user.Id);
@@ -113,7 +115,9 @@ public class LoginUserTests : UserTestsSetup
 
         ActionResult<UserLoginResultDto> result = await Controller.Login(loginDto);
 
-        UserLoginResultDto? loginResult = result.Value;
+        OkObjectResult? okResult = result.Result as OkObjectResult;
+        Assert.IsNotNull(okResult);
+        UserLoginResultDto? loginResult = okResult.Value as UserLoginResultDto;
         Assert.IsNotNull(loginResult);
 
         LoginAttempt? loginAttempt = Context.LoginAttempts.FirstOrDefault(la => la.Username == user.Username);
@@ -136,7 +140,9 @@ public class LoginUserTests : UserTestsSetup
 
         ActionResult<UserLoginResultDto> result = await Controller.Login(loginDto);
 
-        UserLoginResultDto? loginResult = result.Value;
+        OkObjectResult? okResult = result.Result as OkObjectResult;
+        Assert.IsNotNull(okResult);
+        UserLoginResultDto? loginResult = okResult.Value as UserLoginResultDto;
         Assert.IsNotNull(loginResult);
 
         User? createdUser = Context.Users.FirstOrDefault(u => u.Username == "testuser");
@@ -162,7 +168,9 @@ public class LoginUserTests : UserTestsSetup
 
         ActionResult<UserLoginResultDto> result = await Controller.Login(loginDto);
 
-        UserLoginResultDto? loginResult = result.Value;
+        OkObjectResult? okResult = result.Result as OkObjectResult;
+        Assert.IsNotNull(okResult);
+        UserLoginResultDto? loginResult = okResult.Value as UserLoginResultDto;
         Assert.IsNotNull(loginResult);
 
         LoginAttempt? loginAttempt = Context.LoginAttempts.FirstOrDefault(la => la.Username == user.Username);

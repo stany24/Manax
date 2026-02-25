@@ -1,3 +1,4 @@
+using ManaxLibrary;
 using ManaxLibrary.DTO.User;
 using ManaxServer.Models.User;
 using Microsoft.AspNetCore.Mvc;
@@ -13,9 +14,9 @@ public class GetUserTests : UserTestsSetup
         ActionResult<IEnumerable<long>> result = await Controller.GetUsers();
 
         OkObjectResult? okResult = result.Result as OkObjectResult;
-        Assert.IsNull(okResult);
+        Assert.IsNotNull(okResult);
 
-        List<long>? returnedIds = result.Value as List<long>;
+        List<long>? returnedIds = okResult.Value as List<long>;
         Assert.IsNotNull(returnedIds);
         Assert.HasCount(Context.Users.Count(), returnedIds);
         foreach (User user in Context.Users) Assert.Contains(user.Id, returnedIds);
@@ -42,7 +43,7 @@ public class GetUserTests : UserTestsSetup
     {
         ActionResult<UserDto> result = await Controller.GetUser(999999);
 
-        Assert.IsInstanceOfType<NotFoundObjectResult>(result.Result);
+        CheckTypeAndErrorCode<NotFoundObjectResult>(result.Result, ErrorCode.UserDoesNotExist);
     }
 
     [TestMethod]

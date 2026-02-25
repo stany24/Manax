@@ -9,9 +9,9 @@ namespace ManaxTests.Server.TagTests;
 
 public abstract class TagTestsSetup
 {
-    protected ManaxContext Context = null!;
-    protected TagController Controller = null!;
-    protected MockNotificationService MockNotificationService = null!;
+    protected ManaxContext Context { get; private set; } = null!;
+    protected TagController Controller { get; private set; } = null!;
+    protected MockNotificationService MockNotificationService { get; private set; } = null!;
 
     [TestInitialize]
     public void Setup()

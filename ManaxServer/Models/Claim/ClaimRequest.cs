@@ -1,7 +1,4 @@
 // ReSharper disable PropertyCanBeMadeInitOnly.Global
-// ReSharper disable PropertyCanBeMadeInitOnly.Global
-// ReSharper disable UnusedAutoPropertyAccessor.Global
-// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
 
 namespace ManaxServer.Models.Claim;
 

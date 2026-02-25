@@ -8,12 +8,12 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ManaxTests.Server.IssueTests;
 
-public abstract class IssueTestsSetup
+public abstract class IssueTestsSetup : TestSetup
 {
-    private MockNotificationService _mockNotificationService = null!;
     private MockFeatureService _mockFeatureService = null!;
-    protected ManaxContext Context = null!;
-    protected IssueController Controller = null!;
+    private MockNotificationService _mockNotificationService = null!;
+    protected ManaxContext Context { get; private set; } = null!;
+    protected IssueController Controller { get; private set; } = null!;
 
     [TestInitialize]
     public void Setup()
@@ -22,10 +22,10 @@ public abstract class IssueTestsSetup
 
         _mockNotificationService = new MockNotificationService();
         _mockFeatureService = new MockFeatureService();
-        _mockFeatureService.SetFeatureEnabled(FeatureType.AutomaticIssues,true);
-        _mockFeatureService.SetFeatureEnabled(FeatureType.ReportedIssues,true);
+        _mockFeatureService.SetFeatureEnabled(FeatureType.AutomaticIssues, true);
+        _mockFeatureService.SetFeatureEnabled(FeatureType.ReportedIssues, true);
 
-        Controller = new IssueController(Context, _mockNotificationService, _mockFeatureService);
+        Controller = new IssueController(Context, _mockNotificationService);
 
         ClaimsPrincipal user = new(new ClaimsIdentity([
             new Claim(ClaimTypes.NameIdentifier, "1"),

@@ -16,7 +16,7 @@ public class PostUserTests : UserTestsSetup
             Role = UserRole.User
         };
 
-        IActionResult result = await Controller.PostUser(createDto);
+        ActionResult result = await Controller.PostUser(createDto);
 
         OkResult? okResult = result as OkResult;
         Assert.IsNotNull(okResult);
@@ -39,7 +39,7 @@ public class PostUserTests : UserTestsSetup
         };
 
         DateTime beforeCreation = DateTime.UtcNow;
-        IActionResult result = await Controller.PostUser(createDto);
+        ActionResult result = await Controller.PostUser(createDto);
         DateTime afterCreation = DateTime.UtcNow;
 
         OkResult? okResult = result as OkResult;
@@ -63,7 +63,7 @@ public class PostUserTests : UserTestsSetup
             Role = UserRole.User
         };
 
-        IActionResult result = await Controller.PostUser(createDto);
+        ActionResult result = await Controller.PostUser(createDto);
 
         OkResult? okResult = result as OkResult;
         Assert.IsNotNull(okResult);
@@ -82,7 +82,7 @@ public class PostUserTests : UserTestsSetup
             Role = UserRole.User
         };
 
-        IActionResult result = await Controller.PostUser(createDto);
+        ActionResult result = await Controller.PostUser(createDto);
 
         OkResult? okResult = result as OkResult;
         Assert.IsNotNull(okResult);

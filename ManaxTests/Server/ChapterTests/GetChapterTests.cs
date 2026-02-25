@@ -1,3 +1,4 @@
+using ManaxLibrary;
 using ManaxLibrary.DTO.Chapter;
 using ManaxServer.Models.Chapter;
 using Microsoft.AspNetCore.Mvc;
@@ -28,13 +29,11 @@ public class GetChapterTests : ChapterTestsSetup
         ActionResult<ChapterDto> result = await Controller.GetChapter(chapter.Id);
 
         OkObjectResult? okResult = result.Result as OkObjectResult;
-        Assert.IsNull(okResult);
+        Assert.IsNotNull(okResult);
 
-        ChapterDto? returnedChapter = result.Value;
+        ChapterDto? returnedChapter = okResult.Value as ChapterDto;
         Assert.IsNotNull(returnedChapter);
-        Assert.AreEqual(chapter.Id, returnedChapter.Id);
-        Assert.AreEqual(chapter.SerieId, returnedChapter.SerieId);
-        Assert.AreEqual(chapter.FileName, returnedChapter.FileName);
+        Assert.IsTrue(chapter.DtoEquals(returnedChapter));
     }
 
     [TestMethod]
@@ -42,41 +41,41 @@ public class GetChapterTests : ChapterTestsSetup
     {
         ActionResult<ChapterDto> result = await Controller.GetChapter(999999);
 
-        Assert.IsInstanceOfType<NotFoundObjectResult>(result.Result);
+        CheckTypeAndErrorCode<NotFoundObjectResult>(result.Result, ErrorCode.ChapterDoesNotExist);
     }
 
     [TestMethod]
     public async Task GetChapterPageWithInvalidIdReturnsNotFound()
     {
-        IActionResult result = await Controller.GetChapterPage(999999, 0);
+        ActionResult result = await Controller.GetChapterPage(999999, 0);
 
-        Assert.IsInstanceOfType<NotFoundObjectResult>(result);
+        CheckTypeAndErrorCode<NotFoundObjectResult>(result, ErrorCode.ChapterDoesNotExist);
     }
 
     [TestMethod]
     public async Task GetChapterPagesWithInvalidIdReturnsNotFound()
     {
-        IActionResult result = await Controller.GetChapterPages(999999);
+        ActionResult result = await Controller.GetChapterPages(999999);
 
-        Assert.IsInstanceOfType<NotFoundObjectResult>(result);
+        CheckTypeAndErrorCode<NotFoundObjectResult>(result, ErrorCode.ChapterDoesNotExist);
     }
 
     [TestMethod]
     public async Task GetChapterPageWithValidIdAndInvalidPageNumberReturnsNotFound()
     {
         Chapter chapter = Context.Chapters.First();
-        IActionResult result = await Controller.GetChapterPage(chapter.Id, 999);
+        ActionResult result = await Controller.GetChapterPage(chapter.Id, 999);
 
-        Assert.IsInstanceOfType<NotFoundObjectResult>(result);
+        CheckTypeAndErrorCode<BadRequestObjectResult>(result, ErrorCode.PageDoesNotExist);
     }
 
     [TestMethod]
     public async Task GetChapterPageWithNegativePageNumberReturnsNotFound()
     {
         Chapter chapter = Context.Chapters.First();
-        IActionResult result = await Controller.GetChapterPage(chapter.Id, -1);
+        ActionResult result = await Controller.GetChapterPage(chapter.Id, -1);
 
-        Assert.IsInstanceOfType<NotFoundObjectResult>(result);
+        CheckTypeAndErrorCode<BadRequestObjectResult>(result, ErrorCode.PageDoesNotExist);
     }
 
     [TestMethod]
@@ -85,24 +84,21 @@ public class GetChapterTests : ChapterTestsSetup
         Chapter chapter = Context.Chapters.First();
         ActionResult<ChapterDto> result = await Controller.GetChapter(chapter.Id);
 
-        ChapterDto? returnedChapter = result.Value;
+        OkObjectResult? okResult = result.Result as OkObjectResult;
+        Assert.IsNotNull(okResult);
+
+        ChapterDto? returnedChapter = okResult.Value as ChapterDto;
         Assert.IsNotNull(returnedChapter);
-        Assert.AreEqual(chapter.Id, returnedChapter.Id);
-        Assert.AreEqual(chapter.SerieId, returnedChapter.SerieId);
-        Assert.AreEqual(chapter.FileName, returnedChapter.FileName);
-        Assert.AreEqual(chapter.Number, returnedChapter.Number);
-        Assert.AreEqual(chapter.PageNumber, returnedChapter.PageNumber);
-        Assert.AreEqual(chapter.Creation, returnedChapter.Creation);
-        Assert.AreEqual(chapter.LastModification, returnedChapter.LastModification);
+        Assert.IsTrue(chapter.DtoEquals(returnedChapter));
     }
 
     [TestMethod]
     public async Task GetChapterPageWithSubZeroNumberReturnsNotFound()
     {
         Chapter chapter = Context.Chapters.First();
-        IActionResult result = await Controller.GetChapterPage(chapter.Id, -1);
+        ActionResult result = await Controller.GetChapterPage(chapter.Id, -1);
 
-        Assert.IsInstanceOfType<NotFoundObjectResult>(result);
+        CheckTypeAndErrorCode<BadRequestObjectResult>(result, ErrorCode.PageDoesNotExist);
     }
 
     [TestMethod]

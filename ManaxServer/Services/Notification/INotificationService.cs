@@ -19,7 +19,6 @@ public interface INotificationService
     void NotifyUserUpdatedAsync(UserDto user);
     void NotifyUserDeletedAsync(long userId);
 
-
     void NotifySerieCreatedAsync(SerieDto serie);
     void NotifySerieUpdatedAsync(SerieDto serie);
     void NotifySerieDeletedAsync(long serieId);
@@ -31,8 +30,9 @@ public interface INotificationService
     void NotifyLibraryDeletedAsync(long libraryId);
 
     void NotifyChapterAddedAsync(ChapterDto chapter);
-    void NotifyChapterModifiedAsync(ChapterDto chapter);
+    void NotifyChapterUpdatedAsync(ChapterDto chapter);
     void NotifyChapterRemovedAsync(long chapterId);
+    void NotifyChapterUploadFailedAsync(long userId, string serieTitle, uint number);
 
     void NotifyRankCreatedAsync(RankDto rank);
     void NotifyRankUpdatedAsync(RankDto rank);
@@ -50,13 +50,13 @@ public interface INotificationService
     void NotifyTagCreatedAsync(TagDto tag);
     void NotifyTagUpdatedAsync(TagDto tag);
     void NotifyTagDeletedAsync(long tagId);
-    
+
     void NotifyFeatureChanged(ManaxLibrary.DTO.Feature.Feature feature);
-    
+
     void NotifyPersonCreatedAsync(PersonDto person);
     void NotifyPersonUpdatedAsync(PersonDto person);
     void NotifyPersonDeletedAsync(long personId);
-    
+
     void NotifyRoleCreatedAsync(RoleDto role);
     void NotifyRoleUpdatedAsync(RoleDto role);
     void NotifyRoleDeletedAsync(long roleId);

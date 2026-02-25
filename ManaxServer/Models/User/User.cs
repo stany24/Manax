@@ -1,6 +1,4 @@
 // ReSharper disable PropertyCanBeMadeInitOnly.Global
-// ReSharper disable PropertyCanBeMadeInitOnly.Global
-// ReSharper disable UnusedAutoPropertyAccessor.Global
 
 using System.ComponentModel.DataAnnotations;
 using ManaxLibrary.DTO.User;
@@ -15,12 +13,10 @@ public class User
     [MaxLength(50)] public string Username { get; set; } = string.Empty;
     [MaxLength(128)] public string PasswordHash { get; set; } = string.Empty;
     public UserRole Role { get; set; }
-
     public DateTime Creation { get; set; }
     public DateTime LastLogin { get; set; }
-
     public ICollection<UserPermission> UserPermissions { get; set; } = new List<UserPermission>();
-    
+
     public static User Create(UserCreateDto dto)
     {
         return new User
@@ -29,7 +25,7 @@ public class User
             Role = dto.Role
         };
     }
-    
+
     public UserDto ToDto()
     {
         return new UserDto
@@ -38,7 +34,7 @@ public class User
             Username = Username,
             Role = Role,
             Creation = Creation,
-            LastLogin = LastLogin,
+            LastLogin = LastLogin
         };
     }
 }

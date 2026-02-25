@@ -24,7 +24,6 @@ public partial class RoleEditViewModel : ConfirmCancelContentViewModel
     {
         return new RoleUpdateDto
         {
-            Id = _originalRole.Id,
             Name = Name.Trim()
         };
     }

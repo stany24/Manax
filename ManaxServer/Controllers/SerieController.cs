@@ -1,18 +1,16 @@
-using System.Globalization;
 using System.Text.RegularExpressions;
+using ManaxLibrary;
 using ManaxLibrary.DTO.Read;
 using ManaxLibrary.DTO.Search;
 using ManaxLibrary.DTO.Serie;
 using ManaxLibrary.DTO.User;
 using ManaxServer.Attributes;
-using ManaxServer.Localization;
 using ManaxServer.Models;
 using ManaxServer.Models.SavePoint;
 using ManaxServer.Models.Serie;
 using ManaxServer.Services.BackgroundTask;
 using ManaxServer.Services.Fix;
 using ManaxServer.Services.Notification;
-using ManaxServer.Settings;
 using ManaxServer.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -28,7 +26,6 @@ public class SerieController(
     IBackgroundTaskService backgroundTaskService)
     : ControllerBase
 {
-    // GET: api/Serie
     [HttpGet("/api/series")]
     [RequirePermission(Permission.ReadSeries)]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -37,7 +34,6 @@ public class SerieController(
         return await context.Series.Select(serie => serie.Id).ToListAsync();
     }
 
-    // GET: api/serie/{id}
     [HttpGet("{id:long}")]
     [RequirePermission(Permission.ReadSeries)]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -49,12 +45,11 @@ public class SerieController(
             .Include(s => s.Persons)
             .FirstOrDefaultAsync(l => l.Id == id);
 
-        if (serie == null) return NotFound(Localizer.SerieNotFound(id));
+        if (serie == null) return NotFound(ErrorCode.SerieDoesNotExist);
 
         return serie.ToDto();
     }
 
-    // GET: api/series/{id}/chapters
     [HttpGet("{id:long}/chapters")]
     [RequirePermission(Permission.ReadChapters)]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -62,23 +57,22 @@ public class SerieController(
     public ActionResult<List<long>> GetSerieChapters(long id)
     {
         Serie? serie = context.Series.FirstOrDefault(s => s.Id == id);
-        if (serie == null) return NotFound(Localizer.SerieNotFound(id));
+        if (serie == null) return NotFound(ErrorCode.SerieDoesNotExist);
         List<long> chaptersIds = context.Chapters
             .Where(c => c.SerieId == id)
-            .OrderBy(c => c.FileName)
+            .OrderBy(c => c.Number)
             .Select(c => c.Id).ToList();
 
         return chaptersIds;
     }
 
-    // GET: api/series/{id}/chapters
     [HttpGet("{id:long}/reads")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public ActionResult<List<ReadDto>> GetSerieReads(long id)
     {
         Serie? serie = context.Series.FirstOrDefault(s => s.Id == id);
-        if (serie == null) return NotFound(Localizer.SerieNotFound(id));
+        if (serie == null) return NotFound(ErrorCode.SerieDoesNotExist);
         List<ReadDto> reads = context.Reads
             .Where(r => r.Chapter.SerieId == id)
             .Where(r => r.UserId == UserController.GetCurrentUserId(HttpContext))
@@ -88,94 +82,88 @@ public class SerieController(
         return reads;
     }
 
-    // GET: api/serie/{id}/poster
     [HttpGet("{id:long}/poster")]
     [RequirePermission(Permission.ReadSeries)]
     [Produces("image/webp")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetPoster(long id)
+    public async Task<ActionResult> GetPoster(long id)
     {
         Serie? serie = context.Series
             .Include(s => s.SavePoint)
             .FirstOrDefault(s => s.Id == id);
-        if (serie == null) return NotFound(Localizer.SerieNotFound(id));
-        string posterName = SettingsManager.Data.PosterName + "." +
-                            SettingsManager.Data.PosterFormat.ToString().ToLower(CultureInfo.InvariantCulture);
-        string posterPath = Path.Combine(serie.SavePath, posterName);
-        if (!System.IO.File.Exists(posterPath)) return NotFound(Localizer.PosterNotFound(id));
-        byte[] readAllBytes = await System.IO.File.ReadAllBytesAsync(posterPath);
-        return File(readAllBytes, "image/webp", posterName);
+        if (serie == null) return NotFound(ErrorCode.SerieDoesNotExist);
+        string poster = serie.PosterPath;
+        if (!System.IO.File.Exists(poster)) return NotFound(ErrorCode.SerieHasNoPoster);
+        byte[] readAllBytes = await System.IO.File.ReadAllBytesAsync(poster);
+        return File(readAllBytes, "image/webp", Path.GetFileName(poster));
     }
 
-    // PUT: api/Serie/5
+    [HttpGet("{id:long}/banner")]
+    [RequirePermission(Permission.ReadSeries)]
+    [Produces("image/webp")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult> GetBanner(long id)
+    {
+        Serie? serie = context.Series
+            .Include(s => s.SavePoint)
+            .FirstOrDefault(s => s.Id == id);
+        if (serie == null) return NotFound(ErrorCode.SerieDoesNotExist);
+        string banner = serie.BannerPath;
+        if (!System.IO.File.Exists(banner)) return NotFound(ErrorCode.SerieHasNoBanner);
+        byte[] readAllBytes = await System.IO.File.ReadAllBytesAsync(banner);
+        return File(readAllBytes, "image/webp", Path.GetFileName(banner));
+    }
+
     [HttpPut("{id:long}")]
     [RequirePermission(Permission.WriteSeries)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> PutSerie(long id, SerieUpdateDto serieUpdate)
+    public async Task<ActionResult> PutSerie(long id, SerieUpdateDto serieUpdate)
     {
-        Serie? serie = await context.Series.FindAsync(id);
-
-        if (serie == null) return NotFound(Localizer.SerieNotFound(id));
-
-        if (string.IsNullOrWhiteSpace(serieUpdate.Title))
-            return BadRequest(Localizer.SerieTitleRequired());
-
-        serie.Update(serieUpdate,context);
+        Serie? serie = await context.Series
+            .Include(s => s.Tags)
+            .Include(s => s.Persons)
+            .FirstOrDefaultAsync(s => s.Id == id);
+        if (serie == null) return NotFound(ErrorCode.SerieDoesNotExist);
+        if (serieUpdate.Title.Trim() == string.Empty) return BadRequest(ErrorCode.InvalidSerieData);
+        serie.Update(serieUpdate, context);
 
         try
         {
             await context.SaveChangesAsync();
-            _ = backgroundTaskService.AddTaskAsync(new FixSerieBackGroundTask(fixService, serie.Id));
-            notificationService.NotifySerieUpdatedAsync(serie.ToDto());
         }
-        catch (DbUpdateConcurrencyException)
+        catch
         {
-            BadRequest("Failed to update serie with ID " + id);
+            return BadRequest(ErrorCode.InvalidSerieData);
         }
 
+        backgroundTaskService.AddTask(new FixSerieBackGroundTask(fixService, serie.Id));
+        notificationService.NotifySerieUpdatedAsync(serie.ToDto());
         return Ok();
     }
 
-    // POST: api/Serie
     [HttpPost]
     [RequirePermission(Permission.WriteSeries)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<long>> PostSerie(SerieCreateDto serieCreate)
     {
-        if (string.IsNullOrWhiteSpace(serieCreate.Title))
-            return BadRequest(Localizer.SerieTitleRequired());
-
         SavePoint? savePoint = SelectSavePoint();
-        if (savePoint == null) return BadRequest(Localizer.NoSavePoint());
-        try
-        {
-            string folderPath = savePoint.Path + Path.DirectorySeparatorChar + serieCreate.Title;
-            if (System.IO.File.Exists(folderPath)) return BadRequest(Localizer.SerieAlreadyExists());
-            Serie serie = new()
-            {
-                SavePoint = savePoint,
-                Title = serieCreate.Title,
-                FolderName = serieCreate.Title,
-                Description = "",
-                Status = Status.Ongoing,
-                Creation = DateTime.UtcNow,
-                LastModification = DateTime.UtcNow
-            };
-            context.Series.Add(serie);
-            await context.SaveChangesAsync();
-            Directory.CreateDirectory(folderPath);
-            notificationService.NotifySerieCreatedAsync(serie.ToDto());
-            _ = backgroundTaskService.AddTaskAsync(new FixSerieBackGroundTask(fixService, serie.Id));
-            return serie.Id;
-        }
-        catch (Exception)
-        {
-            return BadRequest(Localizer.SerieCreationFailed());
-        }
+        if (savePoint == null) return BadRequest(ErrorCode.NoSavePointAvailable);
+        if (!serieCreate.IsValid()) return BadRequest(ErrorCode.InvalidSerieData);
+        Serie serie = new(serieCreate, savePoint);
+        string folderPath = serie.SavePath;
+        if (System.IO.File.Exists(folderPath)) return BadRequest(ErrorCode.SerieAlreadyExists);
+
+        context.Series.Add(serie);
+        await context.SaveChangesAsync();
+        Directory.CreateDirectory(folderPath);
+        notificationService.NotifySerieCreatedAsync(serie.ToDto());
+        backgroundTaskService.AddTask(new FixSerieBackGroundTask(fixService, serie.Id));
+        return Ok(serie.Id);
     }
 
     private SavePoint? SelectSavePoint()
@@ -209,15 +197,14 @@ public class SerieController(
         return size;
     }
 
-    // DELETE: api/Serie/5
     [HttpDelete("{id:long}")]
     [RequirePermission(Permission.DeleteSeries)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> DeleteSerie(long id)
+    public async Task<ActionResult> DeleteSerie(long id)
     {
         Serie? serie = await context.Series.FindAsync(id);
-        if (serie == null) return NotFound(Localizer.SerieNotFound(id));
+        if (serie == null) return NotFound(ErrorCode.SerieDoesNotExist);
 
         context.Series.Remove(serie);
         await context.SaveChangesAsync();
@@ -229,7 +216,7 @@ public class SerieController(
     [HttpPost("search")]
     [RequirePermission(Permission.ReadSeries)]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public List<long> Search(Search search)
+    public ActionResult<List<long>> Search(Search search)
     {
         Regex regex = new(search.RegexSearch, RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
@@ -248,8 +235,8 @@ public class SerieController(
             series = series.Where(s => search.IncludedStatuses.Contains(s.Status)).ToList();
         series = series.Where(s => !search.ExcludedStatuses.Contains(s.Status)).ToList();
 
-        return series
-            .Where(s => regex.Match(s.Title).Success || regex.Match(s.Description).Success)
+        List<long> result = series
+            .Where(s => regex.IsMatch(s.Title) || regex.IsMatch(s.Description))
             .Where(s =>
             {
                 int chapterCount = seriesWithChapterCount.TryGetValue(s.Id, out int value) ? value : 0;
@@ -257,5 +244,6 @@ public class SerieController(
             })
             .Select(s => s.Id)
             .ToList();
+        return Ok(result);
     }
 }

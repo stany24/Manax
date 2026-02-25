@@ -12,7 +12,7 @@
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Pages.Issue.IssuesPageView"
     x:DataType="page:IssuesPageViewModel"
-    IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).CanReadAllIssues}">
+    IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanReadAllIssues}">
 
     <UserControl.Resources>
         <DataTemplate x:Key="AutomaticChapterIssueTemplate" DataType="issue:IssueChapterAutomatic">
@@ -61,10 +61,9 @@
                                    Command="{Binding $parent[UserControl].((page:IssuesPageViewModel)DataContext).OnChapterIssueClicked}"
                                    CommandParameter="{Binding Chapter}"
                                    Info="{localization1:LocalizeFormat IssuesPage.ChapterUserInfo,
-                                   Param1={Binding Chapter.FileName},
+                                   Param1={Binding Chapter.Number},
                                    Param2={Binding User.Username},
-                                   Param3={Binding CreatedAt}}">
-            </previews:IssuePreview>
+                                   Param3={Binding CreatedAt}}" />
         </DataTemplate>
 
         <DataTemplate x:Key="ReportedSerieIssueTemplate" DataType="issue:IssueSerieReported">
@@ -79,7 +78,8 @@
                                    Info="{localization1:LocalizeFormat IssuesPage.SerieUserInfo,
                                    Param1={Binding Serie.Title},
                                    Param2={Binding User.Username},
-                                   Param3={Binding CreatedAt}}">>
+                                   Param3={Binding CreatedAt}}">
+                >
             </previews:IssuePreview>
         </DataTemplate>
     </UserControl.Resources>
@@ -88,7 +88,7 @@
         <StackPanel Margin="24" Spacing="24">
             <TextBlock Text="{localization:Localize IssuesPage.Title}"
                        FontSize="28"
-                       FontWeight="Bold"/>
+                       FontWeight="Bold" />
 
             <StackPanel Orientation="Horizontal" Spacing="16">
                 <ToggleButton x:Name="AutomaticToggle"
@@ -127,7 +127,7 @@
                     <StackPanel IsVisible="{Binding ShowChapterIssues}" Spacing="12">
                         <TextBlock Text="{localization:Localize IssuesPage.AutomaticChapters}"
                                    FontSize="18"
-                                   FontWeight="SemiBold"/>
+                                   FontWeight="SemiBold" />
 
                         <ItemsControl ItemsSource="{Binding IssueChapterAutomatic}"
                                       ItemTemplate="{StaticResource AutomaticChapterIssueTemplate}" />
@@ -140,7 +140,7 @@
                     <StackPanel IsVisible="{Binding !ShowChapterIssues}" Spacing="12">
                         <TextBlock Text="{localization:Localize IssuesPage.AutomaticSeries}"
                                    FontSize="18"
-                                   FontWeight="SemiBold"/>
+                                   FontWeight="SemiBold" />
 
                         <ItemsControl ItemsSource="{Binding IssueSerieAutomatic}"
                                       ItemTemplate="{StaticResource AutomaticSerieIssueTemplate}" />
@@ -155,7 +155,7 @@
                     <StackPanel IsVisible="{Binding ShowChapterIssues}" Spacing="12">
                         <TextBlock Text="{localization:Localize IssuesPage.ReportedChapters}"
                                    FontSize="18"
-                                   FontWeight="SemiBold"/>
+                                   FontWeight="SemiBold" />
 
                         <ItemsControl ItemsSource="{Binding IssueChapterReported}"
                                       ItemTemplate="{StaticResource ReportedChapterIssueTemplate}" />
@@ -168,7 +168,7 @@
                     <StackPanel IsVisible="{Binding !ShowChapterIssues}" Spacing="12">
                         <TextBlock Text="{localization:Localize IssuesPage.ReportedSeries}"
                                    FontSize="18"
-                                   FontWeight="SemiBold"/>
+                                   FontWeight="SemiBold" />
 
                         <ItemsControl ItemsSource="{Binding IssueSerieReported}"
                                       ItemTemplate="{StaticResource ReportedSerieIssueTemplate}" />

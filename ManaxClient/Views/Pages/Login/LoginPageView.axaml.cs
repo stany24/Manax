@@ -11,8 +11,14 @@ public partial class LoginPageView : UserControl
         InitializeComponent();
     }
 
-    private void TbxUsername_OnLoaded(object? sender, RoutedEventArgs e)
+    public void TbxPasswordOnLoaded(object? sender, RoutedEventArgs e)
     {
-        TbxUsername.Focus();
+        if (TbxUsername.Text == string.Empty)
+        {
+            TbxUsername.Focus();
+            return;
+        }
+
+        TbxPassword.Focus();
     }
 }

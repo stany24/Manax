@@ -6,152 +6,100 @@
     xmlns:chapter1="clr-namespace:ManaxClient.ViewModels.Pages.Chapter"
     xmlns:viewModels="clr-namespace:ManaxClient.ViewModels"
     xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
-    xmlns:localization1="clr-namespace:ManaxClient.Localization"
+    xmlns:controls="clr-namespace:ManaxClient.Controls"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Pages.Chapter.ChapterPageView"
     x:DataType="chapter1:ChapterPageViewModel"
-    IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).CanReadChapters}">
+    IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanReadChapters}">
 
     <Panel>
         <ScrollViewer Offset="{Binding ScrollOffset,Mode=TwoWay}"
                       VerticalScrollBarVisibility="Auto"
-                      HorizontalScrollBarVisibility="Auto">
+                      HorizontalScrollBarVisibility="Disabled"
+                      HorizontalAlignment="Center"
+                      VerticalAlignment="Stretch">
             <Interaction.Behaviors>
                 <EventTriggerBehavior EventName="Tapped">
                     <InvokeCommandAction Command="{Binding ChangeBordersVisibility}" />
                 </EventTriggerBehavior>
             </Interaction.Behaviors>
 
-            <StackPanel HorizontalAlignment="Center">
-                <Border CornerRadius="0,0,12,12"
-                        Padding="16,12"
-                        HorizontalAlignment="Center"
-                        IsVisible="{Binding ControlBordersVisible}">
-                    <StackPanel Orientation="Horizontal" Spacing="16">
-                        <TextBlock Text="{Binding Chapter.FileName}"
-                                   FontWeight="Medium"
-                                   VerticalAlignment="Center" />
-                        <TextBlock Text="{localization1:LocalizeFormat ChapterPage.Pages,
-                                   Param1={Binding $parent[UserControl].((chapter1:ChapterPageViewModel)DataContext).Chapter.Pages.Count}}"
-                                   FontSize="12"
-                                   VerticalAlignment="Center" />
-                    </StackPanel>
-                </Border>
-
-                <ItemsControl ItemsSource="{Binding Chapter.Pages}" Margin="0,8">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Border ClipToBounds="True"
-                                    HorizontalAlignment="Center">
-                                <Image Source="{Binding .}"
-                                       Stretch="Uniform"
-                                       MaxWidth="800" />
-                            </Border>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <StackPanel Orientation="Vertical" Spacing="2" />
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                </ItemsControl>
-            </StackPanel>
+            <ItemsControl ItemsSource="{Binding Chapter.Pages, Mode=OneWay}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Image Source="{Binding .}"
+                               Stretch="Uniform"
+                               StretchDirection="DownOnly"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Vertical" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
         </ScrollViewer>
-
-        <Button Classes="secondary"
+        
+        <Border Classes="card"
                 IsVisible="{Binding ControlBordersVisible}"
-                Command="{Binding Previous}"
                 VerticalAlignment="Top"
-                HorizontalAlignment="Left"
-                Margin="16"
-                Padding="12,8"
-                BorderThickness="0">
-            <StackPanel Orientation="Horizontal" Spacing="8">
-                <TextBlock VerticalAlignment="Center" Text="←" FontSize="16" />
-                <TextBlock Text="{localization:Localize ChapterPage.Back}" />
-            </StackPanel>
-        </Button>
-
-        <Border CornerRadius="12,12,0,0"
-                Padding="20,16"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Bottom"
-                IsVisible="{Binding ControlBordersVisible}"
-                MinWidth="400">
-            <Grid ColumnDefinitions="*,Auto,*" ColumnSpacing="16">
-                <Button Grid.Column="0"
-                        Classes="secondary"
-                        Command="{Binding PreviousChapter}"
-                        HorizontalAlignment="Stretch"
-                        BorderThickness="1">
-                    <StackPanel Orientation="Horizontal" Spacing="8">
-                        <TextBlock Text="⏮️" />
-                        <TextBlock Text="{localization:Localize ChapterPage.Previous}" />
-                    </StackPanel>
-                </Button>
-
-                <StackPanel Grid.Column="1"
-                            Orientation="Vertical"
-                            Spacing="4"
-                            HorizontalAlignment="Center">
-                    <TextBlock Text="{localization:Localize ChapterPage.Chapter}"
-                               FontSize="12"
-                               HorizontalAlignment="Center" />
-                    <TextBlock Text="{Binding Chapter.Number}"
-                               FontWeight="Bold"
-                               FontSize="16"
-                               HorizontalAlignment="Center" />
-                </StackPanel>
-
-                <Button Grid.Column="2"
-                        Classes="primary"
-                        Command="{Binding NextChapter}"
-                        HorizontalAlignment="Stretch">
-                    <StackPanel Orientation="Horizontal" Spacing="8">
-                        <TextBlock Text="{localization:Localize ChapterPage.Next}" />
-                        <TextBlock Text="⏭️" />
-                    </StackPanel>
-                </Button>
-            </Grid>
+                HorizontalAlignment="Left">
+            <controls:IconButton Classes="icon-button light"
+                                 Icon="ArrowLeft"
+                                 Command="{Binding Previous}">
+            </controls:IconButton>
         </Border>
 
-        <Border CornerRadius="12"
-                Padding="8,12"
+        
+        <Border Classes="card"
+                IsVisible="{Binding ControlBordersVisible}"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Center"
-                Margin="16"
-                IsVisible="{Binding ControlBordersVisible}">
+                CornerRadius="0,5,5,0">
             <StackPanel Spacing="12">
-                <Button Classes="secondary"
-                        BorderThickness="0"
-                        Padding="8"
-                        ToolTip.Tip="{localization:Localize ChapterPage.PreviousPage}"
-                        Command="{Binding PreviousPage}">
-                    <TextBlock Text="↑" FontSize="16" />
-                </Button>
+                <controls:IconButton ToolTip.Tip="{localization:Localize ChapterPage.PreviousPage}"
+                                     Classes="icon-button light"
+                                     Command="{Binding PreviousPage}"
+                                     Icon="ArrowUp" />
 
-                <Border CornerRadius="4"
-                        Padding="8,4">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{Binding CurrentPage}"
-                                   FontSize="12"
-                                   FontWeight="Medium" />
-                        <TextBlock>/</TextBlock>
-                        <TextBlock Text="{Binding Chapter.Pages.Count}"
-                                   FontSize="12"
-                                   FontWeight="Medium" />
-                    </StackPanel>
+                <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Center">
+                    <TextBlock Text="{Binding CurrentPage}" />
+                    <TextBlock>/</TextBlock>
+                    <TextBlock Text="{Binding Chapter.Pages.Count}" />
+                </StackPanel>
 
-                </Border>
-
-                <Button Classes="secondary"
-                        BorderThickness="0"
-                        Padding="8"
-                        ToolTip.Tip="{localization:Localize ChapterPage.NextPage}"
-                        Command="{Binding NextPage}">
-                    <TextBlock Text="↓" FontSize="16" />
-                </Button>
+                <controls:IconButton ToolTip.Tip="{localization:Localize ChapterPage.NextPage}"
+                                     Classes="icon-button light"
+                                     Command="{Binding NextPage}"
+                                     Icon="ArrowDown"/>
             </StackPanel>
+        </Border>
+
+        <Border Classes="card"
+                IsVisible="{Binding ControlBordersVisible}"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Bottom"
+                CornerRadius="5,5,0,0">
+            <Grid ColumnDefinitions="*,Auto,*" ColumnSpacing="16">
+                <controls:IconButton Grid.Column="0"
+                                     Classes="icon-button light"
+                                     Icon="ArrowLeft"
+                                     Command="{Binding PreviousChapter}" />
+
+                <StackPanel Grid.Column="1"
+                            VerticalAlignment="Center"
+                            Orientation="Horizontal">
+                    <TextBlock Text="{localization:Localize ChapterPage.Chapter}" />
+                    <TextBlock> </TextBlock>
+                    <TextBlock Text="{Binding Chapter.Number}" />
+                </StackPanel>
+
+                <controls:IconButton Grid.Column="2"
+                                     Classes="icon-button light"
+                                     Icon="ArrowRight"
+                                     Command="{Binding NextChapter}" />
+            </Grid>
         </Border>
     </Panel>
 </UserControl>

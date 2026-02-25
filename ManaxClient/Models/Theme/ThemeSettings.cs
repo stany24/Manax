@@ -1,8 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Text.Json;
 using Avalonia;
 using Avalonia.Media;
+using CommunityToolkit.Mvvm.Messaging;
+using ManaxClient.Event;
+using ManaxClient.Manager;
 using Material.Styles.Themes;
 using Material.Styles.Themes.Base;
 
@@ -10,58 +10,39 @@ namespace ManaxClient.Models.Theme;
 
 public static class ThemeSettings
 {
-    private static readonly string SavePath = System.IO.Path.Combine(
-        Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-        "ManaxClient",
-        "themesettings.json");
+    private static ThemeSettingsData LoadFailBackup { get; } = new(new HslColor(1, 230, 0.5, 0.5));
+    public static ThemeSettingsData Current { get; private set; } = null!;
 
-    private static readonly JsonSerializerOptions Settings = new() { WriteIndented = true };
 
-    public static ThemeSettingsData Current { get; private set; } = new("Last default", Color.Parse("#007ACC"), Color.Parse("#6C757D"));
-    
     public static void UpdateTheme(ThemeSettingsData themeSettingsData)
     {
-        IBaseTheme mode = themeSettingsData.IsDark ? Material.Styles.Themes.Theme.Dark : Material.Styles.Themes.Theme.Light;
-    
-        Material.Styles.Themes.Theme theme = Material.Styles.Themes.Theme.Create(mode, themeSettingsData.PrimaryColor.Color, themeSettingsData.SecondaryColor.Color);
+        IBaseTheme mode = themeSettingsData.IsDark
+            ? Material.Styles.Themes.Theme.Dark
+            : Material.Styles.Themes.Theme.Light;
+
+        HslColor secondaryHsl = new(themeSettingsData.AccentColor.A,
+            themeSettingsData.AccentColor.H + 180 % 360,
+            themeSettingsData.AccentColor.S, themeSettingsData.AccentColor.S);
+
+        Material.Styles.Themes.Theme theme =
+            Material.Styles.Themes.Theme.Create(mode, themeSettingsData.AccentColor.ToRgb(), secondaryHsl.ToRgb());
         MaterialThemeBase? themeBootstrap = Application.Current?.LocateMaterialTheme<MaterialThemeBase>();
-        if (themeBootstrap == null){return;}
+        if (themeBootstrap == null) return;
         themeBootstrap.CurrentTheme = theme;
-        Save(themeSettingsData);
+        StorageManager.Save(StorageManager.ThemeFile, themeSettingsData);
         Current = themeSettingsData;
+        WeakReferenceMessenger.Default.Send(new ThemeMessage(themeSettingsData));
     }
-    
-    public static List<ThemeSettingsData> GetPresets()
-    {
-        return
-        [
-            new ThemeSettingsData("Bleu", Color.Parse("#007ACC"), Color.Parse("#6C757D")),
-            new ThemeSettingsData("Violet", Color.Parse("#6F42C1"), Color.Parse("#6C757D")),
-            new ThemeSettingsData("Rouge", Color.Parse("#DC3545"), Color.Parse("#6C757D")),
-            new ThemeSettingsData("Vert", Color.Parse("#28A745"), Color.Parse("#6C757D"))
-        ];
-    }
-    
+
     public static void Load()
     {
-        if (!System.IO.File.Exists(SavePath))
+        ThemeSettingsData? themeSettingsData = StorageManager.Load<ThemeSettingsData>(StorageManager.ThemeFile);
+        if (themeSettingsData == null)
         {
-            UpdateTheme(GetPresets()[0]);
+            UpdateTheme(LoadFailBackup);
             return;
         }
-        string json = System.IO.File.ReadAllText(SavePath);
-        UpdateTheme(JsonSerializer.Deserialize<ThemeSettingsData>(json) ?? GetPresets()[0]);
-    }
 
-    private static void Save(ThemeSettingsData themeSettingsData)
-    {
-        string directory = System.IO.Path.GetDirectoryName(SavePath) ?? string.Empty;
-        if (!System.IO.Directory.Exists(directory))
-        {
-            System.IO.Directory.CreateDirectory(directory);
-        }
-
-        string json = JsonSerializer.Serialize(themeSettingsData, Settings);
-        System.IO.File.WriteAllText(SavePath, json);
+        UpdateTheme(themeSettingsData);
     }
 }

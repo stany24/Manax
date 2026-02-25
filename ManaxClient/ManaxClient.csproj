@@ -33,6 +33,7 @@
         <!-- <BeautyAfterTasks></BeautyAfterTasks> -->
         <!-- valid values: Error|Detail|Info -->
         <BeautyLogLevel>Info</BeautyLogLevel>
+        <LangVersion>14</LangVersion>
         <!-- set to a repo mirror if you have troble in connecting github -->
         <!-- <BeautyGitCDN>https://gitee.com/liesauer/HostFXRPatcher</BeautyGitCDN> -->
         <!-- <BeautyGitTree>master</BeautyGitTree> -->
@@ -40,7 +41,7 @@
 
     <PropertyGroup>
         <OutputType>WinExe</OutputType>
-        <TargetFramework>net9.0</TargetFramework>
+        <TargetFramework>net10.0</TargetFramework>
         <Nullable>enable</Nullable>
         <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
         <ApplicationManifest>app.manifest</ApplicationManifest>
@@ -52,22 +53,22 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Aspose.Zip" Version="25.11.0" />
-        <PackageReference Include="Avalonia" Version="11.3.8" />
-        <PackageReference Include="Avalonia.Controls.ColorPicker" Version="11.3.8" />
-        <PackageReference Include="Avalonia.Desktop" Version="11.3.8" />
-        <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.8" />
-        <PackageReference Include="Avalonia.Fonts.Inter" Version="11.3.8" />
+        <PackageReference Include="Aspose.Zip" Version="26.1.0"/>
+        <PackageReference Include="Avalonia" Version="11.3.11"/>
+        <PackageReference Include="Avalonia.Controls.ColorPicker" Version="11.3.11"/>
+        <PackageReference Include="Avalonia.Desktop" Version="11.3.11"/>
+        <PackageReference Include="Avalonia.Fonts.Inter" Version="11.3.11"/>
         <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
-        <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.3.8" />
+        <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.3.11"/>
         <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0"/>
         <PackageReference Include="DynamicData" Version="9.4.1"/>
-        <PackageReference Include="Jeek.Avalonia.Localization" Version="1.3.1" />
-        <PackageReference Include="LiveChartsCore.SkiaSharpView.Avalonia" Version="2.0.0-rc6.1" />
-        <PackageReference Include="Magick.NET-Q8-AnyCPU" Version="14.9.1" />
-        <PackageReference Include="Material.Avalonia" Version="3.13.3" />
+        <PackageReference Include="Jeek.Avalonia.Localization" Version="1.3.1"/>
+        <PackageReference Include="LiveChartsCore.SkiaSharpView.Avalonia" Version="2.0.0-rc6.1"/>
+        <PackageReference Include="Magick.NET-Q8-AnyCPU" Version="14.10.2"/>
+        <PackageReference Include="Material.Avalonia" Version="3.13.4"/>
+        <PackageReference Include="Material.Icons.Avalonia" Version="3.0.0-preview6"/>
         <PackageReference Include="nulastudio.NetBeauty" Version="2.1.5"/>
-        <PackageReference Include="Xaml.Behaviors.Avalonia" Version="11.3.8.1" />
+        <PackageReference Include="Xaml.Behaviors.Avalonia" Version="11.3.9.4"/>
     </ItemGroup>
 
     <ItemGroup>
@@ -135,74 +136,74 @@
             <SubType>Code</SubType>
         </Compile>
         <Compile Update="Localization\Resources.Designer.cs">
-          <DesignTime>True</DesignTime>
-          <AutoGen>True</AutoGen>
-          <DependentUpon>Resources.resx</DependentUpon>
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>Resources.resx</DependentUpon>
         </Compile>
         <Compile Update="Localization\Resources.fr.Designer.cs">
-          <DesignTime>True</DesignTime>
-          <AutoGen>True</AutoGen>
-          <DependentUpon>Resources.fr.resx</DependentUpon>
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>Resources.fr.resx</DependentUpon>
         </Compile>
         <Compile Update="Views\Pages\Upload\UploadPageView.axaml.cs">
-          <DependentUpon>TagPageView.axaml</DependentUpon>
-          <SubType>Code</SubType>
+            <DependentUpon>TagPageView.axaml</DependentUpon>
+            <SubType>Code</SubType>
         </Compile>
         <Compile Update="Views\Pages\Upload\Tab\AutoCleanupTabView.axaml.cs">
-          <DependentUpon>UploadPageView.axaml</DependentUpon>
-          <SubType>Code</SubType>
+            <DependentUpon>UploadPageView.axaml</DependentUpon>
+            <SubType>Code</SubType>
         </Compile>
         <Compile Update="Views\Pages\Upload\Tab\FetchFromSourceTabView.axaml.cs">
-          <DependentUpon>FetchFromSourcePageView.axaml</DependentUpon>
-          <SubType>Code</SubType>
+            <DependentUpon>FetchFromSourcePageView.axaml</DependentUpon>
+            <SubType>Code</SubType>
         </Compile>
         <Compile Update="Views\Pages\Upload\Tab\UserEditTabView.axaml.cs">
-          <DependentUpon>UserEditPageView.axaml</DependentUpon>
-          <SubType>Code</SubType>
+            <DependentUpon>UserEditPageView.axaml</DependentUpon>
+            <SubType>Code</SubType>
         </Compile>
         <Compile Update="Views\Pages\Upload\Tab\AutoUploadTabView.axaml.cs">
-          <DependentUpon>AutoUploadPageView.axaml</DependentUpon>
-          <SubType>Code</SubType>
+            <DependentUpon>AutoUploadPageView.axaml</DependentUpon>
+            <SubType>Code</SubType>
         </Compile>
         <Compile Update="Views\Pages\Upload\Tab\ManualUploadTabView.axaml.cs">
-          <DependentUpon>ManualUploadPageView.axaml</DependentUpon>
-          <SubType>Code</SubType>
+            <DependentUpon>ManualUploadPageView.axaml</DependentUpon>
+            <SubType>Code</SubType>
         </Compile>
         <Compile Update="Views\Pages\Upload\Tab\ConfigureUploadTabView.axaml.cs">
-          <DependentUpon>ConfigureUploadTabView.axaml</DependentUpon>
-          <SubType>Code</SubType>
+            <DependentUpon>ConfigureUploadTabView.axaml</DependentUpon>
+            <SubType>Code</SubType>
         </Compile>
         <Compile Update="Views\Pages\Person\PersonPageView.axaml.cs">
-          <DependentUpon>RankPageView.axaml</DependentUpon>
-          <SubType>Code</SubType>
+            <DependentUpon>RankPageView.axaml</DependentUpon>
+            <SubType>Code</SubType>
         </Compile>
         <Compile Update="Views\Pages\Upload\UploadPageView.axaml.cs">
-          <DependentUpon>TagPageView.axaml</DependentUpon>
-          <SubType>Code</SubType>
+            <DependentUpon>TagPageView.axaml</DependentUpon>
+            <SubType>Code</SubType>
         </Compile>
         <Compile Update="Views\Pages\Upload\Tab\AutoCleanupTabView.axaml.cs">
-          <DependentUpon>UploadPageView.axaml</DependentUpon>
-          <SubType>Code</SubType>
+            <DependentUpon>UploadPageView.axaml</DependentUpon>
+            <SubType>Code</SubType>
         </Compile>
         <Compile Update="Views\Pages\Upload\Tab\FetchFromSourceTabView.axaml.cs">
-          <DependentUpon>FetchFromSourcePageView.axaml</DependentUpon>
-          <SubType>Code</SubType>
+            <DependentUpon>FetchFromSourcePageView.axaml</DependentUpon>
+            <SubType>Code</SubType>
         </Compile>
         <Compile Update="Views\Pages\Upload\Tab\ManualCleanupTabView.axaml.cs">
-          <DependentUpon>UserEditPageView.axaml</DependentUpon>
-          <SubType>Code</SubType>
+            <DependentUpon>UserEditPageView.axaml</DependentUpon>
+            <SubType>Code</SubType>
         </Compile>
         <Compile Update="Views\Pages\Upload\Tab\AutoUploadTabView.axaml.cs">
-          <DependentUpon>AutoUploadPageView.axaml</DependentUpon>
-          <SubType>Code</SubType>
+            <DependentUpon>AutoUploadPageView.axaml</DependentUpon>
+            <SubType>Code</SubType>
         </Compile>
         <Compile Update="Views\Pages\Upload\Tab\ManualUploadTabView.axaml.cs">
-          <DependentUpon>ManualUploadPageView.axaml</DependentUpon>
-          <SubType>Code</SubType>
+            <DependentUpon>ManualUploadPageView.axaml</DependentUpon>
+            <SubType>Code</SubType>
         </Compile>
         <Compile Update="Views\Pages\Upload\Tab\ConfigureUploadTabView.axaml.cs">
-          <DependentUpon>ConfigureUploadTabView.axaml</DependentUpon>
-          <SubType>Code</SubType>
+            <DependentUpon>ConfigureUploadTabView.axaml</DependentUpon>
+            <SubType>Code</SubType>
         </Compile>
     </ItemGroup>
 
@@ -227,13 +228,13 @@
     </ItemGroup>
 
     <ItemGroup>
-      <EmbeddedResource Update="Localization\Resources.resx">
-        <Generator>PublicResXFileCodeGenerator</Generator>
-        <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Localization\Resources.fr.resx">
-        <Generator>PublicResXFileCodeGenerator</Generator>
-        <LastGenOutput>Resources.fr.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
+        <EmbeddedResource Update="Localization\Resources.resx">
+            <Generator>PublicResXFileCodeGenerator</Generator>
+            <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
+        <EmbeddedResource Update="Localization\Resources.fr.resx">
+            <Generator>PublicResXFileCodeGenerator</Generator>
+            <LastGenOutput>Resources.fr.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
     </ItemGroup>
 </Project>

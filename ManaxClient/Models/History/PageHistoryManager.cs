@@ -1,63 +1,60 @@
-using System;
 using System.Collections.Generic;
+using System.Threading;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
+using ManaxClient.Event;
 using ManaxClient.ViewModels.Pages;
 using ManaxClient.ViewModels.Pages.Login;
 
 namespace ManaxClient.Models.History;
 
-public class PageHistoryManager
+public partial class PageHistoryManager: ObservableObject
 {
     private readonly Stack<PageViewModel> _backStack = new();
     private readonly Stack<PageViewModel> _forwardStack = new();
-    private bool _navigatingHistory;
-    public PageViewModel? CurrentPage { get; private set; }
-
+    private readonly Lock _lock = new();
+    [ObservableProperty] private PageViewModel _currentPage;
     public bool CanGoBack => _backStack.Count > 0;
     public bool CanGoForward => _forwardStack.Count > 0;
 
-    public event Action<PageViewModel>? OnPageChanged;
-    public event Action<PageViewModel>? OnPageChanging;
+    public PageHistoryManager(PageViewModel pageViewModel)
+    {
+        WeakReferenceMessenger.Default.Register<PageChangeMessage>(this, (_, m) => { SetPage(m.Value); });
+        WeakReferenceMessenger.Default.Register<PreviousPageMessage>(this, (_, _) => { GoBack(); });
+        WeakReferenceMessenger.Default.Register<NextPageMessage>(this, (_, _) => { GoForward(); });
+        CurrentPage = pageViewModel;
+    }
 
     private void SetCurrent(PageViewModel pageViewModel)
     {
-        CurrentPage?.OnPageClosed();
-        OnPageChanging?.Invoke(pageViewModel);
-        CurrentPage = pageViewModel;
-        OnPageChanged?.Invoke(pageViewModel);
+        lock (_lock)
+        {
+            CurrentPage.OnPageClosed();
+            CurrentPage = pageViewModel;
+        }
     }
 
-    public void SetPage(PageViewModel pageViewModel)
+    private void SetPage(PageViewModel pageViewModel)
     {
-        if (!_navigatingHistory && !ReferenceEquals(CurrentPage, pageViewModel))
-        {
-            if (CurrentPage is LoginPageViewModel)
-                _backStack.Clear();
-            else if (CurrentPage != null)
-                _backStack.Push(CurrentPage);
-            _forwardStack.Clear();
-        }
-
-        if (ReferenceEquals(CurrentPage, pageViewModel)) return;
+        if (CurrentPage is not LoginPageViewModel)
+            _backStack.Push(CurrentPage);
+        _forwardStack.Clear();
         SetCurrent(pageViewModel);
     }
 
-    public void GoBack()
+    private void GoBack()
     {
         if (!CanGoBack) return;
-        _navigatingHistory = true;
-        _forwardStack.Push(CurrentPage!);
+        _forwardStack.Push(CurrentPage);
         PageViewModel previous = _backStack.Pop();
         SetCurrent(previous);
-        _navigatingHistory = false;
     }
-
-    public void GoForward()
+    
+    private void GoForward()
     {
         if (!CanGoForward) return;
-        _navigatingHistory = true;
-        _backStack.Push(CurrentPage!);
+        _backStack.Push(CurrentPage);
         PageViewModel next = _forwardStack.Pop();
         SetCurrent(next);
-        _navigatingHistory = false;
     }
 }

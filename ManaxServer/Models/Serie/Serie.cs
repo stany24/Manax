@@ -1,32 +1,56 @@
 // ReSharper disable PropertyCanBeMadeInitOnly.Global
-// ReSharper disable PropertyCanBeMadeInitOnly.Global
-// ReSharper disable UnusedAutoPropertyAccessor.Global
-// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
-// ReSharper disable MemberCanBePrivate.Global
 
-using ManaxLibrary.DTO.Person;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Globalization;
 using ManaxLibrary.DTO.Serie;
-using ManaxLibrary.DTO.Tag;
+using ManaxServer.Settings;
 
 namespace ManaxServer.Models.Serie;
 
 public class Serie
 {
+    public const string PosterName = "poster";
+    public const string BannerName = "banner";
+
+    public Serie(SerieCreateDto serieCreate, SavePoint.SavePoint savePoint)
+    {
+        SavePoint = savePoint;
+        Title = serieCreate.Title;
+        FolderName = serieCreate.Title;
+        Description = "";
+        Status = Status.Ongoing;
+        Creation = DateTime.UtcNow;
+        LastModification = DateTime.UtcNow;
+    }
+
+    public Serie()
+    {
+    }
+
     public long Id { get; set; }
     public List<Person.Person> Persons { get; set; } = [];
     public List<Tag.Tag> Tags { get; set; } = [];
     public Library.Library? Library { get; set; }
-    public SavePoint.SavePoint SavePoint { get; set; } = null!;
+    public long SavePointId { get; set; }
+    [ForeignKey(nameof(SavePointId))] public SavePoint.SavePoint SavePoint { get; set; } = null!;
 
-    public string FolderName { get; set; } = string.Empty;
+    [MaxLength(255)] public string FolderName { get; set; } = string.Empty;
     public string Title { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
     public Status Status { get; set; }
     public DateTime Creation { get; set; }
     public DateTime LastModification { get; set; }
+    public string SavePath => Path.Combine(SavePoint.Path, FolderName);
 
-    public string SavePath => SavePoint.Path + Path.DirectorySeparatorChar + FolderName;
-    
+    public string PosterPath => Path.Combine(SavePath, PosterName + "." +
+                                                       SettingsManager.DataDto.PosterFormat.ToString()
+                                                           .ToLower(CultureInfo.InvariantCulture));
+
+    public string BannerPath => Path.Combine(SavePath + BannerName + "." +
+                                             SettingsManager.DataDto.BannerFormat.ToString()
+                                                 .ToLower(CultureInfo.InvariantCulture));
+
     public SerieDto ToDto()
     {
         return new SerieDto
@@ -50,25 +74,13 @@ public class Serie
         Library = context.Libraries.Find(serieUpdate.LibraryId);
         Status = serieUpdate.Status;
         LastModification = DateTime.UtcNow;
-        
+
         Tags.Clear();
-        foreach (TagDto tagDto in serieUpdate.Tags)
-        {
-            Tag.Tag? tag = context.Tags.Find(tagDto.Id);
-            if (tag != null)
-            {
-                Tags.Add(tag);
-            }
-        }
-        
+        foreach (Tag.Tag tag in serieUpdate.TagIds.Select(tagId => context.Tags.Find(tagId)).OfType<Tag.Tag>())
+            Tags.Add(tag);
+
         Persons.Clear();
-        foreach (PersonDto personDto in serieUpdate.Persons)
-        {
-            Person.Person? person = context.People.Find(personDto.Id);
-            if (person != null)
-            {
-                Persons.Add(person);
-            }
-        }
+        foreach (Person.Person person in serieUpdate.PersonIds.Select(personId => context.Persons.Find(personId))
+                     .OfType<Person.Person>()) Persons.Add(person);
     }
 }

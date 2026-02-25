@@ -1,3 +1,4 @@
+using ManaxLibrary;
 using ManaxServer.Models.Library;
 using ManaxServer.Models.Serie;
 using Microsoft.AspNetCore.Mvc;
@@ -12,7 +13,7 @@ public class DeleteLibraryTests : LibraryTestsSetup
     public async Task DeleteLibraryWithValidIdRemovesLibrary()
     {
         Library library = Context.Libraries.First();
-        IActionResult result = await Controller.DeleteLibrary(library.Id);
+        ActionResult result = await Controller.DeleteLibrary(library.Id);
 
         Assert.IsInstanceOfType<OkResult>(result);
 
@@ -23,20 +24,21 @@ public class DeleteLibraryTests : LibraryTestsSetup
     [TestMethod]
     public async Task DeleteLibraryWithInvalidIdReturnsNotFound()
     {
-        IActionResult result = await Controller.DeleteLibrary(999999);
+        ActionResult result = await Controller.DeleteLibrary(999999);
 
-        Assert.IsInstanceOfType<NotFoundObjectResult>(result);
+        CheckTypeAndErrorCode<NotFoundObjectResult>(result, ErrorCode.LibraryDoesNotExist);
     }
 
     [TestMethod]
     public async Task DeleteLibraryWithAssociatedSeriesRemovesLibraryButKeepsSeries()
     {
         Library library = Context.Libraries.First();
-        List<Serie> associatedSeries = Context.Series.Where(s => s.Library != null && s.Library.Id == library.Id).ToList();
+        List<Serie> associatedSeries =
+            Context.Series.Where(s => s.Library != null && s.Library.Id == library.Id).ToList();
         int initialSeriesCount = associatedSeries.Count;
         List<long> seriesIds = associatedSeries.Select(s => s.Id).ToList();
 
-        IActionResult result = await Controller.DeleteLibrary(library.Id);
+        ActionResult result = await Controller.DeleteLibrary(library.Id);
 
         Assert.IsInstanceOfType<OkResult>(result);
 

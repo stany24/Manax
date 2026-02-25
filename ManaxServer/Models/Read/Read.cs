@@ -12,8 +12,7 @@ namespace ManaxServer.Models.Read;
 public class Read
 {
     public DateTime Date { get; set; }
-
-    public int Page { get; set; }
+    public uint Page { get; set; }
 
     public long ChapterId { get; set; }
 
@@ -26,7 +25,7 @@ public class Read
     [ForeignKey(nameof(UserId))]
     [DeleteBehavior(DeleteBehavior.NoAction)]
     public User.User User { get; set; }
-    
+
     public ReadDto ToDto()
     {
         return new ReadDto

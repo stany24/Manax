@@ -1,12 +1,11 @@
+using ManaxLibrary;
 using ManaxLibrary.DTO.Feature;
 using ManaxLibrary.DTO.Issue.Automatic;
 using ManaxLibrary.DTO.Issue.Reported;
 using ManaxLibrary.DTO.User;
 using ManaxServer.Attributes;
-using ManaxServer.Localization;
 using ManaxServer.Models;
 using ManaxServer.Models.Issue.Reported;
-using ManaxServer.Services.Feature;
 using ManaxServer.Services.Notification;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -15,104 +14,84 @@ namespace ManaxServer.Controllers;
 
 [Route("api/issue")]
 [ApiController]
-public class IssueController(ManaxContext context, INotificationService notificationService, IFeatureService featureService)
+public class IssueController(
+    ManaxContext context,
+    INotificationService notificationService)
     : ControllerBase
 {
     [HttpGet("chapter/automatic")]
     [RequirePermission(Permission.ReadAllIssues)]
+    [RequireFeature(FeatureType.AutomaticIssues)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<IssueChapterAutomaticDto>>> GetAllAutomaticChapterIssues()
     {
-        if (!featureService.IsFeatureEnabled(FeatureType.AutomaticIssues)) { return BadRequest(Localizer.FeatureDisabled(FeatureType.AutomaticIssues)); }
-
-        return await context.AutomaticIssuesChapter
+        List<IssueChapterAutomaticDto> issues = await context.AutomaticIssuesChapter
             .Select(i => i.ToDto())
             .ToListAsync();
+        return Ok(issues);
     }
 
     [HttpGet("serie/automatic")]
     [RequirePermission(Permission.ReadAllIssues)]
+    [RequireFeature(FeatureType.AutomaticIssues)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<IssueSerieAutomaticDto>>> GetAllAutomaticSerieIssues()
     {
-        if (!featureService.IsFeatureEnabled(FeatureType.AutomaticIssues)) { return BadRequest(Localizer.FeatureDisabled(FeatureType.AutomaticIssues)); }
-
-        return await context.AutomaticIssuesSerie
+        List<IssueSerieAutomaticDto> issues = await context.AutomaticIssuesSerie
             .Select(i => i.ToDto())
             .ToListAsync();
+        return Ok(issues);
     }
 
     [HttpGet("chapter/reported")]
     [RequirePermission(Permission.ReadAllIssues)]
+    [RequireFeature(FeatureType.ReportedIssues)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<IssueChapterReportedDto>>> GetAllReportedChapterIssues()
     {
-        if (!featureService.IsFeatureEnabled(FeatureType.ReportedIssues)) { return BadRequest(Localizer.FeatureDisabled(FeatureType.ReportedIssues)); }
-        
-        return await context.ReportedIssuesChapter
+        List<IssueChapterReportedDto> issues = await context.ReportedIssuesChapter
             .Select(i => i.ToDto())
             .ToListAsync();
-    }
-
-    [HttpGet("chapter/reported/types")]
-    [RequirePermission(Permission.ReadAllIssues)]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<IEnumerable<IssueChapterReportedTypeDto>>> GetAllReportedChapterIssuesTypes()
-    {
-        if (!featureService.IsFeatureEnabled(FeatureType.ReportedIssues)) { return BadRequest(Localizer.FeatureDisabled(FeatureType.ReportedIssues)); }
-
-        return await context.ReportedIssueChapterTypes.Select(i => i.ToDto())
-            .ToListAsync();
+        return Ok(issues);
     }
 
     [HttpGet("serie/reported")]
     [RequirePermission(Permission.ReadAllIssues)]
+    [RequireFeature(FeatureType.ReportedIssues)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<IssueSerieReportedDto>>> GetAllReportedSerieIssues()
     {
-        if (!featureService.IsFeatureEnabled(FeatureType.ReportedIssues)) { return BadRequest(Localizer.FeatureDisabled(FeatureType.ReportedIssues)); }
-
-        return await context.ReportedIssuesSerie
+        List<IssueSerieReportedDto> issues = await context.ReportedIssuesSerie
             .Select(i => i.ToDto())
             .ToListAsync();
-    }
-
-    [HttpGet("serie/reported/types")]
-    [RequirePermission(Permission.ReadAllIssues)]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<IEnumerable<IssueSerieReportedTypeDto>>> GetAllReportedSerieIssuesTypes()
-    {
-        if (!featureService.IsFeatureEnabled(FeatureType.ReportedIssues)) { return BadRequest(Localizer.FeatureDisabled(FeatureType.ReportedIssues)); }
-
-        return await context.ReportedIssueSerieTypes.Select(i => i.ToDto())
-            .ToListAsync();
+        return Ok(issues);
     }
 
     [HttpPost("chapter")]
     [RequirePermission(Permission.WriteIssues)]
+    [RequireFeature(FeatureType.ReportedIssues)]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<ActionResult> CreateChapterIssue(IssueChapterReportedCreateDto issueChapterReportedCreate)
     {
-        if (!featureService.IsFeatureEnabled(FeatureType.ReportedIssues)) { return BadRequest(Localizer.FeatureDisabled(FeatureType.ReportedIssues)); }
-
         long? currentUserId = UserController.GetCurrentUserId(HttpContext);
-        if (currentUserId == null) return Unauthorized();
+        if (currentUserId == null) return Unauthorized(ErrorCode.TokenRequired);
 
-        bool issueExists = await context.ReportedIssuesChapter
-            .AnyAsync(i => i.UserId == currentUserId &&
-                           i.ChapterId == issueChapterReportedCreate.ChapterId &&
-                           i.ProblemId == issueChapterReportedCreate.ProblemId);
-
-        if (issueExists) return Conflict("Issue already reported for this chapter and problem type.");
-
-        IssueChapterReported issue = IssueChapterReported.Create(issueChapterReportedCreate,(long)currentUserId);
+        IssueChapterReported issue = IssueChapterReported.Create(issueChapterReportedCreate, (long)currentUserId);
         issue.UserId = (long)currentUserId;
         issue.CreatedAt = DateTime.UtcNow;
 
         context.ReportedIssuesChapter.Add(issue);
-        await context.SaveChangesAsync();
+        try
+        {
+            await context.SaveChangesAsync();
+        }
+        catch
+        {
+            return Conflict(ErrorCode.IssueAlreadyExists);
+        }
+
         notificationService.NotifyChapterIssueCreatedAsync(issue.ToDto());
 
         return Created();
@@ -120,27 +99,27 @@ public class IssueController(ManaxContext context, INotificationService notifica
 
     [HttpPost("serie")]
     [RequirePermission(Permission.WriteIssues)]
+    [RequireFeature(FeatureType.ReportedIssues)]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<ActionResult> CreateSerieIssue(IssueSerieReportedCreateDto issueSerieReportedCreate)
     {
-        if (!featureService.IsFeatureEnabled(FeatureType.ReportedIssues)) { return BadRequest(Localizer.FeatureDisabled(FeatureType.ReportedIssues)); }
-
         long? currentUserId = UserController.GetCurrentUserId(HttpContext);
-        if (currentUserId == null) return Unauthorized();
+        if (currentUserId == null) return Unauthorized(ErrorCode.TokenRequired);
 
-        bool issueExists = await context.ReportedIssuesSerie
-            .AnyAsync(i => i.UserId == currentUserId &&
-                           i.SerieId == issueSerieReportedCreate.SerieId &&
-                           i.ProblemId == issueSerieReportedCreate.ProblemId);
-
-        if (issueExists) return Conflict("Issue already reported for this series and problem type.");
-
-        IssueSerieReported issue = IssueSerieReported.Create(issueSerieReportedCreate,(long)currentUserId);
+        IssueSerieReported issue = IssueSerieReported.Create(issueSerieReportedCreate, (long)currentUserId);
 
         context.ReportedIssuesSerie.Add(issue);
-        await context.SaveChangesAsync();
+        try
+        {
+            await context.SaveChangesAsync();
+        }
+        catch
+        {
+            return Conflict(ErrorCode.IssueAlreadyExists);
+        }
+
         notificationService.NotifySerieIssueCreatedAsync(issue.ToDto());
 
         return Created();
@@ -148,15 +127,14 @@ public class IssueController(ManaxContext context, INotificationService notifica
 
     [HttpPut("chapter/{id:long}/close")]
     [RequirePermission(Permission.DeleteIssues)]
+    [RequireFeature(FeatureType.ReportedIssues)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> CloseChapterIssue(long id)
+    public async Task<ActionResult> CloseChapterIssue(long id)
     {
-        if (!featureService.IsFeatureEnabled(FeatureType.ReportedIssues)) { return BadRequest(Localizer.FeatureDisabled(FeatureType.ReportedIssues)); }
-
         IssueChapterReported? issue = await context.ReportedIssuesChapter.FindAsync(id);
 
-        if (issue == null) return NotFound(Localizer.IssueNotFound(id));
+        if (issue == null) return NotFound(ErrorCode.IssueDoesNotExist);
 
         context.ReportedIssuesChapter.Remove(issue);
         await context.SaveChangesAsync();
@@ -167,15 +145,14 @@ public class IssueController(ManaxContext context, INotificationService notifica
 
     [HttpPut("serie/{id:long}/close")]
     [RequirePermission(Permission.DeleteIssues)]
+    [RequireFeature(FeatureType.ReportedIssues)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> CloseSerieIssue(long id)
+    public async Task<ActionResult> CloseSerieIssue(long id)
     {
-        if (!featureService.IsFeatureEnabled(FeatureType.ReportedIssues)) { return BadRequest(Localizer.FeatureDisabled(FeatureType.ReportedIssues)); }
-
         IssueSerieReported? issue = await context.ReportedIssuesSerie.FindAsync(id);
 
-        if (issue == null) return NotFound(Localizer.IssueNotFound(id));
+        if (issue == null) return NotFound(ErrorCode.IssueDoesNotExist);
 
         context.ReportedIssuesSerie.Remove(issue);
         await context.SaveChangesAsync();

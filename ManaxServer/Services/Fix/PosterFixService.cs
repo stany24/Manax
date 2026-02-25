@@ -1,4 +1,3 @@
-using System.Globalization;
 using ImageMagick;
 using ManaxLibrary.DTO.Issue.Automatic;
 using ManaxServer.Models;
@@ -19,15 +18,12 @@ public partial class FixService
             .FirstOrDefault(s => s.Id == serieId);
         if (serie == null) return;
 
-        string directory = serie.SavePath;
-        string fileName = SettingsManager.Data.PosterName + "." +
-                          SettingsManager.Data.PosterFormat.ToString().ToLower(CultureInfo.InvariantCulture);
-        string posterPath = Path.Combine(directory, fileName);
+        string posterPath = serie.PosterPath;
         issueService.ManageSerieIssue(serie.Id, IssueSerieAutomaticType.PosterMissing, !File.Exists(posterPath));
         if (!File.Exists(posterPath)) return;
 
-        uint min = SettingsManager.Data.MinPosterWidth;
-        uint max = SettingsManager.Data.MaxPosterWidth;
+        uint min = SettingsManager.DataDto.MinPosterWidth;
+        uint max = SettingsManager.DataDto.MaxPosterWidth;
         try
         {
             using MagickImage poster = new(posterPath);

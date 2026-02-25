@@ -4,6 +4,7 @@
 // ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
 // ReSharper disable MemberCanBePrivate.Global
 
+using System.ComponentModel.DataAnnotations;
 using ManaxLibrary.DTO.Library;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,9 +14,9 @@ namespace ManaxServer.Models.Library;
 public class Library
 {
     public long Id { get; set; }
-    public string Name { get; set; } = string.Empty;
+    [MaxLength(256)] public string Name { get; set; } = string.Empty;
     public DateTime Creation { get; set; }
-    
+
     public LibraryDto ToDto()
     {
         return new LibraryDto

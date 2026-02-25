@@ -12,37 +12,36 @@ public static class SettingsManager
         Load();
     }
 
-    public static SettingsData Data { get; private set; } = new();
+    public static SettingsDataDto DataDto { get; private set; } = new();
     private static string SavePath => Path.Combine(AppContext.BaseDirectory, "settings.json");
     private static string BackupPath => Path.Combine(AppContext.BaseDirectory, "settings_backup.json");
 
     private static void Load()
     {
-        if (!File.Exists(SavePath)) File.WriteAllText(SavePath, JsonSerializer.Serialize(Data));
+        if (!File.Exists(SavePath)) File.WriteAllText(SavePath, JsonSerializer.Serialize(DataDto));
 
-        SettingsData? settingsData = JsonSerializer.Deserialize<SettingsData>(File.ReadAllText(SavePath));
+        SettingsDataDto? settingsData = JsonSerializer.Deserialize<SettingsDataDto>(File.ReadAllText(SavePath));
         if (settingsData == null)
         {
             File.Move(SavePath, BackupPath, true);
             File.WriteAllText(SavePath, "{}");
-            settingsData = new SettingsData();
+            settingsData = new SettingsDataDto();
         }
 
-        Data = settingsData;
+        DataDto = settingsData;
     }
 
     private static void Save()
     {
-        string json = JsonSerializer.Serialize(Data, JsonOptions);
+        string json = JsonSerializer.Serialize(DataDto, JsonOptions);
         File.WriteAllText(SavePath, json);
     }
 
-    public static void OverwriteSettings(SettingsData newData)
+    public static void OverwriteSettings(SettingsDataDto newDataDto)
     {
-        if (!newData.IsValid)
-            throw new InvalidOperationException(
-                "New settings data contains issues that need to be resolved before saving.");
-        Data = newData;
+        if (newDataDto.Validate() is { } err)
+            throw new InvalidOperationException(err);
+        DataDto = newDataDto;
         Save();
     }
 }

@@ -3,16 +3,14 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
-using ManaxClient.Models;
 using ManaxClient.Models.Upload;
 
 namespace ManaxClient.ViewModels.Pages.Upload.Tab;
 
-public partial class FetchFromSourceTabViewModel:TabViewModel
+public partial class FetchFromSourceTabViewModel : TabViewModel
 {
-    public ObservableCollection<Source> SourceFolders { get; set; } = [];
-    [ObservableProperty] private string _processingFolder = string.Empty;
     [ObservableProperty] private bool _canFetch = true;
+    [ObservableProperty] private string _processingFolder = string.Empty;
     [ObservableProperty] private int _sourceCompletedCount;
     [ObservableProperty] private int _sourceInProgressCount;
 
@@ -21,7 +19,9 @@ public partial class FetchFromSourceTabViewModel:TabViewModel
         LoadSettings();
         UploadSettings.SettingsChanged += (_, _) => LoadSettings();
     }
-    
+
+    public ObservableCollection<Source> SourceFolders { get; set; } = [];
+
     private void LoadSettings()
     {
         IEnumerable<Source> sources = UploadSettings.SourceFolders.Select(s => new Source { Path = s });
@@ -41,7 +41,14 @@ public partial class FetchFromSourceTabViewModel:TabViewModel
                 SourceCompletedCount++;
                 SourceInProgressCount--;
             }
+
             CanFetch = true;
+            NextRequested?.Invoke(this, new AutoCleanupTabViewModel());
         });
+    }
+
+    public void Skip()
+    {
+        NextRequested?.Invoke(this, new AutoCleanupTabViewModel());
     }
 }

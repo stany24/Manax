@@ -5,31 +5,36 @@ using Avalonia.Data.Converters;
 using Avalonia.Input;
 using Avalonia.Layout;
 using Avalonia.Media;
-using ManaxClient.Models;
+using CommunityToolkit.Mvvm.Messaging;
+using ManaxClient.Event;
+using ManaxClient.ViewModels.Pages.Serie;
+using Serie = ManaxClient.Models.Server.Data.Serie;
 
 namespace ManaxClient.Controls.Previews;
 
 public class SeriePreview : Button
 {
     public static readonly AttachedProperty<Serie?> SerieProperty =
-        AvaloniaProperty.RegisterAttached<SeriePreview, Grid, Serie?>(
+        AvaloniaProperty.RegisterAttached<SeriePreview, SeriePreview, Serie?>(
             "Serie", null, false, BindingMode.OneTime);
 
-    public static readonly AttachedProperty<SolidColorBrush> TextColorProperty =
-        AvaloniaProperty.RegisterAttached<SeriePreview, Grid, SolidColorBrush>(
-            "TextColor", new SolidColorBrush(), false, BindingMode.OneTime);
-
     public static readonly AttachedProperty<SolidColorBrush> BackGroundColorProperty =
-        AvaloniaProperty.RegisterAttached<SeriePreview, Grid, SolidColorBrush>(
+        AvaloniaProperty.RegisterAttached<SeriePreview, SeriePreview, SolidColorBrush>(
             "BackGroundColor", new SolidColorBrush(), false, BindingMode.OneTime);
 
     public SeriePreview()
     {
         Width = 150;
         Height = Width * 1.6;
-        Padding = new Thickness(0);
-        BorderThickness = new Thickness(0);
         CornerRadius = new CornerRadius(12);
+
+        Click += (_, _) =>
+        {
+            Serie? serie = GetSerie(this);
+            if (serie == null) return;
+            SeriePageViewModel seriePageViewModel = new(serie);
+            WeakReferenceMessenger.Default.Send(new PageChangeMessage(seriePageViewModel));
+        };
 
         Image image = new()
         {
@@ -65,7 +70,7 @@ public class SeriePreview : Button
             Converter = new FuncValueConverter<SolidColorBrush, LinearGradientBrush>(brush => new LinearGradientBrush
             {
                 StartPoint = new RelativePoint(0, 1, RelativeUnit.Relative),
-                EndPoint = new RelativePoint(0, 0, RelativeUnit.Relative),
+                EndPoint = new RelativePoint(0, -0.2, RelativeUnit.Relative),
                 GradientStops =
                 [
                     new GradientStop(brush?.Color ?? Colors.White, 0),
@@ -84,11 +89,6 @@ public class SeriePreview : Button
             TextTrimming = TextTrimming.CharacterEllipsis
         };
         textBlock.Bind(TextBlock.TextProperty, new Binding(nameof(Serie) + "." + nameof(Serie.Title))
-        {
-            Source = this,
-            Mode = BindingMode.OneWay
-        });
-        textBlock.Bind(TextBlock.ForegroundProperty, new Binding(nameof(TextColor))
         {
             Source = this,
             Mode = BindingMode.OneWay
@@ -119,12 +119,6 @@ public class SeriePreview : Button
         set => SetSerie(this, value);
     }
 
-    public SolidColorBrush TextColor
-    {
-        get => GetTextColor(this);
-        set => SetTextColor(this, value);
-    }
-
     public SolidColorBrush BackGroundColor
     {
         get => GetBackGroundColor(this);
@@ -151,16 +145,6 @@ public class SeriePreview : Button
     private static Serie? GetSerie(AvaloniaObject element)
     {
         return element.GetValue(SerieProperty);
-    }
-
-    private static void SetTextColor(AvaloniaObject element, SolidColorBrush textColorValue)
-    {
-        element.SetValue(TextColorProperty, textColorValue);
-    }
-
-    private static SolidColorBrush GetTextColor(AvaloniaObject element)
-    {
-        return element.GetValue(TextColorProperty);
     }
 
     private static void SetBackGroundColor(AvaloniaObject element, SolidColorBrush backGroundColorValue)

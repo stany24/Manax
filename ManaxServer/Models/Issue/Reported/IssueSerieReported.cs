@@ -22,7 +22,7 @@ public class IssueSerieReported
     [ForeignKey(nameof(SerieId))] public Serie.Serie Serie { get; set; } = null!;
     public long ProblemId { get; set; }
     [ForeignKey(nameof(ProblemId))] public IssueSerieReportedType Problem { get; set; } = null!;
-    
+
     public IssueSerieReportedDto ToDto()
     {
         return new IssueSerieReportedDto

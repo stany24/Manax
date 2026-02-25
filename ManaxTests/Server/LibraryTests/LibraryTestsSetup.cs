@@ -4,11 +4,11 @@ using ManaxTests.Server.Mocks;
 
 namespace ManaxTests.Server.LibraryTests;
 
-public abstract class LibraryTestsSetup
+public abstract class LibraryTestsSetup : TestSetup
 {
     private MockNotificationService _mockNotificationService = null!;
-    protected ManaxContext Context = null!;
-    protected LibraryController Controller = null!;
+    protected ManaxContext Context { get; private set; } = null!;
+    protected LibraryController Controller { get; private set; } = null!;
 
     [TestInitialize]
     public void Setup()

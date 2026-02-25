@@ -1,9 +1,8 @@
+using ManaxLibrary;
 using ManaxLibrary.DTO.Read;
-using ManaxLibrary.DTO.Serie;
 using ManaxLibrary.DTO.Stats;
 using ManaxLibrary.DTO.User;
 using ManaxServer.Attributes;
-using ManaxServer.Localization;
 using ManaxServer.Models;
 using ManaxServer.Models.SavePoint;
 using Microsoft.AspNetCore.Mvc;
@@ -15,7 +14,6 @@ namespace ManaxServer.Controllers;
 [ApiController]
 public class StatsController(ManaxContext context) : ControllerBase
 {
-    // GET: api/Chapter
     [HttpGet("self")]
     [RequirePermission(Permission.ReadSelfStats)]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -23,7 +21,7 @@ public class StatsController(ManaxContext context) : ControllerBase
     public async Task<ActionResult<UserStats>> GetStats()
     {
         long? currentUserId = UserController.GetCurrentUserId(HttpContext);
-        if (currentUserId == null) return Unauthorized(Localizer.Unauthorized());
+        if (currentUserId == null) return Unauthorized(ErrorCode.TokenRequired);
 
         List<long> chaptersRead = context.Reads
             .Where(r => r.UserId == currentUserId.Value)
@@ -60,7 +58,7 @@ public class StatsController(ManaxContext context) : ControllerBase
             Reads = reads
         };
 
-        return stats;
+        return Ok(stats);
     }
 
     [HttpGet("server")]
@@ -85,9 +83,9 @@ public class StatsController(ManaxContext context) : ControllerBase
             .GroupBy(s => s.Library != null ? s.Library.Name : "No library")
             .ToDictionaryAsync(g => g.Key, g => g.Count());
 
-        List<SerieDto> neverReadSeries = await context.Series
+        List<long> neverReadSerieIds = await context.Series
             .Where(s => !context.Reads.Any(r => context.Chapters.Any(c => c.SerieId == s.Id && c.Id == r.ChapterId)))
-            .Select(s => s.ToDto())
+            .Select(s => s.Id)
             .ToListAsync();
 
         ServerStats stats = new()
@@ -95,14 +93,14 @@ public class StatsController(ManaxContext context) : ControllerBase
             SeriesInLibraries = seriesInLibraries,
             DiskSize = diskSize,
             AvailableDiskSize = availableDiskSize,
-            NeverReadSeries = neverReadSeries,
+            NeverReadSerieIds = neverReadSerieIds,
             Series = await context.Series.CountAsync(),
             Chapters = await context.Chapters.CountAsync(),
             Users = await context.Users.CountAsync(),
             ActiveUsers = await context.Users.Where(u => u.LastLogin > recently).CountAsync()
         };
 
-        return stats;
+        return Ok(stats);
     }
 
     private static long GetDirectorySize(DirectoryInfo d)

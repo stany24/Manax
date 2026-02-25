@@ -22,7 +22,7 @@ public class IssueChapterReported
     [ForeignKey(nameof(ChapterId))] public Chapter.Chapter Chapter { get; set; } = null!;
     public long ProblemId { get; set; }
     [ForeignKey(nameof(ProblemId))] public IssueChapterReportedType Problem { get; set; } = null!;
-    
+
     public IssueChapterReportedDto ToDto()
     {
         return new IssueChapterReportedDto
@@ -31,11 +31,11 @@ public class IssueChapterReported
             CreatedAt = CreatedAt,
             UserId = UserId,
             ChapterId = ChapterId,
-            ProblemId = Problem.Id
+            ProblemId = ProblemId
         };
     }
 
-    public static IssueChapterReported Create(IssueChapterReportedCreateDto issueChapterReportedCreate,long userId)
+    public static IssueChapterReported Create(IssueChapterReportedCreateDto issueChapterReportedCreate, long userId)
     {
         return new IssueChapterReported
         {

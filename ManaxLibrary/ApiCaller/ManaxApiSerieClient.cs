@@ -1,4 +1,3 @@
-using System.Net.Http.Json;
 using ManaxLibrary.DTO.Read;
 using ManaxLibrary.DTO.Search;
 using ManaxLibrary.DTO.Serie;
@@ -9,112 +8,51 @@ public static class ManaxApiSerieClient
 {
     public static async Task<Optional<List<long>>> GetSeriesIdsAsync()
     {
-        return await ManaxApiClient.ExecuteWithErrorHandlingAsync(async () =>
-        {
-            HttpResponseMessage response = await ManaxApiClient.Client.GetAsync("api/series");
-            if (!response.IsSuccessStatusCode) return new Optional<List<long>>(response);
-            List<long>? ids = await response.Content.ReadFromJsonAsync<List<long>>();
-            return ids == null
-                ? new Optional<List<long>>("Failed to read series IDs from response.")
-                : new Optional<List<long>>(ids);
-        });
+        return await ManaxApiClient.GetAsync<List<long>>("api/series");
     }
 
     public static async Task<Optional<SerieDto>> GetSerieInfoAsync(long id)
     {
-        return await ManaxApiClient.ExecuteWithErrorHandlingAsync(async () =>
-        {
-            HttpResponseMessage response = await ManaxApiClient.Client.GetAsync($"api/serie/{id}");
-            if (!response.IsSuccessStatusCode) return new Optional<SerieDto>(response);
-            SerieDto? serie = await response.Content.ReadFromJsonAsync<SerieDto>();
-            return serie == null
-                ? new Optional<SerieDto>($"Failed to read serie info for ID {id} from response.")
-                : new Optional<SerieDto>(serie);
-        });
+        return await ManaxApiClient.GetAsync<SerieDto>($"api/serie/{id}");
     }
 
     public static async Task<Optional<List<long>>> GetSerieChaptersAsync(long id)
     {
-        return await ManaxApiClient.ExecuteWithErrorHandlingAsync(async () =>
-        {
-            HttpResponseMessage response = await ManaxApiClient.Client.GetAsync($"api/serie/{id}/chapters");
-            if (!response.IsSuccessStatusCode) return new Optional<List<long>>(response);
-            List<long>? ids = await response.Content.ReadFromJsonAsync<List<long>>();
-            return ids == null
-                ? new Optional<List<long>>("Failed to read chapter IDs from response.")
-                : new Optional<List<long>>(ids);
-        });
+        return await ManaxApiClient.GetAsync<List<long>>($"api/serie/{id}/chapters");
     }
 
     public static async Task<Optional<List<ReadDto>>> GetSerieChaptersReadAsync(long id)
     {
-        return await ManaxApiClient.ExecuteWithErrorHandlingAsync(async () =>
-        {
-            HttpResponseMessage response = await ManaxApiClient.Client.GetAsync($"api/serie/{id}/reads");
-            if (!response.IsSuccessStatusCode) return new Optional<List<ReadDto>>(response);
-            List<ReadDto>? ids = await response.Content.ReadFromJsonAsync<List<ReadDto>>();
-            return ids == null
-                ? new Optional<List<ReadDto>>("Failed to read chapter IDs from response.")
-                : new Optional<List<ReadDto>>(ids);
-        });
+        return await ManaxApiClient.GetAsync<List<ReadDto>>($"api/serie/{id}/reads");
     }
 
     public static async Task<Optional<long>> PostSerieAsync(SerieCreateDto serieCreate)
     {
-        return await ManaxApiClient.ExecuteWithErrorHandlingAsync(async () =>
-        {
-            HttpResponseMessage response = await ManaxApiClient.Client.PostAsJsonAsync("api/serie", serieCreate);
-            if (!response.IsSuccessStatusCode) return new Optional<long>(response);
-            long id = await response.Content.ReadFromJsonAsync<long>();
-            return new Optional<long>(id);
-        });
+        return await ManaxApiClient.PostAsync<long, SerieCreateDto>("api/serie", serieCreate);
     }
 
     public static async Task<Optional<bool>> PutSerieAsync(long id, SerieUpdateDto serieUpdate)
     {
-        return await ManaxApiClient.ExecuteWithErrorHandlingAsync(async () =>
-        {
-            HttpResponseMessage response = await ManaxApiClient.Client.PutAsJsonAsync($"api/serie/{id}", serieUpdate);
-            return response.IsSuccessStatusCode
-                ? new Optional<bool>(true)
-                : new Optional<bool>(response);
-        });
+        return await ManaxApiClient.PutSuccessAsync($"api/serie/{id}", serieUpdate);
     }
 
     public static async Task<Optional<bool>> DeleteSerieAsync(long id)
     {
-        return await ManaxApiClient.ExecuteWithErrorHandlingAsync(async () =>
-        {
-            HttpResponseMessage response = await ManaxApiClient.Client.DeleteAsync($"api/serie/{id}");
-            return response.IsSuccessStatusCode
-                ? new Optional<bool>(true)
-                : new Optional<bool>(response);
-        });
+        return await ManaxApiClient.DeleteAsync($"api/serie/{id}");
     }
 
     public static async Task<Optional<byte[]>> GetSeriePosterAsync(long id)
     {
-        return await ManaxApiClient.ExecuteWithErrorHandlingAsync(async () =>
-        {
-            HttpResponseMessage response = await ManaxApiClient.Client.GetAsync($"api/serie/{id}/poster");
-            if (!response.IsSuccessStatusCode) return new Optional<byte[]>(response);
-            byte[] data = await response.Content.ReadAsByteArrayAsync();
-            return data.Length == 0
-                ? new Optional<byte[]>($"Empty poster data received for serie ID {id}.")
-                : new Optional<byte[]>(data);
-        });
+        return await ManaxApiClient.GetBytesAsync($"api/serie/{id}/poster");
+    }
+
+    public static async Task<Optional<byte[]>> GetSerieBannerAsync(long id)
+    {
+        return await ManaxApiClient.GetBytesAsync($"api/serie/{id}/banner");
     }
 
     public static async Task<Optional<List<long>>> GetSearchResult(Search search)
     {
-        return await ManaxApiClient.ExecuteWithErrorHandlingAsync(async () =>
-        {
-            HttpResponseMessage response = await ManaxApiClient.Client.PostAsJsonAsync("api/serie/search", search);
-            if (!response.IsSuccessStatusCode) return new Optional<List<long>>(response);
-            List<long>? results = await response.Content.ReadFromJsonAsync<List<long>>();
-            return results == null
-                ? new Optional<List<long>>("Failed to read search results from response.")
-                : new Optional<List<long>>(results);
-        });
+        return await ManaxApiClient.PostAsync<List<long>, Search>("api/serie/search", search);
     }
 }

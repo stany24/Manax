@@ -8,11 +8,11 @@ using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
 using DynamicData;
 using DynamicData.Binding;
 using Jeek.Avalonia.Localization;
-using ManaxClient.Models.Sources;
-using ManaxClient.ViewModels.Pages.Serie;
+using ManaxClient.Event;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
 using ManaxLibrary.Logging;
@@ -21,34 +21,20 @@ namespace ManaxClient.ViewModels.Pages.Home;
 
 public partial class HomePageViewModel : PageViewModel
 {
-    private readonly ReadOnlyObservableCollection<Models.Serie> _series;
+    private readonly ReadOnlyObservableCollection<Models.Server.Data.Serie> _series;
     [ObservableProperty] private bool _isFolderPickerOpen;
 
     public HomePageViewModel()
     {
-        SortExpressionComparer<Models.Serie> comparer =
-            SortExpressionComparer<Models.Serie>.Descending(serie => serie.Title);
-        SerieSource.Series
+        SortExpressionComparer<Models.Server.Data.Serie> comparer =
+            SortExpressionComparer<Models.Server.Data.Serie>.Descending(serie => serie.Title);
+        MainWindowViewModel.Instance.SerieSource.Series
             .Connect()
             .SortAndBind(out _series, comparer)
-            .Subscribe(changes =>
-            {
-                foreach (Change<Models.Serie, long> change in changes)
-                {
-                    if (change.Reason != ChangeReason.Add) continue;
-                    change.Current.LoadInfo();
-                    change.Current.LoadPoster();
-                }
-            });
+            .Subscribe();
     }
 
-    public ReadOnlyObservableCollection<Models.Serie> Series => _series;
-
-    public void MoveToSeriePage(Models.Serie serie)
-    {
-        SeriePageViewModel seriePageViewModel = new(serie);
-        PageChangedRequested?.Invoke(this, seriePageViewModel);
-    }
+    public ReadOnlyObservableCollection<Models.Server.Data.Serie> Series => _series;
 
     public async void UploadSerie()
     {
@@ -61,7 +47,7 @@ public partial class HomePageViewModel : PageViewModel
                 ? desktop.MainWindow
                 : null;
             if (window?.StorageProvider == null) return;
-            
+
             IReadOnlyList<IStorageFolder> folders = await window.StorageProvider.OpenFolderPickerAsync(
                 new FolderPickerOpenOptions
                 {
@@ -77,19 +63,24 @@ public partial class HomePageViewModel : PageViewModel
             Optional<bool> uploadSerieResponse = await ManaxApiUploadClient.UploadSerieAsync(folderPath);
             if (uploadSerieResponse.Failed)
             {
-                InfoEmitted?.Invoke(this, 
-                    string.Format(CultureInfo.InvariantCulture, Localizer.Get("HomePage.UploadFailure"),Path.GetDirectoryName(folderPath)));
+                string format1 = string.Format(CultureInfo.InvariantCulture, Localizer.Get("HomePage.UploadFailure"),
+                    Path.GetDirectoryName(folderPath));
+
+                WeakReferenceMessenger.Default.Send(new NotificationMessage(format1));
+
                 Logger.LogFailure("Failed to upload series: " + uploadSerieResponse.Error);
                 return;
             }
-            InfoEmitted?.Invoke(this, 
-                string.Format(CultureInfo.InvariantCulture, Localizer.Get("HomePage.UploadSuccess"), Path.GetDirectoryName(folderPath)));
+
+            string format2 = string.Format(CultureInfo.InvariantCulture, Localizer.Get("HomePage.UploadSuccess"),
+                Path.GetDirectoryName(folderPath));
+            WeakReferenceMessenger.Default.Send(new NotificationMessage(format2));
             Logger.LogInfo("Serie upload successful");
         }
         catch (Exception e)
         {
             IsFolderPickerOpen = false;
-            InfoEmitted?.Invoke(this, Localizer.Get("HomePage.UploadError"));
+            WeakReferenceMessenger.Default.Send(new NotificationMessage(Localizer.Get("HomePage.UploadError")));
             Logger.LogError("Error uploading series", e);
         }
     }

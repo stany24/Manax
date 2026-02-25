@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using ManaxLibrary;
 using ManaxLibrary.DTO.User;
 using ManaxServer.Models.User;
 using Microsoft.AspNetCore.Mvc;
@@ -20,7 +21,7 @@ public class PutUserTests : UserTestsSetup
             Password = newPassword
         };
 
-        IActionResult result = await Controller.PutUser(userUpdate);
+        ActionResult result = await Controller.PutUser(userUpdate);
 
         Assert.IsInstanceOfType<OkResult>(result);
 
@@ -40,9 +41,9 @@ public class PutUserTests : UserTestsSetup
             Password = ""
         };
 
-        IActionResult result = await Controller.PutUser(userUpdate);
+        ActionResult result = await Controller.PutUser(userUpdate);
 
-        Assert.IsInstanceOfType<BadRequestObjectResult>(result);
+        CheckTypeAndErrorCode<BadRequestObjectResult>(result, ErrorCode.InvalidPassword);
         MockHashService.VerifyHashPasswordNotCalled();
     }
 
@@ -57,9 +58,9 @@ public class PutUserTests : UserTestsSetup
             Password = "newValidPassword123!"
         };
 
-        IActionResult result = await Controller.PutUser(userUpdate);
+        ActionResult result = await Controller.PutUser(userUpdate);
 
-        Assert.IsInstanceOfType<UnauthorizedObjectResult>(result);
+        CheckTypeAndErrorCode<UnauthorizedObjectResult>(result, ErrorCode.TokenRequired);
         MockHashService.VerifyHashPasswordNotCalled();
     }
 
@@ -71,7 +72,9 @@ public class PutUserTests : UserTestsSetup
 
         ActionResult<string> result = await Controller.ResetPassword(2);
 
-        string? newPassword = result.Value;
+        OkObjectResult? okResult = result.Result as OkObjectResult;
+        Assert.IsNotNull(okResult);
+        string? newPassword = okResult.Value as string;
         Assert.IsNotNull(newPassword);
 
         User? updatedUser = await Context.Users.FindAsync(2L);
@@ -85,7 +88,7 @@ public class PutUserTests : UserTestsSetup
     {
         ActionResult<string> result = await Controller.ResetPassword(999);
 
-        Assert.IsInstanceOfType<NotFoundObjectResult>(result.Result);
+        CheckTypeAndErrorCode<NotFoundObjectResult>(result.Result, ErrorCode.UserDoesNotExist);
         MockHashService.VerifyHashPasswordNotCalled();
     }
 }

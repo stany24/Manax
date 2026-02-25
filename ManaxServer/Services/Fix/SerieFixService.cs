@@ -18,36 +18,35 @@ public partial class FixService
             .Include(s => s.SavePoint)
             .FirstOrDefault(s => s.Id == serieId);
         if (serie == null) return;
-        manaxContext.SaveChanges();
 
-        CheckMissingChapters(serie);
+        string[] chapterPaths =
+            manaxContext.Chapters.Where(c => c.SerieId == serie.Id).Select(c => c.Path()).ToArray();
+
+        CheckMissingChapters(chapterPaths, serieId);
         CheckDescription(serie);
     }
 
     private void CheckDescription(Serie serie)
     {
-        uint max = SettingsManager.Data.MaxDescriptionLength;
-        uint min = SettingsManager.Data.MinDescriptionLength;
+        uint max = SettingsManager.DataDto.MaxDescriptionLength;
+        uint min = SettingsManager.DataDto.MinDescriptionLength;
         issueService.ManageSerieIssue(serie.Id, IssueSerieAutomaticType.DescriptionTooLong,
             serie.Description.Length > max);
         issueService.ManageSerieIssue(serie.Id, IssueSerieAutomaticType.DescriptionTooShort,
             serie.Description.Length < min);
     }
 
-    private void CheckMissingChapters(Serie serie)
+    private void CheckMissingChapters(string[] chapterPaths, long serieId)
     {
-        string[] chapters = Directory.GetFiles(serie.SavePath,
-            "*." + SettingsManager.Data.ArchiveFormat.ToString().ToLower(CultureInfo.InvariantCulture),
-            SearchOption.TopDirectoryOnly);
-        issueService.ManageSerieIssue(serie.Id, IssueSerieAutomaticType.MissingChapter, chapters.Length == 0);
-        if (chapters.Length == 0) return;
+        issueService.ManageSerieIssue(serieId, IssueSerieAutomaticType.MissingChapter, chapterPaths.Length == 0);
+        if (chapterPaths.Length == 0) return;
 
-        Array.Sort(chapters);
+        Array.Sort(chapterPaths);
         Regex regex = RegexNumber();
-        string last = Path.GetFileName(chapters[^1]);
+        string last = Path.GetFileName(chapterPaths[^1]);
         Match match = regex.Match(last);
         if (!match.Success) return;
-        issueService.ManageSerieIssue(serie.Id, IssueSerieAutomaticType.MissingChapter,
-            chapters.Length != Convert.ToInt32(match.Value, CultureInfo.InvariantCulture));
+        issueService.ManageSerieIssue(serieId, IssueSerieAutomaticType.MissingChapter,
+            chapterPaths.Length != Convert.ToInt32(match.Value, CultureInfo.InvariantCulture));
     }
 }

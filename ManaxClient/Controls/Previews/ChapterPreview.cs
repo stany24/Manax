@@ -1,6 +1,4 @@
 using System;
-using System.IO;
-using System.Windows.Input;
 using Avalonia;
 using Avalonia.Animation;
 using Avalonia.Controls;
@@ -10,9 +8,11 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
-using Avalonia.Threading;
+using CommunityToolkit.Mvvm.Messaging;
+using Jeek.Avalonia.Localization;
 using ManaxClient.Controls.Popups;
-using ManaxClient.Models;
+using ManaxClient.Event;
+using ManaxClient.ViewModels.Pages.Chapter;
 using ManaxClient.ViewModels.Popup.ConfirmCancel;
 using ManaxClient.ViewModels.Popup.ConfirmCancel.Content;
 using ManaxClient.ViewModels.Popup.SelectChoice;
@@ -20,41 +20,33 @@ using ManaxLibrary.ApiCaller;
 using ManaxLibrary.DTO.Issue.Reported;
 using ManaxLibrary.DTO.Read;
 using ManaxLibrary.Logging;
+using Chapter = ManaxClient.Models.Server.Data.Chapter;
 
 namespace ManaxClient.Controls.Previews;
 
 public class ChapterPreview : Button
 {
-    public static readonly AttachedProperty<Chapter> ChapterProperty =
-        AvaloniaProperty.RegisterAttached<ChapterPreview, Grid, Chapter>(
-            "Chapter", new Chapter(), false, BindingMode.OneTime);
-
-    public static readonly StyledProperty<ICommand?> InfoEmittedCommandProperty =
-        AvaloniaProperty.Register<ChapterPreview, ICommand?>(nameof(InfoEmittedCommand));
-
-    public static readonly StyledProperty<ICommand?> PopupRequestedCommandProperty =
-        AvaloniaProperty.Register<ChapterPreview, ICommand?>(nameof(PopupRequestedCommand));
-
-    private readonly IBrush _backgroundColor = Brushes.White;
-    private readonly IBrush _hoverColor = new SolidColorBrush(Color.Parse("#F8F9FA"));
-
-    private readonly IBrush _readTextColor = new SolidColorBrush(Color.Parse("#6C757D"));
-    private readonly IBrush _unreadTextColor = new SolidColorBrush(Color.Parse("#212529"));
+    public static readonly AttachedProperty<Chapter?> ChapterProperty =
+        AvaloniaProperty.RegisterAttached<ChapterPreview, ChapterPreview, Chapter?>(
+            "Chapter", null, false, BindingMode.OneTime);
 
     public ChapterPreview()
     {
-        Background = Brushes.Transparent;
-        BorderThickness = new Thickness(0);
-        Padding = new Thickness(0);
         HorizontalAlignment = HorizontalAlignment.Stretch;
         HorizontalContentAlignment = HorizontalAlignment.Stretch;
 
+        Click += (_, _) =>
+        {
+            Chapter? chapter = GetChapter(this);
+            if (chapter == null) return;
+            ChapterPageViewModel chapterPageViewModel = new(chapter);
+            WeakReferenceMessenger.Default.Send(new PageChangeMessage(chapterPageViewModel));
+        };
+
         Border border = new()
         {
-            Background = _backgroundColor,
             BorderThickness = new Thickness(1),
-            CornerRadius = new CornerRadius(8),
-            Padding = new Thickness(16, 12)
+            CornerRadius = new CornerRadius(8)
         };
 
         Grid mainGrid = new()
@@ -79,7 +71,7 @@ public class ChapterPreview : Button
             Converter = new FuncValueConverter<ReadDto?, IBrush>(read =>
             {
                 if (read == null) return new SolidColorBrush(Color.Parse("#6C757D"));
-                return read.Page + 1 == Chapter.PageNumber
+                return read.Page + 1 == Chapter?.PageNumber
                     ? new SolidColorBrush(Color.Parse("#28A745"))
                     : new SolidColorBrush(Color.Parse("#007ACC"));
             })
@@ -95,6 +87,7 @@ public class ChapterPreview : Button
 
         TextBlock chapterName = new()
         {
+            VerticalAlignment = VerticalAlignment.Center,
             FontWeight = FontWeight.Medium,
             FontSize = 14,
             TextTrimming = TextTrimming.CharacterEllipsis
@@ -105,30 +98,18 @@ public class ChapterPreview : Button
             FontSize = 12
         };
 
-        chapterName.Bind(TextBlock.TextProperty, new Binding(nameof(Chapter) + "." + nameof(Chapter.FileName))
+        chapterName.Bind(TextBlock.TextProperty, new Binding(nameof(Chapter) + "." + nameof(Chapter.Number))
         {
             Source = this,
             Mode = BindingMode.OneWay,
-            Converter = new FuncValueConverter<string, string>(fileName =>
-                Path.GetFileNameWithoutExtension(fileName) ?? fileName ?? string.Empty)
-        });
-
-        chapterName.Bind(ForegroundProperty, new Binding(nameof(Chapter) + "." + nameof(Chapter.Read))
-        {
-            Source = this,
-            Mode = BindingMode.OneWay,
-            Converter = new FuncValueConverter<ReadDto?, IBrush>(read =>
-            {
-                if (read == null) return _unreadTextColor;
-                return read.Page + 1 == Chapter.PageNumber ? _readTextColor : _unreadTextColor;
-            })
+            Converter = new FuncValueConverter<uint, string>(chapterNumber => $"Chapitre {chapterNumber}")
         });
 
         chapterDetails.Bind(TextBlock.TextProperty, new Binding(nameof(Chapter) + "." + nameof(Chapter.PageNumber))
         {
             Source = this,
             Mode = BindingMode.OneWay,
-            Converter = new FuncValueConverter<int, string>(pages => $"{pages} page(s)")
+            Converter = new FuncValueConverter<uint, string>(pages => $"{pages} page(s)")
         });
 
         Border progressBadge = new()
@@ -151,10 +132,10 @@ public class ChapterPreview : Button
             Mode = BindingMode.OneWay,
             Converter = new FuncValueConverter<ReadDto?, string>(read =>
             {
-                if (read == null) return "Non lu";
-                int currentPage = read.Page + 1;
-                int totalPages = Chapter.PageNumber;
-                return currentPage == totalPages ? "Terminé" : $"{currentPage}/{totalPages}";
+                if (read == null) return Localizer.Get("Chapter.NotRead");
+                uint currentPage = read.Page + 1;
+                uint totalPages = Chapter?.PageNumber ?? 0;
+                return currentPage >= totalPages ? Localizer.Get("Chapter.Read") : $"{currentPage}/{totalPages}";
             })
         });
 
@@ -167,7 +148,7 @@ public class ChapterPreview : Button
             Converter = new FuncValueConverter<ReadDto?, IBrush>(read =>
             {
                 if (read == null) return new SolidColorBrush(Color.Parse("#E9ECEF"));
-                return read.Page + 1 == Chapter.PageNumber
+                return read.Page + 1 >= Chapter?.PageNumber
                     ? new SolidColorBrush(Color.Parse("#D4EDDA"))
                     : new SolidColorBrush(Color.Parse("#CCE5FF"));
             })
@@ -176,23 +157,15 @@ public class ChapterPreview : Button
         Button actionButton = new()
         {
             Content = "...",
-            Background = Brushes.Transparent,
             BorderThickness = new Thickness(0),
             Padding = new Thickness(4),
             HorizontalAlignment = HorizontalAlignment.Right,
             VerticalAlignment = VerticalAlignment.Center,
             Cursor = new Cursor(StandardCursorType.Hand)
         };
-        actionButton.SetValue(Grid.ColumnProperty, 4);
+        actionButton.SetValue(Grid.ColumnProperty, 3);
         actionButton.Click += ShowChoices;
 
-        TextBlock chevron = new()
-        {
-            Text = "›",
-            FontSize = 16,
-            VerticalAlignment = VerticalAlignment.Center
-        };
-        chevron.SetValue(Grid.ColumnProperty, 3);
 
         infoStack.Children.Add(chapterName);
         infoStack.Children.Add(chapterDetails);
@@ -200,7 +173,6 @@ public class ChapterPreview : Button
         mainGrid.Children.Add(statusIndicator);
         mainGrid.Children.Add(infoStack);
         mainGrid.Children.Add(progressBadge);
-        mainGrid.Children.Add(chevron);
         mainGrid.Children.Add(actionButton);
 
         border.Child = mainGrid;
@@ -216,19 +188,7 @@ public class ChapterPreview : Button
         ];
     }
 
-    public ICommand? InfoEmittedCommand
-    {
-        get => GetValue(InfoEmittedCommandProperty);
-        set => SetValue(InfoEmittedCommandProperty, value);
-    }
-
-    public ICommand? PopupRequestedCommand
-    {
-        get => GetValue(PopupRequestedCommandProperty);
-        set => SetValue(PopupRequestedCommandProperty, value);
-    }
-
-    public Chapter Chapter
+    public Chapter? Chapter
     {
         get => GetChapter(this);
         set => SetChapter(this, value);
@@ -236,26 +196,22 @@ public class ChapterPreview : Button
 
     private void ShowChoices(object? sender, RoutedEventArgs e)
     {
-        const string signalIssue = "Signaler un problème";
+        string signalIssue = Localizer.Get("Choice.SignalIssue");
         ChooseActionViewModel viewmodel = new([signalIssue]);
         Popup popup = new(viewmodel);
         popup.Closed += (_, _) =>
         {
             string actionName = viewmodel.GetResult();
-            switch (actionName)
-            {
-                case signalIssue:
-                    ReportIssue();
-                    break;
-            }
+            if (actionName == signalIssue) ReportIssue();
         };
 
-        PopupRequestedCommand?.Execute(popup);
+        WeakReferenceMessenger.Default.Send(new PopupChangeMessage(popup));
         e.Handled = true;
     }
 
     private void ReportIssue()
     {
+        if (Chapter == null) return;
         CreateChapterIssueViewModel content = new(Chapter.Id);
         ConfirmCancelViewModel viewmodel = new(content);
         Popup popup = new(viewmodel);
@@ -268,35 +224,24 @@ public class ChapterPreview : Button
                 ManaxLibrary.Optional<bool> chapterIssueAsync =
                     await ManaxApiIssueClient.CreateChapterIssueAsync(issue);
                 if (chapterIssueAsync.Failed)
-                    InfoEmittedCommand?.Execute(chapterIssueAsync.Error);
+                    WeakReferenceMessenger.Default.Send(new NotificationMessage(chapterIssueAsync.Error));
             }
             catch (Exception e)
             {
-                InfoEmittedCommand?.Execute(" Une erreur est survenue lors de la création du problème.");
-                Logger.LogError("Erreur lors de la création d'un problème de chapitre", e);
+                WeakReferenceMessenger.Default.Send(
+                    new NotificationMessage(Localizer.Get("ChapterPreview.ReportFailed")));
+                Logger.LogError($"Error while creating chapter issue for chapter {Chapter.Id}", e);
             }
         };
-        Dispatcher.UIThread.Post(() => { PopupRequestedCommand?.Execute(popup); });
+        WeakReferenceMessenger.Default.Send(new PopupChangeMessage(popup));
     }
 
-    protected override void OnPointerEntered(PointerEventArgs e)
+    public static void SetChapter(AvaloniaObject element, Chapter? chapterValue)
     {
-        base.OnPointerEntered(e);
-        if (Content is Border border) border.Background = _hoverColor;
+        element.SetValue(ChapterProperty, chapterValue);
     }
 
-    protected override void OnPointerExited(PointerEventArgs e)
-    {
-        base.OnPointerExited(e);
-        if (Content is Border border) border.Background = _backgroundColor;
-    }
-
-    public static void SetChapter(AvaloniaObject element, Chapter serieValue)
-    {
-        element.SetValue(ChapterProperty, serieValue);
-    }
-
-    public static Chapter GetChapter(AvaloniaObject element)
+    public static Chapter? GetChapter(AvaloniaObject element)
     {
         return element.GetValue(ChapterProperty);
     }

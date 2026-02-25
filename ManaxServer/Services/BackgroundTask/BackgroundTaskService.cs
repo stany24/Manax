@@ -1,11 +1,11 @@
 using ManaxLibrary.Logging;
-using ManaxServer.Localization;
 using ManaxServer.Services.Notification;
 using ManaxServer.Tasks;
 
 namespace ManaxServer.Services.BackgroundTask;
 
-public class BackgroundTaskService(INotificationService notificationService) : Service, IBackgroundTaskService
+public class BackgroundTaskService(INotificationService notificationService)
+    : Service, IBackgroundTaskService, IDisposable
 {
     private const int MaxTasks = 6;
 
@@ -13,30 +13,39 @@ public class BackgroundTaskService(INotificationService notificationService) : S
     private readonly SemaphoreSlim _taskSemaphore = new(1, 1);
     private readonly SortedSet<IBackGroundTask> _waitingTasks = new(TaskPriorityComparer.Instance);
 
-    public async Task AddTaskAsync(IBackGroundTask backGroundTask)
+    public void AddTask(IBackGroundTask backGroundTask)
     {
-        await _taskSemaphore.WaitAsync().ConfigureAwait(false);
-        try
+        Task.Run(async () =>
         {
-            bool alreadyWaiting = _waitingTasks.Contains(backGroundTask);
-            bool alreadyRunning = _runningTasks.Any(rt => rt.Task.Equals(backGroundTask));
-            if (alreadyWaiting || alreadyRunning) return;
+            await _taskSemaphore.WaitAsync().ConfigureAwait(false);
+            try
+            {
+                bool alreadyWaiting = _waitingTasks.Contains(backGroundTask);
+                bool alreadyRunning = _runningTasks.Any(rt => rt.Task.Equals(backGroundTask));
+                if (alreadyWaiting || alreadyRunning) return;
 
-            _waitingTasks.Add(backGroundTask);
-            Logger.LogInfo("Task added to waiting list " + backGroundTask.GetName());
-        }
-        finally
-        {
-            _taskSemaphore.Release();
-        }
+                _waitingTasks.Add(backGroundTask);
+                Logger.LogInfo("Task added to waiting list " + backGroundTask.GetName());
+            }
+            finally
+            {
+                _taskSemaphore.Release();
+            }
 
-        await TryStartTasksAsync().ConfigureAwait(false);
-        await PublishTasksAsync().ConfigureAwait(false);
+            await TryStartTasksAsync().ConfigureAwait(false);
+            await PublishTasksAsync().ConfigureAwait(false);
+        });
+    }
+
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
     }
 
     ~BackgroundTaskService()
     {
-        _taskSemaphore.Dispose();
+        Dispose(false);
     }
 
     private async Task TryStartTasksAsync()
@@ -66,7 +75,7 @@ public class BackgroundTaskService(INotificationService notificationService) : S
                     }
                     catch (Exception e)
                     {
-                        Logger.LogError(Localizer.TaskError(backGroundTask.GetName()), e);
+                        Logger.LogError("Error while executing background task " + backGroundTask.GetName(), e);
                     }
                 });
 
@@ -126,6 +135,11 @@ public class BackgroundTaskService(INotificationService notificationService) : S
         {
             _taskSemaphore.Release();
         }
+    }
+
+    private void Dispose(bool disposing)
+    {
+        if (disposing) _taskSemaphore.Dispose();
     }
 }
 
