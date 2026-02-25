@@ -14,10 +14,6 @@
     Title="{localization:Localize MainWindow.Title}"
     WindowStartupLocation="CenterScreen">
 
-    <Window.Resources>
-        <converters:IssuePageVisibleConverter x:Key="IssuePageVisibleConverter" />
-    </Window.Resources>
-
     <Window.Styles>
         <Style Selector="StackPanel.sidebar">
             <Setter Property="Background" Value="{DynamicResource MaterialCardBackgroundBrush}" />
@@ -26,7 +22,7 @@
         <Style Selector="StackPanel.sidebar controls|IconButton">
             <Setter Property="CornerRadius" Value="7" />
             <Setter Property="Padding" Value="6" />
-            <Setter Property="Margin" Value="4,4,12,4" />
+            <Setter Property="Margin" Value="4" />
             <Setter Property="HorizontalContentAlignment" Value="Left" />
             <Setter Property="Background" Value="{DynamicResource MaterialCardBackgroundBrush}" />
             <Setter Property="IconColor" Value="{DynamicResource MaterialPrimaryMidBrush}" />
@@ -40,6 +36,12 @@
             <Setter Property="FontWeight" Value="DemiBold" />
             <Setter Property="FontSize" Value="18" />
             <Setter Property="Margin" Value="12,12,12,0" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+
+        <Style Selector="StackPanel.sidebar > Separator">
+            <Setter Property="IsVisible" Value="{Binding !SideBarVisible}" />
+            <Setter Property="Margin" Value="10" />
         </Style>
     </Window.Styles>
 
@@ -53,15 +55,48 @@
                             IsVisible="{Binding History.CurrentPage.ControlBarVisible}"
                             Orientation="Vertical">
 
-                    <TextBlock Text="{localization:Localize MainWindow.Title}"
-                               HorizontalAlignment="Center" />
+                    <Grid ColumnDefinitions="Auto,*,Auto">
+                        <controls:IconButton Grid.Column="0"
+                                             IsVisible="{Binding !SideBarVisible}"
+                                             Icon="ChevronRight"
+                                             VerticalAlignment="Center"
+                                             Command="{Binding OpenSideBar}" />
+                        <TextBlock Grid.Column="1"
+                                   FontWeight="DemiBold"
+                                   FontSize="18"
+                                   Margin="12"
+                                   VerticalAlignment="Center"
+                                   Text="{localization:Localize MainWindow.Title}"
+                                   IsVisible="{Binding SideBarVisible}"
+                                   HorizontalAlignment="Center" />
+                        <controls:IconButton Grid.Column="2"
+                                             IsVisible="{Binding SideBarVisible}"
+                                             Icon="ChevronLeft"
+                                             VerticalAlignment="Center"
+                                             Command="{Binding CloseSideBar}" />
+                    </Grid>
 
                     <controls:IconButton Command="{Binding ChangePageHome}"
                                          Icon="HomeOutline"
-                                         Text="{localization:Localize MainWindow.Home}" />
+                                         Text="{localization:Localize MainWindow.Home}"
+                                         ShowText="{Binding SideBarVisible}" />
+                    <Separator>
+                        <Separator.IsVisible>
+                            <MultiBinding Converter="{x:Static converters:VisibilityConverters.And}">
+                                <Binding Path="Libraries.Count" />
+                                <Binding Path="!SideBarVisible" />
+                            </MultiBinding>
+                        </Separator.IsVisible>
+                    </Separator>
 
-                    <TextBlock IsVisible="{Binding Libraries.Count}"
-                               Text="{localization:Localize MainWindow.Libraries}" />
+                    <TextBlock Text="{localization:Localize MainWindow.Libraries}">
+                        <TextBlock.IsVisible>
+                            <MultiBinding Converter="{x:Static converters:VisibilityConverters.And}">
+                                <Binding Path="Libraries.Count" />
+                                <Binding Path="SideBarVisible" />
+                            </MultiBinding>
+                        </TextBlock.IsVisible>
+                    </TextBlock>
 
                     <ItemsControl ItemsSource="{Binding Libraries}">
                         <ItemsControl.ItemTemplate>
@@ -70,7 +105,8 @@
                                     Command="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).ShowLibrary}"
                                     CommandParameter="{Binding }"
                                     Icon="Bookshelf"
-                                    Text="{Binding Name}" />
+                                    Text="{Binding Name}"
+                                    ShowText="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).SideBarVisible}" />
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                         <ItemsControl.ItemsPanel>
@@ -80,13 +116,16 @@
                         </ItemsControl.ItemsPanel>
                     </ItemsControl>
 
-                    <TextBlock Text="{localization:Localize MainWindow.Admin}" />
+                    <TextBlock Text="{localization:Localize MainWindow.Admin}"
+                               IsVisible="{Binding SideBarVisible}" />
+                    <Separator />
 
                     <controls:IconButton Command="{Binding ChangePageIssues}"
                                          Icon="WarningOutline"
-                                         Text="{localization:Localize MainWindow.Issues}">
+                                         Text="{localization:Localize MainWindow.Issues}"
+                                         ShowText="{Binding SideBarVisible}">
                         <controls:IconButton.IsVisible>
-                            <MultiBinding Converter="{StaticResource  IssuePageVisibleConverter}">
+                            <MultiBinding Converter="{x:Static converters:VisibilityConverters.IssuePageVisible}">
                                 <Binding Path="FeatureManager.AutomaticIssuesFeatureEnabled" />
                                 <Binding Path="FeatureManager.ReportedIssuesFeatureEnabled" />
                                 <Binding Path="PermissionManager.CanReadAllIssues" />
@@ -97,13 +136,15 @@
                     <controls:IconButton IsVisible="{Binding PermissionManager.CanReadUsers}"
                                          Command="{Binding ChangePageUsers}"
                                          Icon="AccountGroupOutline"
-                                         Text="{localization:Localize MainWindow.Users}" />
+                                         Text="{localization:Localize MainWindow.Users}"
+                                         ShowText="{Binding SideBarVisible}" />
 
                     <controls:IconButton Command="{Binding ChangePageRanks}"
                                          Icon="ChevronTripleUp"
-                                         Text="{localization:Localize MainWindow.Ranks}">
+                                         Text="{localization:Localize MainWindow.Ranks}"
+                                         ShowText="{Binding SideBarVisible}">
                         <controls:IconButton.IsVisible>
-                            <MultiBinding Converter="{x:Static BoolConverters.And}">
+                            <MultiBinding Converter="{x:Static converters:VisibilityConverters.And}">
                                 <Binding Path="FeatureManager.RankFeatureEnabled" />
                                 <Binding Path="PermissionManager.CanReadRanks" />
                             </MultiBinding>
@@ -113,48 +154,61 @@
                     <controls:IconButton IsVisible="{Binding PermissionManager.CanReadTags}"
                                          Command="{Binding ChangePageTags}"
                                          Icon="TagOutline"
-                                         Text="{localization:Localize MainWindow.Tags}" />
+                                         Text="{localization:Localize MainWindow.Tags}"
+                                         ShowText="{Binding SideBarVisible}" />
 
                     <controls:IconButton IsVisible="{Binding PermissionManager.CanUploadChapter}"
                                          Command="{Binding ChangeUploadPage}"
                                          Icon="UploadOutline"
-                                         Text="{localization:Localize MainWindow.Upload}" />
+                                         Text="{localization:Localize MainWindow.Upload}"
+                                         ShowText="{Binding SideBarVisible}" />
 
                     <controls:IconButton IsVisible="{Binding PermissionManager.CanReadPersons}"
                                          Command="{Binding ChangePagePersons}"
                                          Icon="AccountGroupOutline"
-                                         Text="{localization:Localize MainWindow.Persons}" />
+                                         Text="{localization:Localize MainWindow.Persons}"
+                                         ShowText="{Binding SideBarVisible}" />
 
-                    <TextBlock Text="{localization:Localize MainWindow.Parameters}" />
+                    <TextBlock Text="{localization:Localize MainWindow.Parameters}"
+                               IsVisible="{Binding SideBarVisible}" />
+                    <Separator />
 
                     <controls:IconButton IsVisible="{Binding PermissionManager.CanReadServerSettings}"
                                          Command="{Binding ChangePageSettings}"
                                          Icon="CogOutline"
-                                         Text="{localization:Localize MainWindow.Parameters.Server}" />
+                                         Text="{localization:Localize MainWindow.Parameters.Server}"
+                                         ShowText="{Binding SideBarVisible}" />
 
                     <controls:IconButton Command="{Binding ChangePageAppSettings}"
                                          Icon="CogOutline"
-                                         Text="{localization:Localize MainWindow.Parameters.UI}" />
+                                         Text="{localization:Localize MainWindow.Parameters.UI}"
+                                         ShowText="{Binding SideBarVisible}" />
 
                     <controls:IconButton IsVisible="{Binding PermissionManager.CanReadFeatures}"
                                          Command="{Binding ChangePageFeatures}"
                                          Icon="Feather"
-                                         Text="{localization:Localize MainWindow.Parameters.Features}" />
+                                         Text="{localization:Localize MainWindow.Parameters.Features}"
+                                         ShowText="{Binding SideBarVisible}" />
 
-                    <TextBlock Text="{localization:Localize MainWindow.Stats}" />
+                    <TextBlock Text="{localization:Localize MainWindow.Stats}"
+                               IsVisible="{Binding SideBarVisible}" />
+                    <Separator />
 
                     <controls:IconButton Command="{Binding ChangePageUserStats}"
                                          Icon="ChartLine"
-                                         Text="{localization:Localize MainWindow.Stats.User}" />
+                                         Text="{localization:Localize MainWindow.Stats.User}"
+                                         ShowText="{Binding SideBarVisible}" />
 
                     <controls:IconButton IsVisible="{Binding PermissionManager.CanReadServerStats}"
                                          Command="{Binding ChangePageServerStats}"
                                          Icon="ChartLine"
-                                         Text="{localization:Localize MainWindow.Stats.Server}" />
+                                         Text="{localization:Localize MainWindow.Stats.Server}"
+                                         ShowText="{Binding SideBarVisible}" />
 
                     <controls:IconButton Command="{Binding Logout}"
                                          Icon="Logout"
-                                         Text="{localization:Localize MainWindow.Logout}" />
+                                         Text="{localization:Localize MainWindow.Logout}"
+                                         ShowText="{Binding SideBarVisible}" />
 
                     <Border Margin="8,16,8,8"
                             IsVisible="{Binding RunningTasks.Count}">

@@ -5,6 +5,8 @@ using System.IO;
 using System.Linq;
 using Avalonia;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
+using ManaxClient.Event;
 using ManaxClient.Models.Upload;
 
 namespace ManaxClient.ViewModels.Pages.Upload.Tab;
@@ -21,6 +23,13 @@ public partial class ManualCleanupTabViewModel : TabViewModel
     {
         string processingFolder = UploadSettings.ProcessingFolder;
         UploadSettings.SettingsChanged += (_, _) => { processingFolder = UploadSettings.ProcessingFolder; };
+        if (!Directory.Exists(processingFolder))
+        {
+            WeakReferenceMessenger.Default.Send(
+                new NotificationMessage("Processing folder does not exist. Please set it up in the settings."));
+            return;
+        }
+
         SerieFolders = new ObservableCollection<SerieFolder>(
             Directory.GetDirectories(processingFolder)
                 .Select(f => new SerieFolder(f)));
@@ -39,7 +48,7 @@ public partial class ManualCleanupTabViewModel : TabViewModel
     }
 
     public ObservableCollection<string> ImagesToEdit { get; set; } = [];
-    public ObservableCollection<SerieFolder> SerieFolders { get; set; }
+    public ObservableCollection<SerieFolder> SerieFolders { get; set; } = [];
 
     public void ChangeRowCount(bool increase)
     {

@@ -51,6 +51,12 @@ public class Serie
                                              SettingsManager.DataDto.BannerFormat.ToString()
                                                  .ToLower(CultureInfo.InvariantCulture));
 
+    public string ChapterPath(uint nb)
+    {
+        return Path.Combine(SavePath, nb.ToString(CultureInfo.InvariantCulture),
+            SettingsManager.DataDto.ArchiveFormat.ToString().ToLower(CultureInfo.InvariantCulture));
+    }
+
     public SerieDto ToDto()
     {
         return new SerieDto

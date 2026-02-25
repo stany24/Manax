@@ -27,7 +27,7 @@
             <Setter Property="TextWrapping" Value="Wrap" />
             <Setter Property="Padding" Value="0,0,0,10" />
         </Style>
-        
+
         <Style Selector="previews|ChapterPreview.chapter">
             <Setter Property="Background" Value="{DynamicResource MaterialPaperBrush }" />
             <Setter Property="Padding" Value="7" />
@@ -153,7 +153,7 @@
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <previews:ChapterPreview Classes="chapter"
-                                                         Chapter="{Binding .}"/>
+                                                         Chapter="{Binding .}" />
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                         <ItemsControl.ItemsPanel>

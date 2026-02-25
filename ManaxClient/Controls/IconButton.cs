@@ -16,12 +16,17 @@ public class IconButton : Button
     public static readonly StyledProperty<IBrush?> IconColorProperty =
         AvaloniaProperty.Register<IconButton, IBrush?>(nameof(Icon));
 
+    public static readonly StyledProperty<bool> ShowTextProperty =
+        AvaloniaProperty.Register<IconButton, bool>(nameof(ShowText), true);
+
     public static readonly StyledProperty<string?> TextProperty =
         AvaloniaProperty.Register<IconButton, string?>(nameof(Text));
 
+    private readonly MaterialIcon _icon;
+
     public IconButton()
     {
-        MaterialIcon icon = new()
+        _icon = new MaterialIcon
         {
             Width = 20,
             Height = 20,
@@ -32,15 +37,13 @@ public class IconButton : Button
 
         TextBlock textBlock = new()
         {
-            VerticalAlignment = VerticalAlignment.Center
+            VerticalAlignment = VerticalAlignment.Center,
+            [!IsVisibleProperty] = this[!ShowTextProperty]
         };
         textBlock.Bind(TextBlock.TextProperty, this.GetObservable(TextProperty));
-        this.GetObservable(TextProperty).Subscribe(text =>
-        {
-            icon.Margin = string.IsNullOrEmpty(text)
-                ? new Thickness(0)
-                : new Thickness(0, 0, 5, 0);
-        });
+
+        this.GetObservable(TextProperty).Subscribe(_ => UpdateMargin());
+        this.GetObservable(ShowTextProperty).Subscribe(_ => UpdateMargin());
 
         StackPanel stackPanel = new()
         {
@@ -48,7 +51,7 @@ public class IconButton : Button
             HorizontalAlignment = HorizontalAlignment.Center,
             VerticalAlignment = VerticalAlignment.Center
         };
-        stackPanel.Children.Add(icon);
+        stackPanel.Children.Add(_icon);
         stackPanel.Children.Add(textBlock);
 
         Content = stackPanel;
@@ -71,5 +74,20 @@ public class IconButton : Button
     {
         get => GetValue(TextProperty);
         set => SetValue(TextProperty, value);
+    }
+
+    public bool ShowText
+    {
+        get => GetValue(ShowTextProperty);
+        set => SetValue(ShowTextProperty, value);
+    }
+
+    private void UpdateMargin()
+    {
+        bool showText = GetValue(ShowTextProperty);
+        string? text = GetValue(TextProperty);
+        _icon.Margin = showText && !string.IsNullOrEmpty(text)
+            ? new Thickness(0, 0, 5, 0)
+            : new Thickness(0);
     }
 }

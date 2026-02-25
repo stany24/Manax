@@ -72,6 +72,7 @@ public class SerieSource
                             serie.LoadInfo();
                             serie.LoadPoster();
                         }
+
                         _isLoaded = true;
                     }
                 }

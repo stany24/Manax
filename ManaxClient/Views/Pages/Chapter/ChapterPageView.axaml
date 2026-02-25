@@ -29,7 +29,7 @@
                     <DataTemplate>
                         <Image Source="{Binding .}"
                                Stretch="Uniform"
-                               StretchDirection="DownOnly"/>
+                               StretchDirection="DownOnly" />
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
                 <ItemsControl.ItemsPanel>
@@ -39,18 +39,17 @@
                 </ItemsControl.ItemsPanel>
             </ItemsControl>
         </ScrollViewer>
-        
+
         <Border Classes="card"
                 IsVisible="{Binding ControlBordersVisible}"
                 VerticalAlignment="Top"
                 HorizontalAlignment="Left">
             <controls:IconButton Classes="icon-button light"
                                  Icon="ArrowLeft"
-                                 Command="{Binding Previous}">
-            </controls:IconButton>
+                                 Command="{Binding Previous}" />
         </Border>
 
-        
+
         <Border Classes="card"
                 IsVisible="{Binding ControlBordersVisible}"
                 HorizontalAlignment="Left"
@@ -72,7 +71,7 @@
                 <controls:IconButton ToolTip.Tip="{localization:Localize ChapterPage.NextPage}"
                                      Classes="icon-button light"
                                      Command="{Binding NextPage}"
-                                     Icon="ArrowDown"/>
+                                     Icon="ArrowDown" />
             </StackPanel>
         </Border>
 
@@ -91,7 +90,7 @@
                             VerticalAlignment="Center"
                             Orientation="Horizontal">
                     <TextBlock Text="{localization:Localize ChapterPage.Chapter}" />
-                    <TextBlock> </TextBlock>
+                    <TextBlock />
                     <TextBlock Text="{Binding Chapter.Number}" />
                 </StackPanel>
 
