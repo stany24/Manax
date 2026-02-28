@@ -154,7 +154,7 @@ public partial class AutoCleanupTabViewModel : TabViewModel
         string[] imagesToConvert = _imagesFormats.AsParallel().SelectMany(ext =>
             Directory.GetFiles(_processingFolder, "*." + ext, SearchOption.AllDirectories)).ToArray();
         NbImage = imagesToConvert.Length;
-        Parallel.ForEach(imagesToConvert, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount },
+        Parallel.ForEach(imagesToConvert, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount-1 },
             file =>
             {
                 try

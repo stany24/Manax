@@ -61,7 +61,7 @@
             <StackPanel>
                 <TextBlock Text="{localization:Localize SerieUpdatePopup.Serie.Title}" />
                 <TextBox Text="{Binding Title}"
-                         Watermark="{localization:Localize SerieUpdatePopup.Serie.Title.Placeholder}" />
+                         PlaceholderText="{localization:Localize SerieUpdatePopup.Serie.Title.Placeholder}" />
             </StackPanel>
         </Border>
 
@@ -69,7 +69,7 @@
             <StackPanel>
                 <TextBlock Text="{localization:Localize SerieUpdatePopup.Serie.Description}" />
                 <TextBox Text="{Binding Description}"
-                         Watermark="{localization:Localize SerieUpdatePopup.Serie.Description.Placeholder}" />
+                         PlaceholderText="{localization:Localize SerieUpdatePopup.Serie.Description.Placeholder}" />
             </StackPanel>
         </Border>
 

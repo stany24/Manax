@@ -23,7 +23,7 @@
             <StackPanel Spacing="8">
                 <TextBlock Text="{localization:Localize RankEditPopup.Name}" />
                 <TextBox Text="{Binding Name}"
-                         Watermark="{localization:Localize RankEditPopup.Name.Placeholder}" />
+                         PlaceholderText="{localization:Localize RankEditPopup.Name.Placeholder}" />
             </StackPanel>
         </Border>
 

@@ -23,7 +23,7 @@
             <StackPanel>
                 <TextBlock Text="{localization:Localize LibraryCreatePopup.Name}" />
                 <TextBox Text="{Binding Name}"
-                         Watermark="{localization:Localize LibraryCreatePopup.Name.Placeholder}" />
+                         PlaceholderText="{localization:Localize LibraryCreatePopup.Name.Placeholder}" />
             </StackPanel>
         </Border>
 

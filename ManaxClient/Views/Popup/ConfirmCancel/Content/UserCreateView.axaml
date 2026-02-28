@@ -28,7 +28,7 @@
                     Text="{localization:Localize UserCreatePopup.Username}" />
                 <TextBox
                     Text="{Binding Username}"
-                    Watermark="{localization:Localize UserCreatePopup.Username.Placeholder}" />
+                    PlaceholderText="{localization:Localize UserCreatePopup.Username.Placeholder}" />
             </StackPanel>
         </Border>
 
@@ -38,7 +38,7 @@
                     Text="{localization:Localize UserCreatePopup.Password}" />
                 <TextBox
                     Text="{Binding Password}"
-                    Watermark="{localization:Localize UserCreatePopup.Password.Placeholder}"
+                    PlaceholderText="{localization:Localize UserCreatePopup.Password.Placeholder}"
                     PasswordChar="*" />
             </StackPanel>
         </Border>
