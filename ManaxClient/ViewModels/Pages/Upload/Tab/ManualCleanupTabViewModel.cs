@@ -8,6 +8,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
 using ManaxClient.Event;
 using ManaxClient.Models.Upload;
+using ManaxLibrary.Logging;
 
 namespace ManaxClient.ViewModels.Pages.Upload.Tab;
 
@@ -76,7 +77,14 @@ public partial class ManualCleanupTabViewModel : TabViewModel
     {
         if (ImagesToEdit.Count == 0) return;
         string args = ImagesToEdit.Aggregate("", (current, image) => current + $"\"{image}\" ");
-        Process.Start("gimp", args);
+        try
+        {
+            Process.Start("gimp", args);
+        }
+        catch(Exception e)
+        {
+            Logger.LogError("Failed to edit images",e);
+        }
     }
 
     public void Clear()
