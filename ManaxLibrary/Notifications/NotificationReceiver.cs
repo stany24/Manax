@@ -81,6 +81,9 @@ public static class NotificationReceiver
                 options => { options.AccessTokenProvider = () => Task.FromResult(_token)!; })
             .WithAutomaticReconnect()
             .Build();
+        
+        _hubConnection.KeepAliveInterval = NotificationInformation.KeepAliveInterval;
+        _hubConnection.ServerTimeout = NotificationInformation.Timeout;
 
         _hubConnection.On<LibraryDto>(nameof(NotificationType.LibraryCreated),
             libraryData => { OnLibraryCreated?.Invoke(libraryData); });

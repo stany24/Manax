@@ -77,6 +77,11 @@ public partial class ConfigureUploadTabViewModel : TabViewModel
     public void Next()
     {
         StorageManager.ClearTrash();
+        if (SourceFolders.Count == 0)
+        {
+            NextRequested?.Invoke(this, new AutoCleanupTabViewModel());
+            return;
+        }
         NextRequested?.Invoke(this, new FetchFromSourceTabViewModel());
     }
 
