@@ -169,7 +169,7 @@ public class UserController(
             Logger.LogWarning("Failed login attempt for user " + loginDto.Username + " from " + loginAttempt.Origin);
             context.LoginAttempts.Add(loginAttempt);
             await context.SaveChangesAsync();
-            return Unauthorized(ErrorCode.InvalidPassword);
+            return Unauthorized(ErrorCode.BadCredentials);
         }
 
         user.LastLogin = DateTime.UtcNow;

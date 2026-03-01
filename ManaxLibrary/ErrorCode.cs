@@ -20,6 +20,7 @@ public enum ErrorCode
     InvalidPassword = 22,
     CannotDeleteSelf = 23,
     InsufficientPermissions = 24,
+    BadCredentials = 25,
 
     LibraryDoesNotExist = 31,
     InvalidLibraryData = 32,
