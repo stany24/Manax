@@ -28,7 +28,7 @@
                       ColumnSpacing="8">
                     <TextBox Grid.Column="0"
                              Text="{Binding Path}"
-                             PlaceholderText="{localizer:Localize SavePointCreatePopup.Path.Placeholder}" />
+                             Watermark="{localizer:Localize SavePointCreatePopup.Path.Placeholder}" />
                     <controls:IconButton Grid.Column="1"
                                          Classes="icon-button dark"
                                          Icon="FolderOpen" />

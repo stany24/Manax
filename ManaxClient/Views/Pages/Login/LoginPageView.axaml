@@ -34,7 +34,7 @@
                             <TextBlock Text="{localizer:Localize LoginPage.Username}" />
                             <TextBox Name="TbxUsername"
                                      Text="{Binding Username}"
-                                     PlaceholderText="{localizer:Localize LoginPage.Username.Placeholder}" />
+                                     Watermark="{localizer:Localize LoginPage.Username.Placeholder}" />
                         </StackPanel>
                     </Border>
 
@@ -45,7 +45,7 @@
                                      Text="{Binding Password}"
                                      Loaded="TbxPasswordOnLoaded"
                                      PasswordChar="•"
-                                     PlaceholderText="{localizer:Localize LoginPage.Password.Placeholder}" />
+                                     Watermark="{localizer:Localize LoginPage.Password.Placeholder}" />
                         </StackPanel>
                     </Border>
 
@@ -53,7 +53,7 @@
                         <StackPanel Spacing="6">
                             <TextBlock Text="{localizer:Localize LoginPage.Server}" />
                             <TextBox Text="{Binding Host}"
-                                     PlaceholderText="{localizer:Localize LoginPage.Server.Placeholder}" />
+                                     Watermark="{localizer:Localize LoginPage.Server.Placeholder}" />
                         </StackPanel>
                     </Border>
                 </StackPanel>

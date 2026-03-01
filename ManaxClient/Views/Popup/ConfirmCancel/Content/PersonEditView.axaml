@@ -25,7 +25,7 @@
                 <TextBlock Text="{localizer:Localize PersonEditPopup.FirstName}"
                            FontWeight="Medium" />
                 <TextBox Text="{Binding FirstName}"
-                         PlaceholderText="{localizer:Localize PersonEditPopup.FirstName.Placeholder}" />
+                         Watermark="{localizer:Localize PersonEditPopup.FirstName.Placeholder}" />
             </StackPanel>
         </Border>
 
@@ -34,7 +34,7 @@
                 <TextBlock Text="{localizer:Localize PersonEditPopup.LastName}"
                            FontWeight="Medium" />
                 <TextBox Text="{Binding LastName}"
-                         PlaceholderText="{localizer:Localize PersonEditPopup.LastName.Placeholder}" />
+                         Watermark="{localizer:Localize PersonEditPopup.LastName.Placeholder}" />
             </StackPanel>
         </Border>
 
@@ -43,7 +43,7 @@
                 <TextBlock Text="{localizer:Localize PersonEditPopup.Pseudonym}"
                            FontWeight="Medium" />
                 <TextBox Text="{Binding Pseudonym}"
-                         PlaceholderText="{localizer:Localize PersonEditPopup.Pseudonym.Placeholder}" />
+                         Watermark="{localizer:Localize PersonEditPopup.Pseudonym.Placeholder}" />
             </StackPanel>
         </Border>
 

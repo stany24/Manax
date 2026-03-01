@@ -25,7 +25,7 @@
             <StackPanel Spacing="8">
                 <TextBlock Text="{localizer:Localize TagEditPopup.Name}" />
                 <TextBox Text="{Binding Name}"
-                         PlaceholderText="{localizer:Localize TagEditPopup.Name.Placeholder}" />
+                         Watermark="{localizer:Localize TagEditPopup.Name.Placeholder}" />
             </StackPanel>
         </Border>
 
