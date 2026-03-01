@@ -6,10 +6,10 @@
     xmlns:tag="clr-namespace:ManaxClient.ViewModels.Pages.Tag"
     xmlns:converters="clr-namespace:ManaxClient.Converters"
     xmlns:viewModels="clr-namespace:ManaxClient.ViewModels"
-    xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
     xmlns:controls="clr-namespace:ManaxClient.Controls"
     xmlns:icon="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     xmlns:localization1="clr-namespace:ManaxClient.Localization"
+    xmlns:localizer="clr-namespace:ManaxClient.Localization.Localizer"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Pages.Tag.TagPageView"
     x:DataType="tag:TagPageViewModel"
@@ -32,7 +32,7 @@
                                          Classes="icon-button light"
                                          IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWriteTags}"
                                          Command="{Binding CreateTag}"
-                                         Text="{localization:Localize TagPage.NewTag}"
+                                         Text="{localizer:Localize TagPage.NewTag}"
                                          Icon="Add" />
                 </Grid>
             </Border>

@@ -4,8 +4,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:content="clr-namespace:ManaxClient.ViewModels.Popup.ConfirmCancel.Content"
-    xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
     xmlns:icon="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    xmlns:localizer="clr-namespace:ManaxClient.Localization.Localizer"
     mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="400"
     x:Class="ManaxClient.Views.Popup.ConfirmCancel.Content.LibraryCreateView"
     x:DataType="content:LibraryCreateViewModel">
@@ -14,16 +14,16 @@
             <icon:MaterialIcon Classes="icon"
                                Kind="LibraryShelves" />
             <StackPanel>
-                <TextBlock Text="{localization:Localize LibraryCreatePopup.NewLibrary}" />
-                <TextBlock Text="{localization:Localize LibraryCreatePopup.Description}" />
+                <TextBlock Text="{localizer:Localize LibraryCreatePopup.NewLibrary}" />
+                <TextBlock Text="{localizer:Localize LibraryCreatePopup.Description}" />
             </StackPanel>
         </StackPanel>
 
         <Border Classes="input">
             <StackPanel>
-                <TextBlock Text="{localization:Localize LibraryCreatePopup.Name}" />
+                <TextBlock Text="{localizer:Localize LibraryCreatePopup.Name}" />
                 <TextBox Text="{Binding Name}"
-                         PlaceholderText="{localization:Localize LibraryCreatePopup.Name.Placeholder}" />
+                         PlaceholderText="{localizer:Localize LibraryCreatePopup.Name.Placeholder}" />
             </StackPanel>
         </Border>
 
@@ -33,7 +33,7 @@
                                Classes="icon"
                                Kind="Lightbulb" />
             <TextBlock Grid.Column="1"
-                       Text="{localization:Localize LibraryCreatePopup.Info}"
+                       Text="{localizer:Localize LibraryCreatePopup.Info}"
                        TextWrapping="Wrap"
                        VerticalAlignment="Center" />
         </Grid>

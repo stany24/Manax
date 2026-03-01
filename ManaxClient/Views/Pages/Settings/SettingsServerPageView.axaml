@@ -5,9 +5,9 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:page="clr-namespace:ManaxClient.ViewModels.Pages.Settings"
     xmlns:viewModels="clr-namespace:ManaxClient.ViewModels"
-    xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
     xmlns:controls="clr-namespace:ManaxClient.Controls"
     xmlns:icon="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    xmlns:localizer="clr-namespace:ManaxClient.Localization.Localizer"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Pages.Settings.SettingsServerPageView"
     x:DataType="page:SettingsServerPageViewModel"
@@ -41,20 +41,20 @@
                                        Kind="CogOutline" />
 
                     <TextBlock Grid.Column="1"
-                               Text="{localization:Localize SettingsServerPage.Title}" />
+                               Text="{localizer:Localize SettingsServerPage.Title}" />
 
                     <controls:IconButton Grid.Column="3"
                                          Classes="icon-button light"
                                          IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWriteSavePoints}"
                                          Command="{Binding CreateSavePoint}"
-                                         Text="{localization:Localize SettingsServerPage.AddSavePoint}"
+                                         Text="{localizer:Localize SettingsServerPage.AddSavePoint}"
                                          Icon="FolderOpenOutline" />
 
                     <controls:IconButton Grid.Column="4"
                                          Classes="icon-button light"
                                          IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWriteLibraries}"
                                          Command="{Binding CreateLibrary}"
-                                         Text="{localization:Localize SettingsServerPage.AddLibrary}"
+                                         Text="{localizer:Localize SettingsServerPage.AddLibrary}"
                                          Icon="FolderOpenOutline" />
                 </Grid>
             </Border>
@@ -69,7 +69,7 @@
                                                Kind="ImageAlbum"
                                                Classes="icon" />
                             <TextBlock Grid.Column="1"
-                                       Text="{localization:Localize SettingsServerPage.PosterConfig}"
+                                       Text="{localizer:Localize SettingsServerPage.PosterConfig}"
                                        Margin="0" />
                         </Grid>
 
@@ -81,7 +81,7 @@
                                     Grid.Column="0"
                                     Grid.Row="0">
                                 <StackPanel>
-                                    <TextBlock Text="{localization:Localize SettingsServerPage.ImageFormat}"
+                                    <TextBlock Text="{localizer:Localize SettingsServerPage.ImageFormat}"
                                                FontWeight="Medium" />
                                     <ComboBox SelectedItem="{Binding Settings.PosterFormat}"
                                               ItemsSource="{Binding AllImageFormats}"
@@ -93,7 +93,7 @@
                                     Grid.Column="1"
                                     Grid.Row="0">
                                 <StackPanel>
-                                    <TextBlock Text="{localization:Localize SettingsServerPage.Quality}"
+                                    <TextBlock Text="{localizer:Localize SettingsServerPage.Quality}"
                                                FontWeight="Medium" />
                                     <NumericUpDown Classes="input"
                                                    FormatString="0"
@@ -107,7 +107,7 @@
                                     Grid.Column="0"
                                     Grid.Row="1">
                                 <StackPanel>
-                                    <TextBlock Text="{localization:Localize SettingsServerPage.MaxWidth}"
+                                    <TextBlock Text="{localizer:Localize SettingsServerPage.MaxWidth}"
                                                FontWeight="Medium" />
                                     <NumericUpDown Classes="input"
                                                    FormatString="0"
@@ -120,7 +120,7 @@
                                     Grid.Column="1"
                                     Grid.Row="1">
                                 <StackPanel>
-                                    <TextBlock Text="{localization:Localize SettingsServerPage.MinWidth}"
+                                    <TextBlock Text="{localizer:Localize SettingsServerPage.MinWidth}"
                                                FontWeight="Medium" />
                                     <NumericUpDown Classes="input"
                                                    FormatString="0"
@@ -141,7 +141,7 @@
                                                Kind="ImageArea"
                                                Classes="icon" />
                             <TextBlock Grid.Column="1"
-                                       Text="{localization:Localize SettingsServerPage.BannerConfig}"
+                                       Text="{localizer:Localize SettingsServerPage.BannerConfig}"
                                        Margin="0" />
                         </Grid>
 
@@ -152,7 +152,7 @@
                                     Grid.Column="0"
                                     Grid.Row="0">
                                 <StackPanel>
-                                    <TextBlock Text="{localization:Localize SettingsServerPage.ImageFormat}"
+                                    <TextBlock Text="{localizer:Localize SettingsServerPage.ImageFormat}"
                                                FontWeight="Medium" />
                                     <ComboBox SelectedItem="{Binding Settings.BannerFormat}"
                                               ItemsSource="{Binding AllImageFormats}"
@@ -164,7 +164,7 @@
                                     Grid.Column="1"
                                     Grid.Row="0">
                                 <StackPanel>
-                                    <TextBlock Text="{localization:Localize SettingsServerPage.Quality}"
+                                    <TextBlock Text="{localizer:Localize SettingsServerPage.Quality}"
                                                FontWeight="Medium" />
                                     <NumericUpDown Classes="input"
                                                    FormatString="0"
@@ -185,7 +185,7 @@
                                                Classes="icon"
                                                Kind="BookOpenVariantOutline" />
                             <TextBlock Grid.Column="1"
-                                       Text="{localization:Localize SettingsServerPage.ChapterConfig}"
+                                       Text="{localizer:Localize SettingsServerPage.ChapterConfig}"
                                        Margin="0" />
                         </Grid>
 
@@ -197,7 +197,7 @@
                                     Grid.Column="0"
                                     Grid.Row="0">
                                 <StackPanel>
-                                    <TextBlock Text="{localization:Localize SettingsServerPage.MaxPageWidth}"
+                                    <TextBlock Text="{localizer:Localize SettingsServerPage.MaxPageWidth}"
                                                FontWeight="Medium" />
                                     <NumericUpDown Classes="input"
                                                    FormatString="0"
@@ -210,7 +210,7 @@
                                     Grid.Column="1"
                                     Grid.Row="0">
                                 <StackPanel>
-                                    <TextBlock Text="{localization:Localize SettingsServerPage.MinPageWidth}"
+                                    <TextBlock Text="{localizer:Localize SettingsServerPage.MinPageWidth}"
                                                FontWeight="Medium" />
                                     <NumericUpDown Classes="input"
                                                    Value="{Binding Settings.MinChapterWidth}"
@@ -223,7 +223,7 @@
                                     Grid.Column="0"
                                     Grid.Row="1">
                                 <StackPanel>
-                                    <TextBlock Text="{localization:Localize SettingsServerPage.ImageFormat}"
+                                    <TextBlock Text="{localizer:Localize SettingsServerPage.ImageFormat}"
                                                FontWeight="Medium" />
                                     <ComboBox SelectedItem="{Binding Settings.ImageFormat}"
                                               ItemsSource="{Binding AllImageFormats}"
@@ -236,7 +236,7 @@
                                     Grid.Column="1"
                                     Grid.Row="1">
                                 <StackPanel>
-                                    <TextBlock Text="{localization:Localize SettingsServerPage.ArchiveFormat}"
+                                    <TextBlock Text="{localizer:Localize SettingsServerPage.ArchiveFormat}"
                                                FontWeight="Medium" />
                                     <ComboBox SelectedItem="{Binding Settings.ArchiveFormat}"
                                               ItemsSource="{Binding AllArchiveFormats}"
@@ -255,7 +255,7 @@
                                                Classes="icon"
                                                Kind="Bookshelf" />
                             <TextBlock Grid.Column="1"
-                                       Text="{localization:Localize SettingsServerPage.SeriesConfig}"
+                                       Text="{localizer:Localize SettingsServerPage.SeriesConfig}"
                                        Margin="0" />
                         </Grid>
 
@@ -267,7 +267,7 @@
                                     Grid.Column="0"
                                     Grid.Row="0">
                                 <StackPanel>
-                                    <TextBlock Text="{localization:Localize SettingsServerPage.MaxDescriptionLength}"
+                                    <TextBlock Text="{localizer:Localize SettingsServerPage.MaxDescriptionLength}"
                                                FontWeight="Medium" />
                                     <NumericUpDown Classes="input"
                                                    FormatString="0"
@@ -280,7 +280,7 @@
                                     Grid.Column="1"
                                     Grid.Row="0">
                                 <StackPanel>
-                                    <TextBlock Text="{localization:Localize SettingsServerPage.MinDescriptionLength}"
+                                    <TextBlock Text="{localizer:Localize SettingsServerPage.MinDescriptionLength}"
                                                FontWeight="Medium" />
                                     <NumericUpDown Classes="input"
                                                    FormatString="0"
@@ -302,10 +302,10 @@
                                          IsEnabled="{Binding Settings.IsValid}"
                                          Command="{Binding Update}"
                                          Icon="ContentSaveOutline"
-                                         Text="{localization:Localize SettingsServerPage.SaveButton}" />
+                                         Text="{localizer:Localize SettingsServerPage.SaveButton}" />
                     <TextBlock Grid.Column="1"
                                Classes="save-info"
-                               Text="{localization:Localize SettingsServerPage.TipMessage}" />
+                               Text="{localizer:Localize SettingsServerPage.TipMessage}" />
                 </Grid>
             </Border>
         </StackPanel>

@@ -1,5 +1,5 @@
 using CommunityToolkit.Mvvm.ComponentModel;
-using Jeek.Avalonia.Localization;
+using ManaxClient.Localization.Localizer;
 using ManaxLibrary.DTO.Feature;
 
 namespace ManaxClient.Models;

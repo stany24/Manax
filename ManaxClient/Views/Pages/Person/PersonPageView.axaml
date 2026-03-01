@@ -5,11 +5,11 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:page="clr-namespace:ManaxClient.ViewModels.Pages.Person"
     xmlns:viewModels="clr-namespace:ManaxClient.ViewModels"
-    xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
     xmlns:localization1="clr-namespace:ManaxClient.Localization"
     xmlns:data="clr-namespace:ManaxClient.Models.Server.Data"
     xmlns:controls="clr-namespace:ManaxClient.Controls"
     xmlns:icon="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    xmlns:localizer="clr-namespace:ManaxClient.Localization.Localizer"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Pages.Person.PersonPageView"
     x:DataType="page:PersonPageViewModel"
@@ -41,7 +41,7 @@
                                              Classes="icon-button light"
                                              IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWritePersons}"
                                              Command="{Binding CreatePerson}"
-                                             Text="{localization:Localize PersonPage.NewPerson}"
+                                             Text="{localizer:Localize PersonPage.NewPerson}"
                                              Icon="Add" />
                     </Grid>
 
@@ -115,7 +115,7 @@
                                              Classes="icon-button light"
                                              IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWriteRoles}"
                                              Command="{Binding CreateRole}"
-                                             Text="{localization:Localize RolePage.NewRole}"
+                                             Text="{localizer:Localize RolePage.NewRole}"
                                              Icon="Add" />
                     </Grid>
 

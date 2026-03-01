@@ -6,9 +6,9 @@
     xmlns:previews="clr-namespace:ManaxClient.Controls.Previews"
     xmlns:page="clr-namespace:ManaxClient.ViewModels.Pages.Library"
     xmlns:viewModels="clr-namespace:ManaxClient.ViewModels"
-    xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
     xmlns:localization1="clr-namespace:ManaxClient.Localization"
     xmlns:controls="clr-namespace:ManaxClient.Controls"
+    xmlns:localizer="clr-namespace:ManaxClient.Localization.Localizer"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Pages.Library.LibraryPageView"
     x:DataType="page:LibraryPageViewModel"
@@ -37,7 +37,7 @@
                                          Classes="icon-button light"
                                          IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanDeleteLibraries}"
                                          Command="{Binding DeleteLibrary}"
-                                         Text="{localization:Localize LibraryPage.Delete}"
+                                         Text="{localizer:Localize LibraryPage.Delete}"
                                          Icon="DeleteOutline" />
                 </Grid>
             </Border>
@@ -46,7 +46,7 @@
                     IsVisible="{Binding Library.Series.Count}">
                 <StackPanel Orientation="Vertical"
                             Spacing="20">
-                    <TextBlock Text="{localization:Localize LibraryPage.LibrarySeries}" />
+                    <TextBlock Text="{localizer:Localize LibraryPage.LibrarySeries}" />
 
                     <ItemsControl ItemsSource="{Binding Library.Series}">
                         <ItemsControl.ItemTemplate>

@@ -6,11 +6,11 @@
     xmlns:previews="clr-namespace:ManaxClient.Controls.Previews"
     xmlns:page="clr-namespace:ManaxClient.ViewModels.Pages.Serie"
     xmlns:viewModels="clr-namespace:ManaxClient.ViewModels"
-    xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
     xmlns:localization1="clr-namespace:ManaxClient.Localization"
     xmlns:converters="clr-namespace:ManaxClient.Converters"
     xmlns:icon="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     xmlns:controls="clr-namespace:ManaxClient.Controls"
+    xmlns:localizer="clr-namespace:ManaxClient.Localization.Localizer"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Pages.Serie.SeriePageView"
     x:DataType="page:SeriePageViewModel"
@@ -67,7 +67,7 @@
                     <StackPanel
                         IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).FeatureManager.RankFeatureEnabled}"
                         Orientation="Horizontal">
-                        <TextBlock Text="{localization:Localize SeriePage.SerieRating}"
+                        <TextBlock Text="{localizer:Localize SeriePage.SerieRating}"
                                    VerticalAlignment="Center" />
                         <ComboBox ItemsSource="{Binding Ranks}"
                                   SelectedItem="{Binding SelectedRank}"
@@ -143,8 +143,8 @@
                     <Border IsVisible="{Binding !Serie.Chapters.Count}">
                         <StackPanel>
                             <icon:MaterialIcon Kind="BookOpenVariantOutline" />
-                            <TextBlock Text="{localization:Localize SeriePage.NoChaptersAvailable}" />
-                            <TextBlock Text="{localization:Localize SeriePage.NoChaptersDescription}" />
+                            <TextBlock Text="{localizer:Localize SeriePage.NoChaptersAvailable}" />
+                            <TextBlock Text="{localizer:Localize SeriePage.NoChaptersDescription}" />
                         </StackPanel>
                     </Border>
 

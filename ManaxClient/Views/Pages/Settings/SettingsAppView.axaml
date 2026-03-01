@@ -4,9 +4,9 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:page="clr-namespace:ManaxClient.ViewModels.Pages.Settings"
-    xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
     xmlns:icon="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     xmlns:controls="clr-namespace:ManaxClient.Controls"
+    xmlns:localizer="clr-namespace:ManaxClient.Localization.Localizer"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Pages.Settings.SettingsAppView"
     x:DataType="page:SettingsAppViewModel"
@@ -22,7 +22,7 @@
                                        Classes="icon"
                                        Kind="CogOutline" />
                     <TextBlock Grid.Column="1"
-                               Text="{localization:Localize SettingsAppPage.Title}" />
+                               Text="{localizer:Localize SettingsAppPage.Title}" />
                 </Grid>
             </Border>
 
@@ -36,13 +36,13 @@
                                                Classes="icon"
                                                Kind="FlagVariantOutline" />
                             <TextBlock Grid.Column="1"
-                                       Text="{localization:Localize SettingsAppPage.Language}"
+                                       Text="{localizer:Localize SettingsAppPage.Language}"
                                        Margin="0" />
                         </Grid>
 
                         <Border Classes="item-card">
                             <StackPanel Spacing="6">
-                                <TextBlock Text="{localization:Localize SettingsAppPage.SelectedLanguage}"
+                                <TextBlock Text="{localizer:Localize SettingsAppPage.SelectedLanguage}"
                                            FontWeight="Medium" />
                                 <ComboBox ItemsSource="{Binding Languages}"
                                           SelectedItem="{Binding SelectedLanguage}"
@@ -60,13 +60,13 @@
                                                Classes="icon"
                                                Kind="MoonWaxingCrescent" />
                             <TextBlock Grid.Column="1"
-                                       Text="{localization:Localize SettingsAppPage.DisplayMode}"
+                                       Text="{localizer:Localize SettingsAppPage.DisplayMode}"
                                        Margin="0" />
                         </Grid>
 
                         <Border Classes="item-card">
                             <StackPanel Spacing="6">
-                                <TextBlock Text="{localization:Localize SettingsAppPage.DarkMode}"
+                                <TextBlock Text="{localizer:Localize SettingsAppPage.DarkMode}"
                                            FontWeight="Medium" />
                                 <ToggleSwitch IsChecked="{Binding IsDarkMode}" />
                             </StackPanel>
@@ -82,7 +82,7 @@
                                                Classes="icon"
                                                Kind="PaletteOutline" />
                             <TextBlock Grid.Column="1"
-                                       Text="{localization:Localize SettingsAppPage.AccentColor}"
+                                       Text="{localizer:Localize SettingsAppPage.AccentColor}"
                                        Margin="0" />
                         </Grid>
 

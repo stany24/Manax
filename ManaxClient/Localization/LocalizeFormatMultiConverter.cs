@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using Avalonia.Data.Converters;
-using Jeek.Avalonia.Localization;
 
 namespace ManaxClient.Localization;
 
@@ -15,7 +14,7 @@ public class LocalizeFormatMultiConverter(string key) : IMultiValueConverter
 
         try
         {
-            string localizedText = Localizer.Get(key);
+            string localizedText = Localizer.Localizer.Get(key);
             object?[] formatArgs = new object[LocalizeFormatExtension.NbParameters];
             if (values == null) return string.Format(CultureInfo.InvariantCulture, localizedText, formatArgs);
 
@@ -29,7 +28,7 @@ public class LocalizeFormatMultiConverter(string key) : IMultiValueConverter
         }
         catch (Exception)
         {
-            return Localizer.Get(key);
+            return Localizer.Localizer.Get(key);
         }
     }
 }

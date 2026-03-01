@@ -4,9 +4,9 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:content="clr-namespace:ManaxClient.ViewModels.Popup.ConfirmCancel.Content"
-    xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
     xmlns:controls="clr-namespace:ManaxClient.Controls"
     xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    xmlns:localizer="clr-namespace:ManaxClient.Localization.Localizer"
     mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="300"
     x:Class="ManaxClient.Views.Popup.ConfirmCancel.Content.SavePointCreateView"
     x:DataType="content:SavePointCreateViewModel">
@@ -16,19 +16,19 @@
             <avalonia:MaterialIcon Classes="icon"
                                    Kind="ContentSaveOutline" />
             <StackPanel>
-                <TextBlock Text="{localization:Localize SavePointCreatePopup.Title}" />
-                <TextBlock Text="{localization:Localize SavePointCreatePopup.Description}" />
+                <TextBlock Text="{localizer:Localize SavePointCreatePopup.Title}" />
+                <TextBlock Text="{localizer:Localize SavePointCreatePopup.Description}" />
             </StackPanel>
         </StackPanel>
 
         <Border Classes="input">
             <StackPanel>
-                <TextBlock Text="{localization:Localize SavePointCreatePopup.Path}" />
+                <TextBlock Text="{localizer:Localize SavePointCreatePopup.Path}" />
                 <Grid ColumnDefinitions="*,Auto"
                       ColumnSpacing="8">
                     <TextBox Grid.Column="0"
                              Text="{Binding Path}"
-                             PlaceholderText="{localization:Localize SavePointCreatePopup.Path.Placeholder}" />
+                             PlaceholderText="{localizer:Localize SavePointCreatePopup.Path.Placeholder}" />
                     <controls:IconButton Grid.Column="1"
                                          Classes="icon-button dark"
                                          Icon="FolderOpen" />
@@ -42,7 +42,7 @@
             <StackPanel Orientation="Horizontal" Spacing="8">
                 <avalonia:MaterialIcon Classes="icon"
                                        Kind="InformationOutline" />
-                <TextBlock Text="{localization:Localize SavePointCreatePopup.Tip}"
+                <TextBlock Text="{localizer:Localize SavePointCreatePopup.Tip}"
                            TextWrapping="Wrap"
                            VerticalAlignment="Center"
                            FontSize="12" />

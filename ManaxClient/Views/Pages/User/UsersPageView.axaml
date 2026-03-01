@@ -5,10 +5,10 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:page="clr-namespace:ManaxClient.ViewModels.Pages.User"
     xmlns:viewModels="clr-namespace:ManaxClient.ViewModels"
-    xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
     xmlns:localization1="clr-namespace:ManaxClient.Localization"
     xmlns:controls="clr-namespace:ManaxClient.Controls"
     xmlns:icon="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    xmlns:localizer="clr-namespace:ManaxClient.Localization.Localizer"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Pages.User.UsersPageView"
     x:DataType="page:UsersPageViewModel"
@@ -39,7 +39,7 @@
                                          Classes="icon-button light"
                                          IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWriteUsers}"
                                          Command="{Binding CreateUser}"
-                                         Text="{localization:Localize UserPage.Add}"
+                                         Text="{localizer:Localize UserPage.Add}"
                                          Icon="Add" />
                 </Grid>
             </Border>
@@ -72,7 +72,7 @@
                                                 CommandParameter="{Binding Id}"
                                                 Padding="8"
                                                 VerticalAlignment="Center"
-                                                Content="{localization:Localize UserPage.Permissions}" />
+                                                Content="{localizer:Localize UserPage.Permissions}" />
 
                                         <controls:IconButton Grid.Column="5"
                                                              Classes="icon-button dark"

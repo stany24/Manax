@@ -5,9 +5,9 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:page="clr-namespace:ManaxClient.ViewModels.Pages.Settings"
     xmlns:viewModels="clr-namespace:ManaxClient.ViewModels"
-    xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
     xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     xmlns:controls="clr-namespace:ManaxClient.Controls"
+    xmlns:localizer="clr-namespace:ManaxClient.Localization.Localizer"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="600"
     x:Class="ManaxClient.Views.Pages.Settings.SettingsFeaturesPageView"
     x:DataType="page:SettingsFeaturesPageViewModel"
@@ -53,13 +53,13 @@
                                            Classes="icon"
                                            Kind="Feather" />
                     <TextBlock Grid.Column="1"
-                               Text="{localization:Localize SettingsFeaturesPage.Title}" />
+                               Text="{localizer:Localize SettingsFeaturesPage.Title}" />
 
                     <controls:IconButton Grid.Column="3"
                                          Classes="icon-button light"
                                          IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWriteFeatures}"
                                          Command="{Binding SaveFeatures}"
-                                         Text="{localization:Localize SettingsFeaturesPage.Save}"
+                                         Text="{localizer:Localize SettingsFeaturesPage.Save}"
                                          Icon="ContentSaveOutline" />
                 </Grid>
             </Border>

@@ -6,8 +6,8 @@
     xmlns:viewModels="clr-namespace:ManaxClient.ViewModels"
     xmlns:tab="clr-namespace:ManaxClient.ViewModels.Pages.Upload.Tab"
     xmlns:upload="clr-namespace:ManaxClient.Models.Upload"
-    xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
     xmlns:controls="clr-namespace:ManaxClient.Controls"
+    xmlns:localizer="clr-namespace:ManaxClient.Localization.Localizer"
     mc:Ignorable="d" d:DesignWidth="1200" d:DesignHeight="600"
     x:Class="ManaxClient.Views.Pages.Upload.Tab.ManualCleanupTabView"
     x:DataType="tab:ManualCleanupTabViewModel"
@@ -45,7 +45,7 @@
             <Grid RowDefinitions="Auto,*" RowSpacing="8">
                 <TextBlock Grid.Row="0"
                            Classes="title"
-                           Text="{localization:Localize ManualCleanupPage.SerieFolders}" />
+                           Text="{localizer:Localize ManualCleanupPage.SerieFolders}" />
                 <ScrollViewer Grid.Row="1"
                               VerticalScrollBarVisibility="Auto"
                               HorizontalScrollBarVisibility="Disabled">
@@ -90,7 +90,7 @@
             <DockPanel>
                 <StackPanel DockPanel.Dock="Top">
                     <TextBlock Classes="title"
-                               Text="{localization:Localize ManualCleanupPage.Images}" />
+                               Text="{localizer:Localize ManualCleanupPage.Images}" />
                     <TextBlock Classes="sub-title"
                                Text="{Binding SelectedChapterFolder.Name}"
                                IsVisible="{Binding SelectedChapterFolder, Converter={x:Static ObjectConverters.IsNotNull}}" />
@@ -137,7 +137,7 @@
             <Grid RowDefinitions="Auto,*,Auto">
                 <TextBlock Grid.Row="0"
                            Classes="title"
-                           Text="{localization:Localize ManualCleanupPage.ToEdit}" />
+                           Text="{localizer:Localize ManualCleanupPage.ToEdit}" />
                 <ScrollViewer Grid.Row="1"
                               HorizontalScrollBarVisibility="Disabled"
                               VerticalScrollBarVisibility="Auto">
@@ -168,19 +168,19 @@
                 <StackPanel Grid.Row="2"
                             Spacing="8">
                     <Button Classes="button light wide"
-                            Content="{localization:Localize ManualCleanupPage.EditSelected}"
+                            Content="{localizer:Localize ManualCleanupPage.EditSelected}"
                             Command="{Binding Edit}" />
                     <Button Classes="button light wide"
-                            Content="{localization:Localize ManualCleanupPage.ClearSelected}"
+                            Content="{localizer:Localize ManualCleanupPage.ClearSelected}"
                             Command="{Binding Clear}" />
                     <Button Classes="button light wide"
-                            Content="{localization:Localize ManualCleanupPage.Next}"
+                            Content="{localizer:Localize ManualCleanupPage.Next}"
                             Command="{Binding Next}" />
-                    <Button Content="{localization:Localize ManualCleanupPage.RestoreLastImage}"
+                    <Button Content="{localizer:Localize ManualCleanupPage.RestoreLastImage}"
                             IsVisible="False"
                             Command="{Binding SelectedChapterFolder.RestoreLastImage}"
                             HotKey="Ctrl+z" />
-                    <Button Content="{localization:Localize ManualCleanupPage.RestoreLastImage}"
+                    <Button Content="{localizer:Localize ManualCleanupPage.RestoreLastImage}"
                             IsVisible="False"
                             Command="{Binding NextChapter}"
                             HotKey="Right" />

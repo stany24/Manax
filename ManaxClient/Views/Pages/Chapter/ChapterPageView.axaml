@@ -5,8 +5,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:chapter1="clr-namespace:ManaxClient.ViewModels.Pages.Chapter"
     xmlns:viewModels="clr-namespace:ManaxClient.ViewModels"
-    xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
     xmlns:controls="clr-namespace:ManaxClient.Controls"
+    xmlns:localizer="clr-namespace:ManaxClient.Localization.Localizer"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Pages.Chapter.ChapterPageView"
     x:DataType="chapter1:ChapterPageViewModel"
@@ -56,7 +56,7 @@
                 VerticalAlignment="Center"
                 CornerRadius="0,5,5,0">
             <StackPanel Spacing="12">
-                <controls:IconButton ToolTip.Tip="{localization:Localize ChapterPage.PreviousPage}"
+                <controls:IconButton ToolTip.Tip="{localizer:Localize ChapterPage.PreviousPage}"
                                      Classes="icon-button light"
                                      Command="{Binding PreviousPage}"
                                      Icon="ArrowUp" />
@@ -68,7 +68,7 @@
                     <TextBlock Text="{Binding Chapter.Pages.Count}" />
                 </StackPanel>
 
-                <controls:IconButton ToolTip.Tip="{localization:Localize ChapterPage.NextPage}"
+                <controls:IconButton ToolTip.Tip="{localizer:Localize ChapterPage.NextPage}"
                                      Classes="icon-button light"
                                      Command="{Binding NextPage}"
                                      Icon="ArrowDown" />
@@ -89,7 +89,7 @@
                 <StackPanel Grid.Column="1"
                             VerticalAlignment="Center"
                             Orientation="Horizontal">
-                    <TextBlock Text="{localization:Localize ChapterPage.Chapter}" />
+                    <TextBlock Text="{localizer:Localize ChapterPage.Chapter}" />
                     <TextBlock />
                     <TextBlock Text="{Binding Chapter.Number}" />
                 </StackPanel>
