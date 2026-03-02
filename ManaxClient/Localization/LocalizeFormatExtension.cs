@@ -12,20 +12,21 @@ public class LocalizeFormatExtension(string key) : MarkupExtension
     public object? Param3 { get; set; }
     public object? Param4 { get; set; }
 
-    public static int NbParameters => 4;
-
     public override object ProvideValue(IServiceProvider serviceProvider)
     {
-        List<IBinding> bindings = [];
+        List<IBinding> bindings =
+        [
+            new Binding { Source = key }
+        ];
 
-        AddParameterBinding(bindings, Param1 ?? string.Empty);
-        AddParameterBinding(bindings, Param2 ?? string.Empty);
-        AddParameterBinding(bindings, Param3 ?? string.Empty);
-        AddParameterBinding(bindings, Param4 ?? string.Empty);
+        AddParameterBinding(bindings, Param1);
+        AddParameterBinding(bindings, Param2);
+        AddParameterBinding(bindings, Param3);
+        AddParameterBinding(bindings, Param4);
 
         MultiBinding multiBinding = new()
         {
-            Converter = new LocalizeFormatMultiConverter(key),
+            Converter = new LocalizeFormatMultiConverter(),
             Bindings = bindings
         };
 
@@ -34,9 +35,16 @@ public class LocalizeFormatExtension(string key) : MarkupExtension
 
     private static void AddParameterBinding(List<IBinding> bindings, object? param)
     {
-        if (param is IBinding binding)
-            bindings.Add(binding);
-        else
-            bindings.Add(new Binding { Source = param });
+        switch (param)
+        {
+            case null:
+                return;
+            case IBinding binding:
+                bindings.Add(binding);
+                break;
+            default:
+                bindings.Add(new Binding { Source = param });
+                break;
+        }
     }
 }

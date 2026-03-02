@@ -1,29 +1,30 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using Avalonia.Data.Converters;
 
 namespace ManaxClient.Localization;
 
-public class LocalizeFormatMultiConverter(string key) : IMultiValueConverter
+public class LocalizeFormatMultiConverter : IMultiValueConverter
 {
     public object Convert(IList<object?>? values, Type targetType, object? parameter, CultureInfo culture)
     {
-        if (string.IsNullOrEmpty(key))
+        if (values == null || values.Count == 0)
+            return "Missing key";
+
+        if (values[0] is not string key || string.IsNullOrEmpty(key))
             return "Missing key";
 
         try
         {
             string localizedText = Localizer.Localizer.Get(key);
-            object?[] formatArgs = new object[LocalizeFormatExtension.NbParameters];
-            if (values == null) return string.Format(CultureInfo.InvariantCulture, localizedText, formatArgs);
+            
+            if (values.Count == 1)
+                return localizedText;
 
-            for (int i = 0; i < LocalizeFormatExtension.NbParameters; i++)
-                if (i < values.Count)
-                    formatArgs[i] = values[i] ?? string.Empty;
-                else
-                    formatArgs[i] = string.Empty;
-
+            object?[] formatArgs = values.Skip(1).ToArray();
+            
             return string.Format(CultureInfo.InvariantCulture, localizedText, formatArgs);
         }
         catch (Exception)

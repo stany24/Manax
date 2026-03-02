@@ -4,9 +4,9 @@
     xmlns:vm="using:ManaxClient.ViewModels"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:converters="clr-namespace:ManaxClient.Converters"
     xmlns:controls="clr-namespace:ManaxClient.Controls"
     xmlns:localizer="clr-namespace:ManaxClient.Localization.Localizer"
+    xmlns:visibility="clr-namespace:ManaxClient.Converters.Visibility"
     mc:Ignorable="d" d:DesignWidth="1200" d:DesignHeight="800"
     x:Class="ManaxClient.Views.MainWindow"
     x:DataType="vm:MainWindowViewModel"
@@ -82,7 +82,7 @@
                                          ShowText="{Binding SideBarVisible}" />
                     <Separator>
                         <Separator.IsVisible>
-                            <MultiBinding Converter="{x:Static converters:VisibilityConverters.And}">
+                            <MultiBinding Converter="{x:Static visibility:VisibilityConverters.And}">
                                 <Binding Path="Libraries.Count" />
                                 <Binding Path="!SideBarVisible" />
                             </MultiBinding>
@@ -91,7 +91,7 @@
 
                     <TextBlock Text="{localizer:Localize MainWindow.Libraries}">
                         <TextBlock.IsVisible>
-                            <MultiBinding Converter="{x:Static converters:VisibilityConverters.And}">
+                            <MultiBinding Converter="{x:Static visibility:VisibilityConverters.And}">
                                 <Binding Path="Libraries.Count" />
                                 <Binding Path="SideBarVisible" />
                             </MultiBinding>
@@ -125,7 +125,7 @@
                                          Text="{localizer:Localize MainWindow.Issues}"
                                          ShowText="{Binding SideBarVisible}">
                         <controls:IconButton.IsVisible>
-                            <MultiBinding Converter="{x:Static converters:VisibilityConverters.IssuePageVisible}">
+                            <MultiBinding Converter="{x:Static visibility:VisibilityConverters.IssuePageVisible}">
                                 <Binding Path="FeatureManager.AutomaticIssuesFeatureEnabled" />
                                 <Binding Path="FeatureManager.ReportedIssuesFeatureEnabled" />
                                 <Binding Path="PermissionManager.CanReadAllIssues" />
@@ -144,7 +144,7 @@
                                          Text="{localizer:Localize MainWindow.Ranks}"
                                          ShowText="{Binding SideBarVisible}">
                         <controls:IconButton.IsVisible>
-                            <MultiBinding Converter="{x:Static converters:VisibilityConverters.And}">
+                            <MultiBinding Converter="{x:Static visibility:VisibilityConverters.And}">
                                 <Binding Path="FeatureManager.RankFeatureEnabled" />
                                 <Binding Path="PermissionManager.CanReadRanks" />
                             </MultiBinding>
