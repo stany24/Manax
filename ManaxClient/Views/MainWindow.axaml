@@ -264,14 +264,12 @@
                     Margin="24"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Bottom">
-            <ItemsControl ItemsSource="{Binding Infos}">
+            <ItemsControl ItemsSource="{Binding Infos}"
+                          ClipToBounds="False">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <previews:NotificationPreview
-                            Padding="12,8"
                             BorderBrush="{DynamicResource MaterialPrimaryMidBrush}"
-                            BorderThickness="2"
-                            CornerRadius="5"
                             Notification="{Binding .}"/>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>

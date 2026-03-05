@@ -1,3 +1,4 @@
+using System;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
@@ -17,18 +18,34 @@ public class NotificationPreview : Button
 
     public NotificationPreview()
     {
+        BorderThickness = new Thickness(2);
+        CornerRadius= new CornerRadius(5);
+        Padding = new Thickness(12, 8);
+        ClipToBounds = false;
+        RenderTransformOrigin = RelativePoint.Center;
+        Background = Brushes.Transparent;
         Click += (_, _) =>
         {
             Notification?.Remove();
         };
-        Localizer.LanguageChanged += (_, _) =>
-            Content = string.Format(Localizer.Get(Notification.LocalizationKey), Notification.Args);
+        Localizer.LanguageChanged += OnLanguageChanged;
         Bind(ContentProperty, new Binding(nameof(Notification))
         {
             Source = this,
             Converter = new FuncValueConverter<Notification, string>(notification =>
                 notification != null ? string.Format(Localizer.Get(notification.LocalizationKey), notification.Args): "")
         });
+    }
+    
+    ~NotificationPreview()
+    {
+        Localizer.LanguageChanged -= OnLanguageChanged;
+    }
+
+    private void OnLanguageChanged(object? sender, EventArgs e)
+    {
+        if(Notification == null) return;
+        Content = string.Format(Localizer.Get(Notification.LocalizationKey), Notification.Args);
     }
 
     public Notification? Notification
