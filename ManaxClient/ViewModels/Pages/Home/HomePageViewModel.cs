@@ -63,24 +63,17 @@ public partial class HomePageViewModel : PageViewModel
             Optional<bool> uploadSerieResponse = await ManaxApiUploadClient.UploadSerieAsync(folderPath);
             if (uploadSerieResponse.Failed)
             {
-                string format1 = string.Format(CultureInfo.InvariantCulture, Localizer.Get("HomePage.UploadFailure"),
-                    Path.GetDirectoryName(folderPath));
-
-                WeakReferenceMessenger.Default.Send(new NotificationMessage(format1));
-
-                Logger.LogFailure("Failed to upload series: " + uploadSerieResponse.Error);
+                WeakReferenceMessenger.Default.Send(new NotificationMessage(new Notification("HomePage.UploadFailure",[folderPath])));
+                Logger.LogFailure("Failed to upload serie:"+ folderPath +"\nError: " + uploadSerieResponse.Error);
                 return;
             }
-
-            string format2 = string.Format(CultureInfo.InvariantCulture, Localizer.Get("HomePage.UploadSuccess"),
-                Path.GetDirectoryName(folderPath));
-            WeakReferenceMessenger.Default.Send(new NotificationMessage(format2));
-            Logger.LogInfo("Serie upload successful");
+            WeakReferenceMessenger.Default.Send(new NotificationMessage(new Notification("HomePage.UploadSuccess", [folderPath])));
+            Logger.LogInfo("Serie upload successful: " + folderPath);
         }
         catch (Exception e)
         {
             IsFolderPickerOpen = false;
-            WeakReferenceMessenger.Default.Send(new NotificationMessage(Localizer.Get("HomePage.UploadError")));
+            WeakReferenceMessenger.Default.Send(new NotificationMessage(new Notification("HomePage.UploadError")));
             Logger.LogError("Error uploading series", e);
         }
     }

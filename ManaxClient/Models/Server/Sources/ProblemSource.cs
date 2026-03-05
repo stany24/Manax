@@ -44,7 +44,7 @@ public class ProblemSource
             if (chapterResponse.Failed)
             {
                 Logger.LogFailure(chapterResponse.Error);
-                WeakReferenceMessenger.Default.Send(new NotificationMessage(chapterResponse.Error));
+                WeakReferenceMessenger.Default.Send(new NotificationMessage(new Notification(chapterResponse.Error)));
                 return;
             }
 
@@ -56,7 +56,7 @@ public class ProblemSource
             if (serieResponse.Failed)
             {
                 Logger.LogFailure(serieResponse.Error);
-                WeakReferenceMessenger.Default.Send(new NotificationMessage(serieResponse.Error));
+                WeakReferenceMessenger.Default.Send(new NotificationMessage(new Notification(serieResponse.Error)));
                 return;
             }
 

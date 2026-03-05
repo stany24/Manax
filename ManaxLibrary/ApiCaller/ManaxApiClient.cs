@@ -68,7 +68,8 @@ public static class ManaxApiClient
         return await ExecuteWithErrorHandlingAsync(async () =>
         {
             HttpResponseMessage response = await Client.GetAsync(endpoint);
-            if (!response.IsSuccessStatusCode) return Optional<T>.Failure(response);
+            if (!response.IsSuccessStatusCode)
+                return Optional<T>.Failure(await response.Content.ReadFromJsonAsync<int>());
             T? data = await response.Content.ReadFromJsonAsync<T>();
             return data == null
                 ? Optional<T>.Failure(errorMessage ?? $"Failed to deserialize {typeof(T).Name} from API response.")
@@ -81,7 +82,8 @@ public static class ManaxApiClient
         return await ExecuteWithErrorHandlingAsync(async () =>
         {
             HttpResponseMessage response = await Client.GetAsync(endpoint);
-            if (!response.IsSuccessStatusCode) return Optional<byte[]>.Failure(response);
+            if (!response.IsSuccessStatusCode)
+                return Optional<byte[]>.Failure(await response.Content.ReadFromJsonAsync<int>());
             byte[] data = await response.Content.ReadAsByteArrayAsync();
             return data.Length == 0
                 ? Optional<byte[]>.Failure(errorMessage ?? $"Empty data received from {endpoint}.")
@@ -95,7 +97,8 @@ public static class ManaxApiClient
         return await ExecuteWithErrorHandlingAsync(async () =>
         {
             HttpResponseMessage response = await Client.PostAsJsonAsync(endpoint, body);
-            if (!response.IsSuccessStatusCode) return Optional<TResult>.Failure(response);
+            if (!response.IsSuccessStatusCode) 
+                return Optional<TResult>.Failure(await response.Content.ReadFromJsonAsync<int>());
             TResult? data = await response.Content.ReadFromJsonAsync<TResult>();
             return data == null
                 ? Optional<TResult>.Failure(errorMessage ??
@@ -111,7 +114,7 @@ public static class ManaxApiClient
             HttpResponseMessage response = await Client.PostAsJsonAsync(endpoint, body);
             return response.IsSuccessStatusCode
                 ? Optional<bool>.Success(true)
-                : Optional<bool>.Failure(response);
+                : Optional<bool>.Failure(await response.Content.ReadFromJsonAsync<int>());
         });
     }
 
@@ -122,7 +125,7 @@ public static class ManaxApiClient
             HttpResponseMessage response = await Client.PostAsync(endpoint, null);
             return response.IsSuccessStatusCode
                 ? Optional<bool>.Success(true)
-                : Optional<bool>.Failure(response);
+                : Optional<bool>.Failure(await response.Content.ReadFromJsonAsync<int>());
         });
     }
 
@@ -132,7 +135,8 @@ public static class ManaxApiClient
         return await ExecuteWithErrorHandlingAsync(async () =>
         {
             HttpResponseMessage response = await Client.PutAsJsonAsync(endpoint, body);
-            if (!response.IsSuccessStatusCode) return Optional<TResult>.Failure(response);
+            if (!response.IsSuccessStatusCode) 
+                return Optional<TResult>.Failure(await response.Content.ReadFromJsonAsync<int>());
             TResult? data = await response.Content.ReadFromJsonAsync<TResult>();
             return data == null
                 ? Optional<TResult>.Failure(errorMessage ??
@@ -148,7 +152,7 @@ public static class ManaxApiClient
             HttpResponseMessage response = await Client.PutAsJsonAsync(endpoint, body);
             return response.IsSuccessStatusCode
                 ? Optional<bool>.Success(true)
-                : Optional<bool>.Failure(response);
+                : Optional<bool>.Failure(await response.Content.ReadFromJsonAsync<int>());
         });
     }
 
@@ -159,7 +163,7 @@ public static class ManaxApiClient
             HttpResponseMessage response = await Client.PutAsync(endpoint, null);
             return response.IsSuccessStatusCode
                 ? Optional<bool>.Success(true)
-                : Optional<bool>.Failure(response);
+                : Optional<bool>.Failure(await response.Content.ReadFromJsonAsync<int>());
         });
     }
 
@@ -170,7 +174,7 @@ public static class ManaxApiClient
             HttpResponseMessage response = await Client.DeleteAsync(endpoint);
             return response.IsSuccessStatusCode
                 ? Optional<bool>.Success(true)
-                : Optional<bool>.Failure(response);
+                : Optional<bool>.Failure(await response.Content.ReadFromJsonAsync<int>());
         });
     }
 }

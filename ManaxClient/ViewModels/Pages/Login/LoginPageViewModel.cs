@@ -1,6 +1,5 @@
 using System;
 using System.Collections.ObjectModel;
-using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -65,7 +64,7 @@ public sealed partial class LoginPageViewModel : PageViewModel
         }
         catch
         {
-            Release(Localizer.Get("LoginPage.Invalid.Host.Port"));
+            Release("LoginPage.Invalid.Host.Port");
             return;
         }
 
@@ -89,9 +88,9 @@ public sealed partial class LoginPageViewModel : PageViewModel
         Emoji = MaterialIconKind.TimerOutline;
     }
 
-    private void Release(string errorMessage)
+    private void Release(string localizationKey)
     {
-        WeakReferenceMessenger.Default.Send(new NotificationMessage(errorMessage));
+        WeakReferenceMessenger.Default.Send(new NotificationMessage(new Notification(localizationKey)));
         CanLogin = true;
         Emoji = MaterialIconKind.KeyOutline;
     }
@@ -103,16 +102,17 @@ public sealed partial class LoginPageViewModel : PageViewModel
             ManaxApiClient.SetToken(result.Token);
             WeakReferenceMessenger.Default.Send(new LoggedInMessage(result.Token));
             UserDto self = result.User;
-            string format = string.Format(CultureInfo.InvariantCulture, Localizer.Get("LoginPage.Connected"),
-                self.Username, self.Role);
-            WeakReferenceMessenger.Default.Send(new NotificationMessage(format));
-            Logger.LogInfo(format);
+            const string key = "LoginPage.Connected";
+            object[] args = [self.Username, self.Role];
+            WeakReferenceMessenger.Default.Send(new NotificationMessage(new Notification(key,args)));
+            Logger.LogInfo("Logged in as " + self.Username + " with role " + self.Role);
             SaveLoginValues();
             WeakReferenceMessenger.Default.Send(new PageChangeMessage(new HomePageViewModel()));
         }
-        catch (Exception)
+        catch (Exception e)
         {
-            WeakReferenceMessenger.Default.Send(new NotificationMessage("Unknown error while checking token"));
+            Logger.LogError("Unknow error while checking token",e);
+            WeakReferenceMessenger.Default.Send(new NotificationMessage(new Notification("LoginPage.Token.Failed")));
         }
     }
 

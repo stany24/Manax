@@ -79,7 +79,7 @@
         <value>Téléchargement de {0} réussi</value>
     </data>
     <data name="HomePage.UploadError" xml:space="preserve">
-        <value>Erreur lors du téléchargement de la série</value>
+        <value>Erreur lors du téléchargement de la série: {0}</value>
     </data>
     <data name="HomePage.UploadFailure" xml:space="preserve">
         <value>Échec du téléchargement : {0}</value>
@@ -893,5 +893,80 @@
     </data>
     <data name="UserPermissionsEdit.Description" xml:space="preserve">
         <value>Gérer les permissions de lecture, écriture, suppression et autres pour cet utilisateur</value>
+    </data>
+    <data name="25" xml:space="preserve">
+        <value>Identifiants incorrects</value>
+    </data>
+    <data name="Mainwindow.Upload.Failed" xml:space="preserve">
+        <value>Échec du téléversement du chapitre {0}</value>
+    </data>
+    <data name="Mainwindow.Logout.Failed" xml:space="preserve">
+        <value>Échec de la déconnection du serveur</value>
+    </data>
+    <data name="Serie.Load.Info.Failed" xml:space="preserve">
+        <value>Échec du chargement des informations de la série: {0}</value>
+    </data>
+    <data name="Serie.Load.Poster.Failed" xml:space="preserve">
+        <value>Échec du chargement du poster de la série: {0}</value>
+    </data>
+    <data name="Serie.Load.Banner.Failed" xml:space="preserve">
+        <value>Échec du chargement de la bannière de la série: {0}</value>
+    </data>
+    <data name="Chapter.Reads.Failed" xml:space="preserve">
+        <value>Échec du chargement des chapitres lu pour la série: {0}</value>
+    </data>
+    <data name="Chapter.Load.Failed" xml:space="preserve">
+        <value>Échec du chargement des chapitres de la série: {0}</value>
+    </data>
+    <data name="Issue.Load.Failed" xml:space="preserve">
+        <value>Échec du chargement des problèmes</value>
+    </data>
+    <data name="Library.Load.Failed" xml:space="preserve">
+        <value>Échec du chargement des libibliothèques</value>
+    </data>
+    <data name="Person.Load.Failed" xml:space="preserve">
+        <value>Échec du chargement des personnes</value>
+    </data>
+    <data name="Rank.Load.Failed" xml:space="preserve">
+        <value>Échec du chargement des rangs</value>
+    </data>
+    <data name="Role.Load.Failed" xml:space="preserve">
+        <value>Échec du chargement des roles</value>
+    </data>
+    <data name="Tag.Load.Failed" xml:space="preserve">
+        <value>Échec du chargement des étiquettes</value>
+    </data>
+    <data name="User.Load.Failed" xml:space="preserve">
+        <value>Échec du chargement des utilisateurs</value>
+    </data>
+    <data name="UserPage.User.Deleted" xml:space="preserve">
+        <value>L'utilisateur {0} à été supprimé</value>
+    </data>
+    <data name="ManualCleanup.ProcessingFolder.Missing" xml:space="preserve">
+        <value>Le dossier de traitement n'existe pas. Veuillez le configurer dans les paramètres.</value>
+    </data>
+    <data name="IssuePage.Download.Chapter.Failed" xml:space="preserve">
+        <value>Échec du téléchargement du chapitre</value>
+    </data>
+    <data name="IssuePage.Replacement.Failed" xml:space="preserve">
+        <value> Échec du remplacement du chapitre</value>
+    </data>
+    <data name="LibraryPage.Delete.Failed" xml:space="preserve">
+        <value>Échec de la suppression de la librairie: {0}</value>
+    </data>
+    <data name="UserStatsPage.Load.Failed" xml:space="preserve">
+        <value>Échec du chargement des statistiques utilisateur</value>
+    </data>
+    <data name="ServerStatsPage.Load.Failed" xml:space="preserve">
+        <value>Échec du charement des statistiques du serveur</value>
+    </data>
+    <data name="RankPage.Create.Failed" xml:space="preserve">
+        <value>Échec de la création du rang</value>
+    </data>
+    <data name="RankPage.Delete.Failed" xml:space="preserve">
+        <value>Échec de la suppression du rang</value>
+    </data>
+    <data name="RankPage.Update.Failed" xml:space="preserve">
+        <value>Échec de la mise à jour du rang</value>
     </data>
 </root>

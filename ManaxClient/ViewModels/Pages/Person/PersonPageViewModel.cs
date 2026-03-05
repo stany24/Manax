@@ -61,13 +61,12 @@ public class PersonPageViewModel : PageViewModel
                 long personId = content.GetPersonId();
                 Optional<bool> updatePersonAsync = await ManaxApiPersonClient.UpdatePersonAsync(personId, result);
                 if (updatePersonAsync.Failed)
-                    WeakReferenceMessenger.Default.Send(new NotificationMessage(updatePersonAsync.Error));
+                    WeakReferenceMessenger.Default.Send(new NotificationMessage(new Notification(updatePersonAsync.Error)));
             }
             catch (Exception e)
             {
-                const string error = "Failed to update person on server";
-                WeakReferenceMessenger.Default.Send(new NotificationMessage(error));
-                Logger.LogError(error, e);
+                WeakReferenceMessenger.Default.Send(new NotificationMessage(new Notification("PersonPage.Update.Failed")));
+                Logger.LogError("Failed to update person on server", e);
             }
         };
         WeakReferenceMessenger.Default.Send(new PopupChangeMessage(popup));
@@ -81,13 +80,12 @@ public class PersonPageViewModel : PageViewModel
             {
                 Optional<bool> deletePersonResponse = await ManaxApiPersonClient.DeletePersonAsync(person.Id);
                 if (deletePersonResponse.Failed)
-                    WeakReferenceMessenger.Default.Send(new NotificationMessage(deletePersonResponse.Error));
+                    WeakReferenceMessenger.Default.Send(new NotificationMessage(new Notification(deletePersonResponse.Error)));
             }
             catch (Exception e)
             {
-                const string error = "Failed to delete person on server";
-                WeakReferenceMessenger.Default.Send(new NotificationMessage(error));
-                Logger.LogError(error, e);
+                WeakReferenceMessenger.Default.Send(new NotificationMessage(new Notification("PersonPage.Delete.Failed")));
+                Logger.LogError("Failed to delete person on server", e);
             }
         });
     }
@@ -113,13 +111,12 @@ public class PersonPageViewModel : PageViewModel
                 Optional<bool> personResponse = await ManaxApiPersonClient.CreatePersonAsync(result);
 
                 if (personResponse.Failed)
-                    WeakReferenceMessenger.Default.Send(new NotificationMessage(personResponse.Error));
+                    WeakReferenceMessenger.Default.Send(new NotificationMessage(new Notification(personResponse.Error)));
             }
             catch (Exception e)
             {
-                const string error = "Failed to create person on server";
-                WeakReferenceMessenger.Default.Send(new NotificationMessage(error));
-                Logger.LogError(error, e);
+                WeakReferenceMessenger.Default.Send(new NotificationMessage(new Notification("PersonPage.Create.Failed")));
+                Logger.LogError("Failed to create person on server", e);
             }
         };
         WeakReferenceMessenger.Default.Send(new PopupChangeMessage(popup));
@@ -142,13 +139,12 @@ public class PersonPageViewModel : PageViewModel
                 RoleUpdateDto result = content.GetResult();
                 Optional<bool> updateRoleAsync = await ManaxApiRoleClient.UpdateRoleAsync(role.Id, result);
                 if (updateRoleAsync.Failed)
-                    WeakReferenceMessenger.Default.Send(new NotificationMessage(updateRoleAsync.Error));
+                    WeakReferenceMessenger.Default.Send(new NotificationMessage(new Notification(updateRoleAsync.Error)));
             }
             catch (Exception e)
             {
-                const string error = "Failed to update role on server";
-                WeakReferenceMessenger.Default.Send(new NotificationMessage(error));
-                Logger.LogError(error, e);
+                WeakReferenceMessenger.Default.Send(new NotificationMessage(new Notification("PersonPage.UpdateRole.Failed")));
+                Logger.LogError("Failed to update role on server", e);
             }
         };
         WeakReferenceMessenger.Default.Send(new PopupChangeMessage(popup));
@@ -162,13 +158,12 @@ public class PersonPageViewModel : PageViewModel
             {
                 Optional<bool> deleteRoleResponse = await ManaxApiRoleClient.DeleteRoleAsync(role.Id);
                 if (deleteRoleResponse.Failed)
-                    WeakReferenceMessenger.Default.Send(new NotificationMessage(deleteRoleResponse.Error));
+                    WeakReferenceMessenger.Default.Send(new NotificationMessage(new Notification(deleteRoleResponse.Error)));
             }
             catch (Exception e)
             {
-                const string error = "Failed to delete role on server";
-                WeakReferenceMessenger.Default.Send(new NotificationMessage(error));
-                Logger.LogError(error, e);
+                WeakReferenceMessenger.Default.Send(new NotificationMessage(new Notification("PersonPage.DeleteRole.Failed")));
+                Logger.LogError("Failed to delete role on server", e);
             }
         });
     }
@@ -188,13 +183,12 @@ public class PersonPageViewModel : PageViewModel
                     { Name = result.Name });
 
                 if (roleResponse.Failed)
-                    WeakReferenceMessenger.Default.Send(new NotificationMessage(roleResponse.Error));
+                    WeakReferenceMessenger.Default.Send(new NotificationMessage(new Notification(roleResponse.Error)));
             }
             catch (Exception e)
             {
-                const string error = "Failed to create role on server";
-                WeakReferenceMessenger.Default.Send(new NotificationMessage(error));
-                Logger.LogError(error, e);
+                WeakReferenceMessenger.Default.Send(new NotificationMessage(new Notification("PersonPage.CreateRole.Failed")));
+                Logger.LogError("Failed to create role on server", e);
             }
         };
         WeakReferenceMessenger.Default.Send(new PopupChangeMessage(popup));

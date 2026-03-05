@@ -97,7 +97,7 @@ public partial class IssuesPageViewModel : PageViewModel
             Optional<byte[]> chapterPagesAsync = await ManaxApiChapterClient.GetChapterPagesAsync(chapter.Id);
             if (chapterPagesAsync.Failed)
             {
-                WeakReferenceMessenger.Default.Send(new NotificationMessage(chapterPagesAsync.Error));
+                WeakReferenceMessenger.Default.Send(new NotificationMessage(new Notification(chapterPagesAsync.Error)));
                 return;
             }
 
@@ -111,7 +111,7 @@ public partial class IssuesPageViewModel : PageViewModel
         }
         catch (Exception e)
         {
-            WeakReferenceMessenger.Default.Send(new NotificationMessage(e.Message));
+            WeakReferenceMessenger.Default.Send(new NotificationMessage(new Notification("IssuePage.Download.Chapter.Failed")));
             Logger.LogError("Error downloading chapter", e);
         }
     }
@@ -133,7 +133,7 @@ public partial class IssuesPageViewModel : PageViewModel
                     chapter.SerieId);
             if (request.Failed)
             {
-                WeakReferenceMessenger.Default.Send(new NotificationMessage(request.Error));
+                WeakReferenceMessenger.Default.Send(new NotificationMessage(new Notification(request.Error)));
                 Logger.LogFailure("Replace chapter failed");
                 return;
             }
@@ -141,14 +141,14 @@ public partial class IssuesPageViewModel : PageViewModel
             File.Delete(saveFile);
             Directory.Delete(saveFolder, true);
 
-            string message = request.GetValue()
-                ? Localizer.Get("IssuesPage.ReplacementSuccessful")
-                : Localizer.Get("IssuesPage.ReplacementFailed");
-            WeakReferenceMessenger.Default.Send(new NotificationMessage(message));
+            string key = request.Failed
+                ? "IssuesPage.ReplacementFailed"
+                : "IssuesPage.ReplacementSuccessful";
+            WeakReferenceMessenger.Default.Send(new NotificationMessage(new Notification(key)));
         }
         catch (Exception e)
         {
-            WeakReferenceMessenger.Default.Send(new NotificationMessage(e.Message));
+            WeakReferenceMessenger.Default.Send(new NotificationMessage(new Notification("IssuePage.Replacement.Failed")));
             Logger.LogError("Error replacing chapter", e);
         }
     }

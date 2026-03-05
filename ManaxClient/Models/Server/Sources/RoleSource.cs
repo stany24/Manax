@@ -58,7 +58,7 @@ public class RoleSource
                     if (ranksResponse.Failed)
                     {
                         Logger.LogFailure(ranksResponse.Error);
-                        WeakReferenceMessenger.Default.Send(new NotificationMessage(ranksResponse.Error));
+                        WeakReferenceMessenger.Default.Send(new NotificationMessage(new Notification(ranksResponse.Error)));
                         return;
                     }
 
@@ -76,9 +76,8 @@ public class RoleSource
                 }
                 catch (Exception e)
                 {
-                    const string error = "Failed to load ranks from server";
-                    Logger.LogError(error, e);
-                    WeakReferenceMessenger.Default.Send(new NotificationMessage(error));
+                    Logger.LogError("Failed to load ranks from server", e);
+                    WeakReferenceMessenger.Default.Send(new NotificationMessage(new Notification("Role.Load.Failed")));
                 }
             }
         });

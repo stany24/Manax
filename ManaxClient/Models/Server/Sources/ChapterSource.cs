@@ -54,7 +54,7 @@ public class ChapterSource
                 if (response.Failed)
                 {
                     Logger.LogFailure(response.Error);
-                    WeakReferenceMessenger.Default.Send(new NotificationMessage(response.Error));
+                    WeakReferenceMessenger.Default.Send(new NotificationMessage(new Notification(response.Error)));
                     return;
                 }
 
@@ -63,9 +63,8 @@ public class ChapterSource
             }
             catch (Exception e)
             {
-                const string error = "Failed to load chapters from server";
-                Logger.LogError(error, e);
-                WeakReferenceMessenger.Default.Send(new NotificationMessage(error));
+                Logger.LogError("Failed to load chapters for serie: " + id, e);
+                WeakReferenceMessenger.Default.Send(new NotificationMessage(new Notification("Chapter.Load.Failed",[id])));
             }
         });
     }
@@ -83,7 +82,7 @@ public class ChapterSource
             if (response.Failed)
             {
                 Logger.LogFailure(response.Error);
-                WeakReferenceMessenger.Default.Send(new NotificationMessage(response.Error));
+                WeakReferenceMessenger.Default.Send(new NotificationMessage(new Notification(response.Error)));
                 return;
             }
 
@@ -106,7 +105,7 @@ public class ChapterSource
             Optional<List<ReadDto>> response = await ManaxApiSerieClient.GetSerieChaptersReadAsync(serieId);
             if (response.Failed)
             {
-                WeakReferenceMessenger.Default.Send(new NotificationMessage(response.Error));
+                WeakReferenceMessenger.Default.Send(new NotificationMessage(new Notification(response.Error)));
                 return;
             }
 
@@ -125,9 +124,8 @@ public class ChapterSource
         }
         catch (Exception e)
         {
-            string message = "Failed to load chapters for serie with ID: " + serieId;
-            WeakReferenceMessenger.Default.Send(new NotificationMessage(message));
-            Logger.LogError(message, e);
+            WeakReferenceMessenger.Default.Send(new NotificationMessage(new Notification("Chapter.Reads.Failed",[serieId])));
+            Logger.LogError("Failed to load reads for serie with ID: " + serieId, e);
         }
     }
 }

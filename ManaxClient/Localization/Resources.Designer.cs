@@ -1784,5 +1784,149 @@ namespace ManaxClient.Localization {
                 return ResourceManager.GetString("UserPermissionsEdit.Description", resourceCulture);
             }
         }
+        
+        public static string Mainwindow_Upload_Failed {
+            get {
+                return ResourceManager.GetString("Mainwindow.Upload.Failed", resourceCulture);
+            }
+        }
+        
+        public static string Mainwindow_Logout_Failed {
+            get {
+                return ResourceManager.GetString("Mainwindow.Logout.Failed", resourceCulture);
+            }
+        }
+        
+        public static string Serie_Load_Info_Failed {
+            get {
+                return ResourceManager.GetString("Serie.Load.Info.Failed", resourceCulture);
+            }
+        }
+        
+        public static string Serie_Load_Poster_Failed {
+            get {
+                return ResourceManager.GetString("Serie.Load.Poster.Failed", resourceCulture);
+            }
+        }
+        
+        public static string Serie_Load_Banner_Failed {
+            get {
+                return ResourceManager.GetString("Serie.Load.Banner.Failed", resourceCulture);
+            }
+        }
+        
+        public static string Chapter_Reads_Failed {
+            get {
+                return ResourceManager.GetString("Chapter.Reads.Failed", resourceCulture);
+            }
+        }
+        
+        public static string Chapter_Load_Failed {
+            get {
+                return ResourceManager.GetString("Chapter.Load.Failed", resourceCulture);
+            }
+        }
+        
+        public static string Issue_Load_Failed {
+            get {
+                return ResourceManager.GetString("Issue.Load.Failed", resourceCulture);
+            }
+        }
+        
+        public static string Library_Load_Failed {
+            get {
+                return ResourceManager.GetString("Library.Load.Failed", resourceCulture);
+            }
+        }
+        
+        public static string Person_Load_Failed {
+            get {
+                return ResourceManager.GetString("Person.Load.Failed", resourceCulture);
+            }
+        }
+        
+        public static string Rank_Load_Failed {
+            get {
+                return ResourceManager.GetString("Rank.Load.Failed", resourceCulture);
+            }
+        }
+        
+        public static string Role_Load_Failed {
+            get {
+                return ResourceManager.GetString("Role.Load.Failed", resourceCulture);
+            }
+        }
+        
+        public static string Tag_Load_Failed {
+            get {
+                return ResourceManager.GetString("Tag.Load.Failed", resourceCulture);
+            }
+        }
+        
+        public static string User_Load_Failed {
+            get {
+                return ResourceManager.GetString("User.Load.Failed", resourceCulture);
+            }
+        }
+        
+        public static string UserPage_User_Deleted {
+            get {
+                return ResourceManager.GetString("UserPage.User.Deleted", resourceCulture);
+            }
+        }
+        
+        public static string ManualCleanup_ProcessingFolder_Missing {
+            get {
+                return ResourceManager.GetString("ManualCleanup.ProcessingFolder.Missing", resourceCulture);
+            }
+        }
+        
+        public static string IssuePage_Download_Chapter_Failed {
+            get {
+                return ResourceManager.GetString("IssuePage.Download.Chapter.Failed", resourceCulture);
+            }
+        }
+        
+        public static string IssuePage_Replacement_Failed {
+            get {
+                return ResourceManager.GetString("IssuePage.Replacement.Failed", resourceCulture);
+            }
+        }
+        
+        public static string LibraryPage_Delete_Failed {
+            get {
+                return ResourceManager.GetString("LibraryPage.Delete.Failed", resourceCulture);
+            }
+        }
+        
+        public static string UserStatsPage_Load_Failed {
+            get {
+                return ResourceManager.GetString("UserStatsPage.Load.Failed", resourceCulture);
+            }
+        }
+        
+        public static string ServerStatsPage_Load_Failed {
+            get {
+                return ResourceManager.GetString("ServerStatsPage.Load.Failed", resourceCulture);
+            }
+        }
+        
+        public static string RankPage_Create_Failed {
+            get {
+                return ResourceManager.GetString("RankPage.Create.Failed", resourceCulture);
+            }
+        }
+        
+        public static string RankPage_Delete_Failed {
+            get {
+                return ResourceManager.GetString("RankPage.Delete.Failed", resourceCulture);
+            }
+        }
+        
+        public static string RankPage_Update_Failed {
+            get {
+                return ResourceManager.GetString("RankPage.Update.Failed", resourceCulture);
+            }
+        }
     }
 }

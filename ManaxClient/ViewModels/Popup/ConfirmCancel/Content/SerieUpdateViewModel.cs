@@ -222,19 +222,19 @@ public partial class SerieUpdateViewModel : ConfirmCancelContentViewModel
 
             if (replacePosterResponse.Failed)
             {
-                WeakReferenceMessenger.Default.Send(new NotificationMessage(replacePosterResponse.Error));
+                WeakReferenceMessenger.Default.Send(new NotificationMessage(new Notification(replacePosterResponse.Error)));
             }
             else
             {
                 WeakReferenceMessenger.Default.Send(
-                    new NotificationMessage(Localizer.Get("SeriePage.PosterReplacedSuccess")));
+                    new NotificationMessage(new Notification("SeriePage.PosterReplacedSuccess")));
                 Logger.LogInfo("Poster replaced successfully for serie ID: " + _originalSerie.Id);
             }
         }
         catch (Exception e)
         {
             WeakReferenceMessenger.Default.Send(
-                new NotificationMessage(Localizer.Get("SeriePage.ErrorReplacingPoster")));
+                new NotificationMessage(new Notification("SeriePage.ErrorReplacingPoster")));
             Logger.LogError("Error replacing poster for serie ID: " + _originalSerie.Id, e);
         }
     }

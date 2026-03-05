@@ -44,9 +44,8 @@ public partial class UserStatsPageViewModel : PageViewModel
             Optional<UserStats> userStats = await ManaxApiStatsClient.GetUserStats();
             if (userStats.Failed)
             {
-                string error = $"Failed to load user stats: {userStats.Error}";
-                Logger.LogFailure(error);
-                WeakReferenceMessenger.Default.Send(new NotificationMessage(error));
+                Logger.LogFailure($"Failed to load user stats: {userStats.Error}");
+                WeakReferenceMessenger.Default.Send(new NotificationMessage(new Notification(userStats.Error)));
                 return;
             }
 
@@ -58,9 +57,8 @@ public partial class UserStatsPageViewModel : PageViewModel
         }
         catch (Exception e)
         {
-            string error = $"An error occurred while loading user stats: {e.Message}";
-            Logger.LogError(error, e);
-            WeakReferenceMessenger.Default.Send(new NotificationMessage(error));
+            Logger.LogError($"An error occurred while loading user stats: {e.Message}", e);
+            WeakReferenceMessenger.Default.Send(new NotificationMessage(new Notification("UserStatsPage.Load.Failed")));
         }
     }
 

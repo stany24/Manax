@@ -104,7 +104,7 @@ public class IssueSource
                     await ManaxApiIssueClient.GetAllAutomaticChapterIssuesAsync();
                 if (responseIssueChapterAutomatic.Failed)
                 {
-                    WeakReferenceMessenger.Default.Send(new NotificationMessage(responseIssueChapterAutomatic.Error));
+                    WeakReferenceMessenger.Default.Send(new NotificationMessage(new Notification(responseIssueChapterAutomatic.Error)));
                 }
                 else
                 {
@@ -118,6 +118,7 @@ public class IssueSource
             }
             catch (Exception e)
             {
+                WeakReferenceMessenger.Default.Send(new NotificationMessage(new Notification("Issue.Load.Failed")));
                 Logger.LogError("Failed to load issues from API", e);
                 throw;
             }
@@ -134,7 +135,7 @@ public class IssueSource
                     await ManaxApiIssueClient.GetAllAutomaticSerieIssuesAsync();
                 if (responseIssueSerieAutomatic.Failed)
                 {
-                    WeakReferenceMessenger.Default.Send(new NotificationMessage(responseIssueSerieAutomatic.Error));
+                    WeakReferenceMessenger.Default.Send(new NotificationMessage(new Notification(responseIssueSerieAutomatic.Error)));
                 }
                 else
                 {
@@ -148,6 +149,7 @@ public class IssueSource
             }
             catch (Exception e)
             {
+                WeakReferenceMessenger.Default.Send(new NotificationMessage(new Notification("Issue.Load.Failed")));
                 Logger.LogError("Failed to load issues from API", e);
                 throw;
             }
@@ -164,7 +166,7 @@ public class IssueSource
                     await ManaxApiIssueClient.GetAllReportedChapterIssuesAsync();
                 if (responseIssueChapterReported.Failed)
                 {
-                    WeakReferenceMessenger.Default.Send(new NotificationMessage(responseIssueChapterReported.Error));
+                    WeakReferenceMessenger.Default.Send(new NotificationMessage(new Notification(responseIssueChapterReported.Error)));
                 }
                 else
                 {
@@ -178,6 +180,7 @@ public class IssueSource
             }
             catch (Exception e)
             {
+                WeakReferenceMessenger.Default.Send(new NotificationMessage(new Notification("Issue.Load.Failed")));
                 Logger.LogError("Failed to load issues from API", e);
                 throw;
             }
@@ -194,7 +197,7 @@ public class IssueSource
                     await ManaxApiIssueClient.GetAllReportedSerieIssuesAsync();
                 if (responseIssueSerieReported.Failed)
                 {
-                    WeakReferenceMessenger.Default.Send(new NotificationMessage(responseIssueSerieReported.Error));
+                    WeakReferenceMessenger.Default.Send(new NotificationMessage(new Notification(responseIssueSerieReported.Error)));
                 }
                 else
                 {
@@ -208,6 +211,7 @@ public class IssueSource
             }
             catch (Exception e)
             {
+                WeakReferenceMessenger.Default.Send(new NotificationMessage(new Notification("Issue.Load.Failed")));
                 Logger.LogError("Failed to load issues from API", e);
                 throw;
             }

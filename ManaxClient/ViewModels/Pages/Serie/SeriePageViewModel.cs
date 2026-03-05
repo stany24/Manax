@@ -53,10 +53,10 @@ public partial class SeriePageViewModel : PageViewModel
         Task.Run(async () =>
         {
             Optional<bool> userRankResponse = await ManaxApiRankClient.SetUserRankAsync(userRankCreateDto);
-            string message = userRankResponse.Failed
+            string key = userRankResponse.Failed
                 ? userRankResponse.Error
-                : Localizer.Get("SeriePage.RankSetCorrectly");
-            WeakReferenceMessenger.Default.Send(new NotificationMessage(message));
+                : "SeriePage.RankSetCorrectly";
+            WeakReferenceMessenger.Default.Send(new NotificationMessage(new Notification(key)));
         });
     }
 
@@ -74,13 +74,13 @@ public partial class SeriePageViewModel : PageViewModel
                 Optional<bool> serieResponse = await ManaxApiSerieClient.PutSerieAsync(Serie.Id, serie);
                 if (!serieResponse.Failed) return;
                 WeakReferenceMessenger.Default.Send(
-                    new NotificationMessage(Localizer.Get("SeriePage.ErrorUpdatingSerie")));
+                    new NotificationMessage(new Notification("SeriePage.ErrorUpdatingSerie")));
                 Logger.LogFailure("Failed to update serie with ID: " + Serie.Id);
             }
             catch (Exception e)
             {
                 WeakReferenceMessenger.Default.Send(
-                    new NotificationMessage(Localizer.Get("SeriePage.ErrorUpdatingSerie")));
+                    new NotificationMessage(new Notification("SeriePage.ErrorUpdatingSerie")));
                 Logger.LogError("Failed to update serie with ID: " + Serie.Id, e);
             }
         };

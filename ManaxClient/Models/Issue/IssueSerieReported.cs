@@ -34,7 +34,7 @@ public partial class IssueSerieReported : ObservableObject
         Task.Run(async () =>
         {
             Optional<bool> response = await ManaxApiIssueClient.CloseSerieIssueAsync(Id);
-            if (response.Failed) WeakReferenceMessenger.Default.Send(new NotificationMessage(response.Error));
+            if (response.Failed) WeakReferenceMessenger.Default.Send(new NotificationMessage(new Notification(response.Error)));
         });
     }
 

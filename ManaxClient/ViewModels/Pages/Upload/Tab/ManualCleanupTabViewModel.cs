@@ -27,7 +27,7 @@ public partial class ManualCleanupTabViewModel : TabViewModel
         if (!Directory.Exists(processingFolder))
         {
             WeakReferenceMessenger.Default.Send(
-                new NotificationMessage("Processing folder does not exist. Please set it up in the settings."));
+                new NotificationMessage(new Notification("ManualCleanup.ProcessingFolder.Missing")));
             return;
         }
 
@@ -83,6 +83,7 @@ public partial class ManualCleanupTabViewModel : TabViewModel
         }
         catch(Exception e)
         {
+            WeakReferenceMessenger.Default.Send(new NotificationMessage(new Notification("ManualCleanup.Edit.Failed")));
             Logger.LogError("Failed to edit images",e);
         }
     }

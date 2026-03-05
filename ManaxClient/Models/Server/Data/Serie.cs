@@ -42,6 +42,8 @@ public partial class Serie : ObservableObject, IDisposable
     [ObservableProperty] private Status _status;
     [ObservableProperty] private string _title = string.Empty;
 
+    private string ErrorName => Title != string.Empty ? Title : Id.ToString();
+
     public Serie(long id) : this(new SerieDto { Id = id })
     {
     }
@@ -112,16 +114,15 @@ public partial class Serie : ObservableObject, IDisposable
             {
                 Optional<SerieDto> serieInfoResponse = await ManaxApiSerieClient.GetSerieInfoAsync(Id);
                 if (serieInfoResponse.Failed)
-                    WeakReferenceMessenger.Default.Send(new NotificationMessage(serieInfoResponse.Error));
+                    WeakReferenceMessenger.Default.Send(new NotificationMessage(new Notification(serieInfoResponse.Error)));
 
                 FromSerieDto(serieInfoResponse.GetValue());
                 _infoLoaded = true;
             }
             catch (Exception e)
             {
-                string message = "Failed to load serie with ID: " + Id;
-                WeakReferenceMessenger.Default.Send(new NotificationMessage(message));
-                Logger.LogError(message, e);
+                WeakReferenceMessenger.Default.Send(new NotificationMessage(new Notification("Serie.Load.Info.Failed",[ErrorName])));
+                Logger.LogError("Failed to load serie: " + ErrorName, e);
             }
         });
     }
@@ -137,7 +138,7 @@ public partial class Serie : ObservableObject, IDisposable
                 if (seriePosterResponse.Failed)
                 {
                     Poster = null;
-                    WeakReferenceMessenger.Default.Send(new NotificationMessage(seriePosterResponse.Error));
+                    WeakReferenceMessenger.Default.Send(new NotificationMessage(new Notification(seriePosterResponse.Error)));
                     return;
                 }
 
@@ -146,9 +147,8 @@ public partial class Serie : ObservableObject, IDisposable
             }
             catch (Exception e)
             {
-                string message = "Failed to load poster for serie with ID: " + Id;
-                Logger.LogError(message, e);
-                WeakReferenceMessenger.Default.Send(new NotificationMessage(message));
+                Logger.LogError("Failed to load poster for serie: " + ErrorName, e);
+                WeakReferenceMessenger.Default.Send(new NotificationMessage(new Notification("Serie.Load.Poster.Failed",[ErrorName])));
             }
         });
     }
@@ -170,9 +170,10 @@ public partial class Serie : ObservableObject, IDisposable
                 Banner = new Bitmap(new MemoryStream(serieBannerResponse.GetValue()));
                 _bannerLoaded = true;
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                // ignored
+                Logger.LogError("Failed to load banner for serie: " + ErrorName, e);
+                WeakReferenceMessenger.Default.Send(new NotificationMessage(new Notification("Serie.Load.Banner.Failed",[ErrorName])));
             }
         });
     }

@@ -39,8 +39,9 @@ public class UsersPageViewModel : PageViewModel
             Optional<bool> deleteUserResponse = await ManaxApiUserClient.DeleteUserAsync(user.Id);
             string error = deleteUserResponse.Failed
                 ? deleteUserResponse.Error
-                : $"User '{user.Username}' was deleted";
-            WeakReferenceMessenger.Default.Send(new NotificationMessage(error));
+                : "UserPage.User.Deleted";
+            object[] args = deleteUserResponse.Failed ? [] : [user.Username];
+            WeakReferenceMessenger.Default.Send(new NotificationMessage(new Notification(error,args)));
         });
     }
 
@@ -59,13 +60,13 @@ public class UsersPageViewModel : PageViewModel
                 Optional<bool> postUserResponse = await ManaxApiPermissionClient.SetPermissionsAsync(userId, perms);
                 if (postUserResponse.Failed)
                     WeakReferenceMessenger.Default.Send(
-                        new NotificationMessage(Localizer.Get("UserPage.UpdatePermissionsError")));
+                        new NotificationMessage(new Notification("UserPage.UpdatePermissionsError")));
             }
             catch (Exception e)
             {
                 Logger.LogError("Error updating user permissions", e);
                 WeakReferenceMessenger.Default.Send(
-                    new NotificationMessage(Localizer.Get("UserPage.UpdatePermissionsError")));
+                    new NotificationMessage(new Notification("UserPage.UpdatePermissionsError")));
             }
         };
     }
@@ -84,12 +85,12 @@ public class UsersPageViewModel : PageViewModel
                 UserCreateDto user = content.GetResult();
                 Optional<bool> postUserResponse = await ManaxApiUserClient.PostUserAsync(user);
                 if (postUserResponse.Failed)
-                    WeakReferenceMessenger.Default.Send(new NotificationMessage(Localizer.Get("UserPage.CreateError")));
+                    WeakReferenceMessenger.Default.Send(new NotificationMessage(new Notification("UserPage.CreateError")));
             }
             catch (Exception e)
             {
                 Logger.LogError("Error creating user", e);
-                WeakReferenceMessenger.Default.Send(new NotificationMessage(Localizer.Get("UserPage.CreateError")));
+                WeakReferenceMessenger.Default.Send(new NotificationMessage(new Notification("UserPage.CreateError")));
             }
         };
     }

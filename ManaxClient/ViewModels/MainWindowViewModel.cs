@@ -9,6 +9,7 @@ using CommunityToolkit.Mvvm.Messaging;
 using DynamicData;
 using DynamicData.Binding;
 using ManaxClient.Event;
+using ManaxClient.Localization.Localizer;
 using ManaxClient.Manager;
 using ManaxClient.Models;
 using ManaxClient.Models.History;
@@ -35,13 +36,13 @@ namespace ManaxClient.ViewModels;
 public partial class MainWindowViewModel : ObservableObject
 {
     private readonly Lock _infoCancellationLock = new();
-    private readonly Dictionary<string, CancellationTokenSource> _infoCancellationTokens = new();
+    private readonly Dictionary<Notification, CancellationTokenSource> _infoCancellationTokens = new();
     private readonly ReadOnlyObservableCollection<Library> _libraries;
     private readonly IDisposable _librariesSubscription;
     [ObservableProperty] private ChapterSource _chapterSource = new();
     [ObservableProperty] private FeatureManager _featureManager = new();
     [ObservableProperty] private PageHistoryManager _history;
-    [ObservableProperty] private ObservableCollection<string> _infos = [];
+    [ObservableProperty] private ObservableCollection<Notification> _infos = [];
     [ObservableProperty] private IssueSource _issueSource = new();
     [ObservableProperty] private LibrarySource _librarySource = new();
     [ObservableProperty] private PermissionManager _permissionManager = new();
@@ -119,7 +120,9 @@ public partial class MainWindowViewModel : ObservableObject
 
     private void OnChapterUploadFailed(string chapterPath)
     {
-        ShowInfo($"Chapter upload failed: {chapterPath}");
+        const string key = "Mainwindow.Upload.Failed";
+        ShowInfo(new Notification(key, [chapterPath]));
+        Logger.LogWarning("Failed to upload chapter: " + chapterPath);
     }
 
     public async void Logout()
@@ -129,8 +132,8 @@ public partial class MainWindowViewModel : ObservableObject
             Optional<bool> logoutAsync = await ManaxApiUserClient.LogoutAsync();
             if (logoutAsync.Failed)
             {
-                Logger.LogFailure(logoutAsync.Error);
-                ShowInfo(logoutAsync.Error);
+                Logger.LogFailure(Localizer.Get(logoutAsync.Error));
+                ShowInfo(new Notification(logoutAsync.Error));
                 return;
             }
 
@@ -140,9 +143,9 @@ public partial class MainWindowViewModel : ObservableObject
         }
         catch (Exception e)
         {
-            const string error = "Failed to logout from server";
-            Logger.LogError(error, e);
-            ShowInfo(error);
+            const string key = "Mainwindow.Logout.Failed";
+            Logger.LogError("Unknown error while logging out", e);
+            ShowInfo(new Notification(key));
         }
     }
 
@@ -171,14 +174,15 @@ public partial class MainWindowViewModel : ObservableObject
         });
     }
 
-    private void ShowInfo(string info)
+    private void ShowInfo(Notification notification)
     {
-        Dispatcher.UIThread.Post(() => { Infos.Add(info); });
+        Dispatcher.UIThread.Post(() => { Infos.Add(notification); });
+        notification.RemoveRequested += (_,_) => DismissNotification(notification);
 
         CancellationTokenSource cts = new();
         lock (_infoCancellationLock)
         {
-            _infoCancellationTokens[info] = cts;
+            _infoCancellationTokens[notification] = cts;
         }
 
         Task.Run(async () =>
@@ -189,10 +193,10 @@ public partial class MainWindowViewModel : ObservableObject
 
                 Dispatcher.UIThread.Post(() =>
                 {
-                    Infos.Remove(info);
+                    Infos.Remove(notification);
                     lock (_infoCancellationLock)
                     {
-                        _infoCancellationTokens.Remove(info);
+                        _infoCancellationTokens.Remove(notification);
                     }
                 });
             }
@@ -207,19 +211,19 @@ public partial class MainWindowViewModel : ObservableObject
         }, cts.Token);
     }
 
-    public void DismissNotification(string info)
+    private void DismissNotification(Notification notification)
     {
         lock (_infoCancellationLock)
         {
-            if (_infoCancellationTokens.TryGetValue(info, out CancellationTokenSource? cts))
+            if (_infoCancellationTokens.TryGetValue(notification, out CancellationTokenSource? cts))
             {
                 cts.Cancel();
                 cts.Dispose();
-                _infoCancellationTokens.Remove(info);
+                _infoCancellationTokens.Remove(notification);
             }
         }
 
-        Dispatcher.UIThread.Post(() => { Infos.Remove(info); });
+        Dispatcher.UIThread.Post(() => { Infos.Remove(notification); });
     }
 
     public void OpenSideBar()

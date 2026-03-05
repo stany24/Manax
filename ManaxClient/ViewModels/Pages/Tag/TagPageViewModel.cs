@@ -51,11 +51,11 @@ public class TagPageViewModel : PageViewModel
 
                 Optional<bool> request = await ManaxApiTagClient.CreateTagAsync(tagCreate);
                 if (request.Failed)
-                    WeakReferenceMessenger.Default.Send(new NotificationMessage(Localizer.Get("TagPage.CreateError")));
+                    WeakReferenceMessenger.Default.Send(new NotificationMessage(new Notification("TagPage.CreateError")));
             }
             catch
             {
-                WeakReferenceMessenger.Default.Send(new NotificationMessage(Localizer.Get("TagPage.CreateError")));
+                WeakReferenceMessenger.Default.Send(new NotificationMessage(new Notification("TagPage.CreateError")));
             }
         };
 
@@ -82,11 +82,11 @@ public class TagPageViewModel : PageViewModel
                 TagUpdateDto result = content.GetResult();
                 Optional<bool> response = await ManaxApiTagClient.UpdateTagAsync(result);
                 if (response.Failed)
-                    WeakReferenceMessenger.Default.Send(new NotificationMessage(response.Error));
+                    WeakReferenceMessenger.Default.Send(new NotificationMessage(new Notification(response.Error)));
             }
             catch
             {
-                WeakReferenceMessenger.Default.Send(new NotificationMessage(Localizer.Get("TagPage.UpdateError")));
+                WeakReferenceMessenger.Default.Send(new NotificationMessage(new Notification("TagPage.UpdateError")));
             }
         };
 
@@ -101,11 +101,11 @@ public class TagPageViewModel : PageViewModel
             {
                 Optional<bool> response = await ManaxApiTagClient.DeleteTagAsync(tag.Id);
                 if (response.Failed)
-                    WeakReferenceMessenger.Default.Send(new NotificationMessage(response.Error));
+                    WeakReferenceMessenger.Default.Send(new NotificationMessage(new Notification(response.Error)));
             }
             catch
             {
-                WeakReferenceMessenger.Default.Send(new NotificationMessage(Localizer.Get("TagPage.DeleteError")));
+                WeakReferenceMessenger.Default.Send(new NotificationMessage(new Notification("TagPage.DeleteError")));
             }
         });
     }

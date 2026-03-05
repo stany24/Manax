@@ -48,13 +48,12 @@ public class RankPageViewModel : PageViewModel
                 RankUpdateDto result = content.GetResult();
                 Optional<bool> updateRankAsync = await ManaxApiRankClient.UpdateRankAsync(result);
                 if (updateRankAsync.Failed)
-                    WeakReferenceMessenger.Default.Send(new NotificationMessage(updateRankAsync.Error));
+                    WeakReferenceMessenger.Default.Send(new NotificationMessage(new Notification(updateRankAsync.Error)));
             }
             catch (Exception e)
             {
-                const string error = "Failed to update rank on server";
-                WeakReferenceMessenger.Default.Send(new NotificationMessage(error));
-                Logger.LogError(error, e);
+                WeakReferenceMessenger.Default.Send(new NotificationMessage(new Notification("RankPage.Update.Failed")));
+                Logger.LogError("Failed to update rank on server", e);
             }
         };
         WeakReferenceMessenger.Default.Send(new PopupChangeMessage(popup));
@@ -68,13 +67,12 @@ public class RankPageViewModel : PageViewModel
             {
                 Optional<bool> deleteRankResponse = await ManaxApiRankClient.DeleteRankAsync(rank.Id);
                 if (deleteRankResponse.Failed)
-                    WeakReferenceMessenger.Default.Send(new NotificationMessage(deleteRankResponse.Error));
+                    WeakReferenceMessenger.Default.Send(new NotificationMessage(new Notification(deleteRankResponse.Error)));
             }
             catch (Exception e)
             {
-                const string error = "Failed to delete rank on server";
-                WeakReferenceMessenger.Default.Send(new NotificationMessage(error));
-                Logger.LogError(error, e);
+                WeakReferenceMessenger.Default.Send(new NotificationMessage(new Notification("RankPage.Delete.Failed")));
+                Logger.LogError("Failed to delete rank on server", e);
             }
         });
     }
@@ -94,13 +92,12 @@ public class RankPageViewModel : PageViewModel
                     { Name = result.Name, Value = result.Value });
 
                 if (rankResponse.Failed)
-                    WeakReferenceMessenger.Default.Send(new NotificationMessage(rankResponse.Error));
+                    WeakReferenceMessenger.Default.Send(new NotificationMessage(new Notification(rankResponse.Error)));
             }
             catch (Exception e)
             {
-                const string error = "Failed to create rank on server";
-                WeakReferenceMessenger.Default.Send(new NotificationMessage(error));
-                Logger.LogError(error, e);
+                WeakReferenceMessenger.Default.Send(new NotificationMessage(new Notification("RankPage.Create.Failed")));
+                Logger.LogError("Failed to create rank on server", e);
             }
         };
         WeakReferenceMessenger.Default.Send(new PopupChangeMessage(popup));
