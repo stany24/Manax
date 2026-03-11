@@ -6,7 +6,7 @@ public class Notification(string localizationKey)
 {
     public string LocalizationKey { get; init; } = localizationKey;
     public object[] Args { get; init; } = [];
-    public EventHandler RemoveRequested;
+    public EventHandler? RemoveRequested;
 
     public Notification(string localizationKey, object[] args): this(localizationKey)
     {
