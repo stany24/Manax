@@ -48,7 +48,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Magick.NET-Q8-AnyCPU" Version="14.10.3" />
+        <PackageReference Include="Magick.NET-Q8-AnyCPU" Version="14.10.4" />
         <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="11.0.0-preview.1.26104.118" />
     </ItemGroup>
 
