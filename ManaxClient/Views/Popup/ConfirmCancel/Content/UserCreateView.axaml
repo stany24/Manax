@@ -1,12 +1,9 @@
 <UserControl
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:content="clr-namespace:ManaxClient.ViewModels.Popup.ConfirmCancel.Content"
-    xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
     xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-    mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="600"
+    xmlns:localizer="clr-namespace:ManaxClient.Localization.Localizer"
     x:Class="ManaxClient.Views.Popup.ConfirmCancel.Content.UserCreateView"
     x:DataType="content:UserCreateViewModel">
 
@@ -17,28 +14,28 @@
             <avalonia:MaterialIcon Classes="icon"
                                    Kind="UserOutline" />
             <StackPanel>
-                <TextBlock Text="{localization:Localize UserCreatePopup.Title}" />
-                <TextBlock Text="{localization:Localize UserCreatePopup.Description}" />
+                <TextBlock Text="{localizer:Localize UserCreatePopup.Title}" />
+                <TextBlock Text="{localizer:Localize UserCreatePopup.Description}" />
             </StackPanel>
         </StackPanel>
 
         <Border Classes="input">
             <StackPanel>
                 <TextBlock
-                    Text="{localization:Localize UserCreatePopup.Username}" />
+                    Text="{localizer:Localize UserCreatePopup.Username}" />
                 <TextBox
                     Text="{Binding Username}"
-                    Watermark="{localization:Localize UserCreatePopup.Username.Placeholder}" />
+                    Watermark="{localizer:Localize UserCreatePopup.Username.Placeholder}" />
             </StackPanel>
         </Border>
 
         <Border Classes="input">
             <StackPanel Classes="input">
                 <TextBlock
-                    Text="{localization:Localize UserCreatePopup.Password}" />
+                    Text="{localizer:Localize UserCreatePopup.Password}" />
                 <TextBox
                     Text="{Binding Password}"
-                    Watermark="{localization:Localize UserCreatePopup.Password.Placeholder}"
+                    Watermark="{localizer:Localize UserCreatePopup.Password.Placeholder}"
                     PasswordChar="*" />
             </StackPanel>
         </Border>
@@ -46,7 +43,7 @@
         <Border Classes="input">
             <StackPanel Classes="input">
                 <TextBlock
-                    Text="{localization:Localize UserCreatePopup.Role}" />
+                    Text="{localizer:Localize UserCreatePopup.Role}" />
                 <ComboBox
                     ItemsSource="{Binding Roles}"
                     SelectedItem="{Binding SelectedRole}"
@@ -59,7 +56,7 @@
             <avalonia:MaterialIcon Grid.Column="0"
                                    Kind="WarningOutline" />
             <TextBlock Grid.Column="1"
-                       Text="{localization:Localize UserCreatePopup.Tip}"
+                       Text="{localizer:Localize UserCreatePopup.Tip}"
                        TextWrapping="Wrap" />
         </Grid>
     </StackPanel>

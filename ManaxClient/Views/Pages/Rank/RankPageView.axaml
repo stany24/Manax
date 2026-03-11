@@ -1,16 +1,13 @@
 <UserControl
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:page="clr-namespace:ManaxClient.ViewModels.Pages.Rank"
     xmlns:viewModels="clr-namespace:ManaxClient.ViewModels"
-    xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
     xmlns:localization1="clr-namespace:ManaxClient.Localization"
     xmlns:data="clr-namespace:ManaxClient.Models.Server.Data"
     xmlns:controls="clr-namespace:ManaxClient.Controls"
     xmlns:icon="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-    mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+    xmlns:localizer="clr-namespace:ManaxClient.Localization.Localizer"
     x:Class="ManaxClient.Views.Pages.Rank.RankPageView"
     x:DataType="page:RankPageViewModel"
     Classes="page">
@@ -26,14 +23,14 @@
                                        Classes="icon"
                                        Kind="ChevronTripleUp" />
                     <TextBlock Grid.Column="1"
-                               Text="{localization:Localize RankPage.Title}" />
+                               Text="{localizer:Localize RankPage.Title}" />
 
                     <controls:IconButton Grid.Column="3"
                                          Classes="icon-button light"
                                          IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWriteRanks}"
                                          Command="{Binding CreateRank}"
                                          VerticalAlignment="Center"
-                                         Text="{localization:Localize RankPage.NewRank}"
+                                         Text="{localizer:Localize RankPage.NewRank}"
                                          Icon="Add" />
                 </Grid>
             </Border>

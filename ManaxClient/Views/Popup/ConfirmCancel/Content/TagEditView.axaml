@@ -1,12 +1,9 @@
 <UserControl
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:content="clr-namespace:ManaxClient.ViewModels.Popup.ConfirmCancel.Content"
-    xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
     xmlns:icon="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-    mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="250"
+    xmlns:localizer="clr-namespace:ManaxClient.Localization.Localizer"
     x:Class="ManaxClient.Views.Popup.ConfirmCancel.Content.TagEditView"
     x:DataType="content:TagEditViewModel">
     <StackPanel Orientation="Vertical"
@@ -15,23 +12,23 @@
             <icon:MaterialIcon Classes="icon"
                                Kind="Tag" />
             <StackPanel>
-                <TextBlock Text="{localization:Localize TagEditPopup.Title}" />
-                <TextBlock Text="{localization:Localize TagEditPopup.Description}" />
+                <TextBlock Text="{localizer:Localize TagEditPopup.Title}" />
+                <TextBlock Text="{localizer:Localize TagEditPopup.Description}" />
             </StackPanel>
         </StackPanel>
 
 
         <Border Classes="input">
             <StackPanel Spacing="8">
-                <TextBlock Text="{localization:Localize TagEditPopup.Name}" />
+                <TextBlock Text="{localizer:Localize TagEditPopup.Name}" />
                 <TextBox Text="{Binding Name}"
-                         Watermark="{localization:Localize TagEditPopup.Name.Placeholder}" />
+                         Watermark="{localizer:Localize TagEditPopup.Name.Placeholder}" />
             </StackPanel>
         </Border>
 
         <Border Classes="input">
             <StackPanel Spacing="8">
-                <TextBlock Text="{localization:Localize TagEditPopup.Color}" />
+                <TextBlock Text="{localizer:Localize TagEditPopup.Color}" />
                 <ColorView Color="{Binding Color,Mode=TwoWay}" />
             </StackPanel>
         </Border>

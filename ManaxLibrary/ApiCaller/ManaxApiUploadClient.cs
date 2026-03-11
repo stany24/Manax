@@ -1,6 +1,5 @@
 using System.Globalization;
 using System.Net.Http.Headers;
-using System.Net.Http.Json;
 using System.Text.RegularExpressions;
 using ManaxLibrary.DTO.Chapter;
 using ManaxLibrary.DTO.Serie;
@@ -87,13 +86,7 @@ public static partial class ManaxApiUploadClient
 
     public static async Task<Optional<bool>> UploadChapterAsync(NewChapterDto dto)
     {
-        return await ManaxApiClient.ExecuteWithErrorHandlingAsync(async () =>
-        {
-            HttpResponseMessage response = await ManaxApiClient.UploadClient.PostAsJsonAsync("api/upload/chapter", dto);
-            return response.IsSuccessStatusCode
-                ? Optional<bool>.Success(true)
-                : Optional<bool>.Failure(response);
-        });
+        return await ManaxApiClient.PostAsync<bool,NewChapterDto>("api/upload/chapter", dto);
     }
 
     public static async Task<Optional<bool>> ReplaceChapterAsync(ByteArrayContent file, string fileName,

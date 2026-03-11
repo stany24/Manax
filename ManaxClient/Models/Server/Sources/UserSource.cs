@@ -52,7 +52,7 @@ public class UserSource
                 if (usersIdsResponse.Failed)
                 {
                     Logger.LogFailure(usersIdsResponse.Error);
-                    WeakReferenceMessenger.Default.Send(new NotificationMessage(usersIdsResponse.Error));
+                    WeakReferenceMessenger.Default.Send(new NotificationMessage(new Notification(usersIdsResponse.Error)));
                     return;
                 }
 
@@ -63,7 +63,7 @@ public class UserSource
                     if (userResponse.Failed)
                     {
                         Logger.LogFailure(userResponse.Error);
-                        WeakReferenceMessenger.Default.Send(new NotificationMessage(userResponse.Error));
+                        WeakReferenceMessenger.Default.Send(new NotificationMessage(new Notification(userResponse.Error)));
                         continue;
                     }
 
@@ -76,8 +76,8 @@ public class UserSource
             }
             catch (Exception e)
             {
-                const string error = "Failed to load users from server";
-                Logger.LogError(error, e);
+                Logger.LogError("Failed to load users from server", e);
+                WeakReferenceMessenger.Default.Send(new NotificationMessage(new Notification("User.Load.Failed")));
             }
         });
     }

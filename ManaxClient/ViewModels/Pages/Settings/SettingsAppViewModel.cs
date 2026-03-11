@@ -5,8 +5,8 @@ using Avalonia.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData;
 using DynamicData.Binding;
-using Jeek.Avalonia.Localization;
 using ManaxClient.Localization;
+using ManaxClient.Localization.Localizer;
 using ManaxClient.Models.Theme;
 
 namespace ManaxClient.ViewModels.Pages.Settings;

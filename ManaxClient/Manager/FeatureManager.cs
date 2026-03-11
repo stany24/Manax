@@ -49,7 +49,7 @@ public class FeatureManager : ObservableObject
             Optional<List<Feature>> featureResponse = await ManaxApiFeatureClient.GetEnabledFeaturesAsync();
             if (featureResponse.Failed)
             {
-                WeakReferenceMessenger.Default.Send(new NotificationMessage(featureResponse.Error));
+                WeakReferenceMessenger.Default.Send(new NotificationMessage(new Notification(featureResponse.Error)));
                 return Features;
             }
 

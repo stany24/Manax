@@ -1,12 +1,9 @@
 <UserControl
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:page="clr-namespace:ManaxClient.ViewModels.Pages.Login"
-    xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
     xmlns:controls="clr-namespace:ManaxClient.Controls"
-    mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+    xmlns:localizer="clr-namespace:ManaxClient.Localization.Localizer"
     x:Class="ManaxClient.Views.Pages.Login.LoginPageView"
     x:DataType="page:LoginPageViewModel"
     Classes="page">
@@ -21,7 +18,7 @@
                       ColumnDefinitions="Auto,*,Auto">
                     <TextBlock Grid.Column="0"
                                VerticalAlignment="Center"
-                               Text="{localization:Localize LoginPage.Title}" />
+                               Text="{localizer:Localize LoginPage.Title}" />
                     <ComboBox Grid.Column="2"
                               ItemsSource="{Binding Languages}"
                               SelectedItem="{Binding SelectedLanguage}"
@@ -31,29 +28,29 @@
                 <StackPanel Spacing="8">
                     <Border Classes="input">
                         <StackPanel Spacing="6">
-                            <TextBlock Text="{localization:Localize LoginPage.Username}" />
+                            <TextBlock Text="{localizer:Localize LoginPage.Username}" />
                             <TextBox Name="TbxUsername"
                                      Text="{Binding Username}"
-                                     Watermark="{localization:Localize LoginPage.Username.Placeholder}" />
+                                     Watermark="{localizer:Localize LoginPage.Username.Placeholder}" />
                         </StackPanel>
                     </Border>
 
                     <Border Classes="input">
                         <StackPanel Spacing="6">
-                            <TextBlock Text="{localization:Localize LoginPage.Password}" />
+                            <TextBlock Text="{localizer:Localize LoginPage.Password}" />
                             <TextBox Name="TbxPassword"
                                      Text="{Binding Password}"
                                      Loaded="TbxPasswordOnLoaded"
                                      PasswordChar="•"
-                                     Watermark="{localization:Localize LoginPage.Password.Placeholder}" />
+                                     Watermark="{localizer:Localize LoginPage.Password.Placeholder}" />
                         </StackPanel>
                     </Border>
 
                     <Border Classes="input">
                         <StackPanel Spacing="6">
-                            <TextBlock Text="{localization:Localize LoginPage.Server}" />
+                            <TextBlock Text="{localizer:Localize LoginPage.Server}" />
                             <TextBox Text="{Binding Host}"
-                                     Watermark="{localization:Localize LoginPage.Server.Placeholder}" />
+                                     Watermark="{localizer:Localize LoginPage.Server.Placeholder}" />
                         </StackPanel>
                     </Border>
                 </StackPanel>
@@ -61,7 +58,7 @@
                 <controls:IconButton Classes="icon-button"
                                      IsEnabled="{Binding CanLogin}"
                                      Icon="{Binding Emoji}"
-                                     Text="{localization:Localize LoginPage.SignIn}" FontWeight="Medium"
+                                     Text="{localizer:Localize LoginPage.SignIn}" FontWeight="Medium"
                                      Command="{Binding Login}"
                                      HorizontalAlignment="Stretch"
                                      HotKey="Enter" />

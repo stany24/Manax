@@ -1,15 +1,12 @@
 <UserControl
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:avalonia="clr-namespace:LiveChartsCore.SkiaSharpView.Avalonia;assembly=LiveChartsCore.SkiaSharpView.Avalonia"
     xmlns:page="clr-namespace:ManaxClient.ViewModels.Pages.Stats"
     xmlns:viewModels="clr-namespace:ManaxClient.ViewModels"
-    xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
     xmlns:icon="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     xmlns:controls="clr-namespace:ManaxClient.Controls"
-    mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+    xmlns:localizer="clr-namespace:ManaxClient.Localization.Localizer"
     x:Class="ManaxClient.Views.Pages.Stats.UserStatsPageView"
     x:DataType="page:UserStatsPageViewModel"
     IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanReadSelfStats}"
@@ -53,7 +50,7 @@
                                        Classes="icon"
                                        Kind="ChartLine" />
                     <TextBlock Grid.Column="1"
-                               Text="{localization:Localize UserStatsPage.Title}" />
+                               Text="{localizer:Localize UserStatsPage.Title}" />
                 </Grid>
             </Border>
 
@@ -68,7 +65,7 @@
                                                Classes="icon"
                                                Kind="Bookshelf" />
                             <TextBlock Grid.Column="1"
-                                       Text="{localization:Localize UserStatsPage.SeriesProgress.Title}" />
+                                       Text="{localizer:Localize UserStatsPage.SeriesProgress.Title}" />
                         </Grid>
 
                         <avalonia:PieChart Classes="chart"
@@ -79,7 +76,7 @@
                                     Grid.Column="0">
                                 <StackPanel Spacing="4">
                                     <TextBlock Classes="name"
-                                               Text="{localization:Localize UserStatsPage.SeriesProgress.Completed}" />
+                                               Text="{localizer:Localize UserStatsPage.SeriesProgress.Completed}" />
                                     <TextBlock Classes="number"
                                                Text="{Binding UserStats.SeriesCompleted}" />
                                 </StackPanel>
@@ -89,7 +86,7 @@
                                     Grid.Column="1">
                                 <StackPanel Spacing="4">
                                     <TextBlock Classes="name"
-                                               Text="{localization:Localize UserStatsPage.SeriesProgress.InProgress}" />
+                                               Text="{localizer:Localize UserStatsPage.SeriesProgress.InProgress}" />
                                     <TextBlock Classes="number"
                                                Text="{Binding UserStats.SeriesInProgress}" />
                                 </StackPanel>
@@ -99,7 +96,7 @@
                                     Grid.Column="2">
                                 <StackPanel Spacing="4">
                                     <TextBlock Classes="name"
-                                               Text="{localization:Localize UserStatsPage.SeriesProgress.Remaining}" />
+                                               Text="{localizer:Localize UserStatsPage.SeriesProgress.Remaining}" />
                                     <TextBlock Classes="number"
                                                Text="{Binding UserStats.SeriesRemaining}" />
                                 </StackPanel>
@@ -116,7 +113,7 @@
                                                Classes="icon"
                                                Kind="BookOpenVariantOutline" />
                             <TextBlock Grid.Column="1"
-                                       Text="{localization:Localize UserStatsPage.ChaptersProgress.Title}" />
+                                       Text="{localizer:Localize UserStatsPage.ChaptersProgress.Title}" />
                         </Grid>
 
                         <avalonia:PieChart Classes="chart"
@@ -128,7 +125,7 @@
                                     Grid.Column="0">
                                 <StackPanel Spacing="4">
                                     <TextBlock Classes="name"
-                                               Text="{localization:Localize UserStatsPage.ChaptersProgress.Read}" />
+                                               Text="{localizer:Localize UserStatsPage.ChaptersProgress.Read}" />
                                     <TextBlock Classes="number"
                                                Text="{Binding UserStats.ChaptersRead}" />
                                 </StackPanel>
@@ -138,7 +135,7 @@
                                     Grid.Column="1">
                                 <StackPanel Spacing="4">
                                     <TextBlock Classes="name"
-                                               Text="{localization:Localize UserStatsPage.ChaptersProgress.Remaining}" />
+                                               Text="{localizer:Localize UserStatsPage.ChaptersProgress.Remaining}" />
                                     <TextBlock Classes="number"
                                                Text="{Binding UserStats.ChaptersRemaining}" />
                                 </StackPanel>
@@ -155,7 +152,7 @@
                                                Classes="icon"
                                                Kind="ChevronTripleUp" />
                             <TextBlock Grid.Column="1"
-                                       Text="{localization:Localize UserStatsPage.RankDistribution.Title}" />
+                                       Text="{localizer:Localize UserStatsPage.RankDistribution.Title}" />
                         </Grid>
 
                         <avalonia:CartesianChart Classes="chart"
@@ -172,7 +169,7 @@
                                                Classes="icon"
                                                Kind="ChartLine" />
                             <TextBlock Grid.Column="1"
-                                       Text="{localization:Localize UserStatsPage.ReadsPerDay.Title}" />
+                                       Text="{localizer:Localize UserStatsPage.ReadsPerDay.Title}" />
                         </Grid>
 
                         <avalonia:CartesianChart Classes="chart"

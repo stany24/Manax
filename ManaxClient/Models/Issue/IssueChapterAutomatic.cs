@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Text;
 using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData;
-using Jeek.Avalonia.Localization;
+using ManaxClient.Localization.Localizer;
 using ManaxClient.Models.Server.Data;
 using ManaxClient.ViewModels;
 using ManaxLibrary.DTO.Issue.Automatic;

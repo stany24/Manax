@@ -8,6 +8,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
 using ManaxClient.Event;
 using ManaxClient.Models.Upload;
+using ManaxLibrary.Logging;
 
 namespace ManaxClient.ViewModels.Pages.Upload.Tab;
 
@@ -26,7 +27,7 @@ public partial class ManualCleanupTabViewModel : TabViewModel
         if (!Directory.Exists(processingFolder))
         {
             WeakReferenceMessenger.Default.Send(
-                new NotificationMessage("Processing folder does not exist. Please set it up in the settings."));
+                new NotificationMessage(new Notification("ManualCleanup.ProcessingFolder.Missing")));
             return;
         }
 
@@ -76,7 +77,15 @@ public partial class ManualCleanupTabViewModel : TabViewModel
     {
         if (ImagesToEdit.Count == 0) return;
         string args = ImagesToEdit.Aggregate("", (current, image) => current + $"\"{image}\" ");
-        Process.Start("gimp", args);
+        try
+        {
+            Process.Start("gimp", args);
+        }
+        catch(Exception e)
+        {
+            WeakReferenceMessenger.Default.Send(new NotificationMessage(new Notification("ManualCleanup.Edit.Failed")));
+            Logger.LogError("Failed to edit images",e);
+        }
     }
 
     public void Clear()

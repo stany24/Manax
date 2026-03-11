@@ -1,5 +1,3 @@
-using System.Net;
-using System.Net.Http.Json;
 using ManaxLibrary.DTO.User;
 
 namespace ManaxLibrary.ApiCaller;
@@ -8,24 +6,7 @@ public static class ManaxApiUserClient
 {
     public static async Task<Optional<UserLoginResultDto>> LoginAsync(string username, string password)
     {
-        return await ManaxApiClient.ExecuteWithErrorHandlingAsync(async () =>
-        {
-            HttpResponseMessage response =
-                await ManaxApiClient.Client.PostAsJsonAsync("api/login", new { username, password });
-            if (!response.IsSuccessStatusCode)
-                return response.StatusCode switch
-                {
-                    HttpStatusCode.Unauthorized =>
-                        Optional<UserLoginResultDto>.Failure("Invalid username or password."),
-                    HttpStatusCode.BadRequest =>
-                        Optional<UserLoginResultDto>.Failure("User and password are required."),
-                    _ => Optional<UserLoginResultDto>.Failure(response)
-                };
-            UserLoginResultDto? user = await response.Content.ReadFromJsonAsync<UserLoginResultDto>();
-            return user == null
-                ? Optional<UserLoginResultDto>.Failure("Failed to read response content")
-                : Optional<UserLoginResultDto>.Success(user);
-        });
+        return await ManaxApiClient.PostAsync<UserLoginResultDto, object>("api/login", new { username, password });
     }
 
     public static async Task<Optional<List<long>>> GetUsersIdsAsync()

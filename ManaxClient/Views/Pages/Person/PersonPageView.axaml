@@ -1,16 +1,13 @@
 <UserControl
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:page="clr-namespace:ManaxClient.ViewModels.Pages.Person"
     xmlns:viewModels="clr-namespace:ManaxClient.ViewModels"
-    xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
     xmlns:localization1="clr-namespace:ManaxClient.Localization"
     xmlns:data="clr-namespace:ManaxClient.Models.Server.Data"
     xmlns:controls="clr-namespace:ManaxClient.Controls"
     xmlns:icon="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-    mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+    xmlns:localizer="clr-namespace:ManaxClient.Localization.Localizer"
     x:Class="ManaxClient.Views.Pages.Person.PersonPageView"
     x:DataType="page:PersonPageViewModel"
     Classes="page">
@@ -41,7 +38,7 @@
                                              Classes="icon-button light"
                                              IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWritePersons}"
                                              Command="{Binding CreatePerson}"
-                                             Text="{localization:Localize PersonPage.NewPerson}"
+                                             Text="{localizer:Localize PersonPage.NewPerson}"
                                              Icon="Add" />
                     </Grid>
 
@@ -115,7 +112,7 @@
                                              Classes="icon-button light"
                                              IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWriteRoles}"
                                              Command="{Binding CreateRole}"
-                                             Text="{localization:Localize RolePage.NewRole}"
+                                             Text="{localizer:Localize RolePage.NewRole}"
                                              Icon="Add" />
                     </Grid>
 

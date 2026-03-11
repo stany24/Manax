@@ -1,13 +1,10 @@
 <UserControl
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewModels="clr-namespace:ManaxClient.ViewModels"
     xmlns:tab="clr-namespace:ManaxClient.ViewModels.Pages.Upload.Tab"
-    xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
     xmlns:upload="clr-namespace:ManaxClient.Models.Upload"
-    mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+    xmlns:localizer="clr-namespace:ManaxClient.Localization.Localizer"
     x:Class="ManaxClient.Views.Pages.Upload.Tab.FetchFromSourceTabView"
     x:DataType="tab:FetchFromSourceTabViewModel"
     IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanUploadChapter}"
@@ -32,11 +29,11 @@
             <Grid Classes="title"
                   ColumnDefinitions="Auto,*,Auto">
                 <TextBlock Grid.Column="0"
-                           Text="{localization:Localize FetchFromSourcePage.Title}" />
+                           Text="{localizer:Localize FetchFromSourcePage.Title}" />
 
                 <Button Grid.Column="2"
                         Classes="button light"
-                        Content="{localization:Localize FetchFromSourcePage.Skip}"
+                        Content="{localizer:Localize FetchFromSourcePage.Skip}"
                         Command="{Binding Skip}" />
             </Grid>
         </Border>
@@ -48,7 +45,7 @@
                 <Grid Classes="section-title"
                       ColumnDefinitions="Auto">
                     <TextBlock Grid.Column="0"
-                               Text="{localization:Localize FetchFromSourcePage.Sources}"
+                               Text="{localizer:Localize FetchFromSourcePage.Sources}"
                                Margin="0" />
                 </Grid>
 
@@ -86,7 +83,7 @@
                 <Button Grid.Row="2"
                         Classes="button light"
                         HorizontalAlignment="Stretch"
-                        Content="{localization:Localize FetchFromSourcePage.FetchAll}"
+                        Content="{localizer:Localize FetchFromSourcePage.FetchAll}"
                         IsEnabled="{Binding CanFetch}"
                         Command="{Binding Fetch}" />
             </Grid>

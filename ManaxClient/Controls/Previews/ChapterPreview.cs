@@ -9,9 +9,9 @@ using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
 using CommunityToolkit.Mvvm.Messaging;
-using Jeek.Avalonia.Localization;
 using ManaxClient.Controls.Popups;
 using ManaxClient.Event;
+using ManaxClient.Localization.Localizer;
 using ManaxClient.ViewModels.Pages.Chapter;
 using ManaxClient.ViewModels.Popup.ConfirmCancel;
 using ManaxClient.ViewModels.Popup.ConfirmCancel.Content;
@@ -224,13 +224,13 @@ public class ChapterPreview : Button
                 ManaxLibrary.Optional<bool> chapterIssueAsync =
                     await ManaxApiIssueClient.CreateChapterIssueAsync(issue);
                 if (chapterIssueAsync.Failed)
-                    WeakReferenceMessenger.Default.Send(new NotificationMessage(chapterIssueAsync.Error));
+                    WeakReferenceMessenger.Default.Send(new NotificationMessage(new Notification(chapterIssueAsync.Error)));
             }
             catch (Exception e)
             {
                 WeakReferenceMessenger.Default.Send(
-                    new NotificationMessage(Localizer.Get("ChapterPreview.ReportFailed")));
-                Logger.LogError($"Error while creating chapter issue for chapter {Chapter.Id}", e);
+                    new NotificationMessage(new Notification("ChapterPreview.ReportFailed")));
+                Logger.LogError($"Error while creating chapter issue fors chapter {Chapter.Id}", e);
             }
         };
         WeakReferenceMessenger.Default.Send(new PopupChangeMessage(popup));

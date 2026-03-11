@@ -23,7 +23,7 @@ public partial class LibraryPageViewModel : PageViewModel
             Optional<bool> deleteLibraryResponse = await ManaxApiLibraryClient.DeleteLibraryAsync(Library.Id);
             if (deleteLibraryResponse.Failed)
                 WeakReferenceMessenger.Default.Send(
-                    new NotificationMessage("Failed to delete Library '" + Library.Name + "'"));
+                    new NotificationMessage(new Notification("LibraryPage.Delete.Failed", [Library.Name])));
         });
     }
 }

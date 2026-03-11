@@ -7,6 +7,7 @@ using System.IO.Compression;
 using System.Linq;
 using System.Threading.Tasks;
 using Aspose.Zip.Rar;
+using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using ImageMagick;
 using ManaxClient.Models.Upload;
@@ -19,7 +20,7 @@ namespace ManaxClient.ViewModels.Pages.Upload.Tab;
 
 public partial class AutoCleanupTabViewModel : TabViewModel
 {
-    private readonly List<string> _archivesFormats = ["cbr", "cbz", "zip"];
+    private readonly List<string> _archivesFormats = ["cbr", "cbz", "zip", "rar"];
 
     private readonly string[] _formatToDelete = ["xml", "gif", "bin", "js", "css", "html"];
     private readonly string[] _imagesFormats = ["jpg", "jpeg", "png", "webp", "heif", "heic", "avif"];
@@ -129,7 +130,7 @@ public partial class AutoCleanupTabViewModel : TabViewModel
         }
         catch (Exception e)
         {
-            Errors.Add("Failed to extract rar file: " + file + " Error: " + e.Message);
+            Dispatcher.UIThread.Post(() => Errors.Add("Failed to extract rar file: " + file + " Error: " + e.Message));
         }
     }
 
@@ -144,7 +145,7 @@ public partial class AutoCleanupTabViewModel : TabViewModel
         }
         catch (Exception e)
         {
-            Errors.Add("Failed to extract zip file: " + file + " Error: " + e.Message);
+            Dispatcher.UIThread.Post(() => Errors.Add("Failed to extract zip file: " + file + " Error: " + e.Message));
         }
     }
 
@@ -153,7 +154,7 @@ public partial class AutoCleanupTabViewModel : TabViewModel
         string[] imagesToConvert = _imagesFormats.AsParallel().SelectMany(ext =>
             Directory.GetFiles(_processingFolder, "*." + ext, SearchOption.AllDirectories)).ToArray();
         NbImage = imagesToConvert.Length;
-        Parallel.ForEach(imagesToConvert, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount },
+        Parallel.ForEach(imagesToConvert, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount-1 },
             file =>
             {
                 try
@@ -163,7 +164,7 @@ public partial class AutoCleanupTabViewModel : TabViewModel
                 }
                 catch (Exception e)
                 {
-                    Errors.Add("Failed to convert image: " + file + "Error: " + e.Message);
+                    Dispatcher.UIThread.Post(() => Errors.Add("Failed to convert image: " + file + "Error: " + e.Message));
                 }
             });
     }
@@ -179,10 +180,58 @@ public partial class AutoCleanupTabViewModel : TabViewModel
 
         image.HasAlpha = false;
         image.Strip();
-        string newFileName =
-            Path.ChangeExtension(file, _settings.ImageFormat.ToString().ToLower(CultureInfo.InvariantCulture));
         File.Delete(file);
-        image.Write(newFileName);
+        MagickImage[] images = SplitBigImage(image);
+        SaveImages(images,file);
+    }
+
+    private static MagickImage[] SplitBigImage(MagickImage image)
+    {
+        const uint maxHeight = 2560;
+        double ratio = (double)image.Height / image.Width;
+        bool needsSplit = ratio > 3 && image.Height >= maxHeight;
+        if (!needsSplit) { return [image]; }
+
+        uint nbPart = image.Height / maxHeight;
+        
+        MagickImage[] parts = new MagickImage[nbPart];
+        uint desiredHeight = image.Height / nbPart;
+        uint leftover = image.Height % nbPart;
+        uint yOffset = 0;
+        
+        for (int i = 0; i < nbPart; i++)
+        {
+            uint partHeight = desiredHeight;
+            if(i == parts.Length - 1) partHeight += leftover;
+            yOffset += partHeight;
+            
+            parts[i] = new MagickImage(new MagickColor("#000000"),image.Width,partHeight);
+            parts[i].CopyPixels(image, new MagickGeometry(0, (int)yOffset, image.Width, partHeight));
+        }
+
+        return parts;
+    }
+
+    private void SaveImages(MagickImage[] images, string oldFileName)
+    {
+        if (_settings == null) return;
+        string extension = _settings.ImageFormat.ToString().ToLower(CultureInfo.InvariantCulture);
+        string newFileName =
+            Path.ChangeExtension(oldFileName,extension );
+        if (images.Length == 1)
+        {
+            images[0].Write(newFileName);
+            return;
+        }
+        
+        string fileNameWithoutExt = Path.GetFileNameWithoutExtension(newFileName);
+        string directory = Path.GetDirectoryName(newFileName) ?? string.Empty;
+        for (int i = 0; i < images.Length; i++)
+        {
+            string partFileName = Path.Combine(directory,
+                $"{fileNameWithoutExt}_{i + 1:D3}.{extension}");
+            images[i].Write(partFileName);
+        }
     }
 
     private async Task LoadSettings()

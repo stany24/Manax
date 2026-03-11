@@ -79,7 +79,7 @@
         <value>{0} upload successful</value>
     </data>
     <data name="HomePage.UploadError" xml:space="preserve">
-        <value>Error uploading serie</value>
+        <value>Error uploading serie: {0}</value>
     </data>
     <data name="HomePage.UploadFailure" xml:space="preserve">
         <value>Upload failed: {0}</value>
@@ -893,5 +893,80 @@
     </data>
     <data name="UserPermissionsEdit.Description" xml:space="preserve">
         <value>Manage read, write, delete and other permissions for this user</value>
+    </data>
+    <data name="25" xml:space="preserve">
+        <value>Bad credentials</value>
+    </data>
+    <data name="Mainwindow.Upload.Failed" xml:space="preserve">
+        <value>Failed to upload chapter {0}</value>
+    </data>
+    <data name="Mainwindow.Logout.Failed" xml:space="preserve">
+        <value>Failed to logout from server</value>
+    </data>
+    <data name="Serie.Load.Info.Failed" xml:space="preserve">
+        <value>Failed to load serie info: {0}</value>
+    </data>
+    <data name="Serie.Load.Poster.Failed" xml:space="preserve">
+        <value>Failed to load serie poster: {0}</value>
+    </data>
+    <data name="Serie.Load.Banner.Failed" xml:space="preserve">
+        <value>Failed to load serie banner: {0}</value>
+    </data>
+    <data name="Chapter.Reads.Failed" xml:space="preserve">
+        <value>Failed to load reads for serie: {0}</value>
+    </data>
+    <data name="Chapter.Load.Failed" xml:space="preserve">
+        <value>Failed to load chapters for serie: {e}</value>
+    </data>
+    <data name="Issue.Load.Failed" xml:space="preserve">
+        <value>Failed to load issues</value>
+    </data>
+    <data name="Library.Load.Failed" xml:space="preserve">
+        <value>Failed to load Libraries</value>
+    </data>
+    <data name="Person.Load.Failed" xml:space="preserve">
+        <value>Failed to load persons</value>
+    </data>
+    <data name="Rank.Load.Failed" xml:space="preserve">
+        <value>Failed to load ranks</value>
+    </data>
+    <data name="Role.Load.Failed" xml:space="preserve">
+        <value>Failed to load roles</value>
+    </data>
+    <data name="Tag.Load.Failed" xml:space="preserve">
+        <value>Failed to load tags</value>
+    </data>
+    <data name="User.Load.Failed" xml:space="preserve">
+        <value>Failed to load users</value>
+    </data>
+    <data name="UserPage.User.Deleted" xml:space="preserve">
+        <value>User {0} was deleted</value>
+    </data>
+    <data name="ManualCleanup.ProcessingFolder.Missing" xml:space="preserve">
+        <value>Processing folder does not exist. Please set it up in the settings.</value>
+    </data>
+    <data name="IssuePage.Download.Chapter.Failed" xml:space="preserve">
+        <value>Failed to download chapter</value>
+    </data>
+    <data name="IssuePage.Replacement.Failed" xml:space="preserve">
+        <value>Failed to replace chapter</value>
+    </data>
+    <data name="LibraryPage.Delete.Failed" xml:space="preserve">
+        <value>Failed to delete library: {0}</value>
+    </data>
+    <data name="UserStatsPage.Load.Failed" xml:space="preserve">
+        <value>Failed to load user stats</value>
+    </data>
+    <data name="ServerStatsPage.Load.Failed" xml:space="preserve">
+        <value>Failed to load server stats</value>
+    </data>
+    <data name="RankPage.Create.Failed" xml:space="preserve">
+        <value>Failed to create rank</value>
+    </data>
+    <data name="RankPage.Delete.Failed" xml:space="preserve">
+        <value>Failed to delete rank</value>
+    </data>
+    <data name="RankPage.Update.Failed" xml:space="preserve">
+        <value>Failed to update rank</value>
     </data>
 </root>

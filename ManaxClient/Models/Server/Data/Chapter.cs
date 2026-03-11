@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
-using Jeek.Avalonia.Localization;
 using ManaxClient.Event;
 using ManaxLibrary;
 using ManaxLibrary.ApiCaller;
@@ -89,7 +88,7 @@ public partial class Chapter : ObservableObject, IDisposable
                 Optional<byte[]> chapterPageResponse = await ManaxApiChapterClient.GetChapterPageAsync(Id, i);
                 if (chapterPageResponse.Failed)
                 {
-                    WeakReferenceMessenger.Default.Send(new NotificationMessage(chapterPageResponse.Error));
+                    WeakReferenceMessenger.Default.Send(new NotificationMessage(new Notification(chapterPageResponse.Error)));
                     Logger.LogFailure("Loading page " + i + " for chapter " + Id + " failed: " +
                                       chapterPageResponse.Error);
                     continue;
@@ -105,7 +104,7 @@ public partial class Chapter : ObservableObject, IDisposable
                 catch (Exception e)
                 {
                     WeakReferenceMessenger.Default.Send(
-                        new NotificationMessage(string.Format(Localizer.Get("Chapter.LoadPageFailed"), i)));
+                        new NotificationMessage(new Notification("Chapter.LoadPageFailed",[i])));
                     Logger.LogError("Loading page " + i + " for chapter " + Id + " failed", e);
                 }
             }
@@ -123,7 +122,7 @@ public partial class Chapter : ObservableObject, IDisposable
         Task.Run(async () =>
         {
             Optional<bool> response = await ManaxApiReadClient.MarkAsRead(readCreateDto);
-            if (response.Failed) WeakReferenceMessenger.Default.Send(new NotificationMessage(response.Error));
+            if (response.Failed) WeakReferenceMessenger.Default.Send(new NotificationMessage(new Notification(response.Error)));
         });
     }
 

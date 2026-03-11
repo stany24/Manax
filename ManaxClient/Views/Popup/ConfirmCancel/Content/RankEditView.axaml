@@ -1,12 +1,9 @@
 <UserControl
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:content="clr-namespace:ManaxClient.ViewModels.Popup.ConfirmCancel.Content"
-    xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
     xmlns:icon="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-    mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="300"
+    xmlns:localizer="clr-namespace:ManaxClient.Localization.Localizer"
     x:Class="ManaxClient.Views.Popup.ConfirmCancel.Content.RankEditView"
     x:DataType="content:RankEditViewModel">
     <StackPanel Spacing="16">
@@ -14,22 +11,22 @@
             <icon:MaterialIcon Classes="icon"
                                Kind="ChevronTripleUp" />
             <StackPanel>
-                <TextBlock Text="{localization:Localize RankEditPopup.Title}" />
-                <TextBlock Text="{localization:Localize RankEditPopup.Description}" />
+                <TextBlock Text="{localizer:Localize RankEditPopup.Title}" />
+                <TextBlock Text="{localizer:Localize RankEditPopup.Description}" />
             </StackPanel>
         </StackPanel>
 
         <Border Classes="input">
             <StackPanel Spacing="8">
-                <TextBlock Text="{localization:Localize RankEditPopup.Name}" />
+                <TextBlock Text="{localizer:Localize RankEditPopup.Name}" />
                 <TextBox Text="{Binding Name}"
-                         Watermark="{localization:Localize RankEditPopup.Name.Placeholder}" />
+                         Watermark="{localizer:Localize RankEditPopup.Name.Placeholder}" />
             </StackPanel>
         </Border>
 
         <Border Classes="input">
             <StackPanel Spacing="8">
-                <TextBlock Text="{localization:Localize RankEditPopup.Value}" />
+                <TextBlock Text="{localizer:Localize RankEditPopup.Value}" />
                 <NumericUpDown Value="{Binding Value}"
                                Minimum="0"
                                Maximum="100"

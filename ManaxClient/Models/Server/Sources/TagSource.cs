@@ -41,9 +41,8 @@ public class TagSource
                     Optional<List<TagDto>> response = ManaxApiTagClient.GetTagsAsync().Result;
                     if (response.Failed)
                     {
-                        const string message = "failed to load tags.";
-                        Logger.LogFailure(message);
-                        WeakReferenceMessenger.Default.Send(new NotificationMessage(message));
+                        Logger.LogFailure("failed to load tags.");
+                        WeakReferenceMessenger.Default.Send(new NotificationMessage(new Notification(response.Error)));
                         return;
                     }
 
@@ -57,9 +56,8 @@ public class TagSource
             }
             catch (Exception e)
             {
-                const string message = "An error occurred while loading tags.";
-                Logger.LogError(message, e);
-                WeakReferenceMessenger.Default.Send(new NotificationMessage(message));
+                Logger.LogError("An error occurred while loading tags.", e);
+                WeakReferenceMessenger.Default.Send(new NotificationMessage(new Notification("Tag.Load.Failed")));
             }
         });
     }

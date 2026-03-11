@@ -1,15 +1,12 @@
 <UserControl
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewModels="clr-namespace:ManaxClient.ViewModels"
     xmlns:tab="clr-namespace:ManaxClient.ViewModels.Pages.Upload.Tab"
     xmlns:upload="clr-namespace:ManaxClient.Models.Upload"
-    xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
     xmlns:controls="clr-namespace:ManaxClient.Controls"
     xmlns:icon="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-    mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+    xmlns:localizer="clr-namespace:ManaxClient.Localization.Localizer"
     x:Class="ManaxClient.Views.Pages.Upload.Tab.ConfigureUploadTabView"
     x:DataType="tab:ConfigureUploadTabViewModel"
     IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanUploadChapter}"
@@ -27,7 +24,7 @@
             <Setter Property="VerticalAlignment" Value="Center" />
             <Setter Property="FontSize" Value="12" />
             <Style Selector="^:empty">
-                <Setter Property="Text" Value="{localization:Localize ConfigureUploadPage.NoFolderSelected}" />
+                <Setter Property="Text" Value="{localizer:Localize ConfigureUploadPage.NoFolderSelected}" />
                 <Setter Property="Opacity" Value="0.5" />
                 <Setter Property="FontStyle" Value="Italic" />
             </Style>
@@ -50,11 +47,11 @@
                       ColumnDefinitions="Auto,*,Auto">
 
                     <TextBlock Grid.Column="0"
-                               Text="{localization:Localize ConfigureUploadPage.Title}" />
+                               Text="{localizer:Localize ConfigureUploadPage.Title}" />
 
                     <Button Grid.Column="2"
                             Classes="button light"
-                            Content="{localization:Localize ConfigureUploadPage.Next}"
+                            Content="{localizer:Localize ConfigureUploadPage.Next}"
                             Command="{Binding Next}" />
                 </Grid>
             </Border>
@@ -66,11 +63,11 @@
                         <StackPanel Grid.Row="0"
                                     Spacing="4"
                                     Margin="0,0,0,12">
-                            <TextBlock Text="{localization:Localize ConfigureUploadPage.SourceFolders}"
+                            <TextBlock Text="{localizer:Localize ConfigureUploadPage.SourceFolders}"
                                        FontWeight="SemiBold"
                                        FontSize="16" />
                             <TextBlock Classes="description"
-                                       Text="{localization:Localize ConfigureUploadPage.SourceFolders.Description}" />
+                                       Text="{localizer:Localize ConfigureUploadPage.SourceFolders.Description}" />
                         </StackPanel>
 
                         <ItemsControl Grid.Row="1"
@@ -89,7 +86,7 @@
 
                                             <controls:IconButton Grid.Column="2"
                                                                  Classes="icon-button dark"
-                                                                 Text="{localization:Localize ConfigureUploadPage.RemoveSource}"
+                                                                 Text="{localizer:Localize ConfigureUploadPage.RemoveSource}"
                                                                  Command="{Binding $parent[UserControl].((tab:ConfigureUploadTabViewModel)DataContext).RemoveSource}"
                                                                  CommandParameter="{Binding}"
                                                                  Icon="DeleteOutline" />
@@ -101,7 +98,7 @@
 
                         <Button Grid.Row="2"
                                 Classes="button light"
-                                Content="{localization:Localize ConfigureUploadPage.AddSource}"
+                                Content="{localizer:Localize ConfigureUploadPage.AddSource}"
                                 HorizontalAlignment="Stretch"
                                 Command="{Binding AddSource}" />
                     </Grid>
@@ -112,11 +109,11 @@
                     <Grid RowDefinitions="Auto,Auto,Auto,*,Auto">
 
                         <StackPanel Grid.Row="0" Spacing="4" Margin="0,0,0,16">
-                            <TextBlock Text="{localization:Localize ConfigureUploadPage.ProcessingFolder}"
+                            <TextBlock Text="{localizer:Localize ConfigureUploadPage.ProcessingFolder}"
                                        FontWeight="SemiBold"
                                        FontSize="16" />
                             <TextBlock Classes="description"
-                                       Text="{localization:Localize ConfigureUploadPage.ProcessingFolder.Description}" />
+                                       Text="{localizer:Localize ConfigureUploadPage.ProcessingFolder.Description}" />
                         </StackPanel>
 
                         <Border Grid.Row="1"
@@ -132,7 +129,7 @@
 
                                 <controls:IconButton Grid.Column="3"
                                                      Classes="icon-button dark"
-                                                     Text="{localization:Localize ConfigureUploadPage.Browse}"
+                                                     Text="{localizer:Localize ConfigureUploadPage.Browse}"
                                                      Icon="FolderOpenOutline"
                                                      Command="{Binding UpdateProcessingFolder}" />
                             </Grid>
@@ -140,10 +137,10 @@
 
                         <TextBlock Grid.Row="2"
                                    Classes="description">
-                            <Run Text="{localization:Localize ConfigureUploadPage.Information.Text1}" />
+                            <Run Text="{localizer:Localize ConfigureUploadPage.Information.Text1}" />
                             <LineBreak />
                             <LineBreak />
-                            <Run Text="{localization:Localize ConfigureUploadPage.Information.Text2}" />
+                            <Run Text="{localizer:Localize ConfigureUploadPage.Information.Text2}" />
                         </TextBlock>
                     </Grid>
                 </Border>

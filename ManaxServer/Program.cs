@@ -1,5 +1,6 @@
 using System.Net;
 using System.Threading.RateLimiting;
+using ManaxLibrary.Notifications;
 using ManaxServer.Middleware;
 using ManaxServer.Models;
 using ManaxServer.Models.Issue.Reported;
@@ -44,7 +45,12 @@ public static class Program
         });
 
         // SignalR configuration
-        builder.Services.AddSignalR();
+        builder.Services.AddSignalR( options =>
+        {
+            options.EnableDetailedErrors = true;
+            options.KeepAliveInterval = NotificationInformation.KeepAliveInterval;
+            options.ClientTimeoutInterval = NotificationInformation.Timeout;
+        });
 
         builder.Services.AddDbContext<ManaxContext>(opt =>
             opt.UseSqlite($"Data Source={Path.Combine(AppContext.BaseDirectory, "database.db")}"));

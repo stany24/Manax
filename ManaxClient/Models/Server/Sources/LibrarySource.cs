@@ -58,7 +58,7 @@ public class LibrarySource
                     if (response.Failed)
                     {
                         Logger.LogFailure(response.Error);
-                        WeakReferenceMessenger.Default.Send(new NotificationMessage(response.Error));
+                        WeakReferenceMessenger.Default.Send(new NotificationMessage(new Notification(response.Error)));
                         return;
                     }
 
@@ -68,7 +68,7 @@ public class LibrarySource
                         if (libraryResponse.Failed)
                         {
                             Logger.LogFailure(libraryResponse.Error);
-                            WeakReferenceMessenger.Default.Send(new NotificationMessage(libraryResponse.Error));
+                            WeakReferenceMessenger.Default.Send(new NotificationMessage(new Notification(libraryResponse.Error)));
                             continue;
                         }
 
@@ -82,9 +82,8 @@ public class LibrarySource
                 }
                 catch (Exception e)
                 {
-                    const string error = "Failed to load libraries from server";
-                    Logger.LogError(error, e);
-                    WeakReferenceMessenger.Default.Send(new NotificationMessage(error));
+                    Logger.LogError("Failed to load libraries from server", e);
+                    WeakReferenceMessenger.Default.Send(new NotificationMessage(new Notification("Library.Load.Failed")));
                 }
             }
         });

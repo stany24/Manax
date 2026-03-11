@@ -105,7 +105,7 @@ public class PermissionManager : ObservableObject
             Optional<List<Permission>> myPermissionsAsync = await ManaxApiPermissionClient.GetMyPermissionsAsync();
             if (myPermissionsAsync.Failed)
             {
-                WeakReferenceMessenger.Default.Send(new NotificationMessage(myPermissionsAsync.Error));
+                WeakReferenceMessenger.Default.Send(new NotificationMessage(new Notification(myPermissionsAsync.Error)));
                 return;
             }
 

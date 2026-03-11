@@ -20,6 +20,7 @@ public enum ErrorCode
     InvalidPassword = 22,
     CannotDeleteSelf = 23,
     InsufficientPermissions = 24,
+    BadCredentials = 25,
 
     LibraryDoesNotExist = 31,
     InvalidLibraryData = 32,
@@ -28,7 +29,7 @@ public enum ErrorCode
     InvalidTagData = 43,
 
     PersonDoesNotExist = 51,
-    InvalidPersonData = 51,
+    InvalidPersonData = 52,
 
     RoleDoesNotExist = 61,
     InvalidRoleData = 62,

@@ -58,7 +58,7 @@ public class PersonSource
                     if (personsResponse.Failed)
                     {
                         Logger.LogFailure(personsResponse.Error);
-                        WeakReferenceMessenger.Default.Send(new NotificationMessage(personsResponse.Error));
+                        WeakReferenceMessenger.Default.Send(new NotificationMessage(new Notification(personsResponse.Error)));
                         return;
                     }
 
@@ -76,9 +76,8 @@ public class PersonSource
                 }
                 catch (Exception e)
                 {
-                    const string error = "Failed to load ranks from server";
-                    Logger.LogError(error, e);
-                    WeakReferenceMessenger.Default.Send(new NotificationMessage(error));
+                    Logger.LogError("Failed to load ranks from server", e);
+                    WeakReferenceMessenger.Default.Send(new NotificationMessage(new Notification("Person.Load.Failed")));
                 }
             }
         });

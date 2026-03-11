@@ -1,15 +1,12 @@
 <UserControl
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:previews="clr-namespace:ManaxClient.Controls.Previews"
     xmlns:issue="clr-namespace:ManaxClient.Models.Issue"
     xmlns:page="clr-namespace:ManaxClient.ViewModels.Pages.Issue"
     xmlns:viewModels="clr-namespace:ManaxClient.ViewModels"
-    xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
     xmlns:localization1="clr-namespace:ManaxClient.Localization"
-    mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+    xmlns:localizer="clr-namespace:ManaxClient.Localization.Localizer"
     x:Class="ManaxClient.Views.Pages.Issue.IssuesPageView"
     x:DataType="page:IssuesPageViewModel"
     IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanReadAllIssues}">
@@ -53,7 +50,7 @@
 
         <DataTemplate x:Key="ReportedChapterIssueTemplate" DataType="issue:IssueChapterReported">
             <previews:IssuePreview IssueColor="#FD7E14"
-                                   BadgeText="{localization:Localize IssuesPage.Reported}"
+                                   BadgeText="{localizer:Localize IssuesPage.Reported}"
                                    Closable="True"
                                    Problem="{Binding Problem.Name}"
                                    Margin="0,0,0,8"
@@ -68,7 +65,7 @@
 
         <DataTemplate x:Key="ReportedSerieIssueTemplate" DataType="issue:IssueSerieReported">
             <previews:IssuePreview IssueColor="#FD7E14"
-                                   BadgeText="{localization:Localize IssuesPage.Reported}"
+                                   BadgeText="{localizer:Localize IssuesPage.Reported}"
                                    Closable="True"
                                    Problem="{Binding Problem.Name}"
                                    Margin="0,0,0,8"
@@ -86,20 +83,20 @@
 
     <ScrollViewer>
         <StackPanel Margin="24" Spacing="24">
-            <TextBlock Text="{localization:Localize IssuesPage.Title}"
+            <TextBlock Text="{localizer:Localize IssuesPage.Title}"
                        FontSize="28"
                        FontWeight="Bold" />
 
             <StackPanel Orientation="Horizontal" Spacing="16">
                 <ToggleButton x:Name="AutomaticToggle"
-                              Content="{localization:Localize IssuesPage.Automatic}"
+                              Content="{localizer:Localize IssuesPage.Automatic}"
                               IsChecked="{Binding ShowAutomaticIssues}"
                               Padding="12,8"
                               CornerRadius="8"
                               BorderThickness="0" />
 
                 <ToggleButton x:Name="ReportedToggle"
-                              Content="{localization:Localize IssuesPage.Reported}"
+                              Content="{localizer:Localize IssuesPage.Reported}"
                               IsChecked="{Binding !ShowAutomaticIssues}"
                               Padding="12,8"
                               CornerRadius="8"
@@ -108,14 +105,14 @@
                 <Border Width="1" Height="24" VerticalAlignment="Center" />
 
                 <ToggleButton x:Name="ChapterToggle"
-                              Content="{localization:Localize IssuesPage.Chapters}"
+                              Content="{localizer:Localize IssuesPage.Chapters}"
                               IsChecked="{Binding ShowChapterIssues}"
                               Padding="12,8"
                               CornerRadius="8"
                               BorderThickness="0" />
 
                 <ToggleButton x:Name="SerieToggle"
-                              Content="{localization:Localize IssuesPage.Series}"
+                              Content="{localizer:Localize IssuesPage.Series}"
                               IsChecked="{Binding !ShowChapterIssues}"
                               Padding="12,8"
                               CornerRadius="8"
@@ -125,27 +122,27 @@
             <StackPanel Spacing="16">
                 <StackPanel IsVisible="{Binding ShowAutomaticIssues}">
                     <StackPanel IsVisible="{Binding ShowChapterIssues}" Spacing="12">
-                        <TextBlock Text="{localization:Localize IssuesPage.AutomaticChapters}"
+                        <TextBlock Text="{localizer:Localize IssuesPage.AutomaticChapters}"
                                    FontSize="18"
                                    FontWeight="SemiBold" />
 
                         <ItemsControl ItemsSource="{Binding IssueChapterAutomatic}"
                                       ItemTemplate="{StaticResource AutomaticChapterIssueTemplate}" />
 
-                        <TextBlock Text="{localization:Localize IssuesPage.NoAutomaticChapter}"
+                        <TextBlock Text="{localizer:Localize IssuesPage.NoAutomaticChapter}"
                                    FontStyle="Italic"
                                    IsVisible="{Binding IssueChapterAutomatic.Count, Converter={x:Static StringConverters.IsNullOrEmpty}}" />
                     </StackPanel>
 
                     <StackPanel IsVisible="{Binding !ShowChapterIssues}" Spacing="12">
-                        <TextBlock Text="{localization:Localize IssuesPage.AutomaticSeries}"
+                        <TextBlock Text="{localizer:Localize IssuesPage.AutomaticSeries}"
                                    FontSize="18"
                                    FontWeight="SemiBold" />
 
                         <ItemsControl ItemsSource="{Binding IssueSerieAutomatic}"
                                       ItemTemplate="{StaticResource AutomaticSerieIssueTemplate}" />
 
-                        <TextBlock Text="{localization:Localize IssuesPage.NoAutomaticSeries}"
+                        <TextBlock Text="{localizer:Localize IssuesPage.NoAutomaticSeries}"
                                    FontStyle="Italic"
                                    IsVisible="{Binding IssueSerieAutomatic.Count, Converter={x:Static StringConverters.IsNullOrEmpty}}" />
                     </StackPanel>
@@ -153,27 +150,27 @@
 
                 <StackPanel IsVisible="{Binding !ShowAutomaticIssues}">
                     <StackPanel IsVisible="{Binding ShowChapterIssues}" Spacing="12">
-                        <TextBlock Text="{localization:Localize IssuesPage.ReportedChapters}"
+                        <TextBlock Text="{localizer:Localize IssuesPage.ReportedChapters}"
                                    FontSize="18"
                                    FontWeight="SemiBold" />
 
                         <ItemsControl ItemsSource="{Binding IssueChapterReported}"
                                       ItemTemplate="{StaticResource ReportedChapterIssueTemplate}" />
 
-                        <TextBlock Text="{localization:Localize IssuesPage.NoReportedChapter}"
+                        <TextBlock Text="{localizer:Localize IssuesPage.NoReportedChapter}"
                                    FontStyle="Italic"
                                    IsVisible="{Binding IssueChapterReported.Count, Converter={x:Static StringConverters.IsNullOrEmpty}}" />
                     </StackPanel>
 
                     <StackPanel IsVisible="{Binding !ShowChapterIssues}" Spacing="12">
-                        <TextBlock Text="{localization:Localize IssuesPage.ReportedSeries}"
+                        <TextBlock Text="{localizer:Localize IssuesPage.ReportedSeries}"
                                    FontSize="18"
                                    FontWeight="SemiBold" />
 
                         <ItemsControl ItemsSource="{Binding IssueSerieReported}"
                                       ItemTemplate="{StaticResource ReportedSerieIssueTemplate}" />
 
-                        <TextBlock Text="{localization:Localize IssuesPage.NoReportedSeries}"
+                        <TextBlock Text="{localizer:Localize IssuesPage.NoReportedSeries}"
                                    FontStyle="Italic"
                                    IsVisible="{Binding IssueSerieReported.Count, Converter={x:Static StringConverters.IsNullOrEmpty}}" />
                     </StackPanel>

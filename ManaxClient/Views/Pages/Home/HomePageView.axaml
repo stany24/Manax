@@ -1,15 +1,12 @@
 <UserControl
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:previews="clr-namespace:ManaxClient.Controls.Previews"
     xmlns:page="clr-namespace:ManaxClient.ViewModels.Pages.Home"
     xmlns:viewModels="clr-namespace:ManaxClient.ViewModels"
-    xmlns:localization="clr-namespace:Jeek.Avalonia.Localization;assembly=Jeek.Avalonia.Localization"
     xmlns:controls="clr-namespace:ManaxClient.Controls"
     xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-    mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+    xmlns:localizer="clr-namespace:ManaxClient.Localization.Localizer"
     x:Class="ManaxClient.Views.Pages.Home.HomePageView"
     x:DataType="page:HomePageViewModel"
     Classes="page">
@@ -37,7 +34,7 @@
                                          Grid.Column="2"
                                          IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanWriteSeries}"
                                          Command="{Binding UploadSerie}"
-                                         Text="{localization:Localize HomePage.AddSeries}"
+                                         Text="{localizer:Localize HomePage.AddSeries}"
                                          Icon="Add" />
                 </Grid>
             </Border>
@@ -46,7 +43,7 @@
                     IsVisible="{Binding Series.Count}">
                 <StackPanel Orientation="Vertical">
                     <TextBlock Classes="item-name"
-                               Text="{localization:Localize HomePage.RecentSeries}" />
+                               Text="{localizer:Localize HomePage.RecentSeries}" />
 
                     <ScrollViewer HorizontalScrollBarVisibility="Auto"
                                   VerticalScrollBarVisibility="Disabled">

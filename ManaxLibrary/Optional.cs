@@ -27,6 +27,11 @@ public class Optional<TReturn>
     {
         return new Optional<TReturn>(error);
     }
+    
+    public static Optional<TReturn> Failure(int errorCode)
+    {
+        return new Optional<TReturn>(errorCode.ToString());
+    }
 
     public static Optional<TReturn> Failure(HttpResponseMessage response)
     {

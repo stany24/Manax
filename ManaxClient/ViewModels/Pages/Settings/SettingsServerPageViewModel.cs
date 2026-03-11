@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
-using Jeek.Avalonia.Localization;
 using ManaxClient.Event;
+using ManaxClient.Localization.Localizer;
 using ManaxClient.Models;
 using ManaxClient.ViewModels.Popup.ConfirmCancel;
 using ManaxClient.ViewModels.Popup.ConfirmCancel.Content;
@@ -87,13 +87,13 @@ public partial class SettingsServerPageViewModel : PageViewModel
                 SavePointCreateDto savePoint = content.GetResult();
                 Optional<long> postLibraryResponse = await ManaxApiSavePointClient.PostSavePointAsync(savePoint);
                 if (postLibraryResponse.Failed)
-                    WeakReferenceMessenger.Default.Send(new NotificationMessage(postLibraryResponse.Error));
+                    WeakReferenceMessenger.Default.Send(new NotificationMessage(new Notification(postLibraryResponse.Error)));
             }
             catch (Exception e)
             {
                 Logger.LogError("Error creating save point", e);
                 WeakReferenceMessenger.Default.Send(
-                    new NotificationMessage(Localizer.Get("SettingsServerPage.ErrorCreatingSavePoint")));
+                    new NotificationMessage(new Notification("SettingsServerPage.ErrorCreatingSavePoint")));
             }
         };
         WeakReferenceMessenger.Default.Send(new PopupChangeMessage(popup));
@@ -112,13 +112,13 @@ public partial class SettingsServerPageViewModel : PageViewModel
                 LibraryCreateDto library = content.GetResult();
                 Optional<long> postLibraryResponse = await ManaxApiLibraryClient.PostLibraryAsync(library);
                 if (postLibraryResponse.Failed)
-                    WeakReferenceMessenger.Default.Send(new NotificationMessage(postLibraryResponse.Error));
+                    WeakReferenceMessenger.Default.Send(new NotificationMessage(new Notification(postLibraryResponse.Error)));
             }
             catch (Exception e)
             {
                 Logger.LogError("Error creating library", e);
                 WeakReferenceMessenger.Default.Send(
-                    new NotificationMessage(Localizer.Get("SettingsServerPage.ErrorCreatingLibrary")));
+                    new NotificationMessage(new Notification("SettingsServerPage.ErrorCreatingLibrary")));
             }
         };
         WeakReferenceMessenger.Default.Send(new PopupChangeMessage(popup));

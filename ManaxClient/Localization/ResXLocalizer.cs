@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
-using Jeek.Avalonia.Localization;
+using ManaxClient.Localization.Localizer;
 
 namespace ManaxClient.Localization;
 
