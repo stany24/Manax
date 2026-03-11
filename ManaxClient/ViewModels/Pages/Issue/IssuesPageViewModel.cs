@@ -9,7 +9,6 @@ using CommunityToolkit.Mvvm.Messaging;
 using DynamicData;
 using DynamicData.Binding;
 using ManaxClient.Event;
-using ManaxClient.Localization.Localizer;
 using ManaxClient.Manager;
 using ManaxClient.Models.Issue;
 using ManaxClient.ViewModels.Pages.Serie;
