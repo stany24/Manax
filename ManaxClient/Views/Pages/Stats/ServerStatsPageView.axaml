@@ -1,8 +1,6 @@
 <UserControl
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:avalonia="clr-namespace:LiveChartsCore.SkiaSharpView.Avalonia;assembly=LiveChartsCore.SkiaSharpView.Avalonia"
     xmlns:previews="clr-namespace:ManaxClient.Controls.Previews"
     xmlns:page="clr-namespace:ManaxClient.ViewModels.Pages.Stats"
@@ -10,7 +8,6 @@
     xmlns:icon="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     xmlns:controls="clr-namespace:ManaxClient.Controls"
     xmlns:localizer="clr-namespace:ManaxClient.Localization.Localizer"
-    mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Pages.Stats.ServerStatsPageView"
     x:DataType="page:ServerStatsPageViewModel"
     IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanReadServerStats}"
@@ -65,8 +62,9 @@
                     <StackPanel Spacing="20">
                         <Grid Classes="section-title"
                               ColumnDefinitions="Auto,Auto,*">
-                            <TextBlock Grid.Column="0"
-                                       Text="💾" />
+                            <icon:MaterialIcon Classes="icon"
+                                               Grid.Column="0"
+                                               Kind="ChartArc"/>
                             <TextBlock Grid.Column="1"
                                        Text="{localizer:Localize ServerStatsPage.DiskUsage.Title}" />
                         </Grid>
@@ -193,8 +191,9 @@
                 <StackPanel Spacing="20">
                     <Grid Classes="section-title"
                           ColumnDefinitions="Auto,Auto,*">
-                        <TextBlock Grid.Column="0"
-                                   Text="🚫" />
+                        <icon:MaterialIcon Classes="icon"
+                                           Grid.Column="0"
+                                           Kind="BlockHelper"/>
                         <TextBlock Grid.Column="1"
                                    Text="{localizer:Localize ServerStatsPage.NeverRead.Title}" />
                     </Grid>

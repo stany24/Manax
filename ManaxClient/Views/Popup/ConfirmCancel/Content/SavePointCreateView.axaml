@@ -1,13 +1,10 @@
 <UserControl
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:content="clr-namespace:ManaxClient.ViewModels.Popup.ConfirmCancel.Content"
     xmlns:controls="clr-namespace:ManaxClient.Controls"
     xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     xmlns:localizer="clr-namespace:ManaxClient.Localization.Localizer"
-    mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="300"
     x:Class="ManaxClient.Views.Popup.ConfirmCancel.Content.SavePointCreateView"
     x:DataType="content:SavePointCreateViewModel">
     <StackPanel Orientation="Vertical"

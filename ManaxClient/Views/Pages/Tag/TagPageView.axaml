@@ -1,8 +1,6 @@
 <UserControl
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:tag="clr-namespace:ManaxClient.ViewModels.Pages.Tag"
     xmlns:converters="clr-namespace:ManaxClient.Converters"
     xmlns:viewModels="clr-namespace:ManaxClient.ViewModels"
@@ -10,7 +8,6 @@
     xmlns:icon="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     xmlns:localization1="clr-namespace:ManaxClient.Localization"
     xmlns:localizer="clr-namespace:ManaxClient.Localization.Localizer"
-    mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Pages.Tag.TagPageView"
     x:DataType="tag:TagPageViewModel"
     IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanReadTags}"

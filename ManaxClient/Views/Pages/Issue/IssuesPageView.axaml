@@ -1,15 +1,12 @@
 <UserControl
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:previews="clr-namespace:ManaxClient.Controls.Previews"
     xmlns:issue="clr-namespace:ManaxClient.Models.Issue"
     xmlns:page="clr-namespace:ManaxClient.ViewModels.Pages.Issue"
     xmlns:viewModels="clr-namespace:ManaxClient.ViewModels"
     xmlns:localization1="clr-namespace:ManaxClient.Localization"
     xmlns:localizer="clr-namespace:ManaxClient.Localization.Localizer"
-    mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Pages.Issue.IssuesPageView"
     x:DataType="page:IssuesPageViewModel"
     IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanReadAllIssues}">

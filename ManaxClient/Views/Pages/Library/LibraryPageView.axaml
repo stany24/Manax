@@ -1,15 +1,11 @@
 <UserControl
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:previews="clr-namespace:ManaxClient.Controls.Previews"
     xmlns:page="clr-namespace:ManaxClient.ViewModels.Pages.Library"
     xmlns:viewModels="clr-namespace:ManaxClient.ViewModels"
-    xmlns:localization1="clr-namespace:ManaxClient.Localization"
     xmlns:controls="clr-namespace:ManaxClient.Controls"
     xmlns:localizer="clr-namespace:ManaxClient.Localization.Localizer"
-    mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Pages.Library.LibraryPageView"
     x:DataType="page:LibraryPageViewModel"
     IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanReadLibraries}"
@@ -20,20 +16,12 @@
         <StackPanel Orientation="Vertical" Spacing="24">
 
             <Border Classes="card">
-                <Grid Classes=""
-                      ColumnDefinitions="*,Auto"
-                      RowDefinitions="Auto,Auto">
-                    <StackPanel Grid.Column="0"
-                                Grid.Row="0"
-                                Orientation="Vertical">
-                        <TextBlock Text="{Binding Library.Name}" />
-                        <TextBlock
-                            Text="{localization1:LocalizeFormat LibraryPage.SeriesCount,
-                                   Param1={Binding $parent[UserControl].((page:LibraryPageViewModel)DataContext).Library.Series.Count}}" />
-                    </StackPanel>
+                <Grid Classes="title"
+                      ColumnDefinitions="Auto,*,Auto">
+                    <TextBlock Grid.Column="0"
+                               Text="{Binding Library.Name}" />
 
-                    <controls:IconButton Grid.Column="1"
-                                         Grid.Row="0"
+                    <controls:IconButton Grid.Column="2"
                                          Classes="icon-button light"
                                          IsVisible="{Binding $parent[Window].((viewModels:MainWindowViewModel)DataContext).PermissionManager.CanDeleteLibraries}"
                                          Command="{Binding DeleteLibrary}"

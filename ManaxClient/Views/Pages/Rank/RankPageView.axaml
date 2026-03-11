@@ -1,8 +1,6 @@
 <UserControl
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:page="clr-namespace:ManaxClient.ViewModels.Pages.Rank"
     xmlns:viewModels="clr-namespace:ManaxClient.ViewModels"
     xmlns:localization1="clr-namespace:ManaxClient.Localization"
@@ -10,7 +8,6 @@
     xmlns:controls="clr-namespace:ManaxClient.Controls"
     xmlns:icon="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     xmlns:localizer="clr-namespace:ManaxClient.Localization.Localizer"
-    mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="ManaxClient.Views.Pages.Rank.RankPageView"
     x:DataType="page:RankPageViewModel"
     Classes="page">
